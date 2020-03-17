@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Brand = () => (React.createElement("svg", { version: "1.1", xmlns: "http://www.w3.org/2000/svg", xmlnsXlink: "http://www.w3.org/1999/xlink", x: "0px", y: "0px", width: "2rem", height: "2rem", viewBox: "0 0 216.833 227.492", "enable-background": "new 0 0 216.833 227.492" },
+var Brand = function () { return (React.createElement("svg", { version: "1.1", xmlns: "http://www.w3.org/2000/svg", xmlnsXlink: "http://www.w3.org/1999/xlink", x: "0px", y: "0px", width: "2rem", height: "2rem", viewBox: "0 0 216.833 227.492", "enable-background": "new 0 0 216.833 227.492" },
     React.createElement("g", { id: "guides" }),
     React.createElement("g", { id: "icon" },
         React.createElement("g", null,
@@ -13,7 +13,7 @@ const Brand = () => (React.createElement("svg", { version: "1.1", xmlns: "http:/
         React.createElement("g", null,
             React.createElement("path", { fill: "#FFA400", d: "M111.659,80.687l6.629-59.572h-9.874h-9.871l6.632,59.572c1.07-0.032,2.148-0.055,3.239-0.055 C109.508,80.632,110.586,80.654,111.659,80.687z" }),
             React.createElement("path", { fill: "#FFA400", d: "M162.059,53.946l-12.275-7.089l-15.302,37.132c1.542,0.471,2.991,0.979,4.343,1.526L162.059,53.946z" }),
-            React.createElement("path", { fill: "#FFA400", d: "M67.049,46.857l-12.277,7.089l23.234,31.569c1.352-0.547,2.802-1.055,4.344-1.526L67.049,46.857z" })))));
+            React.createElement("path", { fill: "#FFA400", d: "M67.049,46.857l-12.277,7.089l23.234,31.569c1.352-0.547,2.802-1.055,4.344-1.526L67.049,46.857z" }))))); };
 
 export { Brand };
 //# sourceMappingURL=index.es.js.map
