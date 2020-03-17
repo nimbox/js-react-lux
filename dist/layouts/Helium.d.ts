@@ -4,6 +4,7 @@ interface NavigatorComponent<P> extends FC<P> {
     Header: FC<{}>;
     Body: FC<{}>;
     Footer: FC<{}>;
+    Copyright: FC<{}>;
 }
 export declare const Navigator: NavigatorComponent<{}>;
 interface ContentComponent<P> extends FC<P> {

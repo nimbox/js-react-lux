@@ -36,10 +36,9 @@ export default {
 
         typescript({
             clean: true,
+            exclude: [ "**/*.stories.tsx" ],
             tsconfigOverride: {
-                compilerOptions: {
-                    module: 'esnext'
-                }
+                exclude: [ "**/*.stories.tsx" ]
             }
         })
         
