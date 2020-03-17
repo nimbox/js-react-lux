@@ -3,7 +3,7 @@ import { Brand } from '../components/Brand';
 import { Card, Cards } from '../components/Card';
 import { Dropdown } from '../components/Dropdown';
 import { Content, Helium, Navigator } from '../layouts/Helium';
-import '../styles/tailwind.css';
+import '../styles/styles.css';
 
 
 export default { title: 'Layout/Helium' };

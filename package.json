@@ -7,8 +7,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "start": "npm run build:style && react-scripts start",
-    "build": "rm -rf dist/* && npm run build:style && rollup -c",
-    "build:style": "tailwind build src/styles/index.css -o src/styles/tailwind.css",
+    "build": "rm -rf dist/* && npm run build:style && rollup -c && cp src/styles/*.js dist/",
+    "build:style": "tailwind build src/styles/index.css -o src/styles/styles.css",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "npm run build:style && start-storybook"
