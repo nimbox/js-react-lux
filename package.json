@@ -2,7 +2,6 @@
   "name": "js-react-lux",
   "version": "1.0.0",
   "private": true,
-  "index": "src/export.ts",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",

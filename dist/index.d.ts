@@ -1,1 +1,1 @@
-import './styles/tailwind.css';
+export { Brand } from './components/Brand';
