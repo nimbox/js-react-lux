@@ -36,9 +36,8 @@ export default {
 
         typescript({
             clean: true,
-            exclude: [ "**/*.stories.tsx" ],
             tsconfigOverride: {
-                exclude: [ "**/*.stories.tsx" ]
+                exclude: [ "src/styles", "**/*.stories.tsx" ]
             }
         })
         
