@@ -23,9 +23,20 @@ module.exports = {
         'content-fg': colors.white,
         'content-border': '#eaedf3',
 
-        'primary': '#1665d8'
+        'primary': {
+          500: '#1665d8',
+        },
+        'secondary': { 
+          300: '#f8c46d', // -30%
+          500: '#f6ab2f',
+          700: '#c47d08'  // +30%
+        },
+        'info': {
+          500: '#34aa44'
+        }
 
       }
+      
     }
   },
 
@@ -35,6 +46,12 @@ module.exports = {
         'html': { fontSize: '12px' }
       })
     })
-  ]
+  ],
+
+  variants: {
+    fontSize: ['responsive', 'group-hover', 'hover'],
+    textColor: ['responsive', 'focus', 'group-hover', 'hover'],
+    backgroundColor: ['responsive', 'focus', 'group-hover', 'hover']
+  }
 
 };

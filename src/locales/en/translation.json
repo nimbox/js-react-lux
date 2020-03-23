@@ -1,0 +1,35 @@
+{
+    "months": [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    ],
+    "shortDays": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat",
+        "Sun"
+    ],
+    "namedDays": {
+        "tomorrow": "tomorrow",
+        "day-after-tomorrow": "day after tomorrow",
+        "this-friday": "this friday",
+        "next-monday": "next monday",
+        "next-friday": "next friday",
+        "in-two-weeks": "in two weeks",
+        "next-month": "next month",
+        "in-two-months": "in two months"
+    }
+}

@@ -10,7 +10,8 @@ export const Cards: FC<{}> = ({ children }) => (
 
 interface CardComponent<P> extends FC<P> {
     Header: FC<{}>,
-    Body: FC<{}>
+    Body: FC<{}>,
+    Footer: FC<{}>
 }
 
 export const Card: CardComponent<{}> = ({ children }) => (
@@ -23,4 +24,8 @@ Card.Header = ({ children }) => (
 
 Card.Body = ({ children }) => (
     <div className="p-3">{children}</div>
+);
+
+Card.Footer = ({ children }) => (
+    <div className="border-t border-content-border p-3">{children}</div>
 );
