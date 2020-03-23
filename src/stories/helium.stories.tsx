@@ -122,7 +122,7 @@ export const Simple = () => {
                                     </Group>
 
                                     <div className="row-span-1 col-span-2">
-                                        <DatePicker value={[ 1967, 11, 19 ]}/>
+                                        <DatePicker value={[1967, 11, 19]} />
                                     </div>
                                     <div className="row-span-1 col-span-2">d</div>
                                 </div>
@@ -144,8 +144,8 @@ export const Simple = () => {
 
                 </Main.Content >
 
-                <Main.Side className="p-3">
-                    asd
+                <Main.Side className="">
+                    {[...Array(102)].map(() => <DefaultNavigator.Item active={false}>Side</DefaultNavigator.Item>)}
                 </Main.Side>
 
             </Main>
