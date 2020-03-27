@@ -1,3 +1,4 @@
+import * as Icons from './icons/index';
 export * from './components/Buttons';
 export * from './components/Card';
 export * from './components/DatePicker';
@@ -7,5 +8,5 @@ export * from './components/Postit';
 export * from './components/Select';
 export * from './components/TimePicker';
 export * from './hooks/usePopper';
-export * as Icons from './icons/index';
 export * from './layouts/Helium';
+export { Icons };

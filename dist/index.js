@@ -4,9 +4,9 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var classnames = _interopDefault(require('classnames'));
 var React = require('react');
 var React__default = _interopDefault(React);
+var classnames = _interopDefault(require('classnames'));
 var reactI18next = require('react-i18next');
 
 /*! *****************************************************************************
