@@ -1,6 +1,6 @@
-import pack from './package.json';
 import json from 'rollup-plugin-json';
 import typescript from 'rollup-plugin-typescript2';
+import pack from './package.json';
 
 export default {
 
@@ -37,10 +37,10 @@ export default {
         typescript({
             clean: true,
             tsconfigOverride: {
-                exclude: [ "src/styles", "**/*.stories.tsx" ]
+                exclude: [ "src/styles", "**/*.stories.tsx", "src/i18n.tsx" ]
             }
-        })
-        
+        }),
+
     ]
 
 }

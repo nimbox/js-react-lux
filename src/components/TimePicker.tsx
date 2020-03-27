@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePopper } from '../hooks/usePopper';
-import { ReactComponent as Circle } from '../icons/circle-icon.svg';
-import { ReactComponent as Angle } from '../icons/select-icon.svg';
+import { AngleUpIcon, AngleDownIcon, CircleIcon } from '../icons';
+
 
 
 //
@@ -132,7 +132,7 @@ export const TimePicker: FC<Props> = ({ name, value, onChange, placeholder }) =>
     function hourMinuteClasses(hm: number[]) {
         if (hm[0] === selected[0]) {
             return hm[0] === selected[0] && hm[1] === selected[1] ?
-                'text-white    text-base group-hover:text-content hover:text-base                    hover:bg-secondary-500':
+                'text-white    text-base group-hover:text-content hover:text-base                    hover:bg-secondary-500' :
                 'text-info-500           group-hover:text-content hover:text-base                    hover:bg-secondary-500';
         } else {
             return 'text-muted                                    hover:text-base hover:text-content hover:bg-secondary-500';
@@ -158,9 +158,9 @@ export const TimePicker: FC<Props> = ({ name, value, onChange, placeholder }) =>
 
                     <div className="px-2 py-1 bg-gray-400">
                         <div className="text-right">
-                            <button className="dash-picker-prev-hour" onClick={handleClickPrevHour}><Angle className="fill-current text-content h-4 w-4 transform rotate-180"/></button>
-                            <button className="px-2" onClick={handleClickNoon}><Circle className="fill-current text-content h-4 w-4"/></button>
-                            <button className="dash-picker-next-hour" onClick={handleClickNextHour}><Angle className="fill-current text-content h-4 w-4"/></button>
+                            <button className="focus:outline-none" onClick={handleClickPrevHour}><AngleUpIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
+                            <button className="px-2 focus:outline-none" onClick={handleClickNoon}><CircleIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
+                            <button className="focus:outline-none" onClick={handleClickNextHour}><AngleDownIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
                         </div>
                     </div>
 

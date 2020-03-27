@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePopper } from '../hooks/usePopper';
-import { ReactComponent as Circle } from '../icons/circle-icon.svg';
-import { ReactComponent as Angle } from '../icons/select-icon.svg';
+import {AngleLeftIcon, AngleRightIcon, CircleIcon } from '../icons';
+
 
 
 //
@@ -175,9 +175,9 @@ export const DatePicker: FC<Props> = ({ name, value, onChange, shortcuts, placeh
                                     {months![calendar.getMonth()]} {calendar.getFullYear()}
                                 </div>
                                 <div>
-                                    <button className="" onClick={handleClickPrevMonth}><Angle className="fill-current text-content h-4 w-4 transform  rotate-90"/></button>
-                                    <button className="px-2" onClick={handleClickToday}><Circle className="fill-current text-content h-4 w-4"/></button>
-                                    <button className="" onClick={handleClickNextMonth}><Angle className="fill-current text-content h-4 w-4 transform -rotate-90"/></button>
+                                    <button className="focus:outline-none" onClick={handleClickPrevMonth}><AngleLeftIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
+                                    <button className="px-2 focus:outline-none" onClick={handleClickToday}><CircleIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
+                                    <button className="focus:outline-none" onClick={handleClickNextMonth}><AngleRightIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
                                 </div>
                             </div>
 

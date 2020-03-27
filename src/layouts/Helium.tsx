@@ -18,13 +18,13 @@ const Context = createContext<Partial<ContextProps>>({});
 // layout
 
 interface Props {
-    side: boolean,
-    onSide: (side: boolean) => void
+    side?: boolean,
+    onSide?: (side: boolean) => void
 }
 
-export const Helium: FC<Props> = ({ side, onSide, children }) => (
+export const Helium: FC<Props> = ({ side = false, onSide = (side: boolean) => null, children }) => (
     <Context.Provider value={{ side, onSide }}>
-        <div className="relative z-0 min-h-screen flex flex-col">
+        <div className="relative min-h-screen flex flex-col">
             {children}
         </div>
     </Context.Provider>
