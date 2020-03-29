@@ -1,0 +1,41 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { addDecorator } from '@storybook/react';
+import { useViewport, ViewportProvider } from '../hooks/useViewport';
+
+
+<Meta title="Hooks/Viewport"/>
+
+# Viewport
+
+Use a the viewport hook when requiring the size of the current window.  For this
+to work, your root element needs to be wrapped inside `ViewportProvider` that
+provides the context with the listener for the resize event.
+
+```
+<ViewportProvider>
+    <ApplicationCompoment/>
+</ViewPortProvider>
+```
+
+This function is debounced with a 250ms wait, but that can be changed with the
+`wait` parameter in the `ViewportProvider`.
+
+<Preview>
+    <Story name="Basic" parameters={{ decorators: [(Story) => <ViewportProvider>{<Story/>}</ViewportProvider>] }}>
+        {() => {
+            const size = useViewport();
+            return (<div>{JSON.stringify(size)}</div>);
+        }}
+    </Story>
+</Preview>
+
+With a 2 second wait.
+
+<Preview>
+    <Story name="With Wait" parameters={{ decorators: [(Story) => <ViewportProvider wait={2000}>{<Story/>}</ViewportProvider>] }}>
+        {() => {
+            const size = useViewport();
+            return (<div>{JSON.stringify(size)}</div>);
+        }}
+    </Story>
+</Preview>

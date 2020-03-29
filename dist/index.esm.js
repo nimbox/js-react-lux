@@ -1,4 +1,4 @@
-import React__default, { createElement, useEffect, useState, useRef, createContext, useContext } from 'react';
+import React__default, { createElement, useRef, useEffect, useState, createContext, useContext } from 'react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
@@ -202,7 +202,9 @@ Card.Footer = function (_a) {
     return (React__default.createElement("div", { className: "border-t border-content-border p-3" }, children));
 };
 
-var usePopper = function (target, popper, onClickOutside) {
+var useShower = function (onClickOutside) {
+    var target = useRef(null);
+    var popper = useRef(null);
     var handleDocumentClick = function (event) {
         if (popper.current && !popper.current.contains(event.target)) {
             if (target.current && !target.current.contains(event.target)) {
@@ -216,6 +218,7 @@ var usePopper = function (target, popper, onClickOutside) {
             document.removeEventListener("mousedown", handleDocumentClick);
         };
     });
+    return [target, popper];
 };
 
 // constants
@@ -246,9 +249,7 @@ var DatePicker = function (_a) {
     var _c = useState(firstDate(value)), calendar = _c[0], setCalendar = _c[1];
     useEffect(function () { return setCalendar(firstDate(value)); }, [value]);
     var _d = useState(false), show = _d[0], setShow = _d[1];
-    var valueRef = useRef(null);
-    var popperRef = useRef(null);
-    usePopper(valueRef, popperRef, function () { return setShow(false); });
+    var _e = useShower(function () { return setShow(false); }), valueRef = _e[0], popperRef = _e[1];
     // handlers
     var handleShow = function () { if (!show) {
         setShow(true);
@@ -454,9 +455,6 @@ var TextArea = function (_a) {
     return (React__default.createElement("textarea", __assign({}, props, { className: classnames('w-full px-2 py-1 border border-content-border rounded-lg', className) })));
 };
 
-//
-// Postit
-// 
 var Postit = function (_a) {
     var className = _a.className, children = _a.children;
     return (React__default.createElement("div", { className: "postit-container" },
@@ -466,9 +464,7 @@ var Postit = function (_a) {
 var Select = function (_a) {
     var options = _a.options, _b = _a.key, key = _b === void 0 ? function (option) { return option; } : _b, _c = _a.value, _d = _a.onChange, children = _a.children;
     var _e = useState(false), show = _e[0], setShow = _e[1];
-    var valueRef = useRef(null);
-    var popperRef = useRef(null);
-    usePopper(valueRef, popperRef, function () { return setShow(false); });
+    var _f = useShower(function () { return setShow(false); }), valueRef = _f[0], popperRef = _f[1];
     return (React__default.createElement("div", { className: "relative" },
         React__default.createElement("div", { ref: valueRef, className: "pl-4 pr-8 py-2 truncate border rounded-lg", onClick: function () { return setShow(!show); } }, "as jkasd lkjasd lkajsd lkasjd laksjd laksjd laskdj alskdjalsdkj d"),
         React__default.createElement("div", { className: "absolute inset-y-0 right-0 pr-3 flex items-center justify-center" },
@@ -491,9 +487,7 @@ var TimePicker = function (_a) {
     var name = _a.name, value = _a.value, onChange = _a.onChange, placeholder = _a.placeholder;
     var _b = useTranslation(), t = _b.t, ready = _b.ready;
     var _c = useState(false), show = _c[0], setShow = _c[1];
-    var valueRef = useRef(null);
-    var popperRef = useRef(null);
-    usePopper(valueRef, popperRef, function () { return setShow(false); });
+    var _d = useShower(function () { return setShow(false); }), valueRef = _d[0], popperRef = _d[1];
     var times = useRef({ watch: 8 });
     var timesRef = useRef(null);
     useEffect(function () { scroll(); });
@@ -728,5 +722,5 @@ Main.Side = function (_a) {
     return (React__default.createElement("div", { className: classnames('w-1/3 bg-content-bg border-l border-content-border', className) }, children));
 };
 
-export { ButtonBar, Card, Cards, DatePicker, DefaultNavigator, Group, Header, Helium, index as Icons, Input, Label, LinkButton, Main, MoreOptionsButton, Navigator, Postit, PrimaryButton, SecondaryButton, Select, TextArea, TimePicker, Toggle, usePopper };
-//# sourceMappingURL=index.es.js.map
+export { ButtonBar, Card, Cards, DatePicker, DefaultNavigator, Group, Header, Helium, index as Icons, Input, Label, LinkButton, Main, MoreOptionsButton, Navigator, Postit, PrimaryButton, SecondaryButton, Select, TextArea, TimePicker, Toggle, useShower };
+//# sourceMappingURL=index.esm.js.map

@@ -1,5 +1,5 @@
 import React, { FC, ReactElement, useRef, useState } from 'react';
-import { usePopper } from '../hooks/usePopper';
+import { useShower } from '../hooks/useShower';
 import AngleDownIcon from '../icons/AngleDownIcon';
 
 
@@ -17,9 +17,7 @@ interface Props {
 export const Select: FC<Props> = ({ options, key = (option) => option, value = (option) => option, onChange = (option) => null, children }) => {
 
     const [show, setShow] = useState(false);
-    const valueRef = useRef<HTMLDivElement>(null);
-    const popperRef = useRef<HTMLDivElement>(null);
-    usePopper(valueRef, popperRef, () => setShow(false));
+    const [valueRef, popperRef] = useShower(() => setShow(false));
 
     return (
         <div className="relative">

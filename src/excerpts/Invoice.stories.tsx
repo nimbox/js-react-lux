@@ -1,7 +1,7 @@
 import { withKnobs } from "@storybook/addon-knobs";
 import React from 'react';
 import { Card } from "../components/Card";
-import { Postit } from "../components/Postit";
+import { Postit } from "../components/Postit/Postit";
 import '../styles/styles.css';
 import { Invoice as InvoiceComponent } from "./Invoice";
 import { Note as NoteComponent } from './Note';
@@ -10,8 +10,7 @@ import { Payment as PaymentComponent } from './Payment';
 export default {
     title: 'Excerpts', 
     decorators: [
-        withKnobs,
-        (story: () => React.ReactNode) => <div className="h-full p-4 bg-green-100"><div className="bg-white">{story()}</div></div>
+        withKnobs
     ]
 };
 
@@ -38,14 +37,3 @@ export const Invoice = () => {
     );
 
 };
-
-export const SimplePostit = () => {
-    return (
-        <div className="grid grid-cols-1 gap-2">
-            <Postit className="postit w-1/4">Algo</Postit >
-            <Postit className="postit w-2/4">Algo</Postit >
-            <Postit className="postit w-3/4">Algo</Postit >
-            <Postit className="postit w-4/4">Algo</Postit >
-        </div>
-    );
-}

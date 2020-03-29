@@ -6,7 +6,14 @@ import React, { FC } from 'react';
 // Postit
 // 
 
-export const Postit: FC<{ className?: string }> = ({ className, children }) => {
+interface Props {
+
+    /** the css classes */
+    className?: string
+
+}
+
+export const Postit: FC<Props> = ({ className, children }) => {
 
     return (
         <div className="postit-container">

@@ -1,8 +1,7 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { usePopper } from '../hooks/usePopper';
-import {AngleLeftIcon, AngleRightIcon, CircleIcon } from '../icons';
-
+import { useShower } from '../hooks/useShower';
+import { AngleLeftIcon, AngleRightIcon, CircleIcon } from '../icons';
 
 
 //
@@ -52,9 +51,7 @@ export const DatePicker: FC<Props> = ({ name, value, onChange, shortcuts, placeh
     useEffect(() => setCalendar(firstDate(value)), [value]);
 
     const [show, setShow] = useState(false);
-    const valueRef = useRef<HTMLDivElement>(null);
-    const popperRef = useRef<HTMLDivElement>(null);
-    usePopper(valueRef, popperRef, () => setShow(false));
+    const [valueRef, popperRef] = useShower(() => setShow(false));
 
     // handlers
 

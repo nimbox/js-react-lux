@@ -653,6 +653,81 @@ html {
   z-index: -1;
 }
 
+[data-tooltip] {
+  position: relative;
+  z-index: 1;
+}
+
+[data-tooltip]:before {
+  content: "";
+  position: absolute;
+  top: -0.5rem;
+  left: calc(50% - 0.25rem);
+  width: 0;
+  height: 0;
+  border-left: 0.25rem solid transparent;
+  border-right: 0.25rem solid transparent;
+  border-top: 0.5rem solid #222222;
+  opacity: 0;
+  z-index: 2;
+  visibility: hidden;
+}
+
+[data-tooltip]:after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: -2.375rem;
+  left: 50%;
+  margin-top: 2px;
+  margin-left: -1rem;
+  background-color: #222222;
+  color: #ffffff;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  box-shadow: 1px 1px 3px #222222;
+  border: 1px solid #222222;
+  border-radius: 2px;
+  opacity: 0;
+  z-index: 1;
+  visibility: hidden;
+}
+
+[data-tooltip]:hover:before {
+  opacity: 1;
+  transition: all 0.1s ease 0.5s;
+  visibility: visible;
+}
+
+[data-tooltip]:hover:after {
+  opacity: 1;
+  transition: all 0.1s ease 0.5s;
+  visibility: visible;
+}
+
+[data-tooltip][data-tooltip-show]:before {
+  opacity: 1;
+  visibility: visible;
+}
+
+[data-tooltip][data-tooltip-show]:after {
+  opacity: 1;
+  visibility: visible;
+}
+
+svg g.has-svg-tooltip:hover .svg-tooltip {
+  display: inherit;
+}
+
+svg .svg-tooltip {
+  display: none;
+  overflow: visible;
+}
+
+svg .svg-tooltip body {
+  position: fixed;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

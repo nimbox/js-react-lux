@@ -14,7 +14,7 @@ export default {
         },
         {
             file: pack.module,
-            format: 'es',
+            format: 'esm',
             exports: 'named',
             sourcemap: true
         }
@@ -37,7 +37,7 @@ export default {
         typescript({
             clean: true,
             tsconfigOverride: {
-                exclude: [ "src/styles", "**/*.stories.tsx", "src/i18n.tsx" ]
+                exclude: [ "src/styles", "stories/**/*", "**/*.stories.tsx", "src/i18n.tsx" ]
             }
         }),
 
