@@ -5,6 +5,7 @@ import i18n from '../i18n';
 import '../styles/styles.css';
 import { DatePicker } from './DatePicker';
 
+
 const languages = ['en', 'es'];
 
 export default {
@@ -31,6 +32,7 @@ export const Simple = () => {
             <DatePicker name="date" shortcuts={false} value={date} onChange={(d) => setDate(d.target.value)} />
         </div>
     );
+
 };
 
 export const WithShortcuts = () => {
@@ -49,4 +51,5 @@ export const WithShortcuts = () => {
             <DatePicker name="date" shortcuts={true} value={date} onChange={(d) => setDate(d.target.value)} />
         </div>
     );
+
 };

@@ -674,7 +674,7 @@ function formatTime(hm) {
 
 var Context = createContext({});
 var Helium = function (_a) {
-    var _b = _a.side, side = _b === void 0 ? false : _b, _c = _a.onSide, onSide = _c === void 0 ? function (side) { return null; } : _c, children = _a.children;
+    var _b = _a.navigator, side = _b === void 0 ? false : _b, _c = _a.onNavigator, onSide = _c === void 0 ? function (side) { return null; } : _c, children = _a.children;
     return (React__default.createElement(Context.Provider, { value: { side: side, onSide: onSide } },
         React__default.createElement("div", { className: "relative min-h-screen flex flex-col" }, children)));
 };

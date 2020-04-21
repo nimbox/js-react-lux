@@ -9,15 +9,16 @@ import { HamburgerIcon, NimboxIcon, SearchIcon, WaffleIcon } from '../icons';
 import { Header, Helium, Main, Navigator, Toggle } from '../layouts/Helium';
 import '../styles/styles.css';
 
+
 export default { title: 'Layout/Helium', decorators: [withKnobs] };
 
 export const Simple = () => {
 
-    const [side, setSide] = useState(false);
+    const [navigator, setNavigator] = useState(false);
 
     return (
 
-        <Helium side={side} onSide={(s) => setSide(s)}>
+        <Helium navigator={navigator} onNavigator={(s) => setNavigator(s)}>
 
             <Header>
 

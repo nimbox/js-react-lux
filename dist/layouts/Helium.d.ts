@@ -1,7 +1,7 @@
 import { FC } from 'react';
 interface Props {
-    side?: boolean;
-    onSide?: (side: boolean) => void;
+    navigator?: boolean;
+    onNavigator?: (side: boolean) => void;
 }
 export declare const Helium: FC<Props>;
 interface HeaderComponent<P> extends FC<P> {
