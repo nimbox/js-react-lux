@@ -1,8 +1,7 @@
 import React, { FC, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DefaultNavigator } from '../layouts/helium/Navigator';
 import { Link } from 'react-router-dom';
-import { Navigator } from '../layouts/helium/Helium';
+import { Navigator, Panel } from '../layouts/helium/Helium';
 
 
 //
@@ -24,7 +23,7 @@ export interface Props {
     onSupport: () => void
 }
 
-export const ApplicationNavigator: FC<Props> = ({ items, onSupport, children }) => {
+export const ApplicationNavigator: FC<Props> = ({ items, onSupport }) => {
 
     const { t, ready } = useTranslation();
 
@@ -32,27 +31,23 @@ export const ApplicationNavigator: FC<Props> = ({ items, onSupport, children }) 
         <>
 
             <Navigator.Content className="p-3">
-                <DefaultNavigator className="-mx-3">
-
+                <Panel className="-mx-3">
                     {ready && items.map((i) => (
                         (i as Group).items ?
                             <Fragment key={i.name} >
-                                <DefaultNavigator.Group>{t(i.name)}</DefaultNavigator.Group>
+                                <Panel.Group>{t(i.name)}</Panel.Group>
                                 {(i as Group).items.map((j) =>
                                     <Link to={j.to}>
-                                        <DefaultNavigator.Item key={j.name} active={false}>{t(j.name)}</DefaultNavigator.Item>
+                                        <Panel.Item key={j.name} active={false}>{t(j.name)}</Panel.Item>
                                     </Link>
                                 )}
                             </Fragment>
                             :
                             <Link to={(i as Item).to}>
-                                <DefaultNavigator.Item active={false}>{t(i.name)}</DefaultNavigator.Item>
+                                <Panel.Item active={false}>{t(i.name)}</Panel.Item>
                             </Link>
                     ))}
-
-                    {children}
-
-                </DefaultNavigator>
+                </Panel>
             </Navigator.Content>
 
             <Navigator.Footer className="px-3 py-2">

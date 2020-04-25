@@ -1,10 +1,9 @@
-import { withKnobs } from "@storybook/addon-knobs";
+import { withKnobs } from '@storybook/addon-knobs';
 import React, { useState } from 'react';
-import { SearchInput } from "../components/Form";
-import { HamburgerIcon, NimboxIcon } from '../icons';
-import { Header, Helium, Main, Navigator, Toggle } from '../layouts/helium/Helium';
-import { DefaultNavigator } from '../layouts/helium/Navigator';
-import '../styles/styles.css';
+import { SearchInput } from '../../components/Form';
+import { HamburgerIcon, NimboxIcon, CrossIcon } from '../../icons';
+import { Header, Helium, Main, Navigator, Toggle, Panel } from './Helium';
+import '../../styles/styles.css'
 
 
 export default { title: 'Layout/Helium', decorators: [withKnobs] };
@@ -15,14 +14,14 @@ export const Simple = () => {
 
     return (
 
-        <Helium navigator={navigator} onNavigator={(s) => setNavigator(s)}>
+        <Helium navigator={navigator} setNavigator={(s) => setNavigator(s)}>
 
             <Header className="px-3 pl-0 flex flex-row justify-between items-stretch">
 
                 <div className="h-full flex flex-row items-center">
 
-                    <Toggle><HamburgerIcon className="w-8 h-8 fill-current" /></Toggle>
-                    <SearchInput className="pl-3"/>
+                    <Toggle always={true}><HamburgerIcon className="w-8 h-8 fill-current" /></Toggle>
+                    <SearchInput className="pl-3" />
 
                 </div>
 
@@ -37,28 +36,28 @@ export const Simple = () => {
 
             <Navigator>
 
-                <Navigator.Header className="px-3 flex flex-row items-center justify-between">
+                <Navigator.Header className="pl-3 flex flex-row items-center justify-between">
                     <NimboxIcon className="w-8 h-8" />
-                    <div>Right</div>
+                    <Toggle always={false}><CrossIcon className="w-8 h-8 stroke-2" /></Toggle>
                 </Navigator.Header>
 
                 <Navigator.Content className="p-3">
-                    <DefaultNavigator className="-mx-3">
+                    <Panel className="-mx-3">
 
-                        <DefaultNavigator.Group>Menú</DefaultNavigator.Group>
-                        <DefaultNavigator.Item active={true}>Clientes</DefaultNavigator.Item>
-                        <DefaultNavigator.Item active={false}>Vendedores</DefaultNavigator.Item>
-                        <DefaultNavigator.Item active={false}>Documentos</DefaultNavigator.Item>
-                        <DefaultNavigator.Item active={false}>Cobros</DefaultNavigator.Item>
-                        <DefaultNavigator.Item active={false}>Notas</DefaultNavigator.Item>
-                        <DefaultNavigator.Item active={false}>Tareas</DefaultNavigator.Item>
+                        <Panel.Group>Menú</Panel.Group>
+                        <Panel.Item active={true}>Clientes</Panel.Item>
+                        <Panel.Item active={false}>Vendedores</Panel.Item>
+                        <Panel.Item active={false}>Documentos</Panel.Item>
+                        <Panel.Item active={false}>Cobros</Panel.Item>
+                        <Panel.Item active={false}>Notas</Panel.Item>
+                        <Panel.Item active={false}>Tareas</Panel.Item>
 
-                        <DefaultNavigator.Group>Extra</DefaultNavigator.Group>
-                        <DefaultNavigator.Item active={false}>Laboratorio</DefaultNavigator.Item>
+                        <Panel.Group>Extra</Panel.Group>
+                        <Panel.Item active={false}>Laboratorio</Panel.Item>
 
-                        {[...Array(100)].map(() => <DefaultNavigator.Item active={false}>Otros</DefaultNavigator.Item>)}
+                        {[...Array(100)].map(() => <Panel.Item active={false}>Otros</Panel.Item>)}
 
-                    </DefaultNavigator>
+                    </Panel>
                 </Navigator.Content>
 
                 <Navigator.Footer className="px-3 py-2">
@@ -80,7 +79,7 @@ export const Simple = () => {
 
                 <Main.Content className="p-3">
                     <div>first</div>
-                    {[...Array(2)].map(() => <div>content</div>)}
+                    {[...Array(100)].map(() => <div>content</div>)}
                 </Main.Content >
 
                 {true &&
