@@ -35,8 +35,11 @@ module.exports = {
           500: '#34aa44'
         }
 
+      },
+      transitionProperty: {
+        'height': 'height',
+        'spacing': 'margin, padding'
       }
-
     }
   },
 

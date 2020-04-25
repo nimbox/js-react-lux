@@ -6,8 +6,9 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var React = require('react');
 var React__default = _interopDefault(React);
-var classnames = _interopDefault(require('classnames'));
 var reactI18next = require('react-i18next');
+var classnames = _interopDefault(require('classnames'));
+var reactRouterDom = require('react-router-dom');
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -156,6 +157,140 @@ var index = /*#__PURE__*/Object.freeze({
     ThumbsUpIcon: SvgThumbsUpIcon,
     WaffleIcon: SvgWaffleIcon
 });
+
+var DefaultNavigator = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('flex flex-col', className) }, children));
+};
+DefaultNavigator.Group = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('px-3 py-2 text-xs text-muted uppercase', className) }, children));
+};
+DefaultNavigator.Item = function (_a) {
+    var active = _a.active, className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, children));
+};
+
+var Context = React.createContext({});
+var Helium = function (_a) {
+    var _b = _a.navigator, side = _b === void 0 ? false : _b, _c = _a.onNavigator, onSide = _c === void 0 ? function (side) { return null; } : _c, children = _a.children;
+    return (React__default.createElement(Context.Provider, { value: { side: side, onSide: onSide } },
+        React__default.createElement("div", { className: "relative min-h-screen flex flex-col" }, children)));
+};
+// header
+var Header = function (_a) {
+    var className = _a.className, children = _a.children;
+    var context = React.useContext(Context);
+    return (React__default.createElement("header", { className: classnames(context.side ? 'pl-0 md:pl-56' : 'pl-0', 'fixed z-10 inset-x-0 top-0 h-16 flex-none text-content bg-content-fg border-b border-content-border transition duration-700 ease-in-out transition-spacing') },
+        React__default.createElement("div", { className: classnames('h-full', className) }, children)));
+};
+// toggle
+var Toggle = function (_a) {
+    var children = _a.children;
+    var context = React.useContext(Context);
+    return (React__default.createElement("div", { className: "h-16 w-16 text-center hover:text-white hover:bg-primary-500 flex flex-row items-center justify-center" },
+        React__default.createElement("button", { onClick: function () { return context.onSide(!context.side); }, className: "focus:outline-none" }, children)));
+};
+var Navigator = function (_a) {
+    var className = _a.className, children = _a.children;
+    var context = React.useContext(Context);
+    return (React__default.createElement(React__default.Fragment, null,
+        context.side && React__default.createElement("div", { className: classnames('fixed z-10 inset-0 bg-gray-800 opacity-50 md:hidden'), onClick: function () { return context.onSide(false); } }),
+        React__default.createElement("div", { className: classnames('fixed z-20 inset-y-0 left-0 w-56 transform', context.side ? 'translate-x-0' : '-translate-x-56', 'transition duration-700 ease-in-out transition-transform') },
+            React__default.createElement("div", { className: classnames('h-full flex flex-col text-navigator bg-navigator-bg', className) }, children))));
+};
+var NavigatorHeader = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: "flex-none h-16 border-b border-navigator-border" },
+        React__default.createElement("div", { className: classnames('w-full h-full', className) }, children)));
+};
+var NavigatorContent = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('flex-grow overflow-y-scroll', className) }, children));
+};
+var NavigatorFooter = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('flex-none flex-none border-t border-navigator-border', className) }, children));
+};
+Navigator.Header = NavigatorHeader;
+Navigator.Content = NavigatorContent;
+Navigator.Footer = NavigatorFooter;
+var Main = function (_a) {
+    var children = _a.children;
+    var context = React.useContext(Context);
+    return (React__default.createElement("main", { className: classnames('h-full', context.side ? 'pl-0 md:pl-56' : 'pl-0', 'pt-16 flex-grow flex flex-row items-stretch overflow-y-auto text-content bg-content-bg transition duration-700 ease-in-out transition-spacing') }, children));
+};
+Main.Content = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('w-2/3 flex-grow', className) }, children));
+};
+Main.Side = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('w-1/3 bg-content-fg border-l border-content-border', className) }, children));
+};
+
+var ApplicationNavigator = function (_a) {
+    var items = _a.items, onSupport = _a.onSupport, children = _a.children;
+    var _b = reactI18next.useTranslation(), t = _b.t, ready = _b.ready;
+    return (React__default.createElement(React__default.Fragment, null,
+        React__default.createElement(Navigator.Content, { className: "p-3" },
+            React__default.createElement(DefaultNavigator, { className: "-mx-3" },
+                ready && items.map(function (i) { return (i.items ?
+                    React__default.createElement(React.Fragment, { key: i.name },
+                        React__default.createElement(DefaultNavigator.Group, null, t(i.name)),
+                        i.items.map(function (j) {
+                            return React__default.createElement(reactRouterDom.Link, { to: j.to },
+                                React__default.createElement(DefaultNavigator.Item, { key: j.name, active: false }, t(j.name)));
+                        }))
+                    :
+                        React__default.createElement(reactRouterDom.Link, { to: i.to },
+                            React__default.createElement(DefaultNavigator.Item, { active: false }, t(i.name)))); }),
+                children)),
+        React__default.createElement(Navigator.Footer, { className: "px-3 py-2" },
+            React__default.createElement("div", { onClick: onSupport, className: "flex flex-row items-center justify-between cursor-pointer" },
+                React__default.createElement("div", null,
+                    React__default.createElement("div", { className: "" }, "Soporte"),
+                    React__default.createElement("div", { className: "text-xs text-muted" }, "Solicita ayuda aqu\u00ED")),
+                React__default.createElement("div", { className: "w-6 text-center rounded-full bg-navigator text-navigator-bg" }, "?"))),
+        React__default.createElement(Navigator.Footer, { className: "px-3 py-2" },
+            React__default.createElement("div", { className: "text-xs text-muted" }, "\u00A9 2020 Nimbox Technologies LTD"))));
+};
+
+//
+// Delay
+//
+var Delay = function (_a) {
+    var _b = _a.delay, delay = _b === void 0 ? 250 : _b, children = _a.children;
+    var _c = React.useState(false), show = _c[0], setShow = _c[1];
+    React.useEffect(function () { setTimeout(function () { return setShow(true); }, delay); }, [delay, setShow]);
+    return show ? children : null;
+};
+
+var Loading = function (_a) {
+    var className = _a.className;
+    return (React__default.createElement("svg", { width: "45", height: "45", viewBox: "0 0 45 45", xmlns: "http://www.w3.org/2000/svg", stroke: "currentColor", className: classnames('inline-block', 'h-4', className) },
+        React__default.createElement("g", { fill: "none", fillRule: "evenodd", transform: "translate(1 1)", strokeWidth: "2" },
+            React__default.createElement("circle", { cx: "22", cy: "22", r: "6", strokeOpacity: "0" },
+                React__default.createElement("animate", { attributeName: "r", begin: "1.5s", dur: "3s", values: "6;22", calcMode: "linear", repeatCount: "indefinite" }),
+                React__default.createElement("animate", { attributeName: "stroke-opacity", begin: "1.5s", dur: "3s", values: "1;0", calcMode: "linear", repeatCount: "indefinite" }),
+                React__default.createElement("animate", { attributeName: "stroke-width", begin: "1.5s", dur: "3s", values: "2;0", calcMode: "linear", repeatCount: "indefinite" })),
+            React__default.createElement("circle", { cx: "22", cy: "22", r: "6", strokeOpacity: "0" },
+                React__default.createElement("animate", { attributeName: "r", begin: "3s", dur: "3s", values: "6;22", calcMode: "linear", repeatCount: "indefinite" }),
+                React__default.createElement("animate", { attributeName: "stroke-opacity", begin: "3s", dur: "3s", values: "1;0", calcMode: "linear", repeatCount: "indefinite" }),
+                React__default.createElement("animate", { attributeName: "stroke-width", begin: "3s", dur: "3s", values: "2;0", calcMode: "linear", repeatCount: "indefinite" })),
+            React__default.createElement("circle", { cx: "22", cy: "22", r: "8" },
+                React__default.createElement("animate", { attributeName: "r", begin: "0s", dur: "1.5s", values: "6;1;2;3;4;5;6", calcMode: "linear", repeatCount: "indefinite" })))));
+};
+
+//
+// ApplicationLoading
+//
+var ApplicationLoading = function (_a) { return (React__default.createElement(Delay, { delay: 500 },
+    React__default.createElement("div", { className: "h-screen flex flex-row justify-center items-center" },
+        React__default.createElement("div", { className: "inline-block text-center" },
+            React__default.createElement("p", null,
+                React__default.createElement(Loading, { className: "h-20" })),
+            React__default.createElement("p", null, "Loading..."))))); };
 
 //
 // buttons
@@ -417,31 +552,6 @@ function formatDate(ymd) {
     return (ymd[2] < 10 ? '0' + ymd[2] : ymd[2]) + '-' + (m < 10 ? '0' + m : m) + '-' + ymd[0];
 }
 
-var DefaultNavigator = function (_a) {
-    var children = _a.children;
-    return (React__default.createElement("div", { className: "h-full flex-grow flex flex-col" }, children));
-};
-DefaultNavigator.Content = function (_a) {
-    var children = _a.children;
-    return (React__default.createElement("div", { className: "flex-grow overflow-y-scroll" }, children));
-};
-DefaultNavigator.Group = function (_a) {
-    var children = _a.children;
-    return (React__default.createElement("div", { className: "px-3 py-2 text-xs text-muted uppercase" }, children));
-};
-DefaultNavigator.Item = function (_a) {
-    var active = _a.active, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }) }, children));
-};
-DefaultNavigator.Footer = function (_a) {
-    var children = _a.children;
-    return (React__default.createElement("div", { className: "px-3 py-2 flex-none border-t border-navigator-border" }, children));
-};
-DefaultNavigator.Copyright = function (_a) {
-    var children = _a.children;
-    return (React__default.createElement("div", { className: "" }, children));
-};
-
 //
 // form
 //
@@ -460,6 +570,14 @@ var Input = function (_a) {
 var TextArea = function (_a) {
     var className = _a.className, props = __rest(_a, ["className"]);
     return (React__default.createElement("textarea", __assign({}, props, { className: classnames('w-full px-2 py-1 border border-content-border rounded-lg', className) })));
+};
+var SearchInput = function (_a) {
+    var className = _a.className, props = __rest(_a, ["className"]);
+    return (React__default.createElement("div", { className: className },
+        React__default.createElement("div", { className: "relative" },
+            React__default.createElement("input", __assign({}, props, { type: "search", placeholder: "Search", className: "w-56 pl-10 pr-4 py-2 border border-content-border rounded-lg" })),
+            React__default.createElement("div", { className: "absolute inset-y-0 left-0 pl-3 flex items-center justify-center" },
+                React__default.createElement(SvgSearchIcon, { className: "text-content h-5 w-5 stroke-current stroke-2" })))));
 };
 
 var Postit = function (_a) {
@@ -679,61 +797,13 @@ function formatTime(hm) {
     }
 }
 
-var Context = React.createContext({});
-var Helium = function (_a) {
-    var _b = _a.navigator, side = _b === void 0 ? false : _b, _c = _a.onNavigator, onSide = _c === void 0 ? function (side) { return null; } : _c, children = _a.children;
-    return (React__default.createElement(Context.Provider, { value: { side: side, onSide: onSide } },
-        React__default.createElement("div", { className: "relative min-h-screen flex flex-col" }, children)));
-};
-var Header = function (_a) {
-    var children = _a.children;
-    return (React__default.createElement("header", { className: "fixed z-10 inset-x-0 top-0 h-16 flex-none flex flex-row items-stretch bg-content-fg" }, children));
-};
-var HeaderSide = function (_a) {
-    var children = _a.children;
-    var context = React.useContext(Context);
-    return (React__default.createElement("div", { className: classnames(!context.side ? 'w-16 md:w-56' : 'w-16', 'px-3 z-20 flex flex-row items-center justify-between text-navigator bg-navigator-bg border-b border-navigator-border') }, children));
-};
-var HeaderContent = function (_a) {
-    var children = _a.children;
-    return (React__default.createElement("div", { className: "flex-grow flex flex-row items-center px-3 border-b border-content-border" }, children));
-};
-Header.Navigator = HeaderSide;
-Header.Content = HeaderContent;
-// toggle
-var Toggle = function (_a) {
-    var children = _a.children;
-    var context = React.useContext(Context);
-    return (React__default.createElement("span", { className: "w-16 text-center bg-navigator-bg md:hidden" },
-        React__default.createElement("button", { onClick: function () { return context.onSide(!context.side); } }, children)));
-};
-//  navigator
-var Navigator = function (_a) {
-    var children = _a.children;
-    var context = React.useContext(Context);
-    return (React__default.createElement(React__default.Fragment, null,
-        context.side && React__default.createElement("div", { className: classnames('fixed z-10 inset-0 bg-gray-800 opacity-50'), onClick: function () { return context.onSide(false); } }),
-        React__default.createElement("div", { className: classnames('fixed z-20 inset-y-0 left-0 w-56 mt-16 text-navigator bg-navigator-bg transform', !context.side ? '-translate-x-56 md:translate-x-0' : 'translate-x-0', 'transition duration-150 ease-in-out transition-transform') }, children)));
-};
-var Main = function (_a) {
-    var children = _a.children;
-    var context = React.useContext(Context);
-    return (React__default.createElement("main", { className: classnames('pt-16', !context.side ? 'pl-0 md:pl-56' : 'pl-0', 'flex-grow flex flex-row items-stretch overflow-y-auto text-content bg-content-bg') }, children));
-};
-Main.Content = function (_a) {
-    var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('w-2/3', className) }, children));
-};
-Main.Side = function (_a) {
-    var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('w-1/3 bg-content-bg border-l border-content-border', className) }, children));
-};
-
+exports.ApplicationLoading = ApplicationLoading;
+exports.ApplicationNavigator = ApplicationNavigator;
 exports.ButtonBar = ButtonBar;
 exports.Card = Card;
 exports.Cards = Cards;
 exports.DatePicker = DatePicker;
-exports.DefaultNavigator = DefaultNavigator;
+exports.Delay = Delay;
 exports.Group = Group;
 exports.Header = Header;
 exports.Helium = Helium;
@@ -741,11 +811,13 @@ exports.Icons = index;
 exports.Input = Input;
 exports.Label = Label;
 exports.LinkButton = LinkButton;
+exports.Loading = Loading;
 exports.Main = Main;
 exports.MoreOptionsButton = MoreOptionsButton;
 exports.Navigator = Navigator;
 exports.Postit = Postit;
 exports.PrimaryButton = PrimaryButton;
+exports.SearchInput = SearchInput;
 exports.SecondaryButton = SecondaryButton;
 exports.Select = Select;
 exports.TextArea = TextArea;

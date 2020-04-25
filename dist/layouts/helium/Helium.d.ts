@@ -4,13 +4,24 @@ interface Props {
     onNavigator?: (side: boolean) => void;
 }
 export declare const Helium: FC<Props>;
-interface HeaderComponent<P> extends FC<P> {
-    Navigator: FC<{}>;
-    Content: FC<{}>;
-}
-export declare const Header: HeaderComponent<{}>;
+export declare const Header: FC<{
+    className?: string;
+}>;
 export declare const Toggle: FC<{}>;
-export declare const Navigator: FC<{}>;
+interface NavigatorComponent<P> extends FC<P> {
+    Header: FC<{
+        className?: string;
+    }>;
+    Content: FC<{
+        className?: string;
+    }>;
+    Footer: FC<{
+        className?: string;
+    }>;
+}
+export declare const Navigator: NavigatorComponent<{
+    className?: string;
+}>;
 interface MainComponent<P> extends FC<P> {
     Content: FC<{
         className?: string;
