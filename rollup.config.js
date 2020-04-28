@@ -7,12 +7,6 @@ export default {
     input: 'src/index.ts',
     output: [
         {
-            file: pack.main,
-            format: 'cjs',
-            exports: 'named',
-            sourcemap: true
-        },
-        {
             file: pack.module,
             format: 'esm',
             exports: 'named',
