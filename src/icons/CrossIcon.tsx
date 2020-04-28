@@ -13,7 +13,7 @@ function SvgCrossIcon(props: React.SVGProps<SVGSVGElement>) {
       strokeLinejoin="round"
       {...props}
     >
-      <path className="cross-icon_svg__st0" d="M6 6l20 20M26 6L6 26" />
+      <path d="M6 6l20 20M26 6L6 26" />
     </svg>
   );
 }

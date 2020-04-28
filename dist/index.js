@@ -7,8 +7,8 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var React = require('react');
 var React__default = _interopDefault(React);
 var reactI18next = require('react-i18next');
-var classnames = _interopDefault(require('classnames'));
 var reactRouterDom = require('react-router-dom');
+var classnames = _interopDefault(require('classnames'));
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -76,6 +76,11 @@ function SvgCheckIcon(props) {
 function SvgCircleIcon(props) {
     return (React.createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props),
         React.createElement("circle", { cx: 16, cy: 16, r: 10 })));
+}
+
+function SvgCrossIcon(props) {
+    return (React.createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props),
+        React.createElement("path", { d: "M6 6l20 20M26 6L6 26" })));
 }
 
 function SvgEditIcon(props) {
@@ -147,6 +152,7 @@ var index = /*#__PURE__*/Object.freeze({
     AngleUpIcon: SvgAngleUpIcon,
     CheckIcon: SvgCheckIcon,
     CircleIcon: SvgCircleIcon,
+    CrossIcon: SvgCrossIcon,
     EditIcon: SvgEditIcon,
     HamburgerIcon: SvgHamburgerIcon,
     NimboxIcon: SvgNimboxIcon,
@@ -158,45 +164,32 @@ var index = /*#__PURE__*/Object.freeze({
     WaffleIcon: SvgWaffleIcon
 });
 
-var DefaultNavigator = function (_a) {
-    var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('flex flex-col', className) }, children));
-};
-DefaultNavigator.Group = function (_a) {
-    var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('px-3 py-2 text-xs text-muted uppercase', className) }, children));
-};
-DefaultNavigator.Item = function (_a) {
-    var active = _a.active, className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, children));
-};
-
 var Context = React.createContext({});
 var Helium = function (_a) {
-    var _b = _a.navigator, side = _b === void 0 ? false : _b, _c = _a.onNavigator, onSide = _c === void 0 ? function (side) { return null; } : _c, children = _a.children;
-    return (React__default.createElement(Context.Provider, { value: { side: side, onSide: onSide } },
+    var _b = _a.navigator, navigator = _b === void 0 ? false : _b, _c = _a.setNavigator, setNavigator = _c === void 0 ? function (show) { return null; } : _c, children = _a.children;
+    return (React__default.createElement(Context.Provider, { value: { navigator: navigator, setNavigator: setNavigator } },
         React__default.createElement("div", { className: "relative min-h-screen flex flex-col" }, children)));
 };
 // header
 var Header = function (_a) {
     var className = _a.className, children = _a.children;
     var context = React.useContext(Context);
-    return (React__default.createElement("header", { className: classnames(context.side ? 'pl-0 md:pl-56' : 'pl-0', 'fixed z-10 inset-x-0 top-0 h-16 flex-none text-content bg-content-fg border-b border-content-border transition duration-700 ease-in-out transition-spacing') },
+    return (React__default.createElement("header", { className: classnames(context.navigator ? 'pl-0 md:pl-56' : 'pl-0', 'fixed z-10 inset-x-0 top-0 h-16 flex-none text-content bg-content-fg border-b border-content-border transition duration-700 ease-in-out transition-spacing') },
         React__default.createElement("div", { className: classnames('h-full', className) }, children)));
 };
 // toggle
 var Toggle = function (_a) {
-    var children = _a.children;
+    var always = _a.always, children = _a.children;
     var context = React.useContext(Context);
-    return (React__default.createElement("div", { className: "h-16 w-16 text-center hover:text-white hover:bg-primary-500 flex flex-row items-center justify-center" },
-        React__default.createElement("button", { onClick: function () { return context.onSide(!context.side); }, className: "focus:outline-none" }, children)));
+    return (React__default.createElement("div", { className: classnames('h-16 w-16 text-center hover:text-white hover:bg-primary-500', always ? 'flex' : 'flex md:hidden', 'flex-row items-center justify-center') },
+        React__default.createElement("button", { onClick: function () { return context.setNavigator(!context.navigator); }, className: "focus:outline-none" }, children)));
 };
 var Navigator = function (_a) {
     var className = _a.className, children = _a.children;
     var context = React.useContext(Context);
     return (React__default.createElement(React__default.Fragment, null,
-        context.side && React__default.createElement("div", { className: classnames('fixed z-10 inset-0 bg-gray-800 opacity-50 md:hidden'), onClick: function () { return context.onSide(false); } }),
-        React__default.createElement("div", { className: classnames('fixed z-20 inset-y-0 left-0 w-56 transform', context.side ? 'translate-x-0' : '-translate-x-56', 'transition duration-700 ease-in-out transition-transform') },
+        context.navigator && React__default.createElement("div", { className: classnames('fixed z-10 inset-0 bg-gray-800 opacity-50 md:hidden'), onClick: function () { return context.setNavigator(false); } }),
+        React__default.createElement("div", { className: classnames('fixed z-20 inset-y-0 left-0 w-56 transform', context.navigator ? 'translate-x-0' : '-translate-x-56', 'transition duration-700 ease-in-out transition-transform') },
             React__default.createElement("div", { className: classnames('h-full flex flex-col text-navigator bg-navigator-bg', className) }, children))));
 };
 var NavigatorHeader = function (_a) {
@@ -218,7 +211,7 @@ Navigator.Footer = NavigatorFooter;
 var Main = function (_a) {
     var children = _a.children;
     var context = React.useContext(Context);
-    return (React__default.createElement("main", { className: classnames('h-full', context.side ? 'pl-0 md:pl-56' : 'pl-0', 'pt-16 flex-grow flex flex-row items-stretch overflow-y-auto text-content bg-content-bg transition duration-700 ease-in-out transition-spacing') }, children));
+    return (React__default.createElement("main", { className: classnames('h-full', context.navigator ? 'pl-0 md:pl-56' : 'pl-0', 'pt-16 flex-grow flex flex-row items-stretch overflow-y-auto text-content bg-content-bg transition duration-700 ease-in-out transition-spacing') }, children));
 };
 Main.Content = function (_a) {
     var className = _a.className, children = _a.children;
@@ -228,24 +221,34 @@ Main.Side = function (_a) {
     var className = _a.className, children = _a.children;
     return (React__default.createElement("div", { className: classnames('w-1/3 bg-content-fg border-l border-content-border', className) }, children));
 };
+var Panel = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('flex flex-col', className) }, children));
+};
+Panel.Group = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('px-3 py-2 text-xs text-muted uppercase', className) }, children));
+};
+Panel.Item = function (_a) {
+    var active = _a.active, className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, children));
+};
 
 var ApplicationNavigator = function (_a) {
-    var items = _a.items, onSupport = _a.onSupport, children = _a.children;
+    var items = _a.items, onSupport = _a.onSupport;
     var _b = reactI18next.useTranslation(), t = _b.t, ready = _b.ready;
     return (React__default.createElement(React__default.Fragment, null,
         React__default.createElement(Navigator.Content, { className: "p-3" },
-            React__default.createElement(DefaultNavigator, { className: "-mx-3" },
-                ready && items.map(function (i) { return (i.items ?
-                    React__default.createElement(React.Fragment, { key: i.name },
-                        React__default.createElement(DefaultNavigator.Group, null, t(i.name)),
-                        i.items.map(function (j) {
-                            return React__default.createElement(reactRouterDom.Link, { to: j.to },
-                                React__default.createElement(DefaultNavigator.Item, { key: j.name, active: false }, t(j.name)));
-                        }))
-                    :
-                        React__default.createElement(reactRouterDom.Link, { to: i.to },
-                            React__default.createElement(DefaultNavigator.Item, { active: false }, t(i.name)))); }),
-                children)),
+            React__default.createElement(Panel, { className: "-mx-3" }, ready && items.map(function (i) { return (i.items ?
+                React__default.createElement(React.Fragment, { key: i.name },
+                    React__default.createElement(Panel.Group, null, t(i.name)),
+                    i.items.map(function (j) {
+                        return React__default.createElement(reactRouterDom.Link, { to: j.to },
+                            React__default.createElement(Panel.Item, { key: j.name, active: false }, t(j.name)));
+                    }))
+                :
+                    React__default.createElement(reactRouterDom.Link, { to: i.to },
+                        React__default.createElement(Panel.Item, { active: false }, t(i.name)))); }))),
         React__default.createElement(Navigator.Footer, { className: "px-3 py-2" },
             React__default.createElement("div", { onClick: onSupport, className: "flex flex-row items-center justify-between cursor-pointer" },
                 React__default.createElement("div", null,
@@ -815,6 +818,7 @@ exports.Loading = Loading;
 exports.Main = Main;
 exports.MoreOptionsButton = MoreOptionsButton;
 exports.Navigator = Navigator;
+exports.Panel = Panel;
 exports.Postit = Postit;
 exports.PrimaryButton = PrimaryButton;
 exports.SearchInput = SearchInput;

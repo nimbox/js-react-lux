@@ -4,6 +4,7 @@ export { default as AngleRightIcon } from './AngleRightIcon';
 export { default as AngleUpIcon } from './AngleUpIcon';
 export { default as CheckIcon } from './CheckIcon';
 export { default as CircleIcon } from './CircleIcon';
+export { default as CrossIcon } from './CrossIcon';
 export { default as EditIcon } from './EditIcon';
 export { default as HamburgerIcon } from './HamburgerIcon';
 export { default as NimboxIcon } from './NimboxIcon';
