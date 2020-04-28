@@ -27,6 +27,15 @@
     "react-i18next": "^11.4.0",
     "react-router-dom": "^5.1.2"
   },
+  "peerDependencies": {
+    "@popperjs/core": "^2.4.0",
+    "classnames": "^2.2.6",
+    "lodash": "^4.17.15",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-i18next": "^11.4.0",
+    "react-router-dom": "^5.1.2"
+  },
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@storybook/addon-docs": "^5.3.18",
