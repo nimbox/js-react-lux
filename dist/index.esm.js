@@ -1,7 +1,6 @@
-import React__default, { createElement, createContext, useContext, Fragment, useState, useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import React__default, { createElement, useRef, useEffect, useState, createContext, useContext } from 'react';
 import classnames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -156,137 +155,6 @@ var index = /*#__PURE__*/Object.freeze({
     ThumbsUpIcon: SvgThumbsUpIcon,
     WaffleIcon: SvgWaffleIcon
 });
-
-var Context = createContext({});
-var Helium = function (_a) {
-    var _b = _a.navigator, navigator = _b === void 0 ? false : _b, _c = _a.setNavigator, setNavigator = _c === void 0 ? function (show) { return null; } : _c, children = _a.children;
-    return (React__default.createElement(Context.Provider, { value: { navigator: navigator, setNavigator: setNavigator } },
-        React__default.createElement("div", { className: "relative min-h-screen flex flex-col" }, children)));
-};
-// header
-var Header = function (_a) {
-    var className = _a.className, children = _a.children;
-    var context = useContext(Context);
-    return (React__default.createElement("header", { className: classnames(context.navigator ? 'pl-0 md:pl-56' : 'pl-0', 'fixed z-10 inset-x-0 top-0 h-16 flex-none text-content bg-content-fg border-b border-content-border transition duration-700 ease-in-out transition-spacing') },
-        React__default.createElement("div", { className: classnames('h-full', className) }, children)));
-};
-// toggle
-var Toggle = function (_a) {
-    var always = _a.always, children = _a.children;
-    var context = useContext(Context);
-    return (React__default.createElement("div", { className: classnames('h-16 w-16 text-center hover:text-white hover:bg-primary-500', always ? 'flex' : 'flex md:hidden', 'flex-row items-center justify-center') },
-        React__default.createElement("button", { onClick: function () { return context.setNavigator(!context.navigator); }, className: "focus:outline-none" }, children)));
-};
-var Navigator = function (_a) {
-    var className = _a.className, children = _a.children;
-    var context = useContext(Context);
-    return (React__default.createElement(React__default.Fragment, null,
-        context.navigator && React__default.createElement("div", { className: classnames('fixed z-10 inset-0 bg-gray-800 opacity-50 md:hidden'), onClick: function () { return context.setNavigator(false); } }),
-        React__default.createElement("div", { className: classnames('fixed z-20 inset-y-0 left-0 w-56 transform', context.navigator ? 'translate-x-0' : '-translate-x-56', 'transition duration-700 ease-in-out transition-transform') },
-            React__default.createElement("div", { className: classnames('h-full flex flex-col text-navigator bg-navigator-bg', className) }, children))));
-};
-var NavigatorHeader = function (_a) {
-    var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: "flex-none h-16 border-b border-navigator-border" },
-        React__default.createElement("div", { className: classnames('w-full h-full', className) }, children)));
-};
-var NavigatorContent = function (_a) {
-    var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('flex-grow overflow-y-scroll', className) }, children));
-};
-var NavigatorFooter = function (_a) {
-    var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('flex-none flex-none border-t border-navigator-border', className) }, children));
-};
-Navigator.Header = NavigatorHeader;
-Navigator.Content = NavigatorContent;
-Navigator.Footer = NavigatorFooter;
-var Main = function (_a) {
-    var children = _a.children;
-    var context = useContext(Context);
-    return (React__default.createElement("main", { className: classnames('h-full', context.navigator ? 'pl-0 md:pl-56' : 'pl-0', 'pt-16 flex-grow flex flex-row items-stretch overflow-y-auto text-content bg-content-bg transition duration-700 ease-in-out transition-spacing') }, children));
-};
-Main.Content = function (_a) {
-    var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('w-2/3 flex-grow', className) }, children));
-};
-Main.Side = function (_a) {
-    var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('w-1/3 bg-content-fg border-l border-content-border', className) }, children));
-};
-var Panel = function (_a) {
-    var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('flex flex-col', className) }, children));
-};
-Panel.Group = function (_a) {
-    var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('px-3 py-2 text-xs text-muted uppercase', className) }, children));
-};
-Panel.Item = function (_a) {
-    var active = _a.active, className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, children));
-};
-
-var ApplicationNavigator = function (_a) {
-    var items = _a.items, onSupport = _a.onSupport;
-    var _b = useTranslation(), t = _b.t, ready = _b.ready;
-    return (React__default.createElement(React__default.Fragment, null,
-        React__default.createElement(Navigator.Content, { className: "p-3" },
-            React__default.createElement(Panel, { className: "-mx-3" }, ready && items.map(function (i) { return (i.items ?
-                React__default.createElement(Fragment, { key: i.name },
-                    React__default.createElement(Panel.Group, null, t(i.name)),
-                    i.items.map(function (j) {
-                        return React__default.createElement(Link, { to: j.to },
-                            React__default.createElement(Panel.Item, { key: j.name, active: false }, t(j.name)));
-                    }))
-                :
-                    React__default.createElement(Link, { to: i.to },
-                        React__default.createElement(Panel.Item, { active: false }, t(i.name)))); }))),
-        React__default.createElement(Navigator.Footer, { className: "px-3 py-2" },
-            React__default.createElement("div", { onClick: onSupport, className: "flex flex-row items-center justify-between cursor-pointer" },
-                React__default.createElement("div", null,
-                    React__default.createElement("div", { className: "" }, "Soporte"),
-                    React__default.createElement("div", { className: "text-xs text-muted" }, "Solicita ayuda aqu\u00ED")),
-                React__default.createElement("div", { className: "w-6 text-center rounded-full bg-navigator text-navigator-bg" }, "?"))),
-        React__default.createElement(Navigator.Footer, { className: "px-3 py-2" },
-            React__default.createElement("div", { className: "text-xs text-muted" }, "\u00A9 2020 Nimbox Technologies LTD"))));
-};
-
-//
-// Delay
-//
-var Delay = function (_a) {
-    var _b = _a.delay, delay = _b === void 0 ? 250 : _b, children = _a.children;
-    var _c = useState(false), show = _c[0], setShow = _c[1];
-    useEffect(function () { setTimeout(function () { return setShow(true); }, delay); }, [delay, setShow]);
-    return show ? children : null;
-};
-
-var Loading = function (_a) {
-    var className = _a.className;
-    return (React__default.createElement("svg", { width: "45", height: "45", viewBox: "0 0 45 45", xmlns: "http://www.w3.org/2000/svg", stroke: "currentColor", className: classnames('inline-block', 'h-4', className) },
-        React__default.createElement("g", { fill: "none", fillRule: "evenodd", transform: "translate(1 1)", strokeWidth: "2" },
-            React__default.createElement("circle", { cx: "22", cy: "22", r: "6", strokeOpacity: "0" },
-                React__default.createElement("animate", { attributeName: "r", begin: "1.5s", dur: "3s", values: "6;22", calcMode: "linear", repeatCount: "indefinite" }),
-                React__default.createElement("animate", { attributeName: "stroke-opacity", begin: "1.5s", dur: "3s", values: "1;0", calcMode: "linear", repeatCount: "indefinite" }),
-                React__default.createElement("animate", { attributeName: "stroke-width", begin: "1.5s", dur: "3s", values: "2;0", calcMode: "linear", repeatCount: "indefinite" })),
-            React__default.createElement("circle", { cx: "22", cy: "22", r: "6", strokeOpacity: "0" },
-                React__default.createElement("animate", { attributeName: "r", begin: "3s", dur: "3s", values: "6;22", calcMode: "linear", repeatCount: "indefinite" }),
-                React__default.createElement("animate", { attributeName: "stroke-opacity", begin: "3s", dur: "3s", values: "1;0", calcMode: "linear", repeatCount: "indefinite" }),
-                React__default.createElement("animate", { attributeName: "stroke-width", begin: "3s", dur: "3s", values: "2;0", calcMode: "linear", repeatCount: "indefinite" })),
-            React__default.createElement("circle", { cx: "22", cy: "22", r: "8" },
-                React__default.createElement("animate", { attributeName: "r", begin: "0s", dur: "1.5s", values: "6;1;2;3;4;5;6", calcMode: "linear", repeatCount: "indefinite" })))));
-};
-
-//
-// ApplicationLoading
-//
-var ApplicationLoading = function (_a) { return (React__default.createElement(Delay, { delay: 500 },
-    React__default.createElement("div", { className: "h-screen flex flex-row justify-center items-center" },
-        React__default.createElement("div", { className: "inline-block text-center" },
-            React__default.createElement("p", null,
-                React__default.createElement(Loading, { className: "h-20" })),
-            React__default.createElement("p", null, "Loading..."))))); };
 
 //
 // buttons
@@ -549,6 +417,19 @@ function formatDate(ymd) {
 }
 
 //
+// Delay
+//
+var Delay = function (_a) {
+    var _b = _a.delay, delay = _b === void 0 ? 250 : _b, children = _a.children;
+    var _c = useState(false), show = _c[0], setShow = _c[1];
+    useEffect(function () {
+        var timeout = setTimeout(function () { return setShow(true); }, delay);
+        return function () { return clearTimeout(timeout); };
+    }, [delay, setShow]);
+    return show ? children : null;
+};
+
+//
 // form
 //
 var Group = function (_a) {
@@ -574,6 +455,22 @@ var SearchInput = function (_a) {
             React__default.createElement("input", __assign({}, props, { type: "search", placeholder: "Search", className: "w-56 pl-10 pr-4 py-2 border border-content-border rounded-lg" })),
             React__default.createElement("div", { className: "absolute inset-y-0 left-0 pl-3 flex items-center justify-center" },
                 React__default.createElement(SvgSearchIcon, { className: "text-content h-5 w-5 stroke-current stroke-2" })))));
+};
+
+var Loading = function (_a) {
+    var className = _a.className;
+    return (React__default.createElement("svg", { width: "45", height: "45", viewBox: "0 0 45 45", xmlns: "http://www.w3.org/2000/svg", stroke: "currentColor", className: classnames('inline-block', 'h-4', className) },
+        React__default.createElement("g", { fill: "none", fillRule: "evenodd", transform: "translate(1 1)", strokeWidth: "2" },
+            React__default.createElement("circle", { cx: "22", cy: "22", r: "6", strokeOpacity: "0" },
+                React__default.createElement("animate", { attributeName: "r", begin: "1.5s", dur: "3s", values: "6;22", calcMode: "linear", repeatCount: "indefinite" }),
+                React__default.createElement("animate", { attributeName: "stroke-opacity", begin: "1.5s", dur: "3s", values: "1;0", calcMode: "linear", repeatCount: "indefinite" }),
+                React__default.createElement("animate", { attributeName: "stroke-width", begin: "1.5s", dur: "3s", values: "2;0", calcMode: "linear", repeatCount: "indefinite" })),
+            React__default.createElement("circle", { cx: "22", cy: "22", r: "6", strokeOpacity: "0" },
+                React__default.createElement("animate", { attributeName: "r", begin: "3s", dur: "3s", values: "6;22", calcMode: "linear", repeatCount: "indefinite" }),
+                React__default.createElement("animate", { attributeName: "stroke-opacity", begin: "3s", dur: "3s", values: "1;0", calcMode: "linear", repeatCount: "indefinite" }),
+                React__default.createElement("animate", { attributeName: "stroke-width", begin: "3s", dur: "3s", values: "2;0", calcMode: "linear", repeatCount: "indefinite" })),
+            React__default.createElement("circle", { cx: "22", cy: "22", r: "8" },
+                React__default.createElement("animate", { attributeName: "r", begin: "0s", dur: "1.5s", values: "6;1;2;3;4;5;6", calcMode: "linear", repeatCount: "indefinite" })))));
 };
 
 var Postit = function (_a) {
@@ -793,5 +690,75 @@ function formatTime(hm) {
     }
 }
 
-export { ApplicationLoading, ApplicationNavigator, ButtonBar, Card, Cards, DatePicker, Delay, Group, Header, Helium, index as Icons, Input, Label, LinkButton, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, PrimaryButton, SearchInput, SecondaryButton, Select, TextArea, TimePicker, Toggle, useShower };
+var Context = createContext({});
+var Helium = function (_a) {
+    var _b = _a.navigator, navigator = _b === void 0 ? false : _b, _c = _a.setNavigator, setNavigator = _c === void 0 ? function (show) { return null; } : _c, children = _a.children;
+    return (React__default.createElement(Context.Provider, { value: { navigator: navigator, setNavigator: setNavigator } },
+        React__default.createElement("div", { className: "relative min-h-screen flex flex-col" }, children)));
+};
+// header
+var Header = function (_a) {
+    var className = _a.className, children = _a.children;
+    var context = useContext(Context);
+    return (React__default.createElement("header", { className: classnames(context.navigator ? 'pl-0 md:pl-56' : 'pl-0', 'fixed z-10 inset-x-0 top-0 h-16 flex-none text-content bg-content-fg border-b border-content-border transition duration-700 ease-in-out transition-spacing') },
+        React__default.createElement("div", { className: classnames('h-full', className) }, children)));
+};
+// toggle
+var Toggle = function (_a) {
+    var always = _a.always, children = _a.children;
+    var context = useContext(Context);
+    return (React__default.createElement("div", { className: classnames('h-16 w-16 text-center hover:text-white hover:bg-primary-500', always ? 'flex' : 'flex md:hidden', 'flex-row items-center justify-center') },
+        React__default.createElement("button", { onClick: function () { return context.setNavigator(!context.navigator); }, className: "focus:outline-none" }, children)));
+};
+var Navigator = function (_a) {
+    var className = _a.className, children = _a.children;
+    var context = useContext(Context);
+    return (React__default.createElement(React__default.Fragment, null,
+        context.navigator && React__default.createElement("div", { className: classnames('fixed z-10 inset-0 bg-gray-800 opacity-50 md:hidden'), onClick: function () { return context.setNavigator(false); } }),
+        React__default.createElement("div", { className: classnames('fixed z-20 inset-y-0 left-0 w-56 transform', context.navigator ? 'translate-x-0' : '-translate-x-56', 'transition duration-700 ease-in-out transition-transform') },
+            React__default.createElement("div", { className: classnames('h-full flex flex-col text-navigator bg-navigator-bg', className) }, children))));
+};
+var NavigatorHeader = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: "flex-none h-16 border-b border-navigator-border" },
+        React__default.createElement("div", { className: classnames('w-full h-full', className) }, children)));
+};
+var NavigatorContent = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('flex-grow overflow-y-scroll', className) }, children));
+};
+var NavigatorFooter = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('flex-none flex-none border-t border-navigator-border', className) }, children));
+};
+Navigator.Header = NavigatorHeader;
+Navigator.Content = NavigatorContent;
+Navigator.Footer = NavigatorFooter;
+var Main = function (_a) {
+    var children = _a.children;
+    var context = useContext(Context);
+    return (React__default.createElement("main", { className: classnames('h-full', context.navigator ? 'pl-0 md:pl-56' : 'pl-0', 'pt-16 flex-grow flex flex-row items-stretch overflow-y-auto text-content bg-content-bg transition duration-700 ease-in-out transition-spacing') }, children));
+};
+Main.Content = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('w-2/3 flex-grow', className) }, children));
+};
+Main.Side = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('w-1/3 bg-content-fg border-l border-content-border', className) }, children));
+};
+var Panel = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('flex flex-col', className) }, children));
+};
+Panel.Group = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('px-3 py-2 text-xs text-muted uppercase', className) }, children));
+};
+Panel.Item = function (_a) {
+    var active = _a.active, className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, children));
+};
+
+export { ButtonBar, Card, Cards, DatePicker, Delay, Group, Header, Helium, index as Icons, Input, Label, LinkButton, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, PrimaryButton, SearchInput, SecondaryButton, Select, TextArea, TimePicker, Toggle, useShower };
 //# sourceMappingURL=index.esm.js.map

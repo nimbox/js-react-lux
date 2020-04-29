@@ -1,6 +1,4 @@
 import * as Icons from './icons/index';
-export * from './assemblies/ApplicationNavigator';
-export * from './assemblies/ApplicationLoading';
 export * from './components/Buttons';
 export * from './components/Card';
 export * from './components/DatePicker';
