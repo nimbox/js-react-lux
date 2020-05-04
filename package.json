@@ -1,7 +1,7 @@
 {
   "name": "js-react-lux",
   "version": "0.1.2",
-  "private": true,
+  "private": false,
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
