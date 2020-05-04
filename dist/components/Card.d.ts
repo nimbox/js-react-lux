@@ -1,9 +1,16 @@
 import { FC } from 'react';
-export declare const Cards: FC<{}>;
-interface CardComponent<P> extends FC<P> {
-    Header: FC<{}>;
-    Body: FC<{}>;
-    Footer: FC<{}>;
+interface CardComponent extends FC<{
+    className?: string;
+}> {
+    Header: FC<{
+        className?: string;
+    }>;
+    Body: FC<{
+        className?: string;
+    }>;
+    Footer: FC<{
+        className?: string;
+    }>;
 }
-export declare const Card: CardComponent<{}>;
+export declare const Card: CardComponent;
 export {};

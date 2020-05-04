@@ -1,6 +1,6 @@
 {
   "name": "js-react-lux",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -13,7 +13,9 @@
     "build:icons": "rm -f src/icons/*.tsx && svgr --icon --typescript --silent --out-dir src/icons src/icons",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "storybook": "npm run build:style && npm run build:icons && start-storybook -s src"
+    "storybook": "npm run build:style && npm run build:icons && start-storybook -s src",
+    "preversion": "npm install && npm run build",
+    "postversion": "git push origin master --follow-tags && npm publish"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -29,21 +31,17 @@
     "react-router-dom": "^5.1.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.9.6",
     "@popperjs/core": "^2.4.0",
-    "classnames": "^2.2.6",
-    "lodash": "^4.17.15",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-i18next": "^11.4.0",
-    "react-router-dom": "^5.1.2",
-    "@babel/core": "^7.9.0",
+    "@storybook/addon-centered": "^5.3.18",
     "@storybook/addon-docs": "^5.3.18",
     "@storybook/addon-knobs": "^5.3.18",
     "@storybook/preset-create-react-app": "^2.1.1",
     "@storybook/react": "^5.3.18",
     "@svgr/cli": "^5.4.0",
+    "@tailwindcss/custom-forms": "^0.2.1",
     "@testing-library/jest-dom": "^5.5.0",
-    "@testing-library/react": "^10.0.3",
+    "@testing-library/react": "^10.0.4",
     "@testing-library/user-event": "^10.1.0",
     "@types/classnames": "^2.2.10",
     "@types/jest": "^25.2.1",
@@ -54,14 +52,20 @@
     "@types/react-router-dom": "^5.1.5",
     "autoprefixer": "^9.7.6",
     "babel-loader": "^8.1.0",
+    "classnames": "^2.2.6",
     "i18next": "^19.4.4",
     "i18next-xhr-backend": "^3.2.2",
+    "lodash": "^4.17.15",
     "postcss-cli": "^7.1.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-i18next": "^11.4.0",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
-    "rollup": "^2.7.3",
+    "rollup": "^2.7.6",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-typescript2": "^0.27.0",
-    "tailwindcss": "^1.3.5",
+    "tailwindcss": "^1.4.4",
     "typescript": "~3.8.3"
   },
   "browserslist": {

@@ -5,5 +5,5 @@ interface Props {
     value?: (option: any) => ReactElement;
     onChange?: (option: any) => void;
 }
-export declare const Select: FC<Props>;
+export declare const CustomSelect: FC<Props>;
 export {};

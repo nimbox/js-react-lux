@@ -11,7 +11,6 @@ function SvgCheckIcon(props: React.SVGProps<SVGSVGElement>) {
       strokeWidth={0.5}
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="check-icon_svg__feather check-icon_svg__feather-check"
       {...props}
     >
       <path d="M20 6L9 17l-5-5" />

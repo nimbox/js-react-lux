@@ -1,32 +1,29 @@
 import React, { FC } from 'react';
+import classnames from 'classnames';
 
 
 //
 // cards
 //
 
-export const Cards: FC<{}> = ({ children }) => (
-    <div className="grid grid-cols-1 gap-3">{children}</div>
-);
-
-interface CardComponent<P> extends FC<P> {
-    Header: FC<{}>,
-    Body: FC<{}>,
-    Footer: FC<{}>
+interface CardComponent extends FC<{ className?: string }> {
+    Header: FC<{ className?: string }>,
+    Body: FC<{ className?: string }>,
+    Footer: FC<{ className?: string }>
 }
 
-export const Card: CardComponent<{}> = ({ children }) => (
-    <div className="bg-content-fg border border-content-border rounded">{children}</div>
+export const Card: CardComponent = ({ className, children }) => (
+    <div className={classnames('bg-content-fg border border-content-border rounded', className)}>{children}</div>
 );
 
-Card.Header = ({ children }) => (
-    <div className="border-b border-content-border p-3">{children}</div>
+Card.Header = ({ className, children }) => (
+    <div className={classnames('border-b border-content-border p-3', className)}>{children}</div>
 );
 
-Card.Body = ({ children }) => (
-    <div className="p-3">{children}</div>
+Card.Body = ({ className, children }) => (
+    <div className={classnames('p-3', className)}>{children}</div>
 );
 
-Card.Footer = ({ children }) => (
-    <div className="border-t border-content-border p-3">{children}</div>
+Card.Footer = ({ className, children }) => (
+    <div className={classnames('border-t border-content-border p-3', className)}>{children}</div>
 );

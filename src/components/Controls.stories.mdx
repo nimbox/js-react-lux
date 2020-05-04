@@ -1,0 +1,63 @@
+import { Meta, Preview, Story } from '@storybook/addon-docs/blocks';
+import { useState } from 'react';
+import { Card } from './Card';
+import { CheckboxBar } from './CheckboxBar';
+import { Checkbox, Select } from './Form';
+import { RadioBar } from './RadioBar';
+import { Tabs } from './Tabs';
+
+
+<Meta title="Component/Controls"/>
+
+# Controls
+
+<Preview>
+    <Story name="Primary button">
+        {() => {
+            const [ tab, setTab ] = useState("one");
+            const [ checkbox, setChecbox ] = useState([1]);
+            const [ radio, setRadio ] = useState(1);
+            const [ select, setSelect ] = useState(1);
+            return (
+                <Card>
+                    <Card.Header className="pb-0 flex flex-row space-x-4 items-center">
+                        <Tabs value={tab} setValue={setTab} className="text-xs">
+                            <Tabs.Option value="one">One</Tabs.Option>
+                            <Tabs.Option value="two">Two</Tabs.Option>
+                            <Tabs.Option value="three">Three</Tabs.Option>
+                        </Tabs>
+                        <CheckboxBar value={checkbox} onChange={setChecbox} className="text-xs">
+                            <CheckboxBar.Option value={1}>1</CheckboxBar.Option>
+                            <CheckboxBar.Option value={2}>2</CheckboxBar.Option>
+                            <CheckboxBar.Option value={3}>3</CheckboxBar.Option>
+                            <CheckboxBar.Option value={6}>6</CheckboxBar.Option>
+                            <CheckboxBar.Option value={12}>12 months</CheckboxBar.Option>
+                        </CheckboxBar>
+                        <RadioBar value={radio} onChange={setRadio} className="text-xs">
+                            <RadioBar.Option value={1}>1</RadioBar.Option>
+                            <RadioBar.Option value={2}>2</RadioBar.Option>
+                            <RadioBar.Option value={3}>3</RadioBar.Option>
+                            <RadioBar.Option value={6}>6</RadioBar.Option>
+                            <RadioBar.Option value={12}>12 months</RadioBar.Option>
+                        </RadioBar>
+                        <Select className="text-xs">
+                            <Select.Option value={1}>1</Select.Option>
+                            <Select.Option value={2}>2</Select.Option>
+                            <Select.Option value={3}>3</Select.Option>
+                            <Select.Option value={6}>6</Select.Option>
+                            <Select.Option value={12}>12 months</Select.Option>
+                        </Select>
+                        <Checkbox className="text-xs">Something</Checkbox>
+                    </Card.Header>
+                    <Card.Body>
+                        A great Body
+                    </Card.Body>
+                </Card>
+            );
+        }}
+    </Story>
+</Preview>
+
+
+# Note Task
+

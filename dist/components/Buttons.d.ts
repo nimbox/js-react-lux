@@ -1,11 +1,17 @@
 import React, { FC } from 'react';
-export declare const ButtonBar: FC<{
-    className?: string;
+declare type Size = 'xs' | 'base' | 'xl';
+export declare const PrimaryButton: FC<React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    size?: Size;
 }>;
-export declare const PrimaryButton: FC<React.ButtonHTMLAttributes<HTMLButtonElement>>;
-export declare const SecondaryButton: FC<React.ButtonHTMLAttributes<HTMLButtonElement>>;
-export declare const LinkButton: FC<React.HTMLAttributes<HTMLSpanElement>>;
+export declare const SecondaryButton: FC<React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    size?: Size;
+}>;
+export declare const LinkButton: FC<React.HTMLAttributes<HTMLSpanElement> & {
+    size?: Size;
+}>;
 export declare const MoreOptionsButton: FC<{
     value: boolean;
     onChange: (value: boolean) => void;
+    className?: string;
 }>;
+export {};

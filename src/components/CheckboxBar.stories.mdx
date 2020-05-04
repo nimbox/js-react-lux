@@ -1,0 +1,64 @@
+import { Meta, Preview, Story } from '@storybook/addon-docs/blocks';
+import { useState } from 'react';
+import { CheckboxBar } from './CheckboxBar';
+
+
+<Meta title="Component/CheckboxBar"/>
+
+# CheckboxBar
+
+A `CheckboxBar` is equivalent to a `select` with the `multiple` attribute.
+
+<Preview>
+    <Story name="Simple">
+        {() => {
+            const [ checkbox, setChecbox ] = useState([2]);
+            return (
+                <CheckboxBar value={checkbox} onChange={setChecbox}>
+                    <CheckboxBar.Option value={1}>1</CheckboxBar.Option>
+                    <CheckboxBar.Option value={2}>2</CheckboxBar.Option>
+                    <CheckboxBar.Option value={3}>3</CheckboxBar.Option>
+                    <CheckboxBar.Option value={6}>6</CheckboxBar.Option>
+                    <CheckboxBar.Option value={12}>12 months</CheckboxBar.Option>
+                </CheckboxBar>
+            );
+        }}
+    </Story>
+</Preview>
+
+It can also be made smalles by adding `text-xs` or `text-sm` and the appropriate padding.
+
+<Preview>
+    <Story name="Simple sm">
+        {() => {
+            const [ checkbox, setChecbox ] = useState([1]);
+            return (
+                <CheckboxBar value={checkbox} onChange={setChecbox} className="text-sm">
+                    <CheckboxBar.Option value={1}>1</CheckboxBar.Option>
+                    <CheckboxBar.Option value={2}>2</CheckboxBar.Option>
+                    <CheckboxBar.Option value={3}>3</CheckboxBar.Option>
+                    <CheckboxBar.Option value={6}>6</CheckboxBar.Option>
+                    <CheckboxBar.Option value={12}>12 months</CheckboxBar.Option>
+                </CheckboxBar>
+            );
+        }}
+    </Story>
+</Preview>
+
+<Preview>
+    <Story name="Simple xs">
+        {() => {
+            const [ checkbox, setChecbox ] = useState([1]);
+            return (
+                <CheckboxBar value={checkbox} onChange={setChecbox} className="text-xs">
+                    <CheckboxBar.Option value={1}>1</CheckboxBar.Option>
+                    <CheckboxBar.Option value={2}>2</CheckboxBar.Option>
+                    <CheckboxBar.Option value={3}>3</CheckboxBar.Option>
+                    <CheckboxBar.Option value={6}>6</CheckboxBar.Option>
+                    <CheckboxBar.Option value={12}>12 months</CheckboxBar.Option>
+                </CheckboxBar>
+            );
+        }}
+    </Story>
+</Preview>
+

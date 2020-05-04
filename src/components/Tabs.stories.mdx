@@ -1,0 +1,30 @@
+import { Meta, Preview, Story } from '@storybook/addon-docs/blocks';
+import { useState } from 'react';
+import { Tabs } from './Tabs';
+
+
+<Meta title="Component/Tabs"/>
+
+# Tabs
+
+Regular inputs
+
+<Preview>
+    <Story name="Simple">
+        {() => {
+            const [ tab, setTab ] = useState('one');
+            return (
+                <div>
+                    <Tabs value={tab} setValue={setTab}>
+                        <Tabs.Option value="one">One</Tabs.Option>
+                        <Tabs.Option value="two">Two</Tabs.Option>
+                        <Tabs.Option value="three">Three</Tabs.Option>
+                    </Tabs>
+                    {tab === 'one' && <div className="px-4 py-2 bg-gray-200">Tab for one</div>}
+                    {tab === 'two' && <div className="px-4 py-2 bg-gray-200">Tab for two</div>}
+                    {tab === 'three' && <div className="px-4 py-2 bg-gray-200">Tab for three</div>}
+                </div>
+            );
+        }}
+    </Story>
+</Preview>

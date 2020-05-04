@@ -14,7 +14,7 @@ interface Props {
     onChange?: (option: any) => void
 }
 
-export const Select: FC<Props> = ({ options, key = (option) => option, value = (option) => option, onChange = (option) => null, children }) => {
+export const CustomSelect: FC<Props> = ({ options, key = (option) => option, value = (option) => option, onChange = (option) => null, children }) => {
 
     const [show, setShow] = useState(false);
     const [valueRef, popperRef] = useShower(() => setShow(false));

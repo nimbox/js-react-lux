@@ -61,7 +61,7 @@ function SvgAngleUpIcon(props) {
 }
 
 function SvgCheckIcon(props) {
-    return (createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round", className: "check-icon_svg__feather check-icon_svg__feather-check" }, props),
+    return (createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props),
         createElement("path", { d: "M20 6L9 17l-5-5" })));
 }
 
@@ -156,56 +156,43 @@ var index = /*#__PURE__*/Object.freeze({
     WaffleIcon: SvgWaffleIcon
 });
 
-//
-// buttons
-//
-var ButtonBar = function (_a) {
-    var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames(className) }, children));
-};
 var PrimaryButton = function (_a) {
-    var children = _a.children, props = __rest(_a, ["children"]);
-    return (React__default.createElement("button", __assign({}, props, { className: "mr-3 last:mr-0 bg-primary-500 hover:bg-primary-700 text-white font-bold py-2 px-4 border border-primary-500 rounded" }), children));
+    var _b = _a.size, size = _b === void 0 ? 'base' : _b, children = _a.children, className = _a.className, props = __rest(_a, ["size", "children", "className"]);
+    return (React__default.createElement("button", __assign({}, props, { className: classnames({ 'px-2 py-0 text-xs': size === 'xs', 'px-4 py-2': size === 'base', 'px-4 py-2 text-xl': size === 'xl' }, 'text-white font-bold bg-primary-500 hover:bg-primary-700 border border-primary-600 hover:border-primary-700 rounded focus:outline-none', className) }), children));
 };
 var SecondaryButton = function (_a) {
-    var children = _a.children, props = __rest(_a, ["children"]);
-    return (React__default.createElement("button", __assign({}, props, { className: "mr-3 last:mr-0 bg-transparent hover:bg-primary-700 font-bold py-2 px-4 border border-content-border rounded" }), children));
+    var _b = _a.size, size = _b === void 0 ? 'base' : _b, children = _a.children, className = _a.className, props = __rest(_a, ["size", "children", "className"]);
+    return (React__default.createElement("button", __assign({}, props, { className: classnames({ 'px-2 py-0 text-xs': size === 'xs', 'px-4 py-2': size === 'base', 'px-6 py-3 text-xl': size === 'xl' }, 'text-primary-500 hover:text-white font-bold bg-transparent hover:bg-primary-700 border border-primary-600 hover:border-primary-700 rounded focus:outline-none', className) }), children));
 };
 var LinkButton = function (_a) {
-    var children = _a.children, className = _a.className, props = __rest(_a, ["children", "className"]);
-    return (React__default.createElement("button", __assign({}, props, { className: classnames('focus:outline-none -mx-2 px-2 text-sm text-muted hover:bg-gray-200 rounded-full cursor-pointer', className) }), children));
+    var _b = _a.size, children = _a.children, className = _a.className, props = __rest(_a, ["size", "children", "className"]);
+    return (React__default.createElement("button", __assign({}, props, { className: classnames('text-primary-500 hover:text-primary-700 hover:underline rounded cursor-pointer focus:outline-none', className) }), children));
 };
 var MoreOptionsButton = function (_a) {
-    var value = _a.value, onChange = _a.onChange, children = _a.children, props = __rest(_a, ["value", "onChange", "children"]);
+    var value = _a.value, onChange = _a.onChange, className = _a.className, children = _a.children;
+    var t = useTranslation().t;
     return (React__default.createElement(React__default.Fragment, null,
-        React__default.createElement(LinkButton, __assign({}, props, { onClick: function () { return onChange(!value); } }),
-            React__default.createElement(SvgAngleRightIcon, { className: classnames('inline w-4 h-4 mr-1 stroke-current stroke-2 transform', { 'rotate-90': value }, 'transition duration-500 ease-in-out transtition-transform') }),
-            "m\u00E1s opciones"),
+        React__default.createElement(LinkButton, { onClick: function () { return onChange(!value); }, className: className },
+            React__default.createElement(SvgAngleRightIcon, { className: classnames('inline w-4 h-4 mr-1 stroke-current stroke-2 transform', { 'rotate-90': value }, 'transition duration-150 ease-in-out transtition-transform') }),
+            !value ? t('more-options') : t('less-options')),
         value && children));
 };
 
-//
-// cards
-//
-var Cards = function (_a) {
-    var children = _a.children;
-    return (React__default.createElement("div", { className: "grid grid-cols-1 gap-3" }, children));
-};
 var Card = function (_a) {
-    var children = _a.children;
-    return (React__default.createElement("div", { className: "bg-content-fg border border-content-border rounded" }, children));
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('bg-content-fg border border-content-border rounded', className) }, children));
 };
 Card.Header = function (_a) {
-    var children = _a.children;
-    return (React__default.createElement("div", { className: "border-b border-content-border p-3" }, children));
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('border-b border-content-border p-3', className) }, children));
 };
 Card.Body = function (_a) {
-    var children = _a.children;
-    return (React__default.createElement("div", { className: "p-3" }, children));
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('p-3', className) }, children));
 };
 Card.Footer = function (_a) {
-    var children = _a.children;
-    return (React__default.createElement("div", { className: "border-t border-content-border p-3" }, children));
+    var className = _a.className, children = _a.children;
+    return (React__default.createElement("div", { className: classnames('border-t border-content-border p-3', className) }, children));
 };
 
 var useShower = function (onClickOutside) {
@@ -429,33 +416,56 @@ var Delay = function (_a) {
     return show ? children : null;
 };
 
-//
-// form
-//
 var Group = function (_a) {
     var className = _a.className, children = _a.children;
     return (React__default.createElement("div", { className: className }, children));
 };
 var Label = function (_a) {
     var children = _a.children;
-    return (React__default.createElement("label", { className: "block text-sm font-bold mb-0" }, children));
+    return (React__default.createElement("label", { className: "block text-sm uppercase tracking-wide font-bold mb-1" }, children));
 };
 var Input = function (_a) {
-    var className = _a.className, props = __rest(_a, ["className"]);
-    return (React__default.createElement("input", __assign({}, props, { className: classnames('w-full px-2 py-1 border border-content-border rounded-lg', className) })));
+    var error = _a.error, className = _a.className, props = __rest(_a, ["error", "className"]);
+    return (React__default.createElement("input", __assign({}, props, { className: classnames('form-input w-full', { 'border-danger-500': error }, className) })));
 };
 var TextArea = function (_a) {
-    var className = _a.className, props = __rest(_a, ["className"]);
-    return (React__default.createElement("textarea", __assign({}, props, { className: classnames('w-full px-2 py-1 border border-content-border rounded-lg', className) })));
+    var error = _a.error, className = _a.className, props = __rest(_a, ["error", "className"]);
+    return (React__default.createElement("textarea", __assign({}, props, { className: classnames('form-input w-full', { 'border-danger-500': error }, className) })));
 };
 var SearchInput = function (_a) {
-    var className = _a.className, props = __rest(_a, ["className"]);
+    var error = _a.error, className = _a.className, props = __rest(_a, ["error", "className"]);
     return (React__default.createElement("div", { className: className },
         React__default.createElement("div", { className: "relative" },
-            React__default.createElement("input", __assign({}, props, { type: "search", placeholder: "Search", className: "w-56 pl-10 pr-4 py-2 border border-content-border rounded-lg" })),
+            React__default.createElement("input", __assign({}, props, { type: "search", placeholder: "Search", className: "form-input w-full pl-10" })),
             React__default.createElement("div", { className: "absolute inset-y-0 left-0 pl-3 flex items-center justify-center" },
                 React__default.createElement(SvgSearchIcon, { className: "text-content h-5 w-5 stroke-current stroke-2" })))));
 };
+var Error = function (_a) {
+    var error = _a.error, className = _a.className, children = _a.children;
+    return (React__default.createElement(React__default.Fragment, null, error && React__default.createElement("p", { className: classnames('mt-1 text-danger-500 text-xs italic truncate', className) }, children)));
+};
+var Checkbox = function (_a) {
+    var checked = _a.checked, error = _a.error, type = _a.type, className = _a.className, children = _a.children, props = __rest(_a, ["checked", "error", "type", "className", "children"]);
+    return (React__default.createElement("label", { className: "block flex flex-row items-center" },
+        React__default.createElement("input", __assign({}, props, { type: "checkbox", className: classnames('form-checkbox text-primary-500', className) })),
+        React__default.createElement("span", { className: classnames('ml-2', className) }, children)));
+};
+var Radio = function (_a) {
+    var checked = _a.checked, error = _a.error, type = _a.type, className = _a.className, children = _a.children, props = __rest(_a, ["checked", "error", "type", "className", "children"]);
+    return (React__default.createElement("label", { className: "block flex flex-row items-center" },
+        React__default.createElement("input", __assign({}, props, { type: "radio", className: classnames('form-radio text-primary-500', className) })),
+        React__default.createElement("span", { className: "ml-2" }, children)));
+};
+var Select = function (_a) {
+    var value = _a.value, onChange = _a.onChange, className = _a.className, children = _a.children;
+    return (React__default.createElement("select", { className: classnames('form-select py-0', className) }, children));
+};
+Select.Option = function (_a) {
+    var value = _a.value, children = _a.children;
+    return (
+    // <option>uno</option>
+    React__default.createElement("option", { value: value }, children));
+}; //  as FC<{ value?: any, className?: string }>;
 
 var Loading = function (_a) {
     var className = _a.className;
@@ -479,7 +489,7 @@ var Postit = function (_a) {
         React__default.createElement("div", { className: classnames('postit', className) }, children)));
 };
 
-var Select = function (_a) {
+var CustomSelect = function (_a) {
     var options = _a.options, _b = _a.key, key = _b === void 0 ? function (option) { return option; } : _b, _c = _a.value, _d = _a.onChange, children = _a.children;
     var _e = useState(false), show = _e[0], setShow = _e[1];
     var _f = useShower(function () { return setShow(false); }), valueRef = _f[0], popperRef = _f[1];
@@ -760,5 +770,5 @@ Panel.Item = function (_a) {
     return (React__default.createElement("div", { className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, children));
 };
 
-export { ButtonBar, Card, Cards, DatePicker, Delay, Group, Header, Helium, index as Icons, Input, Label, LinkButton, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, PrimaryButton, SearchInput, SecondaryButton, Select, TextArea, TimePicker, Toggle, useShower };
+export { Card, Checkbox, CustomSelect, DatePicker, Delay, Error, Group, Header, Helium, index as Icons, Input, Label, LinkButton, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, PrimaryButton, Radio, SearchInput, SecondaryButton, Select, TextArea, TimePicker, Toggle, useShower };
 //# sourceMappingURL=index.esm.js.map

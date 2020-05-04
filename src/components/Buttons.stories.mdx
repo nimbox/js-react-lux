@@ -1,0 +1,156 @@
+import { Meta, Preview, Story } from '@storybook/addon-docs/blocks';
+import { useState } from 'react';
+import { LinkButton, MoreOptionsButton, PrimaryButton, SecondaryButton } from './Buttons';
+import { CheckIcon } from '../icons';
+
+
+<Meta title="Component/Buttons"/>
+
+# Buttons
+
+There are three types of buttons.
+
+<Preview>
+    <Story name="Primary button">
+        <PrimaryButton>Primary</PrimaryButton>
+    </Story>
+</Preview>
+
+<Preview>
+    <Story name="Secondary button">
+        <SecondaryButton>Secondary</SecondaryButton>
+    </Story>
+</Preview>
+
+<Preview>
+    <Story name="Link button">
+        <LinkButton>link</LinkButton>
+    </Story>
+</Preview>
+
+The link button can be used inline and it flushes correctly right.
+
+<Preview>
+    <Story name="Link button indentation">
+        <div className="text-base">
+            <p>Before</p>
+            <LinkButton>link</LinkButton>
+            <p>After</p>
+            <p>Something <LinkButton>link</LinkButton> to use.</p>
+        </div>
+    </Story>
+</Preview>
+
+
+# Buttons with icons
+
+<Preview>
+    <Story name="Primary button with icon">
+        <PrimaryButton><CheckIcon className="inline-block stroke-4 mr-2"/>Primary</PrimaryButton>
+    </Story>
+</Preview>
+
+<Preview>
+    <Story name="Secondary button with icon">
+        <SecondaryButton><CheckIcon className="inline-block stroke-4 mr-2"/>Secondary</SecondaryButton>
+    </Story>
+</Preview>
+
+<Preview>
+    <Story name="Link button with icon">
+        <LinkButton><CheckIcon className="inline-block stroke-4 mr-2"/>link</LinkButton>
+    </Story>
+</Preview>
+
+
+# Button Bar
+
+Button bars make use of the `space-x-*` classes to create the space between them.
+
+<Preview>
+    <Story name="Button bar">
+        <div class="flex flex-row space-x-4">
+            <PrimaryButton>Primary</PrimaryButton>
+            <SecondaryButton>Secondary</SecondaryButton>
+            <LinkButton>link</LinkButton>
+        </div>
+    </Story>
+</Preview>
+
+# Button Sizes
+
+Xsmall
+
+<Preview>
+    <Story name="Button size small">
+        <div class="flex flex-row space-x-4">
+            <PrimaryButton size="xs">Primary</PrimaryButton>
+            <SecondaryButton size="xs">Secondary</SecondaryButton>
+            <LinkButton className="text-xs">link</LinkButton>
+        </div>
+    </Story>
+</Preview>
+
+Base
+
+<Preview>
+    <Story name="Button size base">
+        <div class="flex flex-row space-x-4">
+            <PrimaryButton>Primary</PrimaryButton>
+            <SecondaryButton>Secondary</SecondaryButton>
+            <LinkButton>link</LinkButton>
+        </div>
+    </Story>
+</Preview>
+
+Xlarge
+
+<Preview>
+    <Story name="Button size large">
+        <div class="flex flex-row space-x-4">
+            <PrimaryButton size="xl">Primary</PrimaryButton>
+            <SecondaryButton size="xl">Secondary</SecondaryButton>
+            <LinkButton className="text-xl">link</LinkButton>
+        </div>
+    </Story>
+</Preview>
+
+# More Options Button
+
+A regular pattern is to a use a show more button.
+
+<Preview>
+    <Story name="Show more link">
+        {() => {
+            const [show, setShow] = useState(false);
+            return (
+                <>
+                <div>Before</div>
+                <MoreOptionsButton value={show} onChange={(show) => setShow(show)}>
+                    <div>Extra content</div>
+                </MoreOptionsButton>
+                <div>After</div>
+                </>
+            );
+        }}
+    </Story>
+</Preview>
+
+Change the size of the text for a less intrusive button.
+
+<Preview>
+    <Story name="Show more link small">
+        {() => {
+            const [show, setShow] = useState(false);
+            return (
+                <>
+                <div>Before</div>
+                <MoreOptionsButton value={show} onChange={(show) => setShow(show)} className="text-xs">
+                    <div>Extra content</div>
+                </MoreOptionsButton>
+                <div>Adter</div>
+                </>
+            );
+        }}
+    </Story>
+</Preview>
