@@ -17,6 +17,9 @@
     "preversion": "npm install && npm run build",
     "postversion": "git push origin master --follow-tags && npm publish"
   },
+  "publishConfig": { 
+    "registry": "https://npm.pkg.github.com/"
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
