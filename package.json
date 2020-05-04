@@ -1,6 +1,6 @@
 {
   "name": "js-react-lux",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -17,7 +17,7 @@
     "preversion": "npm install && npm run build",
     "postversion": "git push origin master --follow-tags && npm publish"
   },
-  "publishConfig": { 
+  "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
   "eslintConfig": {
