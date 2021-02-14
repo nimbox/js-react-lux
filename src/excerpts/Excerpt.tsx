@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import React, { FC, useState } from 'react';
-import { LinkButton } from '../components/Buttons';
+import { Button } from '../components/Buttons';
 import { Kind } from './Kind';
 
 export const colors = {
@@ -60,7 +60,7 @@ export const Actions: FC<{ className?: string }> = ({ className, children }) => 
 );
 
 export const Action: FC<{ onClick?: () => void }> = ({ onClick, children }) => (
-    <span onClick={onClick} className="inline mr-4"><LinkButton>{children}</LinkButton></span>
+    <span onClick={onClick} className="inline mr-4"><Button link>{children}</Button></span>
 );
 
 export const Comment: FC<{ className?: string }> = ({ className, children }) => (

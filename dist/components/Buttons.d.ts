@@ -1,17 +1,14 @@
 import React, { FC } from 'react';
-declare type Size = 'xs' | 'base' | 'xl';
-export declare const PrimaryButton: FC<React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    size?: Size;
-}>;
-export declare const SecondaryButton: FC<React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    size?: Size;
-}>;
-export declare const LinkButton: FC<React.HTMLAttributes<HTMLSpanElement> & {
-    size?: Size;
-}>;
-export declare const MoreOptionsButton: FC<{
+import { ComponentSize } from './ComponentSize';
+export interface ButtonProps {
+    link?: boolean;
+    secondary?: boolean;
+    size?: ComponentSize;
+}
+export declare const Button: FC<React.ButtonHTMLAttributes<HTMLButtonElement> & ButtonProps>;
+export interface MoreOptionsButtonProps {
+    size?: ComponentSize;
     value: boolean;
     onChange: (value: boolean) => void;
-    className?: string;
-}>;
-export {};
+}
+export declare const MoreOptionsButton: FC<React.ButtonHTMLAttributes<HTMLButtonElement> & MoreOptionsButtonProps>;

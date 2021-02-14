@@ -2,7 +2,13 @@ import * as React from "react";
 
 function SvgNimboxIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg width="1em" height="1em" viewBox="0 0 216.833 227.492" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1em"
+      height="1em"
+      viewBox="0 0 216.833 227.492"
+      {...props}
+    >
       <path fill="#F7CE3C" d="M42.111 98.075l66.325-6.472v15.281z" />
       <path fill="#FFE6A2" d="M174.76 98.075l-66.324-6.472v15.281z" />
       <path fill="#00607F" d="M108.436 206.377v-99.945l-66.325-8.357v84.979z" />

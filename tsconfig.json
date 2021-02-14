@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-
+    
     "target": "es5",
     "lib": [
       "dom",
@@ -9,23 +9,24 @@
     ],
 
     "strict": true,
-    
+
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     
     "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
 
     "noEmit": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
 
     "declaration": true,
-    "declarationDir": "./dist"
+    "declarationDir": "./dist",
 
   },
   "include": [

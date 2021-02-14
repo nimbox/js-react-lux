@@ -1,3 +1,11 @@
-const elegant = require('./src/styles/elegant');
-
-module.exports = elegant;
+module.exports = {
+    purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+    darkMode: false,
+    theme: {
+        extend: {}
+    },
+    variants: {
+        extend: {}
+    },
+    plugins: []
+}

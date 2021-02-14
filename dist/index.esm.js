@@ -1,20 +1,21 @@
-import React__default, { createElement, useRef, useEffect, useState, createContext, useContext } from 'react';
+import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { useRef, useEffect, useState, createContext, useContext } from 'react';
 
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
+Copyright (c) Microsoft Corporation.
 
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
 
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 
 var __assign = function() {
@@ -41,99 +42,82 @@ function __rest(s, e) {
 }
 
 function SvgAngleDownIcon(props) {
-    return (createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props),
-        createElement("path", { className: "angle-down-icon_svg__st0", d: "M26 12l-10 8-10-8" })));
+    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { className: "angle-down-icon_svg__st0", d: "M26 12l-10 8-10-8" }, void 0) }), void 0));
 }
 
 function SvgAngleLeftIcon(props) {
-    return (createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props),
-        createElement("path", { className: "angle-left-icon_svg__st0", d: "M20 26l-8-10 8-10" })));
+    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { className: "angle-left-icon_svg__st0", d: "M20 26l-8-10 8-10" }, void 0) }), void 0));
 }
 
 function SvgAngleRightIcon(props) {
-    return (createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props),
-        createElement("path", { d: "M12 6l8 10-8 10" })));
+    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M12 6l8 10-8 10" }, void 0) }), void 0));
 }
 
 function SvgAngleUpIcon(props) {
-    return (createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props),
-        createElement("path", { d: "M6 20l10-8 10 8" })));
+    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M6 20l10-8 10 8" }, void 0) }), void 0));
 }
 
 function SvgCheckIcon(props) {
-    return (createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props),
-        createElement("path", { d: "M20 6L9 17l-5-5" })));
+    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M20 6L9 17l-5-5" }, void 0) }), void 0));
 }
 
 function SvgCircleIcon(props) {
-    return (createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props),
-        createElement("circle", { cx: 16, cy: 16, r: 10 })));
+    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("circle", { cx: 16, cy: 16, r: 10 }, void 0) }), void 0));
 }
 
 function SvgCrossIcon(props) {
-    return (createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props),
-        createElement("path", { d: "M6 6l20 20M26 6L6 26" })));
+    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M6 6l20 20M26 6L6 26" }, void 0) }), void 0));
 }
 
 function SvgEditIcon(props) {
-    return (createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props),
-        createElement("path", { d: "M16 26h10.5M21.3 6.7c1-1 2.5-1 3.5 0s1 2.5 0 3.5L10.2 24.8 5.5 26l1.2-4.7L21.3 6.7z" })));
+    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M16 26h10.5M21.3 6.7c1-1 2.5-1 3.5 0s1 2.5 0 3.5L10.2 24.8 5.5 26l1.2-4.7L21.3 6.7z" }, void 0) }), void 0));
 }
 
 function SvgHamburgerIcon(props) {
-    return (createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props),
-        createElement("path", { className: "hamburger-icon_svg__st0", d: "M24 10H8c-1.1 0-2-.9-2-2v0c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v0c0 1.1-.9 2-2 2zM24 18H8c-1.1 0-2-.9-2-2v0c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v0c0 1.1-.9 2-2 2zM24 26H8c-1.1 0-2-.9-2-2v0c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v0c0 1.1-.9 2-2 2z" })));
+    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { className: "hamburger-icon_svg__st0", d: "M24 10H8c-1.1 0-2-.9-2-2v0c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v0c0 1.1-.9 2-2 2zM24 18H8c-1.1 0-2-.9-2-2v0c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v0c0 1.1-.9 2-2 2zM24 26H8c-1.1 0-2-.9-2-2v0c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v0c0 1.1-.9 2-2 2z" }, void 0) }), void 0));
 }
 
 function SvgNimboxIcon(props) {
-    return (createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 216.833 227.492" }, props),
-        createElement("path", { fill: "#F7CE3C", d: "M42.111 98.075l66.325-6.472v15.281z" }),
-        createElement("path", { fill: "#FFE6A2", d: "M174.76 98.075l-66.324-6.472v15.281z" }),
-        createElement("path", { fill: "#00607F", d: "M108.436 206.377v-99.945l-66.325-8.357v84.979z" }),
-        createElement("path", { fill: "#4EC1E0", d: "M85.836 138.691l-64.721-14.778L42.048 98.09l65.277 8.202z" }),
-        createElement("path", { fill: "#FF4C00", d: "M108.396 206.377v-99.945l66.364-8.357-.038 84.979z" }),
-        createElement("path", { fill: "#FFA400", d: "M130.995 138.691l64.722-14.778-20.935-25.823-65.278 8.202z" }),
-        createElement("g", { fill: "#FFA400" },
-            createElement("path", { d: "M111.659 80.687l6.629-59.572H98.543l6.632 59.572c1.07-.032 2.148-.055 3.239-.055 1.094 0 2.172.022 3.245.055zM162.059 53.946l-12.275-7.089-15.302 37.132c1.542.471 2.991.979 4.343 1.526l23.234-31.569zM67.049 46.857l-12.277 7.089 23.234 31.569a52.461 52.461 0 014.344-1.526L67.049 46.857z" }))));
+    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 216.833 227.492" }, props, { children: [jsx("path", { fill: "#F7CE3C", d: "M42.111 98.075l66.325-6.472v15.281z" }, void 0),
+            jsx("path", { fill: "#FFE6A2", d: "M174.76 98.075l-66.324-6.472v15.281z" }, void 0),
+            jsx("path", { fill: "#00607F", d: "M108.436 206.377v-99.945l-66.325-8.357v84.979z" }, void 0),
+            jsx("path", { fill: "#4EC1E0", d: "M85.836 138.691l-64.721-14.778L42.048 98.09l65.277 8.202z" }, void 0),
+            jsx("path", { fill: "#FF4C00", d: "M108.396 206.377v-99.945l66.364-8.357-.038 84.979z" }, void 0),
+            jsx("path", { fill: "#FFA400", d: "M130.995 138.691l64.722-14.778-20.935-25.823-65.278 8.202z" }, void 0),
+            jsx("g", __assign({ fill: "#FFA400" }, { children: jsx("path", { d: "M111.659 80.687l6.629-59.572H98.543l6.632 59.572c1.07-.032 2.148-.055 3.239-.055 1.094 0 2.172.022 3.245.055zM162.059 53.946l-12.275-7.089-15.302 37.132c1.542.471 2.991.979 4.343 1.526l23.234-31.569zM67.049 46.857l-12.277 7.089 23.234 31.569a52.461 52.461 0 014.344-1.526L67.049 46.857z" }, void 0) }), void 0)] }), void 0));
 }
 
 function SvgSearchIcon(props) {
-    return (createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props),
-        createElement("circle", { cx: 14.5, cy: 14.5, r: 8.5 }),
-        createElement("path", { d: "M26 26l-5.5-5.5" })));
+    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("circle", { cx: 14.5, cy: 14.5, r: 8.5 }, void 0),
+            jsx("path", { d: "M26 26l-5.5-5.5" }, void 0)] }), void 0));
 }
 
 function SvgSpeechBubbleIcon(props) {
-    return (createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props),
-        createElement("path", { d: "M16 6C9.4 6 4 9.6 4 14c0 2.1 1.2 4 3.2 5.4l-1.8 5.8 8.1-3.4c.8.1 1.6.2 2.5.2 6.6 0 12-3.6 12-8s-5.4-8-12-8z" })));
+    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M16 6C9.4 6 4 9.6 4 14c0 2.1 1.2 4 3.2 5.4l-1.8 5.8 8.1-3.4c.8.1 1.6.2 2.5.2 6.6 0 12-3.6 12-8s-5.4-8-12-8z" }, void 0) }), void 0));
 }
 
 function SvgSquareIcon(props) {
-    return (createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props),
-        createElement("path", { className: "square-icon_svg__st0", d: "M6 6h20v20H6z" })));
+    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { className: "square-icon_svg__st0", d: "M6 6h20v20H6z" }, void 0) }), void 0));
 }
 
 function SvgThumbTackIcon(props) {
-    return (createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props),
-        createElement("path", { d: "M16 20v6M17.9 7.4l1.4 8.2c2.5.7 4.4 2.3 4.7 4.3h-4l-8 .1H8c.4-2 2.3-3.6 4.7-4.3l1.4-8.2s-1.3-.7-1.3-.9v-.2c0-.2.3-.3.5-.3h5.2c.3-.1.5.1.5.2v.2c.2.2-1.1.9-1.1.9z" })));
+    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M16 20v6M17.9 7.4l1.4 8.2c2.5.7 4.4 2.3 4.7 4.3h-4l-8 .1H8c.4-2 2.3-3.6 4.7-4.3l1.4-8.2s-1.3-.7-1.3-.9v-.2c0-.2.3-.3.5-.3h5.2c.3-.1.5.1.5.2v.2c.2.2-1.1.9-1.1.9z" }, void 0) }), void 0));
 }
 
 function SvgThumbsUpIcon(props) {
-    return (createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props),
-        createElement("path", { d: "M18.1 13V9c0-1.7-1.3-3-3-3l-4 9v11h11.3c1 0 1.8-.7 2-1.7l1.4-9c.2-1.1-.6-2.1-1.7-2.3h-6zm-6.9 13h-3c-1.1 0-2-.9-2-2v-7c0-1.1.9-2 2-2h3" })));
+    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M18.1 13V9c0-1.7-1.3-3-3-3l-4 9v11h11.3c1 0 1.8-.7 2-1.7l1.4-9c.2-1.1-.6-2.1-1.7-2.3h-6zm-6.9 13h-3c-1.1 0-2-.9-2-2v-7c0-1.1.9-2 2-2h3" }, void 0) }), void 0));
 }
 
 function SvgWaffleIcon(props) {
-    return (createElement("svg", __assign({ width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props),
-        createElement("circle", { cx: 8, cy: 8, r: 2 }),
-        createElement("circle", { cx: 16, cy: 8, r: 2 }),
-        createElement("circle", { cx: 24, cy: 8, r: 2 }),
-        createElement("circle", { cx: 8, cy: 16, r: 2 }),
-        createElement("circle", { cx: 16, cy: 16, r: 2 }),
-        createElement("circle", { cx: 24, cy: 16, r: 2 }),
-        createElement("circle", { cx: 8, cy: 24, r: 2 }),
-        createElement("circle", { cx: 16, cy: 24, r: 2 }),
-        createElement("circle", { cx: 24, cy: 24, r: 2 })));
+    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("circle", { cx: 8, cy: 8, r: 2 }, void 0),
+            jsx("circle", { cx: 16, cy: 8, r: 2 }, void 0),
+            jsx("circle", { cx: 24, cy: 8, r: 2 }, void 0),
+            jsx("circle", { cx: 8, cy: 16, r: 2 }, void 0),
+            jsx("circle", { cx: 16, cy: 16, r: 2 }, void 0),
+            jsx("circle", { cx: 24, cy: 16, r: 2 }, void 0),
+            jsx("circle", { cx: 8, cy: 24, r: 2 }, void 0),
+            jsx("circle", { cx: 16, cy: 24, r: 2 }, void 0),
+            jsx("circle", { cx: 24, cy: 24, r: 2 }, void 0)] }), void 0));
 }
 
 var index = /*#__PURE__*/Object.freeze({
@@ -156,43 +140,48 @@ var index = /*#__PURE__*/Object.freeze({
     WaffleIcon: SvgWaffleIcon
 });
 
-var PrimaryButton = function (_a) {
-    var _b = _a.size, size = _b === void 0 ? 'base' : _b, children = _a.children, className = _a.className, props = __rest(_a, ["size", "children", "className"]);
-    return (React__default.createElement("button", __assign({}, props, { className: classnames({ 'px-2 py-0 text-xs': size === 'xs', 'px-4 py-2': size === 'base', 'px-4 py-2 text-xl': size === 'xl' }, 'text-white font-bold bg-primary-500 hover:bg-primary-700 border border-primary-600 hover:border-primary-700 rounded focus:outline-none', className) }), children));
-};
-var SecondaryButton = function (_a) {
-    var _b = _a.size, size = _b === void 0 ? 'base' : _b, children = _a.children, className = _a.className, props = __rest(_a, ["size", "children", "className"]);
-    return (React__default.createElement("button", __assign({}, props, { className: classnames({ 'px-2 py-0 text-xs': size === 'xs', 'px-4 py-2': size === 'base', 'px-6 py-3 text-xl': size === 'xl' }, 'text-primary-500 hover:text-white font-bold bg-transparent hover:bg-primary-700 border border-primary-600 hover:border-primary-700 rounded focus:outline-none', className) }), children));
-};
-var LinkButton = function (_a) {
-    var _b = _a.size, children = _a.children, className = _a.className, props = __rest(_a, ["size", "children", "className"]);
-    return (React__default.createElement("button", __assign({}, props, { className: classnames('text-primary-500 hover:text-primary-700 hover:underline rounded cursor-pointer focus:outline-none', className) }), children));
+var Button = function (_a) {
+    var _b = _a.link, link = _b === void 0 ? false : _b, _c = _a.secondary, secondary = _c === void 0 ? false : _c, _d = _a.size, size = _d === void 0 ? 'base' : _d, children = _a.children, className = _a.className, props = __rest(_a, ["link", "secondary", "size", "children", "className"]);
+    return link ?
+        (jsx("button", __assign({}, props, { className: classnames({
+                'text-xs': size === 'sm',
+                '': size === 'base',
+                'text-xl': size === 'lg'
+            }, {
+                'text-primary-500 hover:text-primary-700': !secondary,
+                'text-gray-500 hover:text-gray-700': secondary
+            }, ' hover:underline rounded cursor-pointer focus:outline-none', className) }, { children: children }), void 0))
+        :
+            (jsx("button", __assign({}, props, { className: classnames({
+                    'px-2 py-0 text-xs': size === 'sm',
+                    'px-4 py-2': size === 'base',
+                    'px-4 py-2 text-xl': size === 'lg'
+                }, {
+                    'text-white font-bold bg-primary-500 hover:bg-primary-700 border border-primary-600 hover:border-primary-700': !secondary,
+                    'text-primary-500 hover:text-white font-bold bg-transparent hover:bg-primary-700 border border-primary-600 hover:border-primary-700': secondary
+                }, 'rounded focus:outline-none', className) }, { children: children }), void 0));
 };
 var MoreOptionsButton = function (_a) {
-    var value = _a.value, onChange = _a.onChange, className = _a.className, children = _a.children;
+    var _b = _a.value, value = _b === void 0 ? false : _b, onChange = _a.onChange; _a.className; var children = _a.children, props = __rest(_a, ["value", "onChange", "className", "children"]);
     var t = useTranslation().t;
-    return (React__default.createElement(React__default.Fragment, null,
-        React__default.createElement(LinkButton, { onClick: function () { return onChange(!value); }, className: className },
-            React__default.createElement(SvgAngleRightIcon, { className: classnames('inline w-4 h-4 mr-1 stroke-current stroke-2 transform', { 'rotate-90': value }, 'transition duration-150 ease-in-out transtition-transform') }),
-            !value ? t('more-options') : t('less-options')),
-        value && children));
+    return (jsxs(Fragment, { children: [jsxs(Button, __assign({ link: true, onClick: function () { return onChange(!value); } }, props, { children: [jsx(SvgAngleRightIcon, { className: classnames('inline w-4 h-4 mr-1 stroke-current stroke-2 transform', { 'rotate-90': value }, 'transition duration-150 ease-in-out transtition-transform') }, void 0), !value ? t('more-options') : t('less-options')] }), void 0), value && children] }, void 0));
 };
 
 var Card = function (_a) {
     var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('bg-content-fg border border-content-border rounded', className) }, children));
+    return (jsx("div", __assign({ className: classnames('bg-content-fg border border-content-border rounded', className) }, { children: children }), void 0));
 };
 Card.Header = function (_a) {
     var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('border-b border-content-border p-3', className) }, children));
+    return (jsx("div", __assign({ className: classnames('border-b border-content-border p-3', className) }, { children: children }), void 0));
 };
 Card.Body = function (_a) {
     var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('p-3', className) }, children));
+    return (jsx("div", __assign({ className: classnames('p-3', className) }, { children: children }), void 0));
 };
 Card.Footer = function (_a) {
     var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('border-t border-content-border p-3', className) }, children));
+    return (jsx("div", __assign({ className: classnames('border-t border-content-border p-3', className) }, { children: children }), void 0));
 };
 
 var useShower = function (onClickOutside) {
@@ -326,33 +315,18 @@ var DatePicker = function (_a) {
     // render
     var months = ready ? t('months', { returnObjects: true }) : null;
     var days = ready ? t('shortDays', { returnObjects: true }) : null;
-    return (React__default.createElement("div", { className: "relative" },
-        React__default.createElement("div", { ref: valueRef },
-            React__default.createElement("input", { key: "input", name: name, value: value, onChange: handleChange, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder, className: "w-full px-2 py-1 border border-content-border rounded" })),
-        ready && show &&
-            React__default.createElement("div", { ref: popperRef, className: "absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden" },
-                React__default.createElement("div", { className: "flex flex-row" },
-                    React__default.createElement("div", null,
-                        React__default.createElement("div", { className: "px-2 py-1 flex flex-row items-center justify-between bg-gray-400" },
-                            React__default.createElement("div", { className: "flex-grow text-center font-bold" },
-                                months[calendar.getMonth()],
-                                " ",
-                                calendar.getFullYear()),
-                            React__default.createElement("div", null,
-                                React__default.createElement("button", { className: "focus:outline-none", onClick: handleClickPrevMonth },
-                                    React__default.createElement(SvgAngleLeftIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" })),
-                                React__default.createElement("button", { className: "px-2 focus:outline-none", onClick: handleClickToday },
-                                    React__default.createElement(SvgCircleIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" })),
-                                React__default.createElement("button", { className: "focus:outline-none", onClick: handleClickNextMonth },
-                                    React__default.createElement(SvgAngleRightIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" })))),
-                        React__default.createElement("table", { className: "table-fixed text-center" },
-                            React__default.createElement("thead", null,
-                                React__default.createElement("tr", null, days.map(function (d, i) { return React__default.createElement("th", { key: i, className: "w-10 px-1" }, d); }))),
-                            React__default.createElement("tbody", { className: "cursor-pointer" }, weeks.map(function (w) {
-                                return React__default.createElement("tr", { key: w[0].getTime() }, w.map(function (d) { return React__default.createElement("td", { key: d.getTime(), onClick: function () { return handleClickDate(d); }, className: dayClasses(d) }, d.getDate()); }));
-                            })))),
-                    shortcuts &&
-                        React__default.createElement("div", { className: "flex flex-col justify-between bg-gray-300 cursor-pointer" }, namedDays.map(function (s, i) { return React__default.createElement("div", { key: i, onClick: function () { return handleClickDate(s.date(new Date(today))); }, className: "px-2 hover:text-white hover:bg-secondary-500" }, t("namedDays." + s.label)); }))))));
+    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: valueRef }, { children: jsx("input", { name: name, value: value, onChange: handleChange, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder, className: "w-full px-2 py-1 border border-content-border rounded" }, "input") }), void 0),
+            ready && show &&
+                jsx("div", __assign({ ref: popperRef, className: "absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden" }, { children: jsxs("div", __assign({ className: "flex flex-row" }, { children: [jsxs("div", { children: [jsxs("div", __assign({ className: "px-2 py-1 flex flex-row items-center justify-between bg-gray-400" }, { children: [jsxs("div", __assign({ className: "flex-grow text-center font-bold" }, { children: [months[calendar.getMonth()], " ", calendar.getFullYear()] }), void 0),
+                                            jsxs("div", { children: [jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickPrevMonth }, { children: jsx(SvgAngleLeftIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0),
+                                                    jsx("button", __assign({ className: "px-2 focus:outline-none", onClick: handleClickToday }, { children: jsx(SvgCircleIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0),
+                                                    jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickNextMonth }, { children: jsx(SvgAngleRightIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0)] }, void 0)] }), void 0),
+                                    jsxs("table", __assign({ className: "table-fixed text-center" }, { children: [jsx("thead", { children: jsx("tr", { children: days.map(function (d, i) { return jsx("th", __assign({ className: "w-10 px-1" }, { children: d }), i); }) }, void 0) }, void 0),
+                                            jsx("tbody", __assign({ className: "cursor-pointer" }, { children: weeks.map(function (w) {
+                                                    return jsx("tr", { children: w.map(function (d) { return jsx("td", __assign({ onClick: function () { return handleClickDate(d); }, className: dayClasses(d) }, { children: d.getDate() }), d.getTime()); }) }, w[0].getTime());
+                                                }) }), void 0)] }), void 0)] }, void 0),
+                            shortcuts &&
+                                jsx("div", __assign({ className: "flex flex-col justify-between bg-gray-300 cursor-pointer" }, { children: namedDays.map(function (s, i) { return jsx("div", __assign({ onClick: function () { return handleClickDate(s.date(new Date(today))); }, className: "px-2 hover:text-white hover:bg-secondary-500" }, { children: t("namedDays." + s.label) }), i); }) }), void 0)] }), void 0) }), void 0)] }), void 0));
 };
 //
 // parse and format
@@ -418,89 +392,80 @@ var Delay = function (_a) {
 
 var Group = function (_a) {
     var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: className }, children));
+    return (jsx("div", __assign({ className: className }, { children: children }), void 0));
 };
 var Label = function (_a) {
     var children = _a.children;
-    return (React__default.createElement("label", { className: "block text-sm uppercase tracking-wide font-bold mb-1" }, children));
+    return (jsx("label", __assign({ className: "block text-sm uppercase tracking-wide font-bold mb-1" }, { children: children }), void 0));
 };
 var Input = function (_a) {
     var error = _a.error, className = _a.className, props = __rest(_a, ["error", "className"]);
-    return (React__default.createElement("input", __assign({}, props, { className: classnames('form-input w-full', { 'border-danger-500': error }, className) })));
+    return (jsx("input", __assign({}, props, { className: classnames('form-input w-full', { 'border-danger-500': error }, className) }), void 0));
 };
 var TextArea = function (_a) {
     var error = _a.error, className = _a.className, props = __rest(_a, ["error", "className"]);
-    return (React__default.createElement("textarea", __assign({}, props, { className: classnames('form-input w-full', { 'border-danger-500': error }, className) })));
+    return (jsx("textarea", __assign({}, props, { className: classnames('form-input w-full', { 'border-danger-500': error }, className) }), void 0));
 };
 var SearchInput = function (_a) {
-    var error = _a.error, className = _a.className, props = __rest(_a, ["error", "className"]);
-    return (React__default.createElement("div", { className: className },
-        React__default.createElement("div", { className: "relative" },
-            React__default.createElement("input", __assign({}, props, { type: "search", placeholder: "Search", className: "form-input w-full pl-10" })),
-            React__default.createElement("div", { className: "absolute inset-y-0 left-0 pl-3 flex items-center justify-center" },
-                React__default.createElement(SvgSearchIcon, { className: "text-content h-5 w-5 stroke-current stroke-2" })))));
+    _a.error; var className = _a.className, props = __rest(_a, ["error", "className"]);
+    return (jsx("div", __assign({ className: className }, { children: jsxs("div", __assign({ className: "relative" }, { children: [jsx("input", __assign({}, props, { type: "search", placeholder: "Search", className: "form-input w-full pl-10" }), void 0),
+                jsx("div", __assign({ className: "absolute inset-y-0 left-0 pl-3 flex items-center justify-center" }, { children: jsx(SvgSearchIcon, { className: "text-content h-5 w-5 stroke-current stroke-2" }, void 0) }), void 0)] }), void 0) }), void 0));
 };
 var Error = function (_a) {
     var error = _a.error, className = _a.className, children = _a.children;
-    return (React__default.createElement(React__default.Fragment, null, error && React__default.createElement("p", { className: classnames('mt-1 text-danger-500 text-xs italic truncate', className) }, children)));
+    return (jsx(Fragment, { children: error && jsx("p", __assign({ className: classnames('mt-1 text-danger-500 text-xs italic truncate', className) }, { children: children }), void 0) }, void 0));
 };
 var Checkbox = function (_a) {
-    var checked = _a.checked, error = _a.error, type = _a.type, className = _a.className, children = _a.children, props = __rest(_a, ["checked", "error", "type", "className", "children"]);
-    return (React__default.createElement("label", { className: "block flex flex-row items-center" },
-        React__default.createElement("input", __assign({}, props, { type: "checkbox", className: classnames('form-checkbox text-primary-500', className) })),
-        React__default.createElement("span", { className: classnames('ml-2', className) }, children)));
+    _a.checked; _a.error; _a.type; var className = _a.className, children = _a.children, props = __rest(_a, ["checked", "error", "type", "className", "children"]);
+    return (jsxs("label", __assign({ className: "block flex flex-row items-center" }, { children: [jsx("input", __assign({}, props, { type: "checkbox", className: classnames('form-checkbox text-primary-500', className) }), void 0),
+            jsx("span", __assign({ className: classnames('ml-2', className) }, { children: children }), void 0)] }), void 0));
 };
 var Radio = function (_a) {
-    var checked = _a.checked, error = _a.error, type = _a.type, className = _a.className, children = _a.children, props = __rest(_a, ["checked", "error", "type", "className", "children"]);
-    return (React__default.createElement("label", { className: "block flex flex-row items-center" },
-        React__default.createElement("input", __assign({}, props, { type: "radio", className: classnames('form-radio text-primary-500', className) })),
-        React__default.createElement("span", { className: "ml-2" }, children)));
+    _a.checked; _a.error; _a.type; var className = _a.className, children = _a.children, props = __rest(_a, ["checked", "error", "type", "className", "children"]);
+    return (jsxs("label", __assign({ className: "block flex flex-row items-center" }, { children: [jsx("input", __assign({}, props, { type: "radio", className: classnames('form-radio text-primary-500', className) }), void 0),
+            jsx("span", __assign({ className: "ml-2" }, { children: children }), void 0)] }), void 0));
 };
 var Select = function (_a) {
-    var value = _a.value, onChange = _a.onChange, className = _a.className, children = _a.children;
-    return (React__default.createElement("select", { className: classnames('form-select py-0', className) }, children));
+    _a.value; _a.onChange; var className = _a.className, children = _a.children;
+    return (jsx("select", __assign({ className: classnames('form-select py-0', className) }, { children: children }), void 0));
 };
 Select.Option = function (_a) {
     var value = _a.value, children = _a.children;
     return (
     // <option>uno</option>
-    React__default.createElement("option", { value: value }, children));
+    jsx("option", __assign({ value: value }, { children: children }), void 0));
 }; //  as FC<{ value?: any, className?: string }>;
 
 var Loading = function (_a) {
-    var className = _a.className;
-    return (React__default.createElement("svg", { width: "45", height: "45", viewBox: "0 0 45 45", xmlns: "http://www.w3.org/2000/svg", stroke: "currentColor", className: classnames('inline-block', 'h-4', className) },
-        React__default.createElement("g", { fill: "none", fillRule: "evenodd", transform: "translate(1 1)", strokeWidth: "2" },
-            React__default.createElement("circle", { cx: "22", cy: "22", r: "6", strokeOpacity: "0" },
-                React__default.createElement("animate", { attributeName: "r", begin: "1.5s", dur: "3s", values: "6;22", calcMode: "linear", repeatCount: "indefinite" }),
-                React__default.createElement("animate", { attributeName: "stroke-opacity", begin: "1.5s", dur: "3s", values: "1;0", calcMode: "linear", repeatCount: "indefinite" }),
-                React__default.createElement("animate", { attributeName: "stroke-width", begin: "1.5s", dur: "3s", values: "2;0", calcMode: "linear", repeatCount: "indefinite" })),
-            React__default.createElement("circle", { cx: "22", cy: "22", r: "6", strokeOpacity: "0" },
-                React__default.createElement("animate", { attributeName: "r", begin: "3s", dur: "3s", values: "6;22", calcMode: "linear", repeatCount: "indefinite" }),
-                React__default.createElement("animate", { attributeName: "stroke-opacity", begin: "3s", dur: "3s", values: "1;0", calcMode: "linear", repeatCount: "indefinite" }),
-                React__default.createElement("animate", { attributeName: "stroke-width", begin: "3s", dur: "3s", values: "2;0", calcMode: "linear", repeatCount: "indefinite" })),
-            React__default.createElement("circle", { cx: "22", cy: "22", r: "8" },
-                React__default.createElement("animate", { attributeName: "r", begin: "0s", dur: "1.5s", values: "6;1;2;3;4;5;6", calcMode: "linear", repeatCount: "indefinite" })))));
+    var _b = _a.size, size = _b === void 0 ? 'base' : _b, className = _a.className;
+    return (jsx("svg", __assign({ width: "45", height: "45", viewBox: "0 0 45 45", xmlns: "http://www.w3.org/2000/svg", stroke: "currentColor", className: classnames('inline-block', 'text-primary-500', {
+            'h-6 w-6': size === 'sm',
+            'h-10 w-10': size === 'base',
+            'h-14 w-14': size === 'lg'
+        }, className) }, { children: jsxs("g", __assign({ fill: "none", fillRule: "evenodd", transform: "translate(1 1)", strokeWidth: "2" }, { children: [jsxs("circle", __assign({ cx: "22", cy: "22", r: "6", strokeOpacity: "0" }, { children: [jsx("animate", { attributeName: "r", begin: "1.5s", dur: "3s", values: "6;22", calcMode: "linear", repeatCount: "indefinite" }, void 0),
+                        jsx("animate", { attributeName: "stroke-opacity", begin: "1.5s", dur: "3s", values: "1;0", calcMode: "linear", repeatCount: "indefinite" }, void 0),
+                        jsx("animate", { attributeName: "stroke-width", begin: "1.5s", dur: "3s", values: "2;0", calcMode: "linear", repeatCount: "indefinite" }, void 0)] }), void 0),
+                jsxs("circle", __assign({ cx: "22", cy: "22", r: "6", strokeOpacity: "0" }, { children: [jsx("animate", { attributeName: "r", begin: "3s", dur: "3s", values: "6;22", calcMode: "linear", repeatCount: "indefinite" }, void 0),
+                        jsx("animate", { attributeName: "stroke-opacity", begin: "3s", dur: "3s", values: "1;0", calcMode: "linear", repeatCount: "indefinite" }, void 0),
+                        jsx("animate", { attributeName: "stroke-width", begin: "3s", dur: "3s", values: "2;0", calcMode: "linear", repeatCount: "indefinite" }, void 0)] }), void 0),
+                jsx("circle", __assign({ cx: "22", cy: "22", r: "8" }, { children: jsx("animate", { attributeName: "r", begin: "0s", dur: "1.5s", values: "6;1;2;3;4;5;6", calcMode: "linear", repeatCount: "indefinite" }, void 0) }), void 0)] }), void 0) }), void 0));
 };
 
 var Postit = function (_a) {
     var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: "postit-container" },
-        React__default.createElement("div", { className: classnames('postit', className) }, children)));
+    return (jsx("div", __assign({ className: "postit-container" }, { children: jsx("div", __assign({ className: classnames('postit', className) }, { children: children }), void 0) }), void 0));
 };
 
 var CustomSelect = function (_a) {
-    var options = _a.options, _b = _a.key, key = _b === void 0 ? function (option) { return option; } : _b, _c = _a.value, _d = _a.onChange, children = _a.children;
+    var options = _a.options, _b = _a.key, key = _b === void 0 ? function (option) { return option; } : _b; _a.value; _a.onChange; _a.children;
     var _e = useState(false), show = _e[0], setShow = _e[1];
     var _f = useShower(function () { return setShow(false); }), valueRef = _f[0], popperRef = _f[1];
-    return (React__default.createElement("div", { className: "relative" },
-        React__default.createElement("div", { ref: valueRef, className: "pl-4 pr-8 py-2 truncate border rounded-lg", onClick: function () { return setShow(!show); } }, "as jkasd lkjasd lkajsd lkasjd laksjd laksjd laskdj alskdjalsdkj d"),
-        React__default.createElement("div", { className: "absolute inset-y-0 right-0 pr-3 flex items-center justify-center" },
-            React__default.createElement(SvgAngleDownIcon, { className: "text-content h-4 w-4 stroke-current stroke-2" })),
-        show &&
-            React__default.createElement("div", { ref: popperRef, className: "absolute left-0 mt-1 py-1 bg-content-fg border border-conteng-border rounded" }, options.map(function (option) {
-                return React__default.createElement("div", { key: key(option), className: "hover:bg-primary-500 hover:text-content-fg px-3" }, key(option));
-            }))));
+    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: valueRef, className: "pl-4 pr-8 py-2 truncate border rounded-lg", onClick: function () { return setShow(!show); } }, { children: "as jkasd lkjasd lkajsd lkasjd laksjd laksjd laskdj alskdjalsdkj d" }), void 0),
+            jsx("div", __assign({ className: "absolute inset-y-0 right-0 pr-3 flex items-center justify-center" }, { children: jsx(SvgAngleDownIcon, { className: "text-content h-4 w-4 stroke-current stroke-2" }, void 0) }), void 0),
+            show &&
+                jsx("div", __assign({ ref: popperRef, className: "absolute left-0 mt-1 py-1 bg-content-fg border border-conteng-border rounded" }, { children: options.map(function (option) {
+                        return jsx("div", __assign({ className: "hover:bg-primary-500 hover:text-content-fg px-3" }, { children: key(option) }), key(option));
+                    }) }), void 0)] }), void 0));
 };
 
 // constants
@@ -513,7 +478,7 @@ var minutes = [15, 30, 45];
  */
 var TimePicker = function (_a) {
     var name = _a.name, value = _a.value, onChange = _a.onChange, placeholder = _a.placeholder;
-    var _b = useTranslation(), t = _b.t, ready = _b.ready;
+    var _b = useTranslation(); _b.t; var ready = _b.ready;
     var _c = useState(false), show = _c[0], setShow = _c[1];
     var _d = useShower(function () { return setShow(false); }), valueRef = _d[0], popperRef = _d[1];
     var times = useRef({ watch: 8 });
@@ -595,46 +560,31 @@ var TimePicker = function (_a) {
         }
     }
     // render
-    return (React__default.createElement("div", { className: "relative" },
-        React__default.createElement("div", { ref: valueRef },
-            React__default.createElement("input", { key: "input", name: name, value: value, onChange: handleChange, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder, className: "w-full px-2 py-1 border border-content-border rounded" })),
-        ready && show &&
-            React__default.createElement("div", { ref: popperRef, className: "absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden" },
-                React__default.createElement("div", { className: "px-2 py-1 bg-gray-400" },
-                    React__default.createElement("div", { className: "text-right" },
-                        React__default.createElement("button", { className: "focus:outline-none", onClick: handleClickPrevHour },
-                            React__default.createElement(SvgAngleUpIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" })),
-                        React__default.createElement("button", { className: "px-2 focus:outline-none", onClick: handleClickNoon },
-                            React__default.createElement(SvgCircleIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" })),
-                        React__default.createElement("button", { className: "focus:outline-none", onClick: handleClickNextHour },
-                            React__default.createElement(SvgAngleDownIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" })))),
-                React__default.createElement("div", { ref: timesRef, className: "h-64 overflow-scroll" },
-                    React__default.createElement("table", { className: "table-fixed text-center" },
-                        React__default.createElement("thead", null,
-                            React__default.createElement("tr", null,
-                                React__default.createElement("th", { className: "w-10" }, "Hora"),
-                                minutes.map(function (m) { return React__default.createElement("td", { className: "w-10" }); }))),
-                        React__default.createElement("tbody", { className: "cursor-pointer" }, morning.map(function (h) {
-                            return React__default.createElement("tr", { key: h, className: hourClasses([h, 0]) },
-                                React__default.createElement("th", { className: "text-base group-hover:text-content group-hover:bg-secondary-500", onClick: function (e) { return handleClickTime([h, 0]); } }, formatHour(h)),
-                                minutes.map(function (m) {
-                                    return React__default.createElement("td", { key: m, onClick: function (e) { return handleClickTime([h, m]); }, className: hourMinuteClasses([h, m]) }, m);
-                                }));
-                        })),
-                        React__default.createElement("tbody", { className: "bg-gray-200 cursor-pointer" }, noon.map(function (h) {
-                            return React__default.createElement("tr", { key: h, className: hourClasses([h, 0]) },
-                                React__default.createElement("th", { className: "text-base group-hover:text-content group-hover:bg-secondary-500", onClick: function (e) { return handleClickTime([h, 0]); } }, formatHour(h)),
-                                minutes.map(function (m) {
-                                    return React__default.createElement("td", { key: m, onClick: function (e) { return handleClickTime([h, m]); }, className: hourMinuteClasses([h, m]) }, m);
-                                }));
-                        })),
-                        React__default.createElement("tbody", { className: "cursor-pointer" }, afternoon.map(function (h) {
-                            return React__default.createElement("tr", { key: h, className: hourClasses([h, 0]) },
-                                React__default.createElement("th", { className: "text-base group-hover:text-content group-hover:bg-secondary-500", onClick: function (e) { return handleClickTime([h, 0]); } }, formatHour(h)),
-                                minutes.map(function (m) {
-                                    return React__default.createElement("td", { key: m, onClick: function (e) { return handleClickTime([h, m]); }, className: hourMinuteClasses([h, m]) }, m);
-                                }));
-                        })))))));
+    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: valueRef }, { children: jsx("input", { name: name, value: value, onChange: handleChange, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder, className: "w-full px-2 py-1 border border-content-border rounded" }, "input") }), void 0),
+            ready && show &&
+                jsxs("div", __assign({ ref: popperRef, className: "absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden" }, { children: [jsx("div", __assign({ className: "px-2 py-1 bg-gray-400" }, { children: jsxs("div", __assign({ className: "text-right" }, { children: [jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickPrevHour }, { children: jsx(SvgAngleUpIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0),
+                                    jsx("button", __assign({ className: "px-2 focus:outline-none", onClick: handleClickNoon }, { children: jsx(SvgCircleIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0),
+                                    jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickNextHour }, { children: jsx(SvgAngleDownIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0)] }), void 0) }), void 0),
+                        jsx("div", __assign({ ref: timesRef, className: "h-64 overflow-scroll" }, { children: jsxs("table", __assign({ className: "table-fixed text-center" }, { children: [jsx("thead", { children: jsxs("tr", { children: [jsx("th", __assign({ className: "w-10" }, { children: "Hora" }), void 0),
+                                                minutes.map(function (m) { return jsx("td", { className: "w-10" }, void 0); })] }, void 0) }, void 0),
+                                    jsx("tbody", __assign({ className: "cursor-pointer" }, { children: morning.map(function (h) {
+                                            return jsxs("tr", __assign({ className: hourClasses([h, 0]) }, { children: [jsx("th", __assign({ className: "text-base group-hover:text-content group-hover:bg-secondary-500", onClick: function (e) { return handleClickTime([h, 0]); } }, { children: formatHour(h) }), void 0),
+                                                    minutes.map(function (m) {
+                                                        return jsx("td", __assign({ onClick: function (e) { return handleClickTime([h, m]); }, className: hourMinuteClasses([h, m]) }, { children: m }), m);
+                                                    })] }), h);
+                                        }) }), void 0),
+                                    jsx("tbody", __assign({ className: "bg-gray-200 cursor-pointer" }, { children: noon.map(function (h) {
+                                            return jsxs("tr", __assign({ className: hourClasses([h, 0]) }, { children: [jsx("th", __assign({ className: "text-base group-hover:text-content group-hover:bg-secondary-500", onClick: function (e) { return handleClickTime([h, 0]); } }, { children: formatHour(h) }), void 0),
+                                                    minutes.map(function (m) {
+                                                        return jsx("td", __assign({ onClick: function (e) { return handleClickTime([h, m]); }, className: hourMinuteClasses([h, m]) }, { children: m }), m);
+                                                    })] }), h);
+                                        }) }), void 0),
+                                    jsx("tbody", __assign({ className: "cursor-pointer" }, { children: afternoon.map(function (h) {
+                                            return jsxs("tr", __assign({ className: hourClasses([h, 0]) }, { children: [jsx("th", __assign({ className: "text-base group-hover:text-content group-hover:bg-secondary-500", onClick: function (e) { return handleClickTime([h, 0]); } }, { children: formatHour(h) }), void 0),
+                                                    minutes.map(function (m) {
+                                                        return jsx("td", __assign({ onClick: function (e) { return handleClickTime([h, m]); }, className: hourMinuteClasses([h, m]) }, { children: m }), m);
+                                                    })] }), h);
+                                        }) }), void 0)] }), void 0) }), void 0)] }), void 0)] }), void 0));
 };
 //
 // parse and format
@@ -703,43 +653,37 @@ function formatTime(hm) {
 var Context = createContext({});
 var Helium = function (_a) {
     var _b = _a.navigator, navigator = _b === void 0 ? false : _b, _c = _a.setNavigator, setNavigator = _c === void 0 ? function (show) { return null; } : _c, children = _a.children;
-    return (React__default.createElement(Context.Provider, { value: { navigator: navigator, setNavigator: setNavigator } },
-        React__default.createElement("div", { className: "relative min-h-screen flex flex-col" }, children)));
+    return (jsx(Context.Provider, __assign({ value: { navigator: navigator, setNavigator: setNavigator } }, { children: jsx("div", __assign({ className: "relative min-h-screen flex flex-col" }, { children: children }), void 0) }), void 0));
 };
 // header
 var Header = function (_a) {
     var className = _a.className, children = _a.children;
     var context = useContext(Context);
-    return (React__default.createElement("header", { className: classnames(context.navigator ? 'pl-0 md:pl-56' : 'pl-0', 'fixed z-10 inset-x-0 top-0 h-16 flex-none text-content bg-content-fg border-b border-content-border transition duration-700 ease-in-out transition-spacing') },
-        React__default.createElement("div", { className: classnames('h-full', className) }, children)));
+    return (jsx("header", __assign({ className: classnames(context.navigator ? 'pl-0 md:pl-56' : 'pl-0', 'fixed z-10 inset-x-0 top-0 h-16 flex-none text-content bg-content-fg border-b border-content-border transition duration-700 ease-in-out transition-spacing') }, { children: jsx("div", __assign({ className: classnames('h-full', className) }, { children: children }), void 0) }), void 0));
 };
 // toggle
 var Toggle = function (_a) {
     var always = _a.always, children = _a.children;
     var context = useContext(Context);
-    return (React__default.createElement("div", { className: classnames('h-16 w-16 text-center hover:text-white hover:bg-primary-500', always ? 'flex' : 'flex md:hidden', 'flex-row items-center justify-center') },
-        React__default.createElement("button", { onClick: function () { return context.setNavigator(!context.navigator); }, className: "focus:outline-none" }, children)));
+    return (jsx("div", __assign({ className: classnames('h-16 w-16 text-center hover:text-white hover:bg-primary-500', always ? 'flex' : 'flex md:hidden', 'flex-row items-center justify-center') }, { children: jsx("button", __assign({ onClick: function () { return context.setNavigator(!context.navigator); }, className: "focus:outline-none" }, { children: children }), void 0) }), void 0));
 };
 var Navigator = function (_a) {
     var className = _a.className, children = _a.children;
     var context = useContext(Context);
-    return (React__default.createElement(React__default.Fragment, null,
-        context.navigator && React__default.createElement("div", { className: classnames('fixed z-10 inset-0 bg-gray-800 opacity-50 md:hidden'), onClick: function () { return context.setNavigator(false); } }),
-        React__default.createElement("div", { className: classnames('fixed z-20 inset-y-0 left-0 w-56 transform', context.navigator ? 'translate-x-0' : '-translate-x-56', 'transition duration-700 ease-in-out transition-transform') },
-            React__default.createElement("div", { className: classnames('h-full flex flex-col text-navigator bg-navigator-bg', className) }, children))));
+    return (jsxs(Fragment, { children: [context.navigator && jsx("div", { className: classnames('fixed z-10 inset-0 bg-gray-800 opacity-50 md:hidden'), onClick: function () { return context.setNavigator(false); } }, void 0),
+            jsx("div", __assign({ className: classnames('fixed z-20 inset-y-0 left-0 w-56 transform', context.navigator ? 'translate-x-0' : '-translate-x-56', 'transition duration-700 ease-in-out transition-transform') }, { children: jsx("div", __assign({ className: classnames('h-full flex flex-col text-navigator bg-navigator-bg', className) }, { children: children }), void 0) }), void 0)] }, void 0));
 };
 var NavigatorHeader = function (_a) {
     var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: "flex-none h-16 border-b border-navigator-border" },
-        React__default.createElement("div", { className: classnames('w-full h-full', className) }, children)));
+    return (jsx("div", __assign({ className: "flex-none h-16 border-b border-navigator-border" }, { children: jsx("div", __assign({ className: classnames('w-full h-full', className) }, { children: children }), void 0) }), void 0));
 };
 var NavigatorContent = function (_a) {
     var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('flex-grow overflow-y-scroll', className) }, children));
+    return (jsx("div", __assign({ className: classnames('flex-grow overflow-y-scroll', className) }, { children: children }), void 0));
 };
 var NavigatorFooter = function (_a) {
     var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('flex-none flex-none border-t border-navigator-border', className) }, children));
+    return (jsx("div", __assign({ className: classnames('flex-none flex-none border-t border-navigator-border', className) }, { children: children }), void 0));
 };
 Navigator.Header = NavigatorHeader;
 Navigator.Content = NavigatorContent;
@@ -747,28 +691,28 @@ Navigator.Footer = NavigatorFooter;
 var Main = function (_a) {
     var children = _a.children;
     var context = useContext(Context);
-    return (React__default.createElement("main", { className: classnames('h-full', context.navigator ? 'pl-0 md:pl-56' : 'pl-0', 'pt-16 flex-grow flex flex-row items-stretch overflow-y-auto text-content bg-content-bg transition duration-700 ease-in-out transition-spacing') }, children));
+    return (jsx("main", __assign({ className: classnames('h-full', context.navigator ? 'pl-0 md:pl-56' : 'pl-0', 'pt-16 flex-grow flex flex-row items-stretch overflow-y-auto text-content bg-content-bg transition duration-700 ease-in-out transition-spacing') }, { children: children }), void 0));
 };
 Main.Content = function (_a) {
     var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('w-2/3 flex-grow', className) }, children));
+    return (jsx("div", __assign({ className: classnames('w-2/3 flex-grow', className) }, { children: children }), void 0));
 };
 Main.Side = function (_a) {
     var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('w-1/3 bg-content-fg border-l border-content-border', className) }, children));
+    return (jsx("div", __assign({ className: classnames('w-1/3 bg-content-fg border-l border-content-border', className) }, { children: children }), void 0));
 };
 var Panel = function (_a) {
     var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('flex flex-col', className) }, children));
+    return (jsx("div", __assign({ className: classnames('flex flex-col', className) }, { children: children }), void 0));
 };
 Panel.Group = function (_a) {
     var className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('px-3 py-2 text-xs text-muted uppercase', className) }, children));
+    return (jsx("div", __assign({ className: classnames('px-3 py-2 text-xs text-muted uppercase', className) }, { children: children }), void 0));
 };
 Panel.Item = function (_a) {
     var active = _a.active, className = _a.className, children = _a.children;
-    return (React__default.createElement("div", { className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, children));
+    return (jsx("div", __assign({ className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, { children: children }), void 0));
 };
 
-export { Card, Checkbox, CustomSelect, DatePicker, Delay, Error, Group, Header, Helium, index as Icons, Input, Label, LinkButton, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, PrimaryButton, Radio, SearchInput, SecondaryButton, Select, TextArea, TimePicker, Toggle, useShower };
+export { Button, Card, Checkbox, CustomSelect, DatePicker, Delay, Error, Group, Header, Helium, index as Icons, Input, Label, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, SearchInput, Select, TextArea, TimePicker, Toggle, useShower };
 //# sourceMappingURL=index.esm.js.map

@@ -31,20 +31,25 @@ import { Tabs, Tab } from './Tabs';
 
 <Preview>
     <Story name="Card with Tabs">
-        <Card>
-            <Card.Header className="pb-0">
-                <Tabs value="one">
-                    <Tab value="one">One</Tab>
-                    <Tab value="two">Two</Tab>
-                    <Tab value="three">Three</Tab>
-                </Tabs>
-            </Card.Header>
-            <Card.Body>
-                <div>Content</div>
-            </Card.Body>
-            <Card.Footer>
-                <div>Footer</div>
-            </Card.Footer>
-        </Card>
+    {() => {
+        const [ tab, setTab ] = useState('one');
+        return (
+            <Card>
+                <Card.Header className="pb-0">
+                    <Tabs value={tab} setValue={setTab}>
+                        <Tabs.Option value="one">One</Tabs.Option>
+                        <Tabs.Option value="two">Two</Tabs.Option>
+                        <Tabs.Option value="three">Three</Tabs.Option>
+                    </Tabs>
+                </Card.Header>
+                <Card.Body>
+                    <div>Content</div>
+                </Card.Body>
+                <Card.Footer>
+                    <div>Footer</div>
+                </Card.Footer>
+            </Card>
+            );
+        }}
     </Story>
 </Preview>

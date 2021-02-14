@@ -1,0 +1,1 @@
+export type ComponentSize = 'sm' | 'base' | 'lg';

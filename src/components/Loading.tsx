@@ -1,10 +1,23 @@
 
-import React, { FC } from 'react';
 import classnames from 'classnames';
+import React, { FC } from 'react';
+import { ComponentSize } from './ComponentSize';
 
 
-export const Loading: FC<{ className: string }> = ({ className }) => (
-    <svg width="45" height="45" viewBox="0 0 45 45" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" className={classnames('inline-block', 'h-4', className)}>
+export interface LoadingProps {
+    size?: ComponentSize;
+    className?: string;
+}
+
+export const Loading: FC<LoadingProps> = ({ size = 'base', className }) => (
+    <svg width="45" height="45" viewBox="0 0 45 45" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"
+        className={classnames('inline-block', 'text-primary-500',
+            {
+                'h-6 w-6': size === 'sm',
+                'h-10 w-10': size === 'base',
+                'h-14 w-14': size === 'lg'
+            },
+            className)}>
         <g fill="none" fillRule="evenodd" transform="translate(1 1)" strokeWidth="2">
             <circle cx="22" cy="22" r="6" strokeOpacity="0">
                 <animate attributeName="r"

@@ -1,7 +1,6 @@
 import { withKnobs } from "@storybook/addon-knobs";
 import React from 'react';
 import { Card } from "../components/Card";
-import { Postit } from "../components/Postit/Postit";
 import '../styles/styles.css';
 import { Invoice as InvoiceComponent } from "./Invoice";
 import { Note as NoteComponent } from './Note';

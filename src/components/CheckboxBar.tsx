@@ -1,25 +1,30 @@
 import classnames from 'classnames';
 import React, { createContext, FC, useContext } from 'react';
+import { ComponentSize } from './ComponentSize';
 
 
-//
-// CheckboxBar
-//
-
-interface ContextProps {
-    value: any[],
-    onChange: (value?: any) => void
-};
-
-const Context = createContext<ContextProps>({ value: [], onChange: () => [] });
-
-interface CheckboxBarComponent extends FC<ContextProps & { className?: string }> {
-    Option: FC<{ value?: any, className?: string }>;
+export interface CheckboxBarProps {
+    size?: ComponentSize;
+    value: any[];
+    onChange: (value: any) => void;
+    className?: string;
 }
 
-export const CheckboxBar: CheckboxBarComponent = ({ value, onChange, className, children }) => (
-    <Context.Provider value={{ value, onChange }}>
-        <div className={classnames('inline border border-primary-700 rounded', className)}>
+export interface CheckboxBarOptionProps {
+    value: any;
+    className?: string;
+}
+
+type ContextProps = Pick<CheckboxBarProps, 'size' | 'value' | 'onChange'>;
+const Context = createContext<ContextProps>({ size: 'base', value: [], onChange: () => [] });
+
+interface CheckboxBarComponent extends FC<CheckboxBarProps> {
+    Option: FC<CheckboxBarOptionProps>;
+}
+
+export const CheckboxBar: CheckboxBarComponent = ({ size = 'base', value, onChange, className, children }) => (
+    <Context.Provider value={{ size, value, onChange }}>
+        <div className={classnames('inline-block border border-primary-700 rounded text-xs', className)}>
             {children}
         </div>
     </Context.Provider>
@@ -34,10 +39,20 @@ CheckboxBar.Option = (({ value, className, children }) => {
         } else {
             context.onChange([...context.value.slice(0, i), ...context.value.slice(i + 1)]);
         }
-    }
+    };
     return (
-        <div onClick={onClick} className={classnames('inline-block px-2 py-0 border-primary-700 border-r last:border-r-0', { 'text-white bg-primary-500': context.value.indexOf(value) >= 0 }, 'cursor-pointer', className)}>
+        <div onClick={onClick} className={classnames(
+            'inline-block px-2 py-0 border-primary-700 border-r last:border-r-0',
+            {
+                'text-xs': context.size === 'sm',
+                'text-base': context.size === 'base',
+                'text-lg': context.size === 'lg',
+            },
+            {
+                'text-white bg-primary-500': context.value.indexOf(value) >= 0
+            }, 'cursor-pointer', className)}>
             {children}
         </div>
     );
-}) as FC<{ value?: any, className?: string }>;
+}) as FC<CheckboxBarOptionProps>;
+CheckboxBar.Option.displayName = 'CheckboxBar.Option';

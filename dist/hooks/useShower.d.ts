@@ -1,2 +1,1 @@
-/// <reference types="react" />
-export declare const useShower: (onClickOutside: () => void) => [import("react").RefObject<HTMLDivElement>, import("react").RefObject<HTMLDivElement>];
+export declare const useShower: (onClickOutside: () => void) => [React.RefObject<HTMLDivElement>, React.RefObject<HTMLDivElement>];

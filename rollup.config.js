@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import json from 'rollup-plugin-json';
 import typescript from 'rollup-plugin-typescript2';
 import pack from './package.json';
@@ -5,14 +6,12 @@ import pack from './package.json';
 export default {
 
     input: 'src/index.ts',
-    output: [
-        {
-            file: pack.module,
-            format: 'esm',
-            exports: 'named',
-            sourcemap: true
-        }
-    ],
+    output: [{
+        file: pack.module,
+        format: 'esm',
+        exports: 'named',
+        sourcemap: true
+    }],
 
     external: [
         ...Object.keys(pack.dependencies || {}),
@@ -31,9 +30,9 @@ export default {
         typescript({
             clean: true,
             tsconfigOverride: {
-                exclude: [ "src/styles", "stories/**/*", "**/*.stories.tsx", "src/i18n.tsx" ]
+                exclude: ["src/styles", "stories/**/*", "**/*.stories.tsx", "src/i18n.tsx"]
             }
-        }),
+        })
 
     ]
 
