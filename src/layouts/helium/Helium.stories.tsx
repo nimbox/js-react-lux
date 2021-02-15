@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { SearchInput } from '../../components/Form';
 import { HamburgerIcon, NimboxIcon, CrossIcon } from '../../icons';
 import { Header, Helium, Main, Navigator, Toggle, Panel } from './Helium';
-import '../../styles/styles.css'
+import '../../index.css'
 
 
 export default { title: 'Layout/Helium', decorators: [withKnobs] };

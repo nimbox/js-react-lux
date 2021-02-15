@@ -2,15 +2,8 @@ import classnames from 'classnames';
 import React, { FC } from 'react';
 
 
-//
-// Postit
-// 
-
 interface Props {
-
-    /** the css classes */
     className?: string
-
 }
 
 export const Postit: FC<Props> = ({ className, children }) => {

@@ -2,7 +2,7 @@ import { select, withKnobs } from "@storybook/addon-knobs";
 import React, { useState } from 'react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import i18n from '../i18n';
-import '../styles/styles.css';
+import '../index.css';
 import { DatePicker } from './DatePicker';
 
 

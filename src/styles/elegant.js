@@ -86,12 +86,12 @@ module.exports = {
   },
 
   plugins: [
-    require('@tailwindcss/custom-forms'),
     plugin(function ({ addBase, addComponents, config}) {
       addBase({ 'html': { fontSize: '12px' } });
       addComponents({ 
         ...require('./postit'),
-        ...require('./tooltip')
+        ...require('./tooltip'),
+        ...require('./popper')
       })
     })
   ],

@@ -1,7 +1,7 @@
 import { withKnobs } from "@storybook/addon-knobs";
 import React from 'react';
 import { Card } from "../components/Card";
-import '../styles/styles.css';
+import '../index.css';
 import { Invoice as InvoiceComponent } from "./Invoice";
 import { Note as NoteComponent } from './Note';
 import { Payment as PaymentComponent } from './Payment';

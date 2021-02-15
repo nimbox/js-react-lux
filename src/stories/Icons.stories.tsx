@@ -1,7 +1,7 @@
 import { withKnobs } from "@storybook/addon-knobs";
 import React from 'react';
 import * as icons from '../icons';
-import '../styles/styles.css';
+import '../index.css';
 
 
 export default {
