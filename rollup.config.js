@@ -4,9 +4,9 @@ import commonjs from 'rollup-plugin-commonjs';
 import typescript from 'rollup-plugin-typescript2';
 import pack from './package.json';
 
-export default {
+export default [{
 
-    input: ['src/index.ts', 'src/styles/elegant.js'],
+    input: ['src/index.ts'],
     output: [{
         dir: 'dist/',
         format: 'esm',
@@ -28,15 +28,34 @@ export default {
             namedExports: true // Default: true
         }),
 
-        commonjs(),
-
         typescript({
             clean: true,
-            tsconfigOverride: {                
+            tsconfigOverride: {
                 exclude: ["src/styles", "stories/**/*", "**/*.stories.tsx", "src/i18n.tsx"]
             }
         })
 
     ]
 
-}
+}, {
+
+    input: ['src/styles/elegant.js'],
+    output: [{
+        dir: 'dist/',
+        format: 'cjs',
+        exports: 'named',
+        sourcemap: true
+    }],
+
+    external: [
+        ...Object.keys(pack.dependencies || {}),
+        ...Object.keys(pack.peerDependencies || {})
+    ],
+
+    plugins: [
+
+        commonjs()
+
+    ]
+
+}];

@@ -1,4 +1,12 @@
-import tailwindcss from 'tailwindcss';
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var tailwindcss = require('tailwindcss');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var tailwindcss__default = /*#__PURE__*/_interopDefaultLegacy(tailwindcss);
 
 var postit = {
 
@@ -214,8 +222,8 @@ var popper = {
 
 };
 
-const { defaultTheme } = tailwindcss;
-const { plugin } = tailwindcss;
+const { defaultTheme } = tailwindcss__default['default'];
+const { plugin } = tailwindcss__default['default'];
 
 
 var elegant = {
@@ -326,6 +334,8 @@ var elegant_1 = elegant.theme;
 var elegant_2 = elegant.plugins;
 var elegant_3 = elegant.variants;
 
-export default elegant;
-export { elegant_2 as plugins, elegant_1 as theme, elegant_3 as variants };
+exports.default = elegant;
+exports.plugins = elegant_2;
+exports.theme = elegant_1;
+exports.variants = elegant_3;
 //# sourceMappingURL=elegant.js.map
