@@ -21,9 +21,6 @@
     "preversion": "npm install && npm run build",
     "postversion": "git push origin master --follow-tags && npm publish"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "dependencies": {
     "@popperjs/core": "^2.6.0",
     "@tailwindcss/forms": "^0.2.1",
