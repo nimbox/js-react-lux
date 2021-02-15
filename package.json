@@ -35,6 +35,9 @@
     "react-popper": "^2.2.4",
     "react-router-dom": "^5.2.0"
   },
+  "peerDependencies": {
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.3"
+  },
   "devDependencies": {
     "@craco/craco": "^6.1.1",
     "@storybook/addon-actions": "^6.1.18",
