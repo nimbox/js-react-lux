@@ -3,11 +3,15 @@
   "version": "0.1.6",
   "private": false,
   "main": "dist/index.js",
-  "module": "dist/index.esm.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    "./styles/elegant": "dist/elegant.js"
+  },
   "scripts": {
     "start": "react-scripts start",
-    "build": "rm -rf dist/* && npm run build:icons && cp src/styles/*.js dist/ && rollup -c",
+    "build": "rm -rf dist/* && rollup -c",
+    "build:watch": "rm -rf dist/* && npm run build:icons && cp src/styles/*.js dist/ && rollup -cw",
     "build:icons": "rm -f src/icons/*.tsx && svgr --icon --typescript --silent --out-dir src/icons src/icons",
     "build:style": "tailwind build src/styles/index.css -o src/styles/styles.css",
     "test": "react-scripts test",
@@ -20,6 +24,7 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.6.0",
+    "@tailwindcss/forms": "^0.2.1",
     "classnames": "^2.2.6",
     "lodash": "^4.17.20",
     "react": "^17.0.1",
@@ -54,6 +59,7 @@
     "postcss": "^7.0.35",
     "react-scripts": "4.0.2",
     "rollup": "^2.39.0",
+    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-typescript2": "^0.29.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.3",

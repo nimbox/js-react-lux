@@ -1,7 +1,225 @@
-const { colors } = require('tailwindcss/defaultTheme');
-const plugin = require('tailwindcss/plugin');
+import defaultTheme from 'tailwindcss/defaultTheme';
+import plugin from 'tailwindcss/plugin';
 
-module.exports = {
+var postit = {
+
+    '.postit-container': {
+        position: 'relative',
+        zIndex: 1
+    },
+
+    '.postit': {
+
+        display: 'inline-block',
+        position: 'relative',
+
+        width: '100%',
+        minWidth: '64px',
+        minHeight: '5rem',
+
+        padding: '1rem',
+
+        border: '1px solid #e8e8e8',
+        borderBottomRightRadius: '64px 5px',
+
+        background: '#ffff88'
+
+    },
+
+    '.postit:after': {
+
+        content: '""',
+
+        position: 'absolute',
+        right: '0px',
+        bottom: '14px',
+
+        width: '48px',
+        height: '25px',
+
+        background: 'rgba(0, 0, 0, 0.2)',
+        boxShadow: '2px 15px 5px rgba(0, 0, 0, 0.40)',
+        transform: 'matrix(-1, -0.1, 0, 1, 0, 0)',
+
+        zIndex: -1
+
+    }
+
+};
+
+var tooltip = {
+
+    '[data-tooltip]': {
+
+        position: 'relative',
+        zIndex: 1,
+
+    },
+
+    '[data-tooltip]:before': {
+
+        content: '""',
+
+        position: 'absolute',
+        top: '-0.5rem',
+        left: 'calc(50% - 0.25rem)',
+
+        width: 0,
+        height: 0,
+
+        borderLeft: '0.25rem solid transparent',
+        borderRight: '0.25rem solid transparent',
+        borderTop: '0.5rem solid #222222',
+
+        opacity: 0,
+        zIndex: 2,
+        visibility: 'hidden',
+
+    },
+
+    '[data-tooltip]:after': {
+
+        content: 'attr(data-tooltip)',
+
+        position: 'absolute',
+        top: '-2.375rem',
+        left: '50%',
+        marginTop: '2px',
+        marginLeft: '-1rem',
+
+        backgroundColor: '#222222',
+
+        color: '#ffffff',
+        padding: '0.125rem 0.5rem',
+        fontSize: '0.875rem',
+        whiteSpace: 'nowrap',
+        boxShadow: '1px 1px 3px #222222',
+
+        border: '1px solid #222222',
+        borderRadius: '2px',
+
+        opacity: 0,
+        zIndex: 1,
+        visibility: 'hidden',
+
+    },
+
+    '[data-tooltip]:hover:before': {
+        opacity: 1,
+        transition: 'all 0.1s ease 0.5s',
+        visibility: 'visible',
+    },
+
+    '[data-tooltip]:hover:after': {
+        opacity: 1,
+        transition: 'all 0.1s ease 0.5s',
+        visibility: 'visible',
+    },
+
+    '[data-tooltip][data-tooltip-show]:before': {
+        opacity: 1,
+        visibility: 'visible',
+    },
+
+    '[data-tooltip][data-tooltip-show]:after': {
+        opacity: 1,
+        visibility: 'visible',
+    },
+
+    'svg g.has-svg-tooltip:hover .svg-tooltip': {
+        display: 'inherit',
+    },
+
+    'svg .svg-tooltip': {
+        display: 'none',
+        overflow: 'visible',
+    },
+
+    'svg .svg-tooltip body': {
+        position: 'fixed',
+    }
+
+};
+
+var popper = {
+
+    '.popper-element': {
+
+        'color': 'white',
+        'background-color': '#232323',
+
+        '.popper-arrow': {
+
+            'position': 'absolute',
+            'width': '1rem',
+            'height': '1rem',
+
+            '&::before': {
+                'content': '""',
+                'margin': 'auto',
+                'display': 'block',
+                'width': 0,
+                'height': 0,
+                'border-style': 'solid',
+            }
+
+        },
+
+        '&[data-popper-placement*="left"]': {
+            '.popper-arrow': {
+                'right': 0,
+                'margin-right': '-0.75em',
+                '&::before': {
+                    'border-width': '0.5em 0 0.5em 0.5em',
+                    'border-color': 'transparent transparent transparent #232323'
+                }
+            }
+        },
+
+        '&[data-popper-placement*="top"]': {
+            '.popper-arrow': {
+                'bottom': 0,
+                'left': 0,
+                'margin-bottom': '-1em',
+                '&::before': {
+                    'border-width': '0.5em 0.5em 0 0.5em',
+                    'border-color': '#232323 transparent transparent transparent'
+                }
+            }
+        },
+
+        '&[data-popper-placement*="right"]': {
+            '.popper-arrow': {
+                'left': 0,
+                'margin-left': '-0.75em',
+                '&::before': {
+                    'border-width': '0.5em 0.5em 0.5em 0',
+                    'border-color': 'transparent #232323 transparent transparent'
+                }
+            }
+        },
+
+        '&[data-popper-placement*="bottom"]': {
+            '.popper-arrow': {
+                'top': 0,
+                'left': 0,
+                'margin-top': '-0.5em',
+                '&::before': {
+                    'border-width': '0 0.5em 0.5em 0.5em',
+                    'border-color': 'transparent transparent #232323 transparent'
+                }
+            }
+        }
+
+    }
+
+};
+
+const { colors } = defaultTheme;
+
+
+
+var elegant = {
 
   theme: {
 
@@ -89,10 +307,10 @@ module.exports = {
     plugin(function ({ addBase, addComponents, config}) {
       addBase({ 'html': { fontSize: '12px' } });
       addComponents({ 
-        ...require('./postit'),
-        ...require('./tooltip'),
-        ...require('./popper')
-      })
+        ...postit,
+        ...tooltip,
+        ...popper
+      });
     })
   ],
 
@@ -105,3 +323,10 @@ module.exports = {
   }
 
 };
+var elegant_1 = elegant.theme;
+var elegant_2 = elegant.plugins;
+var elegant_3 = elegant.variants;
+
+export default elegant;
+export { elegant_2 as plugins, elegant_1 as theme, elegant_3 as variants };
+//# sourceMappingURL=elegant.js.map

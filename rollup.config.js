@@ -1,13 +1,14 @@
 /* eslint-disable import/no-anonymous-default-export */
 import json from 'rollup-plugin-json';
+import commonjs from 'rollup-plugin-commonjs';
 import typescript from 'rollup-plugin-typescript2';
 import pack from './package.json';
 
 export default {
 
-    input: 'src/index.ts',
+    input: ['src/index.ts', 'src/styles/elegant.js'],
     output: [{
-        file: pack.module,
+        dir: 'dist/',
         format: 'esm',
         exports: 'named',
         sourcemap: true
@@ -27,9 +28,11 @@ export default {
             namedExports: true // Default: true
         }),
 
+        commonjs(),
+
         typescript({
             clean: true,
-            tsconfigOverride: {
+            tsconfigOverride: {                
                 exclude: ["src/styles", "stories/**/*", "**/*.stories.tsx", "src/i18n.tsx"]
             }
         })
