@@ -22,7 +22,7 @@
     "postversion": "git push origin master --follow-tags && npm publish"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+    "registry": "https://npm.pkg.github.com/@nimbox"
   },
   "dependencies": {
     "@popperjs/core": "^2.6.0",
