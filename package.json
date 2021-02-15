@@ -1,12 +1,12 @@
 {
   "name": "js-react-lux",
-  "version": "0.2.2",
+  "version": "0.2.1",
   "private": false,
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
-    "./styles/elegant": "dist/elegant.js"
+    "./styles/elegant": "./dist/elegant.js"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -20,6 +20,9 @@
     "build-storybook": "build-storybook -s public",
     "preversion": "npm install && npm run build",
     "postversion": "git push origin master --follow-tags && npm publish"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
   "dependencies": {
     "@popperjs/core": "^2.6.0",
