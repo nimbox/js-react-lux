@@ -1,8 +1,8 @@
 /* eslint-disable import/no-anonymous-default-export */
 import json from 'rollup-plugin-json';
-import commonjs from 'rollup-plugin-commonjs';
 import typescript from 'rollup-plugin-typescript2';
 import pack from './package.json';
+import copy from 'rollup-plugin-copy';
 
 export default [{
 
@@ -39,11 +39,11 @@ export default [{
 
 }, {
 
-    input: ['src/styles/elegant.js'],
+    input: 'src/styles/elegant.js',
     output: [{
-        dir: 'dist/',
+        dir: 'dist/styles',
         format: 'cjs',
-        exports: 'named',
+        // exports: 'named',
         sourcemap: true
     }],
 
@@ -53,9 +53,9 @@ export default [{
     ],
 
     plugins: [
-
-        commonjs()
-
+        copy({
+            targets: [{ src: ['src/styles/**/*', '!src/styles/elegant.js'], dest: 'dist/styles' }]
+        })
     ]
 
 }];

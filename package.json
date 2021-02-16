@@ -6,7 +6,7 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
-    "./styles/elegant": "./dist/elegant.js"
+    "./styles/elegant": "./dist/styles/elegant.js"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -64,7 +64,7 @@
     "postcss": "^7.0.35",
     "react-scripts": "4.0.2",
     "rollup": "^2.39.0",
-    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-copy": "^3.3.0",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-typescript2": "^0.29.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.3",
