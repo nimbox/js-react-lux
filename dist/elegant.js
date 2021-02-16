@@ -2,11 +2,13 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var tailwindcss = require('tailwindcss');
+var defaultTheme = require('tailwindcss/defaultTheme');
+var plugin = require('tailwindcss/plugin');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-var tailwindcss__default = /*#__PURE__*/_interopDefaultLegacy(tailwindcss);
+var defaultTheme__default = /*#__PURE__*/_interopDefaultLegacy(defaultTheme);
+var plugin__default = /*#__PURE__*/_interopDefaultLegacy(plugin);
 
 var postit = {
 
@@ -222,10 +224,6 @@ var popper = {
 
 };
 
-const { defaultTheme } = tailwindcss__default['default'];
-const { plugin } = tailwindcss__default['default'];
-
-
 var elegant = {
 
     theme: {
@@ -238,7 +236,7 @@ var elegant = {
                 black: '#000',
                 white: '#fff',
 
-                'navigator': defaultTheme.colors.white,
+                'navigator': defaultTheme__default['default'].colors.white,
                 'navigator-bg': '#252529',
                 'navigator-border': '#5f5f5f',
 
@@ -246,7 +244,7 @@ var elegant = {
                 'muted': '#9ea0a5',
 
                 'content-bg': '#fbfbfb',
-                'content-fg': defaultTheme.colors.white,
+                'content-fg': defaultTheme__default['default'].colors.white,
                 'content-border': '#eaedf3',
 
                 'primary': {
@@ -311,7 +309,7 @@ var elegant = {
     },
 
     plugins: [
-        plugin(function({ addBase, addComponents, config }) {
+        plugin__default['default'](function({ addBase, addComponents, config }) {
             addBase({ 'html': { fontSize: '12px' } });
             addComponents({
                 ...postit,
