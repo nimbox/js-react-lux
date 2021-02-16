@@ -10,8 +10,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "rm -rf dist/* && rollup -c",
-    "build:watch": "rm -rf dist/* && npm run build:icons && cp src/styles/*.js dist/ && rollup -cw",
+    "build": "rm -rf dist/* && npm run build:icons && rollup -c",
+    "build:watch": "rm -rf dist/* && npm run build:icons && rollup -cw",
     "build:icons": "rm -f src/icons/*.tsx && svgr --icon --typescript --silent --out-dir src/icons src/icons",
     "build:style": "tailwind build src/styles/index.css -o src/styles/styles.css",
     "test": "react-scripts test",

@@ -1,12 +1,12 @@
 /* eslint-disable import/no-anonymous-default-export */
+import copy from 'rollup-plugin-copy';
 import json from 'rollup-plugin-json';
 import typescript from 'rollup-plugin-typescript2';
 import pack from './package.json';
-import copy from 'rollup-plugin-copy';
 
 export default [{
 
-    input: ['src/index.ts'],
+    input: 'src/index.ts',
     output: [{
         dir: 'dist/',
         format: 'esm',
@@ -43,7 +43,7 @@ export default [{
     output: [{
         dir: 'dist/styles',
         format: 'cjs',
-        // exports: 'named',
+        exports: 'named',
         sourcemap: true
     }],
 
