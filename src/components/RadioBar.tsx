@@ -35,7 +35,15 @@ RadioBar.Option = (({ value, className, children }) => {
     const context = useContext(Context);
     const onClick = () => context.onChange(value);
     return (
-        <div onClick={onClick} className={classnames('inline-block px-2 py-0 border-primary-700 border-r last:border-r-0', { 'text-white bg-primary-500': context.value === value }, 'cursor-pointer', className)}>
+        <div onClick={onClick} className={classnames('inline-block px-2 py-0 border-primary-700 border-r last:border-r-0',
+            {
+                'text-xs': context.size === 'sm',
+                'text-base': context.size === 'base',
+                'text-lg': context.size === 'lg',
+            }, 
+            { 
+                'text-white bg-primary-500': context.value === value 
+            }, 'cursor-pointer', className)}>
             {children}
         </div>
     );
