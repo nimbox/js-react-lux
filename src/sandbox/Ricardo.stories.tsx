@@ -27,7 +27,7 @@ export const InlineFlex = () => {
             <span className="text-2xl">Ricardo</span>
             <span className="inline-flex flex-row p-1 items-baseline max-w-full bg-red-500">
                 <span className="self-center px-2 bg-red-300">x</span>
-                <span className="max-w-full truncate xtext-4xl">as as alksjd lkasd asd asd asdasjd laksdj laskdj laskdj laskdj alskdj aslkdj djk asldkja sdlkj</span>
+                <span className="max-w-full truncate text-4xl">as alskdj aslkdj djk asldkja sdlkj</span>
             </span>
             <span className="text-5xl">asd asd asd asd asd asd asd
             asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd asd ads asd

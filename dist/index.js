@@ -2,6 +2,7 @@ import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { useRef, useEffect, useState, createContext, useContext } from 'react';
+import debounce from 'lodash/debounce';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -650,6 +651,24 @@ function formatTime(hm) {
     }
 }
 
+//
+// viewport
+//
+var ViewportContext = createContext({});
+var ViewportProvider = function (_a) {
+    var _b = _a.wait, wait = _b === void 0 ? 250 : _b, children = _a.children;
+    var _c = useState({ width: window.innerWidth, height: window.innerHeight }), size = _c[0], setSize = _c[1];
+    var handleResize = debounce(function () {
+        setSize({ width: window.innerWidth, height: window.innerHeight });
+    }, wait);
+    useEffect(function () {
+        window.addEventListener('resize', handleResize);
+        return function () { return window.removeEventListener('resize', handleResize); };
+    });
+    return (jsx(ViewportContext.Provider, __assign({ value: size }, { children: children }), void 0));
+};
+var useViewport = function () { return useContext(ViewportContext); };
+
 var Context = createContext({});
 var Helium = function (_a) {
     var _b = _a.navigator, navigator = _b === void 0 ? false : _b, _c = _a.setNavigator, setNavigator = _c === void 0 ? function (show) { return null; } : _c, children = _a.children;
@@ -714,5 +733,5 @@ Panel.Item = function (_a) {
     return (jsx("div", __assign({ className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, { children: children }), void 0));
 };
 
-export { Button, Card, Checkbox, CustomSelect, DatePicker, Delay, Error, Group, Header, Helium, index as Icons, Input, Label, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, SearchInput, Select, TextArea, TimePicker, Toggle, useShower };
+export { Button, Card, Checkbox, CustomSelect, DatePicker, Delay, Error, Group, Header, Helium, index as Icons, Input, Label, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, SearchInput, Select, TextArea, TimePicker, Toggle, ViewportProvider, useShower, useViewport };
 //# sourceMappingURL=index.js.map

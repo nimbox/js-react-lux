@@ -9,5 +9,6 @@ export * from './components/Postit';
 export * from './components/CustomSelect';
 export * from './components/TimePicker';
 export * from './hooks/useShower';
+export * from './hooks/useViewport';
 export * from './layouts/helium/Helium';
 export { Icons };
