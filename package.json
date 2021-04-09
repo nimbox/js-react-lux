@@ -26,19 +26,19 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.6.0",
-    "@tailwindcss/forms": "^0.2.1",
+    "@tailwindcss/forms": "^0.2.1"
+  },
+  "peerDependencies": {
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.3"
+  },
+  "devDependencies": {
     "classnames": "^2.2.6",
     "lodash": "^4.17.20",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-i18next": "^11.8.6",
     "react-popper": "^2.2.4",
-    "react-router-dom": "^5.2.0"
-  },
-  "peerDependencies": {
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.3"
-  },
-  "devDependencies": {
+    "react-router-dom": "^5.2.0",
     "@craco/craco": "^6.1.1",
     "@storybook/addon-actions": "^6.1.18",
     "@storybook/addon-controls": "^6.1.18",

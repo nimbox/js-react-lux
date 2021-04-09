@@ -654,7 +654,7 @@ function formatTime(hm) {
 //
 // viewport
 //
-var ViewportContext = createContext({});
+var ViewportContext = createContext({ width: 0, height: 0 });
 var ViewportProvider = function (_a) {
     var _b = _a.wait, wait = _b === void 0 ? 250 : _b, children = _a.children;
     var _c = useState({ width: window.innerWidth, height: window.innerHeight }), size = _c[0], setSize = _c[1];
