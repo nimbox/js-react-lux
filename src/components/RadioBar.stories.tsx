@@ -1,18 +1,20 @@
+/* eslint-disable import/no-anonymous-default-export */
+import { Story } from '@storybook/react';
 import React, { useState } from 'react';
+import { paddings } from './ComponentSize';
 import { RadioBar, RadioBarProps } from './RadioBar';
 
 
 // definition
 
-const definition = {
+export default {
     title: 'Component/RadioBar',
     component: RadioBar,
     argTypes: {
-        size: { control: { type: 'select', options: ['sm', 'base', 'lg'] } },
+        size: { control: { type: 'select', options: Object.keys(paddings) } },
         value: { control: { type: 'array' } },
     }
 };
-export default definition;
 
 //  parameterized
 
@@ -28,7 +30,7 @@ Parameterized.args = { size: 'base', value: 0, options: ['1', '2', '3', '6', '12
 
 // stories
 
-export const Base = ({ size }: RadioBarProps) => {
+const Template: Story<RadioBarProps> = ({ size }) => {
     const [value, onChange] = useState(1);
     return (
         <RadioBar size={size} value={value} onChange={onChange}>
@@ -40,32 +42,15 @@ export const Base = ({ size }: RadioBarProps) => {
         </RadioBar>
     );
 };
-Base.args = { size: 'base' };
 
-export const Small = ({ size }: RadioBarProps) => {
-    const [value, onChange] = useState(1);
-    return (
-        <RadioBar size={size} value={value} onChange={onChange}>
-            <RadioBar.Option value={1}>1</RadioBar.Option>
-            <RadioBar.Option value={2}>2</RadioBar.Option>
-            <RadioBar.Option value={3}>3</RadioBar.Option>
-            <RadioBar.Option value={6}>6</RadioBar.Option>
-            <RadioBar.Option value={12}>12 months</RadioBar.Option>
-        </RadioBar>
-    );
-};
+export const Extra_Small = Template.bind({});
+Extra_Small.args = { size: 'xs' };
+
+export const Small = Template.bind({});
 Small.args = { size: 'sm' };
 
-export const Large = ({ size }: RadioBarProps) => {
-    const [value, onChange] = useState(1);
-    return (
-        <RadioBar size={size} value={value} onChange={onChange}>
-            <RadioBar.Option value={1}>1</RadioBar.Option>
-            <RadioBar.Option value={2}>2</RadioBar.Option>
-            <RadioBar.Option value={3}>3</RadioBar.Option>
-            <RadioBar.Option value={6}>6</RadioBar.Option>
-            <RadioBar.Option value={12}>12 months</RadioBar.Option>
-        </RadioBar>
-    );
-};
+export const Base = Template.bind({});
+Base.args = { size: 'base' };
+
+export const Large = Template.bind({});
 Large.args = { size: 'lg' };
