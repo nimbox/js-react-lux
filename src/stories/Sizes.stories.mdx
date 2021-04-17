@@ -1,0 +1,127 @@
+import { useState } from 'react';
+import { Meta, Story, Canvas } from '@storybook/addon-docs/blocks';
+import { CheckBar } from '../components/CheckBar';
+import { RadioBar } from '../components/RadioBar';
+import { Button } from '../components/Buttons';
+import { paddings } from '../components/ComponentSize';
+import classnames from 'classnames';
+
+
+export const CheckboxBarSample = ({ size }) => {
+    const [value, onChange] = useState([1]);
+    return (
+        <CheckBar size={size} value={value} onChange={onChange}>
+            <CheckBar.Option value={1}>1</CheckBar.Option>
+            <CheckBar.Option value={2}>2</CheckBar.Option>
+            <CheckBar.Option value={3}>3</CheckBar.Option>
+            <CheckBar.Option value={6}>6</CheckBar.Option>
+            <CheckBar.Option value={12}>12 months</CheckBar.Option>
+        </CheckBar>
+    );
+};
+
+export const RadioBarSample = ({ size }) => {
+    const [value, onChange] = useState([1]);
+    return (
+        <RadioBar size={size} value={value} onChange={onChange}>
+            <RadioBar.Option value={1}>1</RadioBar.Option>
+            <RadioBar.Option value={2}>2</RadioBar.Option>
+            <RadioBar.Option value={3}>3</RadioBar.Option>
+            <RadioBar.Option value={6}>6</RadioBar.Option>
+            <RadioBar.Option value={12}>12 months</RadioBar.Option>
+        </RadioBar>
+    );
+};
+
+
+<Meta title="Standards/Sizes and Paddings"/>
+
+# Sizes
+
+We are using a basic font size for `html` of `14px`.  Most sites use `16px` as
+the default font size, but since our applications are very data intensive we
+need to pack more density. We tried `12px` but the smaller sizes were really to
+small.
+
+When applying the default scalings from tailwind we end up with these sizes. We
+are only using `rems` as units so `px` are only for reference.
+
+<Canvas>
+    <div>
+        <div className="text-xs">The quick brown fox jumps over the lazy dog (xs 0.75rem 10.5px)</div>
+        <div className="text-sm">The quick brown fox jumps over the lazy dog (sm 0.875rem 12.5px)</div>
+        <div className="text-base">The quick brown fox jumps over the lazy dog (base 1rem 14px)</div>
+        <div className="text-lg">The quick brown fox jumps over the lazy dog (lg 1.125rem 15.75px)</div>
+        <div className="text-xl">The quick brown fox jumps over the lazy dog (xl 1.75rem 17.5px)</div>
+    </div>
+</Canvas>
+
+# Paddings
+
+Each size requires different paddings to make sure that the space around the
+text looks ok. Buttons, Inputs, and other elements should use these defaults for
+their paddings. In fact to standardize this we will use the `paddings[]` object
+that given a size (`xs`, `sm`, `base`, `lg`) provides the font size and  padding
+classes.
+
+We are using these defaults:
+
+### Extra Small
+
+<Canvas>
+<Story name="Extra Small">
+<div className="mb-4">{paddings['xs']}</div>
+<div className="flex flex-row items-center space-x-2">
+    <div className="text-xs border px-2 py-0.5 rounded border-gray-500">Text</div>
+    <Button size="xs">Button</Button>
+    <Button size="xs" secondary>Button</Button>
+    <CheckboxBarSample size="xs"/>
+    <RadioBarSample size="xs"/>
+</div>
+</Story>
+</Canvas>
+
+### Small
+
+<Canvas>
+<Story name="Small">
+<div className="mb-4">{paddings['sm']}</div>
+<div className="flex flex-row items-center space-x-2.5">
+    <div className="text-sm border px-2.5 py-1 rounded border-gray-500">Text</div>
+    <Button size="sm">Button</Button>
+    <Button size="sm" secondary>Button</Button>
+    <CheckboxBarSample size="sm"/>
+    <RadioBarSample size="sm"/>
+</div>
+</Story>
+</Canvas>
+
+### Base
+
+<Canvas>
+<Story name="Base">
+<div className="mb-4">{paddings['base']}</div>
+<div className="flex flex-row items-center space-x-3">
+    <div className="inline-block border px-3 py-2 rounded border-gray-500">Text</div>
+    <Button>Button</Button>
+    <Button secondary>Button</Button>
+    <CheckboxBarSample/>
+    <RadioBarSample/>
+</div>
+</Story>
+</Canvas>
+
+### Large
+
+<Canvas>
+<Story name="Large">
+<div className="mb-4">{paddings['lg']}</div>
+<div className="flex flex-row items-center space-x-4">
+    <div className="text-lg border px-4 py-2 rounded border-gray-500">Text</div>
+    <Button size="lg">Button</Button>
+    <Button size="lg" secondary>Button</Button>
+    <CheckboxBarSample size="lg"/>
+    <RadioBarSample size="lg"/>
+</div>
+</Story>
+</Canvas>

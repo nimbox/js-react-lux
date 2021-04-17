@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { withKnobs } from "@storybook/addon-knobs";
 import React from 'react';
 import * as icons from '../icons';
