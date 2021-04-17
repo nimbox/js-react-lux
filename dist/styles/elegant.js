@@ -27,6 +27,8 @@ module.exports = {
                 'content-fg': defaultTheme.colors.white,
                 'content-border': '#eaedf3',
 
+                'control-border': '#888888',
+
                 'primary': {
                     100: '#daedef',
                     200: '#bfe3e8',
@@ -90,7 +92,7 @@ module.exports = {
 
     plugins: [
         plugin(function({ addBase, addComponents, config }) {
-            addBase({ 'html': { fontSize: '12px' } });
+            addBase({ 'html': { fontSize: '14px' } });
             addComponents({
                 ...require('./postit'),
                 ...require('./tooltip'),
