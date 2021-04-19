@@ -6,7 +6,7 @@ import { TagPicker, TagPickerProps } from './TagPicker';
 // definition
 
 const definition = {
-    title: 'Component/TagPicker',
+    title: 'Component/Picker/TagPicker',
     component: TagPicker,
     argTypes: {
         size: { control: { type: 'select', options: ['sm', 'base', 'lg'] } },
