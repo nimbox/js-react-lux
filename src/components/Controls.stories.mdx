@@ -17,7 +17,7 @@ import { Tabs } from './Tabs';
         {() => {
             const [ tab, setTab ] = useState("one");
             const [ checkbox, setChecbox ] = useState([1]);
-            const [ CheckSelect, setChecboxSelect ] = useState([1]);
+            const [ checkSelect, setChecboxSelect ] = useState([1]);
             const [ radio, setRadio ] = useState(1);
             const [ select, setSelect ] = useState(1);
             return (
@@ -50,7 +50,7 @@ import { Tabs } from './Tabs';
                             <Select.Option value={12}>12 months</Select.Option>
                         </Select>
                         <Checkbox className="text-xs">Something</Checkbox>
-                        <CheckSelect value={CheckSelect} onChange={setChecboxSelect} label="Months" className="text-xs">
+                        <CheckSelect value={checkSelect} onChange={setChecboxSelect} label="Months" className="text-xs">
                             <CheckSelect.Option value={1}>1</CheckSelect.Option>
                             <CheckSelect.Option value={2}>2</CheckSelect.Option>
                             <CheckSelect.Option value={3}>3</CheckSelect.Option>
