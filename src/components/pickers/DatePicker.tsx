@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useShower } from '../../hooks/useShower';
+import { useOutsideClick } from '../../hooks/useOutsideClick';
 import { AngleLeftIcon, AngleRightIcon, CircleIcon } from '../../icons';
 
 
@@ -51,7 +51,7 @@ export const DatePicker: FC<Props> = ({ name, value, onChange, shortcuts, placeh
     useEffect(() => setCalendar(firstDate(value)), [value]);
 
     const [show, setShow] = useState(false);
-    const [valueRef, popperRef] = useShower(() => setShow(false));
+    const [valueRef, popperRef] = useOutsideClick(() => setShow(false));
 
     // handlers
 

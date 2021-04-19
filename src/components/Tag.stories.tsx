@@ -2,7 +2,6 @@ import React from 'react';
 import { Tag, TagProps } from './Tag';
 
 
-
 // definition
 
 const definition = {
@@ -23,10 +22,10 @@ export const Parameterized = ({ size, ...props }: TagProps) => {
             <span onClick={() => setShow(true)} className="text-2xl">Mostrar etiqueta</span>
             { show && <Tag size={size} onDelete={() => setShow(!show)} >
                 Etiqueta jefjwennwekdwkmnkcncnwienipqnwdijdojwopdjojdopqjdoqjwdoqwjdoqwjdqowjdopqwjdoqwjdoqwjdopqwjdoqwjdowjdoqwdoqwjdoqjwdojqwdojqwdoqwjdoqwjdoqwjdpoj
-             </Tag> } 
+             </Tag>}
 
         </div>
     );
-} 
+}
 
 Parameterized.args = { size: 'base', className: 'text-secondary-500' };

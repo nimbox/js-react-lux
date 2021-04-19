@@ -2,7 +2,7 @@ import { Meta, Preview, Story } from '@storybook/addon-docs/blocks';
 import { useState } from 'react';
 import { Card } from './Card';
 import { CheckBar } from './CheckBar';
-import { CheckboxSelect } from './CheckboxSelect';
+import { CheckSelect } from './CheckSelect';
 import { Checkbox, Select } from './Form';
 import { RadioBar } from './RadioBar';
 import { Tabs } from './Tabs';
@@ -17,7 +17,7 @@ import { Tabs } from './Tabs';
         {() => {
             const [ tab, setTab ] = useState("one");
             const [ checkbox, setChecbox ] = useState([1]);
-            const [ checkboxSelect, setChecboxSelect ] = useState([1]);
+            const [ CheckSelect, setChecboxSelect ] = useState([1]);
             const [ radio, setRadio ] = useState(1);
             const [ select, setSelect ] = useState(1);
             return (
@@ -50,13 +50,13 @@ import { Tabs } from './Tabs';
                             <Select.Option value={12}>12 months</Select.Option>
                         </Select>
                         <Checkbox className="text-xs">Something</Checkbox>
-                        <CheckboxSelect value={checkboxSelect} onChange={setChecboxSelect} label="Months" className="text-xs">
-                            <CheckboxSelect.Option value={1}>1</CheckboxSelect.Option>
-                            <CheckboxSelect.Option value={2}>2</CheckboxSelect.Option>
-                            <CheckboxSelect.Option value={3}>3</CheckboxSelect.Option>
-                            <CheckboxSelect.Option value={6}>6</CheckboxSelect.Option>
-                            <CheckboxSelect.Option value={12}>12 months</CheckboxSelect.Option>
-                        </CheckboxSelect>
+                        <CheckSelect value={CheckSelect} onChange={setChecboxSelect} label="Months" className="text-xs">
+                            <CheckSelect.Option value={1}>1</CheckSelect.Option>
+                            <CheckSelect.Option value={2}>2</CheckSelect.Option>
+                            <CheckSelect.Option value={3}>3</CheckSelect.Option>
+                            <CheckSelect.Option value={6}>6</CheckSelect.Option>
+                            <CheckSelect.Option value={12}>12 months</CheckSelect.Option>
+                        </CheckSelect>
                     </Card.Header>
                     <Card.Body>
                         A great Body
