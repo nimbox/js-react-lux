@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useShower } from '../../hooks/useShower';
+import { useOutsideClick } from '../../hooks/useOutsideClick';
 import { AngleDownIcon, AngleUpIcon, CircleIcon } from '../../icons';
 
 
@@ -40,7 +40,7 @@ export const TimePicker: FC<Props> = ({ name, value, onChange, placeholder }) =>
     const { t, ready } = useTranslation();
 
     const [show, setShow] = useState(false);
-    const [valueRef, popperRef] = useShower(() => setShow(false));
+    const [valueRef, popperRef] = useOutsideClick(() => setShow(false));
 
     const times = useRef({ watch: 8 });
     const timesRef = useRef<HTMLDivElement>(null);
