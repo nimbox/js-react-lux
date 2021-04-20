@@ -1,7 +1,6 @@
 import classnames from 'classnames';
 import React, { FC, useState } from 'react';
 import { ButtonBar, MoreOptionsButton, PrimaryButton, SecondaryButton } from '../components/Buttons';
-import { TextArea } from '../components/Form';
 import EditIcon from '../icons/EditIcon';
 import SpeechBubbleIcon from '../icons/SpeechBubbleIcon';
 import ThumbsUpIcon from '../icons/ThumbsUpIcon';
@@ -34,7 +33,7 @@ export const Note: FC<Props> = ({ full, value, onChange, children }) => {
                 {!edit ?
                     <div className="">llame al sr. juan arias , pero estaba muy ocupado al momento de llamar , me dijo que me estaria devolviendo ( Le preguntare sobre el contrato de confidialidad, y saber en que necesita de los tecnicos para ponerlos en contacto)</div> :
                     <div className="">
-                        <TextArea value="llame al sr. juan arias , pero estaba muy ocupado al momento de llamar , me dijo que me estaria devolviendo ( Le preguntare sobre el contrato de confidialidad, y saber en que necesita de los tecnicos para ponerlos en contacto)" />
+                        <textarea value="llame al sr. juan arias , pero estaba muy ocupado al momento de llamar , me dijo que me estaria devolviendo ( Le preguntare sobre el contrato de confidialidad, y saber en que necesita de los tecnicos para ponerlos en contacto)" />
                         <MoreOptionsButton value={more} onChange={(more) => setMore(more)} className="mb-2">
                             <div>more stuff</div>
                         </MoreOptionsButton>
@@ -55,7 +54,7 @@ export const Note: FC<Props> = ({ full, value, onChange, children }) => {
 
             {comment &&
                 <div className="">
-                    <TextArea value="llame al sr. juan arias , pero estaba muy ocupado al momento de llamar , me dijo que me estaria devolviendo ( Le preguntare sobre el contrato de confidialidad, y saber en que necesita de los tecnicos para ponerlos en contacto)" />
+                    <textarea value="llame al sr. juan arias , pero estaba muy ocupado al momento de llamar , me dijo que me estaria devolviendo ( Le preguntare sobre el contrato de confidialidad, y saber en que necesita de los tecnicos para ponerlos en contacto)" />
                     <ButtonBar className="mb-2">
                         <PrimaryButton>guardar</PrimaryButton>
                         <SecondaryButton onClick={() => setComment(false)}>cancelar</SecondaryButton>

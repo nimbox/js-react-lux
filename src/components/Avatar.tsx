@@ -1,8 +1,7 @@
 import classnames from 'classnames';
-import React, { FC, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { FC } from 'react';
 import tinycolor from 'tinycolor2';
-import { ComponentSize, paddings } from './ComponentSize';
+import { ComponentSize } from './ComponentSize';
 
 
 

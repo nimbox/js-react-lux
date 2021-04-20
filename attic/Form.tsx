@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import React, { FC } from 'react';
-import { SearchIcon } from '../icons';
+import { SearchIcon } from '../src/icons';
 
 
 //

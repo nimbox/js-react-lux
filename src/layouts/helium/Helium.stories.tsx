@@ -1,6 +1,5 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import React, { useState } from 'react';
-import { SearchInput } from '../../components/Form';
 import { HamburgerIcon, NimboxIcon, CrossIcon } from '../../icons';
 import { Header, Helium, Main, Navigator, Toggle, Panel } from './Helium';
 import '../../index.css'
@@ -21,7 +20,6 @@ export const Simple = () => {
                 <div className="h-full flex flex-row items-center">
 
                     <Toggle always={true}><HamburgerIcon className="w-8 h-8 fill-current" /></Toggle>
-                    <SearchInput className="pl-3" />
 
                 </div>
 

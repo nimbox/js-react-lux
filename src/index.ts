@@ -4,7 +4,6 @@ export * from './components/Buttons';
 export * from './components/Card';
 export * from './components/pickers/DatePicker';
 export * from './components/Delay';
-export * from './components/Form';
 export * from './components/Loading';
 export * from './components/Postit';
 export * from './components/CustomSelect';
