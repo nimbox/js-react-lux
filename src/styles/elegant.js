@@ -7,6 +7,7 @@ module.exports = {
     theme: {
 
         extend: {
+
             colors: {
 
                 transparent: 'transparent',
@@ -72,6 +73,10 @@ module.exports = {
                     900: '#4c0f0f'
                 }
 
+            },
+
+            fontSize: {
+                '1xs': '0.625rem'
             },
 
             strokeWidth: {
