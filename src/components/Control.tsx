@@ -18,13 +18,13 @@ export interface ControlLabelProps {
 type ContextProps = Pick<ControlProps, 'error' | 'size'>;
 const Context = createContext<ContextProps>({ error: false, size: 'base' });
 
-interface ControlComponent extends FC<ControlProps> {
+interface ControlComponent extends ControlProps {
     Label: FC<ControlLabelProps>;
     Message: FC<{ className?: string }>;
     Error: FC<{ className?: string }>;
 }
 
-export const Control: ControlComponent = (({ error = false, size = 'base', className, children }) => {
+export const Control: FC<ControlComponent> = (({ error = false, size = 'base', className, children }) => {
 
     return (
         <Context.Provider value={{ error, size }}>
