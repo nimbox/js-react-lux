@@ -6,18 +6,29 @@ import { ComponentSize } from './ComponentSize';
 
 export interface TagProps {
     size: ComponentSize;
+    color?: string;
+    value: any;
     onClick?: (value: any) => void;
     onDelete?: (value: any) => void;
     className?: string;
 }
 
-export const Tag: FC<TagProps> = (({ size = 'base', onClick, onDelete, className, children }) => {
+export const Tag: FC<TagProps> = (({ size = 'base', color, value, onClick, onDelete, className, children, ...props}) => {
     const show = !!onDelete
     return (
-        <span onClick={onClick} className={classnames('inline-flex flex-row max-w-full items-baseline px-2 py-0 border border-primary-700 rounded-l-2xl rounded-r truncate', className)}>
-            { show && <span className="self-center top-1/2 -m-1 pr-2"><CrossIcon onClick={onDelete} className="h-2 w-2 stroke-current stroke-2" /></span>}
+        <span {...props} onClick={onClick} style={{ backgroundColor: color }} className={classnames(
+            'inline-flex flex-row max-w-full items-baseline pr-1 py-0 border border-control-border rounded-l-2xl rounded-r truncate', 
+            className)}>
+            <span className={classnames("self-center rounded-full",{
+                'h-4 w-4': size === 'xs',
+                'h-5 w-5': size === 'sm',
+                'h-6 w-6': size === 'base',
+                'h-7 w-7': size === 'lg'}, "flex flex-shrink-0 items-center justify-center")}>
+                { show && <CrossIcon onClick={onDelete} className={classnames( "h-3 w-3 stroke-current stroke-2")} />}
+            </span>
             <span className={classnames('self-auto truncate', {
-                'text-xs': size === 'sm',
+                'text-xs': size === 'xs',
+                'text-sm': size === 'sm',
                 'text-base': size === 'base',
                 'text-lg': size === 'lg',
             })}>

@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { TagPicker, TagPickerProps } from './TagPicker';
+import { Tag } from '../Tag';
 
 
 // definition
@@ -9,7 +10,7 @@ const definition = {
     title: 'Component/Picker/TagPicker',
     component: TagPicker,
     argTypes: {
-        size: { control: { type: 'select', options: ['sm', 'base', 'lg'] } },
+        size: { control: { type: 'select', options: ['xs','sm', 'base', 'lg'] } },
         value: { control: { type: 'array' } },
     }
 };
@@ -37,8 +38,8 @@ export const Parameterized = ({ size, tags, ...props }: TagPickerProps) => {
 
     return (
         <div className="w-1/2">
-            <TagPicker size={size} tags={tagsC}
-                onDelete={(key) => onChange(_.remove(tagsC, function (tag) { return tag.key !== key; }))}
+            <TagPicker size={size} tags={tags}
+                onDelete={(key) => { onChange(_.remove(tagsC, function (tag) { return tag.key !== key; })); }}
                 onSearch={((searchTerm) => {
                     if (searchTerm != "") {
                         const results = data.filter(tag =>
@@ -50,7 +51,9 @@ export const Parameterized = ({ size, tags, ...props }: TagPickerProps) => {
                 })}
                 onSelect={(key) => onChange(_.concat(tagsC, (_.find(data, function (tag) { return tag.key == key; }))))}
                 onCreate={(newTag) => onChange(_.concat(tagsC, { "key": newTag, "value": newTag }))}
-            />
+            >
+            {tagsC.map((tag) => <Tag size={size} value={tag.key}>{tag.value}</Tag>)}
+            </TagPicker>
         </div>
     );
 }

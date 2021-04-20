@@ -18,7 +18,7 @@ export interface TagPickerProps {
     onCreate: (value: any) => void;
 }
 
-export const TagPicker: FC<TagPickerProps> = (({ size = 'base', tags, onDelete, onSearch, onSelect, onCreate, className }) => {
+export const TagPicker: FC<TagPickerProps> = (({ size = 'base', tags, onDelete, onSearch, onSelect, onCreate, className, children }) => {
     const [isVisible, onOutsideClick] = useState(false);
     const [ target, popper ] = useOutsideClick(() => onOutsideClick(!isVisible));
     const initial : {key: String | number , value: String}[] = [];
@@ -30,18 +30,27 @@ export const TagPicker: FC<TagPickerProps> = (({ size = 'base', tags, onDelete, 
         setSearchResults(onSearch(e.target.value)); 
         setInputTag(e.target.value) }
     }
-
+    
+    const childrenWithProps = React.Children.map(children, child => {
+        // checking isValidElement is the safe way and avoids a typescript error too
+        if (React.isValidElement(child)) {
+          return React.cloneElement(child, { size: {size}, className: "m-1", onDelete: ((value: string | number) => {if (onDelete) onDelete(value)}) });
+        }
+        return 'no hay child';
+      });
     
     return (
         <div className="relative inline-block max-w-full">
-            <div ref={target} className={classnames('relative p-1 pr-4 border border-primary-700 rounded cursor-pointer', {
-                'text-xs': size === 'sm',
-                'text-base': size === 'base',
-                'text-lg': size === 'lg',
-            }, className)} >
-                {tags.map((tag) => <Tag size={size} className="m-1" onDelete={isVisible && (() => {if (onDelete) onDelete(tag.key); })} >{tag.value}</Tag>)}
-                <div className="absolute bottom-1/2 right-1 -mb-1 pl-1">
-                    < AngleDownIcon className="h-2 w-2 stroke-current stroke-2" onClick={(() => { onOutsideClick(!isVisible) })} />
+            <div ref={target} className={classnames('relative p-1 pr-8 border border-control-border rounded cursor-pointer', className)} >
+                {childrenWithProps}
+                {/* {tags.map((tag) => <Tag size={size} className="m-1" onDelete={isVisible && (() => {if (onDelete) onDelete(tag.key); })} >{tag.value}</Tag>)} */}
+                <div className="absolute top-1/2 right-1 ">
+                    < AngleDownIcon className={classnames("stroke-current stroke-2", {
+                        'h-3 w-3 -mt-1.5': size === 'xs',
+                        'h-4 w-4 -mt-2': size === 'sm',
+                        'h-5 w-5 -mt-2.5': size === 'base',
+                        'h-6 w-6 -mt-3': size === 'lg'
+                        })} onClick={(() => { onOutsideClick(!isVisible) })} />
                 </div>
             </div>
             { isVisible && 
