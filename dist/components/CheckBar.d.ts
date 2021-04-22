@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { ComponentSize } from './ComponentSize';
+import { ComponentScale } from './ComponentSize';
 export interface CheckBarProps {
-    size: ComponentSize;
+    scale: ComponentScale;
     value: any[];
     onChange: (value: any) => void;
     className?: string;

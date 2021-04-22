@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { ComponentSize } from './ComponentSize';
+import { ComponentScale } from './ComponentSize';
 export interface LoadingProps {
-    size?: ComponentSize;
+    scale?: ComponentScale;
     className?: string;
 }
 export declare const Loading: FC<LoadingProps>;

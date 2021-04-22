@@ -161,14 +161,14 @@ var paddings = {
 };
 
 var Button = function (_a) {
-    var _b = _a.link, link = _b === void 0 ? false : _b, _c = _a.secondary, secondary = _c === void 0 ? false : _c, _d = _a.size, size = _d === void 0 ? 'base' : _d, children = _a.children, className = _a.className, props = __rest(_a, ["link", "secondary", "size", "children", "className"]);
+    var _b = _a.link, link = _b === void 0 ? false : _b, _c = _a.secondary, secondary = _c === void 0 ? false : _c, _d = _a.scale, scale = _d === void 0 ? 'base' : _d, children = _a.children, className = _a.className, props = __rest(_a, ["link", "secondary", "scale", "children", "className"]);
     return link ?
-        (jsx("button", __assign({}, props, { className: classnames(paddings[size], {
+        (jsx("button", __assign({}, props, { className: classnames(paddings[scale], {
                 'text-primary-500 hover:text-primary-700': !secondary,
                 'text-gray-500 hover:text-gray-700': secondary
             }, ' hover:underline rounded cursor-pointer focus:outline-none', className) }, { children: children }), void 0))
         :
-            (jsx("button", __assign({}, props, { className: classnames(paddings[size], {
+            (jsx("button", __assign({}, props, { className: classnames(paddings[scale], {
                     'text-white font-bold bg-primary-500 hover:bg-primary-600 border border-control-border': !secondary,
                     'text-primary-500 hover:text-white font-bold bg-transparent hover:bg-primary-600 border border-control-border': secondary
                 }, 'rounded focus:outline-none', className) }, { children: children }), void 0));
@@ -196,7 +196,7 @@ Card.Footer = function (_a) {
     return (jsx("div", __assign({ className: classnames('border-t border-content-border p-3', className) }, { children: children }), void 0));
 };
 
-var useShower = function (onClickOutside) {
+var useOutsideClick = function (onClickOutside) {
     var target = useRef(null);
     var popper = useRef(null);
     var handleDocumentClick = function (event) {
@@ -243,7 +243,7 @@ var DatePicker = function (_a) {
     var _c = useState(firstDate(value)), calendar = _c[0], setCalendar = _c[1];
     useEffect(function () { return setCalendar(firstDate(value)); }, [value]);
     var _d = useState(false), show = _d[0], setShow = _d[1];
-    var _e = useShower(function () { return setShow(false); }), valueRef = _e[0], popperRef = _e[1];
+    var _e = useOutsideClick(function () { return setShow(false); }), valueRef = _e[0], popperRef = _e[1];
     // handlers
     var handleShow = function () { if (!show) {
         setShow(true);
@@ -404,58 +404,12 @@ var Delay = function (_a) {
     return show ? children : null;
 };
 
-var Group = function (_a) {
-    var className = _a.className, children = _a.children;
-    return (jsx("div", __assign({ className: className }, { children: children }), void 0));
-};
-var Label = function (_a) {
-    var children = _a.children;
-    return (jsx("label", __assign({ className: "block text-sm uppercase tracking-wide font-bold mb-1" }, { children: children }), void 0));
-};
-var Input = function (_a) {
-    var error = _a.error, className = _a.className, props = __rest(_a, ["error", "className"]);
-    return (jsx("input", __assign({}, props, { className: classnames('form-input w-full', { 'border-danger-500': error }, className) }), void 0));
-};
-var TextArea = function (_a) {
-    var error = _a.error, className = _a.className, props = __rest(_a, ["error", "className"]);
-    return (jsx("textarea", __assign({}, props, { className: classnames('form-input w-full', { 'border-danger-500': error }, className) }), void 0));
-};
-var SearchInput = function (_a) {
-    _a.error; var className = _a.className, props = __rest(_a, ["error", "className"]);
-    return (jsx("div", __assign({ className: className }, { children: jsxs("div", __assign({ className: "relative" }, { children: [jsx("input", __assign({}, props, { type: "search", placeholder: "Search", className: "form-input w-full pl-10" }), void 0),
-                jsx("div", __assign({ className: "absolute inset-y-0 left-0 pl-3 flex items-center justify-center" }, { children: jsx(SvgSearchIcon, { className: "text-content h-5 w-5 stroke-current stroke-2" }, void 0) }), void 0)] }), void 0) }), void 0));
-};
-var Error = function (_a) {
-    var error = _a.error, className = _a.className, children = _a.children;
-    return (jsx(Fragment, { children: error && jsx("p", __assign({ className: classnames('mt-1 text-danger-500 text-xs italic truncate', className) }, { children: children }), void 0) }, void 0));
-};
-var Checkbox = function (_a) {
-    _a.checked; _a.error; _a.type; var className = _a.className, children = _a.children, props = __rest(_a, ["checked", "error", "type", "className", "children"]);
-    return (jsxs("label", __assign({ className: "block flex flex-row items-center" }, { children: [jsx("input", __assign({}, props, { type: "checkbox", className: classnames('form-checkbox text-primary-500', className) }), void 0),
-            jsx("span", __assign({ className: classnames('ml-2', className) }, { children: children }), void 0)] }), void 0));
-};
-var Radio = function (_a) {
-    _a.checked; _a.error; _a.type; var className = _a.className, children = _a.children, props = __rest(_a, ["checked", "error", "type", "className", "children"]);
-    return (jsxs("label", __assign({ className: "block flex flex-row items-center" }, { children: [jsx("input", __assign({}, props, { type: "radio", className: classnames('form-radio text-primary-500', className) }), void 0),
-            jsx("span", __assign({ className: "ml-2" }, { children: children }), void 0)] }), void 0));
-};
-var Select = function (_a) {
-    _a.value; _a.onChange; var className = _a.className, children = _a.children;
-    return (jsx("select", __assign({ className: classnames('form-select py-0', className) }, { children: children }), void 0));
-};
-Select.Option = function (_a) {
-    var value = _a.value, children = _a.children;
-    return (
-    // <option>uno</option>
-    jsx("option", __assign({ value: value }, { children: children }), void 0));
-}; //  as FC<{ value?: any, className?: string }>;
-
 var Loading = function (_a) {
-    var _b = _a.size, size = _b === void 0 ? 'base' : _b, className = _a.className;
+    var _b = _a.scale, scale = _b === void 0 ? 'base' : _b, className = _a.className;
     return (jsx("svg", __assign({ width: "45", height: "45", viewBox: "0 0 45 45", xmlns: "http://www.w3.org/2000/svg", stroke: "currentColor", className: classnames('inline-block', 'text-primary-500', {
-            'h-6 w-6': size === 'sm',
-            'h-10 w-10': size === 'base',
-            'h-14 w-14': size === 'lg'
+            'h-6 w-6': scale === 'sm',
+            'h-10 w-10': scale === 'base',
+            'h-14 w-14': scale === 'lg'
         }, className) }, { children: jsxs("g", __assign({ fill: "none", fillRule: "evenodd", transform: "translate(1 1)", strokeWidth: "2" }, { children: [jsxs("circle", __assign({ cx: "22", cy: "22", r: "6", strokeOpacity: "0" }, { children: [jsx("animate", { attributeName: "r", begin: "1.5s", dur: "3s", values: "6;22", calcMode: "linear", repeatCount: "indefinite" }, void 0),
                         jsx("animate", { attributeName: "stroke-opacity", begin: "1.5s", dur: "3s", values: "1;0", calcMode: "linear", repeatCount: "indefinite" }, void 0),
                         jsx("animate", { attributeName: "stroke-width", begin: "1.5s", dur: "3s", values: "2;0", calcMode: "linear", repeatCount: "indefinite" }, void 0)] }), void 0),
@@ -473,7 +427,7 @@ var Postit = function (_a) {
 var CustomSelect = function (_a) {
     var options = _a.options, _b = _a.key, key = _b === void 0 ? function (option) { return option; } : _b; _a.value; _a.onChange; _a.children;
     var _e = useState(false), show = _e[0], setShow = _e[1];
-    var _f = useShower(function () { return setShow(false); }), valueRef = _f[0], popperRef = _f[1];
+    var _f = useOutsideClick(function () { return setShow(false); }), valueRef = _f[0], popperRef = _f[1];
     return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: valueRef, className: "pl-4 pr-8 py-2 truncate border rounded-lg", onClick: function () { return setShow(!show); } }, { children: "as jkasd lkjasd lkajsd lkasjd laksjd laksjd laskdj alskdjalsdkj d" }), void 0),
             jsx("div", __assign({ className: "absolute inset-y-0 right-0 pr-3 flex items-center justify-center" }, { children: jsx(SvgAngleDownIcon, { className: "text-content h-4 w-4 stroke-current stroke-2" }, void 0) }), void 0),
             show &&
@@ -494,7 +448,7 @@ var TimePicker = function (_a) {
     var name = _a.name, value = _a.value, onChange = _a.onChange, placeholder = _a.placeholder;
     var _b = useTranslation(); _b.t; var ready = _b.ready;
     var _c = useState(false), show = _c[0], setShow = _c[1];
-    var _d = useShower(function () { return setShow(false); }), valueRef = _d[0], popperRef = _d[1];
+    var _d = useOutsideClick(function () { return setShow(false); }), valueRef = _d[0], popperRef = _d[1];
     var times = useRef({ watch: 8 });
     var timesRef = useRef(null);
     useEffect(function () { scroll(); });
@@ -682,15 +636,15 @@ Tabs.Option = TabsOption;
 var ViewportContext = createContext({ width: 0, height: 0 });
 var ViewportProvider = function (_a) {
     var _b = _a.wait, wait = _b === void 0 ? 250 : _b, children = _a.children;
-    var _c = useState({ width: window.innerWidth, height: window.innerHeight }), size = _c[0], setSize = _c[1];
-    var handleResize = debounce(function () {
-        setSize({ width: window.innerWidth, height: window.innerHeight });
+    var _c = useState({ width: window.innerWidth, height: window.innerHeight }), scale = _c[0], setScale = _c[1];
+    var handleRescale = debounce(function () {
+        setScale({ width: window.innerWidth, height: window.innerHeight });
     }, wait);
     useEffect(function () {
-        window.addEventListener('resize', handleResize);
-        return function () { return window.removeEventListener('resize', handleResize); };
+        window.addEventListener('rescale', handleRescale);
+        return function () { return window.removeEventListener('rescale', handleRescale); };
     });
-    return (jsx(ViewportContext.Provider, __assign({ value: size }, { children: children }), void 0));
+    return (jsx(ViewportContext.Provider, __assign({ value: scale }, { children: children }), void 0));
 };
 var useViewport = function () { return useContext(ViewportContext); };
 
@@ -758,5 +712,5 @@ Panel.Item = function (_a) {
     return (jsx("div", __assign({ className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, { children: children }), void 0));
 };
 
-export { Button, Card, Checkbox, CustomSelect, DatePicker, Delay, Error, Group, Header, Helium, index as Icons, Input, Label, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, SearchInput, Select, Tabs, TextArea, TimePicker, Toggle, ViewportProvider, useShower, useViewport };
+export { Button, Card, CustomSelect, DatePicker, Delay, Header, Helium, index as Icons, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Tabs, TimePicker, Toggle, ViewportProvider, useOutsideClick, useViewport };
 //# sourceMappingURL=index.js.map

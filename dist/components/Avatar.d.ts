@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { ComponentSize } from './ComponentSize';
+import { ComponentScale } from './ComponentSize';
 export interface Props {
     /** Default text used to display inside the avatar. */
     initials: string;
@@ -10,11 +10,11 @@ export interface Props {
     /** Simple tooltip to show when hovering over the avatar. */
     tip?: string;
     /** Size used to display the avatar. */
-    size: ComponentSize;
+    scale: ComponentScale;
     /** Size used to display the avatar. */
     className?: string;
 }
-export declare const CircleSize: {
+export declare const CircleScale: {
     xs: string;
     sm: string;
     base: string;

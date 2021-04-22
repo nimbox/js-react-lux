@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { ComponentSize } from './ComponentSize';
+import { ComponentScale } from './ComponentSize';
 export interface RadioSelectProps {
-    size?: ComponentSize;
+    scale?: ComponentScale;
     value: any;
     label: String;
     onChange: (value: any) => void;

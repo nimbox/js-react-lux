@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
-import { ComponentSize } from './ComponentSize';
+import { ComponentScale } from './ComponentSize';
 export interface ButtonProps {
     link?: boolean;
     secondary?: boolean;
-    size?: ComponentSize;
+    scale?: ComponentScale;
 }
 export declare const Button: FC<React.ButtonHTMLAttributes<HTMLButtonElement> & ButtonProps>;
 export interface MoreOptionsButtonProps {
-    size?: ComponentSize;
+    scale?: ComponentScale;
     value: boolean;
     onChange: (value: boolean) => void;
 }

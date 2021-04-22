@@ -96,6 +96,7 @@ module.exports = {
     },
 
     plugins: [
+
         plugin(function({ addBase, addComponents, config }) {
             addBase({ 'html': { fontSize: '14px' } });
             addComponents({
@@ -103,7 +104,9 @@ module.exports = {
                 ...require('./tooltip'),
                 ...require('./popper')
             });
-        })
+        }),
+
+        require("@tailwindcss/forms")
     ],
 
     variants: {
@@ -111,7 +114,8 @@ module.exports = {
         textColor: ['responsive', 'focus', 'group-hover', 'hover'],
         backgroundColor: ['responsive', 'focus', 'group-hover', 'hover'],
         borderWidth: ['last'],
-        margin: ['responsive', 'last']
+        margin: ['responsive', 'last'],
+        borderColor: ['hover', 'focus', 'checked']
     }
 
 };

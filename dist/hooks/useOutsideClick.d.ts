@@ -1,6 +1,1 @@
-/// <reference types="react" />
-export default function useOutsideClick(initialIsVisible: any): {
-    ref: import("react").RefObject<HTMLDivElement>;
-    isComponentVisible: any;
-    setIsComponentVisible: import("react").Dispatch<any>;
-};
+export declare const useOutsideClick: (onClickOutside: () => void) => [React.RefObject<HTMLDivElement>, React.RefObject<HTMLDivElement>];
