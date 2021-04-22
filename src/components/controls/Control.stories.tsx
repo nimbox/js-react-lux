@@ -1,5 +1,5 @@
 import { CheckBox } from './CheckBox';
-import { Control, Props } from './Control';
+import { Control, ControlProps } from './Control';
 import { Input } from './Input';
 import { Radio } from './Radio';
 import { Select } from './Select';
@@ -19,7 +19,7 @@ export default definition;
 
 //  parameterized
 
-export const Parameterized = ({ scale = 'base', error = false,  ...props }: Props & { options: string[] }) => {
+export const Parameterized = ({ scale = 'base', error = false,  ...props }: ControlProps & { options: string[] }) => {
 
     return (
         <div className="mt-8 max-w-full">
