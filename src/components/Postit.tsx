@@ -2,11 +2,11 @@ import classnames from 'classnames';
 import React, { FC } from 'react';
 
 
-interface Props {
+interface PostitProps {
     className?: string
 }
 
-export const Postit: FC<Props> = ({ className, children }) => {
+export const Postit: FC<PostitProps> = ({ className, children }) => {
 
     return (
         <div className="postit-container">

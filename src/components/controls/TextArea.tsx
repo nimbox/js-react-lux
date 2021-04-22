@@ -4,13 +4,13 @@ import { ComponentScale, paddings } from '../ComponentSize';
 import { Context } from './Control';
 
 
-export interface Props {
+export interface TextAreaProps {
     scale?: ComponentScale;
     error?: boolean;
     className?: string;
 }
 
-export const TextArea: FC<React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement> & Props> =
+export const TextArea: FC<React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement> & TextAreaProps> =
     ({ error, scale, className, ...props }) => {
 
         const context = useContext(Context);

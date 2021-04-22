@@ -8,7 +8,7 @@ import { AngleDownIcon, AngleUpIcon, CircleIcon } from '../../icons';
 // DatePicker
 //
 
-interface Props {
+interface TimePickerProps {
 
     /** Name used for the input element and returned in the change event. */
     name?: string,
@@ -35,7 +35,7 @@ const minutes = [15, 30, 45];
 /**
  * DatePicker. Select a date with one click.
  */
-export const TimePicker: FC<Props> = ({ name, value, onChange, placeholder }) => {
+export const TimePicker: FC<TimePickerProps> = ({ name, value, onChange, placeholder }) => {
 
     const { t, ready } = useTranslation();
 

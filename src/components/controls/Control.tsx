@@ -3,22 +3,22 @@ import React, { createContext, FC, useContext } from 'react';
 import { ComponentScale, scales as componentScales, scalesSmall as componentScalesSmall } from '../ComponentSize';
 
 
-export interface Props {
+export interface ControlProps {
     scale: ComponentScale;
     error?: boolean,
     className?: string;
 }
 
-export interface LabelProps {
+export interface ControlLabelProps {
     badge?: any;
     className?: string;
 }
 
-type ContextProps = Pick<Props, 'scale' | 'error'>;
+type ContextProps = Pick<ControlProps, 'scale' | 'error'>;
 export const Context = createContext<ContextProps>({ scale: 'base', error: false });
 
-export interface ControlComponent extends FC<Props> {
-    Label: FC<LabelProps>;
+export interface ControlComponent extends FC<ControlProps> {
+    Label: FC<ControlLabelProps>;
     Message: FC<{ className?: string }>;
     Error: FC<{ className?: string }>;
 }
@@ -48,7 +48,7 @@ Control.Label = (({ badge, className, children }) => {
         </label>
     );
 
-}) as FC<LabelProps>;
+}) as FC<ControlLabelProps>;
 
 Control.Message = (({ className, children }) => {
 

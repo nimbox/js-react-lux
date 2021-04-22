@@ -8,7 +8,7 @@ import { AngleLeftIcon, AngleRightIcon, CircleIcon } from '../../icons';
 // DatePicker
 //
 
-interface Props {
+interface DatePickerProps {
 
     /** Name used for the input element and returned in the change event. */
     name?: string,
@@ -43,7 +43,7 @@ const namedDays = [
 /**
  * DatePicker. Select a date with one click.
  */
-export const DatePicker: FC<Props> = ({ name, value, onChange, shortcuts, placeholder }) => {
+export const DatePicker: FC<DatePickerProps> = ({ name, value, onChange, shortcuts, placeholder }) => {
 
     const { t, ready } = useTranslation();
 
