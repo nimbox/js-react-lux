@@ -10,7 +10,7 @@ export interface ControlProps {
 }
 
 export interface ControlLabelProps {
-    badge?: any;
+    badge?: string | JSX.Element;
     className?: string;
 }
 

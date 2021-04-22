@@ -7,7 +7,7 @@ import { ComponentScale } from './ComponentSize';
 export interface RadioSelectProps {
     scale?: ComponentScale;
     value: any;
-    label: String;
+    label: string;
     onChange: (value: any) => void;
     className?: string;
 }
