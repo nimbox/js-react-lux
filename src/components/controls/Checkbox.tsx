@@ -4,12 +4,12 @@ import { ComponentScale, scales, scalesSquare } from '../ComponentSize';
 import { Context } from './Control';
 
 
-export interface Props {
+export interface CheckBoxProps {
     scale?: ComponentScale;
     className?: string;
 }
 
-export const Checkbox: FC<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & Props> =
+export const CheckBox: FC<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & CheckBoxProps> =
     ({ scale, className, children, ...props }) => {
 
         const context = useContext(Context);

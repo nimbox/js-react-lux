@@ -1,4 +1,4 @@
-import { Checkbox } from './Checkbox';
+import { CheckBox } from './CheckBox';
 import { Control, Props } from './Control';
 import { Input } from './Input';
 import { Radio } from './Radio';
@@ -42,7 +42,7 @@ export const Parameterized = ({ scale = 'base', error = false,  ...props }: Prop
                 </div>
                 <div>
                     <Control scale={scale}>
-                        <Checkbox scale={scale}>Text text text and more text</Checkbox>
+                        <CheckBox scale={scale}>Text text text and more text</CheckBox>
                     </Control>
                 </div>
                 <div>

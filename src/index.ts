@@ -10,6 +10,10 @@ export * from './components/CustomSelect';
 export * from './components/pickers/TimePicker';
 export * from './components/Tabs';
 
+export * from './components/controls/Input';
+export * from './components/controls/CheckBox';
+export * from './components/controls/Radio';
+
 export * from './hooks/useOutsideClick';
 export * from './hooks/useViewport';
 

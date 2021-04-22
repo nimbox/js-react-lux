@@ -159,6 +159,24 @@ var paddings = {
     'base': 'px-3 py-2',
     'lg': 'text-lg px-4 py-2'
 };
+var scalesSquare = {
+    'xs': 'h-4 w-4',
+    'sm': 'h-5 w-5',
+    'base': 'h-6 w-6',
+    'lg': 'h-6 w-6'
+};
+var scales = {
+    'xs': 'text-xs',
+    'sm': 'text-sm',
+    'base': '',
+    'lg': 'text-lg'
+};
+var scalesSmall = {
+    'xs': 'text-1xs',
+    'sm': 'text-xs',
+    'base': 'text-sm',
+    'lg': ''
+};
 
 var Button = function (_a) {
     var _b = _a.link, link = _b === void 0 ? false : _b, _c = _a.secondary, secondary = _c === void 0 ? false : _c, _d = _a.scale, scale = _d === void 0 ? 'base' : _d, children = _a.children, className = _a.className, props = __rest(_a, ["link", "secondary", "scale", "children", "className"]);
@@ -630,6 +648,53 @@ var TabsOption = function (_a) {
 };
 Tabs.Option = TabsOption;
 
+var Context$1 = createContext({ scale: 'base', error: false });
+var Control = function (_a) {
+    var _b = _a.scale, scale = _b === void 0 ? 'base' : _b, _c = _a.error, error = _c === void 0 ? false : _c, className = _a.className, children = _a.children;
+    return (jsx(Context$1.Provider, __assign({ value: { error: error, scale: scale } }, { children: jsx("div", __assign({ className: classnames('flex flex-col w-full', className) }, { children: children }), void 0) }), void 0));
+};
+Control.Label = (function (_a) {
+    var badge = _a.badge, className = _a.className, children = _a.children;
+    var context = useContext(Context$1);
+    return (jsx("label", __assign({ className: classnames('block', context.error ? 'text-danger-500' : 'text-control-border', scales[context.scale], className) }, { children: jsxs("div", __assign({ className: "flex flex-row justify-between align-baseline" }, { children: [jsx("span", __assign({ className: "uppercase tracking-tighter" }, { children: children }), void 0),
+                badge && jsx("span", { children: badge }, void 0)] }), void 0) }), void 0));
+});
+Control.Message = (function (_a) {
+    var className = _a.className, children = _a.children;
+    var context = useContext(Context$1);
+    return (jsx("div", __assign({ className: classnames(context.error ? 'text-danger-500' : 'text-control-border', scalesSmall[context.scale], className) }, { children: children }), void 0));
+});
+Control.Error = (function (_a) {
+    var className = _a.className, children = _a.children;
+    var context = useContext(Context$1);
+    return (jsx("div", __assign({ className: classnames('text-danger-500', scalesSmall[context.scale], className) }, { children: children }), void 0));
+});
+Control.Label.displayName = 'Control.Label';
+Control.Message.displayName = 'Control.Help';
+Control.Error.displayName = 'Control.Error';
+
+var Input = function (_a) {
+    var error = _a.error, scale = _a.scale, className = _a.className, props = __rest(_a, ["error", "scale", "className"]);
+    var context = useContext(Context$1);
+    return (jsx("input", __assign({}, props, { className: classnames(paddings[scale || context.scale || 'base'], 'block w-full rounded border border-control-border', error || context.error ?
+            'border-danger-500 focus:border-danger-500 focus:ring focus:ring-danger-500' :
+            'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none', className) }), void 0));
+};
+
+var CheckBox = function (_a) {
+    var scale = _a.scale, className = _a.className, children = _a.children, props = __rest(_a, ["scale", "className", "children"]);
+    var context = useContext(Context$1);
+    return (jsxs("div", __assign({ className: "flex flex-row items-center" }, { children: [jsx("input", __assign({ type: "checkbox" }, props, { className: classnames(scalesSquare[scale || context.scale || 'base'], 'rounded border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-offset-0 focus:ring-primary-500 focus:ring-opacity-50', className) }), void 0),
+            jsx("span", __assign({ className: classnames('ml-2', scales[scale || context.scale || 'base'], className) }, { children: children }), void 0)] }), void 0));
+};
+
+var Radio = function (_a) {
+    _a.error; var scale = _a.scale, className = _a.className, children = _a.children, props = __rest(_a, ["error", "scale", "className", "children"]);
+    var context = useContext(Context$1);
+    return (jsxs("div", __assign({ className: "flex flex-row items-center" }, { children: [jsx("input", __assign({ type: "radio" }, props, { className: classnames(scalesSquare[scale || context.scale || 'base'], 'border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-offset-0 focus:ring-primary-500 focus:ring-opacity-50', className) }), void 0),
+            jsx("span", __assign({ className: classnames('ml-2', scales[scale || context.scale || 'base'], className) }, { children: children }), void 0)] }), void 0));
+};
+
 //
 // viewport
 //
@@ -648,26 +713,26 @@ var ViewportProvider = function (_a) {
 };
 var useViewport = function () { return useContext(ViewportContext); };
 
-var Context$1 = createContext({});
+var Context$2 = createContext({});
 var Helium = function (_a) {
     var _b = _a.navigator, navigator = _b === void 0 ? false : _b, _c = _a.setNavigator, setNavigator = _c === void 0 ? function (show) { return null; } : _c, children = _a.children;
-    return (jsx(Context$1.Provider, __assign({ value: { navigator: navigator, setNavigator: setNavigator } }, { children: jsx("div", __assign({ className: "relative min-h-screen flex flex-col" }, { children: children }), void 0) }), void 0));
+    return (jsx(Context$2.Provider, __assign({ value: { navigator: navigator, setNavigator: setNavigator } }, { children: jsx("div", __assign({ className: "relative min-h-screen flex flex-col" }, { children: children }), void 0) }), void 0));
 };
 // header
 var Header = function (_a) {
     var className = _a.className, children = _a.children;
-    var context = useContext(Context$1);
+    var context = useContext(Context$2);
     return (jsx("header", __assign({ className: classnames(context.navigator ? 'pl-0 md:pl-56' : 'pl-0', 'fixed z-10 inset-x-0 top-0 h-16 flex-none text-content bg-content-fg border-b border-content-border transition duration-700 ease-in-out transition-spacing') }, { children: jsx("div", __assign({ className: classnames('h-full', className) }, { children: children }), void 0) }), void 0));
 };
 // toggle
 var Toggle = function (_a) {
     var always = _a.always, children = _a.children;
-    var context = useContext(Context$1);
+    var context = useContext(Context$2);
     return (jsx("div", __assign({ className: classnames('h-16 w-16 text-center hover:text-white hover:bg-primary-500', always ? 'flex' : 'flex md:hidden', 'flex-row items-center justify-center') }, { children: jsx("button", __assign({ onClick: function () { return context.setNavigator(!context.navigator); }, className: "focus:outline-none" }, { children: children }), void 0) }), void 0));
 };
 var Navigator = function (_a) {
     var className = _a.className, children = _a.children;
-    var context = useContext(Context$1);
+    var context = useContext(Context$2);
     return (jsxs(Fragment, { children: [context.navigator && jsx("div", { className: classnames('fixed z-10 inset-0 bg-gray-800 opacity-50 md:hidden'), onClick: function () { return context.setNavigator(false); } }, void 0),
             jsx("div", __assign({ className: classnames('fixed z-20 inset-y-0 left-0 w-56 transform', context.navigator ? 'translate-x-0' : '-translate-x-56', 'transition duration-700 ease-in-out transition-transform') }, { children: jsx("div", __assign({ className: classnames('h-full flex flex-col text-navigator bg-navigator-bg', className) }, { children: children }), void 0) }), void 0)] }, void 0));
 };
@@ -688,7 +753,7 @@ Navigator.Content = NavigatorContent;
 Navigator.Footer = NavigatorFooter;
 var Main = function (_a) {
     var children = _a.children;
-    var context = useContext(Context$1);
+    var context = useContext(Context$2);
     return (jsx("main", __assign({ className: classnames('h-full', context.navigator ? 'pl-0 md:pl-56' : 'pl-0', 'pt-16 flex-grow flex flex-row items-stretch overflow-y-auto text-content bg-content-bg transition duration-700 ease-in-out transition-spacing') }, { children: children }), void 0));
 };
 Main.Content = function (_a) {
@@ -712,5 +777,5 @@ Panel.Item = function (_a) {
     return (jsx("div", __assign({ className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, { children: children }), void 0));
 };
 
-export { Button, Card, CustomSelect, DatePicker, Delay, Header, Helium, index as Icons, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Tabs, TimePicker, Toggle, ViewportProvider, useOutsideClick, useViewport };
+export { Button, Card, CheckBox, CustomSelect, DatePicker, Delay, Header, Helium, index as Icons, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, Tabs, TimePicker, Toggle, ViewportProvider, useOutsideClick, useViewport };
 //# sourceMappingURL=index.js.map

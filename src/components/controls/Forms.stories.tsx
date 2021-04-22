@@ -1,5 +1,5 @@
 import { Button } from '../Buttons';
-import { Checkbox } from './Checkbox';
+import { CheckBox } from './CheckBox';
 import { Control, Props } from './Control';
 import { Input } from './Input';
 import { Radio } from './Radio';
@@ -63,7 +63,7 @@ export const Parameterized = ({ scale, error, ...props }: Props & { options: str
                 </div>
                 <div className="col-span-2">
                     <Control scale={scale}>
-                        <Checkbox scale={scale}>Acepto los términos</Checkbox>
+                        <CheckBox scale={scale}>Acepto los términos</CheckBox>
                     </Control>
                 </div>
                 <div className="col-span-2">
