@@ -1,27 +1,35 @@
-import classnames from "classnames";
-import { FC, useContext } from "react";
-import { paddings, ComponentScale } from "../ComponentSize";
+import classnames from 'classnames';
+import React, { FC, useContext } from 'react';
+import { ComponentScale, paddings } from '../ComponentSize';
 import { Context } from './Control';
 
 
-interface SelectComponent extends FC<{ scale?: ComponentScale, className?: String }> {
+export interface SelectProps extends React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement> {
+    scale?: ComponentScale;
+}
+
+export interface SelectSubComponents {
     Option: FC<{ value?: any, className?: string }>;
 }
 
-export const Select: SelectComponent = ({ scale, className, children }) => {
+export const Select = React.forwardRef(
+    ({ scale, className, children, ...props }, ref) => {
 
-    const context = useContext(Context);
-    
-    return (
-        <select className={classnames(
-            paddings[scale || context.scale || 'base'],
-            'rounded border-control-border focus:border-primary-500 focus:ring focus:ring-primary-500',
-            'focus:ring-opacity-50 focus:outline-none', 
-            className)} >
-            {children}
-        </select>
-    );
-}
+        const context = useContext(Context);
+
+        return (
+            <select {...props} ref={ref} className={classnames(
+                paddings[scale || context.scale || 'base'],
+                'block w-full rounded border border-control-border',
+                'focus:border-primary-500 focus:ring focus:ring-primary-500',
+                'focus:ring-opacity-50 focus:outline-none',
+                className)} >
+                {children}
+            </select>
+        );
+
+    }
+) as React.ForwardRefExoticComponent<React.PropsWithoutRef<SelectProps> & React.RefAttributes<HTMLSelectElement>> & SelectSubComponents;
 
 Select.Option = ({ value, children }) => (
     <option value={value}>{children}</option>

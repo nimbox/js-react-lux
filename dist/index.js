@@ -1,7 +1,7 @@
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { useRef, useEffect, useState, createContext, useContext } from 'react';
+import React, { useRef, useEffect, useState, createContext, useContext } from 'react';
 import debounce from 'lodash/debounce';
 
 /*! *****************************************************************************
@@ -673,13 +673,13 @@ Control.Label.displayName = 'Control.Label';
 Control.Message.displayName = 'Control.Help';
 Control.Error.displayName = 'Control.Error';
 
-var Input = function (_a) {
+var Input = React.forwardRef(function (_a, ref) {
     var error = _a.error, scale = _a.scale, className = _a.className, props = __rest(_a, ["error", "scale", "className"]);
     var context = useContext(Context$1);
-    return (jsx("input", __assign({}, props, { className: classnames(paddings[scale || context.scale || 'base'], 'block w-full rounded border border-control-border', error || context.error ?
+    return (jsx("input", __assign({}, props, { ref: ref, className: classnames(paddings[scale || context.scale || 'base'], 'block w-full rounded border border-control-border', error || context.error ?
             'border-danger-500 focus:border-danger-500 focus:ring focus:ring-danger-500' :
             'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none', className) }), void 0));
-};
+});
 
 var CheckBox = function (_a) {
     var scale = _a.scale, className = _a.className, children = _a.children, props = __rest(_a, ["scale", "className", "children"]);
@@ -693,6 +693,16 @@ var Radio = function (_a) {
     var context = useContext(Context$1);
     return (jsxs("div", __assign({ className: "flex flex-row items-center" }, { children: [jsx("input", __assign({ type: "radio" }, props, { className: classnames(scalesSquare[scale || context.scale || 'base'], 'border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-offset-0 focus:ring-primary-500 focus:ring-opacity-50', className) }), void 0),
             jsx("span", __assign({ className: classnames('ml-2', scales[scale || context.scale || 'base'], className) }, { children: children }), void 0)] }), void 0));
+};
+
+var Select = React.forwardRef(function (_a, ref) {
+    var scale = _a.scale, className = _a.className, children = _a.children, props = __rest(_a, ["scale", "className", "children"]);
+    var context = useContext(Context$1);
+    return (jsx("select", __assign({}, props, { ref: ref, className: classnames(paddings[scale || context.scale || 'base'], 'block w-full rounded border border-control-border', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none', className) }, { children: children }), void 0));
+});
+Select.Option = function (_a) {
+    var value = _a.value, children = _a.children;
+    return (jsx("option", __assign({ value: value }, { children: children }), void 0));
 };
 
 //
@@ -777,5 +787,5 @@ Panel.Item = function (_a) {
     return (jsx("div", __assign({ className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, { children: children }), void 0));
 };
 
-export { Button, Card, CheckBox, CustomSelect, DatePicker, Delay, Header, Helium, index as Icons, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, Tabs, TimePicker, Toggle, ViewportProvider, useOutsideClick, useViewport };
+export { Button, Card, CheckBox, CustomSelect, DatePicker, Delay, Header, Helium, index as Icons, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, Select, Tabs, TimePicker, Toggle, ViewportProvider, useOutsideClick, useViewport };
 //# sourceMappingURL=index.js.map

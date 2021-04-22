@@ -13,6 +13,7 @@ export * from './components/Tabs';
 export * from './components/controls/Input';
 export * from './components/controls/CheckBox';
 export * from './components/controls/Radio';
+export * from './components/controls/Select';
 
 export * from './hooks/useOutsideClick';
 export * from './hooks/useViewport';
