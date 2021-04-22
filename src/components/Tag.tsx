@@ -1,36 +1,44 @@
 import classnames from 'classnames';
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
+import tinycolor from 'tinycolor2';
 import CrossIcon from '../icons/CrossIcon';
-import { ComponentScale } from './ComponentSize';
+import { ComponentScale, scalesSquare, scales } from './ComponentSize';
+import { Context } from './controls/Control';
 
 
 export interface TagProps {
-    scale: ComponentScale;
+    scale?: ComponentScale;
     color?: string;
     onClick?: (value: any) => void;
     onDelete?: (value: any) => void;
     className?: string;
 }
 
-export const Tag: FC<TagProps> = (({ scale = 'base', color, onClick, onDelete, className, children, ...props}) => {
+export const Tag: FC<TagProps> = (({ scale, color: backgroundColor, onClick, onDelete, className, children, ...props}) => {
+    
     const show = !!onDelete
+    const context = useContext(Context);
+    const color = backgroundColor ? tinycolor(backgroundColor).isDark() ? 'white' : 'black': '';
+    
     return (
-        <span {...props} onClick={onClick} style={{ backgroundColor: color }} className={classnames(
-            'inline-flex flex-row max-w-full items-baseline pr-1 py-0 border border-control-border rounded-l-2xl rounded-r truncate', 
+        <span {...props} onClick={onClick} style={{ color: color, backgroundColor: backgroundColor }} className={classnames(
+            'inline-flex flex-row max-w-full items-baseline py-0 border border-control-border rounded-l-2xl rounded-r truncate', 
             className)}>
-            <span className={classnames("self-center rounded-full",{
-                'h-4 w-4': scale === 'xs',
-                'h-5 w-5': scale === 'sm',
-                'h-6 w-6': scale === 'base',
-                'h-7 w-7': scale === 'lg'}, "flex flex-shrink-0 items-center justify-center")}>
-                { show && <CrossIcon onClick={() => onDelete} className={classnames( "h-3 w-3 stroke-current stroke-2")} />}
-            </span>
-            <span className={classnames('self-auto truncate', {
-                'text-xs': scale === 'xs',
-                'text-sm': scale === 'sm',
-                'text-base': scale === 'base',
-                'text-lg': scale === 'lg',
-            })}>
+             {show &&
+             <span className={classnames(
+                'self-center rounded-full flex flex-shrink-0 items-center justify-center ',
+                scalesSquare[scale || context.scale || 'base'] )}>
+                <CrossIcon onClick={() => onDelete} className={classnames( scale === 'xs' ? 'h-3 w-3' : 'h-4 w-4', 'stroke-current stroke-2 ')} /> 
+            </span>}
+            <span className={classnames(
+                            'self-auto truncate',
+                            scales[scale || context.scale || 'base'],
+                            !show ? {
+                                'px-2': scale === 'xs',
+                                'px-2.5': scale === 'sm',
+                                'px-3': scale === 'base' || scale === 'lg',
+                            }: 'pr-0.5', 
+                            )}>
                 {children}
             </span>
         </span>
