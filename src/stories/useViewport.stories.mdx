@@ -7,9 +7,9 @@ import { useViewport, ViewportProvider } from '../hooks/useViewport';
 
 # Viewport
 
-Use a the viewport hook when requiring the size of the current window.  For this
+Use a the viewport hook when requiring the scale of the current window.  For this
 to work, your root element needs to be wrapped inside `ViewportProvider` that
-provides the context with the listener for the resize event.
+provides the context with the listener for the rescale event.
 
 ```
 <ViewportProvider>
@@ -23,8 +23,8 @@ This function is debounced with a 250ms wait, but that can be changed with the
 <Preview>
     <Story name="Basic" parameters={{ decorators: [(Story) => <ViewportProvider>{<Story/>}</ViewportProvider>] }}>
         {() => {
-            const size = useViewport();
-            return (<div>{JSON.stringify(size)}</div>);
+            const scale = useViewport();
+            return (<div>{JSON.stringify(scale)}</div>);
         }}
     </Story>
 </Preview>
@@ -34,8 +34,8 @@ With a 2 second wait.
 <Preview>
     <Story name="With Wait" parameters={{ decorators: [(Story) => <ViewportProvider wait={2000}>{<Story/>}</ViewportProvider>] }}>
         {() => {
-            const size = useViewport();
-            return (<div>{JSON.stringify(size)}</div>);
+            const scale = useViewport();
+            return (<div>{JSON.stringify(scale)}</div>);
         }}
     </Story>
 </Preview>

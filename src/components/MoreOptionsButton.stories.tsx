@@ -8,7 +8,7 @@ const definition = {
     title: 'Component/MoreOptionsButton',
     component: MoreOptionsButton,
     argTypes: {
-        size: { control: { type: 'select', options: ['sm', 'base', 'lg'] } },
+        scale: { control: { type: 'select', options: ['sm', 'base', 'lg'] } },
         value: { control: { type: 'boolean' } },
     }
 };
@@ -30,4 +30,4 @@ export const Base = ({ children, value: initial, ...props }: BaseProps) => {
         </>
     );
 };
-Base.args = { size: 'base', value: false };
+Base.args = { scale: 'base', value: false };

@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React, { FC } from 'react';
 import tinycolor from 'tinycolor2';
-import { ComponentSize } from './ComponentSize';
+import { ComponentScale } from './ComponentSize';
 
 
 
@@ -24,14 +24,14 @@ export interface Props {
     tip?: string;
 
     /** Size used to display the avatar. */
-    size: ComponentSize;
+    scale: ComponentScale;
 
     /** Size used to display the avatar. */
     className?: string;
 
 }
 
-export const CircleSize = {
+export const CircleScale = {
     'xs': 'text-1xs w-5 h-5',
     'sm': 'text-xs w-6 h-6',
     'base': 'text-sm w-7 h-7',
@@ -48,18 +48,18 @@ export const CircleOffset = {
 /**
  * Avatar. Representation of a user in the system.
  */
-export const Avatar: FC<Props> = ({ src, initials, color: backgroundColor, size: textSize = 'base', className, children }) => {
+export const Avatar: FC<Props> = ({ src, initials, color: backgroundColor, scale: textScale = 'base', className, children }) => {
 
     const color = tinycolor(backgroundColor).isDark() ? 'white' : 'black';
 
 
     if (src) {
         return (
-            <img src={src} alt={initials} className={classnames('inline-block', CircleSize[textSize], 'rounded-full overflow-hidden')} style={{ verticalAlign: CircleOffset[textSize] }}/>
+            <img src={src} alt={initials} className={classnames('inline-block', CircleScale[textScale], 'rounded-full overflow-hidden')} style={{ verticalAlign: CircleOffset[textScale] }}/>
         );
     } else {
         return (
-            <span className={classnames('inline-block', CircleSize[textSize], 'rounded-full overflow-hidden')} style={{ verticalAlign: CircleOffset[textSize] }}>
+            <span className={classnames('inline-block', CircleScale[textScale], 'rounded-full overflow-hidden')} style={{ verticalAlign: CircleOffset[textScale] }}>
                 <span className={classnames('w-full h-full inline-flex justify-center items-center', className)} style={{ color: color, backgroundColor: backgroundColor }}>
                     <span className="leading-4">{initials}</span>
                 </span>

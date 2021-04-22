@@ -1,21 +1,21 @@
 
 import classnames from 'classnames';
 import React, { FC } from 'react';
-import { ComponentSize } from './ComponentSize';
+import { ComponentScale } from './ComponentSize';
 
 
 export interface LoadingProps {
-    size?: ComponentSize;
+    scale?: ComponentScale;
     className?: string;
 }
 
-export const Loading: FC<LoadingProps> = ({ size = 'base', className }) => (
+export const Loading: FC<LoadingProps> = ({ scale = 'base', className }) => (
     <svg width="45" height="45" viewBox="0 0 45 45" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"
         className={classnames('inline-block', 'text-primary-500',
             {
-                'h-6 w-6': size === 'sm',
-                'h-10 w-10': size === 'base',
-                'h-14 w-14': size === 'lg'
+                'h-6 w-6': scale === 'sm',
+                'h-10 w-10': scale === 'base',
+                'h-14 w-14': scale === 'lg'
             },
             className)}>
         <g fill="none" fillRule="evenodd" transform="translate(1 1)" strokeWidth="2">

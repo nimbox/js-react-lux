@@ -2,21 +2,21 @@ import classnames from 'classnames';
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AngleRightIcon } from '../icons';
-import { ComponentSize, paddings } from './ComponentSize';
+import { ComponentScale, paddings } from './ComponentSize';
 
 
 export interface ButtonProps {
     link?: boolean;
     secondary?: boolean;
-    size?: ComponentSize;
+    scale?: ComponentScale;
 }
 
 export const Button: FC<React.ButtonHTMLAttributes<HTMLButtonElement> & ButtonProps> =
-    ({ link = false, secondary = false, size = 'base', children, className, ...props }) => {
+    ({ link = false, secondary = false, scale = 'base', children, className, ...props }) => {
 
         return link ?
             (<button {...props} className={classnames(
-                paddings[size],
+                paddings[scale],
                 {
                     'text-primary-500 hover:text-primary-700': !secondary,
                     'text-gray-500 hover:text-gray-700': secondary
@@ -26,7 +26,7 @@ export const Button: FC<React.ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
             </button >)
             :
             (<button {...props} className={classnames(
-                paddings[size],
+                paddings[scale],
                 {
                     'text-white font-bold bg-primary-500 hover:bg-primary-600 border border-control-border': !secondary,
                     'text-primary-500 hover:text-white font-bold bg-transparent hover:bg-primary-600 border border-control-border': secondary
@@ -37,7 +37,7 @@ export const Button: FC<React.ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
     };
 
 export interface MoreOptionsButtonProps {
-    size?: ComponentSize;
+    scale?: ComponentScale;
     value: boolean;
     onChange: (value: boolean) => void;
 }

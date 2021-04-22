@@ -1,10 +1,10 @@
 import classnames from 'classnames';
 import React, { createContext, FC, useContext } from 'react';
-import { ComponentSize, paddings } from './ComponentSize';
+import { ComponentScale, paddings } from './ComponentSize';
 
 
 export interface CheckBarProps {
-    size: ComponentSize;
+    scale: ComponentScale;
     value: any[];
     onChange: (value: any) => void;
     className?: string;
@@ -15,17 +15,17 @@ export interface CheckBarOptionProps {
     className?: string;
 }
 
-type ContextProps = Pick<CheckBarProps, 'size' | 'value' | 'onChange'>;
-const Context = createContext<ContextProps>({ size: 'base', value: [], onChange: () => null });
+type ContextProps = Pick<CheckBarProps, 'scale' | 'value' | 'onChange'>;
+const Context = createContext<ContextProps>({ scale: 'base', value: [], onChange: () => null });
 
 export interface CheckBarComponent extends FC<CheckBarProps> {
     Option: FC<CheckBarOptionProps>;
 }
 
-export const CheckBar: CheckBarComponent = ({ size = 'base', value, onChange, className, children }) => (
-    <Context.Provider value={{ size, value, onChange }}>
+export const CheckBar: CheckBarComponent = ({ scale = 'base', value, onChange, className, children }) => (
+    <Context.Provider value={{ scale, value, onChange }}>
         <div className={classnames('inline-block', 'overflow-hidden',
-            { 'text-xs': size === 'xs', 'text-sm': size === 'sm', 'text-base': size === 'base', 'text-lg': size === 'lg' },
+            { 'text-xs': scale === 'xs', 'text-sm': scale === 'sm', 'text-base': scale === 'base', 'text-lg': scale === 'lg' },
             'border border-control-border rounded', className)}>
             {children}
         </div>
@@ -47,7 +47,7 @@ CheckBar.Option = (({ value, className, children }) => {
     return (
         <div onClick={onClick} className={classnames(
             'inline-block',
-            paddings[context.size],
+            paddings[context.scale],
             'border-control-border border-r last:border-r-0',
             { 'text-white bg-primary-500': context.value.indexOf(value) >= 0 },
             'hover:text-white hover:bg-primary-600',

@@ -10,7 +10,7 @@ export * from './components/CustomSelect';
 export * from './components/pickers/TimePicker';
 export * from './components/Tabs';
 
-export * from './hooks/useShower';
+export * from './hooks/useOutsideClick';
 export * from './hooks/useViewport';
 
 export * from './layouts/helium/Helium';

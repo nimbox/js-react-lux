@@ -10,7 +10,7 @@ const definition = {
     title: 'Component/Picker/TagPicker',
     component: TagPicker,
     argTypes: {
-        size: { control: { type: 'select', options: ['xs','sm', 'base', 'lg'] } },
+        scale: { control: { type: 'select', options: ['xs','sm', 'base', 'lg'] } },
         value: { control: { type: 'array' } },
     }
 };
@@ -33,12 +33,12 @@ const data = [
 
 // parameterized
 
-export const Parameterized = ({ size, tags, ...props }: TagPickerProps) => {
+export const Parameterized = ({ scale, tags, ...props }: TagPickerProps) => {
     const [tagsC, onChange] = React.useState(tags);
-
+    
     return (
         <div className="w-1/2">
-            <TagPicker size={size} tags={tags}
+            <TagPicker scale={scale} tags={tagsC}
                 onDelete={(key) => { onChange(_.remove(tagsC, function (tag) { return tag.key !== key; })); }}
                 onSearch={((searchTerm) => {
                     if (searchTerm != "") {
@@ -52,14 +52,14 @@ export const Parameterized = ({ size, tags, ...props }: TagPickerProps) => {
                 onSelect={(key) => onChange(_.concat(tagsC, (_.find(data, function (tag) { return tag.key == key; }))))}
                 onCreate={(newTag) => onChange(_.concat(tagsC, { "key": newTag, "value": newTag }))}
             >
-            {tagsC.map((tag) => <Tag size={size} value={tag.key}>{tag.value}</Tag>)}
+            {tagsC.map((tag) => <Tag value={tag.key}>{tag.value}</Tag>)}
             </TagPicker>
         </div>
     );
 }
 
 Parameterized.args = {
-    size: 'base', tags: [{ "key": "key0", "value": "etiqueta1wfewfwefwfwefnkwenfkwnefkwnfkwe" },
+    scale: 'base', tags: [{ "key": "key0", "value": "etiqueta1wfewfwefwfwefnkwenfkwnefkwnfkwe" },
     { "key": "key11", "value": "etiqueta2" },
     { "key": "key22", "value": "etiqueta3" }], className: 'text-secondary-500'
 };
