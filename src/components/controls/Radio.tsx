@@ -11,7 +11,7 @@ export interface RadioProps {
 }
 
 export const Radio: FC<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & RadioProps> =
-    ({ error, scale, className, children, ...props }) => {
+    ({ scale, error, className, children, ...props }) => {
 
         const context = useContext(Context);
 

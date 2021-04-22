@@ -55,7 +55,7 @@ export const Avatar: FC<AvatarProps> = ({ src, initials, color: backgroundColor,
 
     if (src) {
         return (
-            <img src={src} alt={initials} className={classnames('inline-block', CircleScale[textScale], 'rounded-full overflow-hidden')} style={{ verticalAlign: CircleOffset[textScale] }}/>
+            <img src={src} alt={initials} className={classnames('inline-block', CircleScale[textScale], 'rounded-full overflow-hidden')} style={{ verticalAlign: CircleOffset[textScale] }} />
         );
     } else {
         return (

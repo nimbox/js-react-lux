@@ -7,7 +7,7 @@ import { paddings } from './ComponentSize';
 
 // definition
 
-export default  {
+export default {
     title: 'Component/CheckBar',
     component: CheckBar,
     argTypes: {

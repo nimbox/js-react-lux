@@ -11,7 +11,7 @@ export interface InputProps {
 }
 
 export const Input: FC<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & InputProps> =
-    ({ error, scale, className, ...props }) => {
+    ({ scale, error, className, ...props }) => {
 
         const context = useContext(Context);
 

@@ -14,7 +14,7 @@ const definition = {
     component: Input,
     argTypes: {
         scale: { control: { type: 'select', options: ['xs', 'sm', 'base', 'lg'] } },
-        error: { control: { type: 'boolean'} }
+        error: { control: { type: 'boolean' } }
     }
 };
 export default definition;

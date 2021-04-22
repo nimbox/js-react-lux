@@ -10,7 +10,7 @@ const definition = {
     title: 'Component/Picker/TagPicker',
     component: TagPicker,
     argTypes: {
-        scale: { control: { type: 'select', options: ['xs','sm', 'base', 'lg'] } },
+        scale: { control: { type: 'select', options: ['xs', 'sm', 'base', 'lg'] } },
         value: { control: { type: 'array' } },
     }
 };
@@ -35,7 +35,7 @@ const data = [
 
 export const Parameterized = ({ scale, tags, ...props }: TagPickerProps) => {
     const [tagsC, onChange] = React.useState(tags);
-    
+
     return (
         <div className="w-1/2">
             <TagPicker scale={scale} tags={tagsC}
@@ -52,7 +52,7 @@ export const Parameterized = ({ scale, tags, ...props }: TagPickerProps) => {
                 onSelect={(key) => onChange(_.concat(tagsC, (_.find(data, function (tag) { return tag.key == key; }))))}
                 onCreate={(newTag) => onChange(_.concat(tagsC, { "key": newTag, "value": newTag }))}
             >
-            {tagsC.map((tag) => <Tag value={tag.key}>{tag.value}</Tag>)}
+                {tagsC.map((tag) => <Tag value={tag.key}>{tag.value}</Tag>)}
             </TagPicker>
         </div>
     );
