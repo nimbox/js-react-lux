@@ -25,13 +25,13 @@ interface CheckSelectComponent extends FC<CheckSelectProps> {
 }
 
 export const CheckSelect: CheckSelectComponent = (({ scale = 'base', label, value, onChange, className, children }) => {
-    
+
     const [isVisible, onOutsideClick] = useState(true);
-    const [ target, popper ] = useOutsideClick(() => onOutsideClick(!isVisible));
-    
+    const [target, popper] = useOutsideClick(() => onOutsideClick(!isVisible));
+
     return (
         <Context.Provider value={{ scale, value, onChange }}>
-            <div  className={classnames('relative inline-block', className)}>
+            <div className={classnames('relative inline-block', className)}>
                 <div ref={target} className={classnames('px-2 py-0 border border-primary-700 rounded cursor-pointer truncate', {
                     'text-xs': scale === 'sm',
                     'text-base': scale === 'base',
@@ -40,9 +40,9 @@ export const CheckSelect: CheckSelectComponent = (({ scale = 'base', label, valu
                     {label}
                 </div>
                 {isVisible &&
-                 <div ref={popper} className={classnames('absolute right-0 max-h-48 overflow-auto mt-2 bg-white border border-primary-700 rounded divide-y divide-primary-700')}>
-                    {children}
-                </div>
+                    <div ref={popper} className={classnames('absolute right-0 max-h-48 overflow-auto mt-2 bg-white border border-primary-700 rounded divide-y divide-primary-700')}>
+                        {children}
+                    </div>
                 }
             </div>
         </Context.Provider>
@@ -51,9 +51,9 @@ export const CheckSelect: CheckSelectComponent = (({ scale = 'base', label, valu
 
 
 CheckSelect.Option = (({ value, className, children }) => {
-    
+
     const context = useContext(Context);
-    
+
     const onClick = () => {
         const i = context.value.indexOf(value);
         if (i < 0) {
@@ -62,7 +62,7 @@ CheckSelect.Option = (({ value, className, children }) => {
             context.onChange([...context.value.slice(0, i), ...context.value.slice(i + 1)]);
         }
     };
-    
+
     return (
         <div onClick={onClick} className={classnames(
             'px-2 py-0',

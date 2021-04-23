@@ -9,7 +9,7 @@ import { ComponentScale } from './ComponentSize';
 // Avatar
 //
 
-export interface Props {
+export interface AvatarProps {
 
     /** Default text used to display inside the avatar. */
     initials: string;
@@ -48,14 +48,14 @@ export const CircleOffset = {
 /**
  * Avatar. Representation of a user in the system.
  */
-export const Avatar: FC<Props> = ({ src, initials, color: backgroundColor, scale: textScale = 'base', className, children }) => {
+export const Avatar: FC<AvatarProps> = ({ src, initials, color: backgroundColor, scale: textScale = 'base', className, children }) => {
 
     const color = tinycolor(backgroundColor).isDark() ? 'white' : 'black';
 
 
     if (src) {
         return (
-            <img src={src} alt={initials} className={classnames('inline-block', CircleScale[textScale], 'rounded-full overflow-hidden')} style={{ verticalAlign: CircleOffset[textScale] }}/>
+            <img src={src} alt={initials} className={classnames('inline-block', CircleScale[textScale], 'rounded-full overflow-hidden')} style={{ verticalAlign: CircleOffset[textScale] }} />
         );
     } else {
         return (

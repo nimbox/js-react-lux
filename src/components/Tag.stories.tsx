@@ -30,7 +30,7 @@ export const Parameterized = ({ scale, color, children, ...props }: TagProps & {
     );
 }
 
-Parameterized.args = { children: 'Etiqueta', scale: 'base', color: '#daedef'};
+Parameterized.args = { scale: 'base', color: '#daedef', children: 'Etiqueta' };
 
 export const TagExtraSmall = ({ scale, ...props }: TagProps) => ( <div><Tag scale="xs">Etiqueta</Tag> <Tag scale="xs" onDelete={() => true}>Etiqueta</Tag></div>);
 

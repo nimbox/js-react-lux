@@ -7,14 +7,14 @@ import AngleDownIcon from '../icons/AngleDownIcon';
 // Select
 // 
 
-interface Props {
+interface CustomSelectProps {
     options: any[],
     key?: (option: any) => ReactElement,
     value?: (option: any) => ReactElement,
     onChange?: (option: any) => void
 }
 
-export const CustomSelect: FC<Props> = ({ options, key = (option) => option, value = (option) => option, onChange = (option) => null, children }) => {
+export const CustomSelect: FC<CustomSelectProps> = ({ options, key = (option) => option, value = (option) => option, onChange = (option) => null, children }) => {
 
     const [show, setShow] = useState(false);
     const [valueRef, popperRef] = useOutsideClick(() => setShow(false));

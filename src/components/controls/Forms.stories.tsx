@@ -1,6 +1,6 @@
 import { Button } from '../Buttons';
 import { CheckBox } from './CheckBox';
-import { Control, Props } from './Control';
+import { Control, ControlProps } from './Control';
 import { Input } from './Input';
 import { Radio } from './Radio';
 import { Select } from './Select';
@@ -14,14 +14,14 @@ const definition = {
     component: Input,
     argTypes: {
         scale: { control: { type: 'select', options: ['xs', 'sm', 'base', 'lg'] } },
-        error: { control: { type: 'boolean'} }
+        error: { control: { type: 'boolean' } }
     }
 };
 export default definition;
 
 //  parameterized
 
-export const Parameterized = ({ scale, error, ...props }: Props & { options: string[] }) => {
+export const Parameterized = ({ scale, error, ...props }: ControlProps & { options: string[] }) => {
 
     return (
         <div className="mt-8 max-w-full">
