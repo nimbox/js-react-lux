@@ -16,50 +16,61 @@ const definition = {
 };
 export default definition;
 
-const data = [
-    { "key": "key1", "value": "kalzuro" },
-    { "key": "key2", "value": "jmeza" },
-    { "key": "key3", "value": "rmarimom" },
-    { "key": "key4", "value": "jcastellanos" },
-    { "key": "key5", "value": "svegas" },
-    { "key": "key6", "value": "etorres" },
-    { "key": "key7", "value": "phernandez" },
-    { "key": "key8", "value": "llara" },
-    { "key": "key9", "value": "kalvarez" },
-    { "key": "key0", "value": "etiqueta1wfewfwefwfwefnkwenfkwnefkwnfkwe" },
-    { "key": "key11", "value": "etiqueta2" },
-    { "key": "key22", "value": "etiqueta3" }
+const tags = [
+    { id: "id1", name: "kalzuro" },
+    { id: "id2", name: "jmeza" },
+    { id: "id3", name: "rmarimom" },
+    { id: "id4", name: "jcastellanos" },
+    { id: "id5", name: "svegas" },
+    { id: "id6", name: "etorres" },
+    { id: "id7", name: "phernandez" },
+    { id: "id8", name: "llara" },
+    { id: "id9", name: "kalvarez" },
+    { id: "id0", name: "etiqueta1wfewfwefwfwefnkwenfkwnefkwnfkwe" },
+    { id: "id11", name: "etiqueta2" },
+    { id: "id22", name: "etiqueta3" }
 ];
+
+const data =
+    [{ id: "id0", name: "etiqueta1wfewfwefwfwefnkwenfkwnefkwnfkwe" },
+    { id: "id11", name: "etiqueta2" },
+    { id: "id22", name: "etiqueta3" }];
+
+// const values = 
+
 
 // parameterized
 
-export const Parameterized = ({ scale, tags, ...props }: TagPickerProps) => {
-    const [tagsC, onChange] = React.useState(tags);
+export const Parameterized = ({ scale, values, ...props }: TagPickerProps) => {
+
+    const [tagsC, onChange] = React.useState(data);
+
+    const render = (t: any, onDelete?: (value: any) => void | undefined) => (
+        <Tag scale={scale} color={t.color} className={"mr-1"} onDelete={onDelete} >{t.name}</Tag>
+    )
 
     return (
-        <div className="w-1/2">
-            <TagPicker scale={scale} tags={tagsC}
-                onDelete={(key) => { onChange(_.remove(tagsC, function (tag) { return tag.key !== key; })); }}
-                onSearch={((searchTerm) => {
-                    if (searchTerm != "") {
-                        const results = data.filter(tag =>
-                            tag.value.toLowerCase().includes(searchTerm.toLowerCase())
-                        );
-                        return results;
-                    }
-                    return [];
-                })}
-                onSelect={(key) => onChange(_.concat(tagsC, (_.find(data, function (tag) { return tag.key == key; }))))}
-                onCreate={(newTag) => onChange(_.concat(tagsC, { "key": newTag, "value": newTag }))}
+        <div className="">
+            <span>Escribo algo antes</span>
+            <TagPicker scale={scale} values={tagsC} render={render}
+                onDelete={(id) => { onChange(_.remove(tagsC, function (tag) { return tag.id !== id; })); }}
+            // onSearch={((searchTerm) => {
+            //     if (searchTerm != "") {
+            //         const results = data.filter(tag =>
+            //             tag.value.toLowerCase().includes(searchTerm.toLowerCase())
+            //         );
+            //         return results;
+            //     }
+            //     return [];
+            // })}
+            // onSelect={(id) => onChange(_.concat(tagsC, (_.find(data, function (tag) { return tag.id == id; }))))}
+            // onCreate={(newTag) => onChange(_.concat(tagsC, { id: newTag, "value": newTag }))}
             >
-                {tagsC.map((tag) => <Tag value={tag.key}>{tag.value}</Tag>)}
             </TagPicker>
         </div>
     );
 }
 
 Parameterized.args = {
-    scale: 'base', tags: [{ "key": "key0", "value": "etiqueta1wfewfwefwfwefnkwenfkwnefkwnfkwe" },
-    { "key": "key11", "value": "etiqueta2" },
-    { "key": "key22", "value": "etiqueta3" }], className: 'text-secondary-500'
+    scale: 'base', className: 'text-secondary-500'
 };

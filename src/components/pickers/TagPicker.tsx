@@ -10,15 +10,17 @@ import { Tag } from '../Tag';
 
 export interface TagPickerProps {
     scale: ComponentScale;
-    values: { key: String | number, value: String }[];
-    className?: string;
+    values: any[];
+    render: (t: any, onDelete?: (value: any) => void) => JSX.Element;
     onDelete?: (value: any) => void;
     onSearch: (value: String) => { key: String | number, value: String }[];
     onSelect: (value: any) => void;
     onCreate: (value: any) => void;
+    className?: string;
 }
 
-export const TagPicker: FC<TagPickerProps> = (({ scale = 'base', tags, onDelete, onSearch, onSelect, onCreate, className, children }) => {
+export const TagPicker: FC<TagPickerProps> = (({ scale = 'base', values, render, onDelete, onSearch, onSelect, onCreate, className }) => {
+
     const [isVisible, onOutsideClick] = useState(false);
     const [target, popper] = useOutsideClick(() => onOutsideClick(!isVisible));
     const initial: { key: String | number, value: String }[] = [];
@@ -31,23 +33,15 @@ export const TagPicker: FC<TagPickerProps> = (({ scale = 'base', tags, onDelete,
             setInputTag(e.target.value)
         }
     }
-    const handleDelete = (value: string | number) => {
-        if (onDelete) onDelete(value);
-    }
 
-    const childrenWithProps = React.Children.map(children, child => {
-        // checking isValidElement is the safe way and avoids a typescript error too
-        if (React.isValidElement(child)) {
-            return React.cloneElement(child, { scale: 'base', className: "m-1", onDelete: handleDelete });
-        }
-        return child;
-    });
+    const handleDelete = (id: string | number) => {
+        if (onDelete) onDelete(id);
+    }
 
     return (
         <div className="relative inline-block max-w-full">
             <div ref={target} className={classnames('relative p-1 pr-8 border border-control-border rounded cursor-pointer', className)} >
-                {childrenWithProps}
-                {/* {tags.map((tag) => <Tag scale={scale} className="m-1" onDelete={isVisible && (() => {if (onDelete) onDelete(tag.key); })} >{tag.value}</Tag>)} */}
+                {values.map((t) => render(t, (isVisible ? (t) => handleDelete(t.id) : undefined)))}
                 <div className="absolute top-1/2 right-1 ">
                     < AngleDownIcon className={classnames("stroke-current stroke-2", {
                         'h-3 w-3 -mt-1.5': scale === 'xs',
