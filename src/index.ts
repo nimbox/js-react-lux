@@ -10,6 +10,7 @@ export * from './components/CustomSelect';
 export * from './components/pickers/TimePicker';
 export * from './components/Tabs';
 
+export * from './components/controls/Control';
 export * from './components/controls/Input';
 export * from './components/controls/CheckBox';
 export * from './components/controls/Radio';

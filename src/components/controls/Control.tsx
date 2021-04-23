@@ -1,12 +1,13 @@
 import classnames from 'classnames';
-import React, { createContext, FC, useContext } from 'react';
+import React, { createContext, CSSProperties, FC, useContext } from 'react';
 import { ComponentScale, scales as componentScales, scalesSmall as componentScalesSmall } from '../ComponentSize';
 
 
 export interface ControlProps {
-    scale: ComponentScale;
+    scale?: ComponentScale;
     error?: boolean,
     className?: string;
+    style?: CSSProperties;
 }
 
 export interface ControlLabelProps {
@@ -23,9 +24,9 @@ export interface ControlComponent extends FC<ControlProps> {
     Error: FC<{ className?: string }>;
 }
 
-export const Control: ControlComponent = ({ scale = 'base', error = false, className, children }) => (
+export const Control: ControlComponent = ({ scale = 'base', error = false, className, style, children }) => (
     <Context.Provider value={{ error, scale }}>
-        <div className={classnames('flex flex-col w-full', className)}>
+        <div className={classnames('flex flex-col w-full', className)} style={style}>
             {children}
         </div>
     </Context.Provider>
@@ -36,11 +37,10 @@ Control.Label = (({ badge, className, children }) => {
     const context = useContext(Context);
 
     return (
-        <label className={classnames(
+        <label className={classnames(className,
             'block',
             context.error ? 'text-danger-500' : 'text-control-border',
-            componentScales[context.scale],
-            className)}>
+            componentScales[context.scale || 'base'])}>
             <div className="flex flex-row justify-between align-baseline">
                 <span className="uppercase tracking-tighter">{children}</span>
                 {badge && <span>{badge}</span>}
@@ -57,7 +57,7 @@ Control.Message = (({ className, children }) => {
     return (
         <div className={classnames(
             context.error ? 'text-danger-500' : 'text-control-border',
-            componentScalesSmall[context.scale],
+            componentScalesSmall[context.scale || 'base'],
             className)}>
             {children}
         </div>
@@ -72,7 +72,7 @@ Control.Error = (({ className, children }) => {
     return (
         <div className={classnames(
             'text-danger-500',
-            componentScalesSmall[context.scale],
+            componentScalesSmall[context.scale || 'base'],
             className)}>
             {children}
         </div>

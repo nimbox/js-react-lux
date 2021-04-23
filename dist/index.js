@@ -650,24 +650,24 @@ Tabs.Option = TabsOption;
 
 var Context$1 = createContext({ scale: 'base', error: false });
 var Control = function (_a) {
-    var _b = _a.scale, scale = _b === void 0 ? 'base' : _b, _c = _a.error, error = _c === void 0 ? false : _c, className = _a.className, children = _a.children;
-    return (jsx(Context$1.Provider, __assign({ value: { error: error, scale: scale } }, { children: jsx("div", __assign({ className: classnames('flex flex-col w-full', className) }, { children: children }), void 0) }), void 0));
+    var _b = _a.scale, scale = _b === void 0 ? 'base' : _b, _c = _a.error, error = _c === void 0 ? false : _c, className = _a.className, style = _a.style, children = _a.children;
+    return (jsx(Context$1.Provider, __assign({ value: { error: error, scale: scale } }, { children: jsx("div", __assign({ className: classnames('flex flex-col w-full', className), style: style }, { children: children }), void 0) }), void 0));
 };
 Control.Label = (function (_a) {
     var badge = _a.badge, className = _a.className, children = _a.children;
     var context = useContext(Context$1);
-    return (jsx("label", __assign({ className: classnames('block', context.error ? 'text-danger-500' : 'text-control-border', scales[context.scale], className) }, { children: jsxs("div", __assign({ className: "flex flex-row justify-between align-baseline" }, { children: [jsx("span", __assign({ className: "uppercase tracking-tighter" }, { children: children }), void 0),
+    return (jsx("label", __assign({ className: classnames(className, 'block', context.error ? 'text-danger-500' : 'text-control-border', scales[context.scale || 'base']) }, { children: jsxs("div", __assign({ className: "flex flex-row justify-between align-baseline" }, { children: [jsx("span", __assign({ className: "uppercase tracking-tighter" }, { children: children }), void 0),
                 badge && jsx("span", { children: badge }, void 0)] }), void 0) }), void 0));
 });
 Control.Message = (function (_a) {
     var className = _a.className, children = _a.children;
     var context = useContext(Context$1);
-    return (jsx("div", __assign({ className: classnames(context.error ? 'text-danger-500' : 'text-control-border', scalesSmall[context.scale], className) }, { children: children }), void 0));
+    return (jsx("div", __assign({ className: classnames(context.error ? 'text-danger-500' : 'text-control-border', scalesSmall[context.scale || 'base'], className) }, { children: children }), void 0));
 });
 Control.Error = (function (_a) {
     var className = _a.className, children = _a.children;
     var context = useContext(Context$1);
-    return (jsx("div", __assign({ className: classnames('text-danger-500', scalesSmall[context.scale], className) }, { children: children }), void 0));
+    return (jsx("div", __assign({ className: classnames('text-danger-500', scalesSmall[context.scale || 'base'], className) }, { children: children }), void 0));
 });
 Control.Label.displayName = 'Control.Label';
 Control.Message.displayName = 'Control.Help';
@@ -684,14 +684,14 @@ var Input = React.forwardRef(function (_a, ref) {
 var CheckBox = React.forwardRef(function (_a, ref) {
     var scale = _a.scale, className = _a.className, children = _a.children, props = __rest(_a, ["scale", "className", "children"]);
     var context = useContext(Context$1);
-    return (jsxs("div", __assign({ className: "flex flex-row items-center" }, { children: [jsx("input", __assign({ type: "checkbox", ref: ref }, props, { className: classnames(scalesSquare[scale || context.scale || 'base'], 'rounded border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-offset-0 focus:ring-primary-500 focus:ring-opacity-50', className) }), void 0),
+    return (jsxs("div", __assign({ className: "flex flex-row items-center" }, { children: [jsx("input", __assign({ type: "checkbox", ref: ref }, props, { className: classnames(className, scalesSquare[scale || context.scale || 'base'], 'rounded border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-offset-0 focus:ring-primary-500 focus:ring-opacity-50') }), void 0),
             jsx("span", __assign({ className: classnames('ml-2', scales[scale || context.scale || 'base'], className) }, { children: children }), void 0)] }), void 0));
 });
 
 var Radio = React.forwardRef(function (_a, ref) {
     var scale = _a.scale; _a.error; var className = _a.className, children = _a.children, props = __rest(_a, ["scale", "error", "className", "children"]);
     var context = useContext(Context$1);
-    return (jsxs("div", __assign({ className: "flex flex-row items-center" }, { children: [jsx("input", __assign({ type: "radio", ref: ref }, props, { className: classnames(scalesSquare[scale || context.scale || 'base'], 'border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-offset-0 focus:ring-primary-500 focus:ring-opacity-50', className) }), void 0),
+    return (jsxs("div", __assign({ className: "flex flex-row items-center" }, { children: [jsx("input", __assign({ type: "radio", ref: ref }, props, { className: classnames(className, scalesSquare[scale || context.scale || 'base'], 'border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-offset-0 focus:ring-primary-500 focus:ring-opacity-50') }), void 0),
             jsx("span", __assign({ className: classnames('ml-2', scales[scale || context.scale || 'base'], className) }, { children: children }), void 0)] }), void 0));
 });
 
@@ -787,5 +787,5 @@ Panel.Item = function (_a) {
     return (jsx("div", __assign({ className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, { children: children }), void 0));
 };
 
-export { Button, Card, CheckBox, CustomSelect, DatePicker, Delay, Header, Helium, index as Icons, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, Select, Tabs, TimePicker, Toggle, ViewportProvider, useOutsideClick, useViewport };
+export { Button, Card, CheckBox, Context$1 as Context, Control, CustomSelect, DatePicker, Delay, Header, Helium, index as Icons, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, Select, Tabs, TimePicker, Toggle, ViewportProvider, useOutsideClick, useViewport };
 //# sourceMappingURL=index.js.map

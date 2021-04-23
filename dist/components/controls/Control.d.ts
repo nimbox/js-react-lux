@@ -1,9 +1,10 @@
-import React, { FC } from 'react';
+import React, { CSSProperties, FC } from 'react';
 import { ComponentScale } from '../ComponentSize';
 export interface ControlProps {
-    scale: ComponentScale;
+    scale?: ComponentScale;
     error?: boolean;
     className?: string;
+    style?: CSSProperties;
 }
 export interface ControlLabelProps {
     badge?: string | JSX.Element;

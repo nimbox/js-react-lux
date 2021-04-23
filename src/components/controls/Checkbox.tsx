@@ -15,11 +15,10 @@ export const CheckBox = React.forwardRef<HTMLInputElement, CheckBoxProps>(({ sca
 
     return (
         <div className="flex flex-row items-center">
-            <input type="checkbox" ref={ref} {...props} className={classnames(
+            <input type="checkbox" ref={ref} {...props} className={classnames(className,
                 scalesSquare[scale || context.scale || 'base'],
                 'rounded border border-control-border checked:border-control-border text-primary-500',
-                'focus:border-primary-500 focus:ring focus:ring-offset-0 focus:ring-primary-500 focus:ring-opacity-50',
-                className)}
+                'focus:border-primary-500 focus:ring focus:ring-offset-0 focus:ring-primary-500 focus:ring-opacity-50')}
             />
             <span className={classnames('ml-2', scales[scale || context.scale || 'base'], className)}>{children}</span>
         </div>
