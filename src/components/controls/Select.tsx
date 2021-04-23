@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import React, { FC, useContext } from 'react';
-import { ComponentScale, paddings } from '../ComponentSize';
+import { ComponentScale, controlScale } from '../ComponentScale';
 import { Context } from './Control';
 
 
@@ -19,7 +19,7 @@ export const Select = React.forwardRef(
 
         return (
             <select {...props} ref={ref} className={classnames(
-                paddings[scale || context.scale || 'base'],
+                controlScale[scale || context.scale || 'base'],
                 'block w-full rounded border border-control-border',
                 'focus:border-primary-500 focus:ring focus:ring-primary-500',
                 'focus:ring-opacity-50 focus:outline-none',

@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import React, { createContext, CSSProperties, FC, useContext } from 'react';
-import { ComponentScale, scales as componentScales, scalesSmall as componentScalesSmall } from '../ComponentSize';
+import { ComponentScale, controlSmallText, controlText } from '../ComponentScale';
 
 
 export interface ControlProps {
@@ -40,7 +40,7 @@ Control.Label = (({ badge, className, children }) => {
         <label className={classnames(className,
             'block',
             context.error ? 'text-danger-500' : 'text-control-border',
-            componentScales[context.scale || 'base'])}>
+            controlText[context.scale || 'base'])}>
             <div className="flex flex-row justify-between align-baseline">
                 <span className="uppercase tracking-tighter">{children}</span>
                 {badge && <span>{badge}</span>}
@@ -57,7 +57,7 @@ Control.Message = (({ className, children }) => {
     return (
         <div className={classnames(
             context.error ? 'text-danger-500' : 'text-control-border',
-            componentScalesSmall[context.scale || 'base'],
+            controlSmallText[context.scale || 'base'],
             className)}>
             {children}
         </div>
@@ -72,7 +72,7 @@ Control.Error = (({ className, children }) => {
     return (
         <div className={classnames(
             'text-danger-500',
-            componentScalesSmall[context.scale || 'base'],
+            controlSmallText[context.scale || 'base'],
             className)}>
             {children}
         </div>

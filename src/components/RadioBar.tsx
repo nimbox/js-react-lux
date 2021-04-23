@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import React, { createContext, FC, useContext } from 'react';
-import { ComponentScale, paddings } from './ComponentSize';
+import { ComponentScale, controlScale } from './ComponentScale';
 
 
 
@@ -41,7 +41,7 @@ RadioBar.Option = (({ value, className, children }) => {
     return (
         <div onClick={onClick} className={classnames(
             'inline-block',
-            paddings[context.scale],
+            controlScale[context.scale],
             'border-control-border border-r last:border-r-0',
             { 'text-white bg-primary-500': context.value === value },
             'hover:text-white hover:bg-primary-600',

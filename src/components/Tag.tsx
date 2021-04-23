@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import React, { FC, useContext } from 'react';
 import tinycolor from 'tinycolor2';
 import CrossIcon from '../icons/CrossIcon';
-import { ComponentScale, scalesSquare, scales } from './ComponentSize';
+import { ComponentScale, controlSize, controlText } from './ComponentScale';
 import { Context } from './controls/Control';
 
 
@@ -27,12 +27,12 @@ export const Tag: FC<TagProps> = (({ scale, color: backgroundColor, onClick, onD
             {show &&
                 <span className={classnames(
                     'self-center rounded-full flex flex-shrink-0 items-center justify-center ',
-                    scalesSquare[scale || context.scale || 'base'])}>
+                    controlSize[scale || context.scale || 'base'])}>
                     <CrossIcon onClick={onDelete} className={classnames(scale === 'xs' ? 'h-3 w-3' : 'h-4 w-4', 'stroke-current stroke-2 ')} />
                 </span>}
             <span className={classnames(
                 'self-auto truncate',
-                scales[scale || context.scale || 'base'],
+                controlText[scale || context.scale || 'base'],
                 !show ? {
                     'px-2': scale === 'xs',
                     'px-2.5': scale === 'sm',

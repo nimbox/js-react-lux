@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { Story } from '@storybook/react';
 import React, { useState } from 'react';
-import { paddings } from './ComponentSize';
+import { controlScale } from './ComponentScale';
 import { RadioBar, RadioBarProps } from './RadioBar';
 
 
@@ -11,7 +11,7 @@ export default {
     title: 'Component/RadioBar',
     component: RadioBar,
     argTypes: {
-        scale: { control: { type: 'select', options: Object.keys(paddings) } },
+        scale: { control: { type: 'select', options: Object.keys(controlScale) } },
         value: { control: { type: 'array' } },
     }
 };

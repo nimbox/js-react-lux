@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import React, { FC, useContext } from 'react';
-import { ComponentScale, paddings } from '../ComponentSize';
+import { ComponentScale, controlScale } from '../ComponentScale';
 import { Context } from './Control';
 
 
@@ -15,7 +15,7 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(({ 
 
     return (
         <textarea {...props} ref={ref} className={classnames(
-            paddings[scale || context.scale || 'base'],
+            controlScale[scale || context.scale || 'base'],
             'block form-input w-full rounded border border-control-border',
             error || context.error ?
                 'border-danger-500 focus:border-danger-500 focus:ring focus:ring-danger-500' :

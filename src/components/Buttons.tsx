@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AngleRightIcon } from '../icons';
-import { ComponentScale, paddings } from './ComponentSize';
+import { ComponentScale, controlScale } from './ComponentScale';
 
 
 export interface ButtonProps {
@@ -16,7 +16,7 @@ export const Button: FC<React.ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
 
         return link ?
             (<button {...props} className={classnames(
-                paddings[scale],
+                controlScale[scale],
                 {
                     'text-primary-500 hover:text-primary-700': !secondary,
                     'text-gray-500 hover:text-gray-700': secondary
@@ -26,7 +26,7 @@ export const Button: FC<React.ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
             </button >)
             :
             (<button {...props} className={classnames(
-                paddings[scale],
+                controlScale[scale],
                 {
                     'text-white font-bold bg-primary-500 hover:bg-primary-600 border border-control-border': !secondary,
                     'text-primary-500 hover:text-white font-bold bg-transparent hover:bg-primary-600 border border-control-border': secondary
