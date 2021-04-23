@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import React, { FC, useContext } from 'react';
-import { ComponentScale, controlScale, controlSize } from '../ComponentScale';
+import { ComponentScale, controlSize, controlText } from '../ComponentScale';
 import { Context } from './Control';
 
 
@@ -23,7 +23,7 @@ export const CheckBox: FC<React.DetailedHTMLProps<React.InputHTMLAttributes<HTML
                     'focus:border-primary-500 focus:ring focus:ring-offset-0 focus:ring-primary-500 focus:ring-opacity-50',
                     className)}
                 />
-                <span className={classnames('ml-2', controlScale[scale || context.scale || 'base'], className)}>{children}</span>
+                <span className={classnames('ml-2', controlText[scale || context.scale || 'base'], className)}>{children}</span>
             </div>
             )
             : 
