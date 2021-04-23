@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React, { createContext, FC, useContext, useState } from 'react';
 import { useOutsideClick } from '../hooks/useOutsideClick';
-import { ComponentScale } from './ComponentSize';
+import { ComponentScale } from './ComponentScale';
 
 
 export interface CheckSelectProps {

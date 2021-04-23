@@ -1,7 +1,7 @@
 
 import classnames from 'classnames';
 import React, { FC } from 'react';
-import { ComponentScale } from './ComponentSize';
+import { ComponentScale } from './ComponentScale';
 
 
 export interface LoadingProps {

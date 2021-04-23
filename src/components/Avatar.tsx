@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React, { FC } from 'react';
 import tinycolor from 'tinycolor2';
-import { ComponentScale } from './ComponentSize';
+import { ComponentScale } from './ComponentScale';
 
 
 

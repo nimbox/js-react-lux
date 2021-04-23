@@ -4,7 +4,7 @@ import { useOutsideClick } from '../../hooks/useOutsideClick';
 import AngleDownIcon from '../../icons/AngleDownIcon';
 import SearchIcon from '../../icons/SearchIcon';
 import { Button } from '../Buttons';
-import { ComponentScale } from '../ComponentSize';
+import { ComponentScale } from '../ComponentScale';
 import { Tag } from '../Tag';
 
 
