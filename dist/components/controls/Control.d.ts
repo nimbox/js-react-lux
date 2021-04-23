@@ -1,17 +1,17 @@
 import React, { FC } from 'react';
 import { ComponentScale } from '../ComponentSize';
-export interface Props {
+export interface ControlProps {
     scale: ComponentScale;
     error?: boolean;
     className?: string;
 }
-export interface LabelProps {
-    badge?: any;
+export interface ControlLabelProps {
+    badge?: string | JSX.Element;
     className?: string;
 }
-export declare const Context: React.Context<Pick<Props, "scale" | "error">>;
-export interface ControlComponent extends FC<Props> {
-    Label: FC<LabelProps>;
+export declare const Context: React.Context<Pick<ControlProps, "scale" | "error">>;
+export interface ControlComponent extends FC<ControlProps> {
+    Label: FC<ControlLabelProps>;
     Message: FC<{
         className?: string;
     }>;

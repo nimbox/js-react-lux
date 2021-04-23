@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-interface Props {
+interface TimePickerProps {
     /** Name used for the input element and returned in the change event. */
     name?: string;
     /** String representation of the time. */
@@ -12,5 +12,5 @@ interface Props {
 /**
  * DatePicker. Select a date with one click.
  */
-export declare const TimePicker: FC<Props>;
+export declare const TimePicker: FC<TimePickerProps>;
 export {};

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-interface Props {
+interface DatePickerProps {
     /** Name used for the input element and returned in the change event. */
     name?: string;
     /** String representation of the date. */
@@ -14,5 +14,5 @@ interface Props {
 /**
  * DatePicker. Select a date with one click.
  */
-export declare const DatePicker: FC<Props>;
+export declare const DatePicker: FC<DatePickerProps>;
 export {};

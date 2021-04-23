@@ -1,6 +1,6 @@
 import { FC } from 'react';
-interface Props {
+interface PostitProps {
     className?: string;
 }
-export declare const Postit: FC<Props>;
+export declare const Postit: FC<PostitProps>;
 export {};

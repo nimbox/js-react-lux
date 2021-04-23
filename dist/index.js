@@ -681,19 +681,19 @@ var Input = React.forwardRef(function (_a, ref) {
             'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none', className) }), void 0));
 });
 
-var CheckBox = function (_a) {
+var CheckBox = React.forwardRef(function (_a, ref) {
     var scale = _a.scale, className = _a.className, children = _a.children, props = __rest(_a, ["scale", "className", "children"]);
     var context = useContext(Context$1);
-    return (jsxs("div", __assign({ className: "flex flex-row items-center" }, { children: [jsx("input", __assign({ type: "checkbox" }, props, { className: classnames(scalesSquare[scale || context.scale || 'base'], 'rounded border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-offset-0 focus:ring-primary-500 focus:ring-opacity-50', className) }), void 0),
+    return (jsxs("div", __assign({ className: "flex flex-row items-center" }, { children: [jsx("input", __assign({ type: "checkbox", ref: ref }, props, { className: classnames(scalesSquare[scale || context.scale || 'base'], 'rounded border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-offset-0 focus:ring-primary-500 focus:ring-opacity-50', className) }), void 0),
             jsx("span", __assign({ className: classnames('ml-2', scales[scale || context.scale || 'base'], className) }, { children: children }), void 0)] }), void 0));
-};
+});
 
-var Radio = function (_a) {
-    _a.error; var scale = _a.scale, className = _a.className, children = _a.children, props = __rest(_a, ["error", "scale", "className", "children"]);
+var Radio = React.forwardRef(function (_a, ref) {
+    var scale = _a.scale; _a.error; var className = _a.className, children = _a.children, props = __rest(_a, ["scale", "error", "className", "children"]);
     var context = useContext(Context$1);
-    return (jsxs("div", __assign({ className: "flex flex-row items-center" }, { children: [jsx("input", __assign({ type: "radio" }, props, { className: classnames(scalesSquare[scale || context.scale || 'base'], 'border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-offset-0 focus:ring-primary-500 focus:ring-opacity-50', className) }), void 0),
+    return (jsxs("div", __assign({ className: "flex flex-row items-center" }, { children: [jsx("input", __assign({ type: "radio", ref: ref }, props, { className: classnames(scalesSquare[scale || context.scale || 'base'], 'border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-offset-0 focus:ring-primary-500 focus:ring-opacity-50', className) }), void 0),
             jsx("span", __assign({ className: classnames('ml-2', scales[scale || context.scale || 'base'], className) }, { children: children }), void 0)] }), void 0));
-};
+});
 
 var Select = React.forwardRef(function (_a, ref) {
     var scale = _a.scale, className = _a.className, children = _a.children, props = __rest(_a, ["scale", "className", "children"]);
