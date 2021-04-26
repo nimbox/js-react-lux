@@ -24,7 +24,7 @@ export interface ControlComponent extends FC<ControlProps> {
     Error: FC<{ className?: string }>;
 }
 
-export const Control: ControlComponent = ({ scale = 'base', error = false, className, style, children }) => (
+export const Control: ControlComponent = ({ scale, error = false, className, style, children }) => (
     <Context.Provider value={{ error, scale }}>
         <div className={classnames('flex flex-col w-full', className)} style={style}>
             {children}

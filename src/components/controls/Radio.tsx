@@ -19,7 +19,8 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(({ scale, er
             <input type="radio" ref={ref} {...props} className={classnames(className,
                 controlSize[scale || context.scale || 'base'],
                 'border border-control-border checked:border-control-border text-primary-500',
-                'focus:border-primary-500 focus:ring focus:ring-offset-0 focus:ring-primary-500 focus:ring-opacity-50')}
+                'focus:border-primary-500 focus:ring focus:ring-primary-500',
+                'focus:ring-opacity-50 focus:ring-offset-0')}
             />
             <span className={classnames('ml-2', controlText[scale || context.scale || 'base'], className)}>{children}</span>
         </div>
@@ -29,7 +30,8 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(({ scale, er
         <input type="radio" ref={ref} {...props} className={classnames(className,
             controlSize[scale || context.scale || 'base'],
             'border border-control-border checked:border-control-border text-primary-500',
-            'focus:border-primary-500 focus:ring focus:ring-offset-0 focus:ring-primary-500 focus:ring-opacity-50')}
+            'focus:border-primary-500 focus:ring focus:ring-primary-500',
+            'focus:ring-opacity-50 focus:ring-offset-0')}
         />
         )
 

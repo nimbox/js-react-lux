@@ -27,7 +27,7 @@ export const Parameterized = ({ scale, error, ...props }: ControlProps & { optio
         <div className="mt-8 max-w-full">
             <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <Control scale={scale} error={error} >
+                    <Control error={error} >
                         <Control.Label badge="1/60">Nombre</Control.Label>
                         <Input type="text" />
                     </Control>
