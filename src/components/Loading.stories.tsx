@@ -8,7 +8,7 @@ const definition = {
     title: 'Component/Loading',
     component: Loading,
     argTypes: {
-        scale: { control: { type: 'select', options: ['sm', 'base', 'lg'] } },
+        scale: { control: { type: 'select', options: ['xs', 'sm', 'base', 'lg'] } },
     }
 };
 export default definition;
@@ -16,7 +16,7 @@ export default definition;
 // parameterized
 
 export const Parameterized = (props: LoadingProps) => <Loading {...props} />;
-Parameterized.args = { scale: 'base', className: 'text-secondary-500' };
+Parameterized.args = { scale: 'base', colorClassName: 'text-secondary-500' };
 
 // stories
 

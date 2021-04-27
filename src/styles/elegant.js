@@ -12,8 +12,8 @@ module.exports = {
 
                 transparent: 'transparent',
 
-                black: '#000',
-                white: '#fff',
+                black: '#000000',
+                white: '#ffffff',
 
                 'navigator': defaultTheme.colors.white,
                 'navigator-bg': '#252529',
