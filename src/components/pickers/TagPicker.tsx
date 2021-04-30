@@ -2,70 +2,84 @@ import classnames from 'classnames';
 import React, { FC, useState } from 'react';
 import { useOutsideClick } from '../../hooks/useOutsideClick';
 import AngleDownIcon from '../../icons/AngleDownIcon';
-import SearchIcon from '../../icons/SearchIcon';
 import { Button } from '../Buttons';
-import { ComponentScale } from '../ComponentScale';
-import { Tag } from '../Tag';
+import { ComponentScale, controlIconMarignSize, smallScale } from '../ComponentScale';
+import { Search } from '../controls/IconInput';
 
 
 export interface TagPickerProps {
     scale: ComponentScale;
     values: any[];
-    render: (t: any, onDelete?: (value: any) => void) => JSX.Element;
-    onDelete?: (value: any) => void;
-    onSearch: (value: String) => { key: String | number, value: String }[];
-    onSelect: (value: any) => void;
-    onCreate: (value: any) => void;
+    render: (t: any, onRemove?: (value: any) => void) => JSX.Element;
+    onSearch: (value: string) => Promise<{ t: any }[]> | { t: any }[];
+    onRemove?: (value: any) => boolean | Promise<boolean>;
+    onAdd: (value: any) => boolean | Promise<boolean>;
+    onCreate: (value: any) => boolean | Promise<boolean>;
     className?: string;
 }
 
-export const TagPicker: FC<TagPickerProps> = (({ scale = 'base', values, render, onDelete, onSearch, onSelect, onCreate, className }) => {
+export const TagPicker: FC<TagPickerProps> = (({ scale = 'base', values, render, onRemove, onSearch, onAdd, onCreate, className }) => {
 
     const [isVisible, onOutsideClick] = useState(false);
     const [target, popper] = useOutsideClick(() => onOutsideClick(!isVisible));
-    const initial: { key: String | number, value: String }[] = [];
+    const initial: { t: any }[] = [];
     const [searchResults, setSearchResults] = React.useState(initial);
     const [inputTag, setInputTag] = React.useState("");
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target) {
-            setSearchResults(onSearch(e.target.value));
-            setInputTag(e.target.value)
+            setInputTag(e.target.value);
+            Promise.resolve(onSearch(e.target.value))
+                .then(results => setSearchResults(results))
+                .catch(error => console.log(error));
         }
     }
 
-    const handleDelete = (id: string | number) => {
-        if (onDelete) onDelete(id);
+    const handleRemove = (id: string | number) => {
+        if (onRemove) {
+            Promise.resolve(onRemove(id))
+                .then(() => onOutsideClick(!isVisible));
+        }
     }
+
+    const handleAdd = (id: string | number) => {
+        Promise.resolve(onAdd(id))
+            .then(() => onOutsideClick(!isVisible));
+    }
+
+    const handleCreate = (id: string | number) => {
+        Promise.resolve(onCreate(id))
+            .then(() => onOutsideClick(!isVisible));
+    }
+
 
     return (
         <div className="relative inline-block max-w-full">
-            <div ref={target} className={classnames('relative p-1 pr-8 border border-control-border rounded cursor-pointer', className)} >
-                {values.map((t) => render(t, (isVisible ? (t) => handleDelete(t.id) : undefined)))}
+            <div ref={target} className={classnames(
+                'relative border border-control-border rounded',
+                'cursor-pointer pb-1 pl-1 pr-8 space-x-1 space-y-1', className)} >
+                {values.map((t) => render(t, (isVisible ? () => handleRemove(t.id) : undefined)))}
                 <div className="absolute top-1/2 right-1 ">
-                    < AngleDownIcon className={classnames("stroke-current stroke-2", {
-                        'h-3 w-3 -mt-1.5': scale === 'xs',
-                        'h-4 w-4 -mt-2': scale === 'sm',
-                        'h-5 w-5 -mt-2.5': scale === 'base',
-                        'h-6 w-6 -mt-3': scale === 'lg'
-                    })} onClick={(() => { onOutsideClick(!isVisible) })} />
+                    < AngleDownIcon className={classnames(
+                        controlIconMarignSize[scale],
+                        'stroke-current stroke-2',
+                    )} onClick={(() => onOutsideClick(!isVisible))} />
                 </div>
             </div>
             { isVisible &&
-                <div ref={popper} className={classnames('absolute w-full p-4 mt-2 bg-white border border-primary-700 rounded')}>
-                    <div className="relative">
-                        <SearchIcon className="absolute inline top-1 right-1" />
-                        <input onChange={handleChange} className="w-full border border-primary-700 rounded" />
-                    </div>
+                <div ref={popper} className={classnames(
+                    'absolute border border-control-border rounded',
+                    'bg-white w-full p-4 mt-2 space-y-2')}>
+                    <Search scale={smallScale[scale]} onChange={handleSearch} />
                     {searchResults &&
                         <ul>
-                            {searchResults.map((item: { key: String | number, value: String }) => (
-                                <li onClick={() => onSelect(item.key)}>{item.value}</li>
+                            {searchResults.map((item: any) => (
+                                <li onClick={() => handleAdd(item.id)}>{item.name}</li>
                             ))}
                         </ul>}
-                    <div className="pt-2">
-                        <Button onClick={() => onCreate(inputTag)} link scale="base">Crear etiqueta {inputTag}</Button>
-                    </div>
+                    <Button onClick={() => handleCreate(inputTag)} secondary scale={smallScale[scale]} className="block w-full">
+                        Crear etiqueta {inputTag}
+                    </Button>
                 </div>
             }
         </div>

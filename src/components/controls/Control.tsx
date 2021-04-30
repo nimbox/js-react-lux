@@ -11,7 +11,7 @@ export interface ControlProps {
 }
 
 export interface ControlLabelProps {
-    badge?: string | JSX.Element;
+    badge?: string | React.ComponentType<any>;
     className?: string;
 }
 
@@ -24,7 +24,7 @@ export interface ControlComponent extends FC<ControlProps> {
     Error: FC<{ className?: string }>;
 }
 
-export const Control: ControlComponent = ({ scale, error = false, className, style, children }) => (
+export const Control: ControlComponent = ({ scale = 'base', error = false, className, style, children }) => (
     <Context.Provider value={{ error, scale }}>
         <div className={classnames('flex flex-col w-full', className)} style={style}>
             {children}
@@ -35,7 +35,7 @@ export const Control: ControlComponent = ({ scale, error = false, className, sty
 Control.Label = (({ badge, className, children }) => {
 
     const context = useContext(Context);
-
+    const Badge = badge;
     return (
         <label className={classnames(className,
             'block',
@@ -43,7 +43,15 @@ Control.Label = (({ badge, className, children }) => {
             controlText[context.scale || 'base'])}>
             <div className="flex flex-row justify-between align-baseline">
                 <span className="uppercase tracking-tighter">{children}</span>
-                {badge && <span>{badge}</span>}
+                {badge &&
+                    (typeof badge === 'string' || badge instanceof String)
+                    ?
+                    <span>{badge}</span>
+                    :
+                    Badge ?
+                    <Badge />
+                    : ''
+                }
             </div>
         </label>
     );
@@ -69,14 +77,16 @@ Control.Error = (({ className, children }) => {
 
     const context = useContext(Context);
 
-    return (
+    return children ? 
+    (
         <div className={classnames(
             'text-danger-500',
             controlSmallText[context.scale || 'base'],
             className)}>
             {children}
         </div>
-    );
+    ) 
+    : null;
 
 }) as FC<{ className?: string }>;;
 

@@ -36,36 +36,89 @@ const data =
     { id: "id11", name: "etiqueta2" },
     { id: "id22", name: "etiqueta3" }];
 
-// const values = 
-
-
 // parameterized
 
 export const Parameterized = ({ scale, values, ...props }: TagPickerProps) => {
 
     const [tagsC, onChange] = React.useState(data);
 
-    const render = (t: any, onDelete?: (value: any) => void | undefined) => (
-        <Tag scale={scale} color={t.color} className={"mr-1"} onDelete={onDelete} >{t.name}</Tag>
+    const render = (t: any, onRemove?: (value: any) => void | undefined) => (
+        <Tag scale={scale} color={t.color} onDelete={onRemove} >{t.name}</Tag>
     )
+
+    const deleteTag: (id:string) => boolean | Promise<boolean> = (id: string) => {
+        let promise: Promise<boolean> = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                let results = _.remove(tagsC, function (tag) { return tag.id !== id; });
+                if (results instanceof Array) {
+                    onChange(results);
+                    resolve(true);
+                } else {
+                    reject(false);
+                }
+            }, 1000);
+        });
+        return promise;
+    };
+
+    const searchTag: (q: string) => Promise<{ t: any }[]> | { t: any }[] = (q: string) => {
+        let promise: Promise<{ t: any }[]> = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (q != "") {
+                    let results = tags.filter(tag =>
+                        tag.name.toLowerCase().includes(q.toLowerCase())
+                    );
+                    resolve(results);
+                } else { resolve([]); }
+
+                let error = new Error("Error");
+                reject(error);
+            }, 1000);
+        });
+        return promise;
+    };
+
+    const selectTag: (id:string) => boolean | Promise<boolean> = (id: string) => {
+        let promise: Promise<boolean> = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                let tagsE = (_.find(tags, function (tag) { return tag.id == id; }));
+                let results;
+                if (tagsE) { results =  _.concat(tagsC, tagsE)} else { results=tagsC };
+                if (results instanceof Array) {
+                    onChange(results);
+                    resolve(true);
+                } else {
+                    reject(false);
+                }
+            }, 1000);
+        });
+        return promise;
+    };
+
+    const createTag: (id:string) => boolean | Promise<boolean> =(id: string) => {
+        let promise: Promise<boolean> = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                let results = _.concat(tagsC, { id: id, name: id });
+                if (results instanceof Array) {
+                    onChange(results);
+                    resolve(true);
+                } else {
+                    reject(false);
+                }
+            }, 1000);
+        });
+        return promise;
+    };
+
 
     return (
         <div className="">
             <span>Escribo algo antes</span>
             <TagPicker scale={scale} values={tagsC} render={render}
-                onDelete={(id) => { onChange(_.remove(tagsC, function (tag) { return tag.id !== id; })); }}
-            // onSearch={((searchTerm) => {
-            //     if (searchTerm != "") {
-            //         const results = data.filter(tag =>
-            //             tag.value.toLowerCase().includes(searchTerm.toLowerCase())
-            //         );
-            //         return results;
-            //     }
-            //     return [];
-            // })}
-            // onSelect={(id) => onChange(_.concat(tagsC, (_.find(data, function (tag) { return tag.id == id; }))))}
-            // onCreate={(newTag) => onChange(_.concat(tagsC, { id: newTag, "value": newTag }))}
-            >
+                onRemove={(id) => deleteTag(id)}
+                onSearch={(q) => searchTag(q)}
+                onAdd={(id) => selectTag(id)}
+                onCreate={(id) => createTag(id)}>
             </TagPicker>
         </div>
     );

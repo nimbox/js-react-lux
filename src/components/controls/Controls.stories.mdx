@@ -2,7 +2,7 @@ import { Meta, Preview, Story } from '@storybook/addon-docs/blocks';
 import { useState } from 'react';
 import { Card } from '../Card';
 import { CheckBar } from '../CheckBar';
-import { CheckSelect } from '../CheckSelect';
+import { CustomMultiSelect } from '../CustomMultiSelect';
 import { RadioBar } from '../RadioBar';
 import { Tabs } from '../Tabs';
 
@@ -42,13 +42,13 @@ import { Tabs } from '../Tabs';
                             <RadioBar.Option value={12}>12 months</RadioBar.Option>
                         </RadioBar>
                         <Checkbox className="text-xs">Something</Checkbox>
-                        <CheckSelect value={checkSelect} onChange={setChecboxSelect} label="Months" className="text-xs">
-                            <CheckSelect.Option value={1}>1</CheckSelect.Option>
-                            <CheckSelect.Option value={2}>2</CheckSelect.Option>
-                            <CheckSelect.Option value={3}>3</CheckSelect.Option>
-                            <CheckSelect.Option value={6}>6</CheckSelect.Option>
-                            <CheckSelect.Option value={12}>12 months</CheckSelect.Option>
-                        </CheckSelect>
+                        <CustomMultiSelect value={checkSelect} onChange={setChecboxSelect} label="Months" className="text-xs">
+                            <CustomMultiSelect.Option value={1}>1</CustomMultiSelect.Option>
+                            <CustomMultiSelect.Option value={2}>2</CustomMultiSelect.Option>
+                            <CustomMultiSelect.Option value={3}>3</CustomMultiSelect.Option>
+                            <CustomMultiSelect.Option value={6}>6</CustomMultiSelect.Option>
+                            <CustomMultiSelect.Option value={12}>12 months</CustomMultiSelect.Option>
+                        </CustomMultiSelect>
                     </Card.Header>
                     <Card.Body>
                         A great Body

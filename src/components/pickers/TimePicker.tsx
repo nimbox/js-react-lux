@@ -1,7 +1,10 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import classNames from 'classnames';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOutsideClick } from '../../hooks/useOutsideClick';
 import { AngleDownIcon, AngleUpIcon, CircleIcon } from '../../icons';
+import { ComponentScale, controlScale } from '../ComponentScale';
+import { Context } from '../controls/Control';
 
 
 //
@@ -15,6 +18,9 @@ interface TimePickerProps {
 
     /** String representation of the time. */
     value: string,
+
+
+    scale?: ComponentScale;
 
     /** Change event handler. */
     onChange: React.ChangeEventHandler<HTMLInputElement>,
@@ -35,7 +41,7 @@ const minutes = [15, 30, 45];
 /**
  * DatePicker. Select a date with one click.
  */
-export const TimePicker: FC<TimePickerProps> = ({ name, value, onChange, placeholder }) => {
+export const TimePicker: FC<TimePickerProps> = ({ name, value, scale = "base", onChange, placeholder }) => {
 
     const { t, ready } = useTranslation();
 
@@ -45,6 +51,8 @@ export const TimePicker: FC<TimePickerProps> = ({ name, value, onChange, placeho
     const times = useRef({ watch: 8 });
     const timesRef = useRef<HTMLDivElement>(null);
     useEffect(() => { scroll() });
+
+    const context = useContext(Context);
 
     // handlers
 
@@ -143,7 +151,11 @@ export const TimePicker: FC<TimePickerProps> = ({ name, value, onChange, placeho
                     name={name} value={value} onChange={handleChange}
                     onFocus={handleFocus} onKeyDown={handleKeyDown}
                     placeholder={placeholder}
-                    className="w-full px-2 py-1 border border-content-border rounded"
+                    className={classNames(
+                        controlScale[scale || context.scale || 'base'],
+                        'w-full px-2 py-1 border border-control-border rounded',
+                        'focus:border-primary-500 focus:ring focus:ring-primary-500',
+                        'focus:ring-opacity-50 focus:outline-none')}
                 />
             </div>
 

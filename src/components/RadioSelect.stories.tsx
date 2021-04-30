@@ -17,8 +17,10 @@ export default definition;
 //  parameterized
 
 export const Parameterized = ({ scale, label, value: initial, options, ...props }: RadioSelectProps & { options: string[] }) => {
+    
     const [value, onChange] = useState(+initial);
     label = options[value];
+    
     return (
         <RadioSelect scale={scale} label={label} className='w-48' value={value} onChange={onChange}>
             {options.map((o, i) => <RadioSelect.Option value={i}>{o}</RadioSelect.Option>)}

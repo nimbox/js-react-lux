@@ -113,7 +113,7 @@ module.exports = {
         backgroundColor: ['responsive', 'focus', 'group-hover', 'hover'],
         borderWidth: ['last'],
         margin: ['responsive', 'last'],
-        borderColor: ['hover', 'focus', 'checked']
+        borderColor: ['hover', 'focus', 'checked','focus-within']
     }
 
 };

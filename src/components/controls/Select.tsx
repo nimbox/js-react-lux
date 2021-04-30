@@ -22,7 +22,7 @@ export const Select = React.forwardRef(
                 controlScale[scale || context.scale || 'base'],
                 'block w-full rounded border border-control-border',
                 'focus:border-primary-500 focus:ring focus:ring-primary-500',
-                'focus:ring-opacity-50 focus:outline-none',
+                'focus:ring-opacity-50 focus:outline-none disabled:opacity-50',
                 className)} >
                 {children}
             </select>
