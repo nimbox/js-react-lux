@@ -1,5 +1,12 @@
 export type ComponentScale = 'xs' | 'sm' | 'base' | 'lg';
 
+export const smallScale = {
+    'xs': 'xs',
+    'sm': 'xs',
+    'base': 'sm',
+    'lg': 'base'
+};
+
 export const controlScale = {
     'xs': 'text-xs px-2 py-0.5',
     'sm': 'text-sm px-2.5 py-1',
@@ -26,6 +33,20 @@ export const controlSmallText = {
     'sm': 'text-xs',
     'base': 'text-sm',
     'lg': ''
+};
+
+export const controlIconSize = {
+    'xs': 'h-5 w-5',
+    'sm': 'h-6 w-6',
+    'base': 'h-8 w-8',
+    'lg': 'h-8 w-8'
+};
+
+export const controlIconMarignSize = {
+    'xs': 'h-3 w-3 -mt-2.5',
+    'sm': 'h-4 w-4 -mt-3',
+    'base': 'h-5 w-5 -mt-3.5',
+    'lg': 'h-6 w-6 -mt-4'
 };
 
 export const tagSize = {

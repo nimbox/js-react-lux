@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import React, { FC, useContext } from 'react';
 import tinycolor from 'tinycolor2';
 import CrossIcon from '../icons/CrossIcon';
-import { ComponentScale, controlSize, controlText } from './ComponentScale';
+import { ComponentScale, controlSize, controlText, tagSize } from './ComponentScale';
 import { Context } from './controls/Control';
 
 
@@ -32,7 +32,7 @@ export const Tag: FC<TagProps> = (({ scale, color: backgroundColor, onClick, onD
                 </span>}
             <span className={classnames(
                 'self-auto truncate',
-                controlText[scale || context.scale || 'base'],
+                tagSize[scale || context.scale || 'base'],
                 !show ? {
                     'px-2': scale === 'xs',
                     'px-2.5': scale === 'sm',
