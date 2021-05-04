@@ -1,6 +1,6 @@
 import React, { FC, ReactElement, useRef, useState } from 'react';
-import { useOutsideClick } from '../hooks/useOutsideClick';
-import AngleDownIcon from '../icons/AngleDownIcon';
+import { useOutsideClick } from '../src/hooks/useOutsideClick';
+import AngleDownIcon from '../src/icons/AngleDownIcon';
 
 
 //

@@ -1,10 +1,11 @@
 import classnames from 'classnames';
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { useOutsideClick } from '../../hooks/useOutsideClick';
 import AngleDownIcon from '../../icons/AngleDownIcon';
 import { Button } from '../Buttons';
-import { ComponentScale, controlIconMarignSize, smallScale } from '../ComponentScale';
+import { ComponentScale, controlIconSmallMarginSize, smallScale } from '../ComponentScale';
 import { Search } from '../controls/IconInput';
+import { Context as controlContext } from '../controls/Control';
 
 
 export interface TagPickerProps {
@@ -20,6 +21,7 @@ export interface TagPickerProps {
 
 export const TagPicker: FC<TagPickerProps> = (({ scale = 'base', values, render, onRemove, onSearch, onAdd, onCreate, className }) => {
 
+    const context = useContext(controlContext);
     const [isVisible, onOutsideClick] = useState(false);
     const [target, popper] = useOutsideClick(() => onOutsideClick(!isVisible));
     const initial: { t: any }[] = [];
@@ -56,12 +58,12 @@ export const TagPicker: FC<TagPickerProps> = (({ scale = 'base', values, render,
     return (
         <div className="relative inline-block max-w-full">
             <div ref={target} className={classnames(
-                'relative border border-control-border rounded',
-                'cursor-pointer pb-1 pl-1 pr-8 space-x-1 space-y-1', className)} >
+                'relative border border-control-border rounded space-x-reverse space-x-1',
+                'cursor-pointer pl-1 pb-1 pr-8 ', className)} >
                 {values.map((t) => render(t, (isVisible ? () => handleRemove(t.id) : undefined)))}
-                <div className="absolute top-1/2 right-1 ">
+                <div className="absolute top-1/2 right-1">
                     < AngleDownIcon className={classnames(
-                        controlIconMarignSize[scale],
+                        controlIconSmallMarginSize[scale || context.scale || 'base'],
                         'stroke-current stroke-2',
                     )} onClick={(() => onOutsideClick(!isVisible))} />
                 </div>
