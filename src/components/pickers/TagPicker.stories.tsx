@@ -46,7 +46,7 @@ export const Parameterized = ({ scale, values, ...props }: TagPickerProps) => {
         <Tag scale={scale} color={t.color} onDelete={onRemove} >{t.name}</Tag>
     )
 
-    const deleteTag: (id:string) => boolean | Promise<boolean> = (id: string) => {
+    const deleteTag: (id: string) => boolean | Promise<boolean> = (id: string) => {
         let promise: Promise<boolean> = new Promise((resolve, reject) => {
             setTimeout(() => {
                 let results = _.remove(tagsC, function (tag) { return tag.id !== id; });
@@ -78,12 +78,12 @@ export const Parameterized = ({ scale, values, ...props }: TagPickerProps) => {
         return promise;
     };
 
-    const selectTag: (id:string) => boolean | Promise<boolean> = (id: string) => {
+    const selectTag: (id: string) => boolean | Promise<boolean> = (id: string) => {
         let promise: Promise<boolean> = new Promise((resolve, reject) => {
             setTimeout(() => {
                 let tagsE = (_.find(tags, function (tag) { return tag.id == id; }));
                 let results;
-                if (tagsE) { results =  _.concat(tagsC, tagsE)} else { results=tagsC };
+                if (tagsE) { results = _.concat(tagsC, tagsE) } else { results = tagsC };
                 if (results instanceof Array) {
                     onChange(results);
                     resolve(true);
@@ -95,7 +95,7 @@ export const Parameterized = ({ scale, values, ...props }: TagPickerProps) => {
         return promise;
     };
 
-    const createTag: (id:string) => boolean | Promise<boolean> =(id: string) => {
+    const createTag: (id: string) => boolean | Promise<boolean> = (id: string) => {
         let promise: Promise<boolean> = new Promise((resolve, reject) => {
             setTimeout(() => {
                 let results = _.concat(tagsC, { id: id, name: id });

@@ -48,7 +48,7 @@ export const Parameterized = ({ scale = 'base', error = false, ...props }: Contr
                 </div>
                 <div>
                     <Control scale={scale} error={error}>
-                        <Search disabled placeholder="disabled"/>
+                        <Search disabled placeholder="disabled" />
                     </Control>
                 </div>
                 <div>

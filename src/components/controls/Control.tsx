@@ -49,8 +49,8 @@ Control.Label = (({ badge, className, children }) => {
                     <span>{badge}</span>
                     :
                     Badge ?
-                    <Badge />
-                    : ''
+                        <Badge />
+                        : ''
                 }
             </div>
         </label>
@@ -77,16 +77,16 @@ Control.Error = (({ className, children }) => {
 
     const context = useContext(Context);
 
-    return children ? 
-    (
-        <div className={classnames(
-            'text-danger-500',
-            controlSmallText[context.scale || 'base'],
-            className)}>
-            {children}
-        </div>
-    ) 
-    : null;
+    return children ?
+        (
+            <div className={classnames(
+                'text-danger-500',
+                controlSmallText[context.scale || 'base'],
+                className)}>
+                {children}
+            </div>
+        )
+        : null;
 
 }) as FC<{ className?: string }>;;
 

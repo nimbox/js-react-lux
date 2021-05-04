@@ -38,13 +38,13 @@ export const CustomMultiSelect: CustomMultiSelectComponent = (({ scale = 'base',
         <Context.Provider value={{ scale, value, onChange }}>
             <div className={classnames('relative inline-block', className)}>
                 <div ref={target} className={classnames(
-                    'relative border border-control-border rounded px-2 py-0 pr-8 cursor-pointer truncate',
+                    'relative border border-control-border rounded px-2 py-0 pr-8 truncate cursor-pointer',
                     controlScale[scale])} onClick={(() => onOutsideClick(!isVisible))}>
                     {label(value)}
                     <div className="absolute top-1/2 right-1 ">
                         < AngleDownIcon className={classnames(
-                            'stroke-current stroke-2', 
-                            controlIconSmallMarginSize[scale || context.scale || 'base'])}  />
+                            'stroke-current stroke-2',
+                            controlIconSmallMarginSize[scale || context.scale || 'base'])} />
                     </div>
                 </div>
                 {isVisible &&
