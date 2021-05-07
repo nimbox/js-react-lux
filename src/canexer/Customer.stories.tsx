@@ -70,7 +70,7 @@ export const Customer = () => {
                         <div className="row-span-3 space-y-2">
                             <Control>
                                 <Control.Label>Nota</Control.Label>
-                                <TextArea />
+                                <TextArea rows={8} />
                             </Control>
                             <Button>Enviar</Button>
                         </div>

@@ -1,5 +1,5 @@
 import React, { CSSProperties, FC } from 'react';
-import { ComponentScale } from '../ComponentSize';
+import { ComponentScale } from '../ComponentScale';
 export interface ControlProps {
     scale?: ComponentScale;
     error?: boolean;
@@ -7,7 +7,7 @@ export interface ControlProps {
     style?: CSSProperties;
 }
 export interface ControlLabelProps {
-    badge?: string | JSX.Element;
+    badge?: string | React.ComponentType<any>;
     className?: string;
 }
 export declare const Context: React.Context<Pick<ControlProps, "scale" | "error">>;

@@ -7,6 +7,7 @@ export { default as CircleIcon } from './CircleIcon';
 export { default as CrossIcon } from './CrossIcon';
 export { default as EditIcon } from './EditIcon';
 export { default as HamburgerIcon } from './HamburgerIcon';
+export { default as MessageIcon } from './MessageIcon';
 export { default as NimboxIcon } from './NimboxIcon';
 export { default as RefreshIcon } from './RefreshIcon';
 export { default as SearchIcon } from './SearchIcon';

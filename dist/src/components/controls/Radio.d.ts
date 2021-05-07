@@ -1,5 +1,5 @@
 import React from 'react';
-import { ComponentScale } from '../ComponentSize';
+import { ComponentScale } from '../ComponentScale';
 export interface RadioProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
     scale?: ComponentScale;
     error?: boolean;

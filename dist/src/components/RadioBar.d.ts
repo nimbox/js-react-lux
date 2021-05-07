@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { ComponentScale } from './ComponentSize';
+import { ComponentScale } from './ComponentScale';
 export interface RadioBarProps {
     scale: ComponentScale;
     value: any;

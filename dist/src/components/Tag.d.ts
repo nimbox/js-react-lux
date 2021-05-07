@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { ComponentScale } from './ComponentSize';
+import { ComponentScale } from './ComponentScale';
 export interface TagProps {
-    scale: ComponentScale;
+    scale?: ComponentScale;
     color?: string;
     onClick?: (value: any) => void;
     onDelete?: (value: any) => void;

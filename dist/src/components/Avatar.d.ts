@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { ComponentScale } from './ComponentSize';
-export interface Props {
+import { ComponentScale } from './ComponentScale';
+export interface AvatarProps {
     /** Default text used to display inside the avatar. */
     initials: string;
     /** Default color used to display the avatar. */
@@ -29,4 +29,4 @@ export declare const CircleOffset: {
 /**
  * Avatar. Representation of a user in the system.
  */
-export declare const Avatar: FC<Props>;
+export declare const Avatar: FC<AvatarProps>;

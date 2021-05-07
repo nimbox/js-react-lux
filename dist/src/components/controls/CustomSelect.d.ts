@@ -1,10 +1,12 @@
 import { FC } from 'react';
-import { ComponentScale } from './ComponentSize';
+import { ComponentScale } from '../ComponentScale';
+import { ComponentAlign } from '../ComponentAlign';
 export interface RadioSelectProps {
     scale?: ComponentScale;
     value: any;
-    label: String;
+    label: (t: any) => string | JSX.Element;
     onChange: (value: any) => void;
+    align: ComponentAlign;
     className?: string;
 }
 export interface RadioSelectOptionProps {
@@ -14,5 +16,5 @@ export interface RadioSelectOptionProps {
 interface RadioSelectComponent extends FC<RadioSelectProps> {
     Option: FC<RadioSelectOptionProps>;
 }
-export declare const RadioSelect: RadioSelectComponent;
+export declare const CustomSelect: RadioSelectComponent;
 export {};

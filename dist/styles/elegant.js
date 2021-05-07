@@ -14,8 +14,8 @@ module.exports = {
 
                 transparent: 'transparent',
 
-                black: '#000',
-                white: '#fff',
+                black: '#000000',
+                white: '#ffffff',
 
                 'navigator': defaultTheme.colors.white,
                 'navigator-bg': '#252529',
@@ -115,7 +115,7 @@ module.exports = {
         backgroundColor: ['responsive', 'focus', 'group-hover', 'hover'],
         borderWidth: ['last'],
         margin: ['responsive', 'last'],
-        borderColor: ['hover', 'focus', 'checked']
+        borderColor: ['hover', 'focus', 'checked','focus-within']
     }
 
 };

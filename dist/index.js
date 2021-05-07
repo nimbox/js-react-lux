@@ -78,6 +78,10 @@ function SvgHamburgerIcon(props) {
     return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { className: "hamburger-icon_svg__st0", d: "M24 10H8c-1.1 0-2-.9-2-2v0c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v0c0 1.1-.9 2-2 2zM24 18H8c-1.1 0-2-.9-2-2v0c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v0c0 1.1-.9 2-2 2zM24 26H8c-1.1 0-2-.9-2-2v0c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v0c0 1.1-.9 2-2 2z" }, void 0) }), void 0));
 }
 
+function SvgMessageIcon(props) {
+    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5 }, props, { children: jsx("path", { d: "M17.388 4.751H2.613a.39.39 0 00-.389.389v9.72c0 .216.175.389.389.389h14.775a.389.389 0 00.389-.389V5.14a.39.39 0 00-.389-.389m-.94.779L10 11.984 3.552 5.53h12.896zm-13.446.551l3.921 3.925-3.921 3.925v-7.85zm.558 8.39l3.914-3.916 2.253 2.253a.385.385 0 00.548 0l2.253-2.253 3.913 3.916H3.56zm13.439-.54l-3.921-3.925 3.921-3.925v7.85z" }, void 0) }), void 0));
+}
+
 function SvgNimboxIcon(props) {
     return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 216.833 227.492" }, props, { children: [jsx("path", { fill: "#F7CE3C", d: "M42.111 98.075l66.325-6.472v15.281z" }, void 0),
             jsx("path", { fill: "#FFE6A2", d: "M174.76 98.075l-66.324-6.472v15.281z" }, void 0),
@@ -142,6 +146,7 @@ var index = /*#__PURE__*/Object.freeze({
     CrossIcon: SvgCrossIcon,
     EditIcon: SvgEditIcon,
     HamburgerIcon: SvgHamburgerIcon,
+    MessageIcon: SvgMessageIcon,
     NimboxIcon: SvgNimboxIcon,
     RefreshIcon: SvgRefreshIcon,
     SearchIcon: SvgSearchIcon,
@@ -153,25 +158,25 @@ var index = /*#__PURE__*/Object.freeze({
     WaffleIcon: SvgWaffleIcon
 });
 
-var paddings = {
+var controlScale = {
     'xs': 'text-xs px-2 py-0.5',
     'sm': 'text-sm px-2.5 py-1',
     'base': 'px-3 py-2',
     'lg': 'text-lg px-4 py-2'
 };
-var scalesSquare = {
+var controlSize = {
     'xs': 'h-4 w-4',
     'sm': 'h-5 w-5',
     'base': 'h-6 w-6',
     'lg': 'h-6 w-6'
 };
-var scales = {
+var controlText = {
     'xs': 'text-xs',
     'sm': 'text-sm',
     'base': '',
     'lg': 'text-lg'
 };
-var scalesSmall = {
+var controlSmallText = {
     'xs': 'text-1xs',
     'sm': 'text-xs',
     'base': 'text-sm',
@@ -181,12 +186,12 @@ var scalesSmall = {
 var Button = function (_a) {
     var _b = _a.link, link = _b === void 0 ? false : _b, _c = _a.secondary, secondary = _c === void 0 ? false : _c, _d = _a.scale, scale = _d === void 0 ? 'base' : _d, children = _a.children, className = _a.className, props = __rest(_a, ["link", "secondary", "scale", "children", "className"]);
     return link ?
-        (jsx("button", __assign({}, props, { className: classnames(paddings[scale], {
+        (jsx("button", __assign({}, props, { className: classnames(controlScale[scale], {
                 'text-primary-500 hover:text-primary-700': !secondary,
                 'text-gray-500 hover:text-gray-700': secondary
             }, ' hover:underline rounded cursor-pointer focus:outline-none', className) }, { children: children }), void 0))
         :
-            (jsx("button", __assign({}, props, { className: classnames(paddings[scale], {
+            (jsx("button", __assign({}, props, { className: classnames(controlScale[scale], {
                     'text-white font-bold bg-primary-500 hover:bg-primary-600 border border-control-border': !secondary,
                     'text-primary-500 hover:text-white font-bold bg-transparent hover:bg-primary-600 border border-control-border': secondary
                 }, 'rounded focus:outline-none', className) }, { children: children }), void 0));
@@ -423,8 +428,8 @@ var Delay = function (_a) {
 };
 
 var Loading = function (_a) {
-    var _b = _a.scale, scale = _b === void 0 ? 'base' : _b, className = _a.className;
-    return (jsx("svg", __assign({ width: "45", height: "45", viewBox: "0 0 45 45", xmlns: "http://www.w3.org/2000/svg", stroke: "currentColor", className: classnames('inline-block', 'text-primary-500', {
+    var _b = _a.scale, scale = _b === void 0 ? 'base' : _b, className = _a.className, _c = _a.colorClassName, colorClassName = _c === void 0 ? 'text-primary-500' : _c;
+    return (jsx("svg", __assign({ width: "45", height: "45", viewBox: "0 0 45 45", xmlns: "http://www.w3.org/2000/svg", stroke: "currentColor", className: classnames('inline-block', colorClassName, {
             'h-6 w-6': scale === 'sm',
             'h-10 w-10': scale === 'base',
             'h-14 w-14': scale === 'lg'
@@ -454,6 +459,41 @@ var CustomSelect = function (_a) {
                     }) }), void 0)] }), void 0));
 };
 
+var Context = createContext({ scale: 'base', error: false });
+var Control = function (_a) {
+    var _b = _a.scale, scale = _b === void 0 ? 'base' : _b, _c = _a.error, error = _c === void 0 ? false : _c, className = _a.className, style = _a.style, children = _a.children;
+    return (jsx(Context.Provider, __assign({ value: { error: error, scale: scale } }, { children: jsx("div", __assign({ className: classnames('flex flex-col w-full', className), style: style }, { children: children }), void 0) }), void 0));
+};
+Control.Label = (function (_a) {
+    var badge = _a.badge, className = _a.className, children = _a.children;
+    var context = useContext(Context);
+    var Badge = badge;
+    return (jsx("label", __assign({ className: classnames(className, 'block', context.error ? 'text-danger-500' : 'text-control-border', controlText[context.scale || 'base']) }, { children: jsxs("div", __assign({ className: "flex flex-row justify-between align-baseline" }, { children: [jsx("span", __assign({ className: "uppercase tracking-tighter" }, { children: children }), void 0),
+                badge &&
+                    (typeof badge === 'string' || badge instanceof String)
+                    ?
+                        jsx("span", { children: badge }, void 0)
+                    :
+                        Badge ?
+                            jsx(Badge, {}, void 0)
+                            : ''] }), void 0) }), void 0));
+});
+Control.Message = (function (_a) {
+    var className = _a.className, children = _a.children;
+    var context = useContext(Context);
+    return (jsx("div", __assign({ className: classnames(context.error ? 'text-danger-500' : 'text-control-border', controlSmallText[context.scale || 'base'], className) }, { children: children }), void 0));
+});
+Control.Error = (function (_a) {
+    var className = _a.className, children = _a.children;
+    var context = useContext(Context);
+    return children ?
+        (jsx("div", __assign({ className: classnames('text-danger-500', controlSmallText[context.scale || 'base'], className) }, { children: children }), void 0))
+        : null;
+});
+Control.Label.displayName = 'Control.Label';
+Control.Message.displayName = 'Control.Help';
+Control.Error.displayName = 'Control.Error';
+
 // constants
 var morning = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 var noon = [12];
@@ -463,13 +503,14 @@ var minutes = [15, 30, 45];
  * DatePicker. Select a date with one click.
  */
 var TimePicker = function (_a) {
-    var name = _a.name, value = _a.value, onChange = _a.onChange, placeholder = _a.placeholder;
-    var _b = useTranslation(); _b.t; var ready = _b.ready;
-    var _c = useState(false), show = _c[0], setShow = _c[1];
-    var _d = useOutsideClick(function () { return setShow(false); }), valueRef = _d[0], popperRef = _d[1];
+    var name = _a.name, value = _a.value, _b = _a.scale, scale = _b === void 0 ? "base" : _b, onChange = _a.onChange, placeholder = _a.placeholder;
+    var _c = useTranslation(); _c.t; var ready = _c.ready;
+    var _d = useState(false), show = _d[0], setShow = _d[1];
+    var _e = useOutsideClick(function () { return setShow(false); }), valueRef = _e[0], popperRef = _e[1];
     var times = useRef({ watch: 8 });
     var timesRef = useRef(null);
     useEffect(function () { scroll(); });
+    var context = useContext(Context);
     // handlers
     var handleShow = function () { if (!show) {
         setShow(true);
@@ -546,7 +587,7 @@ var TimePicker = function (_a) {
         }
     }
     // render
-    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: valueRef }, { children: jsx("input", { name: name, value: value, onChange: handleChange, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder, className: "w-full px-2 py-1 border border-content-border rounded" }, "input") }), void 0),
+    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: valueRef }, { children: jsx("input", { name: name, value: value, onChange: handleChange, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder, className: classnames(controlScale[scale || context.scale || 'base'], 'w-full px-2 py-1 border border-control-border rounded', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none') }, "input") }), void 0),
             ready && show &&
                 jsxs("div", __assign({ ref: popperRef, className: "absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden" }, { children: [jsx("div", __assign({ className: "px-2 py-1 bg-gray-400" }, { children: jsxs("div", __assign({ className: "text-right" }, { children: [jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickPrevHour }, { children: jsx(SvgAngleUpIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0),
                                     jsx("button", __assign({ className: "px-2 focus:outline-none", onClick: handleClickNoon }, { children: jsx(SvgCircleIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0),
@@ -636,69 +677,50 @@ function formatTime(hm) {
     }
 }
 
-var Context = createContext({ value: null, setValue: function () { return null; } });
+var Context$1 = createContext({ value: null, setValue: function () { return null; } });
 var Tabs = function (_a) {
     var value = _a.value, setValue = _a.setValue, className = _a.className, children = _a.children;
-    return (jsx(Context.Provider, __assign({ value: { value: value, setValue: setValue } }, { children: jsx("ul", __assign({ className: classnames('flex flex-row', className) }, { children: children }), void 0) }), void 0));
+    return (jsx(Context$1.Provider, __assign({ value: { value: value, setValue: setValue } }, { children: jsx("ul", __assign({ className: classnames('flex flex-row', className) }, { children: children }), void 0) }), void 0));
 };
 var TabsOption = function (_a) {
     var value = _a.value, className = _a.className, children = _a.children;
-    var context = useContext(Context);
+    var context = useContext(Context$1);
     return (jsx("li", __assign({ onClick: function () { return context.setValue(value); }, className: classnames('px-4 py-2 text-primary-500 hover:text-primary-700 font-bold', { 'border-b-2 border-primary-500': context.value === value }, 'cursor-pointer', className) }, { children: children }), void 0));
 };
 Tabs.Option = TabsOption;
 
-var Context$1 = createContext({ scale: 'base', error: false });
-var Control = function (_a) {
-    var _b = _a.scale, scale = _b === void 0 ? 'base' : _b, _c = _a.error, error = _c === void 0 ? false : _c, className = _a.className, style = _a.style, children = _a.children;
-    return (jsx(Context$1.Provider, __assign({ value: { error: error, scale: scale } }, { children: jsx("div", __assign({ className: classnames('flex flex-col w-full', className), style: style }, { children: children }), void 0) }), void 0));
-};
-Control.Label = (function (_a) {
-    var badge = _a.badge, className = _a.className, children = _a.children;
-    var context = useContext(Context$1);
-    return (jsx("label", __assign({ className: classnames(className, 'block', context.error ? 'text-danger-500' : 'text-control-border', scales[context.scale || 'base']) }, { children: jsxs("div", __assign({ className: "flex flex-row justify-between align-baseline" }, { children: [jsx("span", __assign({ className: "uppercase tracking-tighter" }, { children: children }), void 0),
-                badge && jsx("span", { children: badge }, void 0)] }), void 0) }), void 0));
-});
-Control.Message = (function (_a) {
-    var className = _a.className, children = _a.children;
-    var context = useContext(Context$1);
-    return (jsx("div", __assign({ className: classnames(context.error ? 'text-danger-500' : 'text-control-border', scalesSmall[context.scale || 'base'], className) }, { children: children }), void 0));
-});
-Control.Error = (function (_a) {
-    var className = _a.className, children = _a.children;
-    var context = useContext(Context$1);
-    return (jsx("div", __assign({ className: classnames('text-danger-500', scalesSmall[context.scale || 'base'], className) }, { children: children }), void 0));
-});
-Control.Label.displayName = 'Control.Label';
-Control.Message.displayName = 'Control.Help';
-Control.Error.displayName = 'Control.Error';
-
 var Input = React.forwardRef(function (_a, ref) {
     var error = _a.error, scale = _a.scale, className = _a.className, props = __rest(_a, ["error", "scale", "className"]);
-    var context = useContext(Context$1);
-    return (jsx("input", __assign({}, props, { ref: ref, className: classnames(paddings[scale || context.scale || 'base'], 'block w-full rounded border border-control-border', error || context.error ?
+    var context = useContext(Context);
+    return (jsx("input", __assign({}, props, { ref: ref, className: classnames(controlScale[scale || context.scale || 'base'], 'block w-full rounded border border-control-border', error || context.error ?
             'border-danger-500 focus:border-danger-500 focus:ring focus:ring-danger-500' :
-            'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none', className) }), void 0));
+            'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none disabled:opacity-50', className) }), void 0));
 });
 
-var CheckBox = React.forwardRef(function (_a, ref) {
+var CheckBox = function (_a) {
     var scale = _a.scale, className = _a.className, children = _a.children, props = __rest(_a, ["scale", "className", "children"]);
-    var context = useContext(Context$1);
-    return (jsxs("div", __assign({ className: "flex flex-row items-center" }, { children: [jsx("input", __assign({ type: "checkbox", ref: ref }, props, { className: classnames(className, scalesSquare[scale || context.scale || 'base'], 'rounded border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-offset-0 focus:ring-primary-500 focus:ring-opacity-50') }), void 0),
-            jsx("span", __assign({ className: classnames('ml-2', scales[scale || context.scale || 'base'], className) }, { children: children }), void 0)] }), void 0));
-});
+    var context = useContext(Context);
+    return children ?
+        (jsxs("div", __assign({ className: "flex flex-row items-center" }, { children: [jsx("input", __assign({ type: "checkbox" }, props, { className: classnames(controlSize[scale || context.scale || 'base'], 'rounded border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:ring-offset-0 disabled:opacity-50', className) }), void 0),
+                jsx("span", __assign({ className: classnames('ml-2', controlText[scale || context.scale || 'base'], className) }, { children: children }), void 0)] }), void 0))
+        :
+            (jsx("input", __assign({ type: "checkbox" }, props, { className: classnames(controlSize[scale || context.scale || 'base'], 'rounded border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:ring-offset-0 disabled:opacity-50', className) }), void 0));
+};
 
 var Radio = React.forwardRef(function (_a, ref) {
     var scale = _a.scale; _a.error; var className = _a.className, children = _a.children, props = __rest(_a, ["scale", "error", "className", "children"]);
-    var context = useContext(Context$1);
-    return (jsxs("div", __assign({ className: "flex flex-row items-center" }, { children: [jsx("input", __assign({ type: "radio", ref: ref }, props, { className: classnames(className, scalesSquare[scale || context.scale || 'base'], 'border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-offset-0 focus:ring-primary-500 focus:ring-opacity-50') }), void 0),
-            jsx("span", __assign({ className: classnames('ml-2', scales[scale || context.scale || 'base'], className) }, { children: children }), void 0)] }), void 0));
+    var context = useContext(Context);
+    return children ?
+        (jsxs("div", __assign({ className: "flex flex-row items-center" }, { children: [jsx("input", __assign({ type: "radio", ref: ref }, props, { className: classnames(className, controlSize[scale || context.scale || 'base'], 'border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:ring-offset-0 disabled:opacity-50') }), void 0),
+                jsx("span", __assign({ className: classnames('ml-2', controlText[scale || context.scale || 'base'], className) }, { children: children }), void 0)] }), void 0))
+        :
+            (jsx("input", __assign({ type: "radio", ref: ref }, props, { className: classnames(className, controlSize[scale || context.scale || 'base'], 'border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:ring-offset-0 disabled:opacity-50') }), void 0));
 });
 
 var Select = React.forwardRef(function (_a, ref) {
     var scale = _a.scale, className = _a.className, children = _a.children, props = __rest(_a, ["scale", "className", "children"]);
-    var context = useContext(Context$1);
-    return (jsx("select", __assign({}, props, { ref: ref, className: classnames(paddings[scale || context.scale || 'base'], 'block w-full rounded border border-control-border', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none', className) }, { children: children }), void 0));
+    var context = useContext(Context);
+    return (jsx("select", __assign({}, props, { ref: ref, className: classnames(controlScale[scale || context.scale || 'base'], 'block w-full rounded border border-control-border', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none disabled:opacity-50', className) }, { children: children }), void 0));
 });
 Select.Option = function (_a) {
     var value = _a.value, children = _a.children;
@@ -787,5 +809,5 @@ Panel.Item = function (_a) {
     return (jsx("div", __assign({ className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, { children: children }), void 0));
 };
 
-export { Button, Card, CheckBox, Context$1 as Context, Control, CustomSelect, DatePicker, Delay, Header, Helium, index as Icons, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, Select, Tabs, TimePicker, Toggle, ViewportProvider, useOutsideClick, useViewport };
+export { Button, Card, CheckBox, Context, Control, CustomSelect, DatePicker, Delay, Header, Helium, index as Icons, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, Select, Tabs, TimePicker, Toggle, ViewportProvider, useOutsideClick, useViewport };
 //# sourceMappingURL=index.js.map
