@@ -1,6 +1,6 @@
 import * as React from "react";
 
-function SvgMessageIcon(props: React.SVGProps<SVGSVGElement>) {
+function SvgDragIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,10 +14,14 @@ function SvgMessageIcon(props: React.SVGProps<SVGSVGElement>) {
       strokeLinejoin="round"
       {...props}
     >
-      <path d="M6 9h20v14H6z" />
-      <path d="M6 9l10 9 10-9M6 23l7.3-7.3M26 23l-7.3-7.3" />
+      <circle cx={12} cy={8} r={2} />
+      <circle cx={20} cy={8} r={2} />
+      <circle cx={12} cy={16} r={2} />
+      <circle cx={20} cy={16} r={2} />
+      <circle cx={12} cy={24} r={2} />
+      <circle cx={20} cy={24} r={2} />
     </svg>
   );
 }
 
-export default SvgMessageIcon;
+export default SvgDragIcon;
