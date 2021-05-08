@@ -30,6 +30,9 @@
 
   },
   "include": [
-    "src"
-, "attic/CustomSelect.tsx"  ]
+    "src"  
+  ],
+  "exclude": [
+    "attic"
+  ]
 }

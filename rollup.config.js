@@ -31,7 +31,41 @@ export default [{
         typescript({
             clean: true,
             tsconfigOverride: {
-                exclude: ["src/styles", "stories/**/*", "**/*.stories.tsx", "src/i18n.tsx"]
+                exclude: ["src/icons", "src/styles", "stories/**/*", "**/*.stories.tsx", "src/i18n.tsx"]
+            }
+        })
+
+    ]
+
+}, {
+
+    input: 'src/icons/index.tsx',
+    output: [{
+        dir: 'dist/icons',
+        format: 'esm',
+        exports: 'named',
+        sourcemap: true
+    }],
+
+    external: [
+        ...Object.keys(pack.dependencies || {}),
+        ...Object.keys(pack.peerDependencies || {})
+    ],
+
+    plugins: [
+
+        json({
+            preferConst: true, // Default: false
+            indent: '  ',
+            compact: true, // Default: false
+            namedExports: true // Default: true
+        }),
+
+        typescript({
+            clean: true,
+            tsconfigOverride: {
+                include: ["src/icons"],
+                exclude: ["stories/**/*", "**/*.stories.tsx", "src/i18n.tsx"]
             }
         })
 

@@ -55,3 +55,16 @@ export const MoreOptionsButton: FC<React.ButtonHTMLAttributes<HTMLButtonElement>
             </>
         );
     };
+
+
+export interface RoundButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+
+}
+
+export const RoundButton: FC<RoundButtonProps> = ({ children, ...props }) => {
+
+    return (
+        <button {...props}>{children}</button>
+    );
+
+}
