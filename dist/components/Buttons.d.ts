@@ -12,3 +12,6 @@ export interface MoreOptionsButtonProps {
     onChange: (value: boolean) => void;
 }
 export declare const MoreOptionsButton: FC<React.ButtonHTMLAttributes<HTMLButtonElement> & MoreOptionsButtonProps>;
+export interface RoundButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+}
+export declare const RoundButton: FC<RoundButtonProps>;

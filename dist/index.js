@@ -58,105 +58,9 @@ function SvgAngleUpIcon(props) {
     return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M6 20l10-8 10 8" }, void 0) }), void 0));
 }
 
-function SvgCheckIcon(props) {
-    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M20 6L9 17l-5-5" }, void 0) }), void 0));
-}
-
 function SvgCircleIcon(props) {
     return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("circle", { cx: 16, cy: 16, r: 10 }, void 0) }), void 0));
 }
-
-function SvgCrossIcon(props) {
-    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M6 6l20 20M26 6L6 26" }, void 0) }), void 0));
-}
-
-function SvgEditIcon(props) {
-    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M16 26h10.5M21.3 6.7c1-1 2.5-1 3.5 0s1 2.5 0 3.5L10.2 24.8 5.5 26l1.2-4.7L21.3 6.7z" }, void 0) }), void 0));
-}
-
-function SvgHamburgerIcon(props) {
-    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { className: "hamburger-icon_svg__st0", d: "M24 10H8c-1.1 0-2-.9-2-2v0c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v0c0 1.1-.9 2-2 2zM24 18H8c-1.1 0-2-.9-2-2v0c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v0c0 1.1-.9 2-2 2zM24 26H8c-1.1 0-2-.9-2-2v0c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v0c0 1.1-.9 2-2 2z" }, void 0) }), void 0));
-}
-
-function SvgMessageIcon(props) {
-    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5 }, props, { children: jsx("path", { d: "M17.388 4.751H2.613a.39.39 0 00-.389.389v9.72c0 .216.175.389.389.389h14.775a.389.389 0 00.389-.389V5.14a.39.39 0 00-.389-.389m-.94.779L10 11.984 3.552 5.53h12.896zm-13.446.551l3.921 3.925-3.921 3.925v-7.85zm.558 8.39l3.914-3.916 2.253 2.253a.385.385 0 00.548 0l2.253-2.253 3.913 3.916H3.56zm13.439-.54l-3.921-3.925 3.921-3.925v7.85z" }, void 0) }), void 0));
-}
-
-function SvgNimboxIcon(props) {
-    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 216.833 227.492" }, props, { children: [jsx("path", { fill: "#F7CE3C", d: "M42.111 98.075l66.325-6.472v15.281z" }, void 0),
-            jsx("path", { fill: "#FFE6A2", d: "M174.76 98.075l-66.324-6.472v15.281z" }, void 0),
-            jsx("path", { fill: "#00607F", d: "M108.436 206.377v-99.945l-66.325-8.357v84.979z" }, void 0),
-            jsx("path", { fill: "#4EC1E0", d: "M85.836 138.691l-64.721-14.778L42.048 98.09l65.277 8.202z" }, void 0),
-            jsx("path", { fill: "#FF4C00", d: "M108.396 206.377v-99.945l66.364-8.357-.038 84.979z" }, void 0),
-            jsx("path", { fill: "#FFA400", d: "M130.995 138.691l64.722-14.778-20.935-25.823-65.278 8.202z" }, void 0),
-            jsx("g", __assign({ fill: "#FFA400" }, { children: jsx("path", { d: "M111.659 80.687l6.629-59.572H98.543l6.632 59.572c1.07-.032 2.148-.055 3.239-.055 1.094 0 2.172.022 3.245.055zM162.059 53.946l-12.275-7.089-15.302 37.132c1.542.471 2.991.979 4.343 1.526l23.234-31.569zM67.049 46.857l-12.277 7.089 23.234 31.569a52.461 52.461 0 014.344-1.526L67.049 46.857z" }, void 0) }), void 0)] }), void 0));
-}
-
-function SvgRefreshIcon(props) {
-    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("path", { d: "M24.7 11c-1.3-2.2-3.4-3.9-6.1-4.7-5.3-1.4-10.8 1.8-12.3 7.1S8 24.2 13.4 25.6s10.8-1.7 12.2-7.1" }, void 0),
-            jsx("path", { d: "M25.6 4.7l-.9 6.3-6.5.4" }, void 0)] }), void 0));
-}
-
-function SvgSearchIcon(props) {
-    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("circle", { cx: 14.5, cy: 14.5, r: 8.5 }, void 0),
-            jsx("path", { d: "M26 26l-5.5-5.5" }, void 0)] }), void 0));
-}
-
-function SvgSpeechBubbleIcon(props) {
-    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M16 6C9.4 6 4 9.6 4 14c0 2.1 1.2 4 3.2 5.4l-1.8 5.8 8.1-3.4c.8.1 1.6.2 2.5.2 6.6 0 12-3.6 12-8s-5.4-8-12-8z" }, void 0) }), void 0));
-}
-
-function SvgSquareIcon(props) {
-    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { className: "square-icon_svg__st0", d: "M6 6h20v20H6z" }, void 0) }), void 0));
-}
-
-function SvgThumbTackIcon(props) {
-    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M16 20v6M17.9 7.4l1.4 8.2c2.5.7 4.4 2.3 4.7 4.3h-4l-8 .1H8c.4-2 2.3-3.6 4.7-4.3l1.4-8.2s-1.3-.7-1.3-.9v-.2c0-.2.3-.3.5-.3h5.2c.3-.1.5.1.5.2v.2c.2.2-1.1.9-1.1.9z" }, void 0) }), void 0));
-}
-
-function SvgThumbsUpIcon(props) {
-    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M18.1 13V9c0-1.7-1.3-3-3-3l-4 9v11h11.3c1 0 1.8-.7 2-1.7l1.4-9c.2-1.1-.6-2.1-1.7-2.3h-6zm-6.9 13h-3c-1.1 0-2-.9-2-2v-7c0-1.1.9-2 2-2h3" }, void 0) }), void 0));
-}
-
-function SvgTrashIcon(props) {
-    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("path", { d: "M11.8 11.2c.2 4.3.5 8.5.7 12.8M16 11.2V24M20.1 11.2L19.4 24" }, void 0),
-            jsx("path", { d: "M8.4 8.7l1.4 16.4c0 .5.5.9.9.9h10.6c.5 0 .9-.4.9-.9l1.4-16.4H8.4zM7.2 6.6c.2-.3.5-.6.9-.6h15.7c.4 0 .8.3.9.6l.7 2.1H6.5l.7-2.1zM13.5 6V4.1c0-.5.4-.9.9-.9h3.2c.5 0 .9.4.9.9V6h-5z" }, void 0)] }), void 0));
-}
-
-function SvgWaffleIcon(props) {
-    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("circle", { cx: 8, cy: 8, r: 2 }, void 0),
-            jsx("circle", { cx: 16, cy: 8, r: 2 }, void 0),
-            jsx("circle", { cx: 24, cy: 8, r: 2 }, void 0),
-            jsx("circle", { cx: 8, cy: 16, r: 2 }, void 0),
-            jsx("circle", { cx: 16, cy: 16, r: 2 }, void 0),
-            jsx("circle", { cx: 24, cy: 16, r: 2 }, void 0),
-            jsx("circle", { cx: 8, cy: 24, r: 2 }, void 0),
-            jsx("circle", { cx: 16, cy: 24, r: 2 }, void 0),
-            jsx("circle", { cx: 24, cy: 24, r: 2 }, void 0)] }), void 0));
-}
-
-var index = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    AngleDownIcon: SvgAngleDownIcon,
-    AngleLeftIcon: SvgAngleLeftIcon,
-    AngleRightIcon: SvgAngleRightIcon,
-    AngleUpIcon: SvgAngleUpIcon,
-    CheckIcon: SvgCheckIcon,
-    CircleIcon: SvgCircleIcon,
-    CrossIcon: SvgCrossIcon,
-    EditIcon: SvgEditIcon,
-    HamburgerIcon: SvgHamburgerIcon,
-    MessageIcon: SvgMessageIcon,
-    NimboxIcon: SvgNimboxIcon,
-    RefreshIcon: SvgRefreshIcon,
-    SearchIcon: SvgSearchIcon,
-    SpeechBubbleIcon: SvgSpeechBubbleIcon,
-    SquareIcon: SvgSquareIcon,
-    ThumbTackIcon: SvgThumbTackIcon,
-    ThumbsUpIcon: SvgThumbsUpIcon,
-    TrashIcon: SvgTrashIcon,
-    WaffleIcon: SvgWaffleIcon
-});
 
 var controlScale = {
     'xs': 'text-xs px-2 py-0.5',
@@ -200,6 +104,10 @@ var MoreOptionsButton = function (_a) {
     var _b = _a.value, value = _b === void 0 ? false : _b, onChange = _a.onChange; _a.className; var children = _a.children, props = __rest(_a, ["value", "onChange", "className", "children"]);
     var t = useTranslation().t;
     return (jsxs(Fragment, { children: [jsxs(Button, __assign({ link: true, onClick: function () { return onChange(!value); } }, props, { children: [jsx(SvgAngleRightIcon, { className: classnames('inline w-4 h-4 mr-1 stroke-current stroke-2 transform', { 'rotate-90': value }, 'transition duration-150 ease-in-out transtition-transform') }, void 0), !value ? t('more-options') : t('less-options')] }), void 0), value && children] }, void 0));
+};
+var RoundButton = function (_a) {
+    var children = _a.children, props = __rest(_a, ["children"]);
+    return (jsx("button", __assign({}, props, { children: children }), void 0));
 };
 
 var Card = function (_a) {
@@ -445,18 +353,6 @@ var Loading = function (_a) {
 var Postit = function (_a) {
     var className = _a.className, children = _a.children;
     return (jsx("div", __assign({ className: "postit-container" }, { children: jsx("div", __assign({ className: classnames('postit', className) }, { children: children }), void 0) }), void 0));
-};
-
-var CustomSelect = function (_a) {
-    var options = _a.options, _b = _a.key, key = _b === void 0 ? function (option) { return option; } : _b; _a.value; _a.onChange; _a.children;
-    var _e = useState(false), show = _e[0], setShow = _e[1];
-    var _f = useOutsideClick(function () { return setShow(false); }), valueRef = _f[0], popperRef = _f[1];
-    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: valueRef, className: "pl-4 pr-8 py-2 truncate border rounded-lg", onClick: function () { return setShow(!show); } }, { children: "as jkasd lkjasd lkajsd lkasjd laksjd laksjd laskdj alskdjalsdkj d" }), void 0),
-            jsx("div", __assign({ className: "absolute inset-y-0 right-0 pr-3 flex items-center justify-center" }, { children: jsx(SvgAngleDownIcon, { className: "text-content h-4 w-4 stroke-current stroke-2" }, void 0) }), void 0),
-            show &&
-                jsx("div", __assign({ ref: popperRef, className: "absolute left-0 mt-1 py-1 bg-content-fg border border-conteng-border rounded" }, { children: options.map(function (option) {
-                        return jsx("div", __assign({ className: "hover:bg-primary-500 hover:text-content-fg px-3" }, { children: key(option) }), key(option));
-                    }) }), void 0)] }), void 0));
 };
 
 var Context = createContext({ scale: 'base', error: false });
@@ -809,5 +705,5 @@ Panel.Item = function (_a) {
     return (jsx("div", __assign({ className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, { children: children }), void 0));
 };
 
-export { Button, Card, CheckBox, Context, Control, CustomSelect, DatePicker, Delay, Header, Helium, index as Icons, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, Select, Tabs, TimePicker, Toggle, ViewportProvider, useOutsideClick, useViewport };
+export { Button, Card, CheckBox, Context, Control, DatePicker, Delay, Header, Helium, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, RoundButton, Select, Tabs, TimePicker, Toggle, ViewportProvider, useOutsideClick, useViewport };
 //# sourceMappingURL=index.js.map
