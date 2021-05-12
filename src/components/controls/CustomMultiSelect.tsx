@@ -9,7 +9,7 @@ import { ComponentAlign } from '../ComponentAlign';
 
 export interface CustomMultiSelectProps {
     scale?: ComponentScale;
-    label: (t: any) => string | JSX.Element;
+    label: (t: any) => string;
     value: any[];
     onChange: (value: any) => void;
     align: ComponentAlign;
@@ -36,18 +36,21 @@ export const CustomMultiSelect: CustomMultiSelectComponent = (({ scale = 'base',
 
     return (
         <Context.Provider value={{ scale, value, onChange }}>
-            <div className={classnames('relative inline-block', className)}>
-                <div ref={target} className={classnames(
-                    'relative border border-control-border rounded px-2 py-0 pr-8 truncate cursor-pointer',
+            <div className={classnames('relative inline-block w-full', className)}>
+                <div ref={target} tabIndex={0} className={classnames(
+                    'relative border border-control-border rounded',
+                    'focus:border-primary-500 focus:ring focus:ring-primary-500',
+                    'focus:ring-opacity-50 focus:outline-none',
+                    'px-2 py-0 pr-8 truncate cursor-pointer',
                     controlScale[scale])} onClick={(() => onOutsideClick(!isVisible))}>
-                    {label(value)}
+                    {label(value) || <span>&nbsp;</span>}
                     <div className="absolute top-1/2 right-1 ">
                         < AngleDownIcon className={classnames(
                             'stroke-current stroke-2',
                             controlIconSmallMarginSize[scale || context.scale || 'base'])} />
                     </div>
                 </div>
-                {isVisible &&
+                {isVisible && React.Children.count(children) != 0 &&
                     <div ref={popper} className={classnames(
                         'absolute bg-white border border-control-border rounded',
                         {
@@ -58,6 +61,9 @@ export const CustomMultiSelect: CustomMultiSelectComponent = (({ scale = 'base',
                         'mt-2 overflow-auto')}>
                         {children}
                     </div>
+                }
+                {isVisible && React.Children.count(children) == 0 &&
+                    <div className="w-absolute bg-white border border-control-border rounded inset-x-0 mt-2">&nbsp;</div>
                 }
             </div>
         </Context.Provider>

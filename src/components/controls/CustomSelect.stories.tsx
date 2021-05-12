@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CustomSelect, RadioSelectProps } from './CustomSelect';
+import { CustomSelect, CustomSelectProps } from './CustomSelect';
 
 
 // definition
@@ -17,7 +17,7 @@ export default definition;
 
 //  parameterized
 
-export const Parameterized = ({ scale, value: initial, options, align, ...props }: RadioSelectProps & { options: string[] }) => {
+export const Parameterized = ({ scale, value: initial, options, align, ...props }: CustomSelectProps & { options: string[] }) => {
 
     const [value, onChange] = useState(+initial);
     const label = (value: any) => (options[value]);

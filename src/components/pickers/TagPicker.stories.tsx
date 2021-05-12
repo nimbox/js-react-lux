@@ -17,39 +17,39 @@ const definition = {
 export default definition;
 
 const tags = [
-    { id: "id1", name: "kalzuro" },
-    { id: "id2", name: "jmeza" },
-    { id: "id3", name: "rmarimom" },
-    { id: "id4", name: "jcastellanos" },
-    { id: "id5", name: "svegas" },
-    { id: "id6", name: "etorres" },
-    { id: "id7", name: "phernandez" },
-    { id: "id8", name: "llara" },
-    { id: "id9", name: "kalvarez" },
-    { id: "id0", name: "etiqueta1wfewfwefwfwefnkwenfkwnefkwnfkwe" },
-    { id: "id11", name: "etiqueta2" },
-    { id: "id22", name: "etiqueta3" }
+    { value: "id1", name: "kalzuro" },
+    { value: "id2", name: "jmeza" },
+    { value: "id3", name: "rmarimom" },
+    { value: "id4", name: "jcastellanos" },
+    { value: "id5", name: "svegas" },
+    { value: "id6", name: "etorres" },
+    { value: "id7", name: "phernandez" },
+    { value: "id8", name: "llara" },
+    { value: "id9", name: "kalvarez" },
+    { value: "id0", name: "etiqueta1wfewfwefwfwefnkwenfkwnefkwnfkwe" },
+    { value: "id11", name: "etiqueta2" },
+    { value: "id22", name: "etiqueta3" }
 ];
 
 const data =
-    [{ id: "id0", name: "etiqueta1wfewfwefwfwefnkwenfkwnefkwnfkwe" },
-    { id: "id11", name: "etiqueta2" },
-    { id: "id22", name: "etiqueta3" }];
+    [{ value: "id0", name: "etiqueta1wfewfwefwfwefnkwenfkwnefkwnfkwe" },
+    { value: "id11", name: "etiqueta2" },
+    { value: "id22", name: "etiqueta3" }];
 
 // parameterized
 
-export const Parameterized = ({ scale, values, ...props }: TagPickerProps) => {
+export const Parameterized = ({ scale, values, ...props }: TagPickerProps<{value: string | number, name:string, color?:string, className?: string}>) => {
 
     const [tagsC, onChange] = React.useState(data);
 
-    const render = (t: any, onRemove?: (value: any) => void | undefined) => (
-        <Tag scale={scale} color={t.color} onDelete={onRemove} >{t.name}</Tag>
+    const render = (item: {value: string | number, name:string, className?: string, color?: string}, onRemove?: (value: string | number) => void | undefined) => (
+        <Tag scale={scale} color={item.color} onDelete={onRemove} className={item.className}>{item.name}</Tag>
     )
 
-    const deleteTag: (id: string) => boolean | Promise<boolean> = (id: string) => {
+    const deleteTag: (value: string | number) => boolean | Promise<boolean> = (value: string | number) => {
         let promise: Promise<boolean> = new Promise((resolve, reject) => {
             setTimeout(() => {
-                let results = _.remove(tagsC, function (tag) { return tag.id !== id; });
+                let results = _.remove(tagsC, function (tag) { return tag.value !== value; });
                 if (results instanceof Array) {
                     onChange(results);
                     resolve(true);
@@ -61,13 +61,11 @@ export const Parameterized = ({ scale, values, ...props }: TagPickerProps) => {
         return promise;
     };
 
-    const searchTag: (q: string) => Promise<{ t: any }[]> | { t: any }[] = (q: string) => {
-        let promise: Promise<{ t: any }[]> = new Promise((resolve, reject) => {
+    const searchTag: (q: string) => Promise<{value: string | number, name:string, color?:string, className?: string }[]> | {value: string | number, name:string, color?:string, className?: string}[] = (q: string) => {
+        let promise: Promise<{value: string | number, name:string, color?:string, className?: string }[]> = new Promise((resolve, reject) => {
             setTimeout(() => {
                 if (q != "") {
-                    let results = tags.filter(tag =>
-                        tag.name.toLowerCase().includes(q.toLowerCase())
-                    );
+                    let results = tags.filter(tag => tag.name.toLowerCase().includes(q.toLowerCase()) && !tagsC.some(el => el.value === tag.value))
                     resolve(results);
                 } else { resolve([]); }
 
@@ -78,10 +76,10 @@ export const Parameterized = ({ scale, values, ...props }: TagPickerProps) => {
         return promise;
     };
 
-    const selectTag: (id: string) => boolean | Promise<boolean> = (id: string) => {
+    const selectTag: (value: string | number) => boolean | Promise<boolean> = (value: string | number) => {
         let promise: Promise<boolean> = new Promise((resolve, reject) => {
             setTimeout(() => {
-                let tagsE = (_.find(tags, function (tag) { return tag.id == id; }));
+                let tagsE = (_.find(tags, function (tag) { return tag.value == value; }));
                 let results;
                 if (tagsE) { results = _.concat(tagsC, tagsE) } else { results = tagsC };
                 if (results instanceof Array) {
@@ -95,10 +93,10 @@ export const Parameterized = ({ scale, values, ...props }: TagPickerProps) => {
         return promise;
     };
 
-    const createTag: (id: string) => boolean | Promise<boolean> = (id: string) => {
+    const createTag: (value: string | number) => boolean | Promise<boolean> = (value: string | number) => {
         let promise: Promise<boolean> = new Promise((resolve, reject) => {
             setTimeout(() => {
-                let results = _.concat(tagsC, { id: id, name: id });
+                let results = _.concat(tagsC, { value: value, name: value });
                 if (results instanceof Array) {
                     onChange(results);
                     resolve(true);
@@ -114,11 +112,11 @@ export const Parameterized = ({ scale, values, ...props }: TagPickerProps) => {
     return (
         <div className="">
             <span>Escribo algo antes</span>
-            <TagPicker scale={scale} values={tagsC} render={render}
-                onRemove={(id) => deleteTag(id)}
+            <TagPicker scale={scale} values={tagsC} render={render} 
+                onRemove={(value) => deleteTag(value)}
                 onSearch={(q) => searchTag(q)}
-                onAdd={(id) => selectTag(id)}
-                onCreate={(id) => createTag(id)}>
+                onAdd={(value) => selectTag(value)}
+                onCreate={(value) => createTag(value)}>
             </TagPicker>
         </div>
     );

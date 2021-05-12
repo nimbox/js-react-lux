@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { values } from 'lodash';
 import React, { useState } from 'react';
 import { CustomMultiSelect, CustomMultiSelectProps } from './CustomMultiSelect';
 
@@ -23,7 +23,7 @@ export const Parameterized = ({ scale, value: initial, options, align, ...props 
     //label = _.take(value, 2).reduce((acc: string, val: number) => acc + ' ' + options[val], '') + (_.size(value) > 2 ? ` y ${_.size(value) - 2} más` : '');
 
     const label = (value: any) => {
-        if (value.length > 0) {
+        if (value.length > 0 && options.length > 0 && options.length >= value.length) {
             return _.reduce(_.take(value, 2), function (acc: string, val: number) { return acc + ' ' + options[val]; }, '') + (_.size(value) > 2 ? ` y ${_.size(value) - 2} más` : '')
         }
         return 'Ninguna';
@@ -35,4 +35,4 @@ export const Parameterized = ({ scale, value: initial, options, align, ...props 
         </CustomMultiSelect>
     );
 };
-Parameterized.args = { scale: 'base', label: '', value: [1, 4], align: 'start', options: ['UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO'] };
+Parameterized.args = { scale: 'base', label: '', value: [0, 1], align: 'start', options: ['UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO'] };
