@@ -24,11 +24,11 @@ export interface CustomSelectOptionProps {
 type ContextProps = Pick<CustomSelectProps, 'scale' | 'value' | 'onChange'>;
 const Context = createContext<ContextProps>({ scale: 'base', value: [], onChange: () => [] });
 
-interface RadioSelectComponent extends FC<CustomSelectProps> {
+interface CustomSelectComponent extends FC<CustomSelectProps> {
     Option: FC<CustomSelectOptionProps>;
 }
 
-export const CustomSelect: RadioSelectComponent = (({ scale = 'base', value, label, onChange, align, className, children }) => {
+export const CustomSelect: CustomSelectComponent = (({ scale = 'base', value, label, onChange, align, className, children }) => {
 
     const context = useContext(controlContext);
     const [isVisible, onOutsideClick] = useState(false);
@@ -68,7 +68,7 @@ export const CustomSelect: RadioSelectComponent = (({ scale = 'base', value, lab
             </div>
         </Context.Provider>
     );
-}) as RadioSelectComponent;
+}) as CustomSelectComponent;
 
 CustomSelect.Option = (({ value, className, children }) => {
 
