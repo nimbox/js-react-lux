@@ -1,6 +1,6 @@
 export type ComponentScale = 'xs' | 'sm' | 'base' | 'lg';
 
-export const smallScale: { [S in ComponentScale]: ComponentScale }  = {
+export const smallScale: { [S in ComponentScale]: ComponentScale } = {
     'xs': 'xs',
     'sm': 'xs',
     'base': 'sm',

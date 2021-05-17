@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, ButtonProps } from './Buttons';
+import { CheckIcon, CrossIcon } from '../icons';
+import { Button, ButtonProps, RoundButton, RoundButtonProps } from './Buttons';
 
 
 // definition
@@ -58,6 +59,12 @@ SecondaryLinkSmall.args = { link: true, secondary: true, scale: 'sm', children: 
 
 export const SecondaryLinkLarge = ({ children, ...props }: BaseProps) => <Button {...props}>{children}</Button>
 SecondaryLinkLarge.args = { link: true, secondary: true, scale: 'lg', children: 'Primary' };
+
+export const PrimaryRound= ({ children, ...props}: RoundButtonProps) => <RoundButton {...props}>{children}</RoundButton>
+PrimaryRound.args = { scale: 'lg', children: <CheckIcon className="stroke-2"/> }
+
+export const PrimaryRoundDanger = ({ children, ...props}: RoundButtonProps) => <RoundButton {...props}>{children}</RoundButton>
+PrimaryRoundDanger.args = { scale: 'base', color: 'danger', children: <CrossIcon className="stroke-2"/> }
 
 // alignment
 

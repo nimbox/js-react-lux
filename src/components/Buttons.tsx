@@ -2,8 +2,11 @@ import classnames from 'classnames';
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AngleRightIcon } from '../icons';
-import { ComponentScale, controlScale } from './ComponentScale';
+import { ComponentScale, controlScale, controlSize, controlSmallText } from './ComponentScale';
+import { ComponentColor } from './ComponentColor';
 
+
+// Button
 
 export interface ButtonProps {
     link?: boolean;
@@ -36,6 +39,32 @@ export const Button: FC<React.ButtonHTMLAttributes<HTMLButtonElement> & ButtonPr
             </button >);
     };
 
+
+// RoundButton
+
+export interface RoundButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    scale?: ComponentScale;
+    color?: ComponentColor;
+}
+
+export const RoundButton: FC<RoundButtonProps> = ({ scale = 'base', color = 'primary', className, children, ...props }) => {
+
+    return (
+        <button {...props} className={classnames(
+            controlSize[scale], controlSmallText[scale],
+            'flex flex-row justify-center items-center',
+            'text-white font-bold',
+            { 'bg-primary-500 hover:bg-primary-600': color === 'primary' },
+            { 'bg-info-500 hover:bg-info-600': color === 'info' },
+            { 'bg-danger-500 hover:bg-danger-600': color === 'danger' },
+            'border border-control-border',
+            'rounded-full focus:outline-none', className)}>
+            {children}
+        </button>
+    );
+
+};
+
 export interface MoreOptionsButtonProps {
     scale?: ComponentScale;
     value: boolean;
@@ -55,16 +84,3 @@ export const MoreOptionsButton: FC<React.ButtonHTMLAttributes<HTMLButtonElement>
             </>
         );
     };
-
-
-export interface RoundButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-
-}
-
-export const RoundButton: FC<RoundButtonProps> = ({ children, ...props }) => {
-
-    return (
-        <button {...props}>{children}</button>
-    );
-
-}
