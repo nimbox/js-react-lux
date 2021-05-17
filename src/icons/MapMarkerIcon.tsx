@@ -1,6 +1,6 @@
 import * as React from "react";
 
-function SvgCheckIcon(props: React.SVGProps<SVGSVGElement>) {
+function SvgMapMarkerIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,9 +14,9 @@ function SvgCheckIcon(props: React.SVGProps<SVGSVGElement>) {
       strokeLinejoin="round"
       {...props}
     >
-      <path className="check-icon_svg__st0" d="M26 8.5L13 24l-7-8.5" />
+      <path d="M16 2C10.5 2 6 6.5 6 12s10 18 10 18 10-12.5 10-18S21.5 2 16 2zm0 13c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z" />
     </svg>
   );
 }
 
-export default SvgCheckIcon;
+export default SvgMapMarkerIcon;

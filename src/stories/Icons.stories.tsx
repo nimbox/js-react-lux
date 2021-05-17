@@ -105,6 +105,15 @@ export const Simple = () => {
                 </div>
             </div>
 
+            <div className="">
+                <h1 className="text-2xl mt-10">Red Large Stroke 2</h1>
+                <div className="grid grid-cols-8 gap-4">
+                    {Object.keys(icons).sort().map((i) =>
+                        <Tile icon={i} className="w-10 h-10 fill-current stroke-1 text-red-500" />
+                    )}
+                </div>
+            </div>
+
         </div>
     );
 
