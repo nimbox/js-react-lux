@@ -3,7 +3,7 @@ import { ComponentScale } from '../ComponentScale';
 import { ComponentAlign } from '../ComponentAlign';
 export interface CustomMultiSelectProps {
     scale?: ComponentScale;
-    label: (t: any) => string | JSX.Element;
+    label: (t: any) => string;
     value: any[];
     onChange: (value: any) => void;
     align: ComponentAlign;

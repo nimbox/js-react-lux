@@ -11,6 +11,7 @@ export * from './components/controls/Input';
 export * from './components/controls/CheckBox';
 export * from './components/controls/Radio';
 export * from './components/controls/Select';
+export * from './components/controls/TextArea';
 export * from './hooks/useOutsideClick';
 export * from './hooks/useViewport';
 export * from './layouts/helium/Helium';
