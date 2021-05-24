@@ -51,7 +51,7 @@ export const DatePicker: FC<DatePickerProps> = ({ name, value, onChange, shortcu
     useEffect(() => setCalendar(firstDate(value)), [value]);
 
     const [show, setShow] = useState(false);
-    const [valueRef, popperRef] = useOutsideClick(() => setShow(false));
+    const [valueRef, popperRef] = useOutsideClick<HTMLInputElement, HTMLDivElement>(() => setShow(false));
 
     // handlers
 

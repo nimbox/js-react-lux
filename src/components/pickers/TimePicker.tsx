@@ -46,7 +46,7 @@ export const TimePicker: FC<TimePickerProps> = ({ name, value, scale = "base", o
     const { t, ready } = useTranslation();
 
     const [show, setShow] = useState(false);
-    const [valueRef, popperRef] = useOutsideClick(() => setShow(false));
+    const [valueRef, popperRef] = useOutsideClick<HTMLInputElement, HTMLDivElement>(() => setShow(false));
 
     const times = useRef({ watch: 8 });
     const timesRef = useRef<HTMLDivElement>(null);

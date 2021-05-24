@@ -1,10 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { ForwardedRef, MutableRefObject, Ref, RefObject, useEffect, useRef } from 'react';
 
 
-export const useOutsideClick = (onClickOutside: () => void): [React.RefObject<HTMLDivElement>, React.RefObject<HTMLDivElement>] => {
+export const useOutsideClick = <T extends HTMLElement, P extends HTMLElement>(onClickOutside: () => void): [RefObject<T>, RefObject<P>] => {
 
-    const target = useRef<HTMLDivElement>(null);
-    const popper = useRef<HTMLDivElement>(null);
+    const target = useRef<T>(null);
+    const popper = useRef<P>(null);
 
     const handleDocumentClick = (event: MouseEvent) => {
         if (popper.current && !popper.current!.contains(event.target as Node)) {
@@ -15,10 +15,8 @@ export const useOutsideClick = (onClickOutside: () => void): [React.RefObject<HT
     };
 
     useEffect(() => {
-        document.addEventListener("mousedown", handleDocumentClick);
-        return () => {
-            document.removeEventListener("mousedown", handleDocumentClick);
-        };
+        document.addEventListener('mousedown', handleDocumentClick);
+        return () => document.removeEventListener('mousedown', handleDocumentClick);
     });
 
     return [target, popper];
