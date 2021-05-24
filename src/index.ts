@@ -14,6 +14,8 @@ export * from './components/controls/Radio';
 export * from './components/controls/Select';
 export * from './components/controls/TextArea';
 
+export * from './components/RadioBar';
+
 export * from './hooks/useOutsideClick';
 export * from './hooks/useViewport';
 

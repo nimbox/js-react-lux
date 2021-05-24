@@ -5,7 +5,7 @@ import { ComponentScale, controlScale, controlText } from './ComponentScale';
 
 
 export interface RadioBarProps {
-    scale: ComponentScale;
+    scale?: ComponentScale;
     value: any;
     onChange: (value: any) => void;
     className?: string;
@@ -43,7 +43,7 @@ RadioBar.Option = (({ value, className, children }) => {
     return (
         <div onClick={onClick} className={classnames(
             'inline-block', 
-            controlScale[context.scale],
+            controlScale[context.scale!],
             'border-control-border border-r last:border-r-0',
             { 
                 'text-white bg-primary-500': context.value === value 
