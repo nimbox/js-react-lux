@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { ComponentScale } from './ComponentScale';
 export interface RadioBarProps {
-    scale: ComponentScale;
+    scale?: ComponentScale;
     value: any;
     onChange: (value: any) => void;
     className?: string;
