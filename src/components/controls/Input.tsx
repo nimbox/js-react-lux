@@ -9,7 +9,7 @@ export interface InputProps extends React.DetailedHTMLProps<React.InputHTMLAttri
     error?: boolean;
 }
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(({ error, scale, className, ...props }, ref) => {
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(({ scale, error, className, ...props }, ref) => {
 
     const context = useContext(Context);
 
