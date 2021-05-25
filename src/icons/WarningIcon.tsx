@@ -1,6 +1,6 @@
 import * as React from "react";
 
-function SvgCheckIcon(props: React.SVGProps<SVGSVGElement>) {
+function SvgWarningIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,9 +14,11 @@ function SvgCheckIcon(props: React.SVGProps<SVGSVGElement>) {
       strokeLinejoin="round"
       {...props}
     >
-      <path d="M25 9L13.3 23 7 15.3" />
+      <path d="M16 6v12" />
+      <circle cx={16} cy={16} r={15} />
+      <circle cx={16} cy={24} r={2} />
     </svg>
   );
 }
 
-export default SvgCheckIcon;
+export default SvgWarningIcon;
