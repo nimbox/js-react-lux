@@ -16,4 +16,5 @@ export * from './components/controls/TextArea';
 export * from './components/RadioBar';
 export * from './hooks/useOutsideClick';
 export * from './hooks/useViewport';
+export * from './components/Toast';
 export * from './layouts/helium/Helium';

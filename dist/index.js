@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import React, { useState, useEffect, createContext, useContext, useRef } from 'react';
 import debounce from 'lodash/debounce';
+import { v4 } from 'uuid';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -42,6 +43,14 @@ function __rest(s, e) {
     return t;
 }
 
+function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+}
+
 function SvgAngleDownIcon(props) {
     return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { className: "angle-down-icon_svg__st0", d: "M26 12l-10 8-10-8" }, void 0) }), void 0));
 }
@@ -60,6 +69,32 @@ function SvgAngleUpIcon(props) {
 
 function SvgCircleIcon(props) {
     return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("circle", { cx: 16, cy: 16, r: 10 }, void 0) }), void 0));
+}
+
+function SvgCrossIcon(props) {
+    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M8 8l16 16M24 8L8 24" }, void 0) }), void 0));
+}
+
+function SvgDangerIcon(props) {
+    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("path", { d: "M8 8l16 16M24 8L8 24" }, void 0),
+            jsx("circle", { cx: 16, cy: 16, r: 15 }, void 0)] }), void 0));
+}
+
+function SvgInfoIcon(props) {
+    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("circle", { cx: 16, cy: 8, r: 2 }, void 0),
+            jsx("path", { d: "M14 14h2v12h2" }, void 0),
+            jsx("circle", { cx: 16, cy: 16, r: 15 }, void 0)] }), void 0));
+}
+
+function SvgSuccessIcon(props) {
+    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("path", { className: "success-icon_svg__st0", d: "M25 9L13.3 23 7 15.3" }, void 0),
+            jsx("circle", { className: "success-icon_svg__st0", cx: 16, cy: 16, r: 15 }, void 0)] }), void 0));
+}
+
+function SvgWarningIcon(props) {
+    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("path", { d: "M16 6v12" }, void 0),
+            jsx("circle", { cx: 16, cy: 16, r: 15 }, void 0),
+            jsx("circle", { cx: 16, cy: 24, r: 2 }, void 0)] }), void 0));
 }
 
 var controlScale = {
@@ -673,26 +708,99 @@ var ViewportProvider = function (_a) {
 };
 var useViewport = function () { return useContext(ViewportContext); };
 
-var Context$3 = createContext({});
+//
+var Icon = {
+    'success': function (_a) {
+        var className = _a.className;
+        return jsx(SvgSuccessIcon, { className: className }, void 0);
+    },
+    'info': function (_a) {
+        var className = _a.className;
+        return jsx(SvgInfoIcon, { className: className }, void 0);
+    },
+    'warning': function (_a) {
+        var className = _a.className;
+        return jsx(SvgWarningIcon, { className: className }, void 0);
+    },
+    'danger': function (_a) {
+        var className = _a.className;
+        return jsx(SvgDangerIcon, { className: className }, void 0);
+    }
+};
+var Context$3 = createContext({ addToast: function (type, toast, dismiss) { return null; } });
+var useToast = function () {
+    var context = useContext(Context$3);
+    return { addToast: context.addToast };
+};
+//
+var ToastProvider = function (_a) {
+    _a.location; _a.autoDelete; var _d = _a.autoDeleteTimeout, autoDeleteTimeout = _d === void 0 ? 5000 : _d, children = _a.children;
+    var _e = useState([]), toasts = _e[0], setToasts = _e[1];
+    var addToast = function (type, item, dismiss) {
+        setToasts(function (current) {
+            var component = React.isValidElement(item) ? item : jsx(ToastContent, { title: item.title, description: item.description }, void 0);
+            var d = dismiss !== 0;
+            var dt = dismiss || autoDeleteTimeout;
+            return __spreadArrays(current, [{ id: v4(), type: type, component: component, autoDelete: d, autoDeleteTimeout: dt }]);
+        });
+    };
+    var deleteToast = function (id) {
+        setToasts(function (current) { return current.filter(function (t) { return t.id !== id; }); });
+    };
+    return (jsxs(Context$3.Provider, __assign({ value: { addToast: addToast } }, { children: [children, jsx(ToastContainer, { children: toasts.map(function (t) {
+                    return jsx(Toast, __assign({}, t, { onDelete: function () { return deleteToast(t.id); } }), t.id);
+                }) }, void 0)] }), void 0));
+};
+var ToastContainer = function (_a) {
+    var children = _a.children;
+    return (jsx("div", __assign({ className: "fixed w-64 p-2 inset-y-0 right-0 space-y-2 pointer-events-none" }, { children: children }), void 0));
+};
+var ToastContent = function (_a) {
+    var title = _a.title, description = _a.description;
+    return (jsxs(Fragment, { children: [title && jsx("div", __assign({ className: "font-bold" }, { children: title }), void 0),
+            jsx("div", { children: description }, void 0)] }, void 0));
+};
+var Toast = function (_a) {
+    var type = _a.type, component = _a.component, _b = _a.autoDelete, autoDelete = _b === void 0 ? true : _b, _c = _a.autoDeleteTimeout, autoDeleteTimeout = _c === void 0 ? 5000 : _c, onDelete = _a.onDelete;
+    var _d = useState(true), initial = _d[0], setInitial = _d[1];
+    useEffect(function () {
+        var timeout = setTimeout(function () { return setInitial(false); }, 100);
+        return function () { return clearTimeout(timeout); };
+    }, []);
+    useEffect(function () {
+        var timeout = setTimeout(function () {
+            if (autoDelete) {
+                onDelete();
+            }
+        }, autoDeleteTimeout);
+        return function () { return clearTimeout(timeout); };
+    }, []);
+    var IconType = Icon[type];
+    return (jsxs("div", __assign({ className: classnames('px-4 py-4 flex flex-row items-start space-x-4 rounded transition-transform duration-250 transform translate-x-0', { 'translate-x-64': initial }, { 'text-white bg-primary-500': type === 'success' }, { 'text-white bg-info-500': type === 'info' }, { 'text-white bg-secondary-500': type === 'warning' }, { 'text-white bg-danger-500': type === 'danger' }, 'pointer-events-auto') }, { children: [jsx("div", { children: jsx(IconType, { className: "w-6 h-6 stroke-2" }, void 0) }, void 0),
+            jsx("div", __assign({ className: "flex-grow" }, { children: component }), void 0),
+            jsx("div", __assign({ onClick: onDelete, className: "cursor-pointer" }, { children: jsx(SvgCrossIcon, { className: "w-6 h-6 stroke-2" }, void 0) }), void 0)] }), void 0));
+};
+
+var Context$4 = createContext({});
 var Helium = function (_a) {
     var _b = _a.navigator, navigator = _b === void 0 ? false : _b, _c = _a.setNavigator, setNavigator = _c === void 0 ? function (show) { return null; } : _c, children = _a.children;
-    return (jsx(Context$3.Provider, __assign({ value: { navigator: navigator, setNavigator: setNavigator } }, { children: jsx("div", __assign({ className: "relative min-h-screen flex flex-col" }, { children: children }), void 0) }), void 0));
+    return (jsx(Context$4.Provider, __assign({ value: { navigator: navigator, setNavigator: setNavigator } }, { children: jsx("div", __assign({ className: "relative min-h-screen flex flex-col" }, { children: children }), void 0) }), void 0));
 };
 // header
 var Header = function (_a) {
     var className = _a.className, children = _a.children;
-    var context = useContext(Context$3);
+    var context = useContext(Context$4);
     return (jsx("header", __assign({ className: classnames(context.navigator ? 'pl-0 md:pl-56' : 'pl-0', 'fixed z-10 inset-x-0 top-0 h-16 flex-none text-content bg-content-fg border-b border-content-border transition duration-700 ease-in-out transition-spacing') }, { children: jsx("div", __assign({ className: classnames('h-full', className) }, { children: children }), void 0) }), void 0));
 };
 // toggle
 var Toggle = function (_a) {
     var always = _a.always, children = _a.children;
-    var context = useContext(Context$3);
+    var context = useContext(Context$4);
     return (jsx("div", __assign({ className: classnames('h-16 w-16 text-center hover:text-white hover:bg-primary-500', always ? 'flex' : 'flex md:hidden', 'flex-row items-center justify-center') }, { children: jsx("button", __assign({ onClick: function () { return context.setNavigator(!context.navigator); }, className: "focus:outline-none" }, { children: children }), void 0) }), void 0));
 };
 var Navigator = function (_a) {
     var className = _a.className, children = _a.children;
-    var context = useContext(Context$3);
+    var context = useContext(Context$4);
     return (jsxs(Fragment, { children: [context.navigator && jsx("div", { className: classnames('fixed z-10 inset-0 bg-gray-800 opacity-50 md:hidden'), onClick: function () { return context.setNavigator(false); } }, void 0),
             jsx("div", __assign({ className: classnames('fixed z-20 inset-y-0 left-0 w-56 transform', context.navigator ? 'translate-x-0' : '-translate-x-56', 'transition duration-700 ease-in-out transition-transform') }, { children: jsx("div", __assign({ className: classnames('h-full flex flex-col text-navigator bg-navigator-bg', className) }, { children: children }), void 0) }), void 0)] }, void 0));
 };
@@ -713,7 +821,7 @@ Navigator.Content = NavigatorContent;
 Navigator.Footer = NavigatorFooter;
 var Main = function (_a) {
     var children = _a.children;
-    var context = useContext(Context$3);
+    var context = useContext(Context$4);
     return (jsx("main", __assign({ className: classnames('h-full', context.navigator ? 'pl-0 md:pl-56' : 'pl-0', 'pt-16 flex-grow flex flex-row items-stretch overflow-y-auto text-content bg-content-bg transition duration-700 ease-in-out transition-spacing') }, { children: children }), void 0));
 };
 Main.Content = function (_a) {
@@ -737,5 +845,5 @@ Panel.Item = function (_a) {
     return (jsx("div", __assign({ className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, { children: children }), void 0));
 };
 
-export { Button, Card, CheckBox, Context$1 as Context, Control, DatePicker, Delay, Header, Helium, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, RadioBar, RoundButton, Select, SwatchPicker, Tabs, TextArea, TimePicker, Toggle, ViewportProvider, useOutsideClick, useViewport };
+export { Button, Card, CheckBox, Context$1 as Context, Control, DatePicker, Delay, Header, Helium, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, RadioBar, RoundButton, Select, SwatchPicker, Tabs, TextArea, TimePicker, Toast, ToastContainer, ToastContent, ToastProvider, Toggle, ViewportProvider, useOutsideClick, useToast, useViewport };
 //# sourceMappingURL=index.js.map

@@ -48,15 +48,30 @@ function SvgAnniversaryIcon(props) {
 }
 
 function SvgCheckIcon(props) {
-    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { className: "check-icon_svg__st0", d: "M26 8.5L13 24l-7-8.5" }, void 0) }), void 0));
+    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M25 9L13.3 23 7 15.3" }, void 0) }), void 0));
+}
+
+function SvgCircleCross(props) {
+    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("path", { d: "M8 8l16 16M24 8L8 24" }, void 0),
+            jsx("circle", { cx: 16, cy: 16, r: 15 }, void 0)] }), void 0));
 }
 
 function SvgCircleIcon(props) {
     return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("circle", { cx: 16, cy: 16, r: 10 }, void 0) }), void 0));
 }
 
+function SvgCirclePlus(props) {
+    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("path", { d: "M6 16h20M16 6v20" }, void 0),
+            jsx("circle", { cx: 16, cy: 16, r: 15 }, void 0)] }), void 0));
+}
+
 function SvgCrossIcon(props) {
-    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M6 6l20 20M26 6L6 26" }, void 0) }), void 0));
+    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M8 8l16 16M24 8L8 24" }, void 0) }), void 0));
+}
+
+function SvgDangerIcon(props) {
+    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("path", { d: "M8 8l16 16M24 8L8 24" }, void 0),
+            jsx("circle", { cx: 16, cy: 16, r: 15 }, void 0)] }), void 0));
 }
 
 function SvgDragIcon(props) {
@@ -74,6 +89,12 @@ function SvgEditIcon(props) {
 
 function SvgHamburgerIcon(props) {
     return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { className: "hamburger-icon_svg__st0", d: "M24 10H8c-1.1 0-2-.9-2-2v0c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v0c0 1.1-.9 2-2 2zM24 18H8c-1.1 0-2-.9-2-2v0c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v0c0 1.1-.9 2-2 2zM24 26H8c-1.1 0-2-.9-2-2v0c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v0c0 1.1-.9 2-2 2z" }, void 0) }), void 0));
+}
+
+function SvgInfoIcon(props) {
+    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("circle", { cx: 16, cy: 8, r: 2 }, void 0),
+            jsx("path", { d: "M14 14h2v12h2" }, void 0),
+            jsx("circle", { cx: 16, cy: 16, r: 15 }, void 0)] }), void 0));
 }
 
 function SvgMapMarkerIcon(props) {
@@ -129,6 +150,11 @@ function SvgSquareIcon(props) {
     return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { className: "square-icon_svg__st0", d: "M6 6h20v20H6z" }, void 0) }), void 0));
 }
 
+function SvgSuccessIcon(props) {
+    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("path", { className: "success-icon_svg__st0", d: "M25 9L13.3 23 7 15.3" }, void 0),
+            jsx("circle", { className: "success-icon_svg__st0", cx: 16, cy: 16, r: 15 }, void 0)] }), void 0));
+}
+
 function SvgThumbTackIcon(props) {
     return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M16 20v6M17.9 7.4l1.4 8.2c2.5.7 4.4 2.3 4.7 4.3h-4l-8 .1H8c.4-2 2.3-3.6 4.7-4.3l1.4-8.2s-1.3-.7-1.3-.9v-.2c0-.2.3-.3.5-.3h5.2c.3-.1.5.1.5.2v.2c.2.2-1.1.9-1.1.9z" }, void 0) }), void 0));
 }
@@ -154,5 +180,11 @@ function SvgWaffleIcon(props) {
             jsx("circle", { cx: 24, cy: 24, r: 2 }, void 0)] }), void 0));
 }
 
-export { SvgAngleDownIcon as AngleDownIcon, SvgAngleLeftIcon as AngleLeftIcon, SvgAngleRightIcon as AngleRightIcon, SvgAngleUpIcon as AngleUpIcon, SvgAnniversaryIcon as AnniversaryIcon, SvgCheckIcon as CheckIcon, SvgCircleIcon as CircleIcon, SvgCrossIcon as CrossIcon, SvgDragIcon as DragIcon, SvgEditIcon as EditIcon, SvgHamburgerIcon as HamburgerIcon, SvgMapMarkerIcon as MapMarkerIcon, SvgMapSelectorIcon as MapSelectorIcon, SvgMessageIcon as MessageIcon, SvgNimboxIcon as NimboxIcon, SvgOrganizationIcon as OrganizationIcon, SvgPhoneIcon as PhoneIcon, SvgPlusIcon as PlusIcon, SvgRefreshIcon as RefreshIcon, SvgSearchIcon as SearchIcon, SvgSpeechBubbleIcon as SpeechBubbleIcon, SvgSquareIcon as SquareIcon, SvgThumbTackIcon as ThumbTackIcon, SvgThumbsUpIcon as ThumbsUpIcon, SvgTrashIcon as TrashIcon, SvgWaffleIcon as WaffleIcon };
+function SvgWarningIcon(props) {
+    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("path", { d: "M16 6v12" }, void 0),
+            jsx("circle", { cx: 16, cy: 16, r: 15 }, void 0),
+            jsx("circle", { cx: 16, cy: 24, r: 2 }, void 0)] }), void 0));
+}
+
+export { SvgAngleDownIcon as AngleDownIcon, SvgAngleLeftIcon as AngleLeftIcon, SvgAngleRightIcon as AngleRightIcon, SvgAngleUpIcon as AngleUpIcon, SvgAnniversaryIcon as AnniversaryIcon, SvgCheckIcon as CheckIcon, SvgCircleCross as CircleCross, SvgCircleIcon as CircleIcon, SvgCirclePlus as CirclePlus, SvgCrossIcon as CrossIcon, SvgDangerIcon as DangerIcon, SvgDragIcon as DragIcon, SvgEditIcon as EditIcon, SvgHamburgerIcon as HamburgerIcon, SvgInfoIcon as InfoIcon, SvgMapMarkerIcon as MapMarkerIcon, SvgMapSelectorIcon as MapSelectorIcon, SvgMessageIcon as MessageIcon, SvgNimboxIcon as NimboxIcon, SvgOrganizationIcon as OrganizationIcon, SvgPhoneIcon as PhoneIcon, SvgPlusIcon as PlusIcon, SvgRefreshIcon as RefreshIcon, SvgSearchIcon as SearchIcon, SvgSpeechBubbleIcon as SpeechBubbleIcon, SvgSquareIcon as SquareIcon, SvgSuccessIcon as SuccessIcon, SvgThumbTackIcon as ThumbTackIcon, SvgThumbsUpIcon as ThumbsUpIcon, SvgTrashIcon as TrashIcon, SvgWaffleIcon as WaffleIcon, SvgWarningIcon as WarningIcon };
 //# sourceMappingURL=index.js.map
