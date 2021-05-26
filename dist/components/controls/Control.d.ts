@@ -10,7 +10,8 @@ export interface ControlLabelProps {
     badge?: string | React.ComponentType<any>;
     className?: string;
 }
-export declare const Context: React.Context<Pick<ControlProps, "scale" | "error">>;
+declare type ContextProps = Pick<ControlProps, 'scale' | 'error'>;
+export declare const Context: React.Context<ContextProps>;
 export interface ControlComponent extends FC<ControlProps> {
     Label: FC<ControlLabelProps>;
     Message: FC<{
@@ -21,3 +22,4 @@ export interface ControlComponent extends FC<ControlProps> {
     }>;
 }
 export declare const Control: ControlComponent;
+export {};
