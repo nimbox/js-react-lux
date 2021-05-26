@@ -26,8 +26,8 @@
     "registry": "https://npm.pkg.github.com/@nimbox"
   },
   "dependencies": {
-    "@popperjs/core": "^2.6.0",
-    "@tailwindcss/forms": "^0.2.1",
+    "@popperjs/core": "^2.9.2",
+    "@tailwindcss/forms": "^0.3.2",
     "@types/tinycolor2": "^1.4.2",
     "react-dnd": "^14.0.2",
     "react-dnd-html5-backend": "^14.0.0",
@@ -35,49 +35,49 @@
     "uuid": "^8.3.2"
   },
   "peerDependencies": {
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.3"
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2"
   },
   "devDependencies": {
-    "@craco/craco": "^6.1.1",
-    "@storybook/addon-actions": "^6.1.18",
-    "@storybook/addon-controls": "^6.1.18",
-    "@storybook/addon-essentials": "^6.1.18",
-    "@storybook/addon-knobs": "^6.1.18",
-    "@storybook/addon-links": "^6.1.18",
-    "@storybook/node-logger": "^6.1.18",
-    "@storybook/preset-create-react-app": "^3.1.5",
-    "@storybook/react": "^6.1.18",
+    "@craco/craco": "^6.1.2",
+    "@storybook/addon-actions": "^6.2.9",
+    "@storybook/addon-controls": "^6.2.9",
+    "@storybook/addon-essentials": "^6.2.9",
+    "@storybook/addon-knobs": "^6.2.9",
+    "@storybook/addon-links": "^6.2.9",
+    "@storybook/node-logger": "^6.2.9",
+    "@storybook/preset-create-react-app": "^3.1.7",
+    "@storybook/react": "^6.2.9",
     "@svgr/cli": "^5.5.0",
-    "@tailwindcss/postcss7-compat": "^2.0.3",
-    "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.5",
-    "@testing-library/user-event": "^12.7.1",
-    "@types/classnames": "^2.2.11",
-    "@types/jest": "^26.0.20",
-    "@types/lodash": "^4.14.168",
-    "@types/node": "^14.14.27",
-    "@types/react": "^17.0.2",
-    "@types/react-dom": "^17.0.1",
+    "@tailwindcss/postcss7-compat": "^2.1.2",
+    "@testing-library/jest-dom": "^5.12.0",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^13.1.9",
+    "@types/classnames": "^2.3.0",
+    "@types/jest": "^26.0.23",
+    "@types/lodash": "^4.14.170",
+    "@types/node": "^15.6.1",
+    "@types/react": "^17.0.8",
+    "@types/react-dom": "^17.0.5",
     "@types/uuid": "^8.3.0",
     "autoprefixer": "^9.8.6",
-    "classnames": "^2.2.6",
-    "eslint-plugin-mdx": "^1.12.0",
-    "i18next": "^19.8.7",
+    "classnames": "^2.3.1",
+    "eslint-plugin-mdx": "^1.13.0",
+    "i18next": "^20.3.0",
     "i18next-xhr-backend": "^3.2.2",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "postcss": "^7.0.35",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-i18next": "^11.8.6",
-    "react-popper": "^2.2.4",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-i18next": "^11.9.0",
+    "react-popper": "^2.2.5",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.2",
-    "rollup": "^2.39.0",
-    "rollup-plugin-copy": "^3.3.0",
+    "react-scripts": "4.0.3",
+    "rollup": "^2.50.1",
+    "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-typescript2": "^0.29.0",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.3",
-    "typescript": "^4.1.5"
+    "rollup-plugin-typescript2": "^0.30.0",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2",
+    "typescript": "^4.3.2"
   },
   "eslintConfig": {
     "extends": [
@@ -87,6 +87,12 @@
     ],
     "settings": {
       "mdx/code-blocks": true
+    },
+    "rules": {
+      "semi": [
+        2,
+        "always"
+      ]
     }
   },
   "browserslist": {
