@@ -63,6 +63,13 @@ export const controlIconSmallMarginSize: { [S in ComponentScale]: string } = {
     'lg': 'h-6 w-6 -mt-3'
 };
 
+export const controlIconSmallMarginPositiveSize: { [S in ComponentScale]: string } = {
+    'xs': 'h-3 w-3 mt-1.5',
+    'sm': 'h-4 w-4 mt-2',
+    'base': 'h-5 w-5 mt-2.5',
+    'lg': 'h-6 w-6 mt-3'
+};
+
 export const tagText: { [S in ComponentScale]: string } = {
     'xs': 'text-1xs',
     'sm': 'text-xs',

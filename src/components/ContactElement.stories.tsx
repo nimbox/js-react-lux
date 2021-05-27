@@ -1,7 +1,6 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { ContactElement, ContactElementProps } from './ContactElement';
 import { Sortable } from './Sortable';
-import update from 'immutability-helper';
 
 
 // definition
@@ -9,6 +8,7 @@ import update from 'immutability-helper';
 const definition = {
     title: 'Component/ContactElement',
     component: ContactElement,
+    parameters: { actions: { argTypesRegex: '^on.*' } },
     argTypes: {
         scale: { control: { type: 'select', options: ['xs', 'sm', 'base', 'lg'] } },
         isDraggable: { control: { type: 'boolean' } }
@@ -18,14 +18,6 @@ export default definition;
 
 
 export const ContactElements = ({ scale, ...props }: ContactElementProps) => {
-   
-    const style = {
-        border: '1px dashed gray',
-        padding: '0.5rem 1rem',
-        marginBottom: '.5rem',
-        backgroundColor: 'white',
-        cursor: 'move',
-      }
 
     const [contactElements, setContactElements] = useState([
         { value: 1, text: 'kalzuro@nimbox.com', locus: 'work', type: 'email' },
@@ -50,8 +42,8 @@ export const ContactElements = ({ scale, ...props }: ContactElementProps) => {
     }
 
     return (
-        <div>
-        <Sortable onChange={onChange} >
+        <div className="p-2">
+        <Sortable onChange={onChange} scale={scale}>
             {contactElements
                 .map(item => (
                     <ContactElement

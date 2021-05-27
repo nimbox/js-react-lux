@@ -7,8 +7,9 @@ import { Sortable } from './Sortable';
 // definition
 
 const definition = {
-    title: 'Component/ContactList',
-    component: ContactElement,
+    title: 'Component/Sortable',
+    component: Contact,
+    parameters: { actions: { argTypesRegex: '^on.*' } },
     argTypes: {
         scale: { control: { type: 'select', options: ['xs', 'sm', 'base', 'lg'] } },
         isDraggable: { control: { type: 'boolean' } }
@@ -17,7 +18,7 @@ const definition = {
 export default definition;
 
 
-export const ContactList = ({ scale, ...props }: ContactElementProps) => {
+export const SortableList = ({ scale, ...props }: ContactElementProps) => {
 
     let contactIndex: number;
 
@@ -85,14 +86,14 @@ export const ContactList = ({ scale, ...props }: ContactElementProps) => {
 
     return (
         <div>
-            <Sortable onChange={onChangeContacts} >
+            <Sortable onChange={onChangeContacts} scale={scale}>
                 {contacts
                     .map((item, contactIndex) => (
                         <Contact
                             render={item.text}
                             scale={scale}
                         >
-                            <Sortable onChange={(dragIndex: number, hoverIndex: number) => {
+                            <Sortable scale={scale} onChange={(dragIndex: number, hoverIndex: number) => {
                                 const dragItem = contacts[contactIndex].elements[dragIndex];
                                 console.log(contactIndex, 'drag ', dragItem);
                                 if (dragItem) {
@@ -122,4 +123,4 @@ export const ContactList = ({ scale, ...props }: ContactElementProps) => {
 
     )
 };
-ContactList.args = { scale: 'base' };
+SortableList.args = { scale: 'base' };
