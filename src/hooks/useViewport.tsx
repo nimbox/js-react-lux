@@ -1,6 +1,5 @@
-import React, { createContext, FC, useContext, useEffect, useState } from 'react';
 import debounce from 'lodash/debounce';
-import { number } from '@storybook/addon-knobs';
+import React, { createContext, FC, useContext, useEffect, useState } from 'react';
 
 
 //
@@ -11,18 +10,18 @@ const ViewportContext = createContext<{ width: number, height: number }>({ width
 
 export const ViewportProvider: FC<{ wait: number }> = ({ wait = 250, children }) => {
 
-    const [scale, setScale] = useState({ width: window.innerWidth, height: window.innerHeight });
-    const handleRescale = debounce(() => {
-        setScale({ width: window.innerWidth, height: window.innerHeight });
+    const [size, setSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+    const handleResize = debounce(() => {
+        setSize({ width: window.innerWidth, height: window.innerHeight });
     }, wait);
 
     useEffect(() => {
-        window.addEventListener('rescale', handleRescale);
-        return () => window.removeEventListener('rescale', handleRescale);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     });
 
     return (
-        <ViewportContext.Provider value={scale}>
+        <ViewportContext.Provider value={size}>
             {children}
         </ViewportContext.Provider>
     );
