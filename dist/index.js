@@ -714,20 +714,18 @@ RadioBar.Option = (function (_a) {
 RadioBar.Option.displayName = 'RadioBar.Option';
 
 //
-// viewport
+// useViewport
 //
 var ViewportContext = createContext({ width: 0, height: 0 });
 var ViewportProvider = function (_a) {
     var _b = _a.wait, wait = _b === void 0 ? 250 : _b, children = _a.children;
-    var _c = useState({ width: window.innerWidth, height: window.innerHeight }), scale = _c[0], setScale = _c[1];
-    var handleRescale = debounce(function () {
-        setScale({ width: window.innerWidth, height: window.innerHeight });
-    }, wait);
+    var _c = useState({ width: window.innerWidth, height: window.innerHeight }), size = _c[0], setSize = _c[1];
+    var handleResize = debounce(function () { return setSize({ width: window.innerWidth, height: window.innerHeight }); }, wait);
     useEffect(function () {
-        window.addEventListener('rescale', handleRescale);
-        return function () { return window.removeEventListener('rescale', handleRescale); };
+        window.addEventListener('resize', handleResize);
+        return function () { return window.removeEventListener('resize', handleResize); };
     });
-    return (jsx(ViewportContext.Provider, __assign({ value: scale }, { children: children }), void 0));
+    return (jsx(ViewportContext.Provider, __assign({ value: size }, { children: children }), void 0));
 };
 var useViewport = function () { return useContext(ViewportContext); };
 

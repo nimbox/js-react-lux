@@ -35,7 +35,7 @@
     "uuid": "^8.3.2"
   },
   "peerDependencies": {
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2"
+    "tailwindcss": "^2.1.2"
   },
   "devDependencies": {
     "@craco/craco": "^6.1.2",
@@ -59,24 +59,24 @@
     "@types/react": "^17.0.8",
     "@types/react-dom": "^17.0.5",
     "@types/uuid": "^8.3.0",
-    "autoprefixer": "^9.8.6",
+    "autoprefixer": "^10.2.6",
     "classnames": "^2.3.1",
     "eslint-plugin-mdx": "^1.13.0",
-    "i18next": "^20.3.0",
+    "i18next": "^20.3.1",
     "i18next-xhr-backend": "^3.2.2",
     "lodash": "^4.17.21",
-    "postcss": "^7.0.35",
+    "postcss": "^8.3.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-i18next": "^11.9.0",
+    "react-i18next": "^11.10.0",
     "react-popper": "^2.2.5",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
-    "rollup": "^2.50.1",
+    "rollup": "^2.50.4",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-typescript2": "^0.30.0",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2",
+    "tailwindcss": "^2.1.2",
     "typescript": "^4.3.2"
   },
   "eslintConfig": {
@@ -87,12 +87,6 @@
     ],
     "settings": {
       "mdx/code-blocks": true
-    },
-    "rules": {
-      "semi": [
-        2,
-        "always"
-      ]
     }
   },
   "browserslist": {

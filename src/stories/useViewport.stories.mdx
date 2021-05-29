@@ -21,10 +21,10 @@ This function is debounced with a 250ms wait, but that can be changed with the
 `wait` parameter in the `ViewportProvider`.
 
 <Preview>
-    <Story name="Basic" parameters={{ decorators: [(Story) => <ViewportProvider>{<Story/>}</ViewportProvider>] }}>
+    <Story name="Basic" decorators={[(Story) => <ViewportProvider>{<Story/>}</ViewportProvider>]}>
         {() => {
-            const scale = useViewport();
-            return (<div>{JSON.stringify(scale)}</div>);
+            const size = useViewport();
+            return (<div>{JSON.stringify(size)}</div>);
         }}
     </Story>
 </Preview>
@@ -32,10 +32,10 @@ This function is debounced with a 250ms wait, but that can be changed with the
 With a 2 second wait.
 
 <Preview>
-    <Story name="With Wait" parameters={{ decorators: [(Story) => <ViewportProvider wait={2000}>{<Story/>}</ViewportProvider>] }}>
+    <Story name="With Wait" decorators={[(Story) => <ViewportProvider wait={2000}>{<Story/>}</ViewportProvider>]}>
         {() => {
-            const scale = useViewport();
-            return (<div>{JSON.stringify(scale)}</div>);
+            const size = useViewport();
+            return (<div>{JSON.stringify(size)}</div>);
         }}
     </Story>
 </Preview>

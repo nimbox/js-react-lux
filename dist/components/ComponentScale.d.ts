@@ -26,6 +26,9 @@ export declare const controlIconMarginSize: {
 export declare const controlIconSmallMarginSize: {
     [S in ComponentScale]: string;
 };
+export declare const controlIconSmallMarginPositiveSize: {
+    [S in ComponentScale]: string;
+};
 export declare const tagText: {
     [S in ComponentScale]: string;
 };
