@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import { useState } from 'react';
 import { controlScale } from './ComponentScale';
 import { Sortable } from './Sortable';
 
@@ -13,20 +14,23 @@ export default definition;
 
 export const SortableList = () => {
 
+    const [lines, setLines] = useState(["uno", "dos", "tres", "cuatro"]);
+
     const onChange = (source: number, target: number) => {
-        console.log("Sortable story", source, target);
+        setLines(xx => {
+            const changed = [...xx];
+            const removed = changed.splice(source, 1);
+            changed.splice(target, 0, removed[0]);
+            return changed;
+        });
     }
 
     return (
         <div className='inline-block'>
-            <Sortable onChange={onChange} >
-                <div className={classnames(controlScale['base'])}> Elemento 0</div>
-                <div className={classnames(controlScale['base'])}> Elemento 1</div>
-                <div className={classnames(controlScale['base'])}> Elemento 2</div>
-                <div className={classnames(controlScale['base'])}> Elemento 3</div>
-                <div className={classnames(controlScale['base'])}> Elemento 4</div>
+            <Sortable onChange={onChange}>
+                {lines.map(l => <div>{l}</div>)}
             </Sortable>
         </div>
-
     )
+
 };

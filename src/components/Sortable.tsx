@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { FC, LegacyRef, ReactElement, useCallback, useRef, useState } from 'react';
+import React, { FC, LegacyRef, ReactChild, ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 import { useDrag, useDrop } from "react-dnd";
 import { v4 as uuidv4 } from 'uuid';
 import { DragIcon } from '../icons';
@@ -7,23 +7,27 @@ import { ComponentScale, controlIconSmallMarginPositiveSize } from './ComponentS
 
 
 export interface SortableProps {
-    onChange: (source: number, target: number) => void;
     scale?: ComponentScale;
+    onChange: (source: number, target: number) => void;
+    className?: string;
 }
 
 interface SortableItemProps {
-    type: string;
-    onChange: (value: React.Key, target: number) => void;
-    findItem: (id: string) => { index: number };
-    onUpdate: (source: number, target: number) => void;
     scale?: ComponentScale;
+    type: string;
+    findItem: (id: string) => { index: number };
+    onChange: (value: React.Key, target: number) => void;
+    onUpdate: (source: number, target: number) => void;
+    
 }
 
-export const Sortable: FC<SortableProps> = (({ onChange, scale = 'base', children }) => {
+export const Sortable: FC<SortableProps> = (({ onChange, scale = 'base', className, children }) => {
 
-    const d = React.Children.toArray(children);
-    const [childrenArray, setChildrenArray] = useState(d);
+    const [childrenArray, setChildrenArray] = useState<any>([]);
+    useEffect(() => setChildrenArray(React.Children.toArray(children)), [setChildrenArray, children]);
     const [key] = useState(uuidv4());
+
+    console.log('childrenArray', children, childrenArray);
 
     const findItem = useCallback(
         (value: React.Key) => {
@@ -46,14 +50,16 @@ export const Sortable: FC<SortableProps> = (({ onChange, scale = 'base', childre
             })
         }, [findItem, childrenArray, setChildrenArray]);
 
+    console.log('render sortable');
+
     return (
-        <>
+        <ul className={className}>
             {childrenArray.map((element) => {
                 if (React.isValidElement(element)) {
                     return <SortableItem type={key} onChange={moveItem} findItem={findItem} onUpdate={onChange} scale={scale}>{element}</SortableItem>;
                 }
             })}
-        </>
+        </ul>
     );
 });
 
@@ -63,7 +69,7 @@ const SortableItem: FC<SortableItemProps> = (({ type, onChange, findItem, onUpda
     const [, drop] = useDrop(() => ({ accept: type }));
 
     return (
-        <div ref={drop}>
+        <li ref={drop}>
             <div ref={(refPreview as LegacyRef<HTMLDivElement> | undefined)} className={classnames(
                 'relative group',
                 { '-ml-3 pl-3': scale === 'xs', '-ml-4 pl-4': scale === 'sm', '-ml-5 pl-5': scale === 'base', '-ml-6 pl-6': scale === 'lg' })}>
@@ -73,13 +79,13 @@ const SortableItem: FC<SortableItemProps> = (({ type, onChange, findItem, onUpda
                     })}
                 </div>
                 <div ref={(ref as LegacyRef<HTMLDivElement> | undefined)} className={classnames(
-                    'absolute invisible group-hover:visible top-0 left-0')} >
+                    'absolute invisible group-hover:visible top-0 left-0 cursor-move')} >
                     {!isDragging && <DragIcon className={classnames(
                         controlIconSmallMarginPositiveSize[scale || 'base'],
                         'stroke-current stroke-1')} />}
                 </div>
             </div>
-        </div>
+        </li>
     );
 });
 
