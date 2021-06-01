@@ -1,7 +1,7 @@
 import classnames from "classnames";
-import React from "react";
+import React, { FC } from "react";
 import { MessageIcon } from "../icons";
-import  PhoneIcon  from "../icons/PhoneIcon";
+import PhoneIcon from "../icons/PhoneIcon";
 import { Button } from "./Buttons";
 import { ComponentScale, controlSmallText } from "./ComponentScale";
 
@@ -14,8 +14,7 @@ export interface ContactElementProps {
     className?: string;
 }
 
-
-export const ContactElement = React.forwardRef<HTMLInputElement, ContactElementProps>(({ type, locus, render, scale, className, ...props }, ref) => {
+export const ContactElement: FC<ContactElementProps> = ({ type, locus, render, scale, className, ...props }) => {
 
     let Icon = MessageIcon;
     switch (type) {
@@ -28,7 +27,7 @@ export const ContactElement = React.forwardRef<HTMLInputElement, ContactElementP
     }
 
     return (
-        <span ref={ref} {...props} className={classnames(
+        <span {...props} className={classnames(
             'flex flex-row max-w-full items-baseline py-0 truncate',
             className)} >
             <span className={classnames(
@@ -47,5 +46,4 @@ export const ContactElement = React.forwardRef<HTMLInputElement, ContactElementP
             </span>
         </span>
     )
-});
-ContactElement.displayName = 'ContactElement';
+};

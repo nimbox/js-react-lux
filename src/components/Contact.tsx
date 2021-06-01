@@ -1,10 +1,8 @@
 import classnames from "classnames";
-import React from "react";
+import { FC } from "react";
 import { NimboxIcon } from "../icons";
 import { Button } from "./Buttons";
-import { ComponentScale, controlSmallText } from "./ComponentScale";
-import { ContactElement } from './ContactElement';
-
+import { ComponentScale } from "./ComponentScale";
 
 
 export interface ContactProps {
@@ -13,12 +11,11 @@ export interface ContactProps {
     className?: string;
 }
 
-
-export const Contact = React.forwardRef<HTMLInputElement, ContactProps>(({ render, scale, className, children, ...props }, ref) => {
+export const Contact: FC<ContactProps> = ({ render, scale, className, children, ...props }) => {
 
     return (
-        <div ref={ref} {...props} className={className}>
-            <span  className={classnames(
+        <div {...props} className={className}>
+            <span className={classnames(
                 'flex flex-row max-w-full items-baseline py-0 truncate')} >
                 <span className={
                     'self-center flex flex-row items-center justify-center'}>
@@ -35,5 +32,4 @@ export const Contact = React.forwardRef<HTMLInputElement, ContactProps>(({ rende
             </div>
         </div>
     )
-});
-Contact.displayName = 'Contact';
+};

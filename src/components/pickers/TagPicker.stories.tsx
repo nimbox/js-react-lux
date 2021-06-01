@@ -111,7 +111,6 @@ export const Parameterized = ({ scale, values, ...props }: TagPickerProps<{value
 
     return (
         <div className="">
-            <span>Escribo algo antes</span>
             <TagPicker scale={scale} values={tagsC} render={render} 
                 onRemove={(value) => deleteTag(value)}
                 onSearch={(q) => searchTag(q)}

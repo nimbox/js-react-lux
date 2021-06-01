@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, LegacyRef, useContext, useState } from 'react';
 import { useOutsideClick } from '../../hooks/useOutsideClick';
 import AngleDownIcon from '../../icons/AngleDownIcon';
 import { Button } from '../Buttons';
@@ -68,10 +68,9 @@ export const TagPicker: FC<TagPickerProps<{ value: string | number, name: string
                 });
         }
 
-
         return (
             <div className="relative inline-block w-full">
-                <div ref={target} tabIndex={0} className={classnames(
+                <div ref={target as LegacyRef<HTMLDivElement> | undefined} tabIndex={0} className={classnames(
                     'relative border border-control-border rounded',
                     'focus:border-primary-500 focus:ring focus:ring-primary-500',
                     'focus:ring-opacity-50 focus:outline-none pl-1 pr-8',
@@ -90,7 +89,7 @@ export const TagPicker: FC<TagPickerProps<{ value: string | number, name: string
                     </div>
                 </div>
                 { isVisible &&
-                    <div ref={popper} className={classnames(
+                    <div ref={popper as LegacyRef<HTMLDivElement> | undefined} className={classnames(
                         'absolute border border-control-border rounded',
                         'bg-white w-full p-4 mt-2 space-y-2 max-h-72  overflow-auto')}>
                         <Search scale={smallScale[scale || context.scale || 'base']} onChange={handleSearch} />
