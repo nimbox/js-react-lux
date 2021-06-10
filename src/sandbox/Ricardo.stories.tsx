@@ -1,4 +1,5 @@
 import React, { useState, useRef, FC, useLayoutEffect } from 'react';
+import { Input } from '..';
 
 const definition = {
     title: 'Sandbox/Ricardo',
@@ -38,3 +39,44 @@ export const InlineFlex = () => {
 
 };
 
+
+export const Controlled = () => {
+
+    const [name, setName] = useState("Ricardo");
+    const handleChange = (e: any) => {
+        console.log('está siendo', e.target.value);
+        setName(e.target.value);
+    };
+
+    const handleSubmit = (e: any) => { 
+        e.preventDefault();
+        console.log('termino siendo', name);
+    };
+
+    console.log('render');
+    return (
+        <form onSubmit={handleSubmit}>
+            <Input value={name} onChange={handleChange} className="border"/>
+        </form>
+    );
+
+ };
+
+
+ export const UnControlled = () => {
+
+    const ref = useRef<any>();
+
+    const handleSubmit = (e: any) => { 
+        e.preventDefault();
+        console.log('termino siendo', ref.current.value);
+    };
+
+    console.log('render');
+    return (
+        <form onSubmit={handleSubmit}>
+            <Input defaultValue="Ricardo" ref={ref} className="border"/>
+        </form>
+    );
+
+ };
