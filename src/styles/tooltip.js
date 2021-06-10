@@ -18,6 +18,10 @@ module.exports = {
         width: 0,
         height: 0,
 
+        fontSize: '0.75rem',
+        fontWeight: 'normal',
+        lineHeight: '1rem',
+
         borderLeft: '0.25rem solid transparent',
         borderRight: '0.25rem solid transparent',
         borderTop: '0.5rem solid #222222',
@@ -33,16 +37,22 @@ module.exports = {
         content: 'attr(data-tooltip)',
 
         position: 'absolute',
-        top: '-2.375rem',
+        top: '-2rem',
         left: '50%',
+
         marginTop: '2px',
         marginLeft: '-1rem',
 
+        padding: '0.125rem 0.5rem',
+
+        fontSize: '0.75rem',
+        fontWeight: 'normal',
+        lineHeight: '1rem',
+
+        // color: 'red',
+        color: '#ffffff',
         backgroundColor: '#222222',
 
-        color: '#ffffff',
-        padding: '0.125rem 0.5rem',
-        fontSize: '0.875rem',
         whiteSpace: 'nowrap',
         boxShadow: '1px 1px 3px #222222',
 
