@@ -25,8 +25,7 @@ export const Sortable: FC<SortableProps> = (({ onChange, scale = 'base', classNa
 
     const [childrenArray, setChildrenArray] = useState<(React.ReactChild | React.ReactFragment | React.ReactPortal)[]>([]);
     useEffect(() => setChildrenArray(React.Children.toArray(children)), [setChildrenArray, children]);
-    const [key] = useState(uuidv4());
-    console.log('childrenArray', children, childrenArray);
+    const [type] = useState(uuidv4());
 
     const findItem = useCallback(
         (value: React.Key) => {
@@ -49,13 +48,11 @@ export const Sortable: FC<SortableProps> = (({ onChange, scale = 'base', classNa
             })
         }, [findItem, childrenArray, setChildrenArray]);
 
-    console.log('render sortable');
-
     return (
         <ul className={className}>
             {childrenArray.map((element) => {
                 if (React.isValidElement(element)) {
-                    return <SortableItem type={key} onChange={moveItem} findItem={findItem} onUpdate={onChange} scale={scale}>{element}</SortableItem>;
+                    return <SortableItem type={type} onChange={moveItem} findItem={findItem} onUpdate={onChange} scale={scale}>{element}</SortableItem>;
                 }
             })}
         </ul>
