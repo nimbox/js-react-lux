@@ -1,4 +1,4 @@
-import React from "react";
+import { FC } from "react";
 import { ComponentScale } from "./ComponentScale";
 export interface ContactElementProps {
     type: string;
@@ -7,4 +7,4 @@ export interface ContactElementProps {
     scale?: ComponentScale;
     className?: string;
 }
-export declare const ContactElement: React.ForwardRefExoticComponent<ContactElementProps & React.RefAttributes<HTMLInputElement>>;
+export declare const ContactElement: FC<ContactElementProps>;

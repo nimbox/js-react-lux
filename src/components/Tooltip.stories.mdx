@@ -15,7 +15,7 @@ or produce any overhead. They are useful for showing simple and short one liners
 
 <Preview>
     <Story name="Basic">
-        <div className="inline-block px-3 py-2 border rounded" data-tooltip="Hover text">Hover over me</div>
+        <div className="inline-block px-3 py-2 border rounded bg-red-100" data-tooltip="Hover text">Hover over me</div>
     </Story>
 </Preview>
 
@@ -24,9 +24,24 @@ attribute from the element.
 
 <Preview>
     <Story name="Always show">
-        <div className="inline-block px-3 py-2 border rounded" data-tooltip="Hover text" data-tooltip-show>No need to over over me</div>
+        <div className="inline-block px-3 py-2 border rounded bg-red-100" data-tooltip="Hover text" data-tooltip-show>No need to over over me</div>
     </Story>
 </Preview>
+
+When applying to different text sizes it positions accordingly
+
+<Preview>
+    <Story name="Applied to different sizes">
+        <div className="p-10 flex flex-row justify-between items-center">
+            <span className="text-xs bg-red-100" data-tooltip="Hover text" data-tooltip-show>Extra Small</span>
+            <span className="text-sm bg-red-100" data-tooltip="Hover text" data-tooltip-show>Small</span>
+            <span className="text-base bg-red-100" data-tooltip="Hover text" data-tooltip-show>Base</span>
+            <span className="text-lg bg-red-100" data-tooltip="Hover text" data-tooltip-show>Large</span>
+            <span className="text-xl bg-red-100" data-tooltip="Hover text" data-tooltip-show>Extra Large</span>
+        </div>
+    </Story>
+</Preview>
+
 
 It even works on svg using `foreignObject` element. Set the svg's overflow class
 to 'visible' because it might hide the tooltip. Two attributes are required: 
