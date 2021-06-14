@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import React, { createRef, Ref, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { Input } from '..';
 import { Choose, ChooseProps } from './Choose';
+import { Search } from './controls/IconInput';
 
 
 // definition
@@ -37,7 +39,7 @@ export const Parameterized = ({ scale,  ...props }: ChooseProps<{id: string | nu
     const [dataC, setData] = React.useState([]);
     const [newValue, setNewValue] = React.useState("id1");
 
-    const onChange: (value: string) => Promise<{id: string, value: string }[]> | {id: string, value: string}[] = (value: string) => {
+    const onSearch: (value: string) => Promise<{id: string, value: string }[]> | {id: string, value: string}[] = (value: string) => {
         let promise: Promise<{id: string, value:string}[]> = new Promise((resolve, reject) => {
             setTimeout(() => {
                 if (value != "") {
@@ -67,15 +69,29 @@ export const Parameterized = ({ scale,  ...props }: ChooseProps<{id: string | nu
         return promise;
     };
 
+    const itemMatch = (q: string, item) => { 
+        return item.value.toLowerCase().includes(q.toLowerCase())
+    }
+
     const renderItem = (item) => (item.value);
     const itemValue = (item) => (item.id);
-    const valueItem = (value) =>  ( (_.find(data, function (d) { return d.id == value; })));
 
     const recent =["id1", "id5", "id2"];
 
     return (
-        <div className="">
-            <Choose value={newValue} recentValues={recent} onChange={onChange} onSelect={selectItem} renderItem={renderItem} valueItem={valueItem} itemValue={itemValue} scale={scale}  />
+        <div className="grid grid-cols-3 gap-4">
+            <Input />
+            <Choose 
+                defaultValue={newValue} 
+                recentValues={recent} 
+                items={data}
+                onSearch={onSearch} 
+                onSelect={selectItem} 
+                renderItem={renderItem} 
+                itemValue={itemValue} 
+                itemMatch={itemMatch}
+                scale={scale}  />
+            <Search />
         </div>
     );
 }
