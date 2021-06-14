@@ -10,11 +10,12 @@ import { Button, Loading } from '..';
 import _ from 'lodash';
 
 
-export interface ChooseProps<T> {
-    scale?: ComponentScale;
+export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
 
-    value?: string;
-    defaultValue?: string;
+    scale?: ComponentScale;
+   
+    // value?: string;
+    // defaultValue?: string;
     recentValues?: string[];
 
     items?: T[];
@@ -23,7 +24,7 @@ export interface ChooseProps<T> {
 
     onSearch?: (value: string) => Promise<T[]> | T[] | [];
 
-    onSelect: (value: string) => boolean | Promise<boolean>;
+    // onSelect: (value: string) => boolean | Promise<boolean>;
 
     itemValue: (item: T) => string;
     itemMatch: (q: string, item: T) => boolean;
@@ -33,7 +34,8 @@ export interface ChooseProps<T> {
     onCreate?: (value: string) => boolean | Promise<boolean>;
     renderCreateItem?: (q: string) => React.Component;
 
-    className?: string;
+    // className?: string;
+
 }
 
 export const Choose = React.forwardRef<HTMLInputElement, ChooseProps<T>>

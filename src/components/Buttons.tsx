@@ -69,9 +69,10 @@ export interface MoreOptionsButtonProps {
     scale?: ComponentScale;
     value: boolean;
     onChange: (value: boolean) => void;
+    className?: string;
 }
 
-export const MoreOptionsButton: FC<React.ButtonHTMLAttributes<HTMLButtonElement> & MoreOptionsButtonProps> =
+export const MoreOptionsButton: FC<MoreOptionsButtonProps> =
     ({ value = false, onChange, className, children, ...props }) => {
         const { t } = useTranslation();
         return (
