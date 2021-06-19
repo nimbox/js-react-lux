@@ -2,9 +2,9 @@ import classnames from 'classnames';
 import React, { createContext, FC, useContext, useState } from 'react';
 import { useOutsideClick } from '../../hooks/useOutsideClick';
 import { AngleDownIcon } from '../../icons';
-import { Context as controlContext } from './Control';
+import { ComponentAlign } from '../ComponentAlign';
 import { ComponentScale, controlIconSmallMarginSize, controlScale } from '../ComponentScale';
-import { ComponentAlign } from '../ComponentAlign'
+import { Context as controlContext } from './Control';
 
 
 export interface CustomSelectProps {
@@ -50,7 +50,7 @@ export const CustomSelect: CustomSelectComponent = (({ scale = 'base', value, la
                             controlIconSmallMarginSize[scale || context.scale || 'base'])} />
                     </div>
                 </div>
-                {isVisible && React.Children.count(children) != 0 &&
+                {isVisible && React.Children.count(children) !== 0 &&
                     <div ref={popper} className={classnames(
                         'absolute bg-white border border-control-border rounded',
                         {
@@ -62,7 +62,7 @@ export const CustomSelect: CustomSelectComponent = (({ scale = 'base', value, la
                         {children}
                     </div>
                 }
-                {isVisible && React.Children.count(children) == 0 &&
+                {isVisible && React.Children.count(children) === 0 &&
                     <div className="w-absolute bg-white border border-control-border rounded inset-x-0 mt-2">&nbsp;</div>
                 }
             </div>

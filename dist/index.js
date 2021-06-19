@@ -203,7 +203,7 @@ var Tabs = function (_a) {
 var TabsOption = function (_a) {
     var value = _a.value, className = _a.className, children = _a.children;
     var context = useContext(Context$4);
-    return (jsx("li", __assign({ onClick: function () { return context.setValue(value); }, className: classnames('px-4 py-2 text-primary-500 hover:text-primary-700 font-bold', { 'border-b-2 border-primary-500': context.value === value }, 'cursor-pointer', className) }, { children: children }), void 0));
+    return (jsx("li", __assign({ onClick: function () { return context.setValue(value); }, className: classnames('px-4 py-2 text-control-border hover:text-primary-700', { 'text-primary-500 border-b-2 border-primary-500': context.value === value }, 'cursor-pointer', className) }, { children: children }), void 0));
 };
 Tabs.Option = TabsOption;
 

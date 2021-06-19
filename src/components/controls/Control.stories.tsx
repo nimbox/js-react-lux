@@ -1,6 +1,6 @@
 import { CheckBox } from './CheckBox';
 import { Control, ControlProps } from './Control';
-import { Search } from './IconInput';
+import { SearchInput } from './SearchInput';
 import { Input } from './Input';
 import { Radio } from './Radio';
 import { Select } from './Select';
@@ -43,12 +43,12 @@ export const Parameterized = ({ scale = 'base', error = false, ...props }: Contr
                 </div>
                 <div>
                     <Control scale={scale} error={error}>
-                        <Search scale={scale} />
+                        <SearchInput scale={scale} />
                     </Control>
                 </div>
                 <div>
                     <Control scale={scale} error={error}>
-                        <Search disabled placeholder="disabled" />
+                        <SearchInput disabled placeholder="disabled" />
                     </Control>
                 </div>
                 <div>

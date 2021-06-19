@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { FC, useContext } from 'react';
+import React, { useContext } from 'react';
 import { ComponentScale, controlScale } from '../ComponentScale';
 import { Context } from './Control';
 

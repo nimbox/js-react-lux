@@ -1,8 +1,9 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { withKnobs } from '@storybook/addon-knobs';
 import React, { useState } from 'react';
-import { HamburgerIcon, NimboxIcon, CrossIcon } from '../../icons';
-import { Header, Helium, Main, Navigator, Toggle, Panel } from './Helium';
-import '../../index.css'
+import { CrossIcon, HamburgerIcon, NimboxIcon } from '../../icons';
+import '../../index.css';
+import { Header, Helium, Main, Navigator, Panel, Toggle } from './Helium';
 
 
 export default { title: 'Layout/Helium', decorators: [withKnobs] };

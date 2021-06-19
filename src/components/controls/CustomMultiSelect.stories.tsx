@@ -1,4 +1,4 @@
-import _, { values } from 'lodash';
+import _ from 'lodash';
 import React, { useState } from 'react';
 import { CustomMultiSelect, CustomMultiSelectProps } from './CustomMultiSelect';
 

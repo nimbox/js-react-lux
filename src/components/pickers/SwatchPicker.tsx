@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { useImperativeHandle, useRef, useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import { useOutsideClick } from '../../hooks/useOutsideClick';
 import { Input, InputProps } from '../controls/Input';
 

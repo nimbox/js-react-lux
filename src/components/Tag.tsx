@@ -1,48 +1,67 @@
 import classnames from 'classnames';
-import React, { FC, useContext } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import tinycolor from 'tinycolor2';
-import CrossIcon from '../icons/CrossIcon';
-import { ComponentScale, controlSize, controlSmallSize, tagText } from './ComponentScale';
-import { Context } from './controls/Control';
 
+
+export const Cross: FC<React.SVGProps<SVGSVGElement> & { show: boolean }> = ({ show, ...props }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox="0 0 32 32"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={'0.25em'}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+    >
+        {show && <path d="M10 10L22 22M22 10L10 22" />}
+    </svg>
+);
 
 export interface TagProps {
-    scale?: ComponentScale;
+
     color?: string;
-    onClick?: (value: any) => void;
-    onDelete?: (value: any) => void;
+
+    onClick?: (e: any) => void;
+    onDelete?: (e: React.UIEvent<HTMLElement>) => void;
+
     className?: string;
+
 }
 
-export const Tag: FC<TagProps> = (({ scale, color: backgroundColor, onClick, onDelete, className, children, ...props }) => {
+export const Tag: FC<TagProps> = ({ color: backgroundColor = 'red', onClick, onDelete, className, children }) => {
 
-    const show = !!onDelete
-    const context = useContext(Context);
-    const color = backgroundColor ? tinycolor(backgroundColor).isDark() ? 'white' : 'black' : '';
+    const color = useMemo(() => tinycolor(backgroundColor).isDark() ? 'white' : 'black', [backgroundColor]);
+    const crossBackgroundColor = useMemo(() => tinycolor(backgroundColor).darken(5).toString(), [backgroundColor]);
+    const crossBackgroundHoverColor = useMemo(() => tinycolor(crossBackgroundColor).darken(10).toString(), [crossBackgroundColor]);
+    const [hoverColor, setHoverColor] = useState(crossBackgroundColor);
 
     return (
-        <span {...props} onClick={onClick} style={{ color: color, backgroundColor: backgroundColor }} className={classnames(
-            'inline-flex flex-row max-w-full items-baseline py-0 border border-control-border rounded-l-2xl rounded-r truncate',
-            className)}>
-            {show &&
-                <span className={classnames(
-                    'self-center rounded-full flex flex-shrink-0 items-center justify-center',
-                    controlSmallSize[scale || context.scale || 'base'])}>
-                    <CrossIcon onClick={onDelete} className={classnames(
-                        { 'h-2.5 w-2.5': scale === 'xs', 'h-3 w-3': scale === 'sm' || scale === 'base', 'h-3.5 w-3.5': scale === 'lg' },
-                        'stroke-current stroke-2 ')} />
-                </span>}
-            <span className={classnames(
-                'self-auto truncate',
-                tagText[scale || context.scale || 'base'],
-                !show ? {
-                    'px-2': scale === 'xs',
-                    'px-2.5': scale === 'sm',
-                    'px-3': scale === 'base' || scale === 'lg',
-                } : 'pr-0.5',
-            )}>
+        <span
+            className={classnames(
+                'inline-flex flex-row items-baseline py-0.5 max-w-full rounded rounded-full',
+                className
+            )}
+            style={{ paddingLeft: '0.25em', paddingRight: '0.5em', color, backgroundColor }}
+        >
+            <Cross
+                show={!!onDelete}
+                onMouseEnter={() => setHoverColor(crossBackgroundHoverColor)}
+                onMouseLeave={() => setHoverColor(crossBackgroundColor)}
+                onClick={(e: any) => onDelete(e)}
+                className="flex-none self-center stroke-current rounded rounded-full cursor-pointer"
+                style={{ marginRight: '0.15em', backgroundColor: onDelete ? hoverColor : crossBackgroundColor }}
+            />
+            <span
+                onClick={!onDelete ? onClick : undefined}
+                className={classnames('inline-block max-w-full truncate', { 'hover:underline cursor-pointer': onClick && !onDelete })}
+                style={{ height: '1.2em', lineHeight: '1.2em' }}
+            >
                 {children}
             </span>
         </span>
-    );
-});
+    )
+
+};
