@@ -1,5 +1,7 @@
-import React, { useState, useRef, FC, useLayoutEffect } from 'react';
+/* eslint-disable import/no-anonymous-default-export */
+import React, { useRef, useState } from 'react';
 import { Input } from '..';
+
 
 const definition = {
     title: 'Sandbox/Ricardo',

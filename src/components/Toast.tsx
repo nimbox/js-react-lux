@@ -109,7 +109,7 @@ export const ToastContainer: FC<{}> = ({ children }) => {
 export const ToastContent: FC<{ title?: string, description: string }> = ({ title, description }) => {
     return (
         <>
-            { title && <div className="font-bold">{title}</div>}
+            {title && <div className="font-bold">{title}</div>}
             <div>{description}</div>
         </>
     );
@@ -130,7 +130,7 @@ export const Toast: FC<ToastProps> = ({ type, component, autoDelete = true, auto
             }
         }, autoDeleteTimeout);
         return () => clearTimeout(timeout);
-    }, []);
+    }, [autoDelete, autoDeleteTimeout, onDelete]);
 
     const IconType = Icon[type];
 

@@ -2,7 +2,6 @@ import { Button } from '../Buttons';
 import { CheckBox } from './CheckBox';
 import { Control, ControlProps } from './Control';
 import { Input } from './Input';
-import { IconInput, Search } from './IconInput';
 import { Radio } from './Radio';
 import { Select } from './Select';
 import { TextArea } from './TextArea';

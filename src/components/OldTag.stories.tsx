@@ -1,15 +1,14 @@
 import React from 'react';
-import { Tag, TagProps } from './Tag';
 import { Button } from './Buttons';
+import { Tag, TagProps } from './OldTag';
 
 
 // definition
 
 const definition = {
-    title: 'Component/Tag',
+    title: 'Component/OldTag',
     component: Tag,
     argTypes: {
-        scale: { control: { type: 'select', options: ['xs', 'sm', 'base', 'lg'] } },
         color:{ control: { type: 'color' } },
         children: { control: { type: 'text' } }
     }
@@ -58,7 +57,7 @@ export const DiferentTextscales = () => (
 
 export const SameTextscales = ({ scale, ...props }: TagProps) => (
     <div className="">
-        <span>Texto primero</span>
+        <span className="bg-red-500">Texto primero</span>
         <Tag scale={scale} onDelete={() => true}> Etiqueta</Tag>
         <span>Texto después</span>
         <Tag scale={scale}>Otra etiqueta</Tag>

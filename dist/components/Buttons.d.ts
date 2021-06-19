@@ -16,5 +16,6 @@ export interface MoreOptionsButtonProps {
     scale?: ComponentScale;
     value: boolean;
     onChange: (value: boolean) => void;
+    className?: string;
 }
-export declare const MoreOptionsButton: FC<React.ButtonHTMLAttributes<HTMLButtonElement> & MoreOptionsButtonProps>;
+export declare const MoreOptionsButton: FC<MoreOptionsButtonProps>;

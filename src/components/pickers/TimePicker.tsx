@@ -43,7 +43,7 @@ const minutes = [15, 30, 45];
  */
 export const TimePicker: FC<TimePickerProps> = ({ name, value, scale = "base", onChange, placeholder }) => {
 
-    const { t, ready } = useTranslation();
+    const { ready } = useTranslation();
 
     const [show, setShow] = useState(false);
     const [valueRef, popperRef] = useOutsideClick<HTMLInputElement, HTMLDivElement>(() => setShow(false));

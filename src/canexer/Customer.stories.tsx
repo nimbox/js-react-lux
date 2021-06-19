@@ -1,9 +1,10 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { withKnobs } from '@storybook/addon-knobs';
 import { useState } from 'react';
 import { Button } from '../components/Buttons';
 import { Card } from '../components/Card';
-import { Control } from '../components/controls/Control';
 import { CheckBox } from '../components/controls/CheckBox';
+import { Control } from '../components/controls/Control';
 import { Input } from '../components/controls/Input';
 import { Select } from '../components/controls/Select';
 import { TextArea } from '../components/controls/TextArea';
@@ -39,8 +40,8 @@ export const Customer = () => {
         { id: "id8", name: "Sistema Administrativo Contamax " }
     ];
 
-    const render = (t: any, onRemove?: (value: any) => void | undefined) => (
-        <Tag scale="sm" color={t.color} onDelete={onRemove} >{t.name}</Tag>
+    const render = (t: any, onRemove?: (value: any) => void) => (
+        <Tag color={t.color} onDelete={onRemove} >{t.name}</Tag>
     )
 
     const [time, setTime] = useState('08:30am');
@@ -57,7 +58,10 @@ export const Customer = () => {
                 </Card.Header>
                 <Card.Body>
                     <div className="">
-                        <TagPicker scale="base" values={tags} render={render}
+                        <TagPicker
+                            scale="base"
+                            tags={tags} tagValue={(tag) => tag.id}
+                            renderTag={render}
                             onRemove={(id) => true}
                             onSearch={(q) => []}
                             onAdd={(id) => true}
