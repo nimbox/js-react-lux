@@ -1,10 +1,15 @@
 import _ from 'lodash';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { MockStore } from '../../utils/MockStore';
 import { Input } from '../controls/Input';
 import { Tag } from '../Tag';
 import { TagPicker, TagPickerProps } from './TagPicker';
 import colors from '../../utils/flat-colors';
+import { action } from '@storybook/addon-actions';
+import { Button } from '../Buttons';
+import swatches from '../../utils/flat-colors';
+import { SwatchPicker } from './SwatchPicker';
+import { tSExpressionWithTypeArguments } from '@babel/types';
 
 
 // definition
@@ -46,7 +51,6 @@ const store = new MockStore<StoryTag>([
     { id: 'id22', description: 'etiqueta3', color: color() }
 ],
     (value: string) => (item: StoryTag) => item.id === value,
-    (q: string) => ({ id: unique(), description: q, color: color() }),
     (q: string) => {
         const lowerq = q.toLowerCase();
         return (item: StoryTag) => item.description.toLowerCase().includes(lowerq);
@@ -62,6 +66,49 @@ export const Parameterized = ({ scale, ...props }: TagPickerProps<StoryTag>) => 
 
     const [tags, setTags] = useState(initialTags);
 
+    // handlers
+
+    const handleAdd = (tag: StoryTag) => {
+        action('addTag')(tag.id);
+        setTags(tags => [...tags, tag]);
+    }; 
+
+    const handleRemove = (tag: StoryTag) => {
+        action('removeTag')(tag.id);
+        setTags(tags => tags.filter(t => t.id !== tag.id));
+    };
+
+    const handleSearch = async (q: string) => {
+        action('handleSearch')(q);
+        return store.search(q, 0);
+    };
+
+    const handleCreate = async (q: string, color: string) => {
+        action('handleCreate')(q, color);
+        const tag = await store.create({ id: unique(), description: q, color }, 0);
+        console.log('wait');    
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        console.log('wait is over');
+        setTags(tags => [...tags, tag]);
+    };
+
+    const CreateTag: FC<{ disabled: boolean, search: string, onCreate: (create: void | Promise<void>) => void }> = ({ disabled, search, onCreate }) => {
+        const [color, setColor] = useState(swatches[0]);
+        return (
+            <div className="space-y-2">
+                <div className="grid grid-cols-4 gap-2">
+                    <Input scale="sm" type="text" value={search} disabled={true} className="col-span-3"/>
+                    <SwatchPicker scale="sm" swatches={swatches} value={color} onChange={(e) => setColor(e.target.value)} disabled={disabled} popperClassName="grid grid-cols-5" />
+                </div>
+                <Button scale="sm" type="button" disabled={disabled} onClick={() => onCreate(handleCreate(search, color))}>
+                    Crear
+                </Button>
+            </div>
+        );
+    };
+
+    // render
+
     return (
         <div className="flex flex-row space-x-2">
 
@@ -71,19 +118,17 @@ export const Parameterized = ({ scale, ...props }: TagPickerProps<StoryTag>) => 
 
             <TagPicker scale={scale}
 
-                tags={tags} tagValue={(tag) => tag.id}
-                renderTag={(item, onRemove) => <Tag color={item.color} onDelete={onRemove}>{item.description}</Tag>}
+                tags={tags} 
+                tagValue={(tag) => tag.id}
+                renderTag={(tag, onRemove) => <Tag color={tag.color} onDelete={onRemove}>{tag.description}</Tag>}
 
-                onAdd={(item) => { setTags(tags => [...tags, item]); return true; }}
-                onRemove={(item) => { setTags(tags => tags.filter(i => i.id !== item.id)); return true; }}
+                onAdd={handleAdd}
+                onRemove={handleRemove}
 
-                onSearch={(q) => store.search(q, 0)}
-                onCreate={(q) => {
-                    return store.create(q, 0).then(tag => {
-                        console.log('created', tag);
-                        return setTags(tags => [...tags, tag]);
-                    });
-                }}
+                onSearch={handleSearch}
+                onCreate={handleCreate}
+
+                RenderCreate={CreateTag}
 
             />
 
@@ -97,7 +142,7 @@ export const Parameterized = ({ scale, ...props }: TagPickerProps<StoryTag>) => 
 }
 
 Parameterized.args = {
-    scale: 'base', className: 'text-secondary-500'
+    scale: 'base'
 };
 
 

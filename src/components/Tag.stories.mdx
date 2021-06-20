@@ -111,21 +111,25 @@ the internal padding to accommodate the extra `cross` icon.
 <Canvas>
     <Story name="With and Without Same Width">
         <div className="flex flex-row justify-between items-center">
-        <div>
-            <div><Tag className="text-xs">TagXÉ</Tag></div>
-            <div><Tag onDelete={handleDelete} className="text-xs">TagXÉ</Tag></div>
-        </div>
-        <div>
+        <div className="text-xs">
             <div><Tag>TagXÉ</Tag></div>
             <div><Tag onDelete={handleDelete}>TagXÉ</Tag></div>
         </div>
-        <div>
-            <div><Tag className="text-lg">TagXÉ</Tag></div>
-            <div><Tag onDelete={handleDelete} className="text-lg">TagXÉ</Tag></div>
+        <div className="text-sm">
+            <div><Tag>TagXÉ</Tag></div>
+            <div><Tag onDelete={handleDelete}>TagXÉ</Tag></div>
         </div>
-        <div>
-            <div><Tag className="text-xl">TagXÉ</Tag></div>
-            <div><Tag onDelete={handleDelete} className="text-xl">TagXÉ</Tag></div>
+        <div className="text-base">
+            <div><Tag>TagXÉ</Tag></div>
+            <div><Tag onDelete={handleDelete}>TagXÉ</Tag></div>
+        </div>
+        <div className="text-lg">
+            <div><Tag>TagXÉ</Tag></div>
+            <div><Tag onDelete={handleDelete}>TagXÉ</Tag></div>
+        </div>
+        <div className="text-xl">
+            <div><Tag>TagXÉ</Tag></div>
+            <div><Tag onDelete={handleDelete}>TagXÉ</Tag></div>
         </div>
         </div>
     </Story>
@@ -170,6 +174,34 @@ them. This can be done with spaces or via an utility class `lux-tag-space`.
     </Story>
 </Canvas>
 
+<Canvas>
+    <Story name="Spacing with Utility Class Multi Line">
+        <div className="lux-tag-space text-base">
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+        </div>
+    </Story>
+</Canvas>
 
 ## Inside inputs
 
@@ -178,60 +210,67 @@ equivalent of an input element.
 
 <Canvas>
     <Story name="Inside an Input Extra Small">
-        <div className="grid grid-cols-2 gap-2">
-            <div className={classnames('block w-full lux-tag-space rounded border border-control-border', controlScale['xs'])}>
+        <div className="flex flex-row space-x-2 items-start">
+            <div className={classnames('flex-1 w-full lux-tag-space rounded border border-control-border', controlScale['xs'])}>
                 <Tag>Plain</Tag>
                 <Tag>Plain</Tag>
                 <Tag onDelete={handleDelete}>With onDelete</Tag>
                 <Tag onDelete={handleDelete}>With onDelete</Tag>
                 <Tag>Plain</Tag>
             </div>
-            <Input scale="xs" type="text" defaultValue="Plain"/>
+            <div className="flex-1">
+                <Input scale="xs" type="text" defaultValue="Plain"/>
+            </div>
         </div>
     </Story>
 </Canvas>
 
 <Canvas>
     <Story name="Inside an Input Small">
-        <div className="grid grid-cols-2 gap-2">
-            <div className={classnames('block w-full lux-tag-space rounded border border-control-border', controlScale['sm'])}>
+        <div className="flex flex-row space-x-2 items-start">
+            <div className={classnames('flex-1 w-full lux-tag-space rounded border border-control-border', controlScale['sm'])}>
                 <Tag>Plain</Tag>
                 <Tag>Plain</Tag>
                 <Tag onDelete={handleDelete}>With onDelete</Tag>
                 <Tag onDelete={handleDelete}>With onDelete</Tag>
                 <Tag>Plain</Tag>
             </div>
-            <Input scale="sm" type="text" defaultValue="Plain"/>
+            <div className="flex-1">
+                <Input scale="sm" type="text" defaultValue="Plain"/>
+            </div>
         </div>
     </Story>
 </Canvas>
 
 <Canvas>
     <Story name="Inside an Input Base">
-        <div className="grid grid-cols-2 gap-2">
-            <div className={classnames('block w-full lux-tag-space rounded border border-control-border', controlScale['base'])}>
+        <div className="flex flex-row space-x-2 items-start">
+            <div className={classnames('flex-1 block w-full lux-tag-space rounded border border-control-border', controlScale['base'])}>
                 <Tag>Plain</Tag>
                 <Tag>Plain</Tag>
                 <Tag onDelete={handleDelete}>With onDelete</Tag>
                 <Tag onDelete={handleDelete}>With onDelete</Tag>
                 <Tag>Plain</Tag>
             </div>
-            <Input scale="base" type="text" defaultValue="Plain"/>
+            <div className="flex-1">
+                <Input scale="base" type="text" defaultValue="Plain"/>
+            </div>
         </div>
     </Story>
 </Canvas>
 
 <Canvas>
     <Story name="Inside an Input Large">
-        <div className="grid grid-cols-2 gap-2">
-            <div className={classnames('block w-full lux-tag-space rounded border border-control-border', controlScale['lg'])}>
+        <div className="flex flex-row space-x-2 items-start">
+            <div className={classnames('flex-1 w-full lux-tag-space rounded border border-control-border', controlScale['lg'])}>
                 <Tag>Plain</Tag>
                 <Tag>Plain</Tag>
-                <Tag onDelete={handleDelete}>With onDelete</Tag>
                 <Tag onDelete={handleDelete}>With onDelete</Tag>
                 <Tag>Plain</Tag>
             </div>
-            <Input scale="lg" type="text" defaultValue="Plain"/>
+            <div className="flex-1">
+                <Input scale="lg" type="text" defaultValue="Plain"/>
+            </div>
         </div>
     </Story>
 </Canvas>

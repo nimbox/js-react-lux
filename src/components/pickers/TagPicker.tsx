@@ -22,12 +22,13 @@ export interface TagPickerProps<T> {
     tagValue: (item: T) => string;
     renderTag: (item: T, onRemove?: (e: React.UIEvent<HTMLElement>) => void) => React.ReactNode;
 
-    onAdd: (item: T) => boolean | Promise<boolean>;
-    onRemove: (item: T) => boolean | Promise<boolean>;
+    onAdd: (item: T) => void | Promise<void>;
+    onRemove: (item: T) => void | Promise<void>;
 
     onSearch: (q: string) => T[] | Promise<T[]>;
-    onCreate: (q: string) => boolean | Promise<boolean>;
-    renderCreate: (q: string, onSubmit: () => void) => React.ReactNode;
+    onCreate: (q: string) => void | Promise<void>;
+
+    RenderCreate?: React.FC<{disabled: boolean, search : string; onCreate: (create: void | Promise<void>) => void}>
 
 }
 
@@ -56,7 +57,7 @@ export interface TagPickerProps<T> {
  * @param param0 
  * @returns 
  */
-export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, renderTag: render, onRemove, onSearch, onAdd, onCreate }: TagPickerProps<T>) => {
+export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, renderTag: render, onRemove, onSearch, onAdd, onCreate, RenderCreate }: TagPickerProps<T>) => {
 
     const context = useContext(controlContext);
 
@@ -74,24 +75,24 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
     // 
 
     const handleVisible = () => {
-        setIsVisible(true);
-        setSearch('');
-        setSearchResults([]);
+        if (!isVisible) {
+            setIsVisible(true);
+            setSearch('');
+            setSearchResults([]);
+        }
     }
 
     // collection methods
 
-    const handleAdd = (item: T) => {
-        Promise.resolve(onAdd(item)).then(() => {
+    const handleAdd = (tag: T) => {
+        Promise.resolve(onAdd(tag)).then(() => {
             setSearch('');
             setSearchResults([]);
         });
     }
 
-    const handleRemove = (e: React.UIEvent<HTMLElement>, item: T) => {
-        Promise.resolve(onRemove(item)).then(() => {
-
-        });
+    const handleRemove = async (e: React.UIEvent<HTMLElement>, item: T) => {
+        await onRemove(item);
     }
 
     // search methods
@@ -115,16 +116,18 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
         doSearch(e.target.value);
     };
 
-    const handleCreate = (q: string) => {
+    const handleCreate = async (create: void | Promise<void>) => {
+
+        console.log('handleCreate inside the component');
+
         setIsUpdating(true);
-        Promise.resolve(onCreate(q))
-            .then(() => {
-                console.log('creating done');
-                setIsUpdating(false);
-                setIsVisible(!isVisible);
-                setSearchResults([]);
-                setSearch("");
-            });
+        await Promise.resolve(create);
+
+        setSearch('');
+        setSearchResults([]);
+        setIsUpdating(false);
+        searchRef.current!.focus();
+
     }
 
     // render
@@ -150,7 +153,7 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
                             {render(t, (isVisible ? (e: React.UIEvent<HTMLElement>) => handleRemove(e, t) : undefined))}
                         </React.Fragment>
                     ) :
-                    <span>&nbsp;</span>
+                    <span>&nbsp;Placeholder</span>
                 }
                 <div className="absolute inset-y-0 right-0 flex flex-row justify-center items-center cursor-pointer" style={{ width: '2em' }}>
                     {isUpdating ?
@@ -170,7 +173,8 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
                     )}
                     style={{ padding: '0.5em 0.75em 0.5em 0.75em' }}
                 >
-                    <SearchInput scale={smallScale[scale]} ref={searchRef as any}
+                    <SearchInput ref={searchRef as any}
+                        scale={smallScale[scale]} 
                         disabled={isUpdating}
                         value={search} onChange={handleSearch}
                     />
@@ -183,10 +187,8 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
                             )}
                         </ul>
                     }
-                    {(search && !isUpdating && searchResults.length === 0) &&
-                        <Button disabled={isUpdating} onClick={() => handleCreate(search)} secondary scale={smallScale[scale || context.scale || 'base']} className="block w-full">
-                            Crear etiqueta {search}
-                        </Button>
+                    {(search && searchResults.length === 0 && RenderCreate) &&
+                        <RenderCreate disabled={isUpdating} search={search} onCreate={handleCreate}/>
                     }
                 </div>
             }

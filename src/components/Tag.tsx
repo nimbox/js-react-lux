@@ -1,67 +1,61 @@
 import classnames from 'classnames';
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, SVGProps, useMemo, useState } from 'react';
 import tinycolor from 'tinycolor2';
 
 
-export const Cross: FC<React.SVGProps<SVGSVGElement> & { show: boolean }> = ({ show, ...props }) => (
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="1em"
-        height="1em"
-        viewBox="0 0 32 32"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={'0.25em'}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        {...props}
-    >
-        {show && <path d="M10 10L22 22M22 10L10 22" />}
-    </svg>
+export const Cross: FC<SVGProps<SVGSVGElement> & {showCross: boolean; crossColor: string; circleColor: string; }> = ({ showCross, crossColor, circleColor, ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="1em" height="1em"
+    viewBox="0 0 32 32"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <circle cx="16" cy="16" r="14" fill={circleColor} />
+    {showCross && <path d="M10 10L22 22M22 10L10 22" stroke={crossColor} strokeWidth="0.25em" />}
+  </svg>
 );
 
 export interface TagProps {
-
-    color?: string;
-
-    onClick?: (e: any) => void;
-    onDelete?: (e: React.UIEvent<HTMLElement>) => void;
-
-    className?: string;
-
+  color?: string;
+  onClick?: (e: any) => void;
+  onDelete?: (e: React.UIEvent<HTMLElement>) => void;
 }
 
-export const Tag: FC<TagProps> = ({ color: backgroundColor = 'red', onClick, onDelete, className, children }) => {
-
-    const color = useMemo(() => tinycolor(backgroundColor).isDark() ? 'white' : 'black', [backgroundColor]);
+export const Tag: FC<TagProps> = ({ color: backgroundColor = 'red', onClick, onDelete, children }) => {
+  
+    const color = useMemo(() => (tinycolor(backgroundColor).isDark() ? 'white' : 'black'), [backgroundColor]);
     const crossBackgroundColor = useMemo(() => tinycolor(backgroundColor).darken(5).toString(), [backgroundColor]);
     const crossBackgroundHoverColor = useMemo(() => tinycolor(crossBackgroundColor).darken(10).toString(), [crossBackgroundColor]);
     const [hoverColor, setHoverColor] = useState(crossBackgroundColor);
 
     return (
-        <span
-            className={classnames(
-                'inline-flex flex-row items-baseline py-0.5 max-w-full rounded rounded-full',
-                className
-            )}
-            style={{ paddingLeft: '0.25em', paddingRight: '0.5em', color, backgroundColor }}
+        <span 
+            className='inline-flex flex-row items-baseline max-w-full rounded rounded-full'
+            style={{ lineHeight: '1', paddingLeft: '0.25em', paddingTop: '0.125em', paddingRight: '0.5em', paddingBottom: '0.125em', color, backgroundColor }}
         >
             <Cross
-                show={!!onDelete}
+                showCross={!!onDelete}
                 onMouseEnter={() => setHoverColor(crossBackgroundHoverColor)}
                 onMouseLeave={() => setHoverColor(crossBackgroundColor)}
-                onClick={(e: any) => onDelete(e)}
-                className="flex-none self-center stroke-current rounded rounded-full cursor-pointer"
-                style={{ marginRight: '0.15em', backgroundColor: onDelete ? hoverColor : crossBackgroundColor }}
+                onClick={(e) => onDelete && onDelete(e)}
+                crossColor={color}
+                circleColor={onDelete ? hoverColor : crossBackgroundColor}
+                className="block flex-none self-center cursor-pointer"
+                style={{ marginRight: '0.125em' }}
             />
             <span
                 onClick={!onDelete ? onClick : undefined}
-                className={classnames('inline-block max-w-full truncate', { 'hover:underline cursor-pointer': onClick && !onDelete })}
+                className={classnames(
+                    'block flex-1 max-w-full truncate', 
+                    { 'hover:underline cursor-pointer': onClick && !onDelete }
+                )}
                 style={{ height: '1.2em', lineHeight: '1.2em' }}
             >
                 {children}
             </span>
         </span>
-    )
+    );
 
 };
