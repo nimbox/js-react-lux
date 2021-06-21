@@ -1,15 +1,13 @@
+import { action } from '@storybook/addon-actions';
 import _ from 'lodash';
 import React, { FC, useState } from 'react';
+import { default as colors, default as swatches } from '../../utils/flat-colors';
 import { MockStore } from '../../utils/MockStore';
+import { Button } from '../Buttons';
 import { Input } from '../controls/Input';
 import { Tag } from '../Tag';
-import { TagPicker, TagPickerProps } from './TagPicker';
-import colors from '../../utils/flat-colors';
-import { action } from '@storybook/addon-actions';
-import { Button } from '../Buttons';
-import swatches from '../../utils/flat-colors';
 import { SwatchPicker } from './SwatchPicker';
-import { tSExpressionWithTypeArguments } from '@babel/types';
+import { TagPicker, TagPickerProps } from './TagPicker';
 
 
 // definition
@@ -62,7 +60,7 @@ const initialTags = [store.get('id1')!, store.get('id2')!, store.get('id10')!];
 // parameterized
 
 
-export const Parameterized = ({ scale, ...props }: TagPickerProps<StoryTag>) => {
+export const Template = ({ scale, ...props }: TagPickerProps<StoryTag>) => {
 
     const [tags, setTags] = useState(initialTags);
 
@@ -71,7 +69,7 @@ export const Parameterized = ({ scale, ...props }: TagPickerProps<StoryTag>) => 
     const handleAdd = (tag: StoryTag) => {
         action('addTag')(tag.id);
         setTags(tags => [...tags, tag]);
-    }; 
+    };
 
     const handleRemove = (tag: StoryTag) => {
         action('removeTag')(tag.id);
@@ -86,21 +84,19 @@ export const Parameterized = ({ scale, ...props }: TagPickerProps<StoryTag>) => 
     const handleCreate = async (q: string, color: string) => {
         action('handleCreate')(q, color);
         const tag = await store.create({ id: unique(), description: q, color }, 0);
-        console.log('wait');    
         await new Promise(resolve => setTimeout(resolve, 5000));
-        console.log('wait is over');
         setTags(tags => [...tags, tag]);
     };
 
-    const CreateTag: FC<{ disabled: boolean, search: string, onCreate: (create: void | Promise<void>) => void }> = ({ disabled, search, onCreate }) => {
+    const CreateTag: FC<{ search: string; disabled: boolean; onSubmit: (submitting: void | Promise<void>) => void }> = ({ disabled, search, onSubmit }) => {
         const [color, setColor] = useState(swatches[0]);
         return (
             <div className="space-y-2">
                 <div className="grid grid-cols-4 gap-2">
-                    <Input scale="sm" type="text" value={search} disabled={true} className="col-span-3"/>
+                    <Input scale="sm" type="text" value={search} disabled={true} className="col-span-3" />
                     <SwatchPicker scale="sm" swatches={swatches} value={color} onChange={(e) => setColor(e.target.value)} disabled={disabled} popperClassName="grid grid-cols-5" />
                 </div>
-                <Button scale="sm" type="button" disabled={disabled} onClick={() => onCreate(handleCreate(search, color))}>
+                <Button scale="sm" type="button" disabled={disabled} onClick={() => onSubmit(handleCreate(search, color))}>
                     Crear
                 </Button>
             </div>
@@ -118,7 +114,7 @@ export const Parameterized = ({ scale, ...props }: TagPickerProps<StoryTag>) => 
 
             <TagPicker scale={scale}
 
-                tags={tags} 
+                tags={tags}
                 tagValue={(tag) => tag.id}
                 renderTag={(tag, onRemove) => <Tag color={tag.color} onDelete={onRemove}>{tag.description}</Tag>}
 
@@ -126,9 +122,8 @@ export const Parameterized = ({ scale, ...props }: TagPickerProps<StoryTag>) => 
                 onRemove={handleRemove}
 
                 onSearch={handleSearch}
-                onCreate={handleCreate}
 
-                RenderCreate={CreateTag}
+                CreateComponent={CreateTag}
 
             />
 
@@ -140,8 +135,7 @@ export const Parameterized = ({ scale, ...props }: TagPickerProps<StoryTag>) => 
     );
 
 }
-
-Parameterized.args = {
+Template.args = {
     scale: 'base'
 };
 

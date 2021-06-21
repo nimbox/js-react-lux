@@ -3,7 +3,6 @@ import _debounce from 'lodash/debounce';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useOutsideClick } from '../../hooks/useOutsideClick';
 import AngleDownIcon from '../../icons/AngleDownIcon';
-import { Button } from '../Buttons';
 import { ComponentScale, controlText, smallScale } from '../ComponentScale';
 import { Context as controlContext } from '../controls/Control';
 import { SearchInput } from '../controls/SearchInput';
@@ -24,11 +23,9 @@ export interface TagPickerProps<T> {
 
     onAdd: (item: T) => void | Promise<void>;
     onRemove: (item: T) => void | Promise<void>;
-
     onSearch: (q: string) => T[] | Promise<T[]>;
-    onCreate: (q: string) => void | Promise<void>;
 
-    RenderCreate?: React.FC<{disabled: boolean, search : string; onCreate: (create: void | Promise<void>) => void}>
+    CreateComponent?: React.FC<{ search: string; disabled: boolean; onSubmit: (submitting: void | Promise<void>) => void }>
 
 }
 
@@ -54,15 +51,14 @@ export interface TagPickerProps<T> {
  * as `onAdd`). Both `onSearch` and `onCreate` are treated as promises and while
  * they are being resolved the component is shown in a `loading` state.
  *
- * @param param0 
- * @returns 
  */
-export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, renderTag: render, onRemove, onSearch, onAdd, onCreate, RenderCreate }: TagPickerProps<T>) => {
+export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, renderTag, onAdd, onRemove, onSearch, CreateComponent }: TagPickerProps<T>) => {
 
     const context = useContext(controlContext);
 
     const [isVisible, setIsVisible] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
+    const [isError, setIsError] = useState(false);
 
     const [targetRef, popperRef] = useOutsideClick<HTMLDivElement, HTMLDivElement>(() => setIsVisible(!isVisible));
     const searchRef = useRef<HTMLInputElement>();
@@ -74,41 +70,48 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
 
     // 
 
-    const handleVisible = () => {
+    const show = () => {
         if (!isVisible) {
             setIsVisible(true);
             setSearch('');
             setSearchResults([]);
         }
-    }
+    };
+
+    const clean = () => {
+        setSearch('');
+        setSearchResults([]);
+        setIsUpdating(false);
+        searchRef.current!.focus();
+    };
 
     // collection methods
 
-    const handleAdd = (tag: T) => {
-        Promise.resolve(onAdd(tag)).then(() => {
-            setSearch('');
-            setSearchResults([]);
-        });
+    const handleAdd = async (tag: T) => {
+        setIsUpdating(true);
+        await onAdd(tag);
+        clean();
     }
 
     const handleRemove = async (e: React.UIEvent<HTMLElement>, item: T) => {
+        setIsUpdating(true);
         await onRemove(item);
+        setIsUpdating(false);
     }
 
     // search methods
 
-    const doSearch = _debounce((q: string) => {
+    const doSearch = _debounce(async (q: string) => {
         setIsUpdating(true);
-        Promise.resolve(onSearch(q))
-            .then(results => {
-                setIsUpdating(false);
-                const tagValues = new Set(tags.map(tagValue));
-                setSearchResults(results.filter(tag => !tagValues.has(tagValue(tag))));
-            })
-            .catch(error => {
-                setIsUpdating(false);
-                console.log(error);
-            });
+        try {
+            const results = await Promise.resolve(onSearch(q));
+            const tagValues = new Set(tags.map(tagValue));
+            setSearchResults(results.filter(tag => !tagValues.has(tagValue(tag))));
+        } catch (error) {
+            setIsError(true);
+        } finally {
+            setIsUpdating(false);
+        }
     }, 200);
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,18 +119,10 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
         doSearch(e.target.value);
     };
 
-    const handleCreate = async (create: void | Promise<void>) => {
-
-        console.log('handleCreate inside the component');
-
+    const handleSubmit = async (create: void | Promise<void>) => {
         setIsUpdating(true);
         await Promise.resolve(create);
-
-        setSearch('');
-        setSearchResults([]);
-        setIsUpdating(false);
-        searchRef.current!.focus();
-
+        clean();
     }
 
     // render
@@ -137,8 +132,8 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
 
             <div ref={targetRef}
                 tabIndex={isVisible ? -1 : 0}
-                onClick={handleVisible}
-                onFocus={handleVisible}
+                onClick={show}
+                onFocus={show}
                 className={classnames(
                     'relative w-full lux-tag-space',
                     'rounded border border-control-border',
@@ -147,20 +142,23 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
                 )}
                 style={{ padding: '0.5em 2.75em 0.5em 0.75em' }}
             >
-                {tags.length > 0 ?
-                    tags.map((t) =>
-                        <React.Fragment key={tagValue(t)}>
-                            {render(t, (isVisible ? (e: React.UIEvent<HTMLElement>) => handleRemove(e, t) : undefined))}
+
+                {(tags.length > 0) ?
+                    tags.map((tag) =>
+                        <React.Fragment key={tagValue(tag)}>
+                            {renderTag(tag, (isVisible ? (e: React.UIEvent<HTMLElement>) => handleRemove(e, tag) : undefined))}
                         </React.Fragment>
                     ) :
                     <span>&nbsp;Placeholder</span>
                 }
+
                 <div className="absolute inset-y-0 right-0 flex flex-row justify-center items-center cursor-pointer" style={{ width: '2em' }}>
                     {isUpdating ?
                         <Loading /> :
                         <AngleDownIcon width="1em" height="1em" className="inline text-control-border stroke-current stroke-2" />
                     }
                 </div>
+
             </div>
 
             {isVisible &&
@@ -173,23 +171,26 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
                     )}
                     style={{ padding: '0.5em 0.75em 0.5em 0.75em' }}
                 >
+
                     <SearchInput ref={searchRef as any}
-                        scale={smallScale[scale]} 
-                        disabled={isUpdating}
+                        scale={smallScale[scale]}
                         value={search} onChange={handleSearch}
                     />
+
                     {(searchResults.length > 0) &&
                         <ul className="space-y-1">
-                            {searchResults.map((item) =>
-                                <li className="cursor-pointer" onClick={(e: React.MouseEvent<HTMLElement>) => handleAdd(item)}>
-                                    {render(item)}
+                            {searchResults.map((tag) =>
+                                <li key={tagValue(tag)} onClick={(e: React.MouseEvent<HTMLElement>) => handleAdd(tag)} className="cursor-pointer" >
+                                    {renderTag(tag)}
                                 </li>
                             )}
                         </ul>
                     }
-                    {(search && searchResults.length === 0 && RenderCreate) &&
-                        <RenderCreate disabled={isUpdating} search={search} onCreate={handleCreate}/>
+
+                    {(search && searchResults.length === 0 && CreateComponent) &&
+                        <CreateComponent search={search} disabled={isUpdating} onSubmit={handleSubmit} />
                     }
+
                 </div>
             }
 
