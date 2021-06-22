@@ -1,10 +1,12 @@
-import { FC } from 'react';
-import { ComponentScale } from './ComponentScale';
+import React, { FC, SVGProps } from 'react';
+export declare const Cross: FC<SVGProps<SVGSVGElement> & {
+    showCross: boolean;
+    crossColor: string;
+    circleColor: string;
+}>;
 export interface TagProps {
-    scale?: ComponentScale;
     color?: string;
-    onClick?: (value: any) => void;
-    onDelete?: (value: any) => void;
-    className?: string;
+    onClick?: (e: any) => void;
+    onDelete?: (e: React.UIEvent<HTMLElement>) => void;
 }
 export declare const Tag: FC<TagProps>;
