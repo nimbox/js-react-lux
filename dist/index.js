@@ -1,18 +1,11 @@
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
-<<<<<<< HEAD
 import React, { useState, useEffect, createContext, useContext, useMemo, useRef, useImperativeHandle } from 'react';
 import tinycolor from 'tinycolor2';
 import ReactDOM from 'react-dom';
 import { usePopper } from 'react-popper';
 import _debounce from 'lodash/debounce';
-=======
-import React, { useState, useEffect, createContext, useContext, useRef, useImperativeHandle } from 'react';
-import ReactDOM from 'react-dom';
-import { usePopper } from 'react-popper';
-import debounce from 'lodash/debounce';
->>>>>>> c58fda098b3f0fe26e5347f12164aa03f5414809
 import { v4 } from 'uuid';
 
 /*! *****************************************************************************
@@ -127,13 +120,10 @@ function SvgDangerIcon(props) {
 
 function SvgInfoIcon(props) {
     return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("circle", { cx: 16, cy: 8, r: 2 }, void 0), jsx("path", { d: "M14 14h2v12h2" }, void 0), jsx("circle", { cx: 16, cy: 16, r: 15 }, void 0)] }), void 0));
-<<<<<<< HEAD
 }
 
 function SvgSearchIcon(props) {
     return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("circle", { cx: 14.5, cy: 14.5, r: 8.5 }, void 0), jsx("path", { d: "M26 26l-5.5-5.5" }, void 0)] }), void 0));
-=======
->>>>>>> c58fda098b3f0fe26e5347f12164aa03f5414809
 }
 
 function SvgSuccessIcon(props) {
@@ -898,83 +888,6 @@ function formatTime(hm) {
     }
 }
 
-<<<<<<< HEAD
-=======
-var Input = React.forwardRef(function (_a, ref) {
-    var scale = _a.scale, error = _a.error, className = _a.className, props = __rest(_a, ["scale", "error", "className"]);
-    var context = useContext(Context$3);
-    return (jsx("input", __assign({}, props, { ref: ref, className: classnames(controlScale[scale || context.scale || 'base'], 'block w-full rounded border border-control-border', error || context.error ?
-            'border-danger-500 focus:border-danger-500 focus:ring focus:ring-danger-500' :
-            'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none disabled:opacity-50', className) }), void 0));
-});
-
-//
-// https://popper.js.org/docs/v2/modifiers/community-modifiers/
-// https://codesandbox.io/s/bitter-sky-pe3z9?file=/src/index.js:383-394
-//
-var sameWidth = {
-    name: 'sameWidth',
-    enabled: true,
-    phase: 'beforeWrite',
-    requires: ['computeStyles'],
-    fn: function (_a) {
-        var state = _a.state;
-        state.styles.popper.width = state.rects.reference.width + "px";
-    },
-    effect: function (_a) {
-        var state = _a.state;
-        state.elements.popper.style.width = state.elements.reference.offsetWidth + "px";
-    }
-};
-
-var placements = {
-    'start': 'bottom-start',
-    'stretch': 'bottom',
-    'end': 'bottom-end'
-};
-var SwatchPicker = React.forwardRef(function (_a, ref) {
-    var values = _a.swatches, _b = _a.align, align = _b === void 0 ? 'stretch' : _b, popperClassName = _a.popperClassName, onFocus = _a.onFocus, onBlur = _a.onBlur; _a.ref; var props = __rest(_a, ["swatches", "align", "popperClassName", "onFocus", "onBlur", "ref"]);
-    var _c = useState(false), visible = _c[0], setVisible = _c[1];
-    var _d = useState(null), target = _d[0], setTarget = _d[1];
-    var _e = useState(null), popper = _e[0], setPopper = _e[1];
-    useOnOutsideClick(function () { return visible && setVisible(!visible); }, target, popper);
-    useImperativeHandle(ref, function () { return target; });
-    var _f = usePopper(target, popper, {
-        placement: placements[align],
-        modifiers: __spreadArray([
-            { name: 'offset', options: { offset: [0, 4] } }
-        ], (align === 'stretch' ? [sameWidth] : []))
-    }), styles = _f.styles, attributes = _f.attributes;
-    function handleOnFocus(event) {
-        if (onFocus) {
-            onFocus(event);
-        }
-        setVisible(true);
-    }
-    function handleOnBlur(event) {
-        setVisible(false);
-        if (onBlur) {
-            onBlur(event);
-        }
-    }
-    function setValue(event, element, swatch) {
-        var _a;
-        event.preventDefault();
-        event.stopPropagation();
-        var inputSetter = (_a = Object === null || Object === void 0 ? void 0 : Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')) === null || _a === void 0 ? void 0 : _a.set;
-        if (inputSetter) {
-            inputSetter.call(element, swatch);
-            var inputEvent = new Event('input', { bubbles: true });
-            element.dispatchEvent(inputEvent);
-            element.select();
-        }
-    }
-    return (jsxs("div", __assign({ className: "relative inline-block w-full" }, { children: [jsx(Input, __assign({ type: "text", ref: setTarget }, props, { onFocus: handleOnFocus, onBlur: handleOnBlur }), void 0), visible && ReactDOM.createPortal(jsx("div", __assign({ ref: setPopper }, attributes.popper, { className: classnames('border border-control-border rounded', 'bg-white cursor-pointer', popperClassName), style: styles.popper }, { children: values.map(function (s) {
-                    return jsx("div", __assign({ onMouseDown: function (e) { return setValue(e, target, s); }, style: { backgroundColor: s } }, { children: "\u00A0" }), void 0);
-                }) }), void 0), document.querySelector('body'))] }), void 0));
-});
-
->>>>>>> c58fda098b3f0fe26e5347f12164aa03f5414809
 var CheckBox = function (_a) {
     var scale = _a.scale, className = _a.className, children = _a.children, props = __rest(_a, ["scale", "className", "children"]);
     var context = useContext(Context$3);
@@ -1175,9 +1088,5 @@ Panel.Item = function (_a) {
     return (jsx("div", __assign({ className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, { children: children }), void 0));
 };
 
-<<<<<<< HEAD
 export { Button, Card, CheckBox, Context$3 as Context, Control, Cross, DatePicker, Delay, Header, Helium, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, RadioBar, RoundButton, Select, SwatchPicker, Tabs, Tag, TagPicker, TextArea, TimePicker, Toast, ToastContainer, ToastContent, ToastProvider, Toggle, ViewportProvider, useOnOutsideClick, useOutsideClick, useToast, useViewport };
-=======
-export { Button, Card, CheckBox, Context$3 as Context, Control, DatePicker, Delay, Header, Helium, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, RadioBar, RoundButton, Select, SwatchPicker, Tabs, TextArea, TimePicker, Toast, ToastContainer, ToastContent, ToastProvider, Toggle, ViewportProvider, useOnOutsideClick, useOutsideClick, useToast, useViewport };
->>>>>>> c58fda098b3f0fe26e5347f12164aa03f5414809
 //# sourceMappingURL=index.js.map

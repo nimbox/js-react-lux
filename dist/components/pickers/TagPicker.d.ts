@@ -4,7 +4,6 @@ export interface TagPickerProps<T> {
     scale?: ComponentScale;
     tags: T[];
     tagValue: (item: T) => string;
-<<<<<<< HEAD
     renderTag: (item: T, onRemove?: () => void) => React.ReactNode;
     onAdd: (item: T) => void | Promise<void>;
     onRemove: (item: T) => void | Promise<void>;
@@ -13,17 +12,6 @@ export interface TagPickerProps<T> {
         search: string;
         disabled: boolean;
         onSubmit: (submitting: void | Promise<void>) => void;
-=======
-    renderTag: (item: T, onRemove?: (e: React.UIEvent<HTMLElement>) => void) => React.ReactNode;
-    onAdd: (item: T) => void | Promise<void>;
-    onRemove: (item: T) => void | Promise<void>;
-    onSearch: (q: string) => T[] | Promise<T[]>;
-    onCreate: (q: string) => void | Promise<void>;
-    RenderCreate?: React.FC<{
-        disabled: boolean;
-        search: string;
-        onCreate: (create: void | Promise<void>) => void;
->>>>>>> c58fda098b3f0fe26e5347f12164aa03f5414809
     }>;
 }
 /**
@@ -48,12 +36,5 @@ export interface TagPickerProps<T> {
  * as `onAdd`). Both `onSearch` and `onCreate` are treated as promises and while
  * they are being resolved the component is shown in a `loading` state.
  *
-<<<<<<< HEAD
  */
 export declare const TagPicker: <T extends {}>({ scale, tags, tagValue, renderTag, onAdd, onRemove, onSearch, CreateComponent }: TagPickerProps<T>) => JSX.Element;
-=======
- * @param param0
- * @returns
- */
-export declare const TagPicker: <T extends {}>({ scale, tags, tagValue, renderTag: render, onRemove, onSearch, onAdd, onCreate, RenderCreate }: TagPickerProps<T>) => JSX.Element;
->>>>>>> c58fda098b3f0fe26e5347f12164aa03f5414809
