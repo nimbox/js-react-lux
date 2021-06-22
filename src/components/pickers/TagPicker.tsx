@@ -19,7 +19,7 @@ export interface TagPickerProps<T> {
 
     tags: T[];
     tagValue: (item: T) => string;
-    renderTag: (item: T, onRemove?: (e: React.UIEvent<HTMLElement>) => void) => React.ReactNode;
+    renderTag: (item: T, onRemove?: () => void) => React.ReactNode;
 
     onAdd: (item: T) => void | Promise<void>;
     onRemove: (item: T) => void | Promise<void>;
@@ -93,7 +93,7 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
         clean();
     }
 
-    const handleRemove = async (e: React.UIEvent<HTMLElement>, item: T) => {
+    const handleRemove = async (item: T) => {
         setIsUpdating(true);
         await onRemove(item);
         setIsUpdating(false);
@@ -146,7 +146,7 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
                 {(tags.length > 0) ?
                     tags.map((tag) =>
                         <React.Fragment key={tagValue(tag)}>
-                            {renderTag(tag, (isVisible ? (e: React.UIEvent<HTMLElement>) => handleRemove(e, tag) : undefined))}
+                            {renderTag(tag, (isVisible ? () => handleRemove(tag) : undefined))}
                         </React.Fragment>
                     ) :
                     <span>&nbsp;Placeholder</span>
@@ -180,7 +180,7 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
                     {(searchResults.length > 0) &&
                         <ul className="space-y-1">
                             {searchResults.map((tag) =>
-                                <li key={tagValue(tag)} onClick={(e: React.MouseEvent<HTMLElement>) => handleAdd(tag)} className="cursor-pointer" >
+                                <li key={tagValue(tag)} onClick={() => handleAdd(tag)} className="cursor-pointer" >
                                     {renderTag(tag)}
                                 </li>
                             )}
