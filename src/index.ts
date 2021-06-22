@@ -1,5 +1,6 @@
 export * from './components/Buttons';
 export * from './components/Card';
+export * from './components/Choose';
 export * from './components/Delay';
 export * from './components/Loading';
 export * from './components/Postit';
