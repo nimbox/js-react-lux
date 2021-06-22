@@ -1,6 +1,6 @@
 {
   "name": "@nimbox/js-react-lux",
-  "version": "0.2.19",
+  "version": "0.2.20",
   "private": false,
   "main": "dist/index.js",
   "module": "dist/index.js",
