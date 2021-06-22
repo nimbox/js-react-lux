@@ -6,7 +6,7 @@ import { useOutsideClick } from './../hooks/useOutsideClick';
 import AngleDownIcon from './../icons/AngleDownIcon';
 import { ComponentScale, controlIconSmallMarginSize, controlScale, smallScale } from './ComponentScale';
 import { Context as controlContext } from './controls/Control';
-import { Search } from './controls/IconInput';
+import { SearchInput } from './controls/SearchInput';
 
 
 export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
@@ -216,7 +216,7 @@ export const Choose = React.forwardRef<HTMLInputElement, ChooseProps<T>>
                         'absolute border border-control-border rounded', inline && 'w-max',
                         'bg-white w-full p-4 mt-2 space-y-2 max-h-72  overflow-auto')}>
 
-                        <Search scale={smallScale[scale || context.scale || 'base']} value={search} onKeyDown={handleKeyDownSearch} onBlur={handleBlur} onChange={handleSearch} />
+                        <SearchInput scale={smallScale[scale || context.scale || 'base']} value={search} onKeyDown={handleKeyDownSearch} onBlur={handleBlur} onChange={handleSearch} />
 
                         <div className="divide-y-2 divide-dashed divide-opacity-30 divide-primary-500">
                             {recentValues &&

@@ -1,12 +1,9 @@
-import classnames from 'classnames';
 import _ from 'lodash';
-import React, { createRef, Ref, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import tinycolor from 'tinycolor2';
-import { Avatar } from './Avatar';
+import React, { useRef, useState } from 'react';
 import { Button, Input } from '..';
-import { Choose, ChooseProps } from './Choose';
-import { ChooseInline } from './ChooseInline';
-import { Search } from './controls/IconInput';
+import { Avatar } from './Avatar';
+import { Choose } from './Choose';
+import { SearchInput } from './controls/SearchInput';
 
 
 // definition
@@ -97,7 +94,7 @@ export const Controlled = () => {
                     itemMatch={itemMatch}
                     scale="base" />
 
-                <Search />
+                <SearchInput />
             </div>
             {/* <button type="submit" >enviar</button> */}
         </form>
@@ -129,7 +126,7 @@ export const UnControlled = () => {
                     itemValue={itemValue}
                     itemMatch={itemMatch}
                     scale="base" />
-                <Search />
+                <SearchInput />
             </div>
             {/* <button type="submit" >enviar</button> */}
         </form>
@@ -181,7 +178,7 @@ export const Loading = () => {
                     itemMatch={itemMatch}
                     renderItem={renderItem}
                     scale="base" />
-                <Search />
+                <SearchInput />
             </div>
         </form>
     );
@@ -212,7 +209,7 @@ export const Error = () => {
                     itemMatch={itemMatch}
                     renderItem={renderItem}
                     scale="base" />
-                <Search />
+                <SearchInput />
             </div>
         </form>
     );
@@ -267,7 +264,7 @@ export const Creatable = () => {
                     renderCreateItem={renderCreateItem}
                     onCreate={onCreate}
                     scale="base" />
-                <Search />
+                <SearchInput />
             </div>
             {/* <button type="submit" >enviar</button> */}
         </form>
@@ -313,7 +310,7 @@ export const ChooseAvatar = () => {
                     itemMatch={itemMatch}
                     scale="base" />
 
-                <Search />
+                <SearchInput />
             </div>
             {/* <button type="submit" >enviar</button> */}
         </form>
@@ -346,7 +343,7 @@ export const DataNotNull = () => {
                     itemMatch={itemMatch}
                     scale="base" />
 
-                <Search />
+                <SearchInput />
             </div>
             {/* <button type="submit" >enviar</button> */}
         </form>
