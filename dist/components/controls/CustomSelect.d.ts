@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { ComponentScale } from '../ComponentScale';
 import { ComponentAlign } from '../ComponentAlign';
+import { ComponentScale } from '../ComponentScale';
 export interface CustomSelectProps {
     scale?: ComponentScale;
     value: any;
