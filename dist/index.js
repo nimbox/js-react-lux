@@ -1,7 +1,8 @@
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import React, { useState, useEffect, createContext, useContext, useMemo, useRef, useImperativeHandle } from 'react';
+import _ from 'lodash';
+import React, { useRef, useEffect, createContext, useContext, useImperativeHandle, useState, useCallback, useMemo } from 'react';
 import tinycolor from 'tinycolor2';
 import ReactDOM from 'react-dom';
 import { usePopper } from 'react-popper';
@@ -164,6 +165,12 @@ var controlSmallText = {
     'base': 'text-sm',
     'lg': ''
 };
+var controlIconSmallMarginSize = {
+    'xs': 'h-3 w-3 -mt-1.5',
+    'sm': 'h-4 w-4 -mt-2',
+    'base': 'h-5 w-5 -mt-2.5',
+    'lg': 'h-6 w-6 -mt-3'
+};
 
 var Button = function (_a) {
     var _b = _a.link, link = _b === void 0 ? false : _b, _c = _a.secondary, secondary = _c === void 0 ? false : _c, _d = _a.scale, scale = _d === void 0 ? 'base' : _d, children = _a.children, className = _a.className, props = __rest(_a, ["link", "secondary", "scale", "children", "className"]);
@@ -205,59 +212,6 @@ Card.Footer = function (_a) {
     return (jsx("div", __assign({ className: classnames('border-t border-content-border p-3', className) }, { children: children }), void 0));
 };
 
-//
-// Delay
-//
-var Delay = function (_a) {
-    var _b = _a.delay, delay = _b === void 0 ? 250 : _b, children = _a.children;
-    var _c = useState(false), show = _c[0], setShow = _c[1];
-    useEffect(function () {
-        var timeout = setTimeout(function () { return setShow(true); }, delay);
-        return function () { return clearTimeout(timeout); };
-    }, [delay, setShow]);
-    return show ? children : null;
-};
-
-var Loading = function (_a) {
-    var _b = _a.scale, scale = _b === void 0 ? 'base' : _b, className = _a.className, _c = _a.colorClassName, colorClassName = _c === void 0 ? 'text-primary-500' : _c;
-    return (jsx("svg", __assign({ width: "45", height: "45", viewBox: "0 0 45 45", xmlns: "http://www.w3.org/2000/svg", stroke: "currentColor", className: classnames('inline-block', colorClassName, {
-            'h-6 w-6': scale === 'sm',
-            'h-10 w-10': scale === 'base',
-            'h-14 w-14': scale === 'lg'
-        }, className) }, { children: jsxs("g", __assign({ fill: "none", fillRule: "evenodd", transform: "translate(1 1)", strokeWidth: "2" }, { children: [jsxs("circle", __assign({ cx: "22", cy: "22", r: "6", strokeOpacity: "0" }, { children: [jsx("animate", { attributeName: "r", begin: "1.5s", dur: "3s", values: "6;22", calcMode: "linear", repeatCount: "indefinite" }, void 0), jsx("animate", { attributeName: "stroke-opacity", begin: "1.5s", dur: "3s", values: "1;0", calcMode: "linear", repeatCount: "indefinite" }, void 0), jsx("animate", { attributeName: "stroke-width", begin: "1.5s", dur: "3s", values: "2;0", calcMode: "linear", repeatCount: "indefinite" }, void 0)] }), void 0), jsxs("circle", __assign({ cx: "22", cy: "22", r: "6", strokeOpacity: "0" }, { children: [jsx("animate", { attributeName: "r", begin: "3s", dur: "3s", values: "6;22", calcMode: "linear", repeatCount: "indefinite" }, void 0), jsx("animate", { attributeName: "stroke-opacity", begin: "3s", dur: "3s", values: "1;0", calcMode: "linear", repeatCount: "indefinite" }, void 0), jsx("animate", { attributeName: "stroke-width", begin: "3s", dur: "3s", values: "2;0", calcMode: "linear", repeatCount: "indefinite" }, void 0)] }), void 0), jsx("circle", __assign({ cx: "22", cy: "22", r: "8" }, { children: jsx("animate", { attributeName: "r", begin: "0s", dur: "1.5s", values: "6;1;2;3;4;5;6", calcMode: "linear", repeatCount: "indefinite" }, void 0) }), void 0)] }), void 0) }), void 0));
-};
-
-var Postit = function (_a) {
-    var className = _a.className, children = _a.children;
-    return (jsx("div", __assign({ className: "postit-container" }, { children: jsx("div", __assign({ className: classnames('postit', className) }, { children: children }), void 0) }), void 0));
-};
-
-var Context$4 = createContext({ value: null, setValue: function () { return null; } });
-var Tabs = function (_a) {
-    var value = _a.value, setValue = _a.setValue, className = _a.className, children = _a.children;
-    return (jsx(Context$4.Provider, __assign({ value: { value: value, setValue: setValue } }, { children: jsx("ul", __assign({ className: classnames('flex flex-row', className) }, { children: children }), void 0) }), void 0));
-};
-var TabsOption = function (_a) {
-    var value = _a.value, className = _a.className, children = _a.children;
-    var context = useContext(Context$4);
-    return (jsx("li", __assign({ onClick: function () { return context.setValue(value); }, className: classnames('px-4 py-2 text-control-border hover:text-primary-700', { 'text-primary-500 border-b-2 border-primary-500': context.value === value }, 'cursor-pointer', className) }, { children: children }), void 0));
-};
-Tabs.Option = TabsOption;
-
-var Cross = function (_a) {
-    var showCross = _a.showCross, crossColor = _a.crossColor, circleColor = _a.circleColor, props = __rest(_a, ["showCross", "crossColor", "circleColor"]);
-    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("circle", { cx: "16", cy: "16", r: "14", fill: circleColor }, void 0), showCross && jsx("path", { d: "M10 10L22 22M22 10L10 22", stroke: crossColor, strokeWidth: "0.25em" }, void 0)] }), void 0));
-};
-var Tag = function (_a) {
-    var _b = _a.color, propertyColor = _b === void 0 ? '#906090' : _b, propertyBackground = _a.background, onClick = _a.onClick, onDelete = _a.onDelete, children = _a.children;
-    var color = useMemo(function () { return (!propertyBackground ? (tinycolor(propertyColor).isDark() ? 'white' : 'black') : propertyColor); }, [propertyColor, propertyBackground]);
-    var backgroundColor = useMemo(function () { return !propertyBackground ? propertyColor : propertyBackground; }, [propertyColor, propertyBackground]);
-    var crossBackgroundColor = useMemo(function () { return tinycolor(backgroundColor).darken(5).toString(); }, [backgroundColor]);
-    var crossBackgroundHoverColor = useMemo(function () { return tinycolor(crossBackgroundColor).darken(10).toString(); }, [crossBackgroundColor]);
-    var _c = useState(crossBackgroundColor), hoverColor = _c[0], setHoverColor = _c[1];
-    return (jsxs("span", __assign({ className: 'inline-flex flex-row items-baseline max-w-full rounded rounded-full', style: { lineHeight: '1', paddingLeft: '0.25em', paddingTop: '0.125em', paddingRight: '0.5em', paddingBottom: '0.125em', color: color, backgroundColor: backgroundColor } }, { children: [jsx(Cross, { showCross: !!onDelete, onMouseEnter: function () { return setHoverColor(crossBackgroundHoverColor); }, onMouseLeave: function () { return setHoverColor(crossBackgroundColor); }, onClick: function () { return onDelete && onDelete(); }, crossColor: color, circleColor: onDelete ? hoverColor : crossBackgroundColor, className: "block flex-none self-center cursor-pointer", style: { marginRight: '0.125em' } }, void 0), jsx("span", __assign({ onClick: !onDelete ? onClick : undefined, className: classnames('block flex-1 max-w-full truncate', { 'hover:underline cursor-pointer': onClick && !onDelete }), style: { height: '1.2em', lineHeight: '1.2em' } }, { children: children }), void 0)] }), void 0));
-};
-
 var useOutsideClick = function (onClickOutside) {
     var target = useRef(null);
     var popper = useRef(null);
@@ -291,6 +245,301 @@ var useOnOutsideClick = function (onOutsideClick) {
         document.addEventListener('mousedown', handleMouseDown);
         return function () { return document.removeEventListener('mousedown', handleMouseDown); };
     }, elements);
+};
+
+var Context$4 = createContext({ scale: 'base', error: false });
+var Control = function (_a) {
+    var _b = _a.scale, scale = _b === void 0 ? 'base' : _b, _c = _a.error, error = _c === void 0 ? false : _c, className = _a.className, style = _a.style, children = _a.children;
+    return (jsx(Context$4.Provider, __assign({ value: { error: error, scale: scale } }, { children: jsx("div", __assign({ className: classnames('flex flex-col w-full', className), style: style }, { children: children }), void 0) }), void 0));
+};
+Control.Label = (function (_a) {
+    var badge = _a.badge, className = _a.className, children = _a.children;
+    var context = useContext(Context$4);
+    var Badge = badge;
+    return (jsx("label", __assign({ className: classnames(className, 'block', context.error ? 'text-danger-500' : 'text-control-border', controlText[context.scale || 'base']) }, { children: jsxs("div", __assign({ className: "flex flex-row justify-between align-baseline" }, { children: [jsx("span", __assign({ className: "uppercase tracking-tighter" }, { children: children }), void 0), badge &&
+                    (typeof badge === 'string' || badge instanceof String)
+                    ?
+                        jsx("span", { children: badge }, void 0)
+                    :
+                        Badge ?
+                            jsx(Badge, {}, void 0)
+                            : ''] }), void 0) }), void 0));
+});
+Control.Message = (function (_a) {
+    var className = _a.className, children = _a.children;
+    var context = useContext(Context$4);
+    return (jsx("div", __assign({ className: classnames(context.error ? 'text-danger-500' : 'text-control-border', controlSmallText[context.scale || 'base'], className) }, { children: children }), void 0));
+});
+Control.Error = (function (_a) {
+    var className = _a.className, children = _a.children;
+    var context = useContext(Context$4);
+    return children ?
+        (jsx("div", __assign({ className: classnames('text-danger-500', controlSmallText[context.scale || 'base'], className) }, { children: children }), void 0))
+        : null;
+});
+Control.Label.displayName = 'Control.Label';
+Control.Message.displayName = 'Control.Help';
+Control.Error.displayName = 'Control.Error';
+
+var Input = React.forwardRef(function (_a, ref) {
+    var scale = _a.scale, error = _a.error, className = _a.className, props = __rest(_a, ["scale", "error", "className"]);
+    var context = useContext(Context$4);
+    return (jsx("input", __assign({}, props, { ref: ref, className: classnames(controlScale[scale || context.scale || 'base'], 'block w-full rounded border border-control-border', error || context.error ?
+            'border-danger-500 focus:border-danger-500 focus:ring focus:ring-danger-500' :
+            'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none disabled:opacity-50', className) }), void 0));
+});
+
+var IconInput = React.forwardRef(function (_a, ref) {
+    var left = _a.left, right = _a.right, scale = _a.scale; _a.error; var className = _a.className, props = __rest(_a, ["left", "right", "scale", "error", "className"]);
+    return (jsxs("div", __assign({ className: classnames('relative', className) }, { children: [jsx(Input, __assign({ ref: ref, scale: scale, className: classnames({ 'pl-9': left, 'pr-9': right }) }, props), void 0), left &&
+                jsx("div", __assign({ className: "absolute inset-y-0 left-0 flex flex-row justify-center items-center", style: { width: '2em' } }, { children: left }), void 0), right &&
+                jsx("div", __assign({ className: "absolute inset-y-0 right-0 flex flex-row justify-center items-center", style: { width: '2em' } }, { children: right }), void 0)] }), void 0));
+});
+
+var SearchInput = React.forwardRef(function (_a, ref) {
+    var props = __rest(_a, []);
+    return (jsx(IconInput, __assign({ ref: ref, right: jsx(SvgSearchIcon, { width: "1em", height: "1em", className: "text-control-border", style: { strokeWidth: '0.25em' } }, void 0) }, props), void 0));
+});
+
+var ChooseFn = function (_a, ref) {
+    var _b;
+    var _c = _a.scale, scale = _c === void 0 ? 'base' : _c, recentValues = _a.recentValues, items = _a.items, loading = _a.loading, error = _a.error, getItem = _a.getItem, searchItems = _a.searchItems, itemValue = _a.itemValue, itemMatch = _a.itemMatch, renderItem = _a.renderItem, _d = _a.creatable, creatable = _d === void 0 ? false : _d, onCreate = _a.onCreate, renderCreateItem = _a.renderCreateItem, inline = _a.inline, className = _a.className, props = __rest(_a, ["scale", "recentValues", "items", "loading", "error", "getItem", "searchItems", "itemValue", "itemMatch", "renderItem", "creatable", "onCreate", "renderCreateItem", "inline", "className"]);
+    var inputRef = useRef();
+    useImperativeHandle(ref, function () { return inputRef.current; });
+    var _e = useState(""), search = _e[0], setSearch = _e[1];
+    var _f = useState(""), value = _f[0], setValue = _f[1];
+    var context = useContext(Context$4);
+    var _g = useState(false), visible = _g[0], setVisible = _g[1];
+    var _h = useOutsideClick(function () { setVisible(!visible); }), target = _h[0], popper = _h[1];
+    var _j = useState(loading || false), internalLoading = _j[0], setInternalLoading = _j[1];
+    var _k = useState(error || false), internalError = _k[0], setInternalError = _k[1];
+    var _l = useState([]), searchResults = _l[0], setSearchResults = _l[1];
+    var _m = useState(false), showButton = _m[0], setShowButton = _m[1];
+    var _o = useState(false), tab = _o[0], setTab = _o[1];
+    var _p = useState(0), cursor = _p[0], setCursor = _p[1];
+    function handleKeyDown(event) {
+        console.log("envent INPUT", cursor);
+        if (event.key === "ArrowUp" && cursor > 0) {
+            console.log("envent arrowUp", cursor);
+            event.stopPropagation();
+            setCursor(cursor - 1);
+        }
+        else if (event.key === "ArrowDown" && cursor < (searchResults.length + recentValues.length) - 1) {
+            console.log("envent arrowDown", cursor);
+            event.stopPropagation();
+            setCursor(cursor + 1);
+        }
+        else if (event.key === "Enter" && cursor >= 0 && visible) {
+            event.stopPropagation();
+            if (cursor >= recentValues.length) {
+                handleClick(event, inputRef, itemValue(searchResults[cursor - recentValues.length]));
+                setCursor(0);
+            }
+            else {
+                handleClick(event, inputRef, recentValues[cursor]);
+                setCursor(0);
+            }
+        }
+        else if (event.key === "Enter" && !visible) {
+            setVisible(true);
+        }
+    }
+    function handleKeyDownSearch(event) {
+        console.log("envent SEARCH", cursor);
+        if (event.key === "Tab") {
+            setTab(true);
+        }
+        else if (event.key === "ArrowUp" && cursor > 0) {
+            console.log("envent arrowUp", cursor);
+            setCursor(cursor - 1);
+        }
+        else if (event.key === "ArrowDown" && cursor < (searchResults.length + recentValues.length) - 1) {
+            console.log("envent arrowDown", cursor);
+            setCursor(cursor + 1);
+        }
+        else if (event.key === "Enter" && cursor > 0) {
+            if (cursor >= recentValues.length) {
+                handleClick(event, inputRef, itemValue(searchResults[cursor - recentValues.length]));
+                setCursor(0);
+            }
+            else {
+                handleClick(event, inputRef, recentValues[cursor]);
+                setCursor(0);
+            }
+        }
+    }
+    function handleBlur(event) {
+        if (popper.current && !popper.current.contains(event.target)) {
+            if (target.current && !target.current.contains(event.target)) {
+                setVisible(false);
+            }
+        }
+        if (tab) {
+            setTab(false);
+            setVisible(false);
+        }
+    }
+    useEffect(function () {
+        setInternalLoading(loading || false);
+    }, [loading]);
+    useEffect(function () {
+        setInternalError(error);
+    }, [error]);
+    useEffect(function () {
+        var _a;
+        setValue((_a = inputRef === null || inputRef === void 0 ? void 0 : inputRef.current) === null || _a === void 0 ? void 0 : _a.value);
+    }, [(_b = inputRef === null || inputRef === void 0 ? void 0 : inputRef.current) === null || _b === void 0 ? void 0 : _b.value]);
+    var findItem = function (value) {
+        if (items) {
+            return _.find(items, function (item) { return itemValue(item) == value; });
+        }
+        else {
+            if (getItem) {
+                return getItem(value);
+            }
+        }
+    };
+    var handleSearch = useCallback(function (e) {
+        if (e.target) {
+            setSearch(e.target.value);
+            setShowButton(true);
+            console.log(search);
+            if (items) {
+                setInternalLoading(true);
+                new Promise(function (resolve, reject) {
+                    if (e.target.value != "") {
+                        var results = items.filter(function (item) {
+                            return itemMatch(e.target.value, item) && !(recentValues === null || recentValues === void 0 ? void 0 : recentValues.some(function (el) { return el === itemValue(item); })) && itemValue(item) != value;
+                        });
+                        resolve(results);
+                    }
+                    else {
+                        resolve([]);
+                    }
+                    var error = new Error("Error searching items");
+                    reject(error);
+                })
+                    .then(function (results) { setSearchResults(results); setInternalLoading(false); })
+                    .catch(function (error) { setInternalError(error); });
+            }
+            else {
+                if (searchItems)
+                    Promise.resolve(searchItems(e.target.value))
+                        .then(function (results) { return setSearchResults(results); })
+                        .catch(function (error) { return setInternalError(internalError ? internalError + ', ' + error : error); });
+            }
+        }
+    }, [items, value]);
+    function setRefValue(event, element, value) {
+        var _a;
+        event.preventDefault();
+        var inputSetter = (_a = Object === null || Object === void 0 ? void 0 : Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')) === null || _a === void 0 ? void 0 : _a.set;
+        if (inputSetter) {
+            inputSetter.call(element.current, value);
+            var inputEvent = new Event('input', { bubbles: true });
+            element.current.dispatchEvent(inputEvent);
+        }
+    }
+    var handleClick = function (event, element, value) {
+        if (event && element && value) {
+            setRefValue(event, element, value);
+            setVisible(!visible);
+            setSearchResults([]);
+            setSearch("");
+            setShowButton(false);
+        }
+    };
+    var handleCreate = function (event, element, value) {
+        if (onCreate) {
+            Promise.resolve(onCreate(value))
+                .then(function (result) {
+                handleClick(event, element, itemValue(result));
+            })
+                .catch(function (error) { return setInternalError(internalError ? internalError + ' ' + error : error); });
+        }
+    };
+    var doRenderItem = function (value) {
+        if (value == null) {
+            return null;
+        }
+        var item = findItem(value);
+        if (item == null) {
+            return null;
+        }
+        return renderItem(item);
+    };
+    return (jsxs("div", __assign({ className: classnames('relative inline-block', inline ? 'max-w-full' : 'w-full') }, { children: [jsxs("div", __assign({ ref: target, tabIndex: 0, onFocus: function () { return setVisible(true); }, onBlur: handleBlur, onKeyDown: handleKeyDown, className: classnames('relative rounded', inline || 'border border-control-border', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none pl-1 pr-8', controlScale[scale || context.scale || 'base'], visible && 'border-primary-500 ring ring-primary-500 ring-opacity-50 outline-none', className) }, { children: [doRenderItem(value) || jsx("span", { children: "\u00A0" }, void 0), jsx("div", __assign({ className: "absolute top-1/2 right-1" }, { children: jsx(SvgAngleDownIcon, { className: classnames(controlIconSmallMarginSize[scale || context.scale || 'base'], 'stroke-current stroke-2') }, void 0) }), void 0)] }), void 0), visible &&
+                jsxs("div", __assign({ ref: popper, className: classnames('absolute border border-control-border rounded', inline && 'w-max', 'bg-white w-full p-4 mt-2 space-y-2 max-h-72  overflow-auto') }, { children: [jsx(SearchInput, { scale: smallScale[scale || context.scale || 'base'], value: search, onKeyDown: handleKeyDownSearch, onBlur: handleBlur, onChange: handleSearch }, void 0), jsxs("div", __assign({ className: "divide-y-2 divide-dashed divide-opacity-30 divide-primary-500" }, { children: [recentValues &&
+                                    jsx("ul", __assign({ className: "pb-2" }, { children: recentValues.map(function (value, i) { return (jsx("li", __assign({ className: classnames('cursor-pointer', cursor === i && 'bg-primary-400'), onClick: function (e) { return handleClick(e, inputRef, value); } }, { children: doRenderItem(value) }), void 0)); }) }), void 0), internalLoading && jsx(Loading, { colorClassName: "text-primary-500", scale: "base" }, void 0), internalError && jsx("div", { children: internalError }, void 0), !internalLoading && !internalError && searchResults &&
+                                    jsx("ul", __assign({ className: "pt-2" }, { children: searchResults.map(function (item, i) { return (jsx("li", __assign({ className: classnames('cursor-pointer', cursor === i + recentValues.length && 'bg-primary-400'), onClick: function (e) { return handleClick(e, inputRef, itemValue(item)); } }, { children: renderItem(item) }), void 0)); }) }), void 0), creatable && showButton && renderCreateItem &&
+                                    jsx("div", __assign({ className: "p-2", onClick: function (e) { return handleCreate(e, inputRef, search); } }, { children: renderCreateItem(search) }), void 0)] }), void 0)] }), void 0), jsx("input", __assign({ className: "hidden", type: "text", ref: inputRef }, props), void 0)] }), void 0));
+};
+/**
+ * Descripción
+ *
+ * Seleccionar y Cerrar
+ *   - Enter
+ *   - Tab && custor != null
+ *   - Click
+ * Cerrar
+ *   - Tab && cusrsor == null
+ *   - onClickOutside
+ *
+ *
+ */
+var Choose = React.forwardRef(ChooseFn);
+
+//
+// Delay
+//
+var Delay = function (_a) {
+    var _b = _a.delay, delay = _b === void 0 ? 250 : _b, children = _a.children;
+    var _c = useState(false), show = _c[0], setShow = _c[1];
+    useEffect(function () {
+        var timeout = setTimeout(function () { return setShow(true); }, delay);
+        return function () { return clearTimeout(timeout); };
+    }, [delay, setShow]);
+    return show ? children : null;
+};
+
+var Loading = function (_a) {
+    var _b = _a.scale, scale = _b === void 0 ? 'base' : _b, className = _a.className, _c = _a.colorClassName, colorClassName = _c === void 0 ? 'text-primary-500' : _c;
+    return (jsx("svg", __assign({ width: "45", height: "45", viewBox: "0 0 45 45", xmlns: "http://www.w3.org/2000/svg", stroke: "currentColor", className: classnames('inline-block', colorClassName, {
+            'h-6 w-6': scale === 'sm',
+            'h-10 w-10': scale === 'base',
+            'h-14 w-14': scale === 'lg'
+        }, className) }, { children: jsxs("g", __assign({ fill: "none", fillRule: "evenodd", transform: "translate(1 1)", strokeWidth: "2" }, { children: [jsxs("circle", __assign({ cx: "22", cy: "22", r: "6", strokeOpacity: "0" }, { children: [jsx("animate", { attributeName: "r", begin: "1.5s", dur: "3s", values: "6;22", calcMode: "linear", repeatCount: "indefinite" }, void 0), jsx("animate", { attributeName: "stroke-opacity", begin: "1.5s", dur: "3s", values: "1;0", calcMode: "linear", repeatCount: "indefinite" }, void 0), jsx("animate", { attributeName: "stroke-width", begin: "1.5s", dur: "3s", values: "2;0", calcMode: "linear", repeatCount: "indefinite" }, void 0)] }), void 0), jsxs("circle", __assign({ cx: "22", cy: "22", r: "6", strokeOpacity: "0" }, { children: [jsx("animate", { attributeName: "r", begin: "3s", dur: "3s", values: "6;22", calcMode: "linear", repeatCount: "indefinite" }, void 0), jsx("animate", { attributeName: "stroke-opacity", begin: "3s", dur: "3s", values: "1;0", calcMode: "linear", repeatCount: "indefinite" }, void 0), jsx("animate", { attributeName: "stroke-width", begin: "3s", dur: "3s", values: "2;0", calcMode: "linear", repeatCount: "indefinite" }, void 0)] }), void 0), jsx("circle", __assign({ cx: "22", cy: "22", r: "8" }, { children: jsx("animate", { attributeName: "r", begin: "0s", dur: "1.5s", values: "6;1;2;3;4;5;6", calcMode: "linear", repeatCount: "indefinite" }, void 0) }), void 0)] }), void 0) }), void 0));
+};
+
+var Postit = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (jsx("div", __assign({ className: "postit-container" }, { children: jsx("div", __assign({ className: classnames('postit', className) }, { children: children }), void 0) }), void 0));
+};
+
+var Context$3 = createContext({ value: null, setValue: function () { return null; } });
+var Tabs = function (_a) {
+    var value = _a.value, setValue = _a.setValue, className = _a.className, children = _a.children;
+    return (jsx(Context$3.Provider, __assign({ value: { value: value, setValue: setValue } }, { children: jsx("ul", __assign({ className: classnames('flex flex-row', className) }, { children: children }), void 0) }), void 0));
+};
+var TabsOption = function (_a) {
+    var value = _a.value, className = _a.className, children = _a.children;
+    var context = useContext(Context$3);
+    return (jsx("li", __assign({ onClick: function () { return context.setValue(value); }, className: classnames('px-4 py-2 text-control-border hover:text-primary-700', { 'text-primary-500 border-b-2 border-primary-500': context.value === value }, 'cursor-pointer', className) }, { children: children }), void 0));
+};
+Tabs.Option = TabsOption;
+
+var Cross = function (_a) {
+    var showCross = _a.showCross, crossColor = _a.crossColor, circleColor = _a.circleColor, props = __rest(_a, ["showCross", "crossColor", "circleColor"]);
+    return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("circle", { cx: "16", cy: "16", r: "14", fill: circleColor }, void 0), showCross && jsx("path", { d: "M10 10L22 22M22 10L10 22", stroke: crossColor, strokeWidth: "0.25em" }, void 0)] }), void 0));
+};
+var Tag = function (_a) {
+    var _b = _a.color, propertyColor = _b === void 0 ? '#906090' : _b, propertyBackground = _a.background, onClick = _a.onClick, onDelete = _a.onDelete, children = _a.children;
+    var color = useMemo(function () { return (!propertyBackground ? (tinycolor(propertyColor).isDark() ? 'white' : 'black') : propertyColor); }, [propertyColor, propertyBackground]);
+    var backgroundColor = useMemo(function () { return !propertyBackground ? propertyColor : propertyBackground; }, [propertyColor, propertyBackground]);
+    var crossBackgroundColor = useMemo(function () { return tinycolor(backgroundColor).darken(5).toString(); }, [backgroundColor]);
+    var crossBackgroundHoverColor = useMemo(function () { return tinycolor(crossBackgroundColor).darken(10).toString(); }, [crossBackgroundColor]);
+    var _c = useState(crossBackgroundColor), hoverColor = _c[0], setHoverColor = _c[1];
+    return (jsxs("span", __assign({ className: 'inline-flex flex-row items-baseline max-w-full rounded rounded-full', style: { lineHeight: '1', paddingLeft: '0.25em', paddingTop: '0.125em', paddingRight: '0.5em', paddingBottom: '0.125em', color: color, backgroundColor: backgroundColor } }, { children: [jsx(Cross, { showCross: !!onDelete, onMouseEnter: function () { return setHoverColor(crossBackgroundHoverColor); }, onMouseLeave: function () { return setHoverColor(crossBackgroundColor); }, onClick: function () { return onDelete && onDelete(); }, crossColor: color, circleColor: onDelete ? hoverColor : crossBackgroundColor, className: "block flex-none self-center cursor-pointer", style: { marginRight: '0.125em' } }, void 0), jsx("span", __assign({ onClick: !onDelete ? onClick : undefined, className: classnames('block flex-1 max-w-full truncate', { 'hover:underline cursor-pointer': onClick && !onDelete }), style: { height: '1.2em', lineHeight: '1.2em' } }, { children: children }), void 0)] }), void 0));
 };
 
 // constants
@@ -460,48 +709,6 @@ function formatDate(ymd) {
     return (ymd[2] < 10 ? '0' + ymd[2] : ymd[2]) + '-' + (m < 10 ? '0' + m : m) + '-' + ymd[0];
 }
 
-var Context$3 = createContext({ scale: 'base', error: false });
-var Control = function (_a) {
-    var _b = _a.scale, scale = _b === void 0 ? 'base' : _b, _c = _a.error, error = _c === void 0 ? false : _c, className = _a.className, style = _a.style, children = _a.children;
-    return (jsx(Context$3.Provider, __assign({ value: { error: error, scale: scale } }, { children: jsx("div", __assign({ className: classnames('flex flex-col w-full', className), style: style }, { children: children }), void 0) }), void 0));
-};
-Control.Label = (function (_a) {
-    var badge = _a.badge, className = _a.className, children = _a.children;
-    var context = useContext(Context$3);
-    var Badge = badge;
-    return (jsx("label", __assign({ className: classnames(className, 'block', context.error ? 'text-danger-500' : 'text-control-border', controlText[context.scale || 'base']) }, { children: jsxs("div", __assign({ className: "flex flex-row justify-between align-baseline" }, { children: [jsx("span", __assign({ className: "uppercase tracking-tighter" }, { children: children }), void 0), badge &&
-                    (typeof badge === 'string' || badge instanceof String)
-                    ?
-                        jsx("span", { children: badge }, void 0)
-                    :
-                        Badge ?
-                            jsx(Badge, {}, void 0)
-                            : ''] }), void 0) }), void 0));
-});
-Control.Message = (function (_a) {
-    var className = _a.className, children = _a.children;
-    var context = useContext(Context$3);
-    return (jsx("div", __assign({ className: classnames(context.error ? 'text-danger-500' : 'text-control-border', controlSmallText[context.scale || 'base'], className) }, { children: children }), void 0));
-});
-Control.Error = (function (_a) {
-    var className = _a.className, children = _a.children;
-    var context = useContext(Context$3);
-    return children ?
-        (jsx("div", __assign({ className: classnames('text-danger-500', controlSmallText[context.scale || 'base'], className) }, { children: children }), void 0))
-        : null;
-});
-Control.Label.displayName = 'Control.Label';
-Control.Message.displayName = 'Control.Help';
-Control.Error.displayName = 'Control.Error';
-
-var Input = React.forwardRef(function (_a, ref) {
-    var scale = _a.scale, error = _a.error, className = _a.className, props = __rest(_a, ["scale", "error", "className"]);
-    var context = useContext(Context$3);
-    return (jsx("input", __assign({}, props, { ref: ref, className: classnames(controlScale[scale || context.scale || 'base'], 'block w-full rounded border border-control-border', error || context.error ?
-            'border-danger-500 focus:border-danger-500 focus:ring focus:ring-danger-500' :
-            'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none disabled:opacity-50', className) }), void 0));
-});
-
 //
 // https://popper.js.org/docs/v2/modifiers/community-modifiers/
 // https://codesandbox.io/s/bitter-sky-pe3z9?file=/src/index.js:383-394
@@ -568,18 +775,6 @@ var SwatchPicker = React.forwardRef(function (_a, ref) {
                 }) }), void 0), document.querySelector('body'))] }), void 0));
 });
 
-var IconInput = React.forwardRef(function (_a, ref) {
-    var left = _a.left, right = _a.right, scale = _a.scale; _a.error; var className = _a.className, props = __rest(_a, ["left", "right", "scale", "error", "className"]);
-    return (jsxs("div", __assign({ className: classnames('relative', className) }, { children: [jsx(Input, __assign({ ref: ref, scale: scale, className: classnames({ 'pl-9': left, 'pr-9': right }) }, props), void 0), left &&
-                jsx("div", __assign({ className: "absolute inset-y-0 left-0 flex flex-row justify-center items-center", style: { width: '2em' } }, { children: left }), void 0), right &&
-                jsx("div", __assign({ className: "absolute inset-y-0 right-0 flex flex-row justify-center items-center", style: { width: '2em' } }, { children: right }), void 0)] }), void 0));
-});
-
-var SearchInput = React.forwardRef(function (_a, ref) {
-    var props = __rest(_a, []);
-    return (jsx(IconInput, __assign({ ref: ref, right: jsx(SvgSearchIcon, { width: "1em", height: "1em", className: "text-control-border", style: { strokeWidth: '0.25em' } }, void 0) }, props), void 0));
-});
-
 /**
  * TagPicker creates an input to choose from a searchable tag store of type `T`.
  * It takes an array of tags of type `T[]` as `values`, which is the current set
@@ -605,7 +800,7 @@ var SearchInput = React.forwardRef(function (_a, ref) {
  */
 var TagPicker = function (_a) {
     var _b = _a.scale, scale = _b === void 0 ? 'base' : _b, tags = _a.tags, tagValue = _a.tagValue, renderTag = _a.renderTag, onAdd = _a.onAdd, onRemove = _a.onRemove, onSearch = _a.onSearch, CreateComponent = _a.CreateComponent;
-    var context = useContext(Context$3);
+    var context = useContext(Context$4);
     var _c = useState(false), isVisible = _c[0], setIsVisible = _c[1];
     var _d = useState(false), isUpdating = _d[0], setIsUpdating = _d[1];
     var _e = useState(false); _e[0]; var setIsError = _e[1];
@@ -732,7 +927,7 @@ var TimePicker = function (_a) {
     var times = useRef({ watch: 8 });
     var timesRef = useRef(null);
     useEffect(function () { scroll(); });
-    var context = useContext(Context$3);
+    var context = useContext(Context$4);
     // handlers
     var handleShow = function () { if (!show) {
         setShow(true);
@@ -890,7 +1085,7 @@ function formatTime(hm) {
 
 var CheckBox = function (_a) {
     var scale = _a.scale, className = _a.className, children = _a.children, props = __rest(_a, ["scale", "className", "children"]);
-    var context = useContext(Context$3);
+    var context = useContext(Context$4);
     return children ?
         (jsxs("div", __assign({ className: "flex flex-row items-center" }, { children: [jsx("input", __assign({ type: "checkbox" }, props, { className: classnames(controlSize[scale || context.scale || 'base'], 'rounded border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:ring-offset-0 disabled:opacity-50', className) }), void 0), jsx("span", __assign({ className: classnames('ml-2', controlText[scale || context.scale || 'base'], className) }, { children: children }), void 0)] }), void 0))
         :
@@ -899,7 +1094,7 @@ var CheckBox = function (_a) {
 
 var Radio = React.forwardRef(function (_a, ref) {
     var scale = _a.scale; _a.error; var className = _a.className, children = _a.children, props = __rest(_a, ["scale", "error", "className", "children"]);
-    var context = useContext(Context$3);
+    var context = useContext(Context$4);
     return children ?
         (jsxs("div", __assign({ className: "flex flex-row items-center" }, { children: [jsx("input", __assign({ type: "radio", ref: ref }, props, { className: classnames(className, controlSize[scale || context.scale || 'base'], 'border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:ring-offset-0 disabled:opacity-50') }), void 0), jsx("span", __assign({ className: classnames('ml-2', controlText[scale || context.scale || 'base'], className) }, { children: children }), void 0)] }), void 0))
         :
@@ -908,7 +1103,7 @@ var Radio = React.forwardRef(function (_a, ref) {
 
 var Select = React.forwardRef(function (_a, ref) {
     var scale = _a.scale, className = _a.className, children = _a.children, props = __rest(_a, ["scale", "className", "children"]);
-    var context = useContext(Context$3);
+    var context = useContext(Context$4);
     return (jsx("select", __assign({}, props, { ref: ref, className: classnames(controlScale[scale || context.scale || 'base'], 'block w-full rounded border border-control-border', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none disabled:opacity-50', className) }, { children: children }), void 0));
 });
 Select.Option = function (_a) {
@@ -918,7 +1113,7 @@ Select.Option = function (_a) {
 
 var TextArea = React.forwardRef(function (_a, ref) {
     var scale = _a.scale, error = _a.error, className = _a.className, props = __rest(_a, ["scale", "error", "className"]);
-    var context = useContext(Context$3);
+    var context = useContext(Context$4);
     return (jsx("textarea", __assign({}, props, { ref: ref, className: classnames(controlScale[scale || context.scale || 'base'], 'block w-full rounded border border-control-border', error || context.error ?
             'border-danger-500 focus:border-danger-500 focus:ring focus:ring-danger-500' :
             'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none disabled:opacity-50', className) }), void 0));
@@ -1088,5 +1283,5 @@ Panel.Item = function (_a) {
     return (jsx("div", __assign({ className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, { children: children }), void 0));
 };
 
-export { Button, Card, CheckBox, Context$3 as Context, Control, Cross, DatePicker, Delay, Header, Helium, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, RadioBar, RoundButton, Select, SwatchPicker, Tabs, Tag, TagPicker, TextArea, TimePicker, Toast, ToastContainer, ToastContent, ToastProvider, Toggle, ViewportProvider, useOnOutsideClick, useOutsideClick, useToast, useViewport };
+export { Button, Card, CheckBox, Choose, ChooseFn, Context$4 as Context, Control, Cross, DatePicker, Delay, Header, Helium, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, RadioBar, RoundButton, Select, SwatchPicker, Tabs, Tag, TagPicker, TextArea, TimePicker, Toast, ToastContainer, ToastContent, ToastProvider, Toggle, ViewportProvider, useOnOutsideClick, useOutsideClick, useToast, useViewport };
 //# sourceMappingURL=index.js.map
