@@ -1,6 +1,6 @@
 import { action } from '@storybook/addon-actions';
 import _ from 'lodash';
-import React, { useRef, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import { Button, Input } from '..';
 import { MockStore } from '../utils/MockStore';
 import { Avatar } from './Avatar';
@@ -30,8 +30,8 @@ interface StoryChoose {
     description: string;
 }
 
-// const recent = ['id1', 'id5', 'id2', 'id3', 'id4', 'id22', 'id6', 'id7', 'id8', 'id9', 'id0', 'id11'];
-const recent = ['id1', 'id5', 'id2'];
+const recent = ['id1', 'id5', 'id2', 'id3', 'id4', 'id22', 'id6', 'id7', 'id8', 'id9', 'id0', 'id11'];
+//const recent = ['id1', 'id5', 'id2'];
 
 const store = new MockStore<StoryChoose>([
     { id: 'id1', description: 'Karla Alzuro' },
@@ -91,6 +91,7 @@ export const Controlled = () => {
                     onChange={handleChange}
                     recentValues={recent}
                     items={store.items}
+                    getItem={getItem}
                     renderItem={renderItem}
                     itemValue={itemValue}
                     itemMatch={itemMatch}
@@ -124,6 +125,7 @@ export const UnControlled = () => {
                     ref={ref}
                     recentValues={recent}
                     items={store.items}
+                    getItem={getItem}
                     renderItem={renderItem}
                     itemValue={itemValue}
                     itemMatch={itemMatch}
@@ -146,7 +148,8 @@ export const Loading = () => {
         setLoading(true);
         await new Promise(resolve => setTimeout(resolve, 5000));
         setLoading(false);
-        return store.search(q, 0);
+        const result = await store.search(q, 0);
+        return result;
     };
     
     const handleChange = (e: any) => {
@@ -231,26 +234,33 @@ export const Error = () => {
 
 export const Creatable = () => {
 
-    const ref = useRef<any>();
+    const [inputValue, setInputValue] = useState('id1');
+
+    const handleChange = (e: any) => {
+        action('changeSearchString')(e.target.value);
+        console.log('está siendo', e.target.value);
+        setInputValue(e.target.value);
+    };
 
     const handleSubmit = (e: any) => {
-        action('handleSubmit')(ref.current.value);
+        action('handleSubmit')(inputValue);
         e.preventDefault();
-        console.log('termino siendo', ref.current.value);
+        console.log('termino siendo', inputValue);
     };
 
-    const onCreate = async (q: string) => {
-        action('onCreate')(q);
+    const handleCreate = async (q: string) => {
+        action('handleCreate')(q);
         const item = store.create({ id: unique(), description: q }, 0);
         await new Promise(resolve => setTimeout(resolve, 5000));
-        return item;  
+        setInputValue((await item).id);  
     };
 
-    const CreateItem = (q: string) => {
+    const CreateItem: FC<{ search: string; disabled: boolean; onSubmit: (submitting: void | Promise<void>) => void }> = ({ disabled, search, onSubmit }) => {
+
         return (
-            <div>
-                <Button scale="sm" type="button" secondary>
-                    Crear {q}
+            <div className="">
+                <Button scale="sm" type="button" disabled={disabled} onClick={() => onSubmit(handleCreate(search))}>
+                    Crear {search}
                 </Button>
             </div>
         );
@@ -261,16 +271,16 @@ export const Creatable = () => {
             <div className="grid grid-cols-3 gap-4">
                 <Input type="text" />
                 <Choose
-                    defaultValue="id1"
-                    ref={ref}
+                    value={inputValue}
+                    onChange={handleChange}
                     recentValues={recent}
                     items={store.items}
+                    getItem={getItem}
                     renderItem={renderItem}
                     itemValue={itemValue}
                     itemMatch={itemMatch}
                     creatable
-                    renderCreateItem={CreateItem}
-                    onCreate={onCreate}
+                    CreateComponent={CreateItem}
                     scale="base" />
                 <SearchInput />
             </div>
@@ -314,6 +324,7 @@ export const ChooseAvatar = () => {
                     onChange={handleChange}
                     recentValues={recent}
                     items={store.items}
+                    getItem={getItem}
                     renderItem={renderItemAvatar}
                     itemValue={itemValue}
                     itemMatch={itemMatch}
@@ -346,6 +357,7 @@ export const Inline = () => {
                 onChange={handleChange}
                 recentValues={recent}
                 items={store.items}
+                getItem={getItem}
                 renderItem={renderItem}
                 itemValue={itemValue}
                 itemMatch={itemMatch}

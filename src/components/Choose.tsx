@@ -1,15 +1,13 @@
 import classnames from 'classnames';
-import _ from 'lodash';
 import _debounce from 'lodash/debounce';
-import React, { LegacyRef, ReactElement, Ref, useCallback, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { createRef, LegacyRef, ReactElement, Ref, RefObject, useCallback, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Loading } from '..';
 import { DangerIcon } from '../icons';
-import { useOutsideClick } from './../hooks/useOutsideClick';
+import { useOnOutsideClick } from './../hooks/useOutsideClick';
 import AngleDownIcon from './../icons/AngleDownIcon';
 import { ComponentScale, controlText, smallScale } from './ComponentScale';
 import { Context as controlContext } from './controls/Control';
 import { SearchInput } from './controls/SearchInput';
-
 
 
 export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
@@ -19,39 +17,39 @@ export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLA
     recentValues?: string[];
 
     items?: T[];
-    loading?: boolean;
-    error?: any;
+    getItem: (value: string) => T;
 
-    getItem?: (value: string) => T;
     searchItems?: (q: string) => T[] | Promise<T[]>;
+    loading?: boolean;
+    error?: boolean;
 
     itemValue: (item: T) => string;
     itemMatch: (q: string, item: T) => boolean;
     renderItem: (item: T) => React.ReactNode;
 
-    creatable?: boolean;
-    onCreate?: (q: string) => T | Promise<T>;
-    renderCreateItem?: (value: string) => React.ReactNode;
+    CreateComponent?: React.FC<{ search: string; disabled: boolean; onSubmit: (submitting: void | Promise<void>) => void }>
 
     inline?: boolean;
 
     className?: string;
-
 }
 
 type ForwardRefFn<R> = <P = {}>(p: P & React.RefAttributes<R>) => ReactElement | null;
 
-export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, creatable = false, onCreate, renderCreateItem, inline, className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => {
+export const ChooseFn = <T extends {}>({ scale = 'base', value, defaultValue, onChange, recentValues, items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, CreateComponent, inline, className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => {
 
     const inputRef = useRef<HTMLInputElement>();
     useImperativeHandle(ref, () => inputRef.current!);
 
     const [search, setSearch] = useState('');
-    const [value, setValue] = useState('');
+    const [internalValue, setInternalValue] = useState('');
 
     const context = useContext(controlContext);
     const [visible, setVisible] = useState(false);
-    const [targetRef, popperRef] = useOutsideClick<HTMLDivElement, HTMLDivElement>(() => { if (internalError) { reset(); }; setVisible(!visible) });
+
+    const [target, setTarget] = useState<HTMLDivElement | null>(null);
+    const [popper, setPopper] = useState<HTMLDivElement | null>(null);
+    useOnOutsideClick(() => { if (internalError) { reset(); } if (visible) { setVisible(!visible); } }, target, popper);
 
     const [internalLoading, setInternalLoading] = useState(loading || false);
     const [internalError, setInternalError] = useState(error || false);
@@ -61,51 +59,42 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
 
     const searchRef = useRef<HTMLInputElement>();
 
-    const [cursor, setCursor] = useState(0);
-    
-    const listRecentsRefs = searchRecents.reduce((acc: React.RefObject<HTMLInputElement | undefined>[], current, index) => {
-        acc[index] = React.createRef<HTMLInputElement>();
-        return acc;
-    }, []);
+    const [cursor, setCursor] = useState(-1);
 
-    const listSearchRefs = searchResults.reduce((acc: React.RefObject<HTMLInputElement | undefined>[], current, index) => {
-        acc[index] = React.createRef<HTMLInputElement>();
-        return acc;
-    }, []);
+    const searchRecentsLength = searchRecents.length;
+    const [listRecentsRefs, setlistRecentsRefs] = React.useState<RefObject<HTMLLIElement>[]>([]);
 
-    useEffect(() => { setValue(inputRef?.current?.value as string); }, [inputRef?.current?.value]);
+    const searchResultsLength = searchResults.length;
+    const [listResultsRefs, setlistResultsRefs] = React.useState<RefObject<HTMLLIElement>[]>([]);
+
+    useEffect(() => {
+        setlistRecentsRefs(
+            Array(searchRecentsLength).fill(createRef(), 0, searchRecentsLength).map((_, i) => listRecentsRefs[i] || createRef())
+        );
+    }, [searchRecentsLength]);
+
+    useEffect(() => {
+        setlistResultsRefs(
+            Array(searchResultsLength).fill(createRef(), 0, searchResultsLength).map((_, i) => listResultsRefs[i] || createRef())
+        );
+    }, [searchResultsLength]);
+
+    useEffect(() => { setInternalValue(inputRef?.current?.value as string); }, [inputRef?.current?.value]);
 
     useEffect(() => { if (visible) { searchRef.current!.focus(); } }, [visible]);
 
-    useEffect(() => { setInternalLoading(loading || false); }, [loading]);
+    useEffect(() => { setInternalLoading(loading!); }, [loading]);
 
-    useEffect(() => { setInternalError(error); }, [error]);
+    useEffect(() => { setInternalError(error!); }, [error]);
 
     const reset = () => {
-        setInternalError(false);
         setVisible(false);
-        setSearchResults([]);
-        setSearchRecents(recentValues!);
-        setCursor(0);
         setSearch('');
+        setSearchRecents(recentValues!);
+        setSearchResults([]);
+        setCursor(-1);
+        setInternalError(false);
     }
-
-    const findItem = (value: string) => {
-        if (items) {
-            return _.find(items, (item) => itemValue(item) == value);
-        } else {
-            if (getItem) {
-                return getItem(value);
-            }
-        }
-    };
-
-    const doRenderItem = (value: string) => {
-        if (value == null) { return null; }
-        const item = findItem(value);
-        if (item == null) { return null; }
-        return renderItem(item);
-    };
 
     function setRefValue(event: React.MouseEvent<HTMLElement, MouseEvent>, element: React.MutableRefObject<HTMLInputElement | undefined>, value: string) {
         event.preventDefault();
@@ -124,81 +113,70 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
         const searchLength = searchResults.length;
         event.stopPropagation();
 
-        if (event.key === 'ArrowUp' && cursor > 0) {
-            if (cursor != -1) {
-                if (cursor < recentsLength) {
-                    listRecentsRefs[cursor].current?.scrollIntoView({ block: "end", behavior: "smooth" });
-                } else {
-                    listSearchRefs[cursor - searchRecents.length].current?.scrollIntoView({ block: "end", behavior: "smooth" });
+        switch (event.key) {
+            case 'ArrowUp':
+                if (cursor > 0) {
+                    if (cursor < recentsLength) {
+                        listRecentsRefs[cursor].current?.scrollIntoView({ block: "end", behavior: "smooth" });
+                    } else {
+                        listResultsRefs[cursor - searchRecents.length].current?.scrollIntoView({ block: "end", behavior: "smooth" });
+                    }
+                    setCursor(cursor - 1);
                 }
-            }
-            setCursor(cursor - 1);
+                break;
 
-        } else if (event.key === 'ArrowDown' && cursor < (searchLength + recentsLength) - 1) {
-            if (cursor != -1) {
-                if (cursor < recentsLength) {
-                    listRecentsRefs[cursor].current?.scrollIntoView({ behavior: "smooth" });
-                } else {
-                    listSearchRefs[cursor - recentsLength].current?.scrollIntoView({ behavior: "smooth" });
+            case 'ArrowDown':
+                if (cursor < (searchLength + recentsLength) - 1) {
+                    if (cursor != -1) {
+                        if (cursor < recentsLength) {
+                            listRecentsRefs[cursor].current?.scrollIntoView({ behavior: "smooth" });
+                        } else {
+                            listResultsRefs[cursor - recentsLength].current?.scrollIntoView({ behavior: "smooth" });
+                        }
+                    }
+                    setCursor(cursor + 1);
                 }
-            }
-            setCursor(cursor + 1);
+                break;
 
-        } else if (event.key === 'Enter') {
-            if (cursor >= 0 && visible) {
-                if (cursor < recentsLength) {
-                    handleClick(event as unknown as React.MouseEvent<HTMLElement>, searchRecents[cursor]);
-                } else {
-                    handleClick(event as unknown as React.MouseEvent<HTMLElement>, itemValue(searchResults[cursor - recentsLength]))
+            case 'Enter':
+                if (cursor >= 0 && visible) {
+                    if (cursor < recentsLength) {
+                        handleClick(event as unknown as React.MouseEvent<HTMLElement>, searchRecents[cursor]);
+                    } else {
+                        handleClick(event as unknown as React.MouseEvent<HTMLElement>, itemValue(searchResults[cursor - recentsLength]))
+                    }
                 }
-                setCursor(0);
-            }
-            if (!visible) { setVisible(true); }
+                if (!visible) { setVisible(true); }
+                break;
 
-        } else if (event.key === 'Tab') {
-            if (cursor != -1 && visible) {
-                if (cursor < recentsLength) {
-                    handleClick(event as unknown as React.MouseEvent<HTMLElement>, searchRecents[cursor]);
-                } else {
-                    handleClick(event as unknown as React.MouseEvent<HTMLElement>, itemValue(searchResults[cursor - recentsLength]));
+            case 'Tab' || ('Tab' && event.shiftKey):
+                if (cursor != -1 && visible) {
+                    if (cursor < recentsLength) {
+                        handleClick(event as unknown as React.MouseEvent<HTMLElement>, searchRecents[cursor]);
+                        // var keyEvent = new KeyboardEvent('keydown', { key: 'Tab' });
+                        // searchRef.current!.dispatchEvent(keyEvent);
+                    } else {
+                        handleClick(event as unknown as React.MouseEvent<HTMLElement>, itemValue(searchResults[cursor - recentsLength]));
+                    }
                 }
-                setCursor(0);
-            }
-            if (cursor == -1) { setVisible(false); }
-        }
-    }
-
-    function handleBlur(event: React.FocusEvent<HTMLInputElement>) {
-        if (popperRef.current && !popperRef.current!.contains(event.target as Node)) {
-            if (targetRef.current && !targetRef.current!.contains(event.target as Node)) {
-                setVisible(false);
-            }
+                if (cursor === -1) { setVisible(false); }
+                // searchRef.current!.blur();
+                break;
         }
     }
 
     const doSearch = useCallback(_debounce(async (q: string) => {
         try {
-            if (recentValues) {
-                const recentsResults = recentValues.filter(value => {
-                    const item = findItem(value);
-                    if (item) {
-                        return itemMatch(q, item);
-                    }
-                });
-                setSearchRecents(recentsResults);
-            }
             if (items) {
                 setInternalLoading(true);
+                setCursor(-1);
                 const results = await Promise.resolve(() => {
                     if (q != '') {
-                        setCursor(-1);
                         let results = items.filter(item =>
-                            itemMatch(q, item) && !recentValues?.some(el => el === itemValue(item)) && itemValue(item) != value
+                            itemMatch(q, item) && !recentValues?.some(el => el === itemValue(item)) && itemValue(item) != internalValue
                         );
                         return results;
                     } else {
-                        setSearchRecents(recentValues!);
-                        setCursor(0);
                         return [];
                     }
                 });
@@ -206,16 +184,33 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                 setInternalLoading(false);
             } else if (searchItems) {
                 const results = await Promise.resolve(searchItems(q));
-                setSearchResults(results.filter(item => itemValue(item) != value));
+                setSearchResults(results.filter(item => itemValue(item) != internalValue));
             }
         } catch (error) {
             setInternalError(true);
         }
-    }, 200), [items, value]);
+    }, 200), [items, internalValue]);
+
+    const limitRecents = _debounce((q: string) => {
+        if (recentValues) {
+            const recentsResults = recentValues.filter(value => {
+                const item = getItem(value);
+                if (item) {
+                    return itemMatch(q, item) && itemValue(item) != internalValue;
+                }
+            });
+            setSearchRecents(recentsResults);
+        }
+        if (q === '') {
+            setSearchRecents(recentValues!);
+        }
+
+    }, 200);
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value);
         doSearch(e.target.value);
+        limitRecents(e.target.value);
     };
 
     const handleClick = (event: React.MouseEvent<HTMLElement, MouseEvent>, value: string) => {
@@ -225,29 +220,24 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
         }
     }
 
-    const handleCreate = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>, q: string) => {
-        if (onCreate) {
-            setInternalLoading(true);
-            await Promise.resolve(onCreate(q))
-                .then(result => {
-                    handleClick(event, itemValue(result));
-                    setInternalLoading(false);
-                })
-                .catch(() => setInternalError(true));
-        }
+    const handleSubmit = async (create: void | Promise<void>) => {
+        setInternalLoading(true);
+        const result = await Promise.resolve(create);
+        setInternalLoading(false);
+        reset();
     }
 
+    console.log("render", visible);
     return (
         <div className={classnames('relative inline-block',
             inline ? 'max-w-full' : 'w-full',
             controlText[scale || context.scale || 'base']
         )}
         >
-            <div ref={targetRef}
+            <div ref={target as LegacyRef<HTMLDivElement> | undefined}
                 tabIndex={visible ? -1 : 0}
                 onFocus={() => setVisible(true)}
                 onMouseDown={(e) => { e.preventDefault(); setVisible(!visible) }}
-                onBlur={handleBlur}
                 className={classnames(
                     'relative rounded',
                     inline || 'border border-control-border',
@@ -257,21 +247,26 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                 style={{ padding: '0.5em 2.75em 0.5em 0.75em' }}
             >
 
-                {doRenderItem(value) || <span>&nbsp;Placeholder</span>}
+                {(internalValue && renderItem(getItem(internalValue))) || <span>&nbsp;Placeholder</span>}
 
-                <div className="absolute inset-y-0 right-0 flex flex-row justify-center items-center cursor-pointer" style={{ width: '2em' }}>
+                <div className={classnames(
+                    'absolute inset-y-0 right-0 flex flex-row justify-center items-center cursor-pointer',
+                    inline && 'mr-3'
+                )}
+                    style={{ width: '2em' }}>
+
                     {internalLoading &&
                         <Loading />}
                     {internalError &&
                         < DangerIcon className="text-red-500 stroke-current stroke-2" />}
                     {!internalLoading && !internalError &&
-                        <AngleDownIcon width="1em" height="1em" className="inline text-control-border stroke-current stroke-2" />
+                        <AngleDownIcon width="1em" height="1em" className="inline text-control-border stroke-current stroke-2 " />
                     }
                 </div>
 
             </div>
             {visible &&
-                <div ref={popperRef}
+                <div ref={popper as LegacyRef<HTMLDivElement> | undefined}
                     className={classnames(
                         'absolute w-full max-h-72 overflow-auto border border-control-border rounded',
                         'mt-2 space-y-2',
@@ -287,23 +282,23 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                         value={search}
                         onChange={handleSearch}
                         onKeyDown={handleKeyDown}
-                        onBlur={handleBlur}
                         disabled={internalError}
                     />
 
-                    <div className="divide-y-2 divide-dashed divide-opacity-30 divide-primary-500">
+                    <div className="divide-y-2 divide-dashed divide-opacity-30 divide-control-border">
                         {(searchRecents.length > 0) &&
                             <ul className="space-y-1">
                                 {searchRecents.map((value, i) => (
-                                    <li ref={listRecentsRefs[i] as unknown as LegacyRef<HTMLLIElement> | undefined}
+                                    <li ref={listRecentsRefs[i] as LegacyRef<HTMLLIElement> | undefined}
                                         key={value}
                                         onClick={!internalError ? (e) => handleClick(e, value) : undefined}
                                         className={classnames(
-                                            'cursor-pointer',
-                                            cursor === i && 'bg-primary-400'
+                                            'cursor-pointer -ml-3 -mr-3 pl-3 pr-3',
+                                            'hover:text-white hover:bg-secondary-500 ',
+                                            cursor === i && 'bg-primary-500'
                                         )}
                                     >
-                                        {doRenderItem(value)}
+                                        {renderItem(getItem(value))}
                                     </li>
                                 ))}
                             </ul>}
@@ -311,12 +306,13 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                         {(searchResults.length > 0) &&
                             <ul className="space-y-1">
                                 {searchResults.map((item, i) => (
-                                    <li ref={listSearchRefs[i] as unknown as LegacyRef<HTMLLIElement> | undefined}
+                                    <li ref={listResultsRefs[i] as LegacyRef<HTMLLIElement> | undefined}
                                         key={itemValue(item)}
                                         onClick={!internalError ? (e) => handleClick(e, itemValue(item)) : undefined}
                                         className={classnames(
-                                            'cursor-pointer',
-                                            cursor === i + searchRecents!.length && 'bg-primary-400'
+                                            'cursor-pointer -ml-3 -mr-3 pl-3 pr-3',
+                                            'hover:text-white hover:bg-secondary-500',
+                                            cursor === i + searchRecents!.length && 'bg-primary-500'
                                         )}
                                     >
                                         {renderItem(item)}
@@ -325,13 +321,13 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                             </ul>
                         }
 
-                        {search && searchResults.length === 0 && renderCreateItem &&
-                            <div onClick={!internalError ? (e) => handleCreate(e, search) : undefined}>{renderCreateItem(search)}</div>
-                        }
+                        {(search && searchResults.length === 0 && searchRecents.length === 0 && CreateComponent) &&
+                            <CreateComponent search={search} disabled={loading!} onSubmit={handleSubmit} />
+                        }           
                     </div>
                 </div>
             }
-            <input className="hidden" type="text" ref={inputRef as LegacyRef<HTMLInputElement> | undefined}  {...props} />
+            <input className="hidden" type="text" value={value} onChange={onChange} defaultValue={defaultValue} ref={inputRef as LegacyRef<HTMLInputElement> | undefined}  {...props} />
         </div>
 
     );
