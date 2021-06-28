@@ -30,8 +30,8 @@ interface StoryChoose {
     description: string;
 }
 
-const recent = ['id1', 'id5', 'id2', 'id3', 'id4', 'id22', 'id6', 'id7', 'id8', 'id9', 'id0', 'id11'];
-//const recent = ['id1', 'id5', 'id2'];
+//const recent = ['id1', 'id5', 'id2', 'id3', 'id4', 'id22', 'id6', 'id7', 'id8', 'id9', 'id0', 'id11'];
+const recent = ['id1', 'id5', 'id2'];
 
 const store = new MockStore<StoryChoose>([
     { id: 'id1', description: 'Karla Alzuro' },
