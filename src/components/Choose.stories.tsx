@@ -250,13 +250,12 @@ export const Creatable = () => {
 
     const handleCreate = async (q: string) => {
         action('handleCreate')(q);
-        const item = store.create({ id: unique(), description: q }, 0);
+        const item = await store.create({ id: unique(), description: q }, 0);
         await new Promise(resolve => setTimeout(resolve, 5000));
-        setInputValue((await item).id);  
+        setInputValue(item.id);  
     };
 
     const CreateItem: FC<{ search: string; disabled: boolean; onSubmit: (submitting: void | Promise<void>) => void }> = ({ disabled, search, onSubmit }) => {
-
         return (
             <div className="">
                 <Button scale="sm" type="button" disabled={disabled} onClick={() => onSubmit(handleCreate(search))}>
@@ -349,9 +348,8 @@ export const Inline = () => {
 
     return (
         <div>
-            <span>Texto primero</span>
-
-            <Choose
+            <div>
+            <span>Texto primero</span><Choose
                 inline
                 value={inputValue}
                 onChange={handleChange}
@@ -361,9 +359,11 @@ export const Inline = () => {
                 renderItem={renderItem}
                 itemValue={itemValue}
                 itemMatch={itemMatch}
-                scale="base" />
-
-            <span>Texto después</span>
+                scale="base" /><span>Texto después</span>
+            </div>
+            <div>
+                <span>Texto primero</span>Hola<span>Texto después</span>
+            </div>
         </div>
     );
 

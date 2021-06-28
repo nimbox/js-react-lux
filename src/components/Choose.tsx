@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import _debounce from 'lodash/debounce';
-import React, { createRef, LegacyRef, ReactElement, Ref, RefObject, useCallback, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { ChangeEventHandler, createRef, LegacyRef, ReactElement, Ref, RefObject, useCallback, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Loading } from '..';
 import { DangerIcon } from '../icons';
 import { useOnOutsideClick } from './../hooks/useOutsideClick';
@@ -10,18 +10,41 @@ import { Context as controlContext } from './controls/Control';
 import { SearchInput } from './controls/SearchInput';
 
 
+
+/*
+const { data, loading, error } = useQuery(GET_TIMEZONES);
+return (
+    <ChooseProps items={[data?.zones]} loading={loading} error={error}/>
+);
+*/
+
+/*
+<ChooseProps getItem={get} searchItems={search}/>
+
+    setInternalLoading(true);
+    try {
+        setResult(await Promise.resolve(get));
+    } catch (e) {
+        setInternalError(e);
+    } finally {
+        setInternalLoading(false);
+    }
+
+*/
+
 export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
 
-    scale?: ComponentScale;
-
+    defaultValue?: string;
+    value?: string;
     recentValues?: string[];
+    onChange?: ChangeEventHandler<HTMLInputElement>;
 
     items?: T[];
-    getItem: (value: string) => T;
-
-    searchItems?: (q: string) => T[] | Promise<T[]>;
     loading?: boolean;
     error?: boolean;
+
+    getItem: (value: string) => T;
+    searchItems?: (q: string) => T[] | Promise<T[]>;
 
     itemValue: (item: T) => string;
     itemMatch: (q: string, item: T) => boolean;
@@ -29,14 +52,15 @@ export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLA
 
     CreateComponent?: React.FC<{ search: string; disabled: boolean; onSubmit: (submitting: void | Promise<void>) => void }>
 
+    scale?: ComponentScale;
     inline?: boolean;
-
     className?: string;
+
 }
 
 type ForwardRefFn<R> = <P = {}>(p: P & React.RefAttributes<R>) => ReactElement | null;
 
-export const ChooseFn = <T extends {}>({ scale = 'base', value, defaultValue, onChange, recentValues, items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, CreateComponent, inline, className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => {
+export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, CreateComponent, inline, className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => {
 
     const inputRef = useRef<HTMLInputElement>();
     useImperativeHandle(ref, () => inputRef.current!);
@@ -109,12 +133,15 @@ export const ChooseFn = <T extends {}>({ scale = 'base', value, defaultValue, on
     }
 
     function handleKeyDown(event: React.KeyboardEvent<HTMLElement>) {
+
         const recentsLength = searchRecents.length;
         const searchLength = searchResults.length;
-        event.stopPropagation();
+
+        // event.stopPropagation();
 
         switch (event.key) {
             case 'ArrowUp':
+                event.preventDefault();
                 if (cursor > 0) {
                     if (cursor < recentsLength) {
                         listRecentsRefs[cursor].current?.scrollIntoView({ block: "end", behavior: "smooth" });
@@ -126,6 +153,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', value, defaultValue, on
                 break;
 
             case 'ArrowDown':
+                event.preventDefault();
                 if (cursor < (searchLength + recentsLength) - 1) {
                     if (cursor != -1) {
                         if (cursor < recentsLength) {
@@ -162,6 +190,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', value, defaultValue, on
                 if (cursor === -1) { setVisible(false); }
                 // searchRef.current!.blur();
                 break;
+
         }
     }
 
@@ -222,12 +251,18 @@ export const ChooseFn = <T extends {}>({ scale = 'base', value, defaultValue, on
 
     const handleSubmit = async (create: void | Promise<void>) => {
         setInternalLoading(true);
-        const result = await Promise.resolve(create);
-        setInternalLoading(false);
-        reset();
+        try {
+            await Promise.resolve(create);
+        } catch (e) {
+            setInternalError(true);
+        } finally {}
+            setInternalLoading(false);
+            reset();
+        }
     }
 
     console.log("render", visible);
+
     return (
         <div className={classnames('relative inline-block',
             inline ? 'max-w-full' : 'w-full',
@@ -285,7 +320,8 @@ export const ChooseFn = <T extends {}>({ scale = 'base', value, defaultValue, on
                         disabled={internalError}
                     />
 
-                    <div className="divide-y-2 divide-dashed divide-opacity-30 divide-control-border">
+                    <div className="divide-y-2 divide-control-border">
+
                         {(searchRecents.length > 0) &&
                             <ul className="space-y-1">
                                 {searchRecents.map((value, i) => (
@@ -301,7 +337,8 @@ export const ChooseFn = <T extends {}>({ scale = 'base', value, defaultValue, on
                                         {renderItem(getItem(value))}
                                     </li>
                                 ))}
-                            </ul>}
+                            </ul>
+                        }
 
                         {(searchResults.length > 0) &&
                             <ul className="space-y-1">
@@ -323,11 +360,11 @@ export const ChooseFn = <T extends {}>({ scale = 'base', value, defaultValue, on
 
                         {(search && searchResults.length === 0 && searchRecents.length === 0 && CreateComponent) &&
                             <CreateComponent search={search} disabled={loading!} onSubmit={handleSubmit} />
-                        }           
+                        }
                     </div>
                 </div>
             }
-            <input className="hidden" type="text" value={value} onChange={onChange} defaultValue={defaultValue} ref={inputRef as LegacyRef<HTMLInputElement> | undefined}  {...props} />
+            <input className="hidden" type="text" ref={inputRef as LegacyRef<HTMLInputElement> | undefined}  {...props} />
         </div>
 
     );
