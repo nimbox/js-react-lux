@@ -10,28 +10,6 @@ import { Context as controlContext } from './controls/Control';
 import { SearchInput } from './controls/SearchInput';
 
 
-
-/*
-const { data, loading, error } = useQuery(GET_TIMEZONES);
-return (
-    <ChooseProps items={[data?.zones]} loading={loading} error={error}/>
-);
-*/
-
-/*
-<ChooseProps getItem={get} searchItems={search}/>
-
-    setInternalLoading(true);
-    try {
-        setResult(await Promise.resolve(get));
-    } catch (e) {
-        setInternalError(e);
-    } finally {
-        setInternalLoading(false);
-    }
-
-*/
-
 export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
 
     defaultValue?: string;
@@ -105,7 +83,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
 
     useEffect(() => { setInternalValue(inputRef?.current?.value as string); }, [inputRef?.current?.value]);
 
-    useEffect(() => { if (visible) { searchRef.current!.focus(); } }, [visible]);
+    // useEffect(() => { if (visible) { searchRef.current!.focus(); } }, [visible]);
 
     useEffect(() => { setInternalLoading(loading!); }, [loading]);
 
@@ -136,8 +114,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
 
         const recentsLength = searchRecents.length;
         const searchLength = searchResults.length;
-
-        // event.stopPropagation();
+        event.stopPropagation();
 
         switch (event.key) {
             case 'ArrowUp':
@@ -155,7 +132,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
             case 'ArrowDown':
                 event.preventDefault();
                 if (cursor < (searchLength + recentsLength) - 1) {
-                    if (cursor != -1) {
+                    if (cursor >= 0) {
                         if (cursor < recentsLength) {
                             listRecentsRefs[cursor].current?.scrollIntoView({ behavior: "smooth" });
                         } else {
@@ -178,17 +155,14 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                 break;
 
             case 'Tab' || ('Tab' && event.shiftKey):
-                if (cursor != -1 && visible) {
+                if (cursor >= 0 && visible) {
                     if (cursor < recentsLength) {
                         handleClick(event as unknown as React.MouseEvent<HTMLElement>, searchRecents[cursor]);
-                        // var keyEvent = new KeyboardEvent('keydown', { key: 'Tab' });
-                        // searchRef.current!.dispatchEvent(keyEvent);
                     } else {
                         handleClick(event as unknown as React.MouseEvent<HTMLElement>, itemValue(searchResults[cursor - recentsLength]));
                     }
                 }
-                if (cursor === -1) { setVisible(false); }
-                // searchRef.current!.blur();
+                if (cursor < 0) { setVisible(false); }
                 break;
 
         }
@@ -196,29 +170,36 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
 
     const doSearch = useCallback(_debounce(async (q: string) => {
         try {
+            setCursor(-1);
             if (items) {
-                setInternalLoading(true);
-                setCursor(-1);
-                const results = await Promise.resolve(() => {
-                    if (q != '') {
-                        let results = items.filter(item =>
-                            itemMatch(q, item) && !recentValues?.some(el => el === itemValue(item)) && itemValue(item) != internalValue
-                        );
-                        return results;
-                    } else {
-                        return [];
-                    }
-                });
-                setSearchResults(results);
-                setInternalLoading(false);
+                if (!internalLoading) {
+                    const results = await Promise.resolve(() => {
+                        if (q != '') {
+                            let results = items.filter(item =>
+                                itemMatch(q, item) && !recentValues?.some(el => el === itemValue(item)) && itemValue(item) != internalValue
+                            );
+                            return results;
+                        } else {
+                            return [];
+                        }
+                    });
+                    setSearchResults(results);
+                }   
             } else if (searchItems) {
-                const results = await Promise.resolve(searchItems(q));
-                setSearchResults(results.filter(item => itemValue(item) != internalValue));
+                setInternalLoading(true);
+                try {
+                    const results = await Promise.resolve(searchItems(q));
+                    setSearchResults(results.filter(item => itemValue(item) != internalValue));
+                } catch {
+                    setInternalError(true);
+                } finally {
+                    setInternalLoading(false);
+                }
             }
-        } catch (error) {
+        } catch {
             setInternalError(true);
         }
-    }, 200), [items, internalValue]);
+    }, 200), [items, internalValue, internalLoading]);
 
     const limitRecents = _debounce((q: string) => {
         if (recentValues) {
@@ -233,13 +214,13 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
         if (q === '') {
             setSearchRecents(recentValues!);
         }
-
     }, 200);
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value);
         doSearch(e.target.value);
         limitRecents(e.target.value);
+        setCursor(-1);
     };
 
     const handleClick = (event: React.MouseEvent<HTMLElement, MouseEvent>, value: string) => {
@@ -255,7 +236,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
             await Promise.resolve(create);
         } catch (e) {
             setInternalError(true);
-        } finally {}
+        } finally {
             setInternalLoading(false);
             reset();
         }
@@ -269,8 +250,8 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
             controlText[scale || context.scale || 'base']
         )}
         >
-            <div ref={target as LegacyRef<HTMLDivElement> | undefined}
-                tabIndex={visible ? -1 : 0}
+            <div ref={setTarget as LegacyRef<HTMLDivElement> | undefined}
+                tabIndex={0}
                 onFocus={() => setVisible(true)}
                 onMouseDown={(e) => { e.preventDefault(); setVisible(!visible) }}
                 className={classnames(
@@ -279,15 +260,12 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                     'focus:border-primary-500 focus:ring focus:ring-primary-500',
                     'focus:ring-opacity-50 focus:outline-none'
                 )}
-                style={{ padding: '0.5em 2.75em 0.5em 0.75em' }}
+                style={inline ? { paddingRight: '2em' } : { padding: '0.5em 2.75em 0.5em 0.75em' }}
             >
 
                 {(internalValue && renderItem(getItem(internalValue))) || <span>&nbsp;Placeholder</span>}
 
-                <div className={classnames(
-                    'absolute inset-y-0 right-0 flex flex-row justify-center items-center cursor-pointer',
-                    inline && 'mr-3'
-                )}
+                <div className="absolute inset-y-0 right-0 flex flex-row justify-center items-center cursor-pointer"
                     style={{ width: '2em' }}>
 
                     {internalLoading &&
@@ -301,7 +279,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
 
             </div>
             {visible &&
-                <div ref={popper as LegacyRef<HTMLDivElement> | undefined}
+                <div ref={setPopper as LegacyRef<HTMLDivElement> | undefined}
                     className={classnames(
                         'absolute w-full max-h-72 overflow-auto border border-control-border rounded',
                         'mt-2 space-y-2',
@@ -320,7 +298,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                         disabled={internalError}
                     />
 
-                    <div className="divide-y-2 divide-control-border">
+                    <div className="divide-y divide-control-border">
 
                         {(searchRecents.length > 0) &&
                             <ul className="space-y-1">
@@ -376,10 +354,10 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
  * 
  * Seleccionar y Cerrar
  *   - Enter
- *   - Tab && custor != null
+ *   - Tab && custor != -1
  *   - Click
  * Cerrar
- *   - Tab && cusrsor == null
+ *   - Tab && cursor == -1
  *   - onClickOutside
  * 
  *

@@ -1,6 +1,6 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, LegacyRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useOutsideClick } from '../../hooks/useOutsideClick';
+import { useOnOutsideClick } from '../../hooks/useOutsideClick';
 import { AngleLeftIcon, AngleRightIcon, CircleIcon } from '../../icons';
 
 
@@ -51,7 +51,10 @@ export const DatePicker: FC<DatePickerProps> = ({ name, value, onChange, shortcu
     useEffect(() => setCalendar(firstDate(value)), [value]);
 
     const [show, setShow] = useState(false);
-    const [valueRef, popperRef] = useOutsideClick<HTMLInputElement, HTMLDivElement>(() => setShow(false));
+
+    const [target, setTarget] = useState<HTMLDivElement | null>(null);
+    const [popper, setPopper] = useState<HTMLDivElement | null>(null);
+    useOnOutsideClick(() => { if (show) { setShow(!show); } }, target, popper);
 
     // handlers
 
@@ -154,7 +157,7 @@ export const DatePicker: FC<DatePickerProps> = ({ name, value, onChange, shortcu
             <div>{ready ? 'ready' : 'not-ready'}</div>
             <div>{days}</div>
 
-            <div ref={valueRef}>
+            <div ref={setTarget as LegacyRef<HTMLDivElement> | undefined}>
                 <input key="input"
                     name={name} value={value} onChange={handleChange}
                     onFocus={handleFocus} onKeyDown={handleKeyDown}
@@ -164,7 +167,7 @@ export const DatePicker: FC<DatePickerProps> = ({ name, value, onChange, shortcu
             </div>
 
             {ready && show &&
-                <div ref={popperRef} className="absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden">
+                <div ref={setPopper as LegacyRef<HTMLDivElement> | undefined} className="absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden">
 
                     <div className="flex flex-row">
 

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import React, { FC, useContext, useEffect, useRef, useState } from 'react';
+import React, { FC, LegacyRef, useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useOutsideClick } from '../../hooks/useOutsideClick';
+import { useOnOutsideClick } from '../../hooks/useOutsideClick';
 import { AngleDownIcon, AngleUpIcon, CircleIcon } from '../../icons';
 import { ComponentScale, controlScale } from '../ComponentScale';
 import { Context } from '../controls/Control';
@@ -46,7 +46,10 @@ export const TimePicker: FC<TimePickerProps> = ({ name, value, scale = "base", o
     const { ready } = useTranslation();
 
     const [show, setShow] = useState(false);
-    const [valueRef, popperRef] = useOutsideClick<HTMLInputElement, HTMLDivElement>(() => setShow(false));
+ 
+    const [target, setTarget] = useState<HTMLDivElement | null>(null);
+    const [popper, setPopper] = useState<HTMLDivElement | null>(null);
+    useOnOutsideClick(() => { if (show) { setShow(!show); } }, target, popper);
 
     const times = useRef({ watch: 8 });
     const timesRef = useRef<HTMLDivElement>(null);
@@ -146,7 +149,7 @@ export const TimePicker: FC<TimePickerProps> = ({ name, value, scale = "base", o
     return (
         <div className="relative">
 
-            <div ref={valueRef}>
+            <div ref={setTarget as LegacyRef<HTMLDivElement> | undefined}>
                 <input key="input"
                     name={name} value={value} onChange={handleChange}
                     onFocus={handleFocus} onKeyDown={handleKeyDown}
@@ -160,7 +163,7 @@ export const TimePicker: FC<TimePickerProps> = ({ name, value, scale = "base", o
             </div>
 
             {ready && show &&
-                <div ref={popperRef} className="absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden">
+                <div ref={setPopper as LegacyRef<HTMLDivElement> | undefined} className="absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden">
 
                     <div className="px-2 py-1 bg-gray-400">
                         <div className="text-right">

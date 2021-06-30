@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import _debounce from 'lodash/debounce';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useOutsideClick } from '../../hooks/useOutsideClick';
+import React, { LegacyRef, useContext, useEffect, useRef, useState } from 'react';
+import { useOnOutsideClick } from '../../hooks/useOutsideClick';
 import AngleDownIcon from '../../icons/AngleDownIcon';
 import { ComponentScale, controlText, smallScale } from '../ComponentScale';
 import { Context as controlContext } from '../controls/Control';
@@ -60,8 +60,11 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
     const [isUpdating, setIsUpdating] = useState(false);
     const [isError, setIsError] = useState(false);
 
-    const [targetRef, popperRef] = useOutsideClick<HTMLDivElement, HTMLDivElement>(() => setIsVisible(!isVisible));
     const searchRef = useRef<HTMLInputElement>();
+
+    const [target, setTarget] = useState<HTMLDivElement | null>(null);
+    const [popper, setPopper] = useState<HTMLDivElement | null>(null);
+    useOnOutsideClick(() => { if (isVisible) { setIsVisible(!isVisible); } }, target, popper);
 
     const [search, setSearch] = useState('');
     const [searchResults, setSearchResults] = useState<T[]>([]);
@@ -130,7 +133,7 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
     return (
         <div className={classnames('relative w-full', controlText[scale || context.scale || 'base'])}>
 
-            <div ref={targetRef}
+            <div ref={setTarget as LegacyRef<HTMLDivElement> | undefined}
                 tabIndex={isVisible ? -1 : 0}
                 onClick={show}
                 onFocus={show}
@@ -162,7 +165,7 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
             </div>
 
             {isVisible &&
-                <div ref={popperRef}
+                <div ref={setPopper as LegacyRef<HTMLDivElement> | undefined}
                     className={classnames(
                         'absolute w-full max-h-72 overflow-auto',
                         'mt-2 space-y-2',

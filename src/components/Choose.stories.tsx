@@ -1,6 +1,6 @@
 import { action } from '@storybook/addon-actions';
 import _ from 'lodash';
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { Button, Input } from '..';
 import { MockStore } from '../utils/MockStore';
 import { Avatar } from './Avatar';
@@ -143,13 +143,10 @@ export const Loading = () => {
     const [inputValue, setInputValue] = useState('id1');
     const [loading, setLoading] = useState(false);
 
-    const handleSearch = async (q: string) => {
-        action('handleSearch')(q);
+    const doLoading = async () => {
         setLoading(true);
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await new Promise(resolve => setTimeout(resolve, 10000));
         setLoading(false);
-        const result = await store.search(q, 0);
-        return result;
     };
     
     const handleChange = (e: any) => {
@@ -164,6 +161,10 @@ export const Loading = () => {
         console.log('termino siendo', inputValue);
     };
 
+    useEffect(() => { 
+        doLoading()
+     }, []);
+
     return (
         <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-3 gap-4">
@@ -172,7 +173,7 @@ export const Loading = () => {
                     value={inputValue}
                     onChange={handleChange}
                     recentValues={recent}
-                    searchItems={handleSearch}
+                    items={store.items}
                     getItem={getItem}
                     loading={loading}
                     itemValue={itemValue}
