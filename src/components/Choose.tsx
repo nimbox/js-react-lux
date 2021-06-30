@@ -3,7 +3,7 @@ import _debounce from 'lodash/debounce';
 import React, { ChangeEventHandler, createRef, LegacyRef, ReactElement, Ref, RefObject, useCallback, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Loading } from '..';
 import { DangerIcon } from '../icons';
-import { useOnOutsideClick } from './../hooks/useOutsideClick';
+import { useOnOutsideClick } from '../hooks/useOnOutsideClick';
 import AngleDownIcon from './../icons/AngleDownIcon';
 import { ComponentScale, controlText, smallScale } from './ComponentScale';
 import { Context as controlContext } from './controls/Control';
@@ -49,9 +49,9 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
     const context = useContext(controlContext);
     const [visible, setVisible] = useState(false);
 
-    const [target, setTarget] = useState<HTMLDivElement | null>(null);
+    const target = useRef<HTMLDivElement>(null);
     const [popper, setPopper] = useState<HTMLDivElement | null>(null);
-    useOnOutsideClick(() => { if (internalError) { reset(); } if (visible) { setVisible(!visible); } }, target, popper);
+    useOnOutsideClick(() => { if (internalError) { reset(); } if (visible) { setVisible(false); } }, visible, target.current, popper);
 
     const [internalLoading, setInternalLoading] = useState(loading || false);
     const [internalError, setInternalError] = useState(error || false);
@@ -184,7 +184,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                         }
                     });
                     setSearchResults(results);
-                }   
+                }
             } else if (searchItems) {
                 setInternalLoading(true);
                 try {
@@ -242,15 +242,13 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
         }
     }
 
-    console.log("render", visible);
-
     return (
         <div className={classnames('relative inline-block',
             inline ? 'max-w-full' : 'w-full',
             controlText[scale || context.scale || 'base']
         )}
         >
-            <div ref={setTarget as LegacyRef<HTMLDivElement> | undefined}
+            <div ref={target}
                 tabIndex={0}
                 onFocus={() => setVisible(true)}
                 onMouseDown={(e) => { e.preventDefault(); setVisible(!visible) }}
@@ -260,13 +258,13 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                     'focus:border-primary-500 focus:ring focus:ring-primary-500',
                     'focus:ring-opacity-50 focus:outline-none'
                 )}
-                style={inline ? { paddingRight: '2em' } : { padding: '0.5em 2.75em 0.5em 0.75em' }}
+                style={inline ? { paddingRight: '1.25em' } : { padding: '0.5em 2em 0.5em 0.75em' }}
             >
 
                 {(internalValue && renderItem(getItem(internalValue))) || <span>&nbsp;Placeholder</span>}
 
                 <div className="absolute inset-y-0 right-0 flex flex-row justify-center items-center cursor-pointer"
-                    style={{ width: '2em' }}>
+                    style={{ width: '1em', marginRight: inline ? '0' : '0.5em' }}>
 
                     {internalLoading &&
                         <Loading />}
@@ -279,7 +277,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
 
             </div>
             {visible &&
-                <div ref={setPopper as LegacyRef<HTMLDivElement> | undefined}
+                <div ref={setPopper}
                     className={classnames(
                         'absolute w-full max-h-72 overflow-auto border border-control-border rounded',
                         'mt-2 space-y-2',
