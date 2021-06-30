@@ -273,7 +273,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                     {internalError &&
                         < DangerIcon className="text-red-500 stroke-current stroke-2" />}
                     {!internalLoading && !internalError &&
-                        <AngleDownIcon width="1em" height="1em" className="inline text-control-border stroke-current stroke-2 " />
+                        <AngleDownIcon width="1em" height="1em" className="inline text-control-border stroke-current stroke-2 bg-red-500" />
                     }
                 </div>
 
