@@ -2,7 +2,7 @@ import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import _debounce from 'lodash/debounce';
-import React, { useRef, useEffect, createContext, useContext, useImperativeHandle, useState, createRef, useCallback, useMemo } from 'react';
+import React, { useEffect, createContext, useContext, useRef, useImperativeHandle, useState, useLayoutEffect, createRef, useCallback, useMemo } from 'react';
 import tinycolor from 'tinycolor2';
 import ReactDOM from 'react-dom';
 import { usePopper } from 'react-popper';
@@ -205,39 +205,24 @@ Card.Footer = function (_a) {
     return (jsx("div", __assign({ className: classnames('border-t border-content-border p-3', className) }, { children: children }), void 0));
 };
 
-var useOutsideClick = function (onClickOutside) {
-    var target = useRef(null);
-    var popper = useRef(null);
-    var handleDocumentClick = function (event) {
-        if (popper.current && !popper.current.contains(event.target)) {
-            if (target.current && !target.current.contains(event.target)) {
-                onClickOutside();
-            }
-        }
-    };
-    useEffect(function () {
-        document.addEventListener('mousedown', handleDocumentClick);
-        return function () { return document.removeEventListener('mousedown', handleDocumentClick); };
-    });
-    return [target, popper];
-};
-var useOnOutsideClick = function (onOutsideClick) {
+var useOnOutsideClick = function (onOutsideClick, enable) {
     var elements = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        elements[_i - 1] = arguments[_i];
+    for (var _i = 2; _i < arguments.length; _i++) {
+        elements[_i - 2] = arguments[_i];
     }
-    var handleMouseDown = function (event) {
-        var inside = elements.find(function (element) { return element && element.contains(event.target); });
-        console.log('inside', inside);
-        if (!inside) {
-            console.log('trigger');
-            onOutsideClick();
-        }
-    };
     useEffect(function () {
-        document.addEventListener('mousedown', handleMouseDown);
-        return function () { return document.removeEventListener('mousedown', handleMouseDown); };
-    }, elements);
+        if (enable) {
+            var handleMouseDown_1 = function (event) {
+                console.log('UPDATING elements', elements);
+                var inside = elements.find(function (element) { return element && element.contains(event.target); });
+                if (!inside) {
+                    onOutsideClick();
+                }
+            };
+            document.addEventListener('mousedown', handleMouseDown_1);
+            return function () { return document.removeEventListener('mousedown', handleMouseDown_1); };
+        }
+    }, __spreadArray([enable], elements));
 };
 
 var Context$4 = createContext({ scale: 'base', error: false });
@@ -303,19 +288,21 @@ var ChooseFn = function (_a, ref) {
     var _e = useState(''), internalValue = _e[0], setInternalValue = _e[1];
     var context = useContext(Context$4);
     var _f = useState(false), visible = _f[0], setVisible = _f[1];
-    var _g = useState(null), target = _g[0], setTarget = _g[1];
+    var _g = useState(false), active = _g[0], setActive = _g[1];
+    useLayoutEffect(function () { setActive(visible); }, [visible]);
+    var target = useRef(null);
     var _h = useState(null), popper = _h[0], setPopper = _h[1];
     useOnOutsideClick(function () { if (internalError) {
         reset();
     } if (visible) {
-        setVisible(!visible);
-    } }, target, popper);
+        setVisible(false);
+    } }, visible, target.current, popper);
     var _j = useState(loading || false), internalLoading = _j[0], setInternalLoading = _j[1];
     var _k = useState(error || false), internalError = _k[0], setInternalError = _k[1];
     var _l = useState([]), searchResults = _l[0], setSearchResults = _l[1];
     var _m = useState(recentValues), searchRecents = _m[0], setSearchRecents = _m[1];
     var searchRef = useRef();
-    var _o = useState(-1), cursor = _o[0], setCursor = _o[1];
+    var _o = useState(null), cursor = _o[0], setCursor = _o[1];
     var searchRecentsLength = searchRecents.length;
     var _p = React.useState([]), listRecentsRefs = _p[0], setlistRecentsRefs = _p[1];
     var searchResultsLength = searchResults.length;
@@ -327,7 +314,9 @@ var ChooseFn = function (_a, ref) {
         setlistResultsRefs(Array(searchResultsLength).fill(createRef(), 0, searchResultsLength).map(function (_, i) { return listResultsRefs[i] || createRef(); }));
     }, [searchResultsLength]);
     useEffect(function () { var _a; setInternalValue((_a = inputRef === null || inputRef === void 0 ? void 0 : inputRef.current) === null || _a === void 0 ? void 0 : _a.value); }, [(_b = inputRef === null || inputRef === void 0 ? void 0 : inputRef.current) === null || _b === void 0 ? void 0 : _b.value]);
-    // useEffect(() => { if (visible) { searchRef.current!.focus(); } }, [visible]);
+    useEffect(function () { if (visible) {
+        searchRef.current.focus();
+    } }, [visible]);
     useEffect(function () { setInternalLoading(loading); }, [loading]);
     useEffect(function () { setInternalError(error); }, [error]);
     var reset = function () {
@@ -335,7 +324,7 @@ var ChooseFn = function (_a, ref) {
         setSearch('');
         setSearchRecents(recentValues);
         setSearchResults([]);
-        setCursor(-1);
+        setCursor(null);
         setInternalError(false);
     };
     function setRefValue(event, element, value) {
@@ -357,7 +346,7 @@ var ChooseFn = function (_a, ref) {
         switch (event.key) {
             case 'ArrowUp':
                 event.preventDefault();
-                if (cursor > 0) {
+                if (cursor != null && cursor > 0) {
                     if (cursor < recentsLength) {
                         (_a = listRecentsRefs[cursor].current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({ block: "end", behavior: "smooth" });
                     }
@@ -369,7 +358,7 @@ var ChooseFn = function (_a, ref) {
                 break;
             case 'ArrowDown':
                 event.preventDefault();
-                if (cursor < (searchLength + recentsLength) - 1) {
+                if (cursor != null && cursor < (searchLength + recentsLength) - 1) {
                     if (cursor >= 0) {
                         if (cursor < recentsLength) {
                             (_c = listRecentsRefs[cursor].current) === null || _c === void 0 ? void 0 : _c.scrollIntoView({ behavior: "smooth" });
@@ -380,9 +369,12 @@ var ChooseFn = function (_a, ref) {
                     }
                     setCursor(cursor + 1);
                 }
+                else if (cursor === null) {
+                    setCursor(0);
+                }
                 break;
             case 'Enter':
-                if (cursor >= 0 && visible) {
+                if (cursor != null && visible) {
                     if (cursor < recentsLength) {
                         handleClick(event, searchRecents[cursor]);
                     }
@@ -395,7 +387,7 @@ var ChooseFn = function (_a, ref) {
                 }
                 break;
             case 'Tab' :
-                if (cursor >= 0 && visible) {
+                if (cursor != null && visible) {
                     if (cursor < recentsLength) {
                         handleClick(event, searchRecents[cursor]);
                     }
@@ -403,7 +395,7 @@ var ChooseFn = function (_a, ref) {
                         handleClick(event, itemValue(searchResults[cursor - recentsLength]));
                     }
                 }
-                if (cursor < 0) {
+                if (cursor === null) {
                     setVisible(false);
                 }
                 break;
@@ -415,7 +407,7 @@ var ChooseFn = function (_a, ref) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 9, , 10]);
-                    setCursor(-1);
+                    setCursor(null);
                     if (!items) return [3 /*break*/, 3];
                     if (!!internalLoading) return [3 /*break*/, 2];
                     return [4 /*yield*/, Promise.resolve(function () {
@@ -479,7 +471,7 @@ var ChooseFn = function (_a, ref) {
         setSearch(e.target.value);
         doSearch(e.target.value);
         limitRecents(e.target.value);
-        setCursor(-1);
+        setCursor(null);
     };
     var handleClick = function (event, value) {
         if (event && inputRef && value) {
@@ -511,14 +503,14 @@ var ChooseFn = function (_a, ref) {
             }
         });
     }); };
-    console.log("render", visible);
-    return (jsxs("div", __assign({ className: classnames('relative inline-block', inline ? 'max-w-full' : 'w-full', controlText[scale || context.scale || 'base']) }, { children: [jsxs("div", __assign({ ref: setTarget, tabIndex: 0, onFocus: function () { return setVisible(true); }, onMouseDown: function (e) { e.preventDefault(); setVisible(!visible); }, className: classnames('relative rounded', inline || 'border border-control-border', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none'), style: inline ? { paddingRight: '2em' } : { padding: '0.5em 2.75em 0.5em 0.75em' } }, { children: [(internalValue && renderItem(getItem(internalValue))) || jsx("span", { children: "\u00A0Placeholder" }, void 0), jsxs("div", __assign({ className: "absolute inset-y-0 right-0 flex flex-row justify-center items-center cursor-pointer", style: { width: '2em' } }, { children: [internalLoading &&
+    return (jsxs("div", __assign({ className: classnames('relative inline-block', inline ? 'max-w-full' : 'w-full', controlText[scale || context.scale || 'base']) }, { children: [jsxs("div", __assign({ ref: target, tabIndex: active ? -1 : 0, onFocus: function () { if (!visible)
+                    setVisible(true); }, onMouseDown: function (e) { e.preventDefault(); setVisible(!visible); }, className: classnames('relative rounded', inline || 'border border-control-border', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none'), style: inline ? { paddingRight: '1.25em' } : { padding: '0.5em 2em 0.5em 0.75em' } }, { children: [(internalValue && renderItem(getItem(internalValue))) || jsx("span", { children: "\u00A0Placeholder" }, void 0), jsxs("div", __assign({ className: "absolute inset-y-0 right-0 flex flex-row justify-center items-center cursor-pointer", style: { width: '1em', marginRight: inline ? '0' : '0.5em' } }, { children: [internalLoading &&
                                 jsx(Loading, {}, void 0), internalError &&
                                 jsx(SvgDangerIcon, { className: "text-red-500 stroke-current stroke-2" }, void 0), !internalLoading && !internalError &&
-                                jsx(SvgAngleDownIcon, { width: "1em", height: "1em", className: "inline text-control-border stroke-current stroke-2 bg-red-500" }, void 0)] }), void 0)] }), void 0), visible &&
-                jsxs("div", __assign({ ref: setPopper, className: classnames('absolute w-full max-h-72 overflow-auto border border-control-border rounded', 'mt-2 space-y-2', 'bg-white', 'rounded border border-control-border', inline && 'w-max'), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [jsx(SearchInput, { ref: searchRef, scale: smallScale[scale || context.scale || 'base'], value: search, onChange: handleSearch, onKeyDown: handleKeyDown, disabled: internalError }, void 0), jsxs("div", __assign({ className: "divide-y divide-control-border" }, { children: [(searchRecents.length > 0) &&
+                                jsx(SvgAngleDownIcon, { width: "1em", height: "1em", className: "inline text-control-border stroke-current stroke-2" }, void 0)] }), void 0)] }), void 0), visible &&
+                jsxs("div", __assign({ ref: setPopper, className: classnames('absolute w-full max-h-72 overflow-auto border border-control-border rounded', 'mt-2 space-y-2', 'bg-white', 'rounded border border-control-border', inline && 'w-max'), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [jsx(SearchInput, { ref: searchRef, scale: smallScale[scale || context.scale || 'base'], value: search, onChange: handleSearch, onKeyDown: handleKeyDown, disabled: internalError }, void 0), jsxs("div", __assign({ className: "space-y-1" }, { children: [(searchRecents.length > 0) &&
                                     jsx("ul", __assign({ className: "space-y-1" }, { children: searchRecents.map(function (value, i) { return (jsx("li", __assign({ ref: listRecentsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, value); } : undefined, className: classnames('cursor-pointer -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500 ', cursor === i && 'bg-primary-500') }, { children: renderItem(getItem(value)) }), value)); }) }), void 0), (searchResults.length > 0) &&
-                                    jsx("ul", __assign({ className: "space-y-1" }, { children: searchResults.map(function (item, i) { return (jsx("li", __assign({ ref: listResultsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, itemValue(item)); } : undefined, className: classnames('cursor-pointer -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i + searchRecents.length && 'bg-primary-500') }, { children: renderItem(item) }), itemValue(item))); }) }), void 0), (search && searchResults.length === 0 && searchRecents.length === 0 && CreateComponent) &&
+                                    jsxs(Fragment, { children: [jsx("div", { className: "h-px bg-control-border", style: { marginLeft: '-0.75em', marginRight: '-0.75em' } }, void 0), jsx("ul", __assign({ className: "space-y-1" }, { children: searchResults.map(function (item, i) { return (jsx("li", __assign({ ref: listResultsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, itemValue(item)); } : undefined, className: classnames('cursor-pointer -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i + searchRecents.length && 'bg-primary-500') }, { children: renderItem(item) }), itemValue(item))); }) }), void 0)] }, void 0), (search && searchResults.length === 0 && searchRecents.length === 0 && CreateComponent) &&
                                     jsx(CreateComponent, { search: search, disabled: loading, onSubmit: handleSubmit }, void 0)] }), void 0)] }), void 0), jsx("input", __assign({ className: "hidden", type: "text", ref: inputRef }, props), void 0)] }), void 0));
 };
 /**
@@ -621,7 +613,7 @@ var DatePicker = function (_a) {
     var _f = useState(null), popper = _f[0], setPopper = _f[1];
     useOnOutsideClick(function () { if (show) {
         setShow(!show);
-    } }, target, popper);
+    } }, show, target, popper);
     // handlers
     var handleShow = function () { if (!show) {
         setShow(true);
@@ -789,7 +781,7 @@ var SwatchPicker = React.forwardRef(function (_a, ref) {
     var _c = useState(false), visible = _c[0], setVisible = _c[1];
     var _d = useState(null), target = _d[0], setTarget = _d[1];
     var _e = useState(null), popper = _e[0], setPopper = _e[1];
-    useOnOutsideClick(function () { return visible && setVisible(!visible); }, target, popper);
+    useOnOutsideClick(function () { return visible && setVisible(false); }, visible, target, popper);
     useImperativeHandle(ref, function () { return target; });
     var _f = usePopper(target, popper, {
         placement: placements[align],
@@ -859,8 +851,8 @@ var TagPicker = function (_a) {
     var _f = useState(null), target = _f[0], setTarget = _f[1];
     var _g = useState(null), popper = _g[0], setPopper = _g[1];
     useOnOutsideClick(function () { if (isVisible) {
-        setIsVisible(!isVisible);
-    } }, target, popper);
+        setIsVisible(false);
+    } }, isVisible, target, popper);
     var _h = useState(''), search = _h[0], setSearch = _h[1];
     var _j = useState([]), searchResults = _j[0], setSearchResults = _j[1];
     useEffect(function () { if (isVisible) {
@@ -981,8 +973,8 @@ var TimePicker = function (_a) {
     var _d = useState(null), target = _d[0], setTarget = _d[1];
     var _e = useState(null), popper = _e[0], setPopper = _e[1];
     useOnOutsideClick(function () { if (show) {
-        setShow(!show);
-    } }, target, popper);
+        setShow(false);
+    } }, show, target, popper);
     var times = useRef({ watch: 8 });
     var timesRef = useRef(null);
     useEffect(function () { scroll(); });
@@ -1342,5 +1334,5 @@ Panel.Item = function (_a) {
     return (jsx("div", __assign({ className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, { children: children }), void 0));
 };
 
-export { Button, Card, CheckBox, Choose, ChooseFn, Context$4 as Context, Control, Cross, DatePicker, Delay, Header, Helium, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, RadioBar, RoundButton, Select, SwatchPicker, Tabs, Tag, TagPicker, TextArea, TimePicker, Toast, ToastContainer, ToastContent, ToastProvider, Toggle, ViewportProvider, useOnOutsideClick, useOutsideClick, useToast, useViewport };
+export { Button, Card, CheckBox, Choose, ChooseFn, Context$4 as Context, Control, Cross, DatePicker, Delay, Header, Helium, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, RadioBar, RoundButton, Select, SwatchPicker, Tabs, Tag, TagPicker, TextArea, TimePicker, Toast, ToastContainer, ToastContent, ToastProvider, Toggle, ViewportProvider, useOnOutsideClick, useToast, useViewport };
 //# sourceMappingURL=index.js.map

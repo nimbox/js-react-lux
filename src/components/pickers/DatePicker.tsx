@@ -54,7 +54,7 @@ export const DatePicker: FC<DatePickerProps> = ({ name, value, onChange, shortcu
 
     const [target, setTarget] = useState<HTMLDivElement | null>(null);
     const [popper, setPopper] = useState<HTMLDivElement | null>(null);
-    useOnOutsideClick(() => { if (show) { setShow(!show); } }, target, popper);
+    useOnOutsideClick(() => { if (show) { setShow(!show); } }, show, target, popper);
 
     // handlers
 
