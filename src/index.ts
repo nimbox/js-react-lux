@@ -21,7 +21,7 @@ export * from './components/controls/TextArea';
 
 export * from './components/RadioBar';
 
-export * from './hooks/useOutsideClick';
+export * from './hooks/useOnOutsideClick';
 export * from './hooks/useViewport';
 
 export * from './components/Toast';
