@@ -228,7 +228,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
             setRefValue(event, inputRef, value);
             reset();
         }
-    }
+    };
 
     const handleSubmit = async (create: void | Promise<void>) => {
         setInternalLoading(true);
@@ -240,7 +240,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
             setInternalLoading(false);
             reset();
         }
-    }
+    };
 
     return (
         <div className={classnames('relative inline-block',
@@ -296,7 +296,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                         disabled={internalError}
                     />
 
-                    <div className="divide-y divide-control-border">
+                    <div className="space-y-1">
 
                         {(searchRecents.length > 0) &&
                             <ul className="space-y-1">
@@ -317,26 +317,30 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                         }
 
                         {(searchResults.length > 0) &&
-                            <ul className="space-y-1">
-                                {searchResults.map((item, i) => (
-                                    <li ref={listResultsRefs[i] as LegacyRef<HTMLLIElement> | undefined}
-                                        key={itemValue(item)}
-                                        onClick={!internalError ? (e) => handleClick(e, itemValue(item)) : undefined}
-                                        className={classnames(
-                                            'cursor-pointer -ml-3 -mr-3 pl-3 pr-3',
-                                            'hover:text-white hover:bg-secondary-500',
-                                            cursor === i + searchRecents!.length && 'bg-primary-500'
-                                        )}
-                                    >
-                                        {renderItem(item)}
-                                    </li>
-                                ))}
-                            </ul>
+                            <>
+                                <div className="h-px bg-control-border" style={{ marginLeft: '-0.75em', marginRight: '-0.75em' }} />
+                                <ul className="space-y-1">
+                                    {searchResults.map((item, i) => (
+                                        <li ref={listResultsRefs[i] as LegacyRef<HTMLLIElement> | undefined}
+                                            key={itemValue(item)}
+                                            onClick={!internalError ? (e) => handleClick(e, itemValue(item)) : undefined}
+                                            className={classnames(
+                                                'cursor-pointer -ml-3 -mr-3 pl-3 pr-3',
+                                                'hover:text-white hover:bg-secondary-500',
+                                                cursor === i + searchRecents!.length && 'bg-primary-500'
+                                            )}
+                                        >
+                                            {renderItem(item)}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </>
                         }
 
                         {(search && searchResults.length === 0 && searchRecents.length === 0 && CreateComponent) &&
                             <CreateComponent search={search} disabled={loading!} onSubmit={handleSubmit} />
                         }
+
                     </div>
                 </div>
             }
