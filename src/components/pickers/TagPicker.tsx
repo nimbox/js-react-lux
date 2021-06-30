@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import _debounce from 'lodash/debounce';
 import React, { LegacyRef, useContext, useEffect, useRef, useState } from 'react';
-import { useOnOutsideClick } from '../../hooks/useOutsideClick';
+import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import AngleDownIcon from '../../icons/AngleDownIcon';
 import { ComponentScale, controlText, smallScale } from '../ComponentScale';
 import { Context as controlContext } from '../controls/Control';
@@ -64,7 +64,7 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
 
     const [target, setTarget] = useState<HTMLDivElement | null>(null);
     const [popper, setPopper] = useState<HTMLDivElement | null>(null);
-    useOnOutsideClick(() => { if (isVisible) { setIsVisible(!isVisible); } }, target, popper);
+    useOnOutsideClick(() => { if (isVisible) { setIsVisible(false); } }, isVisible, target, popper);
 
     const [search, setSearch] = useState('');
     const [searchResults, setSearchResults] = useState<T[]>([]);

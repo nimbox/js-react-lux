@@ -1,6 +1,6 @@
 import React, { FC, LegacyRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useOnOutsideClick } from '../../hooks/useOutsideClick';
+import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleLeftIcon, AngleRightIcon, CircleIcon } from '../../icons';
 
 

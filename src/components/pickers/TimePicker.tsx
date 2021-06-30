@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { FC, LegacyRef, useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useOnOutsideClick } from '../../hooks/useOutsideClick';
+import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon, AngleUpIcon, CircleIcon } from '../../icons';
 import { ComponentScale, controlScale } from '../ComponentScale';
 import { Context } from '../controls/Control';
@@ -49,7 +49,7 @@ export const TimePicker: FC<TimePickerProps> = ({ name, value, scale = "base", o
  
     const [target, setTarget] = useState<HTMLDivElement | null>(null);
     const [popper, setPopper] = useState<HTMLDivElement | null>(null);
-    useOnOutsideClick(() => { if (show) { setShow(!show); } }, target, popper);
+    useOnOutsideClick(() => { if (show) { setShow(false); } }, show, target, popper);
 
     const times = useRef({ watch: 8 });
     const timesRef = useRef<HTMLDivElement>(null);

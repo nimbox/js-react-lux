@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import React, { useImperativeHandle, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { usePopper } from 'react-popper';
-import { useOnOutsideClick } from '../../hooks/useOutsideClick';
+import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { Input, InputProps } from '../controls/Input';
 import { sameWidth } from '../../utils/popper-modifiers';
 
@@ -28,7 +28,7 @@ export const SwatchPicker = React.forwardRef<HTMLInputElement, SwatchPickerProps
 
     const [target, setTarget] = useState<HTMLInputElement | null>(null);
     const [popper, setPopper] = useState<HTMLDivElement | null>(null);
-    useOnOutsideClick(() => visible && setVisible(!visible), target, popper);
+    useOnOutsideClick(() => visible && setVisible(false), visible, target, popper);
 
     useImperativeHandle(ref, () => target!);
 

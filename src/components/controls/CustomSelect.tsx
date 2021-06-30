@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import React, { createContext, FC, LegacyRef, useContext, useState } from 'react';
-import { useOnOutsideClick } from '../../hooks/useOutsideClick';
+import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon } from '../../icons';
 import { ComponentAlign } from '../ComponentAlign';
 import { ComponentScale, controlIconSmallMarginSize, controlScale } from '../ComponentScale';
@@ -35,7 +35,7 @@ export const CustomSelect: CustomSelectComponent = (({ scale = 'base', value, la
 
     const [target, setTarget] = useState<HTMLDivElement | null>(null);
     const [popper, setPopper] = useState<HTMLDivElement | null>(null);
-    useOnOutsideClick(() => {if (isVisible) { setIsVisible(!isVisible); } }, target, popper);
+    useOnOutsideClick(() => {if (isVisible) { setIsVisible(false); } }, isVisible, target, popper);
 
 
     return (
