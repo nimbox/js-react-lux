@@ -61,7 +61,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
 
     const searchRef = useRef<HTMLInputElement>();
 
-    const [cursor, setCursor] = useState(-1);
+    const [cursor, setCursor] = useState<number | null>(null);
 
     const searchRecentsLength = searchRecents.length;
     const [listRecentsRefs, setlistRecentsRefs] = React.useState<RefObject<HTMLLIElement>[]>([]);
@@ -94,7 +94,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
         setSearch('');
         setSearchRecents(recentValues!);
         setSearchResults([]);
-        setCursor(-1);
+        setCursor(null);
         setInternalError(false);
     }
 
@@ -115,11 +115,11 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
         const recentsLength = searchRecents.length;
         const searchLength = searchResults.length;
         event.stopPropagation();
-
+        
         switch (event.key) {
             case 'ArrowUp':
                 event.preventDefault();
-                if (cursor > 0) {
+                if (cursor!=null && cursor > 0) {
                     if (cursor < recentsLength) {
                         listRecentsRefs[cursor].current?.scrollIntoView({ block: "end", behavior: "smooth" });
                     } else {
@@ -131,7 +131,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
 
             case 'ArrowDown':
                 event.preventDefault();
-                if (cursor < (searchLength + recentsLength) - 1) {
+                if (cursor!=null && cursor < (searchLength + recentsLength) - 1) {
                     if (cursor >= 0) {
                         if (cursor < recentsLength) {
                             listRecentsRefs[cursor].current?.scrollIntoView({ behavior: "smooth" });
@@ -141,10 +141,11 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                     }
                     setCursor(cursor + 1);
                 }
+                else if (cursor===null) {setCursor(0);}
                 break;
 
             case 'Enter':
-                if (cursor >= 0 && visible) {
+                if (cursor!=null && visible) {
                     if (cursor < recentsLength) {
                         handleClick(event as unknown as React.MouseEvent<HTMLElement>, searchRecents[cursor]);
                     } else {
@@ -155,14 +156,14 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                 break;
 
             case 'Tab' || ('Tab' && event.shiftKey):
-                if (cursor >= 0 && visible) {
+                if (cursor!=null && visible) {
                     if (cursor < recentsLength) {
                         handleClick(event as unknown as React.MouseEvent<HTMLElement>, searchRecents[cursor]);
                     } else {
                         handleClick(event as unknown as React.MouseEvent<HTMLElement>, itemValue(searchResults[cursor - recentsLength]));
                     }
                 }
-                if (cursor < 0) { setVisible(false); }
+                if (cursor===null) { setVisible(false); }
                 break;
 
         }
@@ -170,7 +171,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
 
     const doSearch = useCallback(_debounce(async (q: string) => {
         try {
-            setCursor(-1);
+            setCursor(null);
             if (items) {
                 if (!internalLoading) {
                     const results = await Promise.resolve(() => {
@@ -220,7 +221,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
         setSearch(e.target.value);
         doSearch(e.target.value);
         limitRecents(e.target.value);
-        setCursor(-1);
+        setCursor(null);
     };
 
     const handleClick = (event: React.MouseEvent<HTMLElement, MouseEvent>, value: string) => {
