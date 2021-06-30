@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import _debounce from 'lodash/debounce';
-import React, { ChangeEventHandler, createRef, LegacyRef, ReactElement, Ref, RefObject, useCallback, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { ChangeEventHandler, createRef, LegacyRef, ReactElement, Ref, RefObject, useCallback, useContext, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react';
 import { Loading } from '..';
 import { DangerIcon } from '../icons';
 import { useOnOutsideClick } from '../hooks/useOnOutsideClick';
@@ -47,7 +47,10 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
     const [internalValue, setInternalValue] = useState('');
 
     const context = useContext(controlContext);
+
     const [visible, setVisible] = useState(false);
+    const [active, setActive] = useState(false);
+    useLayoutEffect(() => { setActive(visible); }, [visible]);
 
     const target = useRef<HTMLDivElement>(null);
     const [popper, setPopper] = useState<HTMLDivElement | null>(null);
@@ -83,7 +86,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
 
     useEffect(() => { setInternalValue(inputRef?.current?.value as string); }, [inputRef?.current?.value]);
 
-    // useEffect(() => { if (visible) { searchRef.current!.focus(); } }, [visible]);
+    useEffect(() => { if (visible) { searchRef.current!.focus(); } }, [visible]);
 
     useEffect(() => { setInternalLoading(loading!); }, [loading]);
 
@@ -249,8 +252,8 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
         )}
         >
             <div ref={target}
-                tabIndex={0}
-                onFocus={() => setVisible(true)}
+                tabIndex={active ? -1 : 0}
+                onFocus={() => { if (!visible) setVisible(true); }}
                 onMouseDown={(e) => { e.preventDefault(); setVisible(!visible) }}
                 className={classnames(
                     'relative rounded',
