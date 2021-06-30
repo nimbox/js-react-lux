@@ -1,33 +1,38 @@
-import React, { ReactElement, Ref } from 'react';
+import React, { ChangeEventHandler, ReactElement, Ref } from 'react';
 import { ComponentScale } from './ComponentScale';
 export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
-    scale?: ComponentScale;
+    defaultValue?: string;
+    value?: string;
     recentValues?: string[];
+    onChange?: ChangeEventHandler<HTMLInputElement>;
     items?: T[];
     loading?: boolean;
-    error?: any;
-    getItem?: (value: string) => T;
+    error?: boolean;
+    getItem: (value: string) => T;
     searchItems?: (q: string) => T[] | Promise<T[]>;
     itemValue: (item: T) => string;
     itemMatch: (q: string, item: T) => boolean;
     renderItem: (item: T) => React.ReactNode;
-    creatable?: boolean;
-    onCreate?: (q: string) => T | Promise<T>;
-    renderCreateItem?: (value: string) => React.ReactNode;
+    CreateComponent?: React.FC<{
+        search: string;
+        disabled: boolean;
+        onSubmit: (submitting: void | Promise<void>) => void;
+    }>;
+    scale?: ComponentScale;
     inline?: boolean;
     className?: string;
 }
 declare type ForwardRefFn<R> = <P = {}>(p: P & React.RefAttributes<R>) => ReactElement | null;
-export declare const ChooseFn: <T extends {}>({ scale, recentValues, items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, creatable, onCreate, renderCreateItem, inline, className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => JSX.Element;
+export declare const ChooseFn: <T extends {}>({ scale, recentValues, items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, CreateComponent, inline, className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => JSX.Element;
 /**
  * Descripción
  *
  * Seleccionar y Cerrar
  *   - Enter
- *   - Tab && custor != null
+ *   - Tab && custor != -1
  *   - Click
  * Cerrar
- *   - Tab && cusrsor == null
+ *   - Tab && cursor == -1
  *   - onClickOutside
  *
  *

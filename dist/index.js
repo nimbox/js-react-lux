@@ -1,12 +1,11 @@
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import _ from 'lodash';
-import React, { useRef, useEffect, createContext, useContext, useImperativeHandle, useState, useCallback, useMemo } from 'react';
+import _debounce from 'lodash/debounce';
+import React, { useRef, useEffect, createContext, useContext, useImperativeHandle, useState, createRef, useCallback, useMemo } from 'react';
 import tinycolor from 'tinycolor2';
 import ReactDOM from 'react-dom';
 import { usePopper } from 'react-popper';
-import _debounce from 'lodash/debounce';
 import { v4 } from 'uuid';
 
 /*! *****************************************************************************
@@ -165,12 +164,6 @@ var controlSmallText = {
     'base': 'text-sm',
     'lg': ''
 };
-var controlIconSmallMarginSize = {
-    'xs': 'h-3 w-3 -mt-1.5',
-    'sm': 'h-4 w-4 -mt-2',
-    'base': 'h-5 w-5 -mt-2.5',
-    'lg': 'h-6 w-6 -mt-3'
-};
 
 var Button = function (_a) {
     var _b = _a.link, link = _b === void 0 ? false : _b, _c = _a.secondary, secondary = _c === void 0 ? false : _c, _d = _a.scale, scale = _d === void 0 ? 'base' : _d, children = _a.children, className = _a.className, props = __rest(_a, ["link", "secondary", "scale", "children", "className"]);
@@ -303,136 +296,52 @@ var SearchInput = React.forwardRef(function (_a, ref) {
 
 var ChooseFn = function (_a, ref) {
     var _b;
-    var _c = _a.scale, scale = _c === void 0 ? 'base' : _c, recentValues = _a.recentValues, items = _a.items, loading = _a.loading, error = _a.error, getItem = _a.getItem, searchItems = _a.searchItems, itemValue = _a.itemValue, itemMatch = _a.itemMatch, renderItem = _a.renderItem, _d = _a.creatable, creatable = _d === void 0 ? false : _d, onCreate = _a.onCreate, renderCreateItem = _a.renderCreateItem, inline = _a.inline, className = _a.className, props = __rest(_a, ["scale", "recentValues", "items", "loading", "error", "getItem", "searchItems", "itemValue", "itemMatch", "renderItem", "creatable", "onCreate", "renderCreateItem", "inline", "className"]);
+    var _c = _a.scale, scale = _c === void 0 ? 'base' : _c, recentValues = _a.recentValues, items = _a.items, loading = _a.loading, error = _a.error, getItem = _a.getItem, searchItems = _a.searchItems, itemValue = _a.itemValue, itemMatch = _a.itemMatch, renderItem = _a.renderItem, CreateComponent = _a.CreateComponent, inline = _a.inline; _a.className; var props = __rest(_a, ["scale", "recentValues", "items", "loading", "error", "getItem", "searchItems", "itemValue", "itemMatch", "renderItem", "CreateComponent", "inline", "className"]);
     var inputRef = useRef();
     useImperativeHandle(ref, function () { return inputRef.current; });
-    var _e = useState(""), search = _e[0], setSearch = _e[1];
-    var _f = useState(""), value = _f[0], setValue = _f[1];
+    var _d = useState(''), search = _d[0], setSearch = _d[1];
+    var _e = useState(''), internalValue = _e[0], setInternalValue = _e[1];
     var context = useContext(Context$4);
-    var _g = useState(false), visible = _g[0], setVisible = _g[1];
-    var _h = useOutsideClick(function () { setVisible(!visible); }), target = _h[0], popper = _h[1];
+    var _f = useState(false), visible = _f[0], setVisible = _f[1];
+    var _g = useState(null), target = _g[0], setTarget = _g[1];
+    var _h = useState(null), popper = _h[0], setPopper = _h[1];
+    useOnOutsideClick(function () { if (internalError) {
+        reset();
+    } if (visible) {
+        setVisible(!visible);
+    } }, target, popper);
     var _j = useState(loading || false), internalLoading = _j[0], setInternalLoading = _j[1];
     var _k = useState(error || false), internalError = _k[0], setInternalError = _k[1];
     var _l = useState([]), searchResults = _l[0], setSearchResults = _l[1];
-    var _m = useState(false), showButton = _m[0], setShowButton = _m[1];
-    var _o = useState(false), tab = _o[0], setTab = _o[1];
-    var _p = useState(0), cursor = _p[0], setCursor = _p[1];
-    function handleKeyDown(event) {
-        console.log("envent INPUT", cursor);
-        if (event.key === "ArrowUp" && cursor > 0) {
-            console.log("envent arrowUp", cursor);
-            event.stopPropagation();
-            setCursor(cursor - 1);
-        }
-        else if (event.key === "ArrowDown" && cursor < (searchResults.length + recentValues.length) - 1) {
-            console.log("envent arrowDown", cursor);
-            event.stopPropagation();
-            setCursor(cursor + 1);
-        }
-        else if (event.key === "Enter" && cursor >= 0 && visible) {
-            event.stopPropagation();
-            if (cursor >= recentValues.length) {
-                handleClick(event, inputRef, itemValue(searchResults[cursor - recentValues.length]));
-                setCursor(0);
-            }
-            else {
-                handleClick(event, inputRef, recentValues[cursor]);
-                setCursor(0);
-            }
-        }
-        else if (event.key === "Enter" && !visible) {
-            setVisible(true);
-        }
-    }
-    function handleKeyDownSearch(event) {
-        console.log("envent SEARCH", cursor);
-        if (event.key === "Tab") {
-            setTab(true);
-        }
-        else if (event.key === "ArrowUp" && cursor > 0) {
-            console.log("envent arrowUp", cursor);
-            setCursor(cursor - 1);
-        }
-        else if (event.key === "ArrowDown" && cursor < (searchResults.length + recentValues.length) - 1) {
-            console.log("envent arrowDown", cursor);
-            setCursor(cursor + 1);
-        }
-        else if (event.key === "Enter" && cursor > 0) {
-            if (cursor >= recentValues.length) {
-                handleClick(event, inputRef, itemValue(searchResults[cursor - recentValues.length]));
-                setCursor(0);
-            }
-            else {
-                handleClick(event, inputRef, recentValues[cursor]);
-                setCursor(0);
-            }
-        }
-    }
-    function handleBlur(event) {
-        if (popper.current && !popper.current.contains(event.target)) {
-            if (target.current && !target.current.contains(event.target)) {
-                setVisible(false);
-            }
-        }
-        if (tab) {
-            setTab(false);
-            setVisible(false);
-        }
-    }
+    var _m = useState(recentValues), searchRecents = _m[0], setSearchRecents = _m[1];
+    var searchRef = useRef();
+    var _o = useState(-1), cursor = _o[0], setCursor = _o[1];
+    var searchRecentsLength = searchRecents.length;
+    var _p = React.useState([]), listRecentsRefs = _p[0], setlistRecentsRefs = _p[1];
+    var searchResultsLength = searchResults.length;
+    var _q = React.useState([]), listResultsRefs = _q[0], setlistResultsRefs = _q[1];
     useEffect(function () {
-        setInternalLoading(loading || false);
-    }, [loading]);
+        setlistRecentsRefs(Array(searchRecentsLength).fill(createRef(), 0, searchRecentsLength).map(function (_, i) { return listRecentsRefs[i] || createRef(); }));
+    }, [searchRecentsLength]);
     useEffect(function () {
-        setInternalError(error);
-    }, [error]);
-    useEffect(function () {
-        var _a;
-        setValue((_a = inputRef === null || inputRef === void 0 ? void 0 : inputRef.current) === null || _a === void 0 ? void 0 : _a.value);
-    }, [(_b = inputRef === null || inputRef === void 0 ? void 0 : inputRef.current) === null || _b === void 0 ? void 0 : _b.value]);
-    var findItem = function (value) {
-        if (items) {
-            return _.find(items, function (item) { return itemValue(item) == value; });
-        }
-        else {
-            if (getItem) {
-                return getItem(value);
-            }
-        }
+        setlistResultsRefs(Array(searchResultsLength).fill(createRef(), 0, searchResultsLength).map(function (_, i) { return listResultsRefs[i] || createRef(); }));
+    }, [searchResultsLength]);
+    useEffect(function () { var _a; setInternalValue((_a = inputRef === null || inputRef === void 0 ? void 0 : inputRef.current) === null || _a === void 0 ? void 0 : _a.value); }, [(_b = inputRef === null || inputRef === void 0 ? void 0 : inputRef.current) === null || _b === void 0 ? void 0 : _b.value]);
+    // useEffect(() => { if (visible) { searchRef.current!.focus(); } }, [visible]);
+    useEffect(function () { setInternalLoading(loading); }, [loading]);
+    useEffect(function () { setInternalError(error); }, [error]);
+    var reset = function () {
+        setVisible(false);
+        setSearch('');
+        setSearchRecents(recentValues);
+        setSearchResults([]);
+        setCursor(-1);
+        setInternalError(false);
     };
-    var handleSearch = useCallback(function (e) {
-        if (e.target) {
-            setSearch(e.target.value);
-            setShowButton(true);
-            console.log(search);
-            if (items) {
-                setInternalLoading(true);
-                new Promise(function (resolve, reject) {
-                    if (e.target.value != "") {
-                        var results = items.filter(function (item) {
-                            return itemMatch(e.target.value, item) && !(recentValues === null || recentValues === void 0 ? void 0 : recentValues.some(function (el) { return el === itemValue(item); })) && itemValue(item) != value;
-                        });
-                        resolve(results);
-                    }
-                    else {
-                        resolve([]);
-                    }
-                    var error = new Error("Error searching items");
-                    reject(error);
-                })
-                    .then(function (results) { setSearchResults(results); setInternalLoading(false); })
-                    .catch(function (error) { setInternalError(error); });
-            }
-            else {
-                if (searchItems)
-                    Promise.resolve(searchItems(e.target.value))
-                        .then(function (results) { return setSearchResults(results); })
-                        .catch(function (error) { return setInternalError(internalError ? internalError + ', ' + error : error); });
-            }
-        }
-    }, [items, value]);
     function setRefValue(event, element, value) {
         var _a;
         event.preventDefault();
+        event.stopPropagation();
         var inputSetter = (_a = Object === null || Object === void 0 ? void 0 : Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')) === null || _a === void 0 ? void 0 : _a.set;
         if (inputSetter) {
             inputSetter.call(element.current, value);
@@ -440,49 +349,187 @@ var ChooseFn = function (_a, ref) {
             element.current.dispatchEvent(inputEvent);
         }
     }
-    var handleClick = function (event, element, value) {
-        if (event && element && value) {
-            setRefValue(event, element, value);
-            setVisible(!visible);
-            setSearchResults([]);
-            setSearch("");
-            setShowButton(false);
+    function handleKeyDown(event) {
+        var _a, _b, _c, _d;
+        var recentsLength = searchRecents.length;
+        var searchLength = searchResults.length;
+        event.stopPropagation();
+        switch (event.key) {
+            case 'ArrowUp':
+                event.preventDefault();
+                if (cursor > 0) {
+                    if (cursor < recentsLength) {
+                        (_a = listRecentsRefs[cursor].current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({ block: "end", behavior: "smooth" });
+                    }
+                    else {
+                        (_b = listResultsRefs[cursor - searchRecents.length].current) === null || _b === void 0 ? void 0 : _b.scrollIntoView({ block: "end", behavior: "smooth" });
+                    }
+                    setCursor(cursor - 1);
+                }
+                break;
+            case 'ArrowDown':
+                event.preventDefault();
+                if (cursor < (searchLength + recentsLength) - 1) {
+                    if (cursor >= 0) {
+                        if (cursor < recentsLength) {
+                            (_c = listRecentsRefs[cursor].current) === null || _c === void 0 ? void 0 : _c.scrollIntoView({ behavior: "smooth" });
+                        }
+                        else {
+                            (_d = listResultsRefs[cursor - recentsLength].current) === null || _d === void 0 ? void 0 : _d.scrollIntoView({ behavior: "smooth" });
+                        }
+                    }
+                    setCursor(cursor + 1);
+                }
+                break;
+            case 'Enter':
+                if (cursor >= 0 && visible) {
+                    if (cursor < recentsLength) {
+                        handleClick(event, searchRecents[cursor]);
+                    }
+                    else {
+                        handleClick(event, itemValue(searchResults[cursor - recentsLength]));
+                    }
+                }
+                if (!visible) {
+                    setVisible(true);
+                }
+                break;
+            case 'Tab' :
+                if (cursor >= 0 && visible) {
+                    if (cursor < recentsLength) {
+                        handleClick(event, searchRecents[cursor]);
+                    }
+                    else {
+                        handleClick(event, itemValue(searchResults[cursor - recentsLength]));
+                    }
+                }
+                if (cursor < 0) {
+                    setVisible(false);
+                }
+                break;
+        }
+    }
+    var doSearch = useCallback(_debounce(function (q) { return __awaiter(void 0, void 0, void 0, function () {
+        var results, results;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 9, , 10]);
+                    setCursor(-1);
+                    if (!items) return [3 /*break*/, 3];
+                    if (!!internalLoading) return [3 /*break*/, 2];
+                    return [4 /*yield*/, Promise.resolve(function () {
+                            if (q != '') {
+                                var results_1 = items.filter(function (item) {
+                                    return itemMatch(q, item) && !(recentValues === null || recentValues === void 0 ? void 0 : recentValues.some(function (el) { return el === itemValue(item); })) && itemValue(item) != internalValue;
+                                });
+                                return results_1;
+                            }
+                            else {
+                                return [];
+                            }
+                        })];
+                case 1:
+                    results = _c.sent();
+                    setSearchResults(results);
+                    _c.label = 2;
+                case 2: return [3 /*break*/, 8];
+                case 3:
+                    if (!searchItems) return [3 /*break*/, 8];
+                    setInternalLoading(true);
+                    _c.label = 4;
+                case 4:
+                    _c.trys.push([4, 6, 7, 8]);
+                    return [4 /*yield*/, Promise.resolve(searchItems(q))];
+                case 5:
+                    results = _c.sent();
+                    setSearchResults(results.filter(function (item) { return itemValue(item) != internalValue; }));
+                    return [3 /*break*/, 8];
+                case 6:
+                    _c.sent();
+                    setInternalError(true);
+                    return [3 /*break*/, 8];
+                case 7:
+                    setInternalLoading(false);
+                    return [7 /*endfinally*/];
+                case 8: return [3 /*break*/, 10];
+                case 9:
+                    _c.sent();
+                    setInternalError(true);
+                    return [3 /*break*/, 10];
+                case 10: return [2 /*return*/];
+            }
+        });
+    }); }, 200), [items, internalValue, internalLoading]);
+    var limitRecents = _debounce(function (q) {
+        if (recentValues) {
+            var recentsResults = recentValues.filter(function (value) {
+                var item = getItem(value);
+                if (item) {
+                    return itemMatch(q, item) && itemValue(item) != internalValue;
+                }
+            });
+            setSearchRecents(recentsResults);
+        }
+        if (q === '') {
+            setSearchRecents(recentValues);
+        }
+    }, 200);
+    var handleSearch = function (e) {
+        setSearch(e.target.value);
+        doSearch(e.target.value);
+        limitRecents(e.target.value);
+        setCursor(-1);
+    };
+    var handleClick = function (event, value) {
+        if (event && inputRef && value) {
+            setRefValue(event, inputRef, value);
+            reset();
         }
     };
-    var handleCreate = function (event, element, value) {
-        if (onCreate) {
-            Promise.resolve(onCreate(value))
-                .then(function (result) {
-                handleClick(event, element, itemValue(result));
-            })
-                .catch(function (error) { return setInternalError(internalError ? internalError + ' ' + error : error); });
-        }
-    };
-    var doRenderItem = function (value) {
-        if (value == null) {
-            return null;
-        }
-        var item = findItem(value);
-        if (item == null) {
-            return null;
-        }
-        return renderItem(item);
-    };
-    return (jsxs("div", __assign({ className: classnames('relative inline-block', inline ? 'max-w-full' : 'w-full') }, { children: [jsxs("div", __assign({ ref: target, tabIndex: 0, onFocus: function () { return setVisible(true); }, onBlur: handleBlur, onKeyDown: handleKeyDown, className: classnames('relative rounded', inline || 'border border-control-border', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none pl-1 pr-8', controlScale[scale || context.scale || 'base'], visible && 'border-primary-500 ring ring-primary-500 ring-opacity-50 outline-none', className) }, { children: [doRenderItem(value) || jsx("span", { children: "\u00A0" }, void 0), jsx("div", __assign({ className: "absolute top-1/2 right-1" }, { children: jsx(SvgAngleDownIcon, { className: classnames(controlIconSmallMarginSize[scale || context.scale || 'base'], 'stroke-current stroke-2') }, void 0) }), void 0)] }), void 0), visible &&
-                jsxs("div", __assign({ ref: popper, className: classnames('absolute border border-control-border rounded', inline && 'w-max', 'bg-white w-full p-4 mt-2 space-y-2 max-h-72  overflow-auto') }, { children: [jsx(SearchInput, { scale: smallScale[scale || context.scale || 'base'], value: search, onKeyDown: handleKeyDownSearch, onBlur: handleBlur, onChange: handleSearch }, void 0), jsxs("div", __assign({ className: "divide-y-2 divide-dashed divide-opacity-30 divide-primary-500" }, { children: [recentValues &&
-                                    jsx("ul", __assign({ className: "pb-2" }, { children: recentValues.map(function (value, i) { return (jsx("li", __assign({ className: classnames('cursor-pointer', cursor === i && 'bg-primary-400'), onClick: function (e) { return handleClick(e, inputRef, value); } }, { children: doRenderItem(value) }), void 0)); }) }), void 0), internalLoading && jsx(Loading, { colorClassName: "text-primary-500", scale: "base" }, void 0), internalError && jsx("div", { children: internalError }, void 0), !internalLoading && !internalError && searchResults &&
-                                    jsx("ul", __assign({ className: "pt-2" }, { children: searchResults.map(function (item, i) { return (jsx("li", __assign({ className: classnames('cursor-pointer', cursor === i + recentValues.length && 'bg-primary-400'), onClick: function (e) { return handleClick(e, inputRef, itemValue(item)); } }, { children: renderItem(item) }), void 0)); }) }), void 0), creatable && showButton && renderCreateItem &&
-                                    jsx("div", __assign({ className: "p-2", onClick: function (e) { return handleCreate(e, inputRef, search); } }, { children: renderCreateItem(search) }), void 0)] }), void 0)] }), void 0), jsx("input", __assign({ className: "hidden", type: "text", ref: inputRef }, props), void 0)] }), void 0));
+    var handleSubmit = function (create) { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    setInternalLoading(true);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, 4, 5]);
+                    return [4 /*yield*/, Promise.resolve(create)];
+                case 2:
+                    _a.sent();
+                    return [3 /*break*/, 5];
+                case 3:
+                    _a.sent();
+                    setInternalError(true);
+                    return [3 /*break*/, 5];
+                case 4:
+                    setInternalLoading(false);
+                    reset();
+                    return [7 /*endfinally*/];
+                case 5: return [2 /*return*/];
+            }
+        });
+    }); };
+    console.log("render", visible);
+    return (jsxs("div", __assign({ className: classnames('relative inline-block', inline ? 'max-w-full' : 'w-full', controlText[scale || context.scale || 'base']) }, { children: [jsxs("div", __assign({ ref: setTarget, tabIndex: 0, onFocus: function () { return setVisible(true); }, onMouseDown: function (e) { e.preventDefault(); setVisible(!visible); }, className: classnames('relative rounded', inline || 'border border-control-border', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none'), style: inline ? { paddingRight: '2em' } : { padding: '0.5em 2.75em 0.5em 0.75em' } }, { children: [(internalValue && renderItem(getItem(internalValue))) || jsx("span", { children: "\u00A0Placeholder" }, void 0), jsxs("div", __assign({ className: "absolute inset-y-0 right-0 flex flex-row justify-center items-center cursor-pointer", style: { width: '2em' } }, { children: [internalLoading &&
+                                jsx(Loading, {}, void 0), internalError &&
+                                jsx(SvgDangerIcon, { className: "text-red-500 stroke-current stroke-2" }, void 0), !internalLoading && !internalError &&
+                                jsx(SvgAngleDownIcon, { width: "1em", height: "1em", className: "inline text-control-border stroke-current stroke-2 bg-red-500" }, void 0)] }), void 0)] }), void 0), visible &&
+                jsxs("div", __assign({ ref: setPopper, className: classnames('absolute w-full max-h-72 overflow-auto border border-control-border rounded', 'mt-2 space-y-2', 'bg-white', 'rounded border border-control-border', inline && 'w-max'), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [jsx(SearchInput, { ref: searchRef, scale: smallScale[scale || context.scale || 'base'], value: search, onChange: handleSearch, onKeyDown: handleKeyDown, disabled: internalError }, void 0), jsxs("div", __assign({ className: "divide-y divide-control-border" }, { children: [(searchRecents.length > 0) &&
+                                    jsx("ul", __assign({ className: "space-y-1" }, { children: searchRecents.map(function (value, i) { return (jsx("li", __assign({ ref: listRecentsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, value); } : undefined, className: classnames('cursor-pointer -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500 ', cursor === i && 'bg-primary-500') }, { children: renderItem(getItem(value)) }), value)); }) }), void 0), (searchResults.length > 0) &&
+                                    jsx("ul", __assign({ className: "space-y-1" }, { children: searchResults.map(function (item, i) { return (jsx("li", __assign({ ref: listResultsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, itemValue(item)); } : undefined, className: classnames('cursor-pointer -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i + searchRecents.length && 'bg-primary-500') }, { children: renderItem(item) }), itemValue(item))); }) }), void 0), (search && searchResults.length === 0 && searchRecents.length === 0 && CreateComponent) &&
+                                    jsx(CreateComponent, { search: search, disabled: loading, onSubmit: handleSubmit }, void 0)] }), void 0)] }), void 0), jsx("input", __assign({ className: "hidden", type: "text", ref: inputRef }, props), void 0)] }), void 0));
 };
 /**
  * Descripción
  *
  * Seleccionar y Cerrar
  *   - Enter
- *   - Tab && custor != null
+ *   - Tab && custor != -1
  *   - Click
  * Cerrar
- *   - Tab && cusrsor == null
+ *   - Tab && cursor == -1
  *   - onClickOutside
  *
  *
@@ -570,7 +617,11 @@ var DatePicker = function (_a) {
     var _c = useState(firstDate(value)), calendar = _c[0], setCalendar = _c[1];
     useEffect(function () { return setCalendar(firstDate(value)); }, [value]);
     var _d = useState(false), show = _d[0], setShow = _d[1];
-    var _e = useOutsideClick(function () { return setShow(false); }), valueRef = _e[0], popperRef = _e[1];
+    var _e = useState(null), target = _e[0], setTarget = _e[1];
+    var _f = useState(null), popper = _f[0], setPopper = _f[1];
+    useOnOutsideClick(function () { if (show) {
+        setShow(!show);
+    } }, target, popper);
     // handlers
     var handleShow = function () { if (!show) {
         setShow(true);
@@ -654,8 +705,8 @@ var DatePicker = function (_a) {
     // render
     var months = ready ? t('months', { defaultValue: ['Janruary', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], returnObjects: true }) : null;
     var days = ready ? t('shortDays', { defaultValue: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], returnObjects: true }) : [];
-    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", { children: ready ? 'ready' : 'not-ready' }, void 0), jsx("div", { children: days }, void 0), jsx("div", __assign({ ref: valueRef }, { children: jsx("input", { name: name, value: value, onChange: handleChange, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder, className: "w-full px-2 py-1 border border-content-border rounded" }, "input") }), void 0), ready && show &&
-                jsx("div", __assign({ ref: popperRef, className: "absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden" }, { children: jsxs("div", __assign({ className: "flex flex-row" }, { children: [jsxs("div", { children: [jsxs("div", __assign({ className: "px-2 py-1 flex flex-row items-center justify-between bg-gray-400" }, { children: [jsxs("div", __assign({ className: "flex-grow text-center font-bold" }, { children: [months[calendar.getMonth()], " ", calendar.getFullYear()] }), void 0), jsxs("div", { children: [jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickPrevMonth }, { children: jsx(SvgAngleLeftIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ className: "px-2 focus:outline-none", onClick: handleClickToday }, { children: jsx(SvgCircleIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickNextMonth }, { children: jsx(SvgAngleRightIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0)] }, void 0)] }), void 0), jsxs("table", __assign({ className: "table-fixed text-center" }, { children: [jsx("thead", { children: jsx("tr", { children: days.map(function (d, i) { return jsx("th", __assign({ className: "w-10 px-1" }, { children: d }), i); }) }, void 0) }, void 0), jsx("tbody", __assign({ className: "cursor-pointer" }, { children: weeks.map(function (w) {
+    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", { children: ready ? 'ready' : 'not-ready' }, void 0), jsx("div", { children: days }, void 0), jsx("div", __assign({ ref: setTarget }, { children: jsx("input", { name: name, value: value, onChange: handleChange, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder, className: "w-full px-2 py-1 border border-content-border rounded" }, "input") }), void 0), ready && show &&
+                jsx("div", __assign({ ref: setPopper, className: "absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden" }, { children: jsxs("div", __assign({ className: "flex flex-row" }, { children: [jsxs("div", { children: [jsxs("div", __assign({ className: "px-2 py-1 flex flex-row items-center justify-between bg-gray-400" }, { children: [jsxs("div", __assign({ className: "flex-grow text-center font-bold" }, { children: [months[calendar.getMonth()], " ", calendar.getFullYear()] }), void 0), jsxs("div", { children: [jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickPrevMonth }, { children: jsx(SvgAngleLeftIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ className: "px-2 focus:outline-none", onClick: handleClickToday }, { children: jsx(SvgCircleIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickNextMonth }, { children: jsx(SvgAngleRightIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0)] }, void 0)] }), void 0), jsxs("table", __assign({ className: "table-fixed text-center" }, { children: [jsx("thead", { children: jsx("tr", { children: days.map(function (d, i) { return jsx("th", __assign({ className: "w-10 px-1" }, { children: d }), i); }) }, void 0) }, void 0), jsx("tbody", __assign({ className: "cursor-pointer" }, { children: weeks.map(function (w) {
                                                     return jsx("tr", { children: w.map(function (d) { return jsx("td", __assign({ onClick: function () { return handleClickDate(d); }, className: dayClasses(d) }, { children: d.getDate() }), d.getTime()); }) }, w[0].getTime());
                                                 }) }), void 0)] }), void 0)] }, void 0), shortcuts &&
                                 jsx("div", __assign({ className: "flex flex-col justify-between bg-gray-300 cursor-pointer" }, { children: namedDays.map(function (s, i) { return jsx("div", __assign({ onClick: function () { return handleClickDate(s.date(new Date(today))); }, className: "px-2 hover:text-white hover:bg-secondary-500" }, { children: t("namedDays." + s.label, { defaultValue: s.label }) }), i); }) }), void 0)] }), void 0) }), void 0)] }), void 0));
@@ -804,10 +855,14 @@ var TagPicker = function (_a) {
     var _c = useState(false), isVisible = _c[0], setIsVisible = _c[1];
     var _d = useState(false), isUpdating = _d[0], setIsUpdating = _d[1];
     var _e = useState(false); _e[0]; var setIsError = _e[1];
-    var _f = useOutsideClick(function () { return setIsVisible(!isVisible); }), targetRef = _f[0], popperRef = _f[1];
     var searchRef = useRef();
-    var _g = useState(''), search = _g[0], setSearch = _g[1];
-    var _h = useState([]), searchResults = _h[0], setSearchResults = _h[1];
+    var _f = useState(null), target = _f[0], setTarget = _f[1];
+    var _g = useState(null), popper = _g[0], setPopper = _g[1];
+    useOnOutsideClick(function () { if (isVisible) {
+        setIsVisible(!isVisible);
+    } }, target, popper);
+    var _h = useState(''), search = _h[0], setSearch = _h[1];
+    var _j = useState([]), searchResults = _j[0], setSearchResults = _j[1];
     useEffect(function () { if (isVisible) {
         searchRef.current.focus();
     } }, [isVisible]);
@@ -897,14 +952,14 @@ var TagPicker = function (_a) {
         });
     }); };
     // render
-    return (jsxs("div", __assign({ className: classnames('relative w-full', controlText[scale || context.scale || 'base']) }, { children: [jsxs("div", __assign({ ref: targetRef, tabIndex: isVisible ? -1 : 0, onClick: show, onFocus: show, className: classnames('relative w-full lux-tag-space', 'rounded border border-control-border', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none'), style: { padding: '0.5em 2.75em 0.5em 0.75em' } }, { children: [(tags.length > 0) ?
+    return (jsxs("div", __assign({ className: classnames('relative w-full', controlText[scale || context.scale || 'base']) }, { children: [jsxs("div", __assign({ ref: setTarget, tabIndex: isVisible ? -1 : 0, onClick: show, onFocus: show, className: classnames('relative w-full lux-tag-space', 'rounded border border-control-border', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none'), style: { padding: '0.5em 2.75em 0.5em 0.75em' } }, { children: [(tags.length > 0) ?
                         tags.map(function (tag) {
                             return jsx(React.Fragment, { children: renderTag(tag, (isVisible ? function () { return handleRemove(tag); } : undefined)) }, tagValue(tag));
                         }) :
                         jsx("span", { children: "\u00A0Placeholder" }, void 0), jsx("div", __assign({ className: "absolute inset-y-0 right-0 flex flex-row justify-center items-center cursor-pointer", style: { width: '2em' } }, { children: isUpdating ?
                             jsx(Loading, {}, void 0) :
                             jsx(SvgAngleDownIcon, { width: "1em", height: "1em", className: "inline text-control-border stroke-current stroke-2" }, void 0) }), void 0)] }), void 0), isVisible &&
-                jsxs("div", __assign({ ref: popperRef, className: classnames('absolute w-full max-h-72 overflow-auto', 'mt-2 space-y-2', 'bg-white', 'rounded border border-control-border'), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [jsx(SearchInput, { ref: searchRef, scale: smallScale[scale], value: search, onChange: handleSearch }, void 0), (searchResults.length > 0) &&
+                jsxs("div", __assign({ ref: setPopper, className: classnames('absolute w-full max-h-72 overflow-auto', 'mt-2 space-y-2', 'bg-white', 'rounded border border-control-border'), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [jsx(SearchInput, { ref: searchRef, scale: smallScale[scale], value: search, onChange: handleSearch }, void 0), (searchResults.length > 0) &&
                             jsx("ul", __assign({ className: "space-y-1" }, { children: searchResults.map(function (tag) {
                                     return jsx("li", __assign({ onClick: function () { return handleAdd(tag); }, className: "cursor-pointer" }, { children: renderTag(tag) }), tagValue(tag));
                                 }) }), void 0), (search && searchResults.length === 0 && CreateComponent) &&
@@ -923,7 +978,11 @@ var TimePicker = function (_a) {
     var name = _a.name, value = _a.value, _b = _a.scale, scale = _b === void 0 ? "base" : _b, onChange = _a.onChange, placeholder = _a.placeholder;
     var ready = useTranslation().ready;
     var _c = useState(false), show = _c[0], setShow = _c[1];
-    var _d = useOutsideClick(function () { return setShow(false); }), valueRef = _d[0], popperRef = _d[1];
+    var _d = useState(null), target = _d[0], setTarget = _d[1];
+    var _e = useState(null), popper = _e[0], setPopper = _e[1];
+    useOnOutsideClick(function () { if (show) {
+        setShow(!show);
+    } }, target, popper);
     var times = useRef({ watch: 8 });
     var timesRef = useRef(null);
     useEffect(function () { scroll(); });
@@ -1004,8 +1063,8 @@ var TimePicker = function (_a) {
         }
     }
     // render
-    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: valueRef }, { children: jsx("input", { name: name, value: value, onChange: handleChange, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder, className: classnames(controlScale[scale || context.scale || 'base'], 'w-full px-2 py-1 border border-control-border rounded', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none') }, "input") }), void 0), ready && show &&
-                jsxs("div", __assign({ ref: popperRef, className: "absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden" }, { children: [jsx("div", __assign({ className: "px-2 py-1 bg-gray-400" }, { children: jsxs("div", __assign({ className: "text-right" }, { children: [jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickPrevHour }, { children: jsx(SvgAngleUpIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ className: "px-2 focus:outline-none", onClick: handleClickNoon }, { children: jsx(SvgCircleIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickNextHour }, { children: jsx(SvgAngleDownIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0)] }), void 0) }), void 0), jsx("div", __assign({ ref: timesRef, className: "h-64 overflow-scroll" }, { children: jsxs("table", __assign({ className: "table-fixed text-center" }, { children: [jsx("thead", { children: jsxs("tr", { children: [jsx("th", __assign({ className: "w-10" }, { children: "Hora" }), void 0), minutes.map(function (m) { return jsx("td", { className: "w-10" }, void 0); })] }, void 0) }, void 0), jsx("tbody", __assign({ className: "cursor-pointer" }, { children: morning.map(function (h) {
+    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: setTarget }, { children: jsx("input", { name: name, value: value, onChange: handleChange, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder, className: classnames(controlScale[scale || context.scale || 'base'], 'w-full px-2 py-1 border border-control-border rounded', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none') }, "input") }), void 0), ready && show &&
+                jsxs("div", __assign({ ref: setPopper, className: "absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden" }, { children: [jsx("div", __assign({ className: "px-2 py-1 bg-gray-400" }, { children: jsxs("div", __assign({ className: "text-right" }, { children: [jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickPrevHour }, { children: jsx(SvgAngleUpIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ className: "px-2 focus:outline-none", onClick: handleClickNoon }, { children: jsx(SvgCircleIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickNextHour }, { children: jsx(SvgAngleDownIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0)] }), void 0) }), void 0), jsx("div", __assign({ ref: timesRef, className: "h-64 overflow-scroll" }, { children: jsxs("table", __assign({ className: "table-fixed text-center" }, { children: [jsx("thead", { children: jsxs("tr", { children: [jsx("th", __assign({ className: "w-10" }, { children: "Hora" }), void 0), minutes.map(function (m) { return jsx("td", { className: "w-10" }, void 0); })] }, void 0) }, void 0), jsx("tbody", __assign({ className: "cursor-pointer" }, { children: morning.map(function (h) {
                                             return jsxs("tr", __assign({ className: hourClasses([h, 0]) }, { children: [jsx("th", __assign({ className: "text-base group-hover:text-content group-hover:bg-secondary-500", onClick: function (e) { return handleClickTime([h, 0]); } }, { children: formatHour(h) }), void 0), minutes.map(function (m) {
                                                         return jsx("td", __assign({ onClick: function (e) { return handleClickTime([h, m]); }, className: hourMinuteClasses([h, m]) }, { children: m }), m);
                                                     })] }), h);
