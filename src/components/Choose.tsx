@@ -323,13 +323,13 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                         {(searchResults.length > 0) &&
                             <>
                                 <div className="h-px bg-control-border" style={{ marginLeft: '-0.75em', marginRight: '-0.75em' }} />
-                                <ul className="space-y-1">
+                                <ul className="space-y-1 p-0">
                                     {searchResults.map((item, i) => (
                                         <li ref={listResultsRefs[i] as LegacyRef<HTMLLIElement> | undefined}
                                             key={itemValue(item)}
                                             onClick={!internalError ? (e) => handleClick(e, itemValue(item)) : undefined}
                                             className={classnames(
-                                                'cursor-pointer',
+                                                'cursor-pointer -ml-3 -mr-3 pl-3 pr-3',
                                                 'hover:text-white hover:bg-secondary-500',
                                                 cursor === i + searchRecents!.length && 'bg-primary-500'
                                             )}
