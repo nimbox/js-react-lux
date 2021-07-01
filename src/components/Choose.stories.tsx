@@ -84,12 +84,12 @@ export const Controlled = () => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <div className="grid grid-cols-3 gap-4">
-                <Input />
+            {/* <div className="grid grid-cols-3 gap-4"> */}
+                {/* <Input /> */}
                 <Choose
                     value={inputValue}
                     onChange={handleChange}
-                    recentValues={recent}
+                    //recentValues={recent}
                     items={store.items}
                     getItem={getItem}
                     renderItem={renderItem}
@@ -97,8 +97,8 @@ export const Controlled = () => {
                     itemMatch={itemMatch}
                     scale="base" />
 
-                <SearchInput />
-            </div>
+                {/* <SearchInput /> */}
+            {/* </div> */}
             <Button className="mt-2" type="submit" >enviar</Button>
         </form>
     );

@@ -265,7 +265,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                 style={inline ? { paddingRight: '1.25em' } : { padding: '0.5em 2em 0.5em 0.75em' }}
             >
 
-                {(internalValue && renderItem(getItem(internalValue))) || <span>&nbsp;Placeholder</span>}
+                {(!internalLoading && internalValue && renderItem(getItem(internalValue))) || <span>&nbsp;Placeholder</span>}
 
                 <div className="absolute inset-y-0 right-0 flex flex-row justify-center items-center cursor-pointer"
                     style={{ width: '1em', marginRight: inline ? '0' : '0.5em' }}>
@@ -303,14 +303,14 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                     <div className="space-y-1">
 
                         {(searchRecents.length > 0) &&
-                            <ul className="space-y-1">
+                            <ul className="space-y-1 p-0">
                                 {searchRecents.map((value, i) => (
                                     <li ref={listRecentsRefs[i] as LegacyRef<HTMLLIElement> | undefined}
                                         key={value}
                                         onClick={!internalError ? (e) => handleClick(e, value) : undefined}
                                         className={classnames(
                                             'cursor-pointer -ml-3 -mr-3 pl-3 pr-3',
-                                            'hover:text-white hover:bg-secondary-500 ',
+                                            'hover:text-white hover:bg-secondary-500',
                                             cursor === i && 'bg-primary-500'
                                         )}
                                     >
@@ -329,7 +329,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                                             key={itemValue(item)}
                                             onClick={!internalError ? (e) => handleClick(e, itemValue(item)) : undefined}
                                             className={classnames(
-                                                'cursor-pointer -ml-3 -mr-3 pl-3 pr-3',
+                                                'cursor-pointer',
                                                 'hover:text-white hover:bg-secondary-500',
                                                 cursor === i + searchRecents!.length && 'bg-primary-500'
                                             )}
