@@ -309,8 +309,7 @@ export const ChooseAvatar = () => {
     const renderItemAvatar = (item: StoryChoose) => {
         return (
             <div>
-                <Avatar initials={item.id} color="green" scale="sm" className="mr-0.5" />
-                <span>{item.description}</span>
+                <Avatar initials={item.id} color="green" />&nbsp;{item.description}
             </div>
         )
     };
