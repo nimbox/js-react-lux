@@ -38,7 +38,7 @@ export const Tag: FC<TagProps> = ({ color: propertyColor = '#906090', background
 
     return (
         <span
-            className='inline-flex flex-row items-baseline max-w-full rounded rounded-full'
+            className='inline-flex flex-row items-baseline max-w-full rounded-full'
             style={{ lineHeight: '1', paddingLeft: '0.25em', paddingTop: '0.125em', paddingRight: '0.5em', paddingBottom: '0.125em', color, backgroundColor }}
         >
             <Cross
