@@ -281,32 +281,32 @@ var SearchInput = React.forwardRef(function (_a, ref) {
 
 var ChooseFn = function (_a, ref) {
     var _b;
-    var _c = _a.scale, scale = _c === void 0 ? 'base' : _c, recentValues = _a.recentValues, items = _a.items, loading = _a.loading, error = _a.error, getItem = _a.getItem, searchItems = _a.searchItems, itemValue = _a.itemValue, itemMatch = _a.itemMatch, renderItem = _a.renderItem, CreateComponent = _a.CreateComponent, inline = _a.inline; _a.className; var props = __rest(_a, ["scale", "recentValues", "items", "loading", "error", "getItem", "searchItems", "itemValue", "itemMatch", "renderItem", "CreateComponent", "inline", "className"]);
+    var _c = _a.scale, scale = _c === void 0 ? 'base' : _c, _d = _a.recentValues, recentValues = _d === void 0 ? [] : _d, items = _a.items, loading = _a.loading, error = _a.error, getItem = _a.getItem, searchItems = _a.searchItems, itemValue = _a.itemValue, itemMatch = _a.itemMatch, renderItem = _a.renderItem, CreateComponent = _a.CreateComponent, inline = _a.inline; _a.className; var props = __rest(_a, ["scale", "recentValues", "items", "loading", "error", "getItem", "searchItems", "itemValue", "itemMatch", "renderItem", "CreateComponent", "inline", "className"]);
     var inputRef = useRef();
     useImperativeHandle(ref, function () { return inputRef.current; });
-    var _d = useState(''), search = _d[0], setSearch = _d[1];
-    var _e = useState(''), internalValue = _e[0], setInternalValue = _e[1];
+    var _e = useState(''), search = _e[0], setSearch = _e[1];
+    var _f = useState(''), internalValue = _f[0], setInternalValue = _f[1];
     var context = useContext(Context$4);
-    var _f = useState(false), visible = _f[0], setVisible = _f[1];
-    var _g = useState(false), active = _g[0], setActive = _g[1];
+    var _g = useState(false), visible = _g[0], setVisible = _g[1];
+    var _h = useState(false), active = _h[0], setActive = _h[1];
     useLayoutEffect(function () { setActive(visible); }, [visible]);
     var target = useRef(null);
-    var _h = useState(null), popper = _h[0], setPopper = _h[1];
+    var _j = useState(null), popper = _j[0], setPopper = _j[1];
     useOnOutsideClick(function () { if (internalError) {
         reset();
     } if (visible) {
         setVisible(false);
     } }, visible, target.current, popper);
-    var _j = useState(loading || false), internalLoading = _j[0], setInternalLoading = _j[1];
-    var _k = useState(error || false), internalError = _k[0], setInternalError = _k[1];
-    var _l = useState([]), searchResults = _l[0], setSearchResults = _l[1];
-    var _m = useState(recentValues), searchRecents = _m[0], setSearchRecents = _m[1];
+    var _k = useState(loading || false), internalLoading = _k[0], setInternalLoading = _k[1];
+    var _l = useState(error || false), internalError = _l[0], setInternalError = _l[1];
+    var _m = useState([]), searchResults = _m[0], setSearchResults = _m[1];
+    var _o = useState(recentValues), searchRecents = _o[0], setSearchRecents = _o[1];
     var searchRef = useRef();
-    var _o = useState(null), cursor = _o[0], setCursor = _o[1];
+    var _p = useState(null), cursor = _p[0], setCursor = _p[1];
     var searchRecentsLength = searchRecents.length;
-    var _p = React.useState([]), listRecentsRefs = _p[0], setlistRecentsRefs = _p[1];
+    var _q = React.useState([]), listRecentsRefs = _q[0], setlistRecentsRefs = _q[1];
     var searchResultsLength = searchResults.length;
-    var _q = React.useState([]), listResultsRefs = _q[0], setlistResultsRefs = _q[1];
+    var _r = React.useState([]), listResultsRefs = _r[0], setlistResultsRefs = _r[1];
     useEffect(function () {
         setlistRecentsRefs(Array(searchRecentsLength).fill(createRef(), 0, searchRecentsLength).map(function (_, i) { return listRecentsRefs[i] || createRef(); }));
     }, [searchRecentsLength]);
@@ -508,9 +508,9 @@ var ChooseFn = function (_a, ref) {
                                 jsx(Loading, {}, void 0), internalError &&
                                 jsx(SvgDangerIcon, { className: "text-red-500 stroke-current stroke-2" }, void 0), !internalLoading && !internalError &&
                                 jsx(SvgAngleDownIcon, { width: "1em", height: "1em", className: "inline text-control-border stroke-current stroke-2" }, void 0)] }), void 0)] }), void 0), visible &&
-                jsxs("div", __assign({ ref: setPopper, className: classnames('absolute w-full max-h-72 overflow-auto border border-control-border rounded', 'mt-2 space-y-2', 'bg-white', 'rounded border border-control-border', inline && 'w-max'), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [jsx(SearchInput, { ref: searchRef, scale: smallScale[scale || context.scale || 'base'], value: search, onChange: handleSearch, onKeyDown: handleKeyDown, disabled: internalError }, void 0), jsxs("div", __assign({ className: "space-y-1" }, { children: [(searchRecents.length > 0) &&
-                                    jsx("ul", __assign({ className: "space-y-1 p-0" }, { children: searchRecents.map(function (value, i) { return (jsx("li", __assign({ ref: listRecentsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, value); } : undefined, className: classnames('cursor-pointer -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i && 'bg-primary-500') }, { children: renderItem(getItem(value)) }), value)); }) }), void 0), (searchResults.length > 0) &&
-                                    jsxs(Fragment, { children: [jsx("div", { className: "h-px bg-control-border", style: { marginLeft: '-0.75em', marginRight: '-0.75em' } }, void 0), jsx("ul", __assign({ className: "space-y-1 p-0" }, { children: searchResults.map(function (item, i) { return (jsx("li", __assign({ ref: listResultsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, itemValue(item)); } : undefined, className: classnames('cursor-pointer -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i + searchRecents.length && 'bg-primary-500') }, { children: renderItem(item) }), itemValue(item))); }) }), void 0)] }, void 0), (search && searchResults.length === 0 && searchRecents.length === 0 && CreateComponent) &&
+                jsxs("div", __assign({ ref: setPopper, className: classnames('absolute w-full max-h-72 overflow-auto border border-control-border rounded', 'mt-2 space-y-2', 'bg-white', 'rounded border border-control-border', inline && 'w-max'), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [jsx(SearchInput, { ref: searchRef, scale: smallScale[scale || context.scale || 'base'], value: search, onChange: handleSearch, onKeyDown: handleKeyDown, disabled: internalError }, void 0), jsxs("div", __assign({ className: "" }, { children: [(searchRecents.length > 0) &&
+                                    jsx("ul", __assign({ className: "m-0 p-0" }, { children: searchRecents.map(function (value, i) { return (jsx("li", __assign({ ref: listRecentsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, value); } : undefined, className: classnames('cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i && 'bg-primary-500') }, { children: renderItem(getItem(value)) }), value)); }) }), void 0), (searchResults.length > 0) &&
+                                    jsxs(Fragment, { children: [jsx("div", { className: "h-px bg-control-border", style: { margin: '0.5em -0.75em' } }, void 0), jsx("ul", __assign({ className: "m-0 p-0" }, { children: searchResults.map(function (item, i) { return (jsx("li", __assign({ ref: listResultsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, itemValue(item)); } : undefined, className: classnames('cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i + searchRecents.length && 'bg-primary-500') }, { children: renderItem(item) }), itemValue(item))); }) }), void 0)] }, void 0), (search && searchResults.length === 0 && searchRecents.length === 0 && CreateComponent) &&
                                     jsx(CreateComponent, { search: search, disabled: loading, onSubmit: handleSubmit }, void 0)] }), void 0)] }), void 0), jsx("input", __assign({ className: "hidden", type: "text", ref: inputRef }, props), void 0)] }), void 0));
 };
 /**

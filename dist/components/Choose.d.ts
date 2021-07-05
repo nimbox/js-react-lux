@@ -1,6 +1,7 @@
 import React, { ChangeEventHandler, ReactElement, Ref } from 'react';
 import { ComponentScale } from './ComponentScale';
 export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
+    /** The default value for the choose component */
     defaultValue?: string;
     value?: string;
     recentValues?: string[];

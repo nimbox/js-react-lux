@@ -12,6 +12,7 @@ import { SearchInput } from './controls/SearchInput';
 
 export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
 
+    /** The default value for the choose component */
     defaultValue?: string;
     value?: string;
     recentValues?: string[];
@@ -38,7 +39,7 @@ export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLA
 
 type ForwardRefFn<R> = <P = {}>(p: P & React.RefAttributes<R>) => ReactElement | null;
 
-export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, CreateComponent, inline, className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => {
+export const ChooseFn = <T extends {}>({ scale = 'base', recentValues = [], items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, CreateComponent, inline, className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => {
 
     const inputRef = useRef<HTMLInputElement>();
     useImperativeHandle(ref, () => inputRef.current!);
@@ -60,7 +61,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
     const [internalError, setInternalError] = useState(error || false);
 
     const [searchResults, setSearchResults] = useState<T[]>([]);
-    const [searchRecents, setSearchRecents] = useState<string[]>(recentValues!);
+    const [searchRecents, setSearchRecents] = useState<string[]>(recentValues);
 
     const searchRef = useRef<HTMLInputElement>();
 
@@ -300,16 +301,16 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                         disabled={internalError}
                     />
 
-                    <div className="space-y-1">
+                    <div className="">
 
                         {(searchRecents.length > 0) &&
-                            <ul className="space-y-1 p-0">
+                            <ul className="m-0 p-0">
                                 {searchRecents.map((value, i) => (
                                     <li ref={listRecentsRefs[i] as LegacyRef<HTMLLIElement> | undefined}
                                         key={value}
                                         onClick={!internalError ? (e) => handleClick(e, value) : undefined}
                                         className={classnames(
-                                            'cursor-pointer -ml-3 -mr-3 pl-3 pr-3',
+                                            'cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3',
                                             'hover:text-white hover:bg-secondary-500',
                                             cursor === i && 'bg-primary-500'
                                         )}
@@ -322,14 +323,14 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
 
                         {(searchResults.length > 0) &&
                             <>
-                                <div className="h-px bg-control-border" style={{ marginLeft: '-0.75em', marginRight: '-0.75em' }} />
-                                <ul className="space-y-1 p-0">
+                                <div className="h-px bg-control-border" style={{ margin: '0.5em -0.75em' }} />
+                                <ul className="m-0 p-0">
                                     {searchResults.map((item, i) => (
                                         <li ref={listResultsRefs[i] as LegacyRef<HTMLLIElement> | undefined}
                                             key={itemValue(item)}
                                             onClick={!internalError ? (e) => handleClick(e, itemValue(item)) : undefined}
                                             className={classnames(
-                                                'cursor-pointer -ml-3 -mr-3 pl-3 pr-3',
+                                                'cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3',
                                                 'hover:text-white hover:bg-secondary-500',
                                                 cursor === i + searchRecents!.length && 'bg-primary-500'
                                             )}
