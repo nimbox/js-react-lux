@@ -1,9 +1,9 @@
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
+import tinycolor from 'tinycolor2';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import _debounce from 'lodash/debounce';
 import React, { useEffect, createContext, useContext, useRef, useImperativeHandle, useState, useLayoutEffect, createRef, useCallback, useMemo } from 'react';
-import tinycolor from 'tinycolor2';
 import ReactDOM from 'react-dom';
 import { usePopper } from 'react-popper';
 import { v4 } from 'uuid';
@@ -89,6 +89,28 @@ function __spreadArray(to, from) {
         to[j] = from[i];
     return to;
 }
+
+/**
+ * Avatar. Representation of a user in the system.
+ */
+var Avatar = function (_a) {
+    var src = _a.src, initials = _a.initials, color = _a.color, backgroundColor = _a.backgroundColor;
+    var c = backgroundColor ? color : tinycolor(color).isDark() ? 'white' : 'black';
+    var bg = backgroundColor ? backgroundColor : color;
+    if (src) {
+        return (jsx("span", __assign({ className: "inline-flex flex-row justify-center content-center rounded-full overflow-hidden", style: {
+                width: '1.5em',
+                verticalAlign: '10%'
+            } }, { children: jsx("span", __assign({ className: "w-full bg-center bg-cover", style: { fontSize: '0.5em', backgroundImage: "url(" + src + ")" } }, { children: "\u00A0" }), void 0) }), void 0));
+    }
+    else {
+        return (jsx("span", __assign({ className: "inline-flex flex-row justify-center content-center rounded-full overflow-hidden", style: {
+                width: '1.5em',
+                verticalAlign: '10%',
+                color: c, backgroundColor: bg
+            } }, { children: jsx("span", __assign({ style: { fontSize: '0.5em' } }, { children: initials }), void 0) }), void 0));
+    }
+};
 
 function SvgAngleDownIcon(props) {
     return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { className: "angle-down-icon_svg__st0", d: "M26 12l-10 8-10-8" }, void 0) }), void 0));
@@ -518,9 +540,9 @@ var ChooseFn = function (_a, ref) {
                         'left-0': align === 'start',
                         'right-0': align === 'end',
                         'inset-x-0 truncate': align === 'stretch'
-                    }), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [jsx(SearchInput, { ref: searchRef, scale: smallScale[scale || context.scale || 'base'], value: search, onChange: handleSearch, onKeyDown: handleKeyDown, disabled: internalError }, void 0), jsxs("div", __assign({ className: "space-y-1" }, { children: [(searchRecents.length > 0) &&
-                                    jsx("ul", __assign({ className: "space-y-1 p-0" }, { children: searchRecents.map(function (value, i) { return (jsx("li", __assign({ ref: listRecentsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, value); } : undefined, className: classnames('cursor-pointer -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i && 'bg-primary-500') }, { children: renderItem(getItem(value)) }), value)); }) }), void 0), (searchResults.length > 0) &&
-                                    jsxs(Fragment, { children: [jsx("div", { className: "h-px bg-control-border", style: { marginLeft: '-0.75em', marginRight: '-0.75em' } }, void 0), jsx("ul", __assign({ className: "space-y-1 p-0" }, { children: searchResults.map(function (item, i) { return (jsx("li", __assign({ ref: listResultsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, itemValue(item)); } : undefined, className: classnames('cursor-pointer -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i + searchRecents.length && 'bg-primary-500') }, { children: renderItem(item) }), itemValue(item))); }) }), void 0)] }, void 0), (search && searchResults.length === 0 && searchRecents.length === 0 && CreateComponent) &&
+                    }), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [jsx(SearchInput, { ref: searchRef, scale: smallScale[scale || context.scale || 'base'], value: search, onChange: handleSearch, onKeyDown: handleKeyDown, disabled: internalError }, void 0), jsxs("div", __assign({ className: "" }, { children: [(searchRecents.length > 0) &&
+                                    jsx("ul", __assign({ className: "m-0 p-0" }, { children: searchRecents.map(function (value, i) { return (jsx("li", __assign({ ref: listRecentsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, value); } : undefined, className: classnames('cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i && 'bg-primary-500') }, { children: renderItem(getItem(value)) }), value)); }) }), void 0), (searchResults.length > 0) &&
+                                    jsxs(Fragment, { children: [jsx("div", { className: "h-px bg-control-border", style: { margin: '0.5em -0.75em' } }, void 0), jsx("ul", __assign({ className: "m-0 p-0" }, { children: searchResults.map(function (item, i) { return (jsx("li", __assign({ ref: listResultsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, itemValue(item)); } : undefined, className: classnames('cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i + searchRecents.length && 'bg-primary-500') }, { children: renderItem(item) }), itemValue(item))); }) }), void 0)] }, void 0), (search && searchResults.length === 0 && searchRecents.length === 0 && CreateComponent) &&
                                     jsx(CreateComponent, { search: search, disabled: loading, onSubmit: handleSubmit }, void 0)] }), void 0)] }), void 0), jsx("input", __assign({ className: "hidden", type: "text", ref: inputRef }, props), void 0)] }), void 0));
 };
 /**
@@ -588,7 +610,7 @@ var Tag = function (_a) {
     var crossBackgroundColor = useMemo(function () { return tinycolor(backgroundColor).darken(5).toString(); }, [backgroundColor]);
     var crossBackgroundHoverColor = useMemo(function () { return tinycolor(crossBackgroundColor).darken(10).toString(); }, [crossBackgroundColor]);
     var _c = useState(crossBackgroundColor), hoverColor = _c[0], setHoverColor = _c[1];
-    return (jsxs("span", __assign({ className: 'inline-flex flex-row items-baseline max-w-full rounded rounded-full', style: { lineHeight: '1', paddingLeft: '0.25em', paddingTop: '0.125em', paddingRight: '0.5em', paddingBottom: '0.125em', color: color, backgroundColor: backgroundColor } }, { children: [jsx(Cross, { showCross: !!onDelete, onMouseEnter: function () { return setHoverColor(crossBackgroundHoverColor); }, onMouseLeave: function () { return setHoverColor(crossBackgroundColor); }, onClick: function () { return onDelete && onDelete(); }, crossColor: color, circleColor: onDelete ? hoverColor : crossBackgroundColor, className: "block flex-none self-center cursor-pointer", style: { marginRight: '0.125em' } }, void 0), jsx("span", __assign({ onClick: !onDelete ? onClick : undefined, className: classnames('block flex-1 max-w-full truncate', { 'hover:underline cursor-pointer': onClick && !onDelete }), style: { height: '1.2em', lineHeight: '1.2em' } }, { children: children }), void 0)] }), void 0));
+    return (jsxs("span", __assign({ className: 'inline-flex flex-row items-baseline max-w-full rounded-full', style: { lineHeight: '1', paddingLeft: '0.25em', paddingTop: '0.125em', paddingRight: '0.5em', paddingBottom: '0.125em', color: color, backgroundColor: backgroundColor } }, { children: [jsx(Cross, { showCross: !!onDelete, onMouseEnter: function () { return setHoverColor(crossBackgroundHoverColor); }, onMouseLeave: function () { return setHoverColor(crossBackgroundColor); }, onClick: function () { return onDelete && onDelete(); }, crossColor: color, circleColor: onDelete ? hoverColor : crossBackgroundColor, className: "block flex-none self-center cursor-pointer", style: { marginRight: '0.125em' } }, void 0), jsx("span", __assign({ onClick: !onDelete ? onClick : undefined, className: classnames('block flex-1 max-w-full truncate', { 'hover:underline cursor-pointer': onClick && !onDelete }), style: { height: '1.2em', lineHeight: '1.2em' } }, { children: children }), void 0)] }), void 0));
 };
 
 // constants
@@ -1344,5 +1366,5 @@ Panel.Item = function (_a) {
     return (jsx("div", __assign({ className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, { children: children }), void 0));
 };
 
-export { Button, Card, CheckBox, Choose, ChooseFn, Context$4 as Context, Control, Cross, DatePicker, Delay, Header, Helium, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, RadioBar, RoundButton, Select, SwatchPicker, Tabs, Tag, TagPicker, TextArea, TimePicker, Toast, ToastContainer, ToastContent, ToastProvider, Toggle, ViewportProvider, useOnOutsideClick, useToast, useViewport };
+export { Avatar, Button, Card, CheckBox, Choose, ChooseFn, Context$4 as Context, Control, Cross, DatePicker, Delay, Header, Helium, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, RadioBar, RoundButton, Select, SwatchPicker, Tabs, Tag, TagPicker, TextArea, TimePicker, Toast, ToastContainer, ToastContent, ToastProvider, Toggle, ViewportProvider, useOnOutsideClick, useToast, useViewport };
 //# sourceMappingURL=index.js.map

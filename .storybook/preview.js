@@ -8,8 +8,10 @@ export const parameters = {
 
 export const decorators = [
   (Story) => (
-    <DndProvider backend={HTML5Backend}>
-      <Story />
-    </DndProvider>
+    <div className="text-base">
+      <DndProvider backend={HTML5Backend}>
+        <Story />
+      </DndProvider>
+    </div>
   ),
 ];
