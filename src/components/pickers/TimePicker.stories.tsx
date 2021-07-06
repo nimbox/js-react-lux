@@ -1,4 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
 import { select, withKnobs } from "@storybook/addon-knobs";
 import React, { useState } from 'react';
 import { I18nextProvider, useTranslation } from 'react-i18next';

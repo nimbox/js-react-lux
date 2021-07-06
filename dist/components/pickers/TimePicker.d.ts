@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { ComponentScale } from '../ComponentScale';
 interface TimePickerProps {
     /** Name used for the input element and returned in the change event. */
@@ -14,5 +14,5 @@ interface TimePickerProps {
 /**
  * DatePicker. Select a date with one click.
  */
-export declare const TimePicker: FC<TimePickerProps>;
+export declare const TimePicker: React.ForwardRefExoticComponent<TimePickerProps & React.RefAttributes<HTMLInputElement>>;
 export {};

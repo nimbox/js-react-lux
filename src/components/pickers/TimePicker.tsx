@@ -5,6 +5,7 @@ import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon, AngleUpIcon, CircleIcon } from '../../icons';
 import { ComponentScale, controlScale } from '../ComponentScale';
 import { Context } from '../controls/Control';
+import { Input } from '../controls/Input';
 
 
 //
@@ -41,7 +42,7 @@ const minutes = [15, 30, 45];
 /**
  * DatePicker. Select a date with one click.
  */
-export const TimePicker: FC<TimePickerProps> = ({ name, value, scale = "base", onChange, placeholder }) => {
+export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>(({ name, value, scale = "base", onChange, placeholder }, ref) => {
 
     const { ready } = useTranslation();
 
@@ -150,15 +151,10 @@ export const TimePicker: FC<TimePickerProps> = ({ name, value, scale = "base", o
         <div className="relative">
 
             <div ref={setTarget as LegacyRef<HTMLDivElement> | undefined}>
-                <input key="input"
+                <Input key="input" ref={ref}
                     name={name} value={value} onChange={handleChange}
                     onFocus={handleFocus} onKeyDown={handleKeyDown}
                     placeholder={placeholder}
-                    className={classNames(
-                        controlScale[scale || context.scale || 'base'],
-                        'w-full px-2 py-1 border border-control-border rounded',
-                        'focus:border-primary-500 focus:ring focus:ring-primary-500',
-                        'focus:ring-opacity-50 focus:outline-none')}
                 />
             </div>
 
@@ -225,7 +221,7 @@ export const TimePicker: FC<TimePickerProps> = ({ name, value, scale = "base", o
         </div>
     );
 
-};
+});
 
 
 //

@@ -281,32 +281,32 @@ var SearchInput = React.forwardRef(function (_a, ref) {
 
 var ChooseFn = function (_a, ref) {
     var _b;
-    var _c = _a.scale, scale = _c === void 0 ? 'base' : _c, recentValues = _a.recentValues, items = _a.items, loading = _a.loading, error = _a.error, getItem = _a.getItem, searchItems = _a.searchItems, itemValue = _a.itemValue, itemMatch = _a.itemMatch, renderItem = _a.renderItem, CreateComponent = _a.CreateComponent, inline = _a.inline; _a.className; var props = __rest(_a, ["scale", "recentValues", "items", "loading", "error", "getItem", "searchItems", "itemValue", "itemMatch", "renderItem", "CreateComponent", "inline", "className"]);
+    var _c = _a.scale, scale = _c === void 0 ? 'base' : _c, _d = _a.recentValues, recentValues = _d === void 0 ? [] : _d, items = _a.items, loading = _a.loading, error = _a.error, getItem = _a.getItem, searchItems = _a.searchItems, itemValue = _a.itemValue, itemMatch = _a.itemMatch, renderItem = _a.renderItem, CreateComponent = _a.CreateComponent, inline = _a.inline, _e = _a.align, align = _e === void 0 ? 'stretch' : _e; _a.className; var props = __rest(_a, ["scale", "recentValues", "items", "loading", "error", "getItem", "searchItems", "itemValue", "itemMatch", "renderItem", "CreateComponent", "inline", "align", "className"]);
     var inputRef = useRef();
     useImperativeHandle(ref, function () { return inputRef.current; });
-    var _d = useState(''), search = _d[0], setSearch = _d[1];
-    var _e = useState(''), internalValue = _e[0], setInternalValue = _e[1];
+    var _f = useState(''), search = _f[0], setSearch = _f[1];
+    var _g = useState(''), internalValue = _g[0], setInternalValue = _g[1];
     var context = useContext(Context$4);
-    var _f = useState(false), visible = _f[0], setVisible = _f[1];
-    var _g = useState(false), active = _g[0], setActive = _g[1];
+    var _h = useState(false), visible = _h[0], setVisible = _h[1];
+    var _j = useState(false), active = _j[0], setActive = _j[1];
     useLayoutEffect(function () { setActive(visible); }, [visible]);
     var target = useRef(null);
-    var _h = useState(null), popper = _h[0], setPopper = _h[1];
+    var _k = useState(null), popper = _k[0], setPopper = _k[1];
     useOnOutsideClick(function () { if (internalError) {
         reset();
     } if (visible) {
         setVisible(false);
     } }, visible, target.current, popper);
-    var _j = useState(loading || false), internalLoading = _j[0], setInternalLoading = _j[1];
-    var _k = useState(error || false), internalError = _k[0], setInternalError = _k[1];
-    var _l = useState([]), searchResults = _l[0], setSearchResults = _l[1];
-    var _m = useState(recentValues), searchRecents = _m[0], setSearchRecents = _m[1];
+    var _l = useState(loading || false), internalLoading = _l[0], setInternalLoading = _l[1];
+    var _m = useState(error || false), internalError = _m[0], setInternalError = _m[1];
+    var _o = useState([]), searchResults = _o[0], setSearchResults = _o[1];
+    var _p = useState(recentValues), searchRecents = _p[0], setSearchRecents = _p[1];
     var searchRef = useRef();
-    var _o = useState(null), cursor = _o[0], setCursor = _o[1];
+    var _q = useState(null), cursor = _q[0], setCursor = _q[1];
     var searchRecentsLength = searchRecents.length;
-    var _p = React.useState([]), listRecentsRefs = _p[0], setlistRecentsRefs = _p[1];
+    var _r = React.useState([]), listRecentsRefs = _r[0], setlistRecentsRefs = _r[1];
     var searchResultsLength = searchResults.length;
-    var _q = React.useState([]), listResultsRefs = _q[0], setlistResultsRefs = _q[1];
+    var _s = React.useState([]), listResultsRefs = _s[0], setlistResultsRefs = _s[1];
     useEffect(function () {
         setlistRecentsRefs(Array(searchRecentsLength).fill(createRef(), 0, searchRecentsLength).map(function (_, i) { return listRecentsRefs[i] || createRef(); }));
     }, [searchRecentsLength]);
@@ -348,10 +348,14 @@ var ChooseFn = function (_a, ref) {
                 event.preventDefault();
                 if (cursor != null && cursor > 0) {
                     if (cursor < recentsLength) {
-                        (_a = listRecentsRefs[cursor].current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({ block: "end", behavior: "smooth" });
+                        (_a = listRecentsRefs[cursor].current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({ block: "center",
+                            inline: "start",
+                            behavior: "smooth" });
                     }
                     else {
-                        (_b = listResultsRefs[cursor - searchRecents.length].current) === null || _b === void 0 ? void 0 : _b.scrollIntoView({ block: "end", behavior: "smooth" });
+                        (_b = listResultsRefs[cursor - searchRecents.length].current) === null || _b === void 0 ? void 0 : _b.scrollIntoView({ block: "center",
+                            inline: "start",
+                            behavior: "smooth" });
                     }
                     setCursor(cursor - 1);
                 }
@@ -361,10 +365,12 @@ var ChooseFn = function (_a, ref) {
                 if (cursor != null && cursor < (searchLength + recentsLength) - 1) {
                     if (cursor >= 0) {
                         if (cursor < recentsLength) {
-                            (_c = listRecentsRefs[cursor].current) === null || _c === void 0 ? void 0 : _c.scrollIntoView({ behavior: "smooth" });
+                            (_c = listRecentsRefs[cursor].current) === null || _c === void 0 ? void 0 : _c.scrollIntoView({ block: "center", inline: "end",
+                                behavior: "smooth" });
                         }
                         else {
-                            (_d = listResultsRefs[cursor - recentsLength].current) === null || _d === void 0 ? void 0 : _d.scrollIntoView({ behavior: "smooth" });
+                            (_d = listResultsRefs[cursor - recentsLength].current) === null || _d === void 0 ? void 0 : _d.scrollIntoView({ block: "center", inline: "end",
+                                behavior: "smooth" });
                         }
                     }
                     setCursor(cursor + 1);
@@ -508,7 +514,11 @@ var ChooseFn = function (_a, ref) {
                                 jsx(Loading, {}, void 0), internalError &&
                                 jsx(SvgDangerIcon, { className: "text-red-500 stroke-current stroke-2" }, void 0), !internalLoading && !internalError &&
                                 jsx(SvgAngleDownIcon, { width: "1em", height: "1em", className: "inline text-control-border stroke-current stroke-2" }, void 0)] }), void 0)] }), void 0), visible &&
-                jsxs("div", __assign({ ref: setPopper, className: classnames('absolute w-full max-h-72 overflow-auto border border-control-border rounded', 'mt-2 space-y-2', 'bg-white', 'rounded border border-control-border', inline && 'w-max'), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [jsx(SearchInput, { ref: searchRef, scale: smallScale[scale || context.scale || 'base'], value: search, onChange: handleSearch, onKeyDown: handleKeyDown, disabled: internalError }, void 0), jsxs("div", __assign({ className: "space-y-1" }, { children: [(searchRecents.length > 0) &&
+                jsxs("div", __assign({ ref: setPopper, className: classnames('absolute w-full max-h-72 overflow-auto border border-control-border rounded', 'mt-2 space-y-2', 'bg-white', 'rounded border border-control-border', inline && 'w-max', {
+                        'left-0': align === 'start',
+                        'right-0': align === 'end',
+                        'inset-x-0 truncate': align === 'stretch'
+                    }), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [jsx(SearchInput, { ref: searchRef, scale: smallScale[scale || context.scale || 'base'], value: search, onChange: handleSearch, onKeyDown: handleKeyDown, disabled: internalError }, void 0), jsxs("div", __assign({ className: "space-y-1" }, { children: [(searchRecents.length > 0) &&
                                     jsx("ul", __assign({ className: "space-y-1 p-0" }, { children: searchRecents.map(function (value, i) { return (jsx("li", __assign({ ref: listRecentsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, value); } : undefined, className: classnames('cursor-pointer -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i && 'bg-primary-500') }, { children: renderItem(getItem(value)) }), value)); }) }), void 0), (searchResults.length > 0) &&
                                     jsxs(Fragment, { children: [jsx("div", { className: "h-px bg-control-border", style: { marginLeft: '-0.75em', marginRight: '-0.75em' } }, void 0), jsx("ul", __assign({ className: "space-y-1 p-0" }, { children: searchResults.map(function (item, i) { return (jsx("li", __assign({ ref: listResultsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, itemValue(item)); } : undefined, className: classnames('cursor-pointer -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i + searchRecents.length && 'bg-primary-500') }, { children: renderItem(item) }), itemValue(item))); }) }), void 0)] }, void 0), (search && searchResults.length === 0 && searchRecents.length === 0 && CreateComponent) &&
                                     jsx(CreateComponent, { search: search, disabled: loading, onSubmit: handleSubmit }, void 0)] }), void 0)] }), void 0), jsx("input", __assign({ className: "hidden", type: "text", ref: inputRef }, props), void 0)] }), void 0));
@@ -603,7 +613,7 @@ var namedDays = [
 /**
  * DatePicker. Select a date with one click.
  */
-var DatePicker = function (_a) {
+var DatePicker = React.forwardRef(function (_a, ref) {
     var name = _a.name, value = _a.value, onChange = _a.onChange, shortcuts = _a.shortcuts, placeholder = _a.placeholder;
     var _b = useTranslation(), t = _b.t, ready = _b.ready;
     var _c = useState(firstDate(value)), calendar = _c[0], setCalendar = _c[1];
@@ -697,12 +707,12 @@ var DatePicker = function (_a) {
     // render
     var months = ready ? t('months', { defaultValue: ['Janruary', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], returnObjects: true }) : null;
     var days = ready ? t('shortDays', { defaultValue: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], returnObjects: true }) : [];
-    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", { children: ready ? 'ready' : 'not-ready' }, void 0), jsx("div", { children: days }, void 0), jsx("div", __assign({ ref: setTarget }, { children: jsx("input", { name: name, value: value, onChange: handleChange, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder, className: "w-full px-2 py-1 border border-content-border rounded" }, "input") }), void 0), ready && show &&
+    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: setTarget }, { children: jsx(Input, { ref: ref, name: name, value: value, onChange: handleChange, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder }, "input") }), void 0), ready && show &&
                 jsx("div", __assign({ ref: setPopper, className: "absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden" }, { children: jsxs("div", __assign({ className: "flex flex-row" }, { children: [jsxs("div", { children: [jsxs("div", __assign({ className: "px-2 py-1 flex flex-row items-center justify-between bg-gray-400" }, { children: [jsxs("div", __assign({ className: "flex-grow text-center font-bold" }, { children: [months[calendar.getMonth()], " ", calendar.getFullYear()] }), void 0), jsxs("div", { children: [jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickPrevMonth }, { children: jsx(SvgAngleLeftIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ className: "px-2 focus:outline-none", onClick: handleClickToday }, { children: jsx(SvgCircleIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickNextMonth }, { children: jsx(SvgAngleRightIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0)] }, void 0)] }), void 0), jsxs("table", __assign({ className: "table-fixed text-center" }, { children: [jsx("thead", { children: jsx("tr", { children: days.map(function (d, i) { return jsx("th", __assign({ className: "w-10 px-1" }, { children: d }), i); }) }, void 0) }, void 0), jsx("tbody", __assign({ className: "cursor-pointer" }, { children: weeks.map(function (w) {
                                                     return jsx("tr", { children: w.map(function (d) { return jsx("td", __assign({ onClick: function () { return handleClickDate(d); }, className: dayClasses(d) }, { children: d.getDate() }), d.getTime()); }) }, w[0].getTime());
                                                 }) }), void 0)] }), void 0)] }, void 0), shortcuts &&
                                 jsx("div", __assign({ className: "flex flex-col justify-between bg-gray-300 cursor-pointer" }, { children: namedDays.map(function (s, i) { return jsx("div", __assign({ onClick: function () { return handleClickDate(s.date(new Date(today))); }, className: "px-2 hover:text-white hover:bg-secondary-500" }, { children: t("namedDays." + s.label, { defaultValue: s.label }) }), i); }) }), void 0)] }), void 0) }), void 0)] }), void 0));
-};
+});
 //
 // parse and format
 //
@@ -966,8 +976,8 @@ var minutes = [15, 30, 45];
 /**
  * DatePicker. Select a date with one click.
  */
-var TimePicker = function (_a) {
-    var name = _a.name, value = _a.value, _b = _a.scale, scale = _b === void 0 ? "base" : _b, onChange = _a.onChange, placeholder = _a.placeholder;
+var TimePicker = React.forwardRef(function (_a, ref) {
+    var name = _a.name, value = _a.value; _a.scale; var onChange = _a.onChange, placeholder = _a.placeholder;
     var ready = useTranslation().ready;
     var _c = useState(false), show = _c[0], setShow = _c[1];
     var _d = useState(null), target = _d[0], setTarget = _d[1];
@@ -978,7 +988,7 @@ var TimePicker = function (_a) {
     var times = useRef({ watch: 8 });
     var timesRef = useRef(null);
     useEffect(function () { scroll(); });
-    var context = useContext(Context$4);
+    useContext(Context$4);
     // handlers
     var handleShow = function () { if (!show) {
         setShow(true);
@@ -1055,7 +1065,7 @@ var TimePicker = function (_a) {
         }
     }
     // render
-    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: setTarget }, { children: jsx("input", { name: name, value: value, onChange: handleChange, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder, className: classnames(controlScale[scale || context.scale || 'base'], 'w-full px-2 py-1 border border-control-border rounded', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none') }, "input") }), void 0), ready && show &&
+    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: setTarget }, { children: jsx(Input, { ref: ref, name: name, value: value, onChange: handleChange, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder }, "input") }), void 0), ready && show &&
                 jsxs("div", __assign({ ref: setPopper, className: "absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden" }, { children: [jsx("div", __assign({ className: "px-2 py-1 bg-gray-400" }, { children: jsxs("div", __assign({ className: "text-right" }, { children: [jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickPrevHour }, { children: jsx(SvgAngleUpIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ className: "px-2 focus:outline-none", onClick: handleClickNoon }, { children: jsx(SvgCircleIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickNextHour }, { children: jsx(SvgAngleDownIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0)] }), void 0) }), void 0), jsx("div", __assign({ ref: timesRef, className: "h-64 overflow-scroll" }, { children: jsxs("table", __assign({ className: "table-fixed text-center" }, { children: [jsx("thead", { children: jsxs("tr", { children: [jsx("th", __assign({ className: "w-10" }, { children: "Hora" }), void 0), minutes.map(function (m) { return jsx("td", { className: "w-10" }, void 0); })] }, void 0) }, void 0), jsx("tbody", __assign({ className: "cursor-pointer" }, { children: morning.map(function (h) {
                                             return jsxs("tr", __assign({ className: hourClasses([h, 0]) }, { children: [jsx("th", __assign({ className: "text-base group-hover:text-content group-hover:bg-secondary-500", onClick: function (e) { return handleClickTime([h, 0]); } }, { children: formatHour(h) }), void 0), minutes.map(function (m) {
                                                         return jsx("td", __assign({ onClick: function (e) { return handleClickTime([h, m]); }, className: hourMinuteClasses([h, m]) }, { children: m }), m);
@@ -1069,7 +1079,7 @@ var TimePicker = function (_a) {
                                                         return jsx("td", __assign({ onClick: function (e) { return handleClickTime([h, m]); }, className: hourMinuteClasses([h, m]) }, { children: m }), m);
                                                     })] }), h);
                                         }) }), void 0)] }), void 0) }), void 0)] }), void 0)] }), void 0));
-};
+});
 //
 // parse and format
 //

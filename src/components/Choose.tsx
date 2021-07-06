@@ -8,6 +8,7 @@ import AngleDownIcon from './../icons/AngleDownIcon';
 import { ComponentScale, controlText, smallScale } from './ComponentScale';
 import { Context as controlContext } from './controls/Control';
 import { SearchInput } from './controls/SearchInput';
+import {ComponentAlign} from './ComponentAlign';
 
 
 export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
@@ -32,13 +33,14 @@ export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLA
 
     scale?: ComponentScale;
     inline?: boolean;
+    align?: ComponentAlign;
     className?: string;
 
 }
 
 type ForwardRefFn<R> = <P = {}>(p: P & React.RefAttributes<R>) => ReactElement | null;
 
-export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, CreateComponent, inline, className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => {
+export const ChooseFn = <T extends {}>({ scale = 'base', recentValues = [], items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, CreateComponent, inline, align = 'stretch', className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => {
 
     const inputRef = useRef<HTMLInputElement>();
     useImperativeHandle(ref, () => inputRef.current!);
@@ -60,7 +62,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
     const [internalError, setInternalError] = useState(error || false);
 
     const [searchResults, setSearchResults] = useState<T[]>([]);
-    const [searchRecents, setSearchRecents] = useState<string[]>(recentValues!);
+    const [searchRecents, setSearchRecents] = useState<string[]>(recentValues);
 
     const searchRef = useRef<HTMLInputElement>();
 
@@ -124,9 +126,13 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                 event.preventDefault();
                 if (cursor!=null && cursor > 0) {
                     if (cursor < recentsLength) {
-                        listRecentsRefs[cursor].current?.scrollIntoView({ block: "end", behavior: "smooth" });
+                        listRecentsRefs[cursor].current?.scrollIntoView({ block: "center",
+                        inline: "start",
+                        behavior: "smooth" });
                     } else {
-                        listResultsRefs[cursor - searchRecents.length].current?.scrollIntoView({ block: "end", behavior: "smooth" });
+                        listResultsRefs[cursor - searchRecents.length].current?.scrollIntoView({ block: "center",
+                        inline: "start",
+                        behavior: "smooth" });
                     }
                     setCursor(cursor - 1);
                 }
@@ -137,9 +143,11 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                 if (cursor!=null && cursor < (searchLength + recentsLength) - 1) {
                     if (cursor >= 0) {
                         if (cursor < recentsLength) {
-                            listRecentsRefs[cursor].current?.scrollIntoView({ behavior: "smooth" });
+                            listRecentsRefs[cursor].current?.scrollIntoView({ block: "center",inline: "end",
+                            behavior: "smooth" });
                         } else {
-                            listResultsRefs[cursor - recentsLength].current?.scrollIntoView({ behavior: "smooth" });
+                            listResultsRefs[cursor - recentsLength].current?.scrollIntoView({ block: "center",inline: "end",
+                            behavior: "smooth" });
                         }
                     }
                     setCursor(cursor + 1);
@@ -288,6 +296,11 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues, items, lo
                         'bg-white',
                         'rounded border border-control-border',
                         inline && 'w-max',
+                        {
+                            'left-0': align === 'start',
+                            'right-0': align === 'end',
+                            'inset-x-0 truncate': align === 'stretch'
+                        },
                     )}
                     style={{ padding: '0.5em 0.75em 0.5em 0.75em' }}
                 >

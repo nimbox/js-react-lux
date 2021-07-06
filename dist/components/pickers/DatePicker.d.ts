@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 interface DatePickerProps {
     /** Name used for the input element and returned in the change event. */
     name?: string;
@@ -14,5 +14,5 @@ interface DatePickerProps {
 /**
  * DatePicker. Select a date with one click.
  */
-export declare const DatePicker: FC<DatePickerProps>;
+export declare const DatePicker: React.ForwardRefExoticComponent<DatePickerProps & React.RefAttributes<HTMLInputElement>>;
 export {};

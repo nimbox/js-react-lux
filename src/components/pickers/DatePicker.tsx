@@ -2,6 +2,7 @@ import React, { FC, LegacyRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleLeftIcon, AngleRightIcon, CircleIcon } from '../../icons';
+import { Input } from '../controls/Input';
 
 
 //
@@ -43,7 +44,7 @@ const namedDays = [
 /**
  * DatePicker. Select a date with one click.
  */
-export const DatePicker: FC<DatePickerProps> = ({ name, value, onChange, shortcuts, placeholder }) => {
+export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({ name, value, onChange, shortcuts, placeholder }, ref) => {
 
     const { t, ready } = useTranslation();
 
@@ -154,15 +155,14 @@ export const DatePicker: FC<DatePickerProps> = ({ name, value, onChange, shortcu
     return (
         <div className="relative">
 
-            <div>{ready ? 'ready' : 'not-ready'}</div>
-            <div>{days}</div>
+            {/* <div>{ready ? 'ready' : 'not-ready'}</div>
+            <div>{days}</div> */}
 
             <div ref={setTarget as LegacyRef<HTMLDivElement> | undefined}>
-                <input key="input"
+                <Input key="input" ref={ref}
                     name={name} value={value} onChange={handleChange}
                     onFocus={handleFocus} onKeyDown={handleKeyDown}
                     placeholder={placeholder}
-                    className="w-full px-2 py-1 border border-content-border rounded"
                 />
             </div>
 
@@ -214,7 +214,7 @@ export const DatePicker: FC<DatePickerProps> = ({ name, value, onChange, shortcu
         </div>
     );
 
-};
+});
 
 
 //
