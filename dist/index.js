@@ -303,7 +303,7 @@ var SearchInput = React.forwardRef(function (_a, ref) {
 
 var ChooseFn = function (_a, ref) {
     var _b;
-    var _c = _a.scale, scale = _c === void 0 ? 'base' : _c, _d = _a.recentValues, recentValues = _d === void 0 ? [] : _d, items = _a.items, loading = _a.loading, error = _a.error, getItem = _a.getItem, searchItems = _a.searchItems, itemValue = _a.itemValue, itemMatch = _a.itemMatch, renderItem = _a.renderItem, CreateComponent = _a.CreateComponent, inline = _a.inline, _e = _a.align, align = _e === void 0 ? 'stretch' : _e; _a.className; var props = __rest(_a, ["scale", "recentValues", "items", "loading", "error", "getItem", "searchItems", "itemValue", "itemMatch", "renderItem", "CreateComponent", "inline", "align", "className"]);
+    var _c = _a.scale, scale = _c === void 0 ? 'base' : _c, name = _a.name, _d = _a.recentValues, recentValues = _d === void 0 ? [] : _d, items = _a.items, loading = _a.loading, error = _a.error, getItem = _a.getItem, searchItems = _a.searchItems, itemValue = _a.itemValue, itemMatch = _a.itemMatch, renderItem = _a.renderItem, CreateComponent = _a.CreateComponent, inline = _a.inline, _e = _a.align, align = _e === void 0 ? 'stretch' : _e; _a.className; var props = __rest(_a, ["scale", "name", "recentValues", "items", "loading", "error", "getItem", "searchItems", "itemValue", "itemMatch", "renderItem", "CreateComponent", "inline", "align", "className"]);
     var inputRef = useRef();
     useImperativeHandle(ref, function () { return inputRef.current; });
     var _f = useState(''), search = _f[0], setSearch = _f[1];
@@ -540,10 +540,10 @@ var ChooseFn = function (_a, ref) {
                         'left-0': align === 'start',
                         'right-0': align === 'end',
                         'inset-x-0 truncate': align === 'stretch'
-                    }), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [jsx(SearchInput, { ref: searchRef, scale: smallScale[scale || context.scale || 'base'], value: search, onChange: handleSearch, onKeyDown: handleKeyDown, disabled: internalError }, void 0), jsxs("div", __assign({ className: "" }, { children: [(searchRecents.length > 0) &&
+                    }), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [jsx(SearchInput, { ref: searchRef, scale: smallScale[scale || context.scale || 'base'], value: search, onChange: handleSearch, onKeyDown: handleKeyDown, disabled: internalError }, "input"), jsxs("div", __assign({ className: "" }, { children: [(searchRecents.length > 0) &&
                                     jsx("ul", __assign({ className: "m-0 p-0" }, { children: searchRecents.map(function (value, i) { return (jsx("li", __assign({ ref: listRecentsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, value); } : undefined, className: classnames('cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i && 'bg-primary-500') }, { children: renderItem(getItem(value)) }), value)); }) }), void 0), (searchResults.length > 0) &&
                                     jsxs(Fragment, { children: [jsx("div", { className: "h-px bg-control-border", style: { margin: '0.5em -0.75em' } }, void 0), jsx("ul", __assign({ className: "m-0 p-0" }, { children: searchResults.map(function (item, i) { return (jsx("li", __assign({ ref: listResultsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, itemValue(item)); } : undefined, className: classnames('cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i + searchRecents.length && 'bg-primary-500') }, { children: renderItem(item) }), itemValue(item))); }) }), void 0)] }, void 0), (search && searchResults.length === 0 && searchRecents.length === 0 && CreateComponent) &&
-                                    jsx(CreateComponent, { search: search, disabled: loading, onSubmit: handleSubmit }, void 0)] }), void 0)] }), void 0), jsx("input", __assign({ className: "hidden", type: "text", ref: inputRef }, props), void 0)] }), void 0));
+                                    jsx(CreateComponent, { search: search, disabled: loading, onSubmit: handleSubmit }, void 0)] }), void 0)] }), void 0), jsx("input", __assign({ className: "hidden", type: "text", name: name, ref: inputRef }, props), void 0)] }), void 0));
 };
 /**
  * Descripción
@@ -636,13 +636,18 @@ var namedDays = [
  * DatePicker. Select a date with one click.
  */
 var DatePicker = React.forwardRef(function (_a, ref) {
-    var name = _a.name, value = _a.value, onChange = _a.onChange, shortcuts = _a.shortcuts, placeholder = _a.placeholder;
-    var _b = useTranslation(), t = _b.t, ready = _b.ready;
-    var _c = useState(firstDate(value)), calendar = _c[0], setCalendar = _c[1];
-    useEffect(function () { return setCalendar(firstDate(value)); }, [value]);
-    var _d = useState(false), show = _d[0], setShow = _d[1];
-    var _e = useState(null), target = _e[0], setTarget = _e[1];
-    var _f = useState(null), popper = _f[0], setPopper = _f[1];
+    var _b;
+    var name = _a.name, shortcuts = _a.shortcuts, placeholder = _a.placeholder, props = __rest(_a, ["name", "shortcuts", "placeholder"]);
+    var inputRef = useRef();
+    useImperativeHandle(ref, function () { return inputRef.current; });
+    var _c = useState(''), internalValue = _c[0], setInternalValue = _c[1];
+    useEffect(function () { var _a; setInternalValue((_a = inputRef === null || inputRef === void 0 ? void 0 : inputRef.current) === null || _a === void 0 ? void 0 : _a.value); }, [(_b = inputRef === null || inputRef === void 0 ? void 0 : inputRef.current) === null || _b === void 0 ? void 0 : _b.value]);
+    var _d = useTranslation(), t = _d.t, ready = _d.ready;
+    var _e = useState(firstDate(internalValue)), calendar = _e[0], setCalendar = _e[1];
+    useEffect(function () { return setCalendar(firstDate(internalValue)); }, [internalValue]);
+    var _f = useState(false), show = _f[0], setShow = _f[1];
+    var _g = useState(null), target = _g[0], setTarget = _g[1];
+    var _h = useState(null), popper = _h[0], setPopper = _h[1];
     useOnOutsideClick(function () { if (show) {
         setShow(!show);
     } }, show, target, popper);
@@ -658,9 +663,9 @@ var DatePicker = React.forwardRef(function (_a, ref) {
         switch (e.keyCode) {
             case 9: // tab
             case 13: // enter
-                var ymd = parseDate(value);
-                if (ymd) {
-                    handleFinalChange(ymd);
+                // const ymd = parseDate(internalValue);
+                if (internalValue) {
+                    handleFinalChange();
                 }
                 handleHide();
                 break;
@@ -668,14 +673,22 @@ var DatePicker = React.forwardRef(function (_a, ref) {
                 handleShow();
         }
     };
-    var handleChange = function (e) {
-        onChange({ target: { name: name, value: e.target.value.replace(/[^0-9-]/g, '') } });
-    };
-    var handleFinalChange = function (ymd) {
-        var value = formatDate(ymd);
-        onChange({ target: { name: name, value: value } });
+    var handleFinalChange = function (value) {
+        // const value = formatDate(ymd);
+        //onChange({ target: { name, value } } as React.ChangeEvent<HTMLInputElement>);
         handleHide();
     };
+    function setRefValue(event, element, value) {
+        var _a;
+        event.preventDefault();
+        event.stopPropagation();
+        var inputSetter = (_a = Object === null || Object === void 0 ? void 0 : Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')) === null || _a === void 0 ? void 0 : _a.set;
+        if (inputSetter) {
+            inputSetter.call(element.current, value);
+            var inputEvent = new Event('input', { bubbles: true });
+            element.current.dispatchEvent(inputEvent);
+        }
+    }
     // navigation
     var handleClickPrevMonth = function () {
         var c = new Date(calendar);
@@ -692,14 +705,16 @@ var DatePicker = React.forwardRef(function (_a, ref) {
         c.setMonth(c.getMonth() + 1);
         setCalendar(c);
     };
-    var handleClickDate = function (d) {
-        handleFinalChange([d.getFullYear(), d.getMonth(), d.getDate()]);
+    var handleClickDate = function (e, d) {
+        var value = formatDate([d.getFullYear(), d.getMonth(), d.getDate()]);
+        setRefValue(e, inputRef, value);
+        handleFinalChange();
         handleHide();
     };
     // setup
     var today = new Date();
     today.setHours(12, 0, 0, 0);
-    var v = parseDate(value);
+    var v = parseDate(internalValue);
     var selected = v ? new Date(v[0], v[1], v[2], 12, 0, 0, 0) : null;
     // calculate
     var d = new Date(calendar.getTime());
@@ -729,11 +744,11 @@ var DatePicker = React.forwardRef(function (_a, ref) {
     // render
     var months = ready ? t('months', { defaultValue: ['Janruary', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], returnObjects: true }) : null;
     var days = ready ? t('shortDays', { defaultValue: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], returnObjects: true }) : [];
-    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: setTarget }, { children: jsx(Input, { ref: ref, name: name, value: value, onChange: handleChange, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder }, "input") }), void 0), ready && show &&
+    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: setTarget }, { children: jsx("input", __assign({ type: "text", className: "border", ref: inputRef, name: name, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder }, props), "input") }), void 0), ready && show &&
                 jsx("div", __assign({ ref: setPopper, className: "absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden" }, { children: jsxs("div", __assign({ className: "flex flex-row" }, { children: [jsxs("div", { children: [jsxs("div", __assign({ className: "px-2 py-1 flex flex-row items-center justify-between bg-gray-400" }, { children: [jsxs("div", __assign({ className: "flex-grow text-center font-bold" }, { children: [months[calendar.getMonth()], " ", calendar.getFullYear()] }), void 0), jsxs("div", { children: [jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickPrevMonth }, { children: jsx(SvgAngleLeftIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ className: "px-2 focus:outline-none", onClick: handleClickToday }, { children: jsx(SvgCircleIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ className: "focus:outline-none", onClick: handleClickNextMonth }, { children: jsx(SvgAngleRightIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0)] }, void 0)] }), void 0), jsxs("table", __assign({ className: "table-fixed text-center" }, { children: [jsx("thead", { children: jsx("tr", { children: days.map(function (d, i) { return jsx("th", __assign({ className: "w-10 px-1" }, { children: d }), i); }) }, void 0) }, void 0), jsx("tbody", __assign({ className: "cursor-pointer" }, { children: weeks.map(function (w) {
-                                                    return jsx("tr", { children: w.map(function (d) { return jsx("td", __assign({ onClick: function () { return handleClickDate(d); }, className: dayClasses(d) }, { children: d.getDate() }), d.getTime()); }) }, w[0].getTime());
+                                                    return jsx("tr", { children: w.map(function (d) { return jsx("td", __assign({ onClick: function (e) { return handleClickDate(e, d); }, className: dayClasses(d) }, { children: d.getDate() }), d.getTime()); }) }, w[0].getTime());
                                                 }) }), void 0)] }), void 0)] }, void 0), shortcuts &&
-                                jsx("div", __assign({ className: "flex flex-col justify-between bg-gray-300 cursor-pointer" }, { children: namedDays.map(function (s, i) { return jsx("div", __assign({ onClick: function () { return handleClickDate(s.date(new Date(today))); }, className: "px-2 hover:text-white hover:bg-secondary-500" }, { children: t("namedDays." + s.label, { defaultValue: s.label }) }), i); }) }), void 0)] }), void 0) }), void 0)] }), void 0));
+                                jsx("div", __assign({ className: "flex flex-col justify-between bg-gray-300 cursor-pointer" }, { children: namedDays.map(function (s, i) { return jsx("div", __assign({ onClick: function (e) { return handleClickDate(e, s.date(new Date(today))); }, className: "px-2 hover:text-white hover:bg-secondary-500" }, { children: t("namedDays." + s.label, { defaultValue: s.label }) }), i); }) }), void 0)] }), void 0) }), void 0)] }), void 0));
 });
 //
 // parse and format

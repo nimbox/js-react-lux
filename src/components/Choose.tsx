@@ -14,6 +14,7 @@ import {ComponentAlign} from './ComponentAlign';
 export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
 
     /** The default value for the choose component */
+    name: string;
     defaultValue?: string;
     value?: string;
     recentValues?: string[];
@@ -41,7 +42,7 @@ export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLA
 
 type ForwardRefFn<R> = <P = {}>(p: P & React.RefAttributes<R>) => ReactElement | null;
 
-export const ChooseFn = <T extends {}>({ scale = 'base', recentValues = [], items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, CreateComponent, inline, align = 'stretch', className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => {
+export const ChooseFn = <T extends {}>({ scale = 'base', name, recentValues = [], items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, CreateComponent, inline, align = 'stretch', className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => {
 
     const inputRef = useRef<HTMLInputElement>();
     useImperativeHandle(ref, () => inputRef.current!);
@@ -306,7 +307,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues = [], item
                     style={{ padding: '0.5em 0.75em 0.5em 0.75em' }}
                 >
 
-                    <SearchInput ref={searchRef as any}
+                    <SearchInput key="input" ref={searchRef as any}
                         scale={smallScale[scale || context.scale || 'base']}
                         value={search}
                         onChange={handleSearch}
@@ -362,7 +363,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', recentValues = [], item
                     </div>
                 </div>
             }
-            <input className="hidden" type="text" ref={inputRef as LegacyRef<HTMLInputElement> | undefined}  {...props} />
+            <input className="hidden" type="text" name={name} ref={inputRef as LegacyRef<HTMLInputElement> | undefined}  {...props} />
         </div>
 
     );
