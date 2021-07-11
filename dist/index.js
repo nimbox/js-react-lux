@@ -594,7 +594,7 @@ var Popup = function (_a) {
             { name: 'arrow', options: { padding: 4, element: arrow } },
         ]
     }), styles = _h.styles, attributes = _h.attributes;
-    return (jsxs(Fragment, { children: [React.cloneElement(children, { ref: setTarget }), visible && ReactDOM.createPortal(jsxs("div", __assign({ ref: setPopper }, attributes.popper, { className: "popper-element text-base rounded border border-control-border bg-white", style: styles.popper }, { children: [jsx(Component, {}, void 0), jsx("div", __assign({ ref: setArrow }, attributes.arrow, { className: "popper-arrow", style: styles.arrow }), void 0)] }), void 0), document.querySelector('body'))] }, void 0));
+    return (jsxs(Fragment, { children: [React.cloneElement(children, { ref: setTarget }), visible && ReactDOM.createPortal(jsxs("div", __assign({ ref: setPopper }, attributes.popper, { className: "z-30 popper-element text-base rounded border border-control-border bg-white", style: styles.popper }, { children: [jsx(Component, {}, void 0), jsx("div", __assign({ ref: setArrow }, attributes.arrow, { className: "popper-arrow", style: styles.arrow }), void 0)] }), void 0), document.querySelector('body'))] }, void 0));
 };
 
 var Postit = function (_a) {
