@@ -8,9 +8,6 @@ export const useOnOutsideClick = (onOutsideClick: () => void, enable: boolean, .
         if (enable) {
 
             const handleMouseDown = (event: MouseEvent) => {
-
-                console.log('UPDATING elements', elements);
-
                 const inside = elements.find(element => element && element.contains(event.target as Node));
                 if (!inside) {
                     onOutsideClick();

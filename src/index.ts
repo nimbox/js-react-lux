@@ -4,9 +4,11 @@ export * from './components/Card';
 export * from './components/Choose';
 export * from './components/Delay';
 export * from './components/Loading';
+export * from './components/Popup';
 export * from './components/Postit';
 export * from './components/Tabs';
 export * from './components/Tag';
+export * from './components/Toast';
 
 export * from './components/pickers/DatePicker';
 export * from './components/pickers/SwatchPicker';
@@ -25,5 +27,4 @@ export * from './components/RadioBar';
 export * from './hooks/useOnOutsideClick';
 export * from './hooks/useViewport';
 
-export * from './components/Toast';
 export * from './layouts/helium/Helium';
