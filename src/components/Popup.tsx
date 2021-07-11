@@ -37,7 +37,7 @@ export const Popup: FC<PopupProps> = ({ visible = false, onChangeVisible = (visi
         <>
             {React.cloneElement(children, { ref: setTarget })}
             {visible && ReactDOM.createPortal(
-                <div ref={setPopper} {...attributes.popper} className="popper-element text-base rounded border border-control-border bg-white" style={styles.popper}>
+                <div ref={setPopper} {...attributes.popper} className="z-30 popper-element text-base rounded border border-control-border bg-white" style={styles.popper}>
                     <Component/>
                     <div ref={setArrow} {...attributes.arrow} className="popper-arrow" style={styles.arrow} />
                 </div>,
