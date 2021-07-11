@@ -2,8 +2,8 @@ module.exports = {
 
     '.popper-element': {
 
-        'color': 'white',
-        'background-color': '#232323',
+        // 'color': 'white',
+        // 'background-color': '#232323',
 
         '.popper-arrow': {
 
@@ -15,6 +15,17 @@ module.exports = {
                 'content': '""',
                 'margin': 'auto',
                 'display': 'block',
+                'position': 'absolute',
+                'width': 0,
+                'height': 0,
+                'border-style': 'solid',
+            },
+
+            '&::after': {
+                'content': '""',
+                'margin': 'auto',
+                'display': 'block',
+                'position': 'absolute',
                 'width': 0,
                 'height': 0,
                 'border-style': 'solid',
@@ -27,8 +38,18 @@ module.exports = {
                 'right': 0,
                 'margin-right': '-0.75em',
                 '&::before': {
+                    'top': 0,
+                    'right': 0,
+                    'margin-right': '0.25em',
                     'border-width': '0.5em 0 0.5em 0.5em',
-                    'border-color': 'transparent transparent transparent #232323'
+                    'border-color': 'transparent transparent transparent #888888'
+                },
+                '&::after': {
+                    'top': 0,
+                    'right': 0,
+                    'margin-right': 'calc(0.25em + 1px)',
+                    'border-width': '0.5em 0 0.5em 0.5em',
+                    'border-color': 'transparent transparent transparent white'
                 }
             }
         },
@@ -39,8 +60,16 @@ module.exports = {
                 'left': 0,
                 'margin-bottom': '-1em',
                 '&::before': {
+                    'bottom': 0,
+                    'margin-bottom': '0.5em',
                     'border-width': '0.5em 0.5em 0 0.5em',
-                    'border-color': '#232323 transparent transparent transparent'
+                    'border-color': '#888888 transparent transparent transparent'
+                },
+                '&::after': {
+                    'bottom': 0,
+                    'margin-bottom': 'calc(0.5em + 1px)',
+                    'border-width': '0.5em 0.5em 0 0.5em',
+                    'border-color': 'white transparent transparent transparent'
                 }
             }
         },
@@ -50,8 +79,18 @@ module.exports = {
                 'left': 0,
                 'margin-left': '-0.75em',
                 '&::before': {
+                    'top': 0,
+                    'left': 0,
+                    'margin-left': '0.25em',
                     'border-width': '0.5em 0.5em 0.5em 0',
-                    'border-color': 'transparent #232323 transparent transparent'
+                    'border-color': 'transparent #888888 transparent transparent'
+                },
+                '&::after': {
+                    'top': 0,
+                    'left': 0,
+                    'margin-left': 'calc(0.25em + 1px)',
+                    'border-width': '0.5em 0.5em 0.5em 0',
+                    'border-color': 'transparent white transparent transparent'
                 }
             }
         },
@@ -62,8 +101,16 @@ module.exports = {
                 'left': 0,
                 'margin-top': '-0.5em',
                 '&::before': {
+                    'top': 0,
+                    'margin-top': 0,
                     'border-width': '0 0.5em 0.5em 0.5em',
-                    'border-color': 'transparent transparent #232323 transparent'
+                    'border-color': 'transparent transparent #888888 transparent'
+                },
+                '&::after': {
+                    'top': 0,
+                    'margin-top': '1px',
+                    'border-width': '0 0.5em 0.5em 0.5em',
+                    'border-color': 'transparent transparent white transparent'
                 }
             }
         }

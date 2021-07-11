@@ -235,7 +235,6 @@ var useOnOutsideClick = function (onOutsideClick, enable) {
     useEffect(function () {
         if (enable) {
             var handleMouseDown_1 = function (event) {
-                console.log('UPDATING elements', elements);
                 var inside = elements.find(function (element) { return element && element.contains(event.target); });
                 if (!inside) {
                     onOutsideClick();
@@ -582,6 +581,22 @@ var Loading = function (_a) {
         }, className) }, { children: jsxs("g", __assign({ fill: "none", fillRule: "evenodd", transform: "translate(1 1)", strokeWidth: "2" }, { children: [jsxs("circle", __assign({ cx: "22", cy: "22", r: "6", strokeOpacity: "0" }, { children: [jsx("animate", { attributeName: "r", begin: "1.5s", dur: "3s", values: "6;22", calcMode: "linear", repeatCount: "indefinite" }, void 0), jsx("animate", { attributeName: "stroke-opacity", begin: "1.5s", dur: "3s", values: "1;0", calcMode: "linear", repeatCount: "indefinite" }, void 0), jsx("animate", { attributeName: "stroke-width", begin: "1.5s", dur: "3s", values: "2;0", calcMode: "linear", repeatCount: "indefinite" }, void 0)] }), void 0), jsxs("circle", __assign({ cx: "22", cy: "22", r: "6", strokeOpacity: "0" }, { children: [jsx("animate", { attributeName: "r", begin: "3s", dur: "3s", values: "6;22", calcMode: "linear", repeatCount: "indefinite" }, void 0), jsx("animate", { attributeName: "stroke-opacity", begin: "3s", dur: "3s", values: "1;0", calcMode: "linear", repeatCount: "indefinite" }, void 0), jsx("animate", { attributeName: "stroke-width", begin: "3s", dur: "3s", values: "2;0", calcMode: "linear", repeatCount: "indefinite" }, void 0)] }), void 0), jsx("circle", __assign({ cx: "22", cy: "22", r: "8" }, { children: jsx("animate", { attributeName: "r", begin: "0s", dur: "1.5s", values: "6;1;2;3;4;5;6", calcMode: "linear", repeatCount: "indefinite" }, void 0) }), void 0)] }), void 0) }), void 0));
 };
 
+var Popup = function (_a) {
+    var _b = _a.visible, visible = _b === void 0 ? false : _b, _c = _a.onChangeVisible, onChangeVisible = _c === void 0 ? function (visible) { return null; } : _c, _d = _a.placement, placement = _d === void 0 ? 'bottom' : _d, Component = _a.Component, children = _a.children;
+    var _e = useState(null), target = _e[0], setTarget = _e[1];
+    var _f = useState(null), popper = _f[0], setPopper = _f[1];
+    var _g = useState(null), arrow = _g[0], setArrow = _g[1];
+    useOnOutsideClick(function () { return visible && onChangeVisible(false); }, visible, target, popper);
+    var _h = usePopper(target, popper, {
+        placement: placement,
+        modifiers: [
+            { name: 'offset', options: { offset: [0, 4] } },
+            { name: 'arrow', options: { padding: 4, element: arrow } },
+        ]
+    }), styles = _h.styles, attributes = _h.attributes;
+    return (jsxs(Fragment, { children: [React.cloneElement(children, { ref: setTarget }), visible && ReactDOM.createPortal(jsxs("div", __assign({ ref: setPopper }, attributes.popper, { className: "popper-element text-base rounded border border-control-border bg-white", style: styles.popper }, { children: [jsx(Component, {}, void 0), jsx("div", __assign({ ref: setArrow }, attributes.arrow, { className: "popper-arrow", style: styles.arrow }), void 0)] }), void 0), document.querySelector('body'))] }, void 0));
+};
+
 var Postit = function (_a) {
     var className = _a.className, children = _a.children;
     return (jsx("div", __assign({ className: "postit-container" }, { children: jsx("div", __assign({ className: classnames('postit', className) }, { children: children }), void 0) }), void 0));
@@ -611,6 +626,76 @@ var Tag = function (_a) {
     var crossBackgroundHoverColor = useMemo(function () { return tinycolor(crossBackgroundColor).darken(10).toString(); }, [crossBackgroundColor]);
     var _c = useState(crossBackgroundColor), hoverColor = _c[0], setHoverColor = _c[1];
     return (jsxs("span", __assign({ className: 'inline-flex flex-row items-baseline max-w-full rounded-full', style: { lineHeight: '1', paddingLeft: '0.25em', paddingTop: '0.125em', paddingRight: '0.5em', paddingBottom: '0.125em', color: color, backgroundColor: backgroundColor } }, { children: [jsx(Cross, { showCross: !!onDelete, onMouseEnter: function () { return setHoverColor(crossBackgroundHoverColor); }, onMouseLeave: function () { return setHoverColor(crossBackgroundColor); }, onClick: function () { return onDelete && onDelete(); }, crossColor: color, circleColor: onDelete ? hoverColor : crossBackgroundColor, className: "block flex-none self-center cursor-pointer", style: { marginRight: '0.125em' } }, void 0), jsx("span", __assign({ onClick: !onDelete ? onClick : undefined, className: classnames('block flex-1 max-w-full truncate', { 'hover:underline cursor-pointer': onClick && !onDelete }), style: { height: '1.2em', lineHeight: '1.2em' } }, { children: children }), void 0)] }), void 0));
+};
+
+//
+var Icon = {
+    'success': function (_a) {
+        var className = _a.className;
+        return jsx(SvgSuccessIcon, { className: className }, void 0);
+    },
+    'info': function (_a) {
+        var className = _a.className;
+        return jsx(SvgInfoIcon, { className: className }, void 0);
+    },
+    'warning': function (_a) {
+        var className = _a.className;
+        return jsx(SvgWarningIcon, { className: className }, void 0);
+    },
+    'danger': function (_a) {
+        var className = _a.className;
+        return jsx(SvgDangerIcon, { className: className }, void 0);
+    }
+};
+var Context$2 = createContext({ addToast: function (type, toast, dismiss) { return null; } });
+var useToast = function () {
+    var context = useContext(Context$2);
+    return { addToast: context.addToast };
+};
+//
+var ToastProvider = function (_a) {
+    _a.location; _a.autoDelete; var _d = _a.autoDeleteTimeout, autoDeleteTimeout = _d === void 0 ? 5000 : _d, children = _a.children;
+    var _e = useState([]), toasts = _e[0], setToasts = _e[1];
+    var addToast = function (type, item, dismiss) {
+        setToasts(function (current) {
+            var component = React.isValidElement(item) ? item : jsx(ToastContent, { title: item.title, description: item.description }, void 0);
+            var d = dismiss !== 0;
+            var dt = dismiss || autoDeleteTimeout;
+            return __spreadArray(__spreadArray([], current), [{ id: v4(), type: type, component: component, autoDelete: d, autoDeleteTimeout: dt }]);
+        });
+    };
+    var deleteToast = function (id) {
+        setToasts(function (current) { return current.filter(function (t) { return t.id !== id; }); });
+    };
+    return (jsxs(Context$2.Provider, __assign({ value: { addToast: addToast } }, { children: [children, jsx(ToastContainer, { children: toasts.map(function (t) {
+                    return jsx(Toast, __assign({}, t, { onDelete: function () { return deleteToast(t.id); } }), t.id);
+                }) }, void 0)] }), void 0));
+};
+var ToastContainer = function (_a) {
+    var children = _a.children;
+    return (jsx("div", __assign({ className: "fixed w-64 p-2 pt-20 inset-y-0 right-0 space-y-2 pointer-events-none" }, { children: children }), void 0));
+};
+var ToastContent = function (_a) {
+    var title = _a.title, description = _a.description;
+    return (jsxs(Fragment, { children: [title && jsx("div", __assign({ className: "font-bold" }, { children: title }), void 0), jsx("div", { children: description }, void 0)] }, void 0));
+};
+var Toast = function (_a) {
+    var type = _a.type, component = _a.component, _b = _a.autoDelete, autoDelete = _b === void 0 ? true : _b, _c = _a.autoDeleteTimeout, autoDeleteTimeout = _c === void 0 ? 5000 : _c, onDelete = _a.onDelete;
+    var _d = useState(true), initial = _d[0], setInitial = _d[1];
+    useEffect(function () {
+        var timeout = setTimeout(function () { return setInitial(false); }, 100);
+        return function () { return clearTimeout(timeout); };
+    }, []);
+    useEffect(function () {
+        var timeout = setTimeout(function () {
+            if (autoDelete) {
+                onDelete();
+            }
+        }, autoDeleteTimeout);
+        return function () { return clearTimeout(timeout); };
+    }, [autoDelete, autoDeleteTimeout, onDelete]);
+    var IconType = Icon[type];
+    return (jsxs("div", __assign({ className: classnames('px-4 py-4 flex flex-row items-start space-x-4 rounded transition-transform duration-250 transform translate-x-0', { 'translate-x-64': initial }, { 'text-white bg-primary-500': type === 'success' }, { 'text-white bg-info-500': type === 'info' }, { 'text-white bg-secondary-500': type === 'warning' }, { 'text-white bg-danger-500': type === 'danger' }, 'pointer-events-auto') }, { children: [jsx("div", { children: jsx(IconType, { className: "w-6 h-6 stroke-2" }, void 0) }, void 0), jsx("div", __assign({ className: "flex-grow" }, { children: component }), void 0), jsx("div", __assign({ onClick: onDelete, className: "cursor-pointer" }, { children: jsx(SvgCrossIcon, { className: "w-6 h-6 stroke-2" }, void 0) }), void 0)] }), void 0));
 };
 
 // constants
@@ -1217,14 +1302,14 @@ var TextArea = React.forwardRef(function (_a, ref) {
             'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none disabled:opacity-50', className) }), void 0));
 });
 
-var Context$2 = createContext({ scale: 'base', value: [], onChange: function () { return null; } });
+var Context$1 = createContext({ scale: 'base', value: [], onChange: function () { return null; } });
 var RadioBar = function (_a) {
     var _b = _a.scale, scale = _b === void 0 ? 'base' : _b, value = _a.value, onChange = _a.onChange, className = _a.className, children = _a.children;
-    return (jsx(Context$2.Provider, __assign({ value: { scale: scale, value: value, onChange: onChange } }, { children: jsx("div", __assign({ className: classnames(controlText[scale], 'inline-block truncate', 'border border-control-border rounded', className) }, { children: children }), void 0) }), void 0));
+    return (jsx(Context$1.Provider, __assign({ value: { scale: scale, value: value, onChange: onChange } }, { children: jsx("div", __assign({ className: classnames(controlText[scale], 'inline-block truncate', 'border border-control-border rounded', className) }, { children: children }), void 0) }), void 0));
 };
 RadioBar.Option = (function (_a) {
     var value = _a.value, className = _a.className, children = _a.children;
-    var context = useContext(Context$2);
+    var context = useContext(Context$1);
     var onClick = function () { return context.onChange(value); };
     return (jsx("div", __assign({ onClick: onClick, className: classnames('inline-block', controlScale[context.scale], 'border-control-border border-r last:border-r-0', {
             'text-white bg-primary-500': context.value === value
@@ -1247,76 +1332,6 @@ var ViewportProvider = function (_a) {
     return (jsx(ViewportContext.Provider, __assign({ value: size }, { children: children }), void 0));
 };
 var useViewport = function () { return useContext(ViewportContext); };
-
-//
-var Icon = {
-    'success': function (_a) {
-        var className = _a.className;
-        return jsx(SvgSuccessIcon, { className: className }, void 0);
-    },
-    'info': function (_a) {
-        var className = _a.className;
-        return jsx(SvgInfoIcon, { className: className }, void 0);
-    },
-    'warning': function (_a) {
-        var className = _a.className;
-        return jsx(SvgWarningIcon, { className: className }, void 0);
-    },
-    'danger': function (_a) {
-        var className = _a.className;
-        return jsx(SvgDangerIcon, { className: className }, void 0);
-    }
-};
-var Context$1 = createContext({ addToast: function (type, toast, dismiss) { return null; } });
-var useToast = function () {
-    var context = useContext(Context$1);
-    return { addToast: context.addToast };
-};
-//
-var ToastProvider = function (_a) {
-    _a.location; _a.autoDelete; var _d = _a.autoDeleteTimeout, autoDeleteTimeout = _d === void 0 ? 5000 : _d, children = _a.children;
-    var _e = useState([]), toasts = _e[0], setToasts = _e[1];
-    var addToast = function (type, item, dismiss) {
-        setToasts(function (current) {
-            var component = React.isValidElement(item) ? item : jsx(ToastContent, { title: item.title, description: item.description }, void 0);
-            var d = dismiss !== 0;
-            var dt = dismiss || autoDeleteTimeout;
-            return __spreadArray(__spreadArray([], current), [{ id: v4(), type: type, component: component, autoDelete: d, autoDeleteTimeout: dt }]);
-        });
-    };
-    var deleteToast = function (id) {
-        setToasts(function (current) { return current.filter(function (t) { return t.id !== id; }); });
-    };
-    return (jsxs(Context$1.Provider, __assign({ value: { addToast: addToast } }, { children: [children, jsx(ToastContainer, { children: toasts.map(function (t) {
-                    return jsx(Toast, __assign({}, t, { onDelete: function () { return deleteToast(t.id); } }), t.id);
-                }) }, void 0)] }), void 0));
-};
-var ToastContainer = function (_a) {
-    var children = _a.children;
-    return (jsx("div", __assign({ className: "fixed w-64 p-2 pt-20 inset-y-0 right-0 space-y-2 pointer-events-none" }, { children: children }), void 0));
-};
-var ToastContent = function (_a) {
-    var title = _a.title, description = _a.description;
-    return (jsxs(Fragment, { children: [title && jsx("div", __assign({ className: "font-bold" }, { children: title }), void 0), jsx("div", { children: description }, void 0)] }, void 0));
-};
-var Toast = function (_a) {
-    var type = _a.type, component = _a.component, _b = _a.autoDelete, autoDelete = _b === void 0 ? true : _b, _c = _a.autoDeleteTimeout, autoDeleteTimeout = _c === void 0 ? 5000 : _c, onDelete = _a.onDelete;
-    var _d = useState(true), initial = _d[0], setInitial = _d[1];
-    useEffect(function () {
-        var timeout = setTimeout(function () { return setInitial(false); }, 100);
-        return function () { return clearTimeout(timeout); };
-    }, []);
-    useEffect(function () {
-        var timeout = setTimeout(function () {
-            if (autoDelete) {
-                onDelete();
-            }
-        }, autoDeleteTimeout);
-        return function () { return clearTimeout(timeout); };
-    }, [autoDelete, autoDeleteTimeout, onDelete]);
-    var IconType = Icon[type];
-    return (jsxs("div", __assign({ className: classnames('px-4 py-4 flex flex-row items-start space-x-4 rounded transition-transform duration-250 transform translate-x-0', { 'translate-x-64': initial }, { 'text-white bg-primary-500': type === 'success' }, { 'text-white bg-info-500': type === 'info' }, { 'text-white bg-secondary-500': type === 'warning' }, { 'text-white bg-danger-500': type === 'danger' }, 'pointer-events-auto') }, { children: [jsx("div", { children: jsx(IconType, { className: "w-6 h-6 stroke-2" }, void 0) }, void 0), jsx("div", __assign({ className: "flex-grow" }, { children: component }), void 0), jsx("div", __assign({ onClick: onDelete, className: "cursor-pointer" }, { children: jsx(SvgCrossIcon, { className: "w-6 h-6 stroke-2" }, void 0) }), void 0)] }), void 0));
-};
 
 var Context = createContext({});
 var Helium = function (_a) {
@@ -1381,5 +1396,5 @@ Panel.Item = function (_a) {
     return (jsx("div", __assign({ className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, { children: children }), void 0));
 };
 
-export { Avatar, Button, Card, CheckBox, Choose, ChooseFn, Context$4 as Context, Control, Cross, DatePicker, Delay, Header, Helium, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Postit, Radio, RadioBar, RoundButton, Select, SwatchPicker, Tabs, Tag, TagPicker, TextArea, TimePicker, Toast, ToastContainer, ToastContent, ToastProvider, Toggle, ViewportProvider, useOnOutsideClick, useToast, useViewport };
+export { Avatar, Button, Card, CheckBox, Choose, ChooseFn, Context$4 as Context, Control, Cross, DatePicker, Delay, Header, Helium, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Popup, Postit, Radio, RadioBar, RoundButton, Select, SwatchPicker, Tabs, Tag, TagPicker, TextArea, TimePicker, Toast, ToastContainer, ToastContent, ToastProvider, Toggle, ViewportProvider, useOnOutsideClick, useToast, useViewport };
 //# sourceMappingURL=index.js.map
