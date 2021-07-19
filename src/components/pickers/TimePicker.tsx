@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { FC, LegacyRef, useContext, useEffect, useRef, useState } from 'react';
+import React, { FC, LegacyRef, Ref, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon, AngleUpIcon, CircleIcon } from '../../icons';
@@ -12,19 +12,19 @@ import { Input } from '../controls/Input';
 // DatePicker
 //
 
-interface TimePickerProps {
+interface TimePickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
     /** Name used for the input element and returned in the change event. */
     name?: string,
 
     /** String representation of the time. */
-    value: string,
+    value?: string,
 
 
     scale?: ComponentScale;
 
     /** Change event handler. */
-    onChange: React.ChangeEventHandler<HTMLInputElement>,
+    onChange?: React.ChangeEventHandler<HTMLInputElement>,
 
     /** Input placeholder. */
     placeholder?: string
@@ -42,7 +42,14 @@ const minutes = [15, 30, 45];
 /**
  * DatePicker. Select a date with one click.
  */
-export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>(({ name, value, scale = "base", onChange, placeholder }, ref) => {
+export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>(({ name, scale = "base", placeholder, ...props }, ref) => {
+
+    const inputRef = useRef<HTMLInputElement>();
+    useImperativeHandle(ref, () => inputRef.current!);
+
+    const [internalValue, setInternalValue] = useState('');
+
+    useEffect(() => { setInternalValue(inputRef?.current?.value as string); }, [inputRef?.current?.value]);
 
     const { ready } = useTranslation();
 
@@ -68,7 +75,7 @@ export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>((
         switch (e.keyCode) {
             case 9: // tab
             case 13: // enter
-                const hm = parseTime(value);
+                const hm = parseTime(internalValue);
                 if (hm) { handleFinalChange(hm); }
                 handleHide();
                 break;
@@ -79,15 +86,26 @@ export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>((
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        onChange({ target: { name, value: e.target.value } } as React.ChangeEvent<HTMLInputElement>);
+        //onChange({ target: { name, value: e.target.value } } as React.ChangeEvent<HTMLInputElement>);
     };
 
     const handleFinalChange = (hm: [number, number]) => {
-        const value = formatTime(hm);
-        onChange({ target: { name, value } } as React.ChangeEvent<HTMLInputElement>);
+        //const value = formatTime(hm);
+        //onChange({ target: { name, value } } as React.ChangeEvent<HTMLInputElement>);
         handleHide();
     };
 
+    function setRefValue(event: React.MouseEvent<HTMLElement, MouseEvent>, element: React.MutableRefObject<HTMLInputElement | undefined>, value: string) {
+        event.preventDefault();
+        event.stopPropagation();
+        const inputSetter = Object?.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+        if (inputSetter) {
+            inputSetter.call(element.current, value);
+            var inputEvent = new Event('input', { bubbles: true });
+            element.current!.dispatchEvent(inputEvent);
+
+        }
+    }
     // navigation
 
     const handleClickPrevHour = () => {
@@ -109,7 +127,9 @@ export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>((
         }
     };
 
-    const handleClickTime = (hm: [number, number]) => {
+    const handleClickTime = (e: React.MouseEvent<HTMLElement, MouseEvent>, hm: [number, number]) => {
+        const value = formatTime(hm);
+        setRefValue(e, inputRef, value);
         handleFinalChange(hm);
         handleHide();
     };
@@ -126,7 +146,7 @@ export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>((
 
     // setup
 
-    const v = parseTime(value);
+    const v = parseTime(internalValue);
     const selected = v ? v : [-1, -1];
 
     // format
@@ -151,21 +171,23 @@ export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>((
         <div className="relative">
 
             <div ref={setTarget as LegacyRef<HTMLDivElement> | undefined}>
-                <Input key="input" ref={ref}
-                    name={name} value={value} onChange={handleChange}
+                <Input key="input" ref={inputRef as Ref<HTMLInputElement> | undefined}
+                    name={name} 
+                    scale={context.scale ||scale}
                     onFocus={handleFocus} onKeyDown={handleKeyDown}
                     placeholder={placeholder}
+                    {...props}
                 />
             </div>
 
             {ready && show &&
-                <div ref={setPopper as LegacyRef<HTMLDivElement> | undefined} className="absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden">
+                <div ref={setPopper as LegacyRef<HTMLDivElement> | undefined} className="absolute left-0 mt-1 bg-content-fg border border-content-border rounded overflow-hidden z-10">
 
                     <div className="px-2 py-1 bg-gray-400">
                         <div className="text-right">
-                            <button className="focus:outline-none" onClick={handleClickPrevHour}><AngleUpIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
-                            <button className="px-2 focus:outline-none" onClick={handleClickNoon}><CircleIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
-                            <button className="focus:outline-none" onClick={handleClickNextHour}><AngleDownIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
+                            <button type="button" className="focus:outline-none" onClick={handleClickPrevHour}><AngleUpIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
+                            <button type="button" className="px-2 focus:outline-none" onClick={handleClickNoon}><CircleIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
+                            <button type="button" className="focus:outline-none" onClick={handleClickNextHour}><AngleDownIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
                         </div>
                     </div>
 
@@ -182,9 +204,9 @@ export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>((
                             <tbody className="cursor-pointer">
                                 {morning.map(h =>
                                     <tr key={h} className={hourClasses([h, 0])}>
-                                        <th className="text-base group-hover:text-content group-hover:bg-secondary-500" onClick={e => handleClickTime([h, 0])}>{formatHour(h)}</th>
+                                        <th className="text-base group-hover:text-content group-hover:bg-secondary-500" onClick={e => handleClickTime(e, [h, 0])}>{formatHour(h)}</th>
                                         {minutes.map(m =>
-                                            <td key={m} onClick={e => handleClickTime([h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
+                                            <td key={m} onClick={e => handleClickTime(e,[h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
                                         )}
                                     </tr>
                                 )}
@@ -193,9 +215,9 @@ export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>((
                             <tbody className="bg-gray-200 cursor-pointer">
                                 {noon.map(h =>
                                     <tr key={h} className={hourClasses([h, 0])}>
-                                        <th className="text-base group-hover:text-content group-hover:bg-secondary-500" onClick={e => handleClickTime([h, 0])}>{formatHour(h)}</th>
+                                        <th className="text-base group-hover:text-content group-hover:bg-secondary-500" onClick={e => handleClickTime(e, [h, 0])}>{formatHour(h)}</th>
                                         {minutes.map(m =>
-                                            <td key={m} onClick={e => handleClickTime([h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
+                                            <td key={m} onClick={e => handleClickTime(e,[h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
                                         )}
                                     </tr>
                                 )}
@@ -204,9 +226,9 @@ export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>((
                             <tbody className="cursor-pointer">
                                 {afternoon.map(h =>
                                     <tr key={h} className={hourClasses([h, 0])}>
-                                        <th className="text-base group-hover:text-content group-hover:bg-secondary-500" onClick={e => handleClickTime([h, 0])}>{formatHour(h)}</th>
+                                        <th className="text-base group-hover:text-content group-hover:bg-secondary-500" onClick={e => handleClickTime(e, [h, 0])}>{formatHour(h)}</th>
                                         {minutes.map(m =>
-                                            <td key={m} onClick={e => handleClickTime([h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
+                                            <td key={m} onClick={e => handleClickTime(e,[h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
                                         )}
                                     </tr>
                                 )}

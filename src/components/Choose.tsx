@@ -274,7 +274,6 @@ export const ChooseFn = <T extends {}>({ scale = 'base', name, recentValues = []
                 )}
                 style={inline ? { paddingRight: '1.25em' } : { padding: '0.5em 2em 0.5em 0.75em' }}
             >
-
                 {(!internalLoading && internalValue && renderItem(getItem(internalValue))) || <span>&nbsp;Placeholder</span>}
 
                 <div className="absolute inset-y-0 right-0 flex flex-row justify-center items-center cursor-pointer"
@@ -293,7 +292,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', name, recentValues = []
             {visible &&
                 <div ref={setPopper}
                     className={classnames(
-                        'absolute w-full max-h-72 overflow-auto border border-control-border rounded',
+                        'absolute w-full max-h-72 overflow-auto border border-control-border rounded z-10',
                         'mt-2 space-y-2',
                         'bg-white',
                         'rounded border border-control-border',
@@ -304,7 +303,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', name, recentValues = []
                             'inset-x-0 truncate': align === 'stretch'
                         },
                     )}
-                    style={{ padding: '0.5em 0.75em 0.5em 0.75em' }}
+                    style={{ padding: '0.5em 0.75em 0.5em 0.75em'}}
                 >
 
                     <SearchInput key="input" ref={searchRef as any}

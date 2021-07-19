@@ -1,7 +1,9 @@
-import React, { createRef, FC, LegacyRef, Ref, RefObject, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { createRef, FC, LegacyRef, Ref, RefObject, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleLeftIcon, AngleRightIcon, CircleIcon } from '../../icons';
+import { ComponentScale } from '../ComponentScale';
+import { Context } from '../controls/Control';
 import { Input } from '../controls/Input';
 
 
@@ -9,13 +11,15 @@ import { Input } from '../controls/Input';
 // DatePicker
 //
 
-interface DatePickerProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
+interface DatePickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
     /** Name used for the input element and returned in the change event. */
     name?: string,
 
     /** String representation of the date. */
     value?: string,
+
+    scale?: ComponentScale;
 
     /** Change event handler. */
     onChange?: React.ChangeEventHandler<HTMLInputElement>,
@@ -44,7 +48,7 @@ const namedDays = [
 /**
  * DatePicker. Select a date with one click.
  */
-export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({ name, shortcuts, placeholder, ...props }, ref) => {
+export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({ name, scale = 'base', shortcuts, placeholder, ...props }, ref) => {
 
     const inputRef = useRef<HTMLInputElement>();
     useImperativeHandle(ref, () => inputRef.current!);
@@ -63,6 +67,8 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
     const [target, setTarget] = useState<HTMLDivElement | null>(null);
     const [popper, setPopper] = useState<HTMLDivElement | null>(null);
     useOnOutsideClick(() => { if (show) { setShow(!show); } }, show, target, popper);
+
+    const context = useContext(Context);
 
     // handlers
 
@@ -84,7 +90,6 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        //setRefValue(e,inputRef,e.target.value);
         //onChange({ target: { name, value: e.target.value.replace(/[^0-9-]/g, '') } } as React.ChangeEvent<HTMLInputElement>);
     }
 
@@ -176,14 +181,11 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
 
     return (
         <div className="relative">
-
-            {/* <div>{ready ? 'ready' : 'not-ready'}</div>
-            <div>{days}</div> */}
-
             <div ref={setTarget as LegacyRef<HTMLDivElement> | undefined}>
-                <input key="input" type="text" className="border"
+                <Input type="text" 
                     ref={inputRef as Ref<HTMLInputElement> | undefined}
                     name={name} 
+                    scale={context.scale || scale}
                     onFocus={handleFocus} onKeyDown={handleKeyDown}
                     placeholder={placeholder} 
                     {...props}
@@ -191,7 +193,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
             </div>
 
             {ready && show &&
-                <div ref={setPopper as LegacyRef<HTMLDivElement> | undefined} className="absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden">
+                <div ref={setPopper as LegacyRef<HTMLDivElement> | undefined} className="absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden z-10">
 
                     <div className="flex flex-row">
 
@@ -202,9 +204,9 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
                                     {months![calendar.getMonth()]} {calendar.getFullYear()}
                                 </div>
                                 <div>
-                                    <button className="focus:outline-none" onClick={handleClickPrevMonth}><AngleLeftIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
-                                    <button className="px-2 focus:outline-none" onClick={handleClickToday}><CircleIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
-                                    <button className="focus:outline-none" onClick={handleClickNextMonth}><AngleRightIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
+                                    <button type="button" className="focus:outline-none" onClick={handleClickPrevMonth}><AngleLeftIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
+                                    <button type="button" className="px-2 focus:outline-none" onClick={handleClickToday}><CircleIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
+                                    <button type="button" className="focus:outline-none" onClick={handleClickNextMonth}><AngleRightIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
                                 </div>
                             </div>
 
