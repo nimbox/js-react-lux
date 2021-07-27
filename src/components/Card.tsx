@@ -17,13 +17,13 @@ export const Card: CardComponent = ({ className, children }) => (
 );
 
 Card.Header = ({ className, children }) => (
-    <div className={classnames('border-b border-content-border p-3', className)}>{children}</div>
+    <div className={classnames('border-b border-content-border', className)}>{children}</div>
 );
 
 Card.Body = ({ className, children }) => (
-    <div className={classnames('p-3', className)}>{children}</div>
+    <div className={className}>{children}</div>
 );
 
 Card.Footer = ({ className, children }) => (
-    <div className={classnames('border-t border-content-border p-3', className)}>{children}</div>
+    <div className={classnames('border-t border-content-border', className)}>{children}</div>
 );

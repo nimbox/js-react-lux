@@ -1,4 +1,5 @@
 export * from './components/Avatar';
+export * from './components/Badge';
 export * from './components/Buttons';
 export * from './components/Card';
 export * from './components/Choose';
@@ -9,6 +10,7 @@ export * from './components/Postit';
 export * from './components/Tabs';
 export * from './components/Tag';
 export * from './components/Toast';
+
 
 export * from './components/pickers/DatePicker';
 export * from './components/pickers/SwatchPicker';

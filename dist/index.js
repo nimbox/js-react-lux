@@ -112,6 +112,11 @@ var Avatar = function (_a) {
     }
 };
 
+var Badge = function (_a) {
+    var color = _a.color, backgroundColor = _a.backgroundColor, children = _a.children;
+    return (jsx("span", __assign({ className: "px-2 rounded", style: { color: color, backgroundColor: backgroundColor } }, { children: children }), void 0));
+};
+
 function SvgAngleDownIcon(props) {
     return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { className: "angle-down-icon_svg__st0", d: "M26 12l-10 8-10-8" }, void 0) }), void 0));
 }
@@ -216,15 +221,15 @@ var Card = function (_a) {
 };
 Card.Header = function (_a) {
     var className = _a.className, children = _a.children;
-    return (jsx("div", __assign({ className: classnames('border-b border-content-border p-3', className) }, { children: children }), void 0));
+    return (jsx("div", __assign({ className: classnames('border-b border-content-border', className) }, { children: children }), void 0));
 };
 Card.Body = function (_a) {
     var className = _a.className, children = _a.children;
-    return (jsx("div", __assign({ className: classnames('p-3', className) }, { children: children }), void 0));
+    return (jsx("div", __assign({ className: className }, { children: children }), void 0));
 };
 Card.Footer = function (_a) {
     var className = _a.className, children = _a.children;
-    return (jsx("div", __assign({ className: classnames('border-t border-content-border p-3', className) }, { children: children }), void 0));
+    return (jsx("div", __assign({ className: classnames('border-t border-content-border', className) }, { children: children }), void 0));
 };
 
 var useOnOutsideClick = function (onOutsideClick, enable) {
@@ -904,24 +909,32 @@ var sameWidth = {
     }
 };
 
+/* eslint-disable import/no-anonymous-default-export */
+var swatches = [
+    '#1abc9c', '#2ecc71', '#3498db', '#9b59b6', '#34495e',
+    '#16a085', '#27ae60', '#2980b9', '#8e44ad', '#2c3e50',
+    '#f1c40f', '#e67e22', '#e74c3c', '#ecf0f1', '#95a5a6',
+    '#f39c12', '#d35400', '#c0392b', '#bdc3c7', '#7f8c8d'
+];
+
 var placements = {
     'start': 'bottom-start',
     'stretch': 'bottom',
     'end': 'bottom-end'
 };
 var SwatchPicker = React.forwardRef(function (_a, ref) {
-    var values = _a.swatches, _b = _a.align, align = _b === void 0 ? 'stretch' : _b, popperClassName = _a.popperClassName, onFocus = _a.onFocus, onBlur = _a.onBlur; _a.ref; var props = __rest(_a, ["swatches", "align", "popperClassName", "onFocus", "onBlur", "ref"]);
-    var _c = useState(false), visible = _c[0], setVisible = _c[1];
-    var _d = useState(null), target = _d[0], setTarget = _d[1];
-    var _e = useState(null), popper = _e[0], setPopper = _e[1];
+    var _b = _a.swatches, values = _b === void 0 ? swatches : _b, _c = _a.align, align = _c === void 0 ? 'stretch' : _c, _d = _a.popperClassName, popperClassName = _d === void 0 ? 'grid grid-cols-5 w-32 overflow-hidden' : _d, onFocus = _a.onFocus, onBlur = _a.onBlur; _a.ref; var props = __rest(_a, ["swatches", "align", "popperClassName", "onFocus", "onBlur", "ref"]);
+    var _e = useState(false), visible = _e[0], setVisible = _e[1];
+    var _f = useState(null), target = _f[0], setTarget = _f[1];
+    var _g = useState(null), popper = _g[0], setPopper = _g[1];
     useOnOutsideClick(function () { return visible && setVisible(false); }, visible, target, popper);
     useImperativeHandle(ref, function () { return target; });
-    var _f = usePopper(target, popper, {
+    var _h = usePopper(target, popper, {
         placement: placements[align],
         modifiers: __spreadArray([
             { name: 'offset', options: { offset: [0, 4] } }
         ], (align === 'stretch' ? [sameWidth] : []))
-    }), styles = _f.styles, attributes = _f.attributes;
+    }), styles = _h.styles, attributes = _h.attributes;
     function handleOnFocus(event) {
         if (onFocus) {
             onFocus(event);
@@ -1412,5 +1425,5 @@ Panel.Item = function (_a) {
     return (jsx("div", __assign({ className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, { children: children }), void 0));
 };
 
-export { Avatar, Button, Card, CheckBox, Choose, ChooseFn, Context$4 as Context, Control, Cross, DatePicker, Delay, Header, Helium, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Popup, Postit, Radio, RadioBar, RoundButton, Select, SwatchPicker, Tabs, Tag, TagPicker, TextArea, TimePicker, Toast, ToastContainer, ToastContent, ToastProvider, Toggle, ViewportProvider, useOnOutsideClick, useToast, useViewport };
+export { Avatar, Badge, Button, Card, CheckBox, Choose, ChooseFn, Context$4 as Context, Control, Cross, DatePicker, Delay, Header, Helium, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Popup, Postit, Radio, RadioBar, RoundButton, Select, SwatchPicker, Tabs, Tag, TagPicker, TextArea, TimePicker, Toast, ToastContainer, ToastContent, ToastProvider, Toggle, ViewportProvider, useOnOutsideClick, useToast, useViewport };
 //# sourceMappingURL=index.js.map
