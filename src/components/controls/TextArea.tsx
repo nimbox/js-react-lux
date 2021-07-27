@@ -9,7 +9,7 @@ export interface TextAreaProps extends React.DetailedHTMLProps<React.TextareaHTM
     error?: boolean;
 }
 
-export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(({ scale, error, className, ...props }, ref) => {
+export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(({ scale, error, className, style, ...props }, ref) => {
 
     const context = useContext(Context);
 
@@ -22,7 +22,7 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(({ 
                 'focus:border-primary-500 focus:ring focus:ring-primary-500',
             'focus:ring-opacity-50 focus:outline-none disabled:opacity-50',
             className)}
-            style={{ padding: '0.5em 0.75em 0.5em 0.75em' }}
+            style={{ padding: '0.5em 0.75em 0.5em 0.75em', ...style }}
         />
     );
 

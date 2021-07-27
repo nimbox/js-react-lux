@@ -13,6 +13,8 @@ import {ComponentAlign} from './ComponentAlign';
 
 export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
 
+    noSearch?: boolean;
+
     /** The default value for the choose component */
     name: string;
     defaultValue?: string;
@@ -43,7 +45,7 @@ export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLA
 
 type ForwardRefFn<R> = <P = {}>(p: P & React.RefAttributes<R>) => ReactElement | null;
 
-export const ChooseFn = <T extends {}>({ scale = 'base', name, recentValues = [], items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, renderListItem, CreateComponent, inline, align = 'stretch', className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => {
+export const ChooseFn = <T extends {}>({ noSearch = false, scale = 'base', name, recentValues = [], items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, renderListItem, CreateComponent, inline, align = 'stretch', className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => {
 
     const inputRef = useRef<HTMLInputElement>();
     useImperativeHandle(ref, () => inputRef.current!);
@@ -307,13 +309,15 @@ export const ChooseFn = <T extends {}>({ scale = 'base', name, recentValues = []
                     style={{ padding: '0.5em 0.75em 0.5em 0.75em'}}
                 >
 
-                    <SearchInput key="input" ref={searchRef as any}
-                        scale={smallScale[scale || context.scale || 'base']}
-                        value={search}
-                        onChange={handleSearch}
-                        onKeyDown={handleKeyDown}
-                        disabled={internalError}
-                    />
+                    {!noSearch && 
+                        <SearchInput key="input" ref={searchRef as any}
+                            scale={smallScale[scale || context.scale || 'base']}
+                            value={search}
+                            onChange={handleSearch}
+                            onKeyDown={handleKeyDown}
+                            disabled={internalError}
+                        />
+                    }
 
                     <div className="">
 

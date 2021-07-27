@@ -1,9 +1,9 @@
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import tinycolor from 'tinycolor2';
+import React, { useEffect, createContext, useContext, useRef, useImperativeHandle, useState, useLayoutEffect, createRef, useCallback, useMemo } from 'react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import _debounce from 'lodash/debounce';
-import React, { useEffect, createContext, useContext, useRef, useImperativeHandle, useState, useLayoutEffect, createRef, useCallback, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import { usePopper } from 'react-popper';
 import { v4 } from 'uuid';
@@ -112,10 +112,10 @@ var Avatar = function (_a) {
     }
 };
 
-var Badge = function (_a) {
+var Badge = React.forwardRef(function (_a, ref) {
     var color = _a.color, backgroundColor = _a.backgroundColor, children = _a.children;
-    return (jsx("span", __assign({ className: "px-2 rounded", style: { color: color, backgroundColor: backgroundColor } }, { children: children }), void 0));
-};
+    return (jsx("span", __assign({ ref: ref, className: "px-2 rounded", style: { color: color, backgroundColor: backgroundColor } }, { children: children }), void 0));
+});
 
 function SvgAngleDownIcon(props) {
     return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { className: "angle-down-icon_svg__st0", d: "M26 12l-10 8-10-8" }, void 0) }), void 0));
@@ -307,32 +307,32 @@ var SearchInput = React.forwardRef(function (_a, ref) {
 
 var ChooseFn = function (_a, ref) {
     var _b;
-    var _c = _a.scale, scale = _c === void 0 ? 'base' : _c, name = _a.name, _d = _a.recentValues, recentValues = _d === void 0 ? [] : _d, items = _a.items, loading = _a.loading, error = _a.error, getItem = _a.getItem, searchItems = _a.searchItems, itemValue = _a.itemValue, itemMatch = _a.itemMatch, renderItem = _a.renderItem, renderListItem = _a.renderListItem, CreateComponent = _a.CreateComponent, inline = _a.inline, _e = _a.align, align = _e === void 0 ? 'stretch' : _e; _a.className; var props = __rest(_a, ["scale", "name", "recentValues", "items", "loading", "error", "getItem", "searchItems", "itemValue", "itemMatch", "renderItem", "renderListItem", "CreateComponent", "inline", "align", "className"]);
+    var _c = _a.noSearch, noSearch = _c === void 0 ? false : _c, _d = _a.scale, scale = _d === void 0 ? 'base' : _d, name = _a.name, _e = _a.recentValues, recentValues = _e === void 0 ? [] : _e, items = _a.items, loading = _a.loading, error = _a.error, getItem = _a.getItem, searchItems = _a.searchItems, itemValue = _a.itemValue, itemMatch = _a.itemMatch, renderItem = _a.renderItem, renderListItem = _a.renderListItem, CreateComponent = _a.CreateComponent, inline = _a.inline, _f = _a.align, align = _f === void 0 ? 'stretch' : _f; _a.className; var props = __rest(_a, ["noSearch", "scale", "name", "recentValues", "items", "loading", "error", "getItem", "searchItems", "itemValue", "itemMatch", "renderItem", "renderListItem", "CreateComponent", "inline", "align", "className"]);
     var inputRef = useRef();
     useImperativeHandle(ref, function () { return inputRef.current; });
-    var _f = useState(''), search = _f[0], setSearch = _f[1];
-    var _g = useState(''), internalValue = _g[0], setInternalValue = _g[1];
+    var _g = useState(''), search = _g[0], setSearch = _g[1];
+    var _h = useState(''), internalValue = _h[0], setInternalValue = _h[1];
     var context = useContext(Context$4);
-    var _h = useState(false), visible = _h[0], setVisible = _h[1];
-    var _j = useState(false), active = _j[0], setActive = _j[1];
+    var _j = useState(false), visible = _j[0], setVisible = _j[1];
+    var _k = useState(false), active = _k[0], setActive = _k[1];
     useLayoutEffect(function () { setActive(visible); }, [visible]);
     var target = useRef(null);
-    var _k = useState(null), popper = _k[0], setPopper = _k[1];
+    var _l = useState(null), popper = _l[0], setPopper = _l[1];
     useOnOutsideClick(function () { if (internalError) {
         reset();
     } if (visible) {
         setVisible(false);
     } }, visible, target.current, popper);
-    var _l = useState(loading || false), internalLoading = _l[0], setInternalLoading = _l[1];
-    var _m = useState(error || false), internalError = _m[0], setInternalError = _m[1];
-    var _o = useState([]), searchResults = _o[0], setSearchResults = _o[1];
-    var _p = useState(recentValues), searchRecents = _p[0], setSearchRecents = _p[1];
+    var _m = useState(loading || false), internalLoading = _m[0], setInternalLoading = _m[1];
+    var _o = useState(error || false), internalError = _o[0], setInternalError = _o[1];
+    var _p = useState([]), searchResults = _p[0], setSearchResults = _p[1];
+    var _q = useState(recentValues), searchRecents = _q[0], setSearchRecents = _q[1];
     var searchRef = useRef();
-    var _q = useState(null), cursor = _q[0], setCursor = _q[1];
+    var _r = useState(null), cursor = _r[0], setCursor = _r[1];
     var searchRecentsLength = searchRecents.length;
-    var _r = React.useState([]), listRecentsRefs = _r[0], setlistRecentsRefs = _r[1];
+    var _s = React.useState([]), listRecentsRefs = _s[0], setlistRecentsRefs = _s[1];
     var searchResultsLength = searchResults.length;
-    var _s = React.useState([]), listResultsRefs = _s[0], setlistResultsRefs = _s[1];
+    var _t = React.useState([]), listResultsRefs = _t[0], setlistResultsRefs = _t[1];
     useEffect(function () {
         setlistRecentsRefs(Array(searchRecentsLength).fill(createRef(), 0, searchRecentsLength).map(function (_, i) { return listRecentsRefs[i] || createRef(); }));
     }, [searchRecentsLength]);
@@ -544,7 +544,8 @@ var ChooseFn = function (_a, ref) {
                         'left-0': align === 'start',
                         'right-0': align === 'end',
                         'inset-x-0 truncate': align === 'stretch'
-                    }), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [jsx(SearchInput, { ref: searchRef, scale: smallScale[scale || context.scale || 'base'], value: search, onChange: handleSearch, onKeyDown: handleKeyDown, disabled: internalError }, "input"), jsxs("div", __assign({ className: "" }, { children: [(searchRecents.length > 0) &&
+                    }), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [!noSearch &&
+                            jsx(SearchInput, { ref: searchRef, scale: smallScale[scale || context.scale || 'base'], value: search, onChange: handleSearch, onKeyDown: handleKeyDown, disabled: internalError }, "input"), jsxs("div", __assign({ className: "" }, { children: [(searchRecents.length > 0) &&
                                     jsx("ul", __assign({ className: "m-0 p-0" }, { children: searchRecents.map(function (value, i) { return (jsx("li", __assign({ ref: listRecentsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, value); } : undefined, className: classnames('cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i && 'bg-primary-500') }, { children: renderListItem ? renderListItem(getItem(value)) : renderItem(getItem(value)) }), value)); }) }), void 0), (searchResults.length > 0) &&
                                     jsxs(Fragment, { children: [jsx("div", { className: "h-px bg-control-border", style: { margin: '0.5em -0.75em' } }, void 0), jsx("ul", __assign({ className: "m-0 p-0" }, { children: searchResults.map(function (item, i) { return (jsx("li", __assign({ ref: listResultsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, itemValue(item)); } : undefined, className: classnames('cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i + searchRecents.length && 'bg-primary-500') }, { children: renderListItem ? renderListItem(item) : renderItem(item) }), itemValue(item))); }) }), void 0)] }, void 0), (search && searchResults.length === 0 && searchRecents.length === 0 && CreateComponent) &&
                                     jsx(CreateComponent, { search: search, disabled: loading, onSubmit: handleSubmit }, void 0)] }), void 0)] }), void 0), jsx("input", __assign({ className: "hidden", type: "text", name: name, ref: inputRef }, props), void 0)] }), void 0));
@@ -1324,11 +1325,11 @@ Select.Option = function (_a) {
 };
 
 var TextArea = React.forwardRef(function (_a, ref) {
-    var scale = _a.scale, error = _a.error, className = _a.className, props = __rest(_a, ["scale", "error", "className"]);
+    var scale = _a.scale, error = _a.error, className = _a.className, style = _a.style, props = __rest(_a, ["scale", "error", "className", "style"]);
     var context = useContext(Context$4);
     return (jsx("textarea", __assign({}, props, { ref: ref, className: classnames(controlText[scale || context.scale || 'base'], 'block w-full rounded border border-control-border', error || context.error ?
             'border-danger-500 focus:border-danger-500 focus:ring focus:ring-danger-500' :
-            'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none disabled:opacity-50', className), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }), void 0));
+            'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none disabled:opacity-50', className), style: __assign({ padding: '0.5em 0.75em 0.5em 0.75em' }, style) }), void 0));
 });
 
 var Context$1 = createContext({ scale: 'base', value: [], onChange: function () { return null; } });

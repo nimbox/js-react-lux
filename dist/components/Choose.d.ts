@@ -2,6 +2,7 @@ import React, { ChangeEventHandler, ReactElement, Ref } from 'react';
 import { ComponentScale } from './ComponentScale';
 import { ComponentAlign } from './ComponentAlign';
 export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
+    noSearch?: boolean;
     /** The default value for the choose component */
     name: string;
     defaultValue?: string;
@@ -28,7 +29,7 @@ export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLA
     className?: string;
 }
 declare type ForwardRefFn<R> = <P = {}>(p: P & React.RefAttributes<R>) => ReactElement | null;
-export declare const ChooseFn: <T extends {}>({ scale, name, recentValues, items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, renderListItem, CreateComponent, inline, align, className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => JSX.Element;
+export declare const ChooseFn: <T extends {}>({ noSearch, scale, name, recentValues, items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, renderListItem, CreateComponent, inline, align, className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => JSX.Element;
 /**
  * Descripción
  *

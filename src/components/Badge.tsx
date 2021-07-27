@@ -1,13 +1,13 @@
-import { FC } from 'react';
+import React from 'react';
 
 
-export interface BadgeProps {
+export interface BadgeProps extends React.HTMLProps<HTMLSpanElement> {
     color: string;
     backgroundColor?: string;
 }
 
-export const Badge: FC<BadgeProps> = ({ color, backgroundColor, children }) => {
+export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(({ color, backgroundColor, children }, ref) => {
     return (
-        <span className="px-2 rounded" style={{ color, backgroundColor }}>{children}</span>
+        <span ref={ref} className="px-2 rounded" style={{ color, backgroundColor }}>{children}</span>
     );
-};
+});
