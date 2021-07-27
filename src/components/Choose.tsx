@@ -30,6 +30,7 @@ export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLA
     itemValue: (item: T) => string;
     itemMatch: (q: string, item: T) => boolean;
     renderItem: (item: T) => React.ReactNode;
+    renderListItem?: (item: T) => React.ReactNode;
 
     CreateComponent?: React.FC<{ search: string; disabled: boolean; onSubmit: (submitting: void | Promise<void>) => void }>
 
@@ -42,7 +43,7 @@ export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLA
 
 type ForwardRefFn<R> = <P = {}>(p: P & React.RefAttributes<R>) => ReactElement | null;
 
-export const ChooseFn = <T extends {}>({ scale = 'base', name, recentValues = [], items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, CreateComponent, inline, align = 'stretch', className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => {
+export const ChooseFn = <T extends {}>({ scale = 'base', name, recentValues = [], items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, renderListItem, CreateComponent, inline, align = 'stretch', className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => {
 
     const inputRef = useRef<HTMLInputElement>();
     useImperativeHandle(ref, () => inputRef.current!);
@@ -274,7 +275,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', name, recentValues = []
                 )}
                 style={inline ? { paddingRight: '1.25em' } : { padding: '0.5em 2em 0.5em 0.75em' }}
             >
-                {(!internalLoading && internalValue && renderItem(getItem(internalValue))) || <span>&nbsp;Placeholder</span>}
+                {(!internalLoading && internalValue && renderItem(getItem(internalValue))) || <span>&nbsp;</span>}
 
                 <div className="absolute inset-y-0 right-0 flex flex-row justify-center items-center cursor-pointer"
                     style={{ width: '1em', marginRight: inline ? '0' : '0.5em' }}>
@@ -292,7 +293,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', name, recentValues = []
             {visible &&
                 <div ref={setPopper}
                     className={classnames(
-                        'absolute w-full max-h-72 overflow-auto border border-control-border rounded z-10',
+                        'absolute max-h-72 overflow-auto border border-control-border rounded z-10',
                         'mt-2 space-y-2',
                         'bg-white',
                         'rounded border border-control-border',
@@ -328,7 +329,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', name, recentValues = []
                                             cursor === i && 'bg-primary-500'
                                         )}
                                     >
-                                        {renderItem(getItem(value))}
+                                        {renderListItem ? renderListItem(getItem(value)) : renderItem(getItem(value))}
                                     </li>
                                 ))}
                             </ul>
@@ -348,7 +349,7 @@ export const ChooseFn = <T extends {}>({ scale = 'base', name, recentValues = []
                                                 cursor === i + searchRecents!.length && 'bg-primary-500'
                                             )}
                                         >
-                                            {renderItem(item)}
+                                            {renderListItem ? renderListItem(item) : renderItem(item)}
                                         </li>
                                     ))}
                                 </ul>

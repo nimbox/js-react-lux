@@ -75,14 +75,25 @@ export interface MoreOptionsButtonProps {
 }
 
 export const MoreOptionsButton: FC<MoreOptionsButtonProps> =
-    ({ value = false, onChange, className, children, ...props }) => {
+    ({ scale= 'base', value = false, onChange, className, children, ...props }) => {
         const { t } = useTranslation();
         return (
             <>
-                <Button type="button" link={true} onClick={() => onChange(!value)} {...props}>
-                    <AngleRightIcon className={classnames('inline w-4 h-4 mr-1 stroke-current stroke-2 transform', { 'rotate-90': value }, 'transition duration-150 ease-in-out transtition-transform')} />
-                    {!value ? t('more-options') : t('less-options')}
-                </Button>
+                <span className={classnames(
+                    controlText[scale],
+                    'relative text-primary-500 hover:text-primary-700 cursor-pointer',className)}
+                    onClick={() => onChange(!value)} {...props}>
+                    
+                    <span className="absolute inset-y-0 left-0 flex flex-row justify-center items-center"
+                        style={{ width: '1em' }}>
+                        <AngleRightIcon width="1em" height="1em" 
+                            className={classnames('inline stroke-current stroke-2 transform', { 'rotate-90': value }, 'transition duration-150 ease-in-out transtition-transform')} />
+                    </span>
+
+                    <span style={{paddingLeft: '1.25em' }} >
+                        {!value ? t('more-options') : t('less-options')}
+                    </span>
+                </span>
                 {value && children}
             </>
         );
