@@ -6,12 +6,13 @@ import { usePopper } from 'react-popper';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { Input, InputProps } from '../controls/Input';
 import { sameWidth } from '../../utils/popper-modifiers';
+import swatches from '../../utils/flat-colors';
 
 
 export type SwatchPickerAlign = 'start' | 'stretch' | 'end';
 
 export interface SwatchPickerProps extends InputProps {
-    swatches: string[];
+    swatches?: string[];
     align?: SwatchPickerAlign;
     popperClassName?: string;
 }
@@ -22,7 +23,7 @@ const placements: { [key in SwatchPickerAlign]: Placement } = {
     'end': 'bottom-end'
 };
 
-export const SwatchPicker = React.forwardRef<HTMLInputElement, SwatchPickerProps>(({ swatches: values, align = 'stretch', popperClassName, onFocus, onBlur, ref: oldRef, ...props }, ref) => {
+export const SwatchPicker = React.forwardRef<HTMLInputElement, SwatchPickerProps>(({ swatches: values = swatches, align = 'stretch', popperClassName = 'grid grid-cols-5 w-32 overflow-hidden', onFocus, onBlur, ref: oldRef, ...props }, ref) => {
 
     const [visible, setVisible] = useState(false);
 
