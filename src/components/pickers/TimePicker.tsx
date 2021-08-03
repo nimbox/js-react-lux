@@ -176,6 +176,7 @@ export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>((
                     scale={context.scale ||scale}
                     onFocus={handleFocus} onKeyDown={handleKeyDown}
                     placeholder={placeholder}
+                    autoComplete="off"
                     {...props}
                 />
             </div>

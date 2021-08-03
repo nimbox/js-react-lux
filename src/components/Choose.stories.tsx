@@ -86,7 +86,7 @@ export const Controlled = () => {
         <form onSubmit={handleSubmit}>
             {/* <div className="grid grid-cols-3 gap-4"> */}
                 {/* <Input /> */}
-                <Choose
+                <Choose noSearch
                     value={inputValue}
                     onChange={handleChange}
                     //recentValues={recent}
@@ -120,7 +120,7 @@ export const UnControlled = () => {
         <form onSubmit={handleSubmit} >
             <div className="grid grid-cols-3 gap-4">
                 <Input type="text" />
-                <Choose
+                <Choose noSearch
                     defaultValue="id1"
                     ref={ref}
                     recentValues={recent}
@@ -279,7 +279,6 @@ export const Creatable = () => {
                     renderItem={renderItem}
                     itemValue={itemValue}
                     itemMatch={itemMatch}
-                    creatable
                     CreateComponent={CreateItem}
                     scale="base" />
                 <SearchInput />

@@ -307,7 +307,7 @@ var SearchInput = React.forwardRef(function (_a, ref) {
 
 var ChooseFn = function (_a, ref) {
     var _b;
-    var _c = _a.noSearch, noSearch = _c === void 0 ? false : _c, _d = _a.scale, scale = _d === void 0 ? 'base' : _d, name = _a.name, _e = _a.recentValues, recentValues = _e === void 0 ? [] : _e, items = _a.items, loading = _a.loading, error = _a.error, getItem = _a.getItem, searchItems = _a.searchItems, itemValue = _a.itemValue, itemMatch = _a.itemMatch, renderItem = _a.renderItem, renderListItem = _a.renderListItem, CreateComponent = _a.CreateComponent, inline = _a.inline, _f = _a.align, align = _f === void 0 ? 'stretch' : _f; _a.className; var props = __rest(_a, ["noSearch", "scale", "name", "recentValues", "items", "loading", "error", "getItem", "searchItems", "itemValue", "itemMatch", "renderItem", "renderListItem", "CreateComponent", "inline", "align", "className"]);
+    var _c = _a.noSearch, noSearch = _c === void 0 ? false : _c, _d = _a.scale, scale = _d === void 0 ? 'base' : _d, name = _a.name, _e = _a.recentValues, recentValues = _e === void 0 ? [] : _e, items = _a.items, loading = _a.loading, error = _a.error, getItem = _a.getItem, searchItems = _a.searchItems, itemValue = _a.itemValue, itemMatch = _a.itemMatch, renderItem = _a.renderItem, renderListItem = _a.renderListItem, CreateComponent = _a.CreateComponent, inline = _a.inline, _f = _a.align, align = _f === void 0 ? 'stretch' : _f, className = _a.className, dropdownClassName = _a.dropdownClassName, props = __rest(_a, ["noSearch", "scale", "name", "recentValues", "items", "loading", "error", "getItem", "searchItems", "itemValue", "itemMatch", "renderItem", "renderListItem", "CreateComponent", "inline", "align", "className", "dropdownClassName"]);
     var inputRef = useRef();
     useImperativeHandle(ref, function () { return inputRef.current; });
     var _g = useState(''), search = _g[0], setSearch = _g[1];
@@ -325,7 +325,7 @@ var ChooseFn = function (_a, ref) {
     } }, visible, target.current, popper);
     var _m = useState(loading || false), internalLoading = _m[0], setInternalLoading = _m[1];
     var _o = useState(error || false), internalError = _o[0], setInternalError = _o[1];
-    var _p = useState([]), searchResults = _p[0], setSearchResults = _p[1];
+    var _p = useState(noSearch && items ? items : []), searchResults = _p[0], setSearchResults = _p[1];
     var _q = useState(recentValues), searchRecents = _q[0], setSearchRecents = _q[1];
     var searchRef = useRef();
     var _r = useState(null), cursor = _r[0], setCursor = _r[1];
@@ -340,18 +340,22 @@ var ChooseFn = function (_a, ref) {
         setlistResultsRefs(Array(searchResultsLength).fill(createRef(), 0, searchResultsLength).map(function (_, i) { return listResultsRefs[i] || createRef(); }));
     }, [searchResultsLength]);
     useEffect(function () { var _a; setInternalValue((_a = inputRef === null || inputRef === void 0 ? void 0 : inputRef.current) === null || _a === void 0 ? void 0 : _a.value); }, [(_b = inputRef === null || inputRef === void 0 ? void 0 : inputRef.current) === null || _b === void 0 ? void 0 : _b.value]);
-    useEffect(function () { if (visible) {
+    useEffect(function () { if (visible && !noSearch) {
         searchRef.current.focus();
     } }, [visible]);
-    useEffect(function () { setInternalLoading(loading); }, [loading]);
+    useEffect(function () { setInternalLoading(loading); if (noSearch && items && !loading) {
+        setSearchResults(items);
+    } }, [loading]);
     useEffect(function () { setInternalError(error); }, [error]);
     var reset = function () {
         setVisible(false);
-        setSearch('');
-        setSearchRecents(recentValues);
-        setSearchResults([]);
         setCursor(null);
         setInternalError(false);
+        if (!noSearch) {
+            setSearch('');
+            setSearchRecents(recentValues);
+            setSearchResults([]);
+        }
     };
     function setRefValue(event, element, value) {
         var _a;
@@ -374,14 +378,18 @@ var ChooseFn = function (_a, ref) {
                 event.preventDefault();
                 if (cursor != null && cursor > 0) {
                     if (cursor < recentsLength) {
-                        (_a = listRecentsRefs[cursor].current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({ block: "center",
+                        (_a = listRecentsRefs[cursor].current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
+                            block: "center",
                             inline: "start",
-                            behavior: "smooth" });
+                            behavior: "smooth"
+                        });
                     }
                     else {
-                        (_b = listResultsRefs[cursor - searchRecents.length].current) === null || _b === void 0 ? void 0 : _b.scrollIntoView({ block: "center",
+                        (_b = listResultsRefs[cursor - searchRecents.length].current) === null || _b === void 0 ? void 0 : _b.scrollIntoView({
+                            block: "center",
                             inline: "start",
-                            behavior: "smooth" });
+                            behavior: "smooth"
+                        });
                     }
                     setCursor(cursor - 1);
                 }
@@ -391,12 +399,16 @@ var ChooseFn = function (_a, ref) {
                 if (cursor != null && cursor < (searchLength + recentsLength) - 1) {
                     if (cursor >= 0) {
                         if (cursor < recentsLength) {
-                            (_c = listRecentsRefs[cursor].current) === null || _c === void 0 ? void 0 : _c.scrollIntoView({ block: "center", inline: "end",
-                                behavior: "smooth" });
+                            (_c = listRecentsRefs[cursor].current) === null || _c === void 0 ? void 0 : _c.scrollIntoView({
+                                block: "center", inline: "end",
+                                behavior: "smooth"
+                            });
                         }
                         else {
-                            (_d = listResultsRefs[cursor - recentsLength].current) === null || _d === void 0 ? void 0 : _d.scrollIntoView({ block: "center", inline: "end",
-                                behavior: "smooth" });
+                            (_d = listResultsRefs[cursor - recentsLength].current) === null || _d === void 0 ? void 0 : _d.scrollIntoView({
+                                block: "center", inline: "end",
+                                behavior: "smooth"
+                            });
                         }
                     }
                     setCursor(cursor + 1);
@@ -536,19 +548,20 @@ var ChooseFn = function (_a, ref) {
         });
     }); };
     return (jsxs("div", __assign({ className: classnames('relative inline-block', inline ? 'max-w-full' : 'w-full', controlText[scale || context.scale || 'base']) }, { children: [jsxs("div", __assign({ ref: target, tabIndex: active ? -1 : 0, onFocus: function () { if (!visible)
-                    setVisible(true); }, onMouseDown: function (e) { e.preventDefault(); setVisible(!visible); }, className: classnames('relative rounded', inline || 'border border-control-border', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none'), style: inline ? { paddingRight: '1.25em' } : { padding: '0.5em 2em 0.5em 0.75em' } }, { children: [(!internalLoading && internalValue && renderItem(getItem(internalValue))) || jsx("span", { children: "\u00A0" }, void 0), jsxs("div", __assign({ className: "absolute inset-y-0 right-0 flex flex-row justify-center items-center cursor-pointer", style: { width: '1em', marginRight: inline ? '0' : '0.5em' } }, { children: [internalLoading &&
+                    setVisible(true); }, onMouseDown: function (e) { e.preventDefault(); setVisible(!visible); }, onKeyDown: noSearch ? handleKeyDown : undefined, className: classnames('relative rounded', inline || 'border border-control-border', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none', className), style: inline ? { paddingRight: '1.25em' } : { padding: '0.5em 2em 0.5em 0.75em' } }, { children: [(!internalLoading && internalValue && renderItem(getItem(internalValue))) || jsx("span", { children: "\u00A0" }, void 0), jsxs("div", __assign({ className: "absolute inset-y-0 right-0 flex flex-row justify-center items-center cursor-pointer", style: { width: '1em', marginRight: inline ? '0' : '0.5em' } }, { children: [internalLoading &&
                                 jsx(Loading, {}, void 0), internalError &&
                                 jsx(SvgDangerIcon, { className: "text-red-500 stroke-current stroke-2" }, void 0), !internalLoading && !internalError &&
                                 jsx(SvgAngleDownIcon, { width: "1em", height: "1em", className: "inline text-control-border stroke-current stroke-2" }, void 0)] }), void 0)] }), void 0), visible &&
-                jsxs("div", __assign({ ref: setPopper, className: classnames('absolute max-h-72 overflow-auto border border-control-border rounded z-10', 'mt-2 space-y-2', 'bg-white', 'rounded border border-control-border', inline && 'w-max', {
+                jsxs("div", __assign({ ref: setPopper, className: classnames('absolute max-h-60 overflow-auto z-10', 'mt-2 space-y-2', 'bg-white', 'rounded border border-control-border', inline && 'w-max', {
                         'left-0': align === 'start',
                         'right-0': align === 'end',
-                        'inset-x-0 truncate': align === 'stretch'
-                    }), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [!noSearch &&
-                            jsx(SearchInput, { ref: searchRef, scale: smallScale[scale || context.scale || 'base'], value: search, onChange: handleSearch, onKeyDown: handleKeyDown, disabled: internalError }, "input"), jsxs("div", __assign({ className: "" }, { children: [(searchRecents.length > 0) &&
-                                    jsx("ul", __assign({ className: "m-0 p-0" }, { children: searchRecents.map(function (value, i) { return (jsx("li", __assign({ ref: listRecentsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, value); } : undefined, className: classnames('cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i && 'bg-primary-500') }, { children: renderListItem ? renderListItem(getItem(value)) : renderItem(getItem(value)) }), value)); }) }), void 0), (searchResults.length > 0) &&
-                                    jsxs(Fragment, { children: [jsx("div", { className: "h-px bg-control-border", style: { margin: '0.5em -0.75em' } }, void 0), jsx("ul", __assign({ className: "m-0 p-0" }, { children: searchResults.map(function (item, i) { return (jsx("li", __assign({ ref: listResultsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, itemValue(item)); } : undefined, className: classnames('cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i + searchRecents.length && 'bg-primary-500') }, { children: renderListItem ? renderListItem(item) : renderItem(item) }), itemValue(item))); }) }), void 0)] }, void 0), (search && searchResults.length === 0 && searchRecents.length === 0 && CreateComponent) &&
-                                    jsx(CreateComponent, { search: search, disabled: loading, onSubmit: handleSubmit }, void 0)] }), void 0)] }), void 0), jsx("input", __assign({ className: "hidden", type: "text", name: name, ref: inputRef }, props), void 0)] }), void 0));
+                        'inset-x-0': align === 'stretch'
+                    }, dropdownClassName), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [!noSearch &&
+                            jsx(SearchInput, { ref: searchRef, scale: smallScale[scale || context.scale || 'base'], value: search, onChange: handleSearch, onKeyDown: handleKeyDown, disabled: internalError }, "input"), (searchRecents.length > 0) &&
+                            jsx("ul", __assign({ className: "m-0 p-0" }, { children: searchRecents.map(function (value, i) { return (jsx("li", __assign({ ref: listRecentsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, value); } : undefined, className: classnames('cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i && 'bg-primary-500') }, { children: renderListItem ? renderListItem(getItem(value)) : renderItem(getItem(value)) }), value)); }) }), void 0), (searchResults.length > 0) &&
+                            jsxs(Fragment, { children: [(searchRecents.length > 0) &&
+                                        jsx("div", { className: "h-px bg-control-border", style: { margin: '0.5em -0.75em' } }, void 0), jsx("ul", __assign({ className: "m-0 p-0" }, { children: searchResults.map(function (item, i) { return (jsx("li", __assign({ ref: listResultsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, itemValue(item)); } : undefined, className: classnames('cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i + searchRecents.length && 'bg-primary-500') }, { children: renderListItem ? renderListItem(item) : renderItem(item) }), itemValue(item))); }) }), void 0)] }, void 0), (search && searchResults.length === 0 && searchRecents.length === 0 && CreateComponent) &&
+                            jsx(CreateComponent, { search: search, disabled: loading, onSubmit: handleSubmit }, void 0)] }), void 0), jsx("input", __assign({ className: "hidden", type: "text", name: name, ref: inputRef }, props), void 0)] }), void 0));
 };
 /**
  * Descripción
@@ -836,7 +849,7 @@ var DatePicker = React.forwardRef(function (_a, ref) {
     // render
     var months = ready ? t('months', { defaultValue: ['Janruary', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], returnObjects: true }) : null;
     var days = ready ? t('shortDays', { defaultValue: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], returnObjects: true }) : [];
-    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: setTarget }, { children: jsx(Input, __assign({ type: "text", ref: inputRef, name: name, scale: context.scale || scale, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder }, props), void 0) }), void 0), ready && show &&
+    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: setTarget }, { children: jsx(Input, __assign({ type: "text", ref: inputRef, name: name, scale: context.scale || scale, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder, autoComplete: "off" }, props), void 0) }), void 0), ready && show &&
                 jsx("div", __assign({ ref: setPopper, className: "absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden z-10" }, { children: jsxs("div", __assign({ className: "flex flex-row" }, { children: [jsxs("div", { children: [jsxs("div", __assign({ className: "px-2 py-1 flex flex-row items-center justify-between bg-gray-400" }, { children: [jsxs("div", __assign({ className: "flex-grow text-center font-bold" }, { children: [months[calendar.getMonth()], " ", calendar.getFullYear()] }), void 0), jsxs("div", { children: [jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickPrevMonth }, { children: jsx(SvgAngleLeftIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "px-2 focus:outline-none", onClick: handleClickToday }, { children: jsx(SvgCircleIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickNextMonth }, { children: jsx(SvgAngleRightIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0)] }, void 0)] }), void 0), jsxs("table", __assign({ className: "table-fixed text-center" }, { children: [jsx("thead", { children: jsx("tr", { children: days.map(function (d, i) { return jsx("th", __assign({ className: "w-10 px-1" }, { children: d }), i); }) }, void 0) }, void 0), jsx("tbody", __assign({ className: "cursor-pointer" }, { children: weeks.map(function (w) {
                                                     return jsx("tr", { children: w.map(function (d) { return jsx("td", __assign({ onClick: function (e) { return handleClickDate(e, d); }, className: dayClasses(d) }, { children: d.getDate() }), d.getTime()); }) }, w[0].getTime());
                                                 }) }), void 0)] }), void 0)] }, void 0), shortcuts &&
@@ -1217,7 +1230,7 @@ var TimePicker = React.forwardRef(function (_a, ref) {
         }
     }
     // render
-    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: setTarget }, { children: jsx(Input, __assign({ ref: inputRef, name: name, scale: context.scale || scale, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder }, props), "input") }), void 0), ready && show &&
+    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: setTarget }, { children: jsx(Input, __assign({ ref: inputRef, name: name, scale: context.scale || scale, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder, autoComplete: "off" }, props), "input") }), void 0), ready && show &&
                 jsxs("div", __assign({ ref: setPopper, className: "absolute left-0 mt-1 bg-content-fg border border-content-border rounded overflow-hidden z-10" }, { children: [jsx("div", __assign({ className: "px-2 py-1 bg-gray-400" }, { children: jsxs("div", __assign({ className: "text-right" }, { children: [jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickPrevHour }, { children: jsx(SvgAngleUpIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "px-2 focus:outline-none", onClick: handleClickNoon }, { children: jsx(SvgCircleIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickNextHour }, { children: jsx(SvgAngleDownIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0)] }), void 0) }), void 0), jsx("div", __assign({ ref: timesRef, className: "h-64 overflow-scroll" }, { children: jsxs("table", __assign({ className: "table-fixed text-center" }, { children: [jsx("thead", { children: jsxs("tr", { children: [jsx("th", __assign({ className: "w-10" }, { children: "Hora" }), void 0), minutes.map(function (m) { return jsx("td", { className: "w-10" }, void 0); })] }, void 0) }, void 0), jsx("tbody", __assign({ className: "cursor-pointer" }, { children: morning.map(function (h) {
                                             return jsxs("tr", __assign({ className: hourClasses([h, 0]) }, { children: [jsx("th", __assign({ className: "text-base group-hover:text-content group-hover:bg-secondary-500", onClick: function (e) { return handleClickTime(e, [h, 0]); } }, { children: formatHour(h) }), void 0), minutes.map(function (m) {
                                                         return jsx("td", __assign({ onClick: function (e) { return handleClickTime(e, [h, m]); }, className: hourMinuteClasses([h, m]) }, { children: m }), m);

@@ -188,6 +188,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
                     scale={context.scale || scale}
                     onFocus={handleFocus} onKeyDown={handleKeyDown}
                     placeholder={placeholder} 
+                    autoComplete="off"
                     {...props}
                 />
             </div>

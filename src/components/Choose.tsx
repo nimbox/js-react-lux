@@ -8,7 +8,7 @@ import AngleDownIcon from './../icons/AngleDownIcon';
 import { ComponentScale, controlText, smallScale } from './ComponentScale';
 import { Context as controlContext } from './controls/Control';
 import { SearchInput } from './controls/SearchInput';
-import {ComponentAlign} from './ComponentAlign';
+import { ComponentAlign } from './ComponentAlign';
 
 
 export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
@@ -40,12 +40,13 @@ export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLA
     inline?: boolean;
     align?: ComponentAlign;
     className?: string;
+    dropdownClassName?: string;
 
 }
 
 type ForwardRefFn<R> = <P = {}>(p: P & React.RefAttributes<R>) => ReactElement | null;
 
-export const ChooseFn = <T extends {}>({ noSearch = false, scale = 'base', name, recentValues = [], items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, renderListItem, CreateComponent, inline, align = 'stretch', className, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => {
+export const ChooseFn = <T extends {}>({ noSearch = false, scale = 'base', name, recentValues = [], items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, renderListItem, CreateComponent, inline, align = 'stretch', className, dropdownClassName, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => {
 
     const inputRef = useRef<HTMLInputElement>();
     useImperativeHandle(ref, () => inputRef.current!);
@@ -66,7 +67,7 @@ export const ChooseFn = <T extends {}>({ noSearch = false, scale = 'base', name,
     const [internalLoading, setInternalLoading] = useState(loading || false);
     const [internalError, setInternalError] = useState(error || false);
 
-    const [searchResults, setSearchResults] = useState<T[]>([]);
+    const [searchResults, setSearchResults] = useState<T[]>(noSearch && items ? items : []);
     const [searchRecents, setSearchRecents] = useState<string[]>(recentValues);
 
     const searchRef = useRef<HTMLInputElement>();
@@ -93,19 +94,22 @@ export const ChooseFn = <T extends {}>({ noSearch = false, scale = 'base', name,
 
     useEffect(() => { setInternalValue(inputRef?.current?.value as string); }, [inputRef?.current?.value]);
 
-    useEffect(() => { if (visible) { searchRef.current!.focus(); } }, [visible]);
+    useEffect(() => { if (visible && !noSearch) { searchRef.current!.focus(); } }, [visible]);
 
-    useEffect(() => { setInternalLoading(loading!); }, [loading]);
+    useEffect(() => { setInternalLoading(loading!); if (noSearch && items && !loading) {setSearchResults(items)} }, [loading]);
 
     useEffect(() => { setInternalError(error!); }, [error]);
 
     const reset = () => {
         setVisible(false);
-        setSearch('');
-        setSearchRecents(recentValues!);
-        setSearchResults([]);
         setCursor(null);
         setInternalError(false);
+
+        if(!noSearch) {
+            setSearch('');
+            setSearchRecents(recentValues!);
+            setSearchResults([]);
+        } 
     }
 
     function setRefValue(event: React.MouseEvent<HTMLElement, MouseEvent>, element: React.MutableRefObject<HTMLInputElement | undefined>, value: string) {
@@ -125,19 +129,23 @@ export const ChooseFn = <T extends {}>({ noSearch = false, scale = 'base', name,
         const recentsLength = searchRecents.length;
         const searchLength = searchResults.length;
         event.stopPropagation();
-        
+
         switch (event.key) {
             case 'ArrowUp':
                 event.preventDefault();
-                if (cursor!=null && cursor > 0) {
+                if (cursor != null && cursor > 0) {
                     if (cursor < recentsLength) {
-                        listRecentsRefs[cursor].current?.scrollIntoView({ block: "center",
-                        inline: "start",
-                        behavior: "smooth" });
+                        listRecentsRefs[cursor].current?.scrollIntoView({
+                            block: "center",
+                            inline: "start",
+                            behavior: "smooth"
+                        });
                     } else {
-                        listResultsRefs[cursor - searchRecents.length].current?.scrollIntoView({ block: "center",
-                        inline: "start",
-                        behavior: "smooth" });
+                        listResultsRefs[cursor - searchRecents.length].current?.scrollIntoView({
+                            block: "center",
+                            inline: "start",
+                            behavior: "smooth"
+                        });
                     }
                     setCursor(cursor - 1);
                 }
@@ -145,23 +153,27 @@ export const ChooseFn = <T extends {}>({ noSearch = false, scale = 'base', name,
 
             case 'ArrowDown':
                 event.preventDefault();
-                if (cursor!=null && cursor < (searchLength + recentsLength) - 1) {
+                if (cursor != null && cursor < (searchLength + recentsLength) - 1) {
                     if (cursor >= 0) {
                         if (cursor < recentsLength) {
-                            listRecentsRefs[cursor].current?.scrollIntoView({ block: "center",inline: "end",
-                            behavior: "smooth" });
+                            listRecentsRefs[cursor].current?.scrollIntoView({
+                                block: "center", inline: "end",
+                                behavior: "smooth"
+                            });
                         } else {
-                            listResultsRefs[cursor - recentsLength].current?.scrollIntoView({ block: "center",inline: "end",
-                            behavior: "smooth" });
+                            listResultsRefs[cursor - recentsLength].current?.scrollIntoView({
+                                block: "center", inline: "end",
+                                behavior: "smooth"
+                            });
                         }
                     }
                     setCursor(cursor + 1);
                 }
-                else if (cursor===null) {setCursor(0);}
+                else if (cursor === null) { setCursor(0); }
                 break;
 
             case 'Enter':
-                if (cursor!=null && visible) {
+                if (cursor != null && visible) {
                     if (cursor < recentsLength) {
                         handleClick(event as unknown as React.MouseEvent<HTMLElement>, searchRecents[cursor]);
                     } else {
@@ -172,14 +184,14 @@ export const ChooseFn = <T extends {}>({ noSearch = false, scale = 'base', name,
                 break;
 
             case 'Tab' || ('Tab' && event.shiftKey):
-                if (cursor!=null && visible) {
+                if (cursor != null && visible) {
                     if (cursor < recentsLength) {
                         handleClick(event as unknown as React.MouseEvent<HTMLElement>, searchRecents[cursor]);
                     } else {
                         handleClick(event as unknown as React.MouseEvent<HTMLElement>, itemValue(searchResults[cursor - recentsLength]));
                     }
                 }
-                if (cursor===null) { setVisible(false); }
+                if (cursor === null) { setVisible(false); }
                 break;
 
         }
@@ -269,11 +281,13 @@ export const ChooseFn = <T extends {}>({ noSearch = false, scale = 'base', name,
                 tabIndex={active ? -1 : 0}
                 onFocus={() => { if (!visible) setVisible(true); }}
                 onMouseDown={(e) => { e.preventDefault(); setVisible(!visible) }}
+                onKeyDown={noSearch ? handleKeyDown : undefined}
                 className={classnames(
                     'relative rounded',
                     inline || 'border border-control-border',
                     'focus:border-primary-500 focus:ring focus:ring-primary-500',
-                    'focus:ring-opacity-50 focus:outline-none'
+                    'focus:ring-opacity-50 focus:outline-none',
+                    className
                 )}
                 style={inline ? { paddingRight: '1.25em' } : { padding: '0.5em 2em 0.5em 0.75em' }}
             >
@@ -295,7 +309,7 @@ export const ChooseFn = <T extends {}>({ noSearch = false, scale = 'base', name,
             {visible &&
                 <div ref={setPopper}
                     className={classnames(
-                        'absolute max-h-72 overflow-auto border border-control-border rounded z-10',
+                        'absolute max-h-60 overflow-auto z-10',
                         'mt-2 space-y-2',
                         'bg-white',
                         'rounded border border-control-border',
@@ -303,13 +317,14 @@ export const ChooseFn = <T extends {}>({ noSearch = false, scale = 'base', name,
                         {
                             'left-0': align === 'start',
                             'right-0': align === 'end',
-                            'inset-x-0 truncate': align === 'stretch'
+                            'inset-x-0': align === 'stretch'
                         },
+                        dropdownClassName
                     )}
-                    style={{ padding: '0.5em 0.75em 0.5em 0.75em'}}
+                    style={{ padding: '0.5em 0.75em 0.5em 0.75em' }}
                 >
 
-                    {!noSearch && 
+                    {!noSearch &&
                         <SearchInput key="input" ref={searchRef as any}
                             scale={smallScale[scale || context.scale || 'base']}
                             value={search}
@@ -319,52 +334,51 @@ export const ChooseFn = <T extends {}>({ noSearch = false, scale = 'base', name,
                         />
                     }
 
-                    <div className="">
+                    {(searchRecents.length > 0) &&
+                        <ul className="m-0 p-0">
+                            {searchRecents.map((value, i) => (
+                                <li ref={listRecentsRefs[i] as LegacyRef<HTMLLIElement> | undefined}
+                                    key={value}
+                                    onClick={!internalError ? (e) => handleClick(e, value) : undefined}
+                                    className={classnames(
+                                        'cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3',
+                                        'hover:text-white hover:bg-secondary-500',
+                                        cursor === i && 'bg-primary-500'
+                                    )}
+                                >
+                                    {renderListItem ? renderListItem(getItem(value)) : renderItem(getItem(value))}
+                                </li>
+                            ))}
+                        </ul>
+                    }
 
-                        {(searchRecents.length > 0) &&
+                    {(searchResults.length > 0) &&
+                        <>
+                            {(searchRecents.length > 0) &&
+                                <div className="h-px bg-control-border" style={{ margin: '0.5em -0.75em' }} />}
+                            
                             <ul className="m-0 p-0">
-                                {searchRecents.map((value, i) => (
-                                    <li ref={listRecentsRefs[i] as LegacyRef<HTMLLIElement> | undefined}
-                                        key={value}
-                                        onClick={!internalError ? (e) => handleClick(e, value) : undefined}
+                                {searchResults.map((item, i) => (
+                                    <li ref={listResultsRefs[i] as LegacyRef<HTMLLIElement> | undefined}
+                                        key={itemValue(item)}
+                                        onClick={!internalError ? (e) => handleClick(e, itemValue(item)) : undefined}
                                         className={classnames(
                                             'cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3',
                                             'hover:text-white hover:bg-secondary-500',
-                                            cursor === i && 'bg-primary-500'
+                                            cursor === i + searchRecents!.length && 'bg-primary-500'
                                         )}
                                     >
-                                        {renderListItem ? renderListItem(getItem(value)) : renderItem(getItem(value))}
+                                        {renderListItem ? renderListItem(item) : renderItem(item)}
                                     </li>
                                 ))}
                             </ul>
-                        }
+                        </>
+                    }
 
-                        {(searchResults.length > 0) &&
-                            <>
-                                <div className="h-px bg-control-border" style={{ margin: '0.5em -0.75em' }} />
-                                <ul className="m-0 p-0">
-                                    {searchResults.map((item, i) => (
-                                        <li ref={listResultsRefs[i] as LegacyRef<HTMLLIElement> | undefined}
-                                            key={itemValue(item)}
-                                            onClick={!internalError ? (e) => handleClick(e, itemValue(item)) : undefined}
-                                            className={classnames(
-                                                'cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3',
-                                                'hover:text-white hover:bg-secondary-500',
-                                                cursor === i + searchRecents!.length && 'bg-primary-500'
-                                            )}
-                                        >
-                                            {renderListItem ? renderListItem(item) : renderItem(item)}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </>
-                        }
+                    {(search && searchResults.length === 0 && searchRecents.length === 0 && CreateComponent) &&
+                        <CreateComponent search={search} disabled={loading!} onSubmit={handleSubmit} />
+                    }
 
-                        {(search && searchResults.length === 0 && searchRecents.length === 0 && CreateComponent) &&
-                            <CreateComponent search={search} disabled={loading!} onSubmit={handleSubmit} />
-                        }
-
-                    </div>
                 </div>
             }
             <input className="hidden" type="text" name={name} ref={inputRef as LegacyRef<HTMLInputElement> | undefined}  {...props} />
