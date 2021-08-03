@@ -9,6 +9,7 @@ import { ComponentScale, controlText, smallScale } from './ComponentScale';
 import { Context as controlContext } from './controls/Control';
 import { SearchInput } from './controls/SearchInput';
 import { ComponentAlign } from './ComponentAlign';
+import { CLICK } from '@storybook/addon-knobs';
 
 
 export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
@@ -336,6 +337,16 @@ export const ChooseFn = <T extends {}>({ noSearch = false, scale = 'base', name,
 
                     {(searchRecents.length > 0) &&
                         <ul className="m-0 p-0">
+
+
+                            {/* handleSelect = (e : Mouse | Keyboard, item) => {
+                            }
+
+                            <Componente noLinesBetween values={[
+                                searchRecents.map((value, i) => { item: getItem(value), node: renderItem(getItem(value)) }),
+                                searchResults.map((item, i) => renderItem(item))
+                            ]} onSelect={ CLICK, TAB, ENTER } value={} separator={<li className="h-px bg-red-100"></li>}/> */}
+
                             {searchRecents.map((value, i) => (
                                 <li ref={listRecentsRefs[i] as LegacyRef<HTMLLIElement> | undefined}
                                     key={value}
@@ -349,6 +360,7 @@ export const ChooseFn = <T extends {}>({ noSearch = false, scale = 'base', name,
                                     {renderListItem ? renderListItem(getItem(value)) : renderItem(getItem(value))}
                                 </li>
                             ))}
+
                         </ul>
                     }
 

@@ -4,7 +4,7 @@ import { ComponentScale, controlScale, controlText } from '../ComponentScale';
 import { Context } from './Control';
 
 
-export interface InputProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     scale?: ComponentScale;
     error?: boolean;
 }

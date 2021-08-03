@@ -937,7 +937,7 @@ var placements = {
     'end': 'bottom-end'
 };
 var SwatchPicker = React.forwardRef(function (_a, ref) {
-    var _b = _a.swatches, values = _b === void 0 ? swatches : _b, _c = _a.align, align = _c === void 0 ? 'stretch' : _c, _d = _a.popperClassName, popperClassName = _d === void 0 ? 'grid grid-cols-5 w-32 overflow-hidden' : _d, onFocus = _a.onFocus, onBlur = _a.onBlur; _a.ref; var props = __rest(_a, ["swatches", "align", "popperClassName", "onFocus", "onBlur", "ref"]);
+    var _b = _a.swatches, values = _b === void 0 ? swatches : _b, _c = _a.align, align = _c === void 0 ? 'stretch' : _c, _d = _a.popperClassName, popperClassName = _d === void 0 ? 'grid grid-cols-5 w-32 overflow-hidden' : _d, onFocus = _a.onFocus, onBlur = _a.onBlur, props = __rest(_a, ["swatches", "align", "popperClassName", "onFocus", "onBlur"]);
     var _e = useState(false), visible = _e[0], setVisible = _e[1];
     var _f = useState(null), target = _f[0], setTarget = _f[1];
     var _g = useState(null), popper = _g[0], setPopper = _g[1];
@@ -971,10 +971,11 @@ var SwatchPicker = React.forwardRef(function (_a, ref) {
             var inputEvent = new Event('input', { bubbles: true });
             element.dispatchEvent(inputEvent);
             element.select();
+            setVisible(false);
         }
     }
-    return (jsxs("div", __assign({ className: "relative inline-block w-full" }, { children: [jsx(Input, __assign({ type: "text", ref: setTarget }, props, { onFocus: handleOnFocus, onBlur: handleOnBlur }), void 0), visible && ReactDOM.createPortal(jsx("div", __assign({ ref: setPopper }, attributes.popper, { className: classnames('border border-control-border rounded', 'bg-white cursor-pointer', popperClassName), style: styles.popper }, { children: values.map(function (s) {
-                    return jsx("div", __assign({ onMouseDown: function (e) { return setValue(e, target, s); }, style: { backgroundColor: s } }, { children: "\u00A0" }), void 0);
+    return (jsxs("div", __assign({ className: "relative inline-block w-full" }, { children: [jsx(Input, __assign({ type: "text", ref: setTarget }, props, { maxLength: 7, onClick: function () { return setVisible(true); }, onFocus: handleOnFocus, onBlur: handleOnBlur }), void 0), jsx("div", { className: "m-px absolute inset-y-0 right-0 rounded bg-red-500", style: { width: '2.5em', backgroundColor: target === null || target === void 0 ? void 0 : target.value } }, void 0), visible && ReactDOM.createPortal(jsx("div", __assign({ ref: setPopper }, attributes.popper, { className: classnames('border border-control-border rounded', 'bg-white cursor-pointer', popperClassName), style: styles.popper }, { children: values.map(function (s, i) {
+                    return jsx("div", __assign({ onMouseDown: function (e) { return setValue(e, target, s); }, style: { backgroundColor: s } }, { children: "\u00A0" }), i);
                 }) }), void 0), document.querySelector('body'))] }), void 0));
 });
 

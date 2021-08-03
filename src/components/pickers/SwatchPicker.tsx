@@ -23,7 +23,7 @@ const placements: { [key in SwatchPickerAlign]: Placement } = {
     'end': 'bottom-end'
 };
 
-export const SwatchPicker = React.forwardRef<HTMLInputElement, SwatchPickerProps>(({ swatches: values = swatches, align = 'stretch', popperClassName = 'grid grid-cols-5 w-32 overflow-hidden', onFocus, onBlur, ref: oldRef, ...props }, ref) => {
+export const SwatchPicker = React.forwardRef<HTMLInputElement, SwatchPickerProps>(({ swatches: values = swatches, align = 'stretch', popperClassName = 'grid grid-cols-5 w-32 overflow-hidden', onFocus, onBlur, ...props }, ref) => {
 
     const [visible, setVisible] = useState(false);
 
@@ -60,16 +60,21 @@ export const SwatchPicker = React.forwardRef<HTMLInputElement, SwatchPickerProps
             var inputEvent = new Event('input', { bubbles: true });
             element.dispatchEvent(inputEvent);
             element.select();
+            setVisible(false);
         }
     }
 
     return (
         <div className="relative inline-block w-full">
 
-            <Input type="text" ref={setTarget} {...props} onFocus={handleOnFocus} onBlur={handleOnBlur} />
+            <Input type="text" ref={setTarget} {...props} maxLength={7} onClick={() => setVisible(true)} onFocus={handleOnFocus} onBlur={handleOnBlur} />
+
+            <div className="m-px absolute inset-y-0 right-0 rounded bg-red-500" style={{ width: '2.5em', backgroundColor: target?.value }}>
+                
+            </div>
 
             {visible && ReactDOM.createPortal(
-                <div ref={setPopper} 
+                <div ref={setPopper}
                     {...attributes.popper}
                     className={classnames(
                         'border border-control-border rounded',
@@ -78,8 +83,8 @@ export const SwatchPicker = React.forwardRef<HTMLInputElement, SwatchPickerProps
                     )}
                     style={styles.popper}
                 >
-                    {values.map(s =>
-                        <div onMouseDown={(e) => setValue(e, target!, s)} style={{ backgroundColor: s }}>&nbsp;</div>
+                    {values.map((s, i) =>
+                        <div key={i} onMouseDown={(e) => setValue(e, target!, s)} style={{ backgroundColor: s }}>&nbsp;</div>
                     )}
                 </div>,
                 document.querySelector('body')!
