@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler, ReactElement, Ref } from 'react';
-import { ComponentScale } from './ComponentScale';
 import { ComponentAlign } from './ComponentAlign';
+import { ComponentScale } from './ComponentScale';
 export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
     noSearch?: boolean;
     /** The default value for the choose component */

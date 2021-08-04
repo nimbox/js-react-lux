@@ -1,5 +1,4 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { withKnobs } from '@storybook/addon-knobs';
 import _ from 'lodash';
 import { useState } from 'react';
 import { CheckBar } from '../components/CheckBar';
@@ -12,10 +11,7 @@ import { SearchInput } from '../components/controls/SearchInput';
 // definition
 
 export default {
-    title: 'Canexer/Navigator',
-    decorators: [
-        withKnobs
-    ]
+    title: 'Canexer/Navigator'
 };
 
 

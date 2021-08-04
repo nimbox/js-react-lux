@@ -1,5 +1,4 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { withKnobs } from "@storybook/addon-knobs";
 import React from 'react';
 import * as icons from '../icons';
 import '../index.css';
@@ -8,7 +7,6 @@ import '../index.css';
 export default {
     title: 'Icons',
     decorators: [
-        withKnobs,
         (story: () => React.ReactNode) => <div className="h-full p-4 bg-green-100"><div className="bg-white">{story()}</div></div>
     ]
 };

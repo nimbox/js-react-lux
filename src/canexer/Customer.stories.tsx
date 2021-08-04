@@ -1,5 +1,4 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { withKnobs } from '@storybook/addon-knobs';
 import { useState } from 'react';
 import { Button } from '../components/Buttons';
 import { Card } from '../components/Card';
@@ -17,10 +16,7 @@ import MessageIcon from '../icons/MessageIcon';
 // definition
 
 export default {
-    title: 'Canexer/Customer',
-    decorators: [
-        withKnobs
-    ]
+    title: 'Canexer/Customer'
 };
 
 
