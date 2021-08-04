@@ -1,23 +1,24 @@
 import { createContext, FC, useContext, useEffect, useState } from "react";
-import { ConnectDragSource, useDrag } from "react-dnd";
+import { ConnectDragSource, ConnectDropTarget, useDrag, useDrop } from "react-dnd";
 
 
 export interface KanbanContextProps {
-    isDragging: boolean;
-    setIsDragging: (isDragging: boolean) => void;
+    isActive: boolean;
+    setIsActive: (isActive
+        : boolean) => void;
 }
 
 export const KanbanContext = createContext<KanbanContextProps>({
-    isDragging: false,
-    setIsDragging: (isDragging) => null
+    isActive: false,
+    setIsActive: () => null
 });
 
 export const KanbanProvider: FC = ({ children }) => {
 
-    const [isDragging, setIsDragging] = useState(true);
+    const [isActive, setIsActive] = useState(true);
 
     return (
-        <KanbanContext.Provider value={{ isDragging, setIsDragging }}>
+        <KanbanContext.Provider value={{ isActive, setIsActive }}>
             {children}
         </KanbanContext.Provider>
     );
@@ -28,6 +29,34 @@ export const useKanbanContext = () => useContext(KanbanContext);
 //
 // hooks
 //
+
+
+
+export const useColumn = (id: string): [any, ConnectDropTarget] => {
+
+
+    const [{ isOver }, drop] = useDrop(
+        () => ({
+            accept: 'kanban-card',
+            collect: (monitor) => ({
+                isOver: monitor.isOver()
+            })
+            // canDrop: () => false,
+            // hover({ value: draggedValue }: {
+            //     value: React.Key
+            //     originalIndex: number
+            // }) {
+            //     if (draggedValue !== value) {
+            //         const { index: target } = findItem(value);
+            //         onChange(draggedValue, target);
+            //     }
+            // },
+        }),
+    );
+
+    return [{ isOver }, drop];
+
+}
 
 export const useCard = (id: string): [any, ConnectDragSource] => {
 
@@ -41,7 +70,7 @@ export const useCard = (id: string): [any, ConnectDragSource] => {
         })
     }));
 
-    useEffect(() => { context.setIsDragging(isDragging); }, [isDragging]);
+    useEffect(() => { context.setIsActive(isDragging); }, [isDragging]);
 
     return ([{ isDragging, isSelfDragging: isDragging }, drag]);
 

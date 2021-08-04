@@ -9,7 +9,7 @@ export interface ColumnProps {
 
 export const Column: FC<ColumnProps> = ({ id, className, children }) => {
 
-    const { isDragging } = useContext(KanbanContext);
+    const { isActive: isDragging } = useContext(KanbanContext);
 
     return (
         <div className={className}>

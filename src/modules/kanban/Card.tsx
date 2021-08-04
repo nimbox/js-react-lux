@@ -22,7 +22,7 @@ export const Card: FC<CardProps> = ({ id, className, children }) => {
         })
     }));
 
-    useEffect(() => { context.setIsDragging(isDragging); }, [isDragging]);
+    useEffect(() => { context.setIsActive(isDragging); }, [isDragging]);
 
     // render
 

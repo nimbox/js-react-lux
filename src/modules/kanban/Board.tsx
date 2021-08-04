@@ -8,7 +8,7 @@ export interface BoardProps {
 
 export const Board: FC<BoardProps> = ({ className, children }) => {
 
-    const { isDragging } = useContext(KanbanContext);
+    const { isActive: isDragging } = useContext(KanbanContext);
 
     return (
         <div className={className}>

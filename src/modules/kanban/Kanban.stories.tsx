@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
-import { KanbanProvider, useCard, useKanbanContext } from './Kanban';
+import { KanbanProvider, useCard, useColumn, useKanbanContext } from './Kanban';
 import classnames from 'classnames';
 import { BoardProps } from './Board';
+import _ from 'lodash';
 
 
 // definition
@@ -30,17 +31,31 @@ export const Simple = () => {
 
 const StoryBoard: FC<BoardProps> = () => {
 
-    const { isDragging } = useKanbanContext();
+    const { isActive: isDragging } = useKanbanContext();
 
     return (
         <div className={classnames('w-full h-full px-3 py-2 flex flex-row space-x-2', isDragging ? 'bg-red-200' : 'bg-blue-200')}>
 
             <KanbanColumn id="a">
                 <KanbanCard id="1" lines={3} />
-                <KanbanCard id="2" lines={3} />
+                <KanbanCard id="2" lines={2} />
+                <KanbanCard id="3" lines={1} />
+                <KanbanCard id="4" lines={5} />
+            </KanbanColumn>
+
+            <KanbanColumn id="b">
+                <KanbanCard id="5" lines={1} />
+                <KanbanCard id="6" lines={2} />
+            </KanbanColumn>
+
+            <KanbanColumn id="c">
+                <KanbanCard id="7" lines={1} />
+                <KanbanCard id="8" lines={2} />
+                <KanbanCard id="9" lines={5} />
             </KanbanColumn>
 
         </div>
+
     );
 
 };
@@ -51,7 +66,9 @@ const KanbanCard: FC<{ id: string, lines: number }> = ({ id, lines }) => {
 
     return (
         <div ref={card} className={classnames('w-48 bg-gray-300')}>
-            line
+            <div className={isSelfDragging ? 'invisible' : ''}>
+                {_.range(lines).map(() => <div>Line</div>)}
+            </div>
         </div>
     );
 
@@ -59,8 +76,10 @@ const KanbanCard: FC<{ id: string, lines: number }> = ({ id, lines }) => {
 
 const KanbanColumn: FC<{ id: string }> = ({ id, children }) => {
 
+    const [{ isOver }, column] = useColumn(id);
+
     return (
-        <div className="px-3 py-2 space-y-2 bg-gray-100">
+        <div ref={column} className={classnames('px-3 py-2 space-y-2 bg-gray-100', { 'bg-gray-400': isOver })}>
             {children}
         </div>
     );
