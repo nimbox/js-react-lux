@@ -1,5 +1,5 @@
-import { createContext, FC, useContext, useEffect, useState } from "react";
-import { ConnectDragSource, ConnectDropTarget, useDrag, useDrop } from "react-dnd";
+import { createContext, FC, RefObject, useContext, useEffect, useRef, useState } from "react";
+import { ConnectDragSource, ConnectDropTarget, useDrag, useDrop, XYCoord } from "react-dnd";
 
 
 export interface KanbanContextProps {
@@ -32,29 +32,49 @@ export const useKanbanContext = () => useContext(KanbanContext);
 
 
 
-export const useColumn = (id: string): [any, ConnectDropTarget] => {
+export const useColumn = (id: string): [any, RefObject<any>] => {
 
+    const dropRef = useRef<HTMLElement>(null);
 
-    const [{ isOver }, drop] = useDrop(
-        () => ({
-            accept: 'kanban-card',
-            collect: (monitor) => ({
-                isOver: monitor.isOver()
-            })
-            // canDrop: () => false,
-            // hover({ value: draggedValue }: {
-            //     value: React.Key
-            //     originalIndex: number
-            // }) {
-            //     if (draggedValue !== value) {
-            //         const { index: target } = findItem(value);
-            //         onChange(draggedValue, target);
-            //     }
-            // },
-        }),
-    );
+    const clientOffset = useRef<XYCoord | null>(null);
+    const [clientPosition, setClientPosition] = useState<number | null>(null);
 
-    return [{ isOver }, drop];
+    const [{ isOver }, drop] = useDrop(() => ({
+
+        accept: 'kanban-card',
+        hover: (item, monitor) => {
+
+            const offset = monitor.getClientOffset();
+
+            if (offset !== null && (clientOffset.current === null || clientOffset.current.x !== offset.x || clientOffset.current.y !== offset.y) ) {
+                
+                clientOffset.current = offset;
+
+                console.log('setting offset', offset);
+                console.log('   ', dropRef.current!.offsetHeight, dropRef.current!.clientTop, dropRef.current!.offsetTop , dropRef.current!.scrollTop  );
+                console.log('start');
+        
+        
+        
+                Array.from(dropRef.current!.children!).forEach(child => {
+                        console.log(child.getBoundingClientRect());
+                });
+
+                console.log('XXXXX',  dropRef.current!.children.length);
+
+                setClientPosition(offset!.y);
+            }
+
+        },
+        collect: (monitor) => ({
+            isOver: monitor.isOver()
+        })
+        
+    }));
+
+    drop(dropRef);
+    
+    return [{ isOver, clientPosition }, dropRef];
 
 }
 

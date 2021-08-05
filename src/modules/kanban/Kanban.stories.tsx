@@ -31,16 +31,21 @@ export const Simple = () => {
 
 const StoryBoard: FC<BoardProps> = () => {
 
-    const { isActive: isDragging } = useKanbanContext();
+    const { isActive } = useKanbanContext();
 
     return (
-        <div className={classnames('w-full h-full px-3 py-2 flex flex-row space-x-2', isDragging ? 'bg-red-200' : 'bg-blue-200')}>
+        <div className={classnames('w-full h-full px-10 py-10 flex flex-row space-x-2', isActive ? 'bg-red-200' : 'bg-blue-200')}>
 
             <KanbanColumn id="a">
                 <KanbanCard id="1" lines={3} />
                 <KanbanCard id="2" lines={2} />
                 <KanbanCard id="3" lines={1} />
                 <KanbanCard id="4" lines={5} />
+                <KanbanCard id="41" lines={5} />
+                <KanbanCard id="42" lines={5} />
+                <KanbanCard id="43" lines={3} />
+                <KanbanCard id="44" lines={2} />
+                <KanbanCard id="45" lines={1} />
             </KanbanColumn>
 
             <KanbanColumn id="b">
@@ -60,6 +65,20 @@ const StoryBoard: FC<BoardProps> = () => {
 
 };
 
+const KanbanColumn: FC<{ id: string }> = ({ id, children }) => {
+
+    const [{ isOver, clientPosition }, column] = useColumn(id);
+
+    console.log('clientOffset', clientPosition);
+
+    return (
+        <div ref={column} className={classnames('h-full px-3 py-2 space-y-2 overflow-y-auto bg-gray-100', { 'bg-gray-400': isOver })}>
+            {children}
+        </div>
+    );
+
+};
+
 const KanbanCard: FC<{ id: string, lines: number }> = ({ id, lines }) => {
 
     const [{ isSelfDragging }, card] = useCard(id);
@@ -74,17 +93,6 @@ const KanbanCard: FC<{ id: string, lines: number }> = ({ id, lines }) => {
 
 };
 
-const KanbanColumn: FC<{ id: string }> = ({ id, children }) => {
-
-    const [{ isOver }, column] = useColumn(id);
-
-    return (
-        <div ref={column} className={classnames('px-3 py-2 space-y-2 bg-gray-100', { 'bg-gray-400': isOver })}>
-            {children}
-        </div>
-    );
-
-};
 
 
 
