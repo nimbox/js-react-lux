@@ -9,7 +9,7 @@ export function useCard(id: string): [any, RefObject<any>] {
     const context = useKanbanContext();
 
     const cardRef = useRef<HTMLElement>(null);
-    const [{ item, isDragging }, drag, preview] = useDrag(() => ({
+    const [{ item, isDragging }, drag] = useDrag(() => ({
         type: 'kanban-card',
         item: (): KanbanItem => ({ id, sourceBoundingClientRect: cardRef.current!.getBoundingClientRect() }),
         collect: (monitor) => ({
@@ -19,9 +19,8 @@ export function useCard(id: string): [any, RefObject<any>] {
     }), [id, cardRef]);
     drag(cardRef);
 
-    useEffect(() => { context.setIsActive(isDragging); }, [isDragging]);
     useEffect(() => { cardRef.current!.setAttribute('data-kanban-card-id', id); }, []);
 
-    return ([{ isDragging, isSelfDragging: isDragging, item }, cardRef]);
+    return ([{ isDragging: item?.id === id, item }, cardRef]);
 
 };

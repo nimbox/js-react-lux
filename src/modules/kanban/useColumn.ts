@@ -1,59 +1,25 @@
-import { RefObject, useRef, useState } from "react";
-import { useDrop, XYCoord } from "react-dnd";
-import { useKanbanContext } from "./Kanban";
-import { KanbanItem } from "./types";
-import getPosition from "./utils/getPosition";
+import { RefObject, useEffect, useRef } from 'react';
+import { useDrag } from 'react-dnd';
+import { useKanbanContext } from './Kanban';
+import { KanbanItem } from './types';
 
 
-export function useColumn(id: string): [any, RefObject<any>, RefObject<any>] {
+export function useColumn(id: string): [any, RefObject<any>] {
 
     const context = useKanbanContext();
 
     const columnRef = useRef<HTMLElement>(null);
-    const placeholderRef = useRef<HTMLElement>(null);
-
-    const clientOffset = useRef<XYCoord | null>(null);
-    const columnScrollTop = useRef<number>(0);
-
-    const [clientPosition, setClientPosition] = useState<number | null>(null);
-
-    const [{ isOver, item }, drop] = useDrop(() => ({
-
-        accept: 'kanban-card',
-        hover: (item: KanbanItem, monitor) => {
-
-            const offset = monitor.getClientOffset();
-            const scrollTop = columnScrollTop.current;
-
-            console.log('scrollTop', columnRef.current!.scrollTop);
-
-            if (offset !== null && (
-                clientOffset.current === null ||
-                clientOffset.current.x !== offset.x || clientOffset.current.y !== offset.y ||
-                columnRef.current!.scrollTop != scrollTop
-            )) {
-
-                const position = getPosition(item.id, columnRef.current!, offset, placeholderRef.current!)
-                setClientPosition(position);
-
-                columnScrollTop.current = columnRef.current!.scrollTop;
-                clientOffset.current = offset;
-
-            }
-
-        },
-        drop: (item: KanbanItem, monitor) => {
-            console.log('DROP', 'column', id, 'card', clientPosition);
-        },
+    const [{ item }, drag] = useDrag(() => ({
+        type: 'kanban-column',
+        item: (): KanbanItem => ({ id, sourceBoundingClientRect: columnRef.current!.getBoundingClientRect() }),
         collect: (monitor) => ({
-            isOver: monitor.isOver(),
             item: monitor.getItem()
         })
+    }), [id, columnRef]);
+    drag(columnRef);
 
-    }), [clientPosition]);
+    useEffect(() => { columnRef.current!.setAttribute('data-kanban-column-id', id); }, []);
 
-    drop(columnRef);
+    return ([{ isDragging: item?.id === id, item }, columnRef]);
 
-    return [{ isOver, item: isOver ? item : null, clientPosition: isOver ? clientPosition : null }, columnRef, placeholderRef];
-
-}
+};

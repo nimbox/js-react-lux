@@ -1,31 +1,25 @@
 import { lookup } from "dns";
 import { nextTick } from "node:process";
-import { createContext, FC, RefObject, useContext, useEffect, useRef, useState } from "react";
+import { createContext, FC, PropsWithChildren, ReactElement, RefObject, useContext, useEffect, useRef, useState } from "react";
 import { ConnectDragSource, ConnectDropTarget, useDrag, useDrop, XYCoord } from "react-dnd";
 
 
-export interface KanbanContextProps<C> {
-
-    context?: C;
-
+export interface KanbanContextProps {
+    context?: any;
     isActive: boolean;
     setIsActive: (isActive: boolean) => void;
-    onMoveCard: (cardId: string, columnId: string, position: number) => void | Promise<void>;
-
-
 }
 
-export const KanbanContext = createContext<KanbanContextProps<C>>({
+export const KanbanContext = createContext<KanbanContextProps>({
     isActive: false,
-    setIsActive: () => undefined,
-    onMoveCard: (cardId: string, columnId: string, position: number) => Promise.resolve(undefined)
+    setIsActive: () => undefined
 });
 
 export interface KanbanProviderProps<C> {
     context: C;
 }
 
-export const KanbanProvider: FC<KanbanProviderProps<C>> = <C,>({ context, children }) => {
+export const KanbanProvider = <C extends any>( {context, children}: PropsWithChildren<KanbanProviderProps<C>>): ReactElement<any, any> | null=> {
 
     const [isActive, setIsActive] = useState(true);
 
@@ -36,15 +30,5 @@ export const KanbanProvider: FC<KanbanProviderProps<C>> = <C,>({ context, childr
     );
 
 };
-export const useKanbanContext = () => useContext(KanbanContext);
 
-//
-// hooks
-//
-
-
-
-
-//
-// utilities
-//
+export const useKanbanContext = <C extends any>() => useContext(KanbanContext);
