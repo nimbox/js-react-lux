@@ -1,7 +1,7 @@
 import { RefObject, useEffect, useRef } from 'react';
 import { useDrag } from 'react-dnd';
 import { useKanbanContext } from './Kanban';
-import { KanbanItem } from './types';
+import { COLUMN_TYPE, KanbanItem } from './types';
 
 
 export function useColumn(id: string): [any, RefObject<any>] {
@@ -10,7 +10,7 @@ export function useColumn(id: string): [any, RefObject<any>] {
 
     const columnRef = useRef<HTMLElement>(null);
     const [{ item }, drag] = useDrag(() => ({
-        type: 'kanban-column',
+        type: COLUMN_TYPE,
         item: (): KanbanItem => ({ id, sourceBoundingClientRect: columnRef.current!.getBoundingClientRect() }),
         collect: (monitor) => ({
             item: monitor.getItem()

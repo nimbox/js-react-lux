@@ -1,7 +1,7 @@
 import { RefObject, useEffect, useRef } from 'react';
 import { useDrag } from 'react-dnd';
 import { useKanbanContext } from './Kanban';
-import { KanbanItem } from './types';
+import { CARD_TYPE, KanbanItem } from './types';
 
 
 export function useCard(id: string): [any, RefObject<any>] {
@@ -10,7 +10,7 @@ export function useCard(id: string): [any, RefObject<any>] {
 
     const cardRef = useRef<HTMLElement>(null);
     const [{ item, isDragging }, drag] = useDrag(() => ({
-        type: 'kanban-card',
+        type: CARD_TYPE,
         item: (): KanbanItem => ({ id, sourceBoundingClientRect: cardRef.current!.getBoundingClientRect() }),
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),

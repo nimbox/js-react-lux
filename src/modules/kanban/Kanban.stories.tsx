@@ -7,6 +7,7 @@ import { KanbanProvider, useKanbanContext } from './Kanban';
 import { useCard } from './useCard';
 import { useCards } from './useCards';
 import { useColumn } from './useColumn';
+import { useColumns } from './useColumns';
 
 
 // definition
@@ -55,6 +56,25 @@ export const Simple = () => {
         setColumns([...columns, { id: uniqueColumn(), cards: [] }]);
     };
 
+    const moveColumn = (columnId: string, columnIndex: number) => {
+
+        const sourceColumnIndex = columns.findIndex(column => column.id === columnId);
+        
+        const column = columns[sourceColumnIndex];
+
+        const columnsWithoutColumn = [...columns.slice(0, sourceColumnIndex), ...columns.slice(sourceColumnIndex + 1)];
+
+        const adjustedColumnIndex = sourceColumnIndex <= columnIndex ? columnIndex - 1 : columnIndex;
+        const columnsWithColumn = [
+            ...columnsWithoutColumn.slice(0, adjustedColumnIndex),
+            column,
+            ...columnsWithoutColumn.slice(adjustedColumnIndex)
+        ];
+
+        setColumns(columnsWithColumn);
+
+    };
+
     const addCard = (columnId: string) => {
         setColumns(columns.map(column => column.id === columnId ?
             { id: column.id, cards: [...column.cards, { id: uniqueCard(), lines: 2 }] } :
@@ -64,8 +84,8 @@ export const Simple = () => {
 
     const moveCard = (cardId: string, columnId: string, cardIndex: number) => {
 
-        const sourceColumnIndex = columns.findIndex(column => column.cards.findIndex(card  => card.id === cardId ) >= 0);
-        const sourceCardIndex = columns[sourceColumnIndex].cards.findIndex(card  => card.id === cardId );
+        const sourceColumnIndex = columns.findIndex(column => column.cards.findIndex(card => card.id === cardId) >= 0);
+        const sourceCardIndex = columns[sourceColumnIndex].cards.findIndex(card => card.id === cardId);
 
         const columnIndex = columns.findIndex(column => column.id === columnId);
 
@@ -74,7 +94,8 @@ export const Simple = () => {
         const sourceColumn = columns[sourceColumnIndex];
         const columnsWithoutCard = [
             ...columns.slice(0, sourceColumnIndex),
-            { ...sourceColumn, cards: [
+            {
+                ...sourceColumn, cards: [
                     ...sourceColumn.cards.slice(0, sourceCardIndex),
                     ...sourceColumn.cards.slice(sourceCardIndex + 1)
                 ]
@@ -82,15 +103,16 @@ export const Simple = () => {
             ...columns.slice(sourceColumnIndex + 1)
         ];
 
-        const adjustedColumnIndex = sourceColumnIndex === columnIndex  && sourceCardIndex <= cardIndex ? cardIndex - 1 : cardIndex;
-        
+        const adjustedCardIndex = sourceColumnIndex === columnIndex && sourceCardIndex <= cardIndex ? cardIndex - 1 : cardIndex;
+
         const column = columnsWithoutCard[columnIndex];
         const columnsWithCard = [
             ...columnsWithoutCard.slice(0, columnIndex),
-            { ...column, cards: [
-                   ...column.cards.slice(0, adjustedColumnIndex),
+            {
+                ...column, cards: [
+                    ...column.cards.slice(0, adjustedCardIndex),
                     card,
-                    ...column.cards.slice(adjustedColumnIndex)
+                    ...column.cards.slice(adjustedCardIndex)
                 ]
             },
             ...columnsWithoutCard.slice(columnIndex + 1)
@@ -102,7 +124,7 @@ export const Simple = () => {
 
     return (
         <div className="w-full h-screen bg-yellow-100">
-            <KanbanProvider context={{ addColumn, addCard, moveCard }}>
+            <KanbanProvider context={{ addColumn, moveColumn, addCard, moveCard }}>
                 <KanbanBoard columns={columns} />
             </KanbanProvider>
         </div>
@@ -119,7 +141,7 @@ const KanbanBoard: FC<{ columns: { id: string, cards: { id: string, lines: numbe
     return (
         <div className={classnames('w-full h-full px-10 py-10 flex flex-row items-start space-x-2', isActive ? 'bg-blue-500' : 'bg-blue-400')}>
 
-            <div className="flex flex-row items-start space-x-2">
+            <KanbanColumns>
                 {columns.map(column =>
                     <KanbanColumn key={column.id} id={column.id}>
                         {column.cards.map(card =>
@@ -127,7 +149,7 @@ const KanbanBoard: FC<{ columns: { id: string, cards: { id: string, lines: numbe
                         )}
                     </KanbanColumn>
                 )}
-            </div>
+            </KanbanColumns>
 
             <div className="px-3 py-2 flex-none bg-gray-200 rounded">
                 <div onClick={addColumn} className="w-48 px-2 py-2 hover:bg-gray-300 rounded cursor-pointer">
@@ -141,20 +163,35 @@ const KanbanBoard: FC<{ columns: { id: string, cards: { id: string, lines: numbe
 
 };
 
+const KanbanColumns: FC<{}> = ({ children }) => {
+
+    const [{ isOver, item, clientPosition }, columnsRef, placeholderRef] = useColumns();
+    const childrenArray = React.Children.toArray(children);
+
+    return (
+        <div ref={columnsRef} className="flex flex-row items-start space-x-2">
+            {childrenArray.slice(0, clientPosition).map(c => c)}
+            {item && (clientPosition !== null) && <div key="placeholder" ref={placeholderRef} className="w-52 bg-gray-300 rounded shadow-inner" style={{ height: item.sourceBoundingClientRect.height }}></div>}
+            {childrenArray.slice(clientPosition).map(c => c)}
+        </div>
+    );
+
+}
+
 const KanbanColumn: FC<{ id: string }> = ({ id, children }) => {
 
     const { context: { addCard }, isActive } = useKanbanContext();
 
-    const [ , columnRef] = useColumn(id);
-    const [{ isOver, item, clientPosition }, cardsRef, placeholderRef] = useCards(id);
+    const [{ isDragging }, columnRef] = useColumn(id);
 
+    const [{ isOver, item, clientPosition }, cardsRef, placeholderRef] = useCards(id);
     const childrenArray = React.Children.toArray(children);
 
     return (
-        <div ref={columnRef} className="max-h-full px-3 py-2 space-y-2 flex flex-col bg-gray-200 rounded">
-            
+        <div ref={columnRef} className={classnames('max-h-full px-3 py-2 space-y-2 flex flex-col bg-gray-200 rounded', { 'opacity-20': isDragging })}>
+
             <div className="flex-none font-bold">ID: {id}</div>
-            
+
             <div ref={cardsRef} className={classnames('flex-1 w-48 max-h-full px-1 py-1 -mx-1 space-y-2 overflow-y-auto')} style={{ minHeight: '1rem' }}>
                 {childrenArray.slice(0, clientPosition).map(c => c)}
                 {item && (clientPosition !== null) && <div key="placeholder" ref={placeholderRef} className="w-full bg-gray-300 rounded shadow-inner" style={{ height: item.sourceBoundingClientRect.height }}></div>}

@@ -1,48 +1,48 @@
 import { RefObject, useRef, useState } from 'react';
 import { useDrop, XYCoord } from 'react-dnd';
 import { useKanbanContext } from './Kanban';
-import { CARD_TYPE, KanbanItem } from './types';
-import getVerticalPosition from './utils/getVerticalPosition';
+import { COLUMN_TYPE, KanbanItem } from './types';
+import getHorizontalPosition from './utils/getHorizontalPosition';
 
 
-export function useCards(columnId: string): [any, RefObject<any>, RefObject<any>] {
+export function useColumns(): [any, RefObject<any>, RefObject<any>] {
 
     const context = useKanbanContext();
 
-    const columnRef = useRef<HTMLElement>(null);
+    const columnsRef = useRef<HTMLElement>(null);
     const placeholderRef = useRef<HTMLElement>(null);
 
     const clientOffset = useRef<XYCoord | null>(null);
-    const columnScrollTop = useRef<number>(0);
+    const columnScrollLeft = useRef<number>(0);
 
     const [clientPosition, setClientPosition] = useState<number | null>(null);
 
     const [{ isOver, item }, drop] = useDrop(() => ({
 
-        accept: CARD_TYPE,
+        accept: COLUMN_TYPE,
         hover: (item: KanbanItem, monitor) => {
 
             const offset = monitor.getClientOffset();
-            const scrollTop = columnScrollTop.current;
+            const scrollLeft = columnScrollLeft.current;
 
             if (offset !== null && (
                 clientOffset.current === null ||
                 clientOffset.current.x !== offset.x || clientOffset.current.y !== offset.y ||
-                columnRef.current!.scrollTop != scrollTop
+                columnsRef.current!.scrollLeft != scrollLeft
             )) {
 
-                const position = getVerticalPosition(item.id, columnRef.current!, offset, placeholderRef.current!)
+                const position = getHorizontalPosition(item.id, columnsRef.current!, offset, placeholderRef.current!)
                 setClientPosition(position);
 
                 clientOffset.current = offset;
-                columnScrollTop.current = columnRef.current!.scrollTop;
+                columnScrollLeft.current = columnsRef.current!.scrollLeft;
 
             }
 
         },
         drop: (item: KanbanItem, monitor) => {
             if (clientPosition != null) {
-                context.context!.moveCard(item.id, columnId, clientPosition);
+                context.context!.moveColumn(item.id, clientPosition);
             }
         },
         collect: (monitor) => ({
@@ -50,10 +50,10 @@ export function useCards(columnId: string): [any, RefObject<any>, RefObject<any>
             item: monitor.getItem()
         })
 
-    }), [columnId, context, clientPosition]);
+    }), [context, clientPosition]);
 
-    drop(columnRef);
+    drop(columnsRef);
 
-    return [{ isOver, item: isOver ? item : null, clientPosition: isOver ? clientPosition : null }, columnRef, placeholderRef];
+    return [{ isOver, item: isOver ? item : null, clientPosition: isOver ? clientPosition : null }, columnsRef, placeholderRef];
 
 }
