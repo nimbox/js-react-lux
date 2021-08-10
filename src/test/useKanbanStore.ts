@@ -65,7 +65,7 @@ export function useKanbanStore<S, C>(defaultColumns: Column<S, C>[], createCard:
 
     };
 
-    function updateCard(cardId: string, fn: (c: Card<C>) => C) {
+    function updateCard(cardId: string, fn: (c: Card<C>) => Partial<C>) {
 
         const columnIndex = columns.findIndex(column => column.cards.findIndex(card => card.id === cardId) >= 0);
         const column = columns[columnIndex];
@@ -87,7 +87,7 @@ export function useKanbanStore<S, C>(defaultColumns: Column<S, C>[], createCard:
 
     }
 
-    function deleteCard(cardId: string, fn: ({ id, lines }: { id: string, lines: number }) => { lines?: number }) {
+    function deleteCard(cardId: string) {
 
         const columnIndex = columns.findIndex(column => column.cards.findIndex(card => card.id === cardId) >= 0);
         const column = columns[columnIndex];
@@ -132,8 +132,19 @@ export function useKanbanStore<S, C>(defaultColumns: Column<S, C>[], createCard:
 
     };
 
+    function deleteColumn(columnId: string) {
+
+        const columnIndex = columns.findIndex(column => column.id === columnId);
+
+        setColumns([
+            ...columns.slice(0, columnIndex),
+            ...columns.slice(columnIndex + 1)
+        ]);
+
+    };
+
     //
 
-    return [columns, { addCard, moveCard, updateCard, deleteCard, addColumn, moveColumn }] as const;
+    return [columns, { addCard, moveCard, updateCard, deleteCard, addColumn, moveColumn, deleteColumn }] as const;
 
 }

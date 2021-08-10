@@ -1,14 +1,14 @@
 import { RefObject, useRef } from 'react';
 import { useDrop } from 'react-dnd';
-import { CARD_TYPE, KanbanItem } from './types';
+import { CARD_TYPE, KanbanCardItem } from './types';
 
 
 export interface UseCardDropProps {
-    onDrop?: (item: KanbanItem) => void;
+    onDrop?: (item: KanbanCardItem) => void;
 }
 
 export interface UseCardDropCollectedProps {
-    item: KanbanItem;
+    item: KanbanCardItem;
     isOver: boolean;
 }
 
@@ -17,9 +17,9 @@ export function useCardDrop<C extends HTMLElement>({ onDrop }: UseCardDropProps)
     const dropRef = useRef<C>(null);
     const [{ item, isOver }, drop] = useDrop(() => ({
         accept: CARD_TYPE,
-        ...(onDrop && { drop: (item: KanbanItem) => onDrop(item) }),
+        ...(onDrop && { drop: (item: KanbanCardItem) => onDrop(item) }),
         collect: (monitor) => ({
-            item: monitor.getItem<KanbanItem>(),
+            item: monitor.getItem<KanbanCardItem>(),
             isOver: monitor.isOver(),
         })
     }));

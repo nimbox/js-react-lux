@@ -1,0 +1,279 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import kanbanStructureImage from './assets/kanban-structure.svg';
+
+
+<Meta title="Module/Kanban/Documentation"/>
+
+# Kanban Boards
+
+Kanban boards provide a very graphical and useful representation of "things to
+do". Columns usually are a representation of a category or state whereas cards
+are representations of tasks or things to do. Order in both columns and cards 
+are importante to further convey prioritizacion.
+
+The kanban set of hooks only provides the logic for managing the kanban board.
+All the styling is left to the user of the library. The examples in this page
+will be done with styling from tailwind to make it look nice, but you have the
+final say on how the sytling looks.
+
+The basic structure is as follows:
+
+<p style={{ textAlign: 'center' }}>
+<img src={kanbanStructureImage} style={{ display: 'inline-block', width: 477 }}/>
+</p>
+
+There are two types of objects: `card` and `column`.  Each is expected to be a
+`block` item.  These objects should be direct children of their corresponding
+containers, `cards` and `columns`, with the restriction that cards are expected
+to go down in the flow inside `cards` and columns are expected to go right
+in the flow inside `columns`.
+
+Typically `columns` should have classes `"flex flex-row items-start space-x-2"`
+and `cards` should have classes `"flex flex-column items-start space-y-2"`. The
+way the columns and cards is also left to how you want them to work.
+
+When dragging and dropping there is a third type of object: `placeholder`. This
+object represents the location where the `card` or `column` will eventually be
+dropped. You are also responsible of formatting this element and placing it in
+the appropriate locations inside the `columns` and `cards` container. No other
+elements, besides `card`, `column` and `placeholder`, should be inside the
+`columns` and `cards` containers.
+
+The best way to use these hooks is to create the following react components:
+
+* **KanbanCard** - the basic card component.
+* **KanbanCards** - the `KanbanCard` container dealing with the card 
+  placeholder.
+* **KanbanColumn** - the basic column component containing the `KanbanCards`.
+* **KanbanColumns** - the `KanbanColumn` container dealing with the column 
+  placeholder.
+* **KanbanBoard** - the board component containing the `KanbanColumns`
+  and setting up all the handlers necessary to update the kanban data.
+
+
+## KanbanCard (useCard)
+
+At the lowest level of the hierarchy is the `card`. The `card` can be styled in
+any way possible, usually with a fixed width.
+
+A typical implementation should look like this:
+
+```js
+const KanbanCard: FC<{id :string }> = ({ id }) => {
+    const [cardRef, { isDragging }] = useCard<HTMLDivElement>(id);
+    return (
+        <div ref={cardRef} className={classnames(
+            'w-full px-2 py-1 bg-gray-50 rounded shadow',
+            { 'opacity-20': isDragging }
+        )}>
+            <div>Card {id}</div>
+            {Array.from(Array(lines - 1).keys()).map((_, i) => <div key={i}>Line</div>)}
+        </div>
+    );
+};
+```
+
+* The hook `useCard` returns two parameters, the `cardRef` and `isDragging`. 
+* The reference `cardRef` should be attached to the div that gets dragged and
+`isDragging` should change the way the element is displayed while it is
+dragging. 
+* The drag preview is taken before applying the styling of `isDragging`.
+
+## KanbanCards (useCards)
+
+Cards are maintained in a card container which displays them flowing down. 
+
+A typical implementation should look like this where `children` are expected to
+be cards.
+
+```js
+const KanbanCards: FC<{ columnId: string, moveCard: MoveCardCallback }> = 
+    ({ columnId, moveCard, children }) => {
+
+    const [cardsRef, placeholderRef, { isOver, canDrop, placeholderIndex, item }] =
+        useCards<HTMLDivElement, HTMLDivElement>(columnId, { moveCard });
+    const childrenArray = React.Children.toArray(children);
+
+    return (
+        <div ref={cardsRef} className={classnames(
+            'w-48 min-h-0 px-1 py-1 -mx-1 space-y-2 overflow-y-auto',
+            { '': isOver }
+        )} style={{ minHeight: '2rem' }}>
+            {childrenArray.slice(0, placeholderIndex || 0).map(c => c)}
+            {canDrop && 
+                <div key="placeholder" 
+                    ref={placeholderRef} 
+                    className="w-full bg-gray-300 rounded shadow-inner" 
+                    style={{ height: item.sourceBoundingClientRect.height }}
+                />
+            }
+            {childrenArray.slice(placeholderIndex || 0).map(c => c)}
+        </div>
+    );
+
+};
+```
+
+* The `useCards` hook returns two refs, `cardsRef` and `placeholderRef`.
+* The `cardsRef` must be attached to the `div` containing the cards. 
+* The `placeholderRef` must be attached to the element representing the
+`placeholderRef` for the card. 
+* The placeholder is an element placed at `placeholderIndex`. 
+* The `placeholderIndex` is undefined unless`canDrop` is `true`.
+
+## KanbanColumn (useColumn)
+
+The base board member is a `column`. The column contains the cards, which are
+contained inside the `cards` element. The `column` also contains other display
+components, like add new card, and those components should be place outside the
+`cards` element.
+
+A typical implementation should look like this where `children` are expected to
+be cards.
+
+```js
+const KanbanColumn: FC<{ id: string,  moveCard: MoveCardCallback }> = 
+    ({ id, children }) => {
+
+    const [columnRef, { isDragging }] = useColumn<HTMLDivElement>(id);
+    return (
+        <div ref={columnRef} className={classnames(
+            'max-h-full px-3 py-2 flex flex-col space-y-2 bg-gray-200 rounded shadow',
+            { 'opacity-20': isDragging })
+        }>
+            <div className="flex-none font-bold">ID: {id}</div>
+            <KanbanCards columnId={id} moveCard={moveCard}>
+                {children}
+            </KanbanCards>
+        </div>
+    );
+
+};
+```
+
+* The `useColumns` hook returns two parameters, the `columnRef` and `isDragging`. 
+* The reference `columnRef` should be attached to the div that gets dragged and
+`isDragging` should change the way the element is displayed while it is
+dragging. 
+* The drag preview is taken before applying the styling of `isDragging`.
+
+## KanbanColumns (useColumns)
+
+Columns are maintained in a column container which displays them flowing right. 
+
+A typical implementation should look like this where `children` are expected to
+be columns.
+
+
+```js
+const KanbanColumns: FC<{ moveColumn: MoveColumnCallback }> = 
+    ({ moveColumn, children }) => {
+
+    const [columnsRef, placeholderRef, 
+        { isOver, canDrop, placeholderIndex, item }]
+        = useColumns<HTMLDivElement, HTMLDivElement>({ moveColumn });
+    const childrenArray = React.Children.toArray(children);
+
+    return (
+        <div ref={columnsRef} className={classnames(
+            'h-full flex flex-row items-start space-x-2',
+            { '': isOver })
+        }>
+            {childrenArray.slice(0, placeholderIndex || 0).map(c => c)}
+            {canDrop &&
+                <div key="placeholder"
+                    ref={placeholderRef}
+                    className="w-52 bg-gray-300 rounded shadow-inner"
+                    style={{ height: item.sourceBoundingClientRect.height }}
+                />
+            }
+            {childrenArray.slice(placeholderIndex || 0).map(c => c)}
+        </div>
+    );
+
+};
+```
+
+* The `useColumns` hook returns two refs, `columnsRef` and `placeholderRef`.
+* The `columnsRef` must be attached to the `div` containing the columns. 
+* The `placeholderRef` must be attached to the element representing the
+`placeholderRef` for the column. 
+* The placeholder is an element placed at `placeholderIndex`. 
+* The `placeholderIndex` is undefined unless`canDrop` is `true`.
+
+## KanbanBoard (your component)
+
+Finally at the top of this structure, is the `KanbanBoard` which sets the
+`KanbanProvider` and puts all the columns and the childrens.
+
+```js
+const KanbanBoard: FC<{ columns: any, actions: any }> = ({ columns, actions }) => {
+
+    const { isDraggingCard, isDraggingColumn } = useKanbanContext();
+
+    return (
+        <div className="relative w-full h-full">
+
+            <div className={classnames(
+                'w-full h-full px-10 py-10 flex flex-row items-start overflow-x-auto space-x-2',
+            )}>
+
+                <KanbanColumns moveColumn={actions.moveColumn}>
+                    {columns.map(column =>
+                        <KanbanColumn key={column.id} id={column.id} addCard={actions.addCard} moveCard={actions.moveCard} >
+                            {column.cards.map(card =>
+                                <KanbanCard key={card.id} id={card.id} lines={card.lines} />
+                            )}
+                        </KanbanColumn>
+                    )}
+                </KanbanColumns>
+
+            </div>
+
+        </div>
+    );
+
+};
+```
+
+To complete setup the provider, the KanbanBoard must be called inside the
+`KanbanProvider` in a different component.
+
+```js
+<div className="w-full h-screen">
+    <KanbanProvider>
+        <KanbanBoard columns={columns} actions={actions} />
+    </KanbanProvider>
+</div>
+```
+
+
+## KanbanDrops (useCardDrop, useColumnDrop)
+
+Sometimes you need to be able to drop cards and columns inside other containers
+to provide further functionallity. Generally you can show these drop zones
+by checking the `isDraggingCard` and `isDraggingColumn` properties provider by
+the `useKanbanContext` in your board.
+
+A typical drop would look like this:
+
+```js
+const KanbanCardDropDelete: FC<{ deleteCard: DeleteStoryCardCallback }> = 
+    ({ title, deleteCard }) => {
+
+    const [cardDropRef, { isOver }] = useCardDrop<HTMLDivElement>({
+        onDrop: (item) => deleteCard(item.id)
+    });
+
+    return (
+        <div ref={cardDropRef} className={classnames(
+            'w-48 h-16 flex justify-center items-center',
+            isOver ? 'bg-white border-red-400' : '',
+            'border-dashed border-2 rounded'
+        )}>
+            delete
+        </div>
+    );
+
+};
+```

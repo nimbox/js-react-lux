@@ -1,12 +1,7 @@
-import { lookup } from "dns";
-import { nextTick } from "node:process";
-import { createContext, FC, PropsWithChildren, ReactElement, RefObject, useContext, useEffect, useRef, useState } from "react";
-import { ConnectDragSource, ConnectDropTarget, useDrag, useDragDropManager, useDrop, XYCoord } from "react-dnd";
+import { createContext, FC, useContext, useState } from 'react';
 
 
 export interface KanbanContextProps {
-
-    context?: any;
 
     isDraggingColumn: boolean;
     setIsDraggingColumn: (isDraggingColumn: boolean) => void;
@@ -26,23 +21,17 @@ export const KanbanContext = createContext<KanbanContextProps>({
 
 });
 
-export interface KanbanProviderProps<C> {
-    context: C;
-}
-
-export const KanbanProvider = <C extends any>( {context, children}: PropsWithChildren<KanbanProviderProps<C>>): ReactElement<any, any> | null=> {
+export const KanbanProvider: FC<{}> = ({ children }) => {
 
     const [isDraggingColumn, setIsDraggingColumn] = useState(false);
     const [isDraggingCard, setIsDraggingCard] = useState(false);
 
-    const manager = useDragDropManager();
-
     return (
-        <KanbanContext.Provider value={{ context, isDraggingColumn, setIsDraggingColumn, isDraggingCard, setIsDraggingCard }}>
+        <KanbanContext.Provider value={{ isDraggingColumn, setIsDraggingColumn, isDraggingCard, setIsDraggingCard }}>
             {children}
         </KanbanContext.Provider>
     );
 
 };
 
-export const useKanbanContext = <C extends any>() => useContext(KanbanContext);
+export const useKanbanContext = () => useContext(KanbanContext);

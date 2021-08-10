@@ -1,13 +1,14 @@
 import classnames from 'classnames';
-import _range from 'lodash/range';
 import React, { FC } from 'react';
 import { PlusIcon } from '../../icons';
-import { Column, uniqueCard, uniqueColumn, useKanbanStore } from '../../test/useKanbanStore';
+import { Card, Column, uniqueCard, uniqueColumn, useKanbanStore } from '../../test/useKanbanStore';
 import { KanbanProvider, useKanbanContext } from './Kanban';
+import { MoveCardCallback, MoveColumnCallback } from './types';
 import { useCard } from './useCard';
 import { useCardDrop } from './useCardDrop';
 import { useCards } from './useCards';
 import { useColumn } from './useColumn';
+import { useColumnDrop } from './useColumnDrop';
 import { useColumns } from './useColumns';
 
 
@@ -21,7 +22,10 @@ export default {
     }
 };
 
-const defaultColumns: Column<{}, { lines: number }>[] = [
+interface StoryCard { lines: number };
+interface StoryColumn { };
+
+const defaultColumns: Column<StoryColumn, StoryCard>[] = [
     {
         id: uniqueColumn(), cards: [
             { id: uniqueCard(), lines: 3 },
@@ -39,15 +43,21 @@ const defaultColumns: Column<{}, { lines: number }>[] = [
     }
 ];
 
+type UpdateStoryCardCallback = (cardId: string, fn: (c: Card<StoryCard>) => Partial<StoryCard>) => void;
+type DeleteStoryCardCallback = (cardId: string) => void;
+
+type DeleteStoryColumnCallback = (columnId: string) => void;
+
+//
+
 export const Simple = () => {
 
     const [columns, actions] = useKanbanStore(defaultColumns, () => ({ lines: 2 }), () => ({}));
-    const { addCard, moveCard, updateCard, deleteCard, addColumn, moveColumn } = actions;
 
     return (
         <div className="w-full h-screen">
-            <KanbanProvider context={{ addColumn, moveColumn, addCard, updateCard, deleteCard, moveCard }}>
-                <KanbanBoard columns={columns} />
+            <KanbanProvider>
+                <KanbanBoard columns={columns} actions={actions} />
             </KanbanProvider>
         </div>
     );
@@ -56,9 +66,22 @@ export const Simple = () => {
 
 //
 
-const KanbanBoard: FC<{ columns: { id: string, cards: { id: string, lines: number }[] }[] }> = ({ columns }) => {
+interface KanbanBoardActions {
 
-    const { context: { addColumn }, isDraggingColumn, isDraggingCard } = useKanbanContext();
+    addCard: (columnId: string) => void;
+    moveCard: MoveCardCallback;
+    updateCard: UpdateStoryCardCallback;
+    deleteCard: DeleteStoryCardCallback;
+
+    addColumn: () => void;
+    moveColumn: MoveColumnCallback;
+    deleteColumn: DeleteStoryColumnCallback;
+
+}
+
+const KanbanBoard: FC<{ columns: { id: string, cards: { id: string, lines: number }[] }[], actions: KanbanBoardActions }> = ({ columns, actions }) => {
+
+    const { isDraggingCard, isDraggingColumn } = useKanbanContext();
 
     return (
         <div className="relative w-full h-full">
@@ -68,31 +91,37 @@ const KanbanBoard: FC<{ columns: { id: string, cards: { id: string, lines: numbe
                 (isDraggingColumn || isDraggingCard) ? (isDraggingColumn ? 'bg-blue-400' : 'bg-blue-400') : 'bg-blue-400',
             )}>
 
-                <KanbanColumns>
+                <KanbanColumns moveColumn={actions.moveColumn}>
                     {columns.map(column =>
-                        <KanbanColumn key={column.id} id={column.id}>
+                        <KanbanColumn key={column.id} id={column.id} addCard={actions.addCard} moveCard={actions.moveCard} >
                             {column.cards.map(card =>
-                                <KanbanCard key={card.id} columnId={column.id} id={card.id} lines={card.lines} />
+                                <KanbanCard key={card.id} id={card.id} lines={card.lines} />
                             )}
                         </KanbanColumn>
                     )}
                 </KanbanColumns>
 
                 <div className="px-3 py-2 flex-none bg-gray-200 rounded">
-                    <div onClick={addColumn} className="w-48 px-2 py-2 hover:bg-gray-300 rounded cursor-pointer">
+                    <div onClick={() => actions.addColumn()} className="w-48 px-2 py-2 hover:bg-gray-300 rounded cursor-pointer">
                         <PlusIcon className="inline stroke-2" />&nbsp;Add a column
                     </div>
                 </div>
 
             </div>
 
-            {(isDraggingCard) &&
+            {isDraggingCard &&
                 <div className="absolute inset-x-0 bottom-0 px-3 py-2 flex flex-row justify-between bg-white bg-opacity-30">
                     <div className="flex flex-row space-x-2">
-                        <KanbanCardDropUpdate title="add" fn={({ lines }) => ({ lines: lines + 1 })} />
-                        <KanbanCardDropUpdate title="subtract" fn={({ lines }) => ({ lines: Math.max(lines - 1, 1) })} />
+                        <KanbanCardDropUpdate title="add" updateCard={actions.updateCard} fn={({ lines }) => ({ lines: lines + 1 })} />
+                        <KanbanCardDropUpdate title="subtract" updateCard={actions.updateCard} fn={({ lines }) => ({ lines: Math.max(lines - 1, 1) })} />
                     </div>
-                    <KanbanCardDropDelete title="delete" />
+                    <KanbanCardDropDelete title="delete" deleteCard={actions.deleteCard} />
+                </div>
+            }
+
+            {isDraggingColumn &&
+                <div className="absolute inset-x-0 bottom-0 px-3 py-2 flex flex-row justify-end bg-white bg-opacity-30">
+                    <KanbanColumnDropDelete title="delete" deleteColumn={actions.deleteColumn} />
                 </div>
             }
 
@@ -101,10 +130,9 @@ const KanbanBoard: FC<{ columns: { id: string, cards: { id: string, lines: numbe
 
 };
 
-const KanbanCardDropUpdate: FC<{ title: string, fn: ({ id, lines }: { id: string, lines: number }) => { lines?: number } }> = ({ title, fn }) => {
+const KanbanCardDropUpdate: FC<{ title: string, updateCard: UpdateStoryCardCallback, fn: ({ id, lines }: Card<StoryCard>) => Partial<StoryCard> }> = ({ title, updateCard, fn }) => {
 
-    const { context: { updateCard } } = useKanbanContext();
-    const [cardDropRef, { item, isOver }] = useCardDrop<HTMLDivElement>({
+    const [cardDropRef, { isOver }] = useCardDrop<HTMLDivElement>({
         onDrop: (item) => updateCard(item.id, fn)
     });
 
@@ -120,10 +148,9 @@ const KanbanCardDropUpdate: FC<{ title: string, fn: ({ id, lines }: { id: string
 
 };
 
-const KanbanCardDropDelete: FC<{ title: string }> = ({ title }) => {
+const KanbanCardDropDelete: FC<{ title: string, deleteCard: DeleteStoryCardCallback }> = ({ title, deleteCard }) => {
 
-    const { context: { deleteCard } } = useKanbanContext();
-    const [cardDropRef, { item, isOver }] = useCardDrop<HTMLDivElement>({
+    const [cardDropRef, { isOver }] = useCardDrop<HTMLDivElement>({
         onDrop: (item) => deleteCard(item.id)
     });
 
@@ -139,33 +166,62 @@ const KanbanCardDropDelete: FC<{ title: string }> = ({ title }) => {
 
 };
 
-const KanbanColumns: FC<{}> = ({ children }) => {
+const KanbanColumnDropDelete: FC<{ title: string, deleteColumn: DeleteStoryColumnCallback }> = ({ title, deleteColumn }) => {
 
-    const [{ isOver, canDrop, item, clientPosition }, columnsRef, placeholderRef] = useColumns<HTMLDivElement, HTMLDivElement>();
+    const [cardDropRef, { isOver }] = useColumnDrop<HTMLDivElement>({
+        onDrop: (item) => deleteColumn(item.id)
+    });
+
+    return (
+        <div ref={cardDropRef} className={classnames(
+            'w-48 h-16 flex justify-center items-center',
+            isOver ? 'bg-white border-red-400' : '',
+            'border-dashed border-2 rounded'
+        )}>
+            {title}
+        </div>
+    );
+
+};
+
+const KanbanColumns: FC<{ moveColumn: MoveColumnCallback }> = ({ moveColumn, children }) => {
+
+    const [columnsRef, placeholderRef, { isOver, canDrop, item, placeholderIndex: clientPosition }]
+        = useColumns<HTMLDivElement, HTMLDivElement>({ moveColumn });
     const childrenArray = React.Children.toArray(children);
 
     return (
-        <div ref={columnsRef} className={classnames('h-full flex flex-row items-start space-x-2', { '': isOver })}>
+        <div ref={columnsRef} className={classnames(
+            'h-full flex flex-row items-start space-x-2',
+            { '': isOver })
+        }>
             {childrenArray.slice(0, clientPosition || 0).map(c => c)}
-            {isOver && canDrop && (clientPosition !== null) && <div key="placeholder" ref={placeholderRef} className="w-52 bg-gray-300 rounded shadow-inner" style={{ height: item.sourceBoundingClientRect.height }}></div>}
+            {canDrop &&
+                <div key="placeholder"
+                    ref={placeholderRef}
+                    className="w-52 bg-gray-300 rounded shadow-inner"
+                    style={{ height: item.sourceBoundingClientRect.height }}
+                />
+            }
             {childrenArray.slice(clientPosition || 0).map(c => c)}
         </div>
     );
 
-}
+};
 
-const KanbanColumn: FC<{ id: string }> = ({ id, children }) => {
+const KanbanColumn: FC<{ id: string, addCard: (id: string) => void, moveCard: MoveCardCallback }> = ({ id, addCard, moveCard, children }) => {
 
-    const { context: { addCard }, isDraggingCard: isActive } = useKanbanContext();
-    const [{ isDragging }, columnRef] = useColumn<HTMLDivElement>(id);
-
+    const [columnRef, { isDragging }] = useColumn<HTMLDivElement>(id);
 
     return (
-        <div ref={columnRef} className={classnames('max-h-full px-3 py-2 flex flex-col space-y-2 bg-gray-200 rounded shadow', { 'opacity-20': isDragging })}>
+        <div ref={columnRef} className={classnames(
+            'max-h-full px-3 py-2 flex flex-col space-y-2 bg-gray-200 rounded shadow',
+            { 'opacity-20': isDragging })
+        }>
 
             <div className="flex-none font-bold">ID: {id}</div>
 
-            <KanbanCards columnId={id}>
+            <KanbanCards columnId={id} moveCard={moveCard}>
                 {children}
             </KanbanCards>
 
@@ -181,29 +237,42 @@ const KanbanColumn: FC<{ id: string }> = ({ id, children }) => {
 };
 
 
-const KanbanCards: FC<{ columnId: string }> = ({ columnId, children }) => {
+const KanbanCards: FC<{ columnId: string, moveCard: MoveCardCallback }> = ({ columnId, moveCard, children }) => {
 
-    const [{ isOver, canDrop, item, clientPosition }, cardsRef, placeholderRef] = useCards<HTMLDivElement, HTMLDivElement>(columnId);
+    const [cardsRef, placeholderRef, { isOver, canDrop, placeholderIndex, item }] =
+        useCards<HTMLDivElement, HTMLDivElement>(columnId, { moveCard });
     const childrenArray = React.Children.toArray(children);
 
     return (
-        <div ref={cardsRef} className={classnames('w-48 min-h-0 px-1 py-1 -mx-1 space-y-2 overflow-y-auto', { '': isOver })} style={{ minHeight: '2rem' }}>
-            {childrenArray.slice(0, clientPosition || 0).map(c => c)}
-            {isOver && canDrop && <div key="placeholder" ref={placeholderRef} className="w-full bg-gray-300 rounded shadow-inner" style={{ height: item.sourceBoundingClientRect.height }}></div>}
-            {childrenArray.slice(clientPosition || 0).map(c => c)}
+        <div ref={cardsRef} className={classnames(
+            'w-48 min-h-0 px-1 py-1 -mx-1 space-y-2 overflow-y-auto',
+            { '': isOver }
+        )} style={{ minHeight: '2rem' }}>
+            {childrenArray.slice(0, placeholderIndex || 0).map(c => c)}
+            {canDrop &&
+                <div key="placeholder"
+                    ref={placeholderRef}
+                    className="w-full bg-gray-300 rounded shadow-inner"
+                    style={{ height: item.sourceBoundingClientRect.height }}
+                />
+            }
+            {childrenArray.slice(placeholderIndex || 0).map(c => c)}
         </div>
     );
 
 };
 
-const KanbanCard: FC<{ columnId: string, id: string, lines: number }> = ({ columnId, id, lines }) => {
+const KanbanCard: FC<{ id: string, lines: number }> = ({ id, lines }) => {
 
-    const [{ isDragging }, cardRef] = useCard<HTMLDivElement>(id);
+    const [cardRef, { isDragging }] = useCard<HTMLDivElement>(id);
 
     return (
-        <div ref={cardRef} className={classnames('w-full px-2 py-1 bg-gray-50 rounded shadow', { 'opacity-20': isDragging })}>
+        <div ref={cardRef} className={classnames(
+            'w-full px-2 py-1 bg-gray-50 rounded shadow',
+            { 'opacity-20': isDragging }
+        )}>
             <div>ID: {id}</div>
-            {_range(lines - 1).map((_, i) => <div key={i}>Line</div>)}
+            {Array.from(Array(lines - 1).keys()).map((_, i) => <div key={i}>Line</div>)}
         </div>
     );
 

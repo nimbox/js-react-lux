@@ -1,20 +1,21 @@
 import { RefObject, useRef, useState } from 'react';
 import { useDrop, XYCoord } from 'react-dnd';
-import { useKanbanContext } from './Kanban';
-import { COLUMN_TYPE, KanbanItem } from './types';
-import getHorizontalPosition from './utils/getHorizontalPosition';
+import { COLUMN_TYPE, KanbanColumnItem, MoveColumnCallback } from './types';
+import getHorizontalIndex from './utils/getHorizontalIndex';
 
 
 export interface UseColumnsProps {
-    item: KanbanItem;
-    isOver: boolean; 
-    canDrop: boolean;
-    clientPosition?: number | null;
+    moveColumn?: MoveColumnCallback;
 }
 
-export function useColumns<C extends HTMLElement, P extends HTMLElement>(): [UseColumnsProps, RefObject<C>, RefObject<P>] {
+export interface UseColumnsCollectedProps {
+    isOver: boolean;
+    canDrop: boolean;
+    placeholderIndex?: number | null;
+    item: KanbanColumnItem;
+}
 
-    const context = useKanbanContext();
+export function useColumns<C extends HTMLElement, P extends HTMLElement>({ moveColumn = () => null }: UseColumnsProps = {}): [RefObject<C>, RefObject<P>, UseColumnsCollectedProps] {
 
     const columnsRef = useRef<C>(null);
     const placeholderRef = useRef<P>(null);
@@ -22,12 +23,13 @@ export function useColumns<C extends HTMLElement, P extends HTMLElement>(): [Use
     const clientOffset = useRef<XYCoord | null>(null);
     const columnScrollLeft = useRef<number>(0);
 
-    const [clientPosition, setClientPosition] = useState<number | null>(null);
+    const [placeholderIndex, setPlaceholderIndex] = useState<number | null>(null);
 
     const [{ item, isOver }, drop] = useDrop(() => ({
 
         accept: COLUMN_TYPE,
-        hover: (item: KanbanItem, monitor) => {
+
+        hover: (item: KanbanColumnItem, monitor) => {
 
             const offset = monitor.getClientOffset();
             const scrollLeft = columnScrollLeft.current;
@@ -38,8 +40,8 @@ export function useColumns<C extends HTMLElement, P extends HTMLElement>(): [Use
                 columnsRef.current!.scrollLeft != scrollLeft
             )) {
 
-                const position = getHorizontalPosition(item.id, columnsRef.current!, offset, placeholderRef.current!)
-                setClientPosition(position);
+                const index = getHorizontalIndex(item.id, columnsRef.current!, offset, placeholderRef.current!)
+                setPlaceholderIndex(index);
 
                 clientOffset.current = offset;
                 columnScrollLeft.current = columnsRef.current!.scrollLeft;
@@ -47,20 +49,21 @@ export function useColumns<C extends HTMLElement, P extends HTMLElement>(): [Use
             }
 
         },
-        drop: (item: KanbanItem, monitor) => {
-            if (clientPosition != null) {
-                context.context!.moveColumn(item.id, clientPosition);
+
+        drop: (item: KanbanColumnItem, monitor) => {
+            if (placeholderIndex != null) {
+                moveColumn(item.id, placeholderIndex);
             }
         },
+
         collect: (monitor) => ({
-            item: monitor.getItem<KanbanItem>(),
+            item: monitor.getItem<KanbanColumnItem>(),
             isOver: monitor.isOver()
         })
 
-    }), [context, clientPosition]);
-
+    }), [moveColumn, placeholderIndex]);
     drop(columnsRef);
 
-    return [{ item, isOver, canDrop : isOver && (clientPosition != null), clientPosition: isOver ? clientPosition : null }, columnsRef, placeholderRef];
+    return [columnsRef, placeholderRef, { item, isOver, canDrop: isOver && (placeholderIndex != null), placeholderIndex: isOver ? placeholderIndex : null }];
 
 }
