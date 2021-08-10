@@ -5,19 +5,26 @@ import { COLUMN_TYPE, KanbanItem } from './types';
 import getHorizontalPosition from './utils/getHorizontalPosition';
 
 
-export function useColumns(): [any, RefObject<any>, RefObject<any>] {
+export interface UseColumnsProps {
+    item: KanbanItem;
+    isOver: boolean; 
+    canDrop: boolean;
+    clientPosition?: number | null;
+}
+
+export function useColumns<C extends HTMLElement, P extends HTMLElement>(): [UseColumnsProps, RefObject<C>, RefObject<P>] {
 
     const context = useKanbanContext();
 
-    const columnsRef = useRef<HTMLElement>(null);
-    const placeholderRef = useRef<HTMLElement>(null);
+    const columnsRef = useRef<C>(null);
+    const placeholderRef = useRef<P>(null);
 
     const clientOffset = useRef<XYCoord | null>(null);
     const columnScrollLeft = useRef<number>(0);
 
     const [clientPosition, setClientPosition] = useState<number | null>(null);
 
-    const [{ isOver, item }, drop] = useDrop(() => ({
+    const [{ item, isOver }, drop] = useDrop(() => ({
 
         accept: COLUMN_TYPE,
         hover: (item: KanbanItem, monitor) => {
@@ -46,14 +53,14 @@ export function useColumns(): [any, RefObject<any>, RefObject<any>] {
             }
         },
         collect: (monitor) => ({
-            isOver: monitor.isOver(),
-            item: monitor.getItem()
+            item: monitor.getItem<KanbanItem>(),
+            isOver: monitor.isOver()
         })
 
     }), [context, clientPosition]);
 
     drop(columnsRef);
 
-    return [{ isOver, item: isOver ? item : null, clientPosition: isOver ? clientPosition : null }, columnsRef, placeholderRef];
+    return [{ item, isOver, canDrop : isOver && (clientPosition != null), clientPosition: isOver ? clientPosition : null }, columnsRef, placeholderRef];
 
 }

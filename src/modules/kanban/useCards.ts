@@ -5,19 +5,26 @@ import { CARD_TYPE, KanbanItem } from './types';
 import getVerticalPosition from './utils/getVerticalPosition';
 
 
-export function useCards(columnId: string): [any, RefObject<any>, RefObject<any>] {
+export interface UseCardsProps {
+    item: KanbanItem;
+    isOver: boolean; 
+    canDrop: boolean;
+    clientPosition?: number | null;
+}
+
+export function useCards<C extends HTMLElement, P extends HTMLElement>(columnId: string): [UseCardsProps, RefObject<C>, RefObject<P>] {
 
     const context = useKanbanContext();
 
-    const columnRef = useRef<HTMLElement>(null);
-    const placeholderRef = useRef<HTMLElement>(null);
+    const cardsRef = useRef<C>(null);
+    const placeholderRef = useRef<P>(null);
 
     const clientOffset = useRef<XYCoord | null>(null);
     const columnScrollTop = useRef<number>(0);
 
     const [clientPosition, setClientPosition] = useState<number | null>(null);
 
-    const [{ isOver, item }, drop] = useDrop(() => ({
+    const [{ item, isOver }, drop] = useDrop(() => ({
 
         accept: CARD_TYPE,
         hover: (item: KanbanItem, monitor) => {
@@ -28,14 +35,14 @@ export function useCards(columnId: string): [any, RefObject<any>, RefObject<any>
             if (offset !== null && (
                 clientOffset.current === null ||
                 clientOffset.current.x !== offset.x || clientOffset.current.y !== offset.y ||
-                columnRef.current!.scrollTop != scrollTop
+                cardsRef.current!.scrollTop != scrollTop
             )) {
 
-                const position = getVerticalPosition(item.id, columnRef.current!, offset, placeholderRef.current!)
+                const position = getVerticalPosition(item.id, cardsRef.current!, offset, placeholderRef.current!)
                 setClientPosition(position);
 
                 clientOffset.current = offset;
-                columnScrollTop.current = columnRef.current!.scrollTop;
+                columnScrollTop.current = cardsRef.current!.scrollTop;
 
             }
 
@@ -46,14 +53,14 @@ export function useCards(columnId: string): [any, RefObject<any>, RefObject<any>
             }
         },
         collect: (monitor) => ({
+            item: monitor.getItem<KanbanItem>(),
             isOver: monitor.isOver(),
-            item: monitor.getItem()
         })
 
     }), [columnId, context, clientPosition]);
 
-    drop(columnRef);
+    drop(cardsRef);
 
-    return [{ isOver, item: isOver ? item : null, clientPosition: isOver ? clientPosition : null }, columnRef, placeholderRef];
+    return [{ item, isOver, canDrop: isOver && (clientPosition != null), clientPosition: isOver ? clientPosition : null }, cardsRef, placeholderRef];
 
 }

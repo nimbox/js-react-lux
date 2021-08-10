@@ -4,22 +4,32 @@ import { useKanbanContext } from './Kanban';
 import { COLUMN_TYPE, KanbanItem } from './types';
 
 
-export function useColumn(id: string): [any, RefObject<any>] {
+export interface UseColumnProps {
+    isDragging: boolean;
+}
+
+export function useColumn<T extends HTMLElement>(id: string): [UseColumnProps, RefObject<T>] {
 
     const context = useKanbanContext();
 
-    const columnRef = useRef<HTMLElement>(null);
+    const columnRef = useRef<T>(null);
     const [{ item }, drag] = useDrag(() => ({
         type: COLUMN_TYPE,
-        item: (): KanbanItem => ({ id, sourceBoundingClientRect: columnRef.current!.getBoundingClientRect() }),
+        item: (): KanbanItem => {
+            context.setIsDraggingColumn(true);
+            return ({ id, sourceBoundingClientRect: columnRef.current!.getBoundingClientRect() });
+        },
         collect: (monitor) => ({
             item: monitor.getItem()
-        })
+        }),
+        end: () => {
+            context.setIsDraggingColumn(false);
+        }
     }), [id, columnRef]);
     drag(columnRef);
 
     useEffect(() => { columnRef.current!.setAttribute('data-kanban-column-id', id); }, []);
 
-    return ([{ isDragging: item?.id === id, item }, columnRef]);
+    return ([{ isDragging: item?.id === id }, columnRef]);
 
 };
