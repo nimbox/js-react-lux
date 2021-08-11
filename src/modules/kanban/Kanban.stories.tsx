@@ -203,8 +203,21 @@ const KanbanColumnDropDelete: FC<{ title: string, deleteColumn: DeleteStoryColum
 
 const KanbanColumns: FC<{ moveColumn: MoveColumnCallback }> = ({ moveColumn, children }) => {
 
-    const [columnsRef, placeholderRef, { isOver, canDrop, item, placeholderIndex: clientPosition }] = useColumns<HTMLDivElement, HTMLDivElement>({ moveColumn });
+    const [columnsRef, placeholderRef, { isOver, canDrop, item, placeholderIndex }] = useColumns<HTMLDivElement, HTMLDivElement>({ moveColumn });
+
+    // inserting into the childrenArray dramatically reduces
+    // the number of renders
+
     const childrenArray = React.Children.toArray(children);
+    if (canDrop && placeholderIndex != null) {
+        const Placeholder = () =>
+            <div
+                ref={placeholderRef}
+                className="w-52 bg-gray-300 rounded shadow-inner"
+                style={{ height: item.sourceBoundingClientRect.height }}
+            />;
+        childrenArray.splice(placeholderIndex, 0, <Placeholder key="placeholder" />);
+    }
 
     countRender('columns');
 
@@ -213,15 +226,7 @@ const KanbanColumns: FC<{ moveColumn: MoveColumnCallback }> = ({ moveColumn, chi
             'h-full flex flex-row items-start space-x-2',
             { '': isOver }
         )}>
-            {childrenArray.slice(0, clientPosition || 0).map(c => c)}
-            {canDrop &&
-                <div key="placeholder"
-                    ref={placeholderRef}
-                    className="w-52 bg-gray-300 rounded shadow-inner"
-                    style={{ height: item.sourceBoundingClientRect.height }}
-                />
-            }
-            {childrenArray.slice(clientPosition || 0).map(c => c)}
+            {childrenArray.map(c => c)}
         </div>
     );
 
@@ -259,7 +264,20 @@ const KanbanColumn: FC<{ id: string, addCard: (id: string) => void, moveCard: Mo
 const KanbanCards: FC<{ columnId: string, moveCard: MoveCardCallback }> = ({ columnId, moveCard, children }) => {
 
     const [cardsRef, placeholderRef, { isOver, canDrop, placeholderIndex, item }] = useCards<HTMLDivElement, HTMLDivElement>(columnId, { moveCard });
+
+    // inserting into the childrenArray dramatically reduces
+    // the number of renders
+
     const childrenArray = React.Children.toArray(children);
+    if (canDrop && placeholderIndex != null) {
+        const Placeholder = () =>
+            <div key="placeholder"
+                ref={placeholderRef}
+                className="w-full bg-gray-300 rounded shadow-inner"
+                style={{ height: item.sourceBoundingClientRect.height }}
+            />;
+        childrenArray.splice(placeholderIndex, 0, <Placeholder key="placeholder" />);
+    }
 
     countRender('cards');
 
@@ -268,15 +286,7 @@ const KanbanCards: FC<{ columnId: string, moveCard: MoveCardCallback }> = ({ col
             'w-48 min-h-0 px-1 py-1 -mx-1 space-y-2 overflow-y-auto',
             { '': isOver }
         )} style={{ minHeight: '2rem' }}>
-            {childrenArray.slice(0, placeholderIndex || 0).map(c => c)}
-            {canDrop &&
-                <div key="placeholder"
-                    ref={placeholderRef}
-                    className="w-full bg-gray-300 rounded shadow-inner"
-                    style={{ height: item.sourceBoundingClientRect.height }}
-                />
-            }
-            {childrenArray.slice(placeholderIndex || 0).map(c => c)}
+            {childrenArray.map(c => c)}
         </div>
     );
 
