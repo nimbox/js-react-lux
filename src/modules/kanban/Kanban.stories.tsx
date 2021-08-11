@@ -30,7 +30,7 @@ const countRender = (c: string) => {
 // definition
 
 export default {
-    title: 'Module/Kanban',
+    title: 'Modules/Kanban',
     component: KanbanProvider,
     parameters: {
         layout: 'fullscreen'
