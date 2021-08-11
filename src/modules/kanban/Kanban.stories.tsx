@@ -12,6 +12,19 @@ import { useColumnDrop } from './useColumnDrop';
 import { useColumns } from './useColumns';
 
 
+let renders: { [key: string]: number } = {
+    card: 0,
+    cards: 0,
+    column: 0,
+    columns: 0,
+    board: 0
+};
+
+const countRender = (c: string) => {
+    renders[c]++;
+    console.log(renders);
+};
+
 // definition
 
 export default {
@@ -82,6 +95,8 @@ interface KanbanBoardActions {
 const KanbanBoard: FC<{ columns: { id: string, cards: { id: string, lines: number }[] }[], actions: KanbanBoardActions }> = ({ columns, actions }) => {
 
     const { isDraggingCard, isDraggingColumn } = useKanbanContext();
+
+    countRender('board');
 
     return (
         <div className="relative w-full h-full">
@@ -186,15 +201,16 @@ const KanbanColumnDropDelete: FC<{ title: string, deleteColumn: DeleteStoryColum
 
 const KanbanColumns: FC<{ moveColumn: MoveColumnCallback }> = ({ moveColumn, children }) => {
 
-    const [columnsRef, placeholderRef, { isOver, canDrop, item, placeholderIndex: clientPosition }]
-        = useColumns<HTMLDivElement, HTMLDivElement>({ moveColumn });
+    const [columnsRef, placeholderRef, { isOver, canDrop, item, placeholderIndex: clientPosition }] = useColumns<HTMLDivElement, HTMLDivElement>({ moveColumn });
     const childrenArray = React.Children.toArray(children);
+
+    countRender('columns');
 
     return (
         <div ref={columnsRef} className={classnames(
             'h-full flex flex-row items-start space-x-2',
-            { '': isOver })
-        }>
+            { '': isOver }
+        )}>
             {childrenArray.slice(0, clientPosition || 0).map(c => c)}
             {canDrop &&
                 <div key="placeholder"
@@ -213,11 +229,13 @@ const KanbanColumn: FC<{ id: string, addCard: (id: string) => void, moveCard: Mo
 
     const [columnRef, { isDragging }] = useColumn<HTMLDivElement>(id);
 
+    countRender('column');
+
     return (
         <div ref={columnRef} className={classnames(
             'max-h-full px-3 py-2 flex flex-col space-y-2 bg-gray-200 rounded shadow',
-            { 'opacity-20': isDragging })
-        }>
+            { 'opacity-20': isDragging }
+        )}>
 
             <div className="flex-none font-bold">ID: {id}</div>
 
@@ -239,9 +257,10 @@ const KanbanColumn: FC<{ id: string, addCard: (id: string) => void, moveCard: Mo
 
 const KanbanCards: FC<{ columnId: string, moveCard: MoveCardCallback }> = ({ columnId, moveCard, children }) => {
 
-    const [cardsRef, placeholderRef, { isOver, canDrop, placeholderIndex, item }] =
-        useCards<HTMLDivElement, HTMLDivElement>(columnId, { moveCard });
+    const [cardsRef, placeholderRef, { isOver, canDrop, placeholderIndex, item }] = useCards<HTMLDivElement, HTMLDivElement>(columnId, { moveCard });
     const childrenArray = React.Children.toArray(children);
+
+    countRender('cards');
 
     return (
         <div ref={cardsRef} className={classnames(
@@ -265,6 +284,8 @@ const KanbanCards: FC<{ columnId: string, moveCard: MoveCardCallback }> = ({ col
 const KanbanCard: FC<{ id: string, lines: number }> = ({ id, lines }) => {
 
     const [cardRef, { isDragging }] = useCard<HTMLDivElement>(id);
+
+    countRender('card');
 
     return (
         <div ref={cardRef} className={classnames(
