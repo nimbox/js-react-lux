@@ -12,6 +12,8 @@ import { useColumnDrop } from './useColumnDrop';
 import { useColumns } from './useColumns';
 
 
+//
+
 let renders: { [key: string]: number } = {
     card: 0,
     cards: 0,
@@ -253,7 +255,6 @@ const KanbanColumn: FC<{ id: string, addCard: (id: string) => void, moveCard: Mo
     );
 
 };
-
 
 const KanbanCards: FC<{ columnId: string, moveCard: MoveCardCallback }> = ({ columnId, moveCard, children }) => {
 
