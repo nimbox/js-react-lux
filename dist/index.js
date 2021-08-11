@@ -4,9 +4,10 @@ import React, { useEffect, createContext, useContext, useRef, useImperativeHandl
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import _debounce from 'lodash/debounce';
-import ReactDOM from 'react-dom';
+import ReactDOM, { createPortal } from 'react-dom';
 import { usePopper } from 'react-popper';
 import { v4 } from 'uuid';
+import { useDrag, useDrop } from 'react-dnd';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -716,6 +717,241 @@ var Toast = function (_a) {
     var IconType = Icon[type];
     return (jsxs("div", __assign({ className: classnames('px-4 py-4 flex flex-row items-start space-x-4 rounded transition-transform duration-250 transform translate-x-0', { 'translate-x-64': initial }, { 'text-white bg-primary-500': type === 'success' }, { 'text-white bg-info-500': type === 'info' }, { 'text-white bg-secondary-500': type === 'warning' }, { 'text-white bg-danger-500': type === 'danger' }, 'pointer-events-auto') }, { children: [jsx("div", { children: jsx(IconType, { className: "w-6 h-6 stroke-2" }, void 0) }, void 0), jsx("div", __assign({ className: "flex-grow" }, { children: component }), void 0), jsx("div", __assign({ onClick: onDelete, className: "cursor-pointer" }, { children: jsx(SvgCrossIcon, { className: "w-6 h-6 stroke-2" }, void 0) }), void 0)] }), void 0));
 };
+
+var Modal = function (_a) {
+    var visible = _a.visible; _a.onHide; var children = _a.children;
+    return visible ? createPortal(jsx("div", __assign({ className: "fixed inset-0 bg-gray-700 bg-opacity-80" }, { children: React.Children.only(children) }), void 0), document.querySelector('#modal')) : null;
+};
+
+var Dialog = function (_a) {
+    var visible = _a.visible, onHide = _a.onHide, className = _a.className, children = _a.children;
+    return (jsx(Modal, __assign({ visible: visible, onHide: onHide }, { children: jsx("div", __assign({ className: "w-full h-full flex flex-row justify-center items-center" }, { children: jsx("div", __assign({ className: className }, { children: children }), void 0) }), void 0) }), void 0));
+};
+Dialog.Header = function (_a) {
+    var _b = _a.noBorder, noBorder = _b === void 0 ? false : _b, className = _a.className, children = _a.children;
+    return (jsx("div", __assign({ className: classnames({ 'border-b border-content-border': !noBorder }, className) }, { children: children }), void 0));
+};
+Dialog.Body = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (jsx("div", __assign({ className: className }, { children: children }), void 0));
+};
+Dialog.Footer = function (_a) {
+    var className = _a.className, children = _a.children;
+    return (jsx("div", __assign({ className: classnames('border-t border-content-border', className) }, { children: children }), void 0));
+};
+
+var KanbanContext = createContext({
+    isDraggingColumn: false,
+    setIsDraggingColumn: function () { return undefined; },
+    isDraggingCard: false,
+    setIsDraggingCard: function () { return undefined; }
+});
+var KanbanProvider = function (_a) {
+    var children = _a.children;
+    var _b = useState(false), isDraggingColumn = _b[0], setIsDraggingColumn = _b[1];
+    var _c = useState(false), isDraggingCard = _c[0], setIsDraggingCard = _c[1];
+    return (jsx(KanbanContext.Provider, __assign({ value: { isDraggingColumn: isDraggingColumn, setIsDraggingColumn: setIsDraggingColumn, isDraggingCard: isDraggingCard, setIsDraggingCard: setIsDraggingCard } }, { children: children }), void 0));
+};
+var useKanbanContext = function () { return useContext(KanbanContext); };
+
+var COLUMN_TYPE = 'kanban-column';
+var CARD_TYPE = 'kanban-card';
+
+function useCard(id) {
+    var context = useKanbanContext();
+    var cardRef = useRef(null);
+    var _a = useDrag(function () { return ({
+        type: CARD_TYPE,
+        item: function () {
+            context.setIsDraggingCard(true);
+            return ({ id: id, sourceBoundingClientRect: cardRef.current.getBoundingClientRect() });
+        },
+        collect: function (monitor) { return ({
+            item: monitor.getItem()
+        }); },
+        end: function () {
+            context.setIsDraggingCard(false);
+        }
+    }); }, [id]), item = _a[0].item, drag = _a[1];
+    drag(cardRef);
+    useEffect(function () { cardRef.current.setAttribute('data-kanban-card-id', id); }, []);
+    return ([cardRef, { isDragging: (item === null || item === void 0 ? void 0 : item.id) === id }]);
+}
+
+function useCardDrop(_a) {
+    var onDrop = _a.onDrop;
+    var dropRef = useRef(null);
+    var _b = useDrop(function () { return (__assign(__assign({ accept: CARD_TYPE }, (onDrop && { drop: function (item) { return onDrop(item); } })), { collect: function (monitor) { return ({
+            item: monitor.getItem(),
+            isOver: monitor.isOver(),
+        }); } })); }), _c = _b[0], item = _c.item, isOver = _c.isOver, drop = _b[1];
+    drop(dropRef);
+    return [dropRef, { item: item, isOver: isOver }];
+}
+
+var getVerticalIndex = (function (cardId, cards, offset, placeholder) {
+    var cardsRect = cards.getBoundingClientRect();
+    var pointerY = offset.y - cardsRect.top;
+    // find the index to drop the card
+    var i = 0;
+    var index = 0;
+    while (i < cards.children.length) {
+        var child = cards.children[i];
+        if (child !== placeholder) {
+            var childRect = child.getBoundingClientRect();
+            var childY = childRect.top + childRect.height / 2 - cardsRect.top;
+            if (pointerY < childY) {
+                break;
+            }
+            index = index + 1;
+        }
+        i = i + 1;
+    }
+    // if the index is on top the same card that is dragging
+    // then make the index null
+    if (isCardId(cardId, cards, index - 1) || isCardId(cardId, cards, i)) {
+        index = null;
+    }
+    // return the index
+    return index;
+});
+// utilities
+var isCardId = function (cardId, cards, index) {
+    return index >= 0 && index < cards.children.length && cards.children[index].getAttribute('data-kanban-card-id') === cardId;
+};
+
+function useCards(columnId, _a) {
+    var _b = _a === void 0 ? {} : _a, _c = _b.moveCard, moveCard = _c === void 0 ? function () { return null; } : _c;
+    var cardsRef = useRef(null);
+    var placeholderRef = useRef(null);
+    var clientOffset = useRef(null);
+    var cardsScrollTop = useRef(0);
+    var _d = useState(null), placeholderIndex = _d[0], setPlaceholderIndex = _d[1];
+    var _e = useDrop(function () { return ({
+        accept: CARD_TYPE,
+        hover: function (item, monitor) {
+            var offset = monitor.getClientOffset();
+            var scrollTop = cardsScrollTop.current;
+            if (offset !== null && (clientOffset.current === null ||
+                clientOffset.current.x !== offset.x || clientOffset.current.y !== offset.y ||
+                cardsRef.current.scrollTop !== scrollTop)) {
+                var index = getVerticalIndex(item.id, cardsRef.current, offset, placeholderRef.current);
+                setPlaceholderIndex(index);
+                clientOffset.current = offset;
+                cardsScrollTop.current = cardsRef.current.scrollTop;
+            }
+        },
+        drop: function (item, monitor) {
+            if (placeholderIndex != null) {
+                moveCard(item.id, columnId, placeholderIndex);
+            }
+        },
+        collect: function (monitor) { return ({
+            item: monitor.getItem(),
+            isOver: monitor.isOver(),
+        }); }
+    }); }, [columnId, moveCard, placeholderIndex]), _f = _e[0], item = _f.item, isOver = _f.isOver, drop = _e[1];
+    drop(cardsRef);
+    return [cardsRef, placeholderRef, { item: item, isOver: isOver, canDrop: isOver && (placeholderIndex != null), placeholderIndex: isOver ? placeholderIndex : null }];
+}
+
+function useColumn(id) {
+    var context = useKanbanContext();
+    var columnRef = useRef(null);
+    var _a = useDrag(function () { return ({
+        type: COLUMN_TYPE,
+        item: function () {
+            context.setIsDraggingColumn(true);
+            return ({ id: id, sourceBoundingClientRect: columnRef.current.getBoundingClientRect() });
+        },
+        collect: function (monitor) { return ({
+            item: monitor.getItem()
+        }); },
+        end: function () {
+            context.setIsDraggingColumn(false);
+        }
+    }); }, [id]), item = _a[0].item, drag = _a[1];
+    drag(columnRef);
+    useEffect(function () { columnRef.current.setAttribute('data-kanban-column-id', id); }, []);
+    return ([columnRef, { isDragging: (item === null || item === void 0 ? void 0 : item.id) === id }]);
+}
+
+function useColumnDrop(_a) {
+    var onDrop = _a.onDrop;
+    var dropRef = useRef(null);
+    var _b = useDrop(function () { return (__assign(__assign({ accept: COLUMN_TYPE }, (onDrop && { drop: function (item) { return onDrop(item); } })), { collect: function (monitor) { return ({
+            item: monitor.getItem(),
+            isOver: monitor.isOver(),
+        }); } })); }), _c = _b[0], item = _c.item, isOver = _c.isOver, drop = _b[1];
+    drop(dropRef);
+    return [dropRef, { item: item, isOver: isOver }];
+}
+
+var getHorizontalIndex = (function (cardId, columns, offset, placeholder) {
+    var columnsRect = columns.getBoundingClientRect();
+    var pointerX = offset.x - columnsRect.left;
+    // find the index to drop the column
+    var i = 0;
+    var index = 0;
+    while (i < columns.children.length) {
+        var child = columns.children[i];
+        if (child !== placeholder) {
+            var childRect = child.getBoundingClientRect();
+            var childX = childRect.left + childRect.width / 2 - columnsRect.left;
+            if (pointerX < childX) {
+                break;
+            }
+            index = index + 1;
+        }
+        i = i + 1;
+    }
+    // if the index is on top the same column that is dragging
+    // then make the index null
+    if (isColumnId(cardId, columns, index - 1) || isColumnId(cardId, columns, i)) {
+        index = null;
+    }
+    // return the index
+    return index;
+});
+// utilities
+var isColumnId = function (columnId, columns, index) {
+    return index >= 0 && index < columns.children.length && columns.children[index].getAttribute('data-kanban-column-id') === columnId;
+};
+
+function useColumns(_a) {
+    var _b = _a === void 0 ? {} : _a, _c = _b.moveColumn, moveColumn = _c === void 0 ? function () { return null; } : _c;
+    var columnsRef = useRef(null);
+    var placeholderRef = useRef(null);
+    var clientOffset = useRef(null);
+    var columnScrollLeft = useRef(0);
+    var _d = useState(null), placeholderIndex = _d[0], setPlaceholderIndex = _d[1];
+    var _e = useDrop(function () { return ({
+        accept: COLUMN_TYPE,
+        hover: function (item, monitor) {
+            var offset = monitor.getClientOffset();
+            var scrollLeft = columnScrollLeft.current;
+            if (offset !== null && (clientOffset.current === null ||
+                clientOffset.current.x !== offset.x || clientOffset.current.y !== offset.y ||
+                columnsRef.current.scrollLeft !== scrollLeft)) {
+                var index = getHorizontalIndex(item.id, columnsRef.current, offset, placeholderRef.current);
+                setPlaceholderIndex(index);
+                clientOffset.current = offset;
+                columnScrollLeft.current = columnsRef.current.scrollLeft;
+            }
+        },
+        drop: function (item, monitor) {
+            if (placeholderIndex != null) {
+                moveColumn(item.id, placeholderIndex);
+            }
+        },
+        collect: function (monitor) { return ({
+            item: monitor.getItem(),
+            isOver: monitor.isOver()
+        }); }
+    }); }, [moveColumn, placeholderIndex]), _f = _e[0], item = _f.item, isOver = _f.isOver, drop = _e[1];
+    drop(columnsRef);
+    return [columnsRef, placeholderRef, { item: item, isOver: isOver, canDrop: isOver && (placeholderIndex != null), placeholderIndex: isOver ? placeholderIndex : null }];
+}
 
 // constants
 var namedDays = [
@@ -1440,5 +1676,5 @@ Panel.Item = function (_a) {
     return (jsx("div", __assign({ className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, { children: children }), void 0));
 };
 
-export { Avatar, Badge, Button, Card, CheckBox, Choose, ChooseFn, Context$4 as Context, Control, Cross, DatePicker, Delay, Header, Helium, Input, Loading, Main, MoreOptionsButton, Navigator, Panel, Popup, Postit, Radio, RadioBar, RoundButton, Select, SwatchPicker, Tabs, Tag, TagPicker, TextArea, TimePicker, Toast, ToastContainer, ToastContent, ToastProvider, Toggle, ViewportProvider, useOnOutsideClick, useToast, useViewport };
+export { Avatar, Badge, Button, Card, CheckBox, Choose, ChooseFn, Context$4 as Context, Control, Cross, DatePicker, Delay, Dialog, Header, Helium, Input, KanbanContext, KanbanProvider, Loading, Main, Modal, MoreOptionsButton, Navigator, Panel, Popup, Postit, Radio, RadioBar, RoundButton, Select, SwatchPicker, Tabs, Tag, TagPicker, TextArea, TimePicker, Toast, ToastContainer, ToastContent, ToastProvider, Toggle, ViewportProvider, useCard, useCardDrop, useCards, useColumn, useColumnDrop, useColumns, useKanbanContext, useOnOutsideClick, useToast, useViewport };
 //# sourceMappingURL=index.js.map

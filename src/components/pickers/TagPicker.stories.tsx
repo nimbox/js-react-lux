@@ -2,7 +2,7 @@ import { action } from '@storybook/addon-actions';
 import _ from 'lodash';
 import React, { FC, useState } from 'react';
 import { default as colors, default as swatches } from '../../utils/flat-colors';
-import { MockStore } from '../../utils/MockStore';
+import { MockStore } from '../../test/MockStore';
 import { Button } from '../Buttons';
 import { Input } from '../controls/Input';
 import { Tag } from '../Tag';

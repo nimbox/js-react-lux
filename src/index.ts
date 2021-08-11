@@ -10,7 +10,10 @@ export * from './components/Postit';
 export * from './components/Tabs';
 export * from './components/Tag';
 export * from './components/Toast';
+export * from './components/Modal';
+export * from './components/Dialog';
 
+export * from './modules/kanban';
 
 export * from './components/pickers/DatePicker';
 export * from './components/pickers/SwatchPicker';

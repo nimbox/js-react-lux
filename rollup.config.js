@@ -1,8 +1,10 @@
 /* eslint-disable import/no-anonymous-default-export */
+import filesize from 'rollup-plugin-filesize';
 import copy from 'rollup-plugin-copy';
 import json from 'rollup-plugin-json';
 import typescript from 'rollup-plugin-typescript2';
 import pack from './package.json';
+
 
 export default [{
 
@@ -31,9 +33,11 @@ export default [{
         typescript({
             clean: true,
             tsconfigOverride: {
-                exclude: ["src/icons", "src/styles", "stories/**/*", "**/*.stories.tsx", "src/i18n.tsx"]
+                exclude: ["src/icons", "src/styles", "**/test", "**/stories", "**/*.stories.tsx", "src/i18n.tsx"]
             }
-        })
+        }),
+
+        filesize()
 
     ]
 
@@ -67,7 +71,9 @@ export default [{
                 include: ["src/icons"],
                 exclude: ["stories/**/*", "**/*.stories.tsx", "src/i18n.tsx"]
             }
-        })
+        }),
+
+        filesize()
 
     ]
 
@@ -87,9 +93,13 @@ export default [{
     ],
 
     plugins: [
+
         copy({
             targets: [{ src: ['src/styles/**/*', '!src/styles/elegant.js'], dest: 'dist/styles' }]
-        })
+        }),
+
+        filesize()
+
     ]
 
 }];

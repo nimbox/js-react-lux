@@ -37,7 +37,7 @@ export function useColumns<C extends HTMLElement, P extends HTMLElement>({ moveC
             if (offset !== null && (
                 clientOffset.current === null ||
                 clientOffset.current.x !== offset.x || clientOffset.current.y !== offset.y ||
-                columnsRef.current!.scrollLeft != scrollLeft
+                columnsRef.current!.scrollLeft !== scrollLeft
             )) {
 
                 const index = getHorizontalIndex(item.id, columnsRef.current!, offset, placeholderRef.current!)

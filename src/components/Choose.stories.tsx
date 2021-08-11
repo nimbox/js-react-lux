@@ -2,7 +2,7 @@ import { action } from '@storybook/addon-actions';
 import _ from 'lodash';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { Button, Input } from '..';
-import { MockStore } from '../utils/MockStore';
+import { MockStore } from '../test/MockStore';
 import { Avatar } from './Avatar';
 import { Choose } from './Choose';
 import { SearchInput } from './controls/SearchInput';

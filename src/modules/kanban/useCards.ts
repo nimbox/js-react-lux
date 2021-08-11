@@ -37,7 +37,7 @@ export function useCards<C extends HTMLElement, P extends HTMLElement>(columnId:
             if (offset !== null && (
                 clientOffset.current === null ||
                 clientOffset.current.x !== offset.x || clientOffset.current.y !== offset.y ||
-                cardsRef.current!.scrollTop != scrollTop
+                cardsRef.current!.scrollTop !== scrollTop
             )) {
 
                 const index = getVerticalIndex(item.id, cardsRef.current!, offset, placeholderRef.current!)
