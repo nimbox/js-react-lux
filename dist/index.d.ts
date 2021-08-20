@@ -18,6 +18,7 @@ export * from './components/pickers/SwatchPicker';
 export * from './components/pickers/TagPicker';
 export * from './components/pickers/TimePicker';
 export * from './components/controls/CheckBox';
+export * from './components/controls/CheckButton';
 export * from './components/controls/Control';
 export * from './components/controls/Input';
 export * from './components/controls/Radio';

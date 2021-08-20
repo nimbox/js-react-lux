@@ -1,45 +1,72 @@
 import classnames from 'classnames';
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AngleRightIcon } from '../icons';
-import { ComponentScale, controlScale, controlSize, controlSmallText, controlText } from './ComponentScale';
 import { ComponentColor } from './ComponentColor';
+import { ComponentScale, controlSize, controlSmallText, controlText } from './ComponentScale';
 
 
 // Button
 
-export interface ButtonProps {
-    link?: boolean;
-    secondary?: boolean;
-    scale?: ComponentScale;
+const CLASSES: { [key: string]: { [key: string]: string } } = {
+    'filled': {
+        'primary': 'text-primary-800 bg-primary-500 hover:text-primary-900 hover:bg-primary-600 rounded',
+        'secondary': 'text-secondary-800 bg-secondary-500 hover:text-secondary-900 hover:bg-secondary-600 rounded',
+        'muted': 'text-gray-500 bg-gray-300 hover:text-gray-600 hover:bg-gray-400 rounded'
+    },
+    'text': {
+        'primary': 'text-primary-500 hover:text-primary-600 hover:bg-primary-100 rounded',
+        'secondary': 'text-secondary-500 hover:text-secondary-600 hover:bg-secondary-100 rounded',
+        'muted': 'text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded'
+    },
+    'outlined': {
+        'primary': 'text-primary-500 border border-primary-300 hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 rounded',
+        'secondary': 'text-secondary-500 border border-secondary-300 hover:text-secondary-600 hover:bg-secondary-100 hover:border-secondary-500 rounded',
+        'muted': 'text-gray-400 border border-gray-300 hover:text-gray-500 hover:bg-gray-100 hover:border-gray-500 rounded'
+    },
+    'link': {
+        'primary': 'underline text-primary-500 hover:text-primary-600',
+        'secondary': 'underline text-secondary-500 hover:text-secondary-600',
+        'muted': 'underline text-gray-400 hover:text-gray-500'
+    }
+};
+
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+
+    color?: 'primary' | 'secondary' | 'muted';
+    variant?: 'filled' | 'text' | 'outlined' | 'link';
+
+    start?: ReactNode;
+    end?: ReactNode;
+
+    className?: string;
+
 }
 
-export const Button: FC<React.ButtonHTMLAttributes<HTMLButtonElement> & ButtonProps> =
-    ({ link = false, secondary = false, scale = 'base', children, className, ...props }) => {
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ color = 'primary', variant = 'filled', start, end, children, className, ...props }, ref) => {
 
-        return link ?
-            (<button {...props} className={classnames(
-                controlText[scale],
-                {
-                    'text-primary-500 hover:text-primary-700': !secondary,
-                    'text-gray-500 hover:text-gray-700': secondary
-                },
-                ' hover:underline rounded cursor-pointer focus:outline-none', className)}
-                style={{ padding: '0.5em 0.75em 0.5em 0.75em' }} >
-                { children}
-            </button >)
-            :
-            (<button {...props} className={classnames(
-                controlText[scale],
-                {
-                    'text-white font-bold bg-primary-500 hover:bg-primary-600 border border-control-border': !secondary,
-                    'text-primary-500 hover:text-white font-bold bg-transparent hover:bg-primary-600 border border-control-border': secondary
-                },
-                'rounded focus:outline-none', className)}
-                style={{ padding: '0.5em 0.75em 0.5em 0.75em' }}>
-                { children}
-            </button >);
-    };
+    return (
+        <button {...props} ref={ref}
+            className={classnames(
+                CLASSES[variant][color],
+                'disabled:opacity-50 disabled:cursor-not-allowed'
+            )}
+            style={variant !== 'link' ? { padding: '0.25em 0.75em' } : {}}
+        >
+
+            {(!start && !end) ?
+                <>{children}</> :
+                <span className="flex flex-row items-center">
+                    {start && <span className="flex-none" style={{ marginRight: '0.25em' }}>{start}</span>}
+                    <span className="flex-grow self-baseline">{children}</span>
+                    {end && <span className="flex-none" style={{ marginLeft: '0.25em' }}>{end}</span>}
+                </span>
+            }
+
+        </button>
+    );
+
+});
 
 
 // RoundButton
@@ -75,22 +102,22 @@ export interface MoreOptionsButtonProps {
 }
 
 export const MoreOptionsButton: FC<MoreOptionsButtonProps> =
-    ({ scale= 'base', value = false, onChange, className, children, ...props }) => {
+    ({ scale = 'base', value = false, onChange, className, children, ...props }) => {
         const { t } = useTranslation();
         return (
             <>
                 <span className={classnames(
                     controlText[scale],
-                    'relative text-primary-500 hover:text-primary-700 cursor-pointer',className)}
+                    'relative text-primary-500 hover:text-primary-700 cursor-pointer', className)}
                     onClick={() => onChange(!value)} {...props}>
-                    
+
                     <span className="absolute inset-y-0 left-0 flex flex-row justify-center items-center"
                         style={{ width: '1em' }}>
-                        <AngleRightIcon width="1em" height="1em" 
+                        <AngleRightIcon width="1em" height="1em"
                             className={classnames('inline stroke-current stroke-2 transform', { 'rotate-90': value }, 'transition duration-150 ease-in-out transtition-transform')} />
                     </span>
 
-                    <span style={{paddingLeft: '1.25em' }} >
+                    <span style={{ paddingLeft: '1.25em' }} >
                         {!value ? t('more-options') : t('less-options')}
                     </span>
                 </span>

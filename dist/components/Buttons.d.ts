@@ -1,12 +1,14 @@
-import React, { FC } from 'react';
-import { ComponentScale } from './ComponentScale';
+import React, { FC, ReactNode } from 'react';
 import { ComponentColor } from './ComponentColor';
-export interface ButtonProps {
-    link?: boolean;
-    secondary?: boolean;
-    scale?: ComponentScale;
+import { ComponentScale } from './ComponentScale';
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    color?: 'primary' | 'secondary' | 'muted';
+    variant?: 'filled' | 'text' | 'outlined' | 'link';
+    start?: ReactNode;
+    end?: ReactNode;
+    className?: string;
 }
-export declare const Button: FC<React.ButtonHTMLAttributes<HTMLButtonElement> & ButtonProps>;
+export declare const Button: React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLButtonElement>>;
 export interface RoundButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     scale?: ComponentScale;
     color?: ComponentColor;

@@ -41,7 +41,7 @@ export const Popup: FC<PopupProps> = ({ visible = false, onChangeVisible = (visi
                     <Component/>
                     <div ref={setArrow} {...attributes.arrow} className="popper-arrow" style={styles.arrow} />
                 </div>,
-                document.querySelector('body')!
+                document.querySelector('#modal')!
             )}
         </>
     );

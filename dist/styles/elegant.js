@@ -29,6 +29,7 @@ module.exports = {
                 'content-border': '#eaedf3',
 
                 'control-border': '#888888',
+                'control-placeholder': '#a0a0a0',
 
                 'primary': {
                     100: '#daedef',
@@ -118,13 +119,19 @@ module.exports = {
     ],
 
     variants: {
-        fontSize: ['responsive', 'group-hover', 'hover'],
-        textColor: ['responsive', 'focus', 'group-hover', 'hover'],
-        backgroundColor: ['responsive', 'focus', 'group-hover', 'hover'],
-        borderWidth: ['last'],
-        margin: ['responsive', 'last'],
-        borderColor: ['hover', 'focus', 'checked','focus-within'],
-        visibility: ['group-hover', 'hover']
+        extend: {
+            fontSize: ['responsive', 'group-hover', 'hover'],
+            textColor: ['responsive', 'focus', 'group-hover', 'hover'],
+            backgroundColor: ['responsive', 'focus', 'group-hover', 'hover'],
+            borderWidth: ['last'],
+            margin: ['responsive', 'last'],
+            borderColor: ['hover', 'focus', 'checked','focus-within'],
+            visibility: ['group-hover', 'hover'],
+            opacity: ['disabled'],
+            strokeWidth: ['hover'],
+            display: ['group-hover', 'hover'],
+            cursor: ['disabled']
+        }
     }
 
 };

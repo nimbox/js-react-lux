@@ -25,7 +25,7 @@ interface DatePickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
     onChange?: React.ChangeEventHandler<HTMLInputElement>,
 
     /** Wether to show the shortcuts menu. */
-    shortcuts: boolean
+    shortcuts?: boolean
 
     /** Input placeholder. */
     placeholder?: string

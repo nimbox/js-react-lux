@@ -6,7 +6,7 @@ import { Button, ButtonProps, RoundButton, RoundButtonProps } from './Buttons';
 // definition
 
 const definition = {
-    title: 'Component/Button',
+    title: 'Component/Button1',
     component: Button,
     argTypes: {
         link: { control: { type: 'boolean' } },

@@ -1,6 +1,7 @@
 import { action } from '@storybook/addon-actions';
 import { Story } from '@storybook/react';
 import React, { FC, useState } from 'react';
+import { Button } from './Buttons';
 import { Popup, PopupProps } from './Popup';
 
 
@@ -10,7 +11,12 @@ export default {
     title: 'Component/Popup',
     component: Popup,
     argTypes: {
-        visible: { control: { type: 'boolean' } }
+        visible: {
+            control: { type: 'boolean' }
+        }
+    },
+    parameters: {
+        layout: 'centered'
     }
 };
 
@@ -25,14 +31,14 @@ export const Parameterized: Story<PopupProps> = ({ visible, placement }) => {
         <div className="grid grid-cols-3 gap-8">
             <div></div>
             <Popup visible={visible} onChangeVisible={action('setVisible')} placement={placement} Component={SimplePopup} >
-                <div className="h-32 bg-green-200 flex justify-center items-center">element</div>
+                <div className="w-64 h-32 bg-green-200 flex justify-center items-center">element</div>
             </Popup>
             <div></div>
         </div>
     );
 };
 Parameterized.args = {
-    visible : true,
+    visible: true,
     placement: 'bottom'
 };
 
@@ -100,6 +106,25 @@ export const InDivOnClick = () => {
             <div>element</div>
             <Popup Component={SimplePopup} visible={visible} onChangeVisible={setVisible}>
                 <div className="bg-green-200" onClick={() => setVisible(true)}>element</div>
+            </Popup>
+            <div>element</div>
+            <div>element</div>
+        </div>
+    );
+
+};
+
+
+export const WithFunctionalComponent = () => {
+
+    const [visible, setVisible] = useState(false);
+    const FunctionPopup = () => <div>function</div>;
+
+    return (
+        <div className="grid grid-cols-4 gap-8">
+            <div>element</div>
+            <Popup Component={FunctionPopup} visible={visible} onChangeVisible={setVisible}>
+                <Button onClick={() => setVisible(true)}>element</Button>
             </Popup>
             <div>element</div>
             <div>element</div>

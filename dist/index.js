@@ -134,6 +134,10 @@ function SvgAngleUpIcon(props) {
     return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M6 20l10-8 10 8" }, void 0) }), void 0));
 }
 
+function SvgCheckIcon(props) {
+    return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("path", { d: "M25 9L13.3 23 7 15.3" }, void 0) }), void 0));
+}
+
 function SvgCircleIcon(props) {
     return (jsx("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: jsx("circle", { cx: 16, cy: 16, r: 10 }, void 0) }), void 0));
 }
@@ -193,19 +197,35 @@ var controlSmallText = {
     'lg': ''
 };
 
-var Button = function (_a) {
-    var _b = _a.link, link = _b === void 0 ? false : _b, _c = _a.secondary, secondary = _c === void 0 ? false : _c, _d = _a.scale, scale = _d === void 0 ? 'base' : _d, children = _a.children, className = _a.className, props = __rest(_a, ["link", "secondary", "scale", "children", "className"]);
-    return link ?
-        (jsx("button", __assign({}, props, { className: classnames(controlText[scale], {
-                'text-primary-500 hover:text-primary-700': !secondary,
-                'text-gray-500 hover:text-gray-700': secondary
-            }, ' hover:underline rounded cursor-pointer focus:outline-none', className), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: children }), void 0))
-        :
-            (jsx("button", __assign({}, props, { className: classnames(controlText[scale], {
-                    'text-white font-bold bg-primary-500 hover:bg-primary-600 border border-control-border': !secondary,
-                    'text-primary-500 hover:text-white font-bold bg-transparent hover:bg-primary-600 border border-control-border': secondary
-                }, 'rounded focus:outline-none', className), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: children }), void 0));
+// Button
+var CLASSES = {
+    'filled': {
+        'primary': 'text-primary-800 bg-primary-500 hover:text-primary-900 hover:bg-primary-600 rounded',
+        'secondary': 'text-secondary-800 bg-secondary-500 hover:text-secondary-900 hover:bg-secondary-600 rounded',
+        'muted': 'text-gray-500 bg-gray-300 hover:text-gray-600 hover:bg-gray-400 rounded'
+    },
+    'text': {
+        'primary': 'text-primary-500 hover:text-primary-600 hover:bg-primary-100 rounded',
+        'secondary': 'text-secondary-500 hover:text-secondary-600 hover:bg-secondary-100 rounded',
+        'muted': 'text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded'
+    },
+    'outlined': {
+        'primary': 'text-primary-500 border border-primary-300 hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 rounded',
+        'secondary': 'text-secondary-500 border border-secondary-300 hover:text-secondary-600 hover:bg-secondary-100 hover:border-secondary-500 rounded',
+        'muted': 'text-gray-400 border border-gray-300 hover:text-gray-500 hover:bg-gray-100 hover:border-gray-500 rounded'
+    },
+    'link': {
+        'primary': 'underline text-primary-500 hover:text-primary-600',
+        'secondary': 'underline text-secondary-500 hover:text-secondary-600',
+        'muted': 'underline text-gray-400 hover:text-gray-500'
+    }
 };
+var Button = React.forwardRef(function (_a, ref) {
+    var _b = _a.color, color = _b === void 0 ? 'primary' : _b, _c = _a.variant, variant = _c === void 0 ? 'filled' : _c, start = _a.start, end = _a.end, children = _a.children; _a.className; var props = __rest(_a, ["color", "variant", "start", "end", "children", "className"]);
+    return (jsx("button", __assign({}, props, { ref: ref, className: classnames(CLASSES[variant][color], 'disabled:opacity-50 disabled:cursor-not-allowed'), style: variant !== 'link' ? { padding: '0.25em 0.75em' } : {} }, { children: (!start && !end) ?
+            jsx(Fragment, { children: children }, void 0) :
+            jsxs("span", __assign({ className: "flex flex-row items-center" }, { children: [start && jsx("span", __assign({ className: "flex-none", style: { marginRight: '0.25em' } }, { children: start }), void 0), jsx("span", __assign({ className: "flex-grow self-baseline" }, { children: children }), void 0), end && jsx("span", __assign({ className: "flex-none", style: { marginLeft: '0.25em' } }, { children: end }), void 0)] }), void 0) }), void 0));
+});
 var RoundButton = function (_a) {
     var _b = _a.scale, scale = _b === void 0 ? 'base' : _b, _c = _a.color, color = _c === void 0 ? 'primary' : _c, className = _a.className, children = _a.children, props = __rest(_a, ["scale", "color", "className", "children"]);
     return (jsx("button", __assign({}, props, { className: classnames(controlSize[scale], controlSmallText[scale], 'flex flex-row justify-center items-center', 'text-white font-bold', { 'bg-primary-500 hover:bg-primary-600': color === 'primary' }, { 'bg-info-500 hover:bg-info-600': color === 'info' }, { 'bg-danger-500 hover:bg-danger-600': color === 'danger' }, 'border border-control-border', 'rounded-full focus:outline-none', className) }, { children: children }), void 0));
@@ -614,7 +634,7 @@ var Popup = function (_a) {
             { name: 'arrow', options: { padding: 4, element: arrow } },
         ]
     }), styles = _h.styles, attributes = _h.attributes;
-    return (jsxs(Fragment, { children: [React.cloneElement(children, { ref: setTarget }), visible && ReactDOM.createPortal(jsxs("div", __assign({ ref: setPopper }, attributes.popper, { className: "z-30 popper-element text-base rounded border border-control-border bg-white", style: styles.popper }, { children: [jsx(Component, {}, void 0), jsx("div", __assign({ ref: setArrow }, attributes.arrow, { className: "popper-arrow", style: styles.arrow }), void 0)] }), void 0), document.querySelector('body'))] }, void 0));
+    return (jsxs(Fragment, { children: [React.cloneElement(children, { ref: setTarget }), visible && ReactDOM.createPortal(jsxs("div", __assign({ ref: setPopper }, attributes.popper, { className: "z-30 popper-element text-base rounded border border-control-border bg-white", style: styles.popper }, { children: [jsx(Component, {}, void 0), jsx("div", __assign({ ref: setArrow }, attributes.arrow, { className: "popper-arrow", style: styles.arrow }), void 0)] }), void 0), document.querySelector('#modal'))] }, void 0));
 };
 
 var Postit = function (_a) {
@@ -1547,13 +1567,18 @@ function formatTime(hm) {
 }
 
 var CheckBox = React.forwardRef(function (_a, ref) {
-    var scale = _a.scale, className = _a.className, children = _a.children, props = __rest(_a, ["scale", "className", "children"]);
-    var context = useContext(Context$4);
-    return children ?
-        (jsxs("div", __assign({ className: "flex flex-row items-center" }, { children: [jsx("input", __assign({ ref: ref, type: "checkbox" }, props, { className: classnames(controlSize[scale || context.scale || 'base'], 'rounded border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:ring-offset-0 disabled:opacity-50', className) }), void 0), jsx("span", __assign({ className: classnames('ml-2', controlText[scale || context.scale || 'base'], className) }, { children: children }), void 0)] }), void 0))
-        :
-            (jsx("input", __assign({ ref: ref, type: "checkbox" }, props, { className: classnames(controlSize[scale || context.scale || 'base'], 'rounded border border-control-border checked:border-control-border text-primary-500', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:ring-offset-0 disabled:opacity-50', className) }), void 0));
+    var className = _a.className; _a.children; var props = __rest(_a, ["className", "children"]);
+    useContext(Context$4);
+    return (jsx("input", __assign({ ref: ref, type: "checkbox" }, props, { className: classnames('text-primary-500', 'border border-control-border checked:border-control-border', 'focus:border-primary-500', 'focus:ring focus:ring-primary-500 focus:ring-opacity-50 focus:ring-offset-0', 'disabled:opacity-50', 'rounded', className), style: { width: '1.25em', height: '1.25em', verticalAlign: '-0.25em' } }), void 0));
 });
+
+// import check from '../../icons/check-icon.svg';
+'data:image/svg+xml;base64,' + window.btoa('<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="25,9 13.3,23 7,15.3 "/></svg>');
+'data:image/svg+xml;base64,' + window.btoa('<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="8" x2="24" y2="24"/><line x1="24" y1="8" x2="8" y2="24"/></svg>');
+var CheckButton = function (_a) {
+    var onFulfill = _a.onFulfill, onReject = _a.onReject, dataTooltip = _a["data-tooltip"], dataTooltipFulfill = _a["data-tooltip-fulfill"], dataTooltipReject = _a["data-tooltip-reject"];
+    return (jsxs("div", __assign({ tabIndex: 0, "data-tooltip": dataTooltip, className: classnames('inline-block relative', 'border border-control-border checked:border-control-border', 'focus:border-primary-500', 'focus:ring focus:ring-primary-500 focus:ring-opacity-50 focus:ring-offset-0', 'disabled:opacity-50', 'rounded'), style: { width: '2.5em', height: '1.25em', verticalAlign: '-0.25em' } }, { children: [jsx("button", __assign({ tabIndex: -1, onClick: onFulfill, "data-tooltip": dataTooltipFulfill, className: classnames('absolute inset-y-0 left-0 w-1/2', 'hover:bg-primary-600', 'border-r border-control-border checked:border-control-border', 'rounded') }, { children: jsx(SvgCheckIcon, { className: "m-auto hover:text-white hover:stroke-2", style: { width: '1em', height: '1em' } }, void 0) }), void 0), jsx("button", __assign({ tabIndex: -1, onClick: onReject, "data-tooltip": dataTooltipReject, className: classnames('absolute inset-y-0 right-0 w-1/2', 'rounded') }, { children: jsx(SvgCrossIcon, { className: "m-auto text-transparent stroke-2 hover:text-danger-500", style: { width: '1em', height: '1em' } }, void 0) }), void 0)] }), void 0));
+};
 
 var Radio = React.forwardRef(function (_a, ref) {
     var scale = _a.scale; _a.error; var className = _a.className, children = _a.children, props = __rest(_a, ["scale", "error", "className", "children"]);
@@ -1676,5 +1701,5 @@ Panel.Item = function (_a) {
     return (jsx("div", __assign({ className: classnames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className) }, { children: children }), void 0));
 };
 
-export { Avatar, Badge, Button, Card, CheckBox, Choose, ChooseFn, Context$4 as Context, Control, Cross, DatePicker, Delay, Dialog, Header, Helium, Input, KanbanContext, KanbanProvider, Loading, Main, Modal, MoreOptionsButton, Navigator, Panel, Popup, Postit, Radio, RadioBar, RoundButton, Select, SwatchPicker, Tabs, Tag, TagPicker, TextArea, TimePicker, Toast, ToastContainer, ToastContent, ToastProvider, Toggle, ViewportProvider, useCard, useCardDrop, useCards, useColumn, useColumnDrop, useColumns, useKanbanContext, useOnOutsideClick, useToast, useViewport };
+export { Avatar, Badge, Button, Card, CheckBox, CheckButton, Choose, ChooseFn, Context$4 as Context, Control, Cross, DatePicker, Delay, Dialog, Header, Helium, Input, KanbanContext, KanbanProvider, Loading, Main, Modal, MoreOptionsButton, Navigator, Panel, Popup, Postit, Radio, RadioBar, RoundButton, Select, SwatchPicker, Tabs, Tag, TagPicker, TextArea, TimePicker, Toast, ToastContainer, ToastContent, ToastProvider, Toggle, ViewportProvider, useCard, useCardDrop, useCards, useColumn, useColumnDrop, useColumns, useKanbanContext, useOnOutsideClick, useToast, useViewport };
 //# sourceMappingURL=index.js.map
