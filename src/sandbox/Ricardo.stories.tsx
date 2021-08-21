@@ -1,10 +1,12 @@
 /* eslint-disable import/no-anonymous-default-export */
-import React, { useRef, useState } from 'react';
+import { action } from '@storybook/addon-actions';
+import React, { ChangeEvent, useRef, useState } from 'react';
 import { Input } from '..';
 
 
 const definition = {
     title: 'Sandbox/Ricardo',
+    parameters: { layout: 'centered' }
 };
 export default definition;
 
@@ -90,11 +92,11 @@ export const RemEm = () => {
         <div>
             <div className="text-xs">Ricardo <span className="text-2xl">2XL</span>
                 <span style={{ fontSize: '1em' }}>Ricardo</span>
-                <span className="bg-red-200" style={{ padding: '0em',fontSize: '2em' }}>2em</span>
+                <span className="bg-red-200" style={{ padding: '0em', fontSize: '2em' }}>2em</span>
             </div>
             <div className="text-base">Ricardo <span className="text-2xl">2XL</span>
                 <span style={{ fontSize: '1em' }}>Ricardo</span>
-                <span className="bg-red-200" style={{ padding: '0em',fontSize: '2em' }}>2em</span>
+                <span className="bg-red-200" style={{ padding: '0em', fontSize: '2em' }}>2em</span>
             </div>
             <div className="text-2xl bg-red-100">Ricardo <span className="text-2xl">2XL</span>
                 <span style={{ fontSize: '1em' }}>Ricardo</span>
@@ -102,10 +104,23 @@ export const RemEm = () => {
             </div>
 
             <div>
-            <div className="border border-control-border border-rounded text-xs" style={{ padding: '0.25em 0.5em'}}>Base</div>
-                <div className="border border-control-border border-rounded text-base" style={{ padding: '0.25em 0.5em'}}>Base</div>
-                <div className="border border-control-border border-rounded text-xl" style={{ padding: '0.25em 0.5em'}}>Base</div>
+                <div className="border border-control-border border-rounded text-xs" style={{ padding: '0.25em 0.5em' }}>Base</div>
+                <div className="border border-control-border border-rounded text-base" style={{ padding: '0.25em 0.5em' }}>Base</div>
+                <div className="border border-control-border border-rounded text-xl" style={{ padding: '0.25em 0.5em' }}>Base</div>
             </div>
+        </div>
+    );
+
+};
+
+export const UncontrolledAndControlled = () => {
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
+
+    return (
+        <div>
+            <input type="text" defaultValue="Katniss" onChange={handleChange} />
+            <button></button>
         </div>
     );
 
