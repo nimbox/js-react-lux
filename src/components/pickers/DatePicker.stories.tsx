@@ -1,54 +1,28 @@
-import { action } from "@storybook/addon-actions";
+import { action } from '@storybook/addon-actions';
 import React, { useRef, useState } from 'react';
-import { I18nextProvider, useTranslation } from 'react-i18next';
-import i18n from '../../i18n';
-import '../../index.css';
+import { Button } from '../..';
 import { DatePicker } from './DatePicker';
 
 
-const languages = ['en', 'es'];
-
 export default {
     title: 'Component/Picker/DatePicker',
-    decorators: [
-        (story: () => React.ReactNode) => <I18nextProvider i18n={i18n}>{story()}</I18nextProvider>
-    ]
+    parameters: {
+        layout: 'centered'
+    }
 };
 
-export const Simple = () => {
-
-    const { i18n } = useTranslation();
-    const [language, setLanguage] = useState('en');
-    const selectedLanguage = languages[1];
-    if (language !== selectedLanguage) {
-        i18n.changeLanguage(selectedLanguage, () => setLanguage(selectedLanguage));
-    }
+export const Controlled = () => {
 
     const [date, setDate] = useState('19-12-1967');
 
-    return (
-        <div className="p-10">
-            <DatePicker name="date" shortcuts={false} value={date} onChange={(d) => setDate(d.target.value)} />
-        </div>
-    );
-
-};
-
-export const WithShortcuts = () => {
-
-    const { i18n } = useTranslation();
-    const [language, setLanguage] = useState('en');
-    const selectedLanguage = languages[1];
-    if (language !== selectedLanguage) {
-        i18n.changeLanguage(selectedLanguage, () => setLanguage(selectedLanguage));
-    }
-
-    const [date, setDate] = useState('19-12-1967');
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { setDate(e.target.value); action('onChange')(e.target.value); }
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(date); }
 
     return (
-        <div className="p-10">
-            <DatePicker name="date" shortcuts={true} value={date} onChange={(d) => setDate(d.target.value)} />
-        </div>
+        <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
+            <DatePicker name="date" value={date} onChange={handleChange} placeholder="Enter date"/>
+            <Button>Submit</Button>
+        </form>
     );
 
 };
@@ -56,27 +30,26 @@ export const WithShortcuts = () => {
 export const Uncontrolled = () => {
 
     const ref = useRef<any>();
-
-    const handleSubmit = (e: any) => {
-        e.preventDefault();
-        action('submit')(ref.current.value);
-        console.log("ref", ref.current.value);
-    };
-
-    const { i18n } = useTranslation();
-    const [language, setLanguage] = useState('en');
-    const selectedLanguage = select('Language', languages, languages[0]);
-    if (language !== selectedLanguage) {
-        i18n.changeLanguage(selectedLanguage, () => setLanguage(selectedLanguage));
-    }
-
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(ref.current.value); }
 
     return (
-        <form onSubmit={handleSubmit} className="p-10">
-            <DatePicker name="date" shortcuts={true} ref={ref} defaultValue='19-12-1967' />
-            <button type="submit">Enviar</button>
+        <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
+            <DatePicker ref={ref} name="date" defaultValue="19-12-1967" placeholder="Enter date"/>
+            <Button>Submit</Button>
         </form>
     );
 
+};
 
-}
+export const WithShortcuts = () => {
+
+    const [date, setDate] = useState('19-12-1967');
+
+    return (
+        <div className="w-48 text-xs">
+            <div>Select Date</div>
+            <DatePicker name="date" shortcuts={true} value={date} onChange={(d) => setDate(d.target.value)} />
+        </div>
+    );
+
+};

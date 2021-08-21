@@ -1,36 +1,31 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { action } from "@storybook/addon-actions";
 import React, { useRef, useState } from 'react';
-import { I18nextProvider, useTranslation } from 'react-i18next';
-import i18n from '../../i18n';
 import '../../index.css';
+import { Button } from "../Buttons";
 import { TimePicker } from './TimePicker';
 
 
-const languages = ['en', 'es'];
-
 export default {
     title: 'Component/Picker/TimePicker',
-    decorators: [
-        (story: () => React.ReactNode) => <I18nextProvider i18n={i18n}>{story()}</I18nextProvider>
-    ]
+    parameters: {
+        layout: 'centered'
+    }
 };
 
-export const Simple = () => {
 
-    const { i18n } = useTranslation();
-    const [language, setLanguage] = useState('en');
-    const selectedLanguage = select('Language', languages, languages[0]);
-    if (language !== selectedLanguage) {
-        i18n.changeLanguage(selectedLanguage, () => setLanguage(selectedLanguage));
-    }
+export const Controlled = () => {
 
     const [time, setTime] = useState('08:30am');
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { setTime(e.target.value); action('onChange')(e.target.value); }
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(time); }
+
     return (
-        <div className="p-10">
-            <TimePicker name="time" value={time} onChange={(d) => setTime(d.target.value)} />
-        </div>
+        <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
+            <TimePicker name="date" value={time} onChange={handleChange} placeholder="Enter date"/>
+            <Button>Submit</Button>
+        </form>
     );
 
 };
@@ -38,24 +33,13 @@ export const Simple = () => {
 export const Uncontrolled = () => {
 
     const ref = useRef<any>();
-
-    const handleSubmit = (e: any) => {
-        e.preventDefault();
-        action('submit')(ref.current.value);
-        console.log("ref", ref.current.value);
-    };
-    
-    const { i18n } = useTranslation();
-    const [language, setLanguage] = useState('en');
-    const selectedLanguage = select('Language', languages, languages[0]);
-    if (language !== selectedLanguage) {
-        i18n.changeLanguage(selectedLanguage, () => setLanguage(selectedLanguage));
-    }
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(ref.current.value); }
 
     return (
-        <div className="p-10">
+        <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
             <TimePicker name="time" ref={ref} defaultValue='08:30am' />
-        </div>
+            <Button>Submit</Button>
+        </form>
     );
 
 };

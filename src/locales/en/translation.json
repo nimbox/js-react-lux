@@ -16,13 +16,13 @@
         "December"
     ],
     "shortDays": [
+        "Sun",
         "Mon",
         "Tue",
         "Wed",
         "Thu",
         "Fri",
-        "Sat",
-        "Sun"
+        "Sat"
     ],
     "namedDays": {
         "tomorrow": "tomorrow",
@@ -33,5 +33,7 @@
         "in-two-weeks": "in two weeks",
         "next-month": "next month",
         "in-two-months": "in two months"
-    }
+    },
+    "hour": "Hour",
+    "minutes": "Minutes"
 }

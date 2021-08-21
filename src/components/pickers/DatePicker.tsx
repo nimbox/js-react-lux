@@ -1,9 +1,7 @@
-import React, { createRef, FC, LegacyRef, Ref, RefObject, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleLeftIcon, AngleRightIcon, CircleIcon } from '../../icons';
-import { ComponentScale } from '../ComponentScale';
-import { Context } from '../controls/Control';
 import { Input } from '../controls/Input';
 
 
@@ -16,19 +14,26 @@ interface DatePickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
     /** Name used for the input element and returned in the change event. */
     name?: string,
 
-    /** String representation of the date. */
+    /** String representation of the date (for uncontrolled). */
+    defaultValue?: string,
+
+    /** String representation of the date (for controlled). */
     value?: string,
 
-    scale?: ComponentScale;
-
-    /** Change event handler. */
+    /** Change event handler (for controlled). */
     onChange?: React.ChangeEventHandler<HTMLInputElement>,
 
     /** Wether to show the shortcuts menu. */
     shortcuts?: boolean
 
-    /** Input placeholder. */
-    placeholder?: string
+    /** Parse date function defaults to parsing dd-mm-yyyy into [yyyy, mm, dd] (with zero based month). */
+    parseDate?: (s: string) => [number, number, number] | null;
+
+    /** Format date function defaults to formatting [yyyy, mm, dd] (with zero based month) into dd-mm-yyy. */
+    formatDate?: (date: [number, number, number]) => string;
+
+    /** The first day of the week to display in the calendar. */
+    firstDayOfWeek?: 0 | 1;
 
 }
 
@@ -48,41 +53,46 @@ const namedDays = [
 /**
  * DatePicker. Select a date with one click.
  */
-export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({ name, scale = 'base', shortcuts, placeholder, ...props }, ref) => {
-
-    const inputRef = useRef<HTMLInputElement>();
-    useImperativeHandle(ref, () => inputRef.current!);
-
-    const [internalValue, setInternalValue] = useState('');
-
-    useEffect(() => { setInternalValue(inputRef?.current?.value as string); }, [inputRef?.current?.value]);
+export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({ name, defaultValue, value, onChange, shortcuts = false, parseDate = internalParseDate, formatDate = internalFormatDate, firstDayOfWeek = 0, ...props }, ref) => {
 
     const { t, ready } = useTranslation();
 
-    const [calendar, setCalendar] = useState(firstDate(internalValue));
-    useEffect(() => setCalendar(firstDate(internalValue)), [internalValue]);
+    const inputRef = useRef<HTMLInputElement>(null);
+    useImperativeHandle(ref, () => inputRef.current!);
 
+    // Maintain an internalValue to use the internal input as controlled,
+    // and only update internalValue only when the DatePicker is controlled.
+    const [controlled] = useState(value != null);
+    const [internalValue, setInternalValue] = useState<string>(defaultValue || '');
+    useEffect(() => { if (controlled) { setInternalValue(value || ''); } }, [controlled, value]);
+
+    // Calendar is the normalized first date having the week of the current date
+    // starting at the firstDayOfWeek
+    // (has day = 1, hour = 12, minute = 0, second = 0 and millis = 0)
+    const [calendar, setCalendar] = useState(startOfMonth(parseDate(defaultValue || '')));
+    useEffect(() => setCalendar(startOfMonth(parseDate(internalValue))), [internalValue]);
+
+    // Popper states
     const [show, setShow] = useState(false);
-
     const [target, setTarget] = useState<HTMLDivElement | null>(null);
     const [popper, setPopper] = useState<HTMLDivElement | null>(null);
     useOnOutsideClick(() => { if (show) { setShow(!show); } }, show, target, popper);
-
-    const context = useContext(Context);
 
     // handlers
 
     const handleShow = () => { if (!show) { setShow(true); } }
     const handleHide = () => { if (show) { setShow(false); } }
+
     const handleFocus = handleShow;
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        handleFinalValue();
+    }
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         switch (e.keyCode) {
             case 9: // tab
             case 13: // enter
-                // const ymd = parseDate(internalValue);
-                if (internalValue) { handleFinalChange(internalValue); }
-                handleHide();
+                handleFinalValueDate(parseDate(internalValue));
                 break;
             default:
                 handleShow();
@@ -90,24 +100,14 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        //onChange({ target: { name, value: e.target.value.replace(/[^0-9-]/g, '') } } as React.ChangeEvent<HTMLInputElement>);
-    }
-
-    const handleFinalChange = (value: string) => {
-        // const value = formatDate(ymd);
-        //onChange({ target: { name, value } } as React.ChangeEvent<HTMLInputElement>);
-        handleHide();
-    }
-
-    function setRefValue(event: React.MouseEvent<HTMLElement, MouseEvent>, element: React.MutableRefObject<HTMLInputElement | undefined>, value: string) {
-        event.preventDefault();
-        event.stopPropagation();
-        const inputSetter = Object?.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
-        if (inputSetter) {
-            inputSetter.call(element.current, value);
-            var inputEvent = new Event('input', { bubbles: true });
-            element.current!.dispatchEvent(inputEvent);
-
+        if (onChange) {
+            // bubble up change event regardless of 
+            // controlled or uncontrolled
+            onChange(e);
+        }
+        if (value == null) {
+            // set internal value if uncontrolled
+            setInternalValue(e.target.value);
         }
     }
 
@@ -121,6 +121,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
 
     const handleClickToday = () => {
         const c = new Date();
+        c.setDate(1);
         c.setHours(12, 0, 0, 0);
         setCalendar(c);
     };
@@ -131,12 +132,31 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
         setCalendar(c);
     };
 
-    const handleClickDate = (e: React.MouseEvent<HTMLElement, MouseEvent>, d: Date) => {
-        const value = formatDate([d.getFullYear(), d.getMonth(), d.getDate()]);
-        setRefValue(e, inputRef, value);
-        handleFinalChange(value);
+    const handleClickDate = (e: React.MouseEvent<HTMLElement>, d: Date) => {
+        handleFinalValueDate([d.getFullYear(), d.getMonth(), d.getDate()]);
         handleHide();
     };
+
+    // handle final values
+
+    const handleFinalValue = () => {
+        const finalDate = parseDate(internalValue);
+        handleFinalValueDate(finalDate);
+    }
+
+    const handleFinalValueDate = (finalDate: [number, number, number] | null) => {
+        const finalValue = finalDate != null ? formatDate(finalDate) : '';
+        setFinalInputValue(finalValue);
+        handleHide();
+    }
+
+    const setFinalInputValue = (inputValue: string) => {
+        const setter = Object?.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+        if (setter && inputValue !== '') {
+            setter.call(inputRef.current, inputValue);
+            inputRef.current!.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+    }
 
     // setup
 
@@ -146,19 +166,21 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
     const v = parseDate(internalValue);
     const selected = v ? new Date(v[0], v[1], v[2], 12, 0, 0, 0) : null;
 
-    // calculate
+    // calculate weeks
 
-    const d = new Date(calendar.getTime());
-    d.setDate(1 - d.getDay()); // beginning of week containing beginning of month
-
-    const weeks = [];
-    for (let i = 0; i < 6; i++) {
-        let dates = [];
-        for (let j = 0; j < 7; j++, d.setDate(d.getDate() + 1)) {
-            dates.push(new Date(d.getTime()));
+    const weeks = useMemo(() => {
+        const first = new Date(calendar.getTime());
+        first.setDate(1 - first.getDay() + firstDayOfWeek); // beginning of week containing beginning of month
+        const weeks = [];
+        for (let i = 0; i < 6; i++) {
+            let dates = [];
+            for (let j = 0; j < 7; j++, first.setDate(first.getDate() + 1)) {
+                dates.push(new Date(first.getTime()));
+            }
+            weeks.push(dates);
         }
-        weeks.push(dates);
-    }
+        return weeks;
+    }, [calendar.getTime()]);
 
     // format
 
@@ -176,25 +198,36 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
 
     // render
 
-    const months = ready ? t('months', { defaultValue: ['Janruary', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], returnObjects: true }) as string[] : null;
+    const months = ready ? t('months', { defaultValue: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], returnObjects: true }) as string[] : null;
     const days = ready ? t('shortDays', { defaultValue: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], returnObjects: true }) as string[] : [];
 
     return (
         <div className="relative">
-            <div ref={setTarget as LegacyRef<HTMLDivElement> | undefined}>
-                <Input type="text" 
-                    ref={inputRef as Ref<HTMLInputElement> | undefined}
-                    name={name} 
-                    scale={context.scale || scale}
-                    onFocus={handleFocus} onKeyDown={handleKeyDown}
-                    placeholder={placeholder} 
+
+            <div ref={setTarget}>
+                <Input type="text"
+
+                    ref={inputRef}
+                    name={name}
+
+                    defaultValue={defaultValue}
+                    value={value}
+                    onChange={handleChange}
+
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+
+                    onMouseDown={handleFocus}
+                    onKeyDown={handleKeyDown}
+
                     autoComplete="off"
+
                     {...props}
                 />
             </div>
 
             {ready && show &&
-                <div ref={setPopper as LegacyRef<HTMLDivElement> | undefined} className="absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden z-10">
+                <div ref={setPopper} onMouseDown={(e) => { e.preventDefault(); }} className="absolute left-0 mt-1 bg-content-fg border border-content-border rounded overflow-hidden z-10">
 
                     <div className="flex flex-row">
 
@@ -204,19 +237,21 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
                                 <div className="flex-grow text-center font-bold">
                                     {months![calendar.getMonth()]} {calendar.getFullYear()}
                                 </div>
-                                <div>
-                                    <button type="button" className="focus:outline-none" onClick={handleClickPrevMonth}><AngleLeftIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
-                                    <button type="button" className="px-2 focus:outline-none" onClick={handleClickToday}><CircleIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
-                                    <button type="button" className="focus:outline-none" onClick={handleClickNextMonth}><AngleRightIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
+                                <div className="flex-none space-x-2">
+                                    <button type="button" className="focus:outline-none" onClick={handleClickPrevMonth}><AngleLeftIcon className="text-content stroke-current stroke-2" /></button>
+                                    <button type="button" className="focus:outline-none" onClick={handleClickToday}><CircleIcon className="text-content stroke-current stroke-2" /></button>
+                                    <button type="button" className="focus:outline-none" onClick={handleClickNextMonth}><AngleRightIcon className="text-content stroke-current stroke-2" /></button>
                                 </div>
                             </div>
 
-                            <table className="table-fixed text-center">
+                            <table className="table-fixed text-center" style={{ width: '21em' }}>
+
                                 <thead>
                                     <tr>
-                                        {days!.map((d, i) => <th key={i} className="w-10 px-1">{d}</th>)}
+                                        {weeks[0].map((d, i) => <th key={i} className="" style={{ padding: '0 0.5em', width: '3em' }}>{days[d.getDay()]}</th>)}
                                     </tr>
                                 </thead>
+
                                 <tbody className="cursor-pointer">
                                     {weeks.map(w =>
                                         <tr key={w[0].getTime()}>
@@ -224,17 +259,19 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
                                         </tr>
                                     )}
                                 </tbody>
+
                             </table>
 
                         </div>
 
                         {shortcuts &&
-                            <div className="flex flex-col justify-between bg-gray-300 cursor-pointer">
-                                {namedDays.map((s, i) => <div key={i} onClick={(e) => handleClickDate(e, s.date(new Date(today)))} className="px-2 hover:text-white hover:bg-secondary-500">{t(`namedDays.${s.label}`, { defaultValue: s.label })}</div>)}
+                            <div className="flex flex-col justify-between items-stretch bg-gray-300 cursor-pointer">
+                                {namedDays.map((s, i) => <div key={i} onClick={(e) => handleClickDate(e, s.date(new Date(today)))} className="px-2 truncate hover:text-white hover:bg-secondary-500">{t(`namedDays.${s.label}`, { defaultValue: s.label })}</div>)}
                             </div>
                         }
 
                     </div>
+
                 </div>
             }
 
@@ -245,7 +282,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
 
 
 //
-// parse and format
+// utilities
 //
 
 /**
@@ -254,17 +291,19 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
  * 
  * @param {String} s - The string to parse
  */
-function firstDate(s: string): Date {
+function startOfMonth(date: [number, number, number] | null): Date {
 
-    const ymd = parseDate(s);
+    const start = date ? new Date(date[0], date[1], date[2]) : new Date();
+    start.setHours(12, 0, 0, 0);
+    start.setDate(1);
 
-    const first = ymd ? new Date(ymd[0], ymd[1], ymd[2]) : new Date();
-    first.setHours(12, 0, 0, 0);
-    first.setDate(1);
-
-    return first;
+    return start;
 
 }
+
+//
+// default parse and format
+//
 
 /**
  * Parses a simple date in the format dd-mm-yyyy.
@@ -274,16 +313,16 @@ function firstDate(s: string): Date {
  * @param {String} s - The string to parse
  * @return {Array [ y, m, d ]} - The date represented as an array with a 0 based month
  */
-function parseDate(s: string): [number, number, number] | null {
+function internalParseDate(s: string): [number, number, number] | null {
 
     var parse = /^\s*([0-3]?\d)(?:-(?:([0-1]?\d)?(?:-(\d{4})?)?)?)?\s*$/i.exec(s);
     if (parse) {
 
         var now = new Date();
-        var d = +parse[1],
-            m = parse[2] ? +parse[2] - 1 : now.getMonth(),
-            y = parse[3] ? +parse[3] : now.getFullYear(),
-            valid = new Date(y, m, d, 12, 0, 0, 0);
+        var d = +parse[1];
+        var m = parse[2] ? +parse[2] - 1 : now.getMonth();
+        var y = parse[3] ? +parse[3] : now.getFullYear();
+        var valid = new Date(y, m, d, 12, 0, 0, 0);
 
         if (valid.getFullYear() === y && valid.getMonth() === m && valid.getDate() === d) {
             return [y, m, d];
@@ -303,7 +342,7 @@ function parseDate(s: string): [number, number, number] | null {
  * @param {Array [ y, m, d ]} ymd - The date representes as an array with a 0 based month
  * @returns {String} s - The formated string
  */
-function formatDate(ymd: [number, number, number]): string {
+function internalFormatDate(ymd: [number, number, number]): string {
 
     var m = ymd[1] + 1;
     return (ymd[2] < 10 ? '0' + ymd[2] : ymd[2]) + '-' + (m < 10 ? '0' + m : m) + '-' + ymd[0];

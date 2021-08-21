@@ -33,5 +33,7 @@
         "in-two-weeks": "en dos semanas",
         "next-month": "el mes que viene",
         "in-two-months": "en dos meses"
-    }
+    },
+    "hour": "Hora",
+    "minutes": "Minutos"
 }

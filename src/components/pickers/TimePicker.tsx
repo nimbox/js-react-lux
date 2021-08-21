@@ -1,15 +1,12 @@
-import classNames from 'classnames';
-import React, { FC, LegacyRef, Ref, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon, AngleUpIcon, CircleIcon } from '../../icons';
-import { ComponentScale, controlScale } from '../ComponentScale';
-import { Context } from '../controls/Control';
 import { Input } from '../controls/Input';
+import { useTranslation } from 'react-i18next';
 
 
 //
-// DatePicker
+// TimePicker
 //
 
 interface TimePickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -17,17 +14,23 @@ interface TimePickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
     /** Name used for the input element and returned in the change event. */
     name?: string,
 
-    /** String representation of the time. */
+    /** String representation of the time (for uncontrolled). */
+    defaultValue?: string,
+
+    /** String representation of the time (for controlled). */
     value?: string,
 
-
-    scale?: ComponentScale;
-
-    /** Change event handler. */
+    /** Change event handler (for controlled). */
     onChange?: React.ChangeEventHandler<HTMLInputElement>,
 
-    /** Input placeholder. */
-    placeholder?: string
+    /** Parse time function defaults to parsing dd:mm ampm into [hh, mm]. */
+    parseTime?: (s: string) => [number, number] | null;
+
+    /** Format hour function defaults to formatting [hh] into hh (12 hour based). */
+    formatHour?: (hour: number) => string;
+
+    /** Format time function defaults to formatting [hh, mm] into hh:mm ampm (12 hour based). */
+    formatTime?: (time: [number, number]) => string;
 
 }
 
@@ -40,44 +43,47 @@ const afternoon = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 const minutes = [15, 30, 45];
 
 /**
- * DatePicker. Select a date with one click.
+ * TimePicker. Select a time with one click.
  */
-export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>(({ name, scale = "base", placeholder, ...props }, ref) => {
+export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps>(({ name, defaultValue, value, onChange, parseTime = internalParseTime, formatHour = internalFormatHour, formatTime = internalFormatTime, ...props }, ref) => {
 
-    const inputRef = useRef<HTMLInputElement>();
+    const { t, ready } = useTranslation();
+
+    const inputRef = useRef<HTMLInputElement>(null);
     useImperativeHandle(ref, () => inputRef.current!);
 
-    const [internalValue, setInternalValue] = useState('');
+    // Maintain an internalValue to use the internal input as controlled,
+    // and only update internalValue only when the DatePicker is controlled.
+    const [controlled] = useState(value != null);
+    const [internalValue, setInternalValue] = useState(defaultValue || '');
+    useEffect(() => { if (controlled) { setInternalValue(value || ''); } }, [controlled, value]);
 
-    useEffect(() => { setInternalValue(inputRef?.current?.value as string); }, [inputRef?.current?.value]);
-
-    const { ready } = useTranslation();
-
-    const [show, setShow] = useState(false);
- 
-    const [target, setTarget] = useState<HTMLDivElement | null>(null);
-    const [popper, setPopper] = useState<HTMLDivElement | null>(null);
-    useOnOutsideClick(() => { if (show) { setShow(false); } }, show, target, popper);
-
+    // 
     const times = useRef({ watch: 8 });
     const timesRef = useRef<HTMLDivElement>(null);
     useEffect(() => { scroll() });
 
-    const context = useContext(Context);
+    // Popper states
+    const [show, setShow] = useState(false);
+    const [target, setTarget] = useState<HTMLDivElement | null>(null);
+    const [popper, setPopper] = useState<HTMLDivElement | null>(null);
+    useOnOutsideClick(() => { if (show) { setShow(false); } }, show, target, popper);
 
     // handlers
 
     const handleShow = () => { if (!show) { setShow(true); } }
     const handleHide = () => { if (show) { setShow(false); } }
+
     const handleFocus = handleShow;
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        handleFinalValue();
+    }
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         switch (e.keyCode) {
             case 9: // tab
             case 13: // enter
-                const hm = parseTime(internalValue);
-                if (hm) { handleFinalChange(hm); }
-                handleHide();
+                handleFinalValueTime(parseTime(internalValue));
                 break;
 
             default:
@@ -86,26 +92,17 @@ export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>((
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        //onChange({ target: { name, value: e.target.value } } as React.ChangeEvent<HTMLInputElement>);
-    };
-
-    const handleFinalChange = (hm: [number, number]) => {
-        //const value = formatTime(hm);
-        //onChange({ target: { name, value } } as React.ChangeEvent<HTMLInputElement>);
-        handleHide();
-    };
-
-    function setRefValue(event: React.MouseEvent<HTMLElement, MouseEvent>, element: React.MutableRefObject<HTMLInputElement | undefined>, value: string) {
-        event.preventDefault();
-        event.stopPropagation();
-        const inputSetter = Object?.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
-        if (inputSetter) {
-            inputSetter.call(element.current, value);
-            var inputEvent = new Event('input', { bubbles: true });
-            element.current!.dispatchEvent(inputEvent);
-
+        if (onChange) {
+            // bubble up change event regardless of 
+            // controlled or uncontrolled
+            onChange(e);
+        }
+        if (value == null) {
+            // set internal value if uncontrolled
+            setInternalValue(e.target.value);
         }
     }
+
     // navigation
 
     const handleClickPrevHour = () => {
@@ -127,42 +124,82 @@ export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>((
         }
     };
 
-    const handleClickTime = (e: React.MouseEvent<HTMLElement, MouseEvent>, hm: [number, number]) => {
-        const value = formatTime(hm);
-        setRefValue(e, inputRef, value);
-        handleFinalChange(hm);
+    const handleClickTime = (e: React.MouseEvent<HTMLElement>, time: [number, number]) => {
+        handleFinalValueTime(time);
         handleHide();
     };
 
     const scroll = () => {
-
         if (timesRef.current) {
             const t = timesRef.current;
             let h = t.scrollHeight / 24;
             t.scrollTop = times.current.watch * h;
         }
-
     };
 
+
+    // handle final values
+
+    const handleFinalValue = () => {
+        const finalTime = parseTime(internalValue);
+        handleFinalValueTime(finalTime);
+    }
+
+    const handleFinalValueTime = (finalTime: [number, number] | null) => {
+        const finalValue = finalTime != null ? formatTime(finalTime) : '';
+        setFinalInputValue(finalValue);
+        handleHide();
+    }
+
+    const setFinalInputValue = (inputValue: string) => {
+        const setter = Object?.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+        if (setter && inputValue !== '') {
+            setter.call(inputRef.current, inputValue);
+            inputRef.current!.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+    }
+
     // setup
+
+    const now = new Date();
+
+    now.getHours();
 
     const v = parseTime(internalValue);
     const selected = v ? v : [-1, -1];
 
     // format
 
-    function hourClasses(hm: number[]) {
-        return hm[0] === selected[0] ? 'bg-info-500 text-white text-xs group hover:text-xs hover:bg-secondary-300' : 'group text-xs hover:text-xs hover:bg-secondary-300';
+    function hourClasses(time: number[]) {
+
+        if (time[0] === selected[0]) {
+            return 'text-white bg-primary-500 group hover:bg-secondary-300';
+        }
+
+        if (time[0] === now.getHours()) {
+            return 'text-white bg-info-500 group hover:bg-secondary-300';
+        }
+
+        return 'group hover:bg-secondary-300';
+
     }
 
-    function hourMinuteClasses(hm: number[]) {
-        if (hm[0] === selected[0]) {
-            return hm[0] === selected[0] && hm[1] === selected[1] ?
-                'text-white    text-base group-hover:text-content hover:text-base                    hover:bg-secondary-500' :
-                'text-info-500           group-hover:text-content hover:text-base                    hover:bg-secondary-500';
-        } else {
-            return 'text-muted                                    hover:text-base hover:text-content hover:bg-secondary-500';
+    function hourMinuteClasses(time: number[]) {
+
+        if (time[0] === selected[0]) {
+            if (time[1] === selected[1]) {
+                return 'text-xs text-white group-hover:text-content hover:bg-secondary-500';
+            } else {
+                return 'text-xs text-primary-500 group-hover:text-content hover:bg-secondary-500';
+            }
         }
+
+        if (time[0] === now.getHours()) {
+            return 'text-xs text-white group-hover:text-content hover:bg-secondary-500';
+        }
+
+        return 'text-xs text-muted group-hover:text-content hover:bg-secondary-500';
+
     }
 
     // render
@@ -170,35 +207,50 @@ export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>((
     return (
         <div className="relative">
 
-            <div ref={setTarget as LegacyRef<HTMLDivElement> | undefined}>
-                <Input key="input" ref={inputRef as Ref<HTMLInputElement> | undefined}
-                    name={name} 
-                    scale={context.scale ||scale}
-                    onFocus={handleFocus} onKeyDown={handleKeyDown}
-                    placeholder={placeholder}
+            <div ref={setTarget}>
+                <Input type="text"
+
+                    ref={inputRef}
+                    name={name}
+
+                    defaultValue={defaultValue}
+                    value={value}
+                    onChange={handleChange}
+
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+
+                    onMouseDown={handleFocus}
+                    onKeyDown={handleKeyDown}
+
                     autoComplete="off"
+
                     {...props}
+
                 />
             </div>
 
-            {ready && show &&
-                <div ref={setPopper as LegacyRef<HTMLDivElement> | undefined} className="absolute left-0 mt-1 bg-content-fg border border-content-border rounded overflow-hidden z-10">
+            {show &&
+                <div ref={setPopper} onMouseDown={(e) => { e.preventDefault(); }} className="absolute left-0 mt-1 bg-content-fg border border-content-border rounded overflow-hidden z-10">
 
-                    <div className="px-2 py-1 bg-gray-400">
-                        <div className="text-right">
-                            <button type="button" className="focus:outline-none" onClick={handleClickPrevHour}><AngleUpIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
-                            <button type="button" className="px-2 focus:outline-none" onClick={handleClickNoon}><CircleIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
-                            <button type="button" className="focus:outline-none" onClick={handleClickNextHour}><AngleDownIcon className="h-4 w-4 text-content stroke-current stroke-2" /></button>
+                    <div className="px-2 py-1 flex flex-row items-center justify-between bg-gray-400">
+                        <div className="flex-grow text-center font-bold">
+                            {t('hour', { defaultValue: 'Hour' })}
+                        </div>
+                        <div className=" flex-none space-x-2">
+                            <button type="button" className="focus:outline-none" onClick={handleClickPrevHour}><AngleUpIcon className="text-content stroke-current stroke-2" /></button>
+                            <button type="button" className="focus:outline-none" onClick={handleClickNoon}><CircleIcon className="text-content stroke-current stroke-2" /></button>
+                            <button type="button" className="focus:outline-none" onClick={handleClickNextHour}><AngleDownIcon className="text-content stroke-current stroke-2" /></button>
                         </div>
                     </div>
 
                     <div ref={timesRef} className="h-64 overflow-scroll">
-                        <table className="table-fixed text-center">
+                        <table className="table-fixed text-center" style={{ width: '12em' }}>
 
                             <thead>
                                 <tr>
-                                    <th className="w-10">Hora</th>
-                                    {minutes.map(m => <td className="w-10"></td>)}
+                                    <th style={{ width: '3em' }}></th>
+                                    {minutes.map(m => <td className="w-10" style={{ width: '3em' }}></td>)}
                                 </tr>
                             </thead>
 
@@ -207,7 +259,7 @@ export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>((
                                     <tr key={h} className={hourClasses([h, 0])}>
                                         <th className="text-base group-hover:text-content group-hover:bg-secondary-500" onClick={e => handleClickTime(e, [h, 0])}>{formatHour(h)}</th>
                                         {minutes.map(m =>
-                                            <td key={m} onClick={e => handleClickTime(e,[h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
+                                            <td key={m} onClick={e => handleClickTime(e, [h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
                                         )}
                                     </tr>
                                 )}
@@ -218,7 +270,7 @@ export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>((
                                     <tr key={h} className={hourClasses([h, 0])}>
                                         <th className="text-base group-hover:text-content group-hover:bg-secondary-500" onClick={e => handleClickTime(e, [h, 0])}>{formatHour(h)}</th>
                                         {minutes.map(m =>
-                                            <td key={m} onClick={e => handleClickTime(e,[h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
+                                            <td key={m} onClick={e => handleClickTime(e, [h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
                                         )}
                                     </tr>
                                 )}
@@ -229,7 +281,7 @@ export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>((
                                     <tr key={h} className={hourClasses([h, 0])}>
                                         <th className="text-base group-hover:text-content group-hover:bg-secondary-500" onClick={e => handleClickTime(e, [h, 0])}>{formatHour(h)}</th>
                                         {minutes.map(m =>
-                                            <td key={m} onClick={e => handleClickTime(e,[h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
+                                            <td key={m} onClick={e => handleClickTime(e, [h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
                                         )}
                                     </tr>
                                 )}
@@ -248,7 +300,7 @@ export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>((
 
 
 //
-// parse and format
+// default parse and format
 //
 
 /**
@@ -257,7 +309,7 @@ export const TimePicker =  React.forwardRef<HTMLInputElement, TimePickerProps>((
  * @param {String} s - The string to parse
  * @return {Array[h, m]} - The time represented as an array
  */
-function parseTime(s: string): [number, number] | null {
+function internalParseTime(s: string): [number, number] | null {
 
     var parse = /^\s*?([0-1]?\d)(?::([0-5]?\d)?)?\s*(AM?|PM?)?\s*$/i.exec(s);
     if (parse) {
@@ -293,7 +345,7 @@ function parseTime(s: string): [number, number] | null {
  *
  * @param Formats a time in
  */
-function formatHour(h: number): string {
+function internalFormatHour(h: number): string {
 
     return String(h <= 12 ? (h > 0 ? h : 12) : (h - 12));
 
@@ -305,7 +357,7 @@ function formatHour(h: number): string {
  * @param {Array[h, m]} hm - The time represented as an array
  * @returns {String} s - The formated string
  */
-function formatTime(hm: [number, number]): string {
+function internalFormatTime(hm: [number, number]): string {
 
     var h = hm[0], m = hm[1];
     if (h < 12) {
