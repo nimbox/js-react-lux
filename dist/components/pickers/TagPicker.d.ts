@@ -1,7 +1,5 @@
 import React from 'react';
-import { ComponentScale } from '../ComponentScale';
 export interface TagPickerProps<T> {
-    scale?: ComponentScale;
     tags: T[];
     tagValue: (item: T) => string;
     renderTag: (item: T, onRemove?: () => void) => React.ReactNode;
@@ -37,4 +35,4 @@ export interface TagPickerProps<T> {
  * they are being resolved the component is shown in a `loading` state.
  *
  */
-export declare const TagPicker: <T extends {}>({ scale, tags, tagValue, renderTag, onAdd, onRemove, onSearch, CreateComponent }: TagPickerProps<T>) => JSX.Element;
+export declare const TagPicker: <T extends {}>({ tags, tagValue, renderTag, onAdd, onRemove, onSearch, CreateComponent }: TagPickerProps<T>) => JSX.Element;

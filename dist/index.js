@@ -166,12 +166,6 @@ function SvgWarningIcon(props) {
     return (jsxs("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 32 32", fill: "none", stroke: "currentColor", strokeWidth: 0.5, strokeLinecap: "round", strokeLinejoin: "round" }, props, { children: [jsx("path", { d: "M16 6v12" }, void 0), jsx("circle", { cx: 16, cy: 16, r: 15 }, void 0), jsx("circle", { cx: 16, cy: 24, r: 2 }, void 0)] }), void 0));
 }
 
-var smallScale = {
-    'xs': 'xs',
-    'sm': 'xs',
-    'base': 'sm',
-    'lg': 'base'
-};
 var controlScale = {
     'xs': 'text-xs px-2 py-0.5',
     'sm': 'text-sm px-2.5 py-1',
@@ -200,29 +194,29 @@ var controlSmallText = {
 // Button
 var CLASSES = {
     'filled': {
-        'primary': 'text-primary-800 bg-primary-500 hover:text-primary-900 hover:bg-primary-600 rounded',
-        'secondary': 'text-secondary-800 bg-secondary-500 hover:text-secondary-900 hover:bg-secondary-600 rounded',
-        'muted': 'text-gray-500 bg-gray-300 hover:text-gray-600 hover:bg-gray-400 rounded'
+        'primary': 'text-primary-800 bg-primary-500 border border-primary-500 hover:text-primary-900 hover:bg-primary-600 hover:border-primary-600 focus:ring-primary-500 rounded',
+        'secondary': 'text-secondary-800 bg-secondary-500 border border-secondary-500 hover:text-secondary-900 hover:bg-secondary-600 hover:border-secondary-600 focus:ring-secondary-500 rounded',
+        'muted': 'text-gray-500 bg-gray-300 border border-gray-300 hover:text-gray-600 hover:bg-gray-400 hover:border-gray-400 focus:ring-gray-300 rounded'
     },
     'text': {
-        'primary': 'text-primary-500 hover:text-primary-600 hover:bg-primary-100 rounded',
-        'secondary': 'text-secondary-500 hover:text-secondary-600 hover:bg-secondary-100 rounded',
-        'muted': 'text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded'
+        'primary': 'text-primary-500 border border-transparent hover:text-primary-600 hover:bg-primary-100 hover:border-primary-100 focus:ring-primary-500 rounded',
+        'secondary': 'text-secondary-500 border border-transparent hover:text-secondary-600 hover:bg-secondary-100 hover:border-secondary-100 focus:ring-secondary-500 rounded',
+        'muted': 'text-gray-400 border border-transparent hover:text-gray-500 hover:bg-gray-100 hover:border-gray-100 focus:ring-gray-300 rounded'
     },
     'outlined': {
-        'primary': 'text-primary-500 border border-primary-300 hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 rounded',
-        'secondary': 'text-secondary-500 border border-secondary-300 hover:text-secondary-600 hover:bg-secondary-100 hover:border-secondary-500 rounded',
-        'muted': 'text-gray-400 border border-gray-300 hover:text-gray-500 hover:bg-gray-100 hover:border-gray-500 rounded'
+        'primary': 'text-primary-500 border border-primary-300 hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 focus:ring-primary-500 rounded',
+        'secondary': 'text-secondary-500 border border-secondary-300 hover:text-secondary-600 hover:bg-secondary-100 hover:border-secondary-500 focus:ring-secondary-500 rounded',
+        'muted': 'text-gray-400 border border-gray-300 hover:text-gray-500 hover:bg-gray-100 hover:border-gray-500 focus:ring-gray-300 rounded'
     },
     'link': {
-        'primary': 'underline text-primary-500 hover:text-primary-600',
-        'secondary': 'underline text-secondary-500 hover:text-secondary-600',
-        'muted': 'underline text-gray-400 hover:text-gray-500'
+        'primary': 'underline text-primary-500 hover:text-primary-600 focus:ring-primary-500 rounded',
+        'secondary': 'underline text-secondary-500 hover:text-secondary-600 focus:ring-secondary-500 rounded',
+        'muted': 'underline text-gray-400 hover:text-gray-500 focus:ring-gray-300 rounded'
     }
 };
 var Button = React.forwardRef(function (_a, ref) {
     var _b = _a.color, color = _b === void 0 ? 'primary' : _b, _c = _a.variant, variant = _c === void 0 ? 'filled' : _c, start = _a.start, end = _a.end, children = _a.children; _a.className; var props = __rest(_a, ["color", "variant", "start", "end", "children", "className"]);
-    return (jsx("button", __assign({}, props, { ref: ref, className: classnames(CLASSES[variant][color], 'disabled:opacity-50 disabled:cursor-not-allowed'), style: variant !== 'link' ? { padding: '0.25em 0.75em' } : {} }, { children: (!start && !end) ?
+    return (jsx("button", __assign({}, props, { ref: ref, className: classnames(CLASSES[variant][color], 'lux-control-font', { 'lux-control-padding': variant !== 'link' }, 'focus:ring focus:ring-opacity-50 focus:outline-none', 'disabled:opacity-50 disabled:cursor-not-allowed') }, { children: (!start && !end) ?
             jsx(Fragment, { children: children }, void 0) :
             jsxs("span", __assign({ className: "flex flex-row items-center" }, { children: [start && jsx("span", __assign({ className: "flex-none", style: { marginRight: '0.25em' } }, { children: start }), void 0), jsx("span", __assign({ className: "flex-grow self-baseline" }, { children: children }), void 0), end && jsx("span", __assign({ className: "flex-none", style: { marginLeft: '0.25em' } }, { children: end }), void 0)] }), void 0) }), void 0));
 });
@@ -253,13 +247,13 @@ Card.Footer = function (_a) {
     return (jsx("div", __assign({ className: classnames('border-t border-content-border', className) }, { children: children }), void 0));
 };
 
-var useOnOutsideClick = function (onOutsideClick, enable) {
+var useOnOutsideClick = function (onOutsideClick, show) {
     var elements = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         elements[_i - 2] = arguments[_i];
     }
     useEffect(function () {
-        if (enable) {
+        if (show) {
             var handleMouseDown_1 = function (event) {
                 var inside = elements.find(function (element) { return element && element.contains(event.target); });
                 if (!inside) {
@@ -269,7 +263,7 @@ var useOnOutsideClick = function (onOutsideClick, enable) {
             document.addEventListener('mousedown', handleMouseDown_1);
             return function () { return document.removeEventListener('mousedown', handleMouseDown_1); };
         }
-    }, __spreadArray([enable], elements));
+    }, __spreadArray([show], elements));
 };
 
 var Context$4 = createContext({ scale: 'base', error: false });
@@ -307,16 +301,16 @@ Control.Message.displayName = 'Control.Help';
 Control.Error.displayName = 'Control.Error';
 
 var Input = React.forwardRef(function (_a, ref) {
-    var scale = _a.scale, error = _a.error, className = _a.className, props = __rest(_a, ["scale", "error", "className"]);
+    var error = _a.error, className = _a.className, props = __rest(_a, ["error", "className"]);
     var context = useContext(Context$4);
-    return (jsx("input", __assign({}, props, { ref: ref, className: classnames(controlText[scale || context.scale || 'base'], 'block w-full rounded border border-control-border', error || context.error ?
-            'border-danger-500 focus:border-danger-500 focus:ring focus:ring-danger-500' :
-            'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none disabled:opacity-50', className), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }), void 0));
+    return (jsx("input", __assign({}, props, { ref: ref, className: classnames('block w-full', 'lux-control-font lux-control-padding', 'rounded border border-control-border', error || context.error ?
+            'text-danger-500 border-danger-500 focus:border-danger-500 focus:ring-danger-500 placeholder-danger-500' :
+            'focus:border-primary-500 focus:ring-primary-500 placeholder-control-border', 'focus:ring focus:ring-opacity-50 focus:outline-none', 'placeholder-opacity-40', 'disabled:opacity-50', className) }), void 0));
 });
 
 var IconInput = React.forwardRef(function (_a, ref) {
-    var left = _a.left, right = _a.right, scale = _a.scale; _a.error; var className = _a.className, props = __rest(_a, ["left", "right", "scale", "error", "className"]);
-    return (jsxs("div", __assign({ className: classnames('relative', className) }, { children: [jsx(Input, __assign({ ref: ref, scale: scale, className: classnames({ 'pl-9': left, 'pr-9': right }) }, props), void 0), left &&
+    var left = _a.left, right = _a.right; _a.error; var className = _a.className, props = __rest(_a, ["left", "right", "error", "className"]);
+    return (jsxs("div", __assign({ className: classnames('relative', className) }, { children: [jsx(Input, __assign({ ref: ref, className: classnames({ 'pl-9': left, 'pr-9': right }) }, props), void 0), left &&
                 jsx("div", __assign({ className: "absolute inset-y-0 left-0 flex flex-row justify-center items-center", style: { width: '2em' } }, { children: left }), void 0), right &&
                 jsx("div", __assign({ className: "absolute inset-y-0 right-0 flex flex-row justify-center items-center", style: { width: '2em' } }, { children: right }), void 0)] }), void 0));
 });
@@ -328,32 +322,32 @@ var SearchInput = React.forwardRef(function (_a, ref) {
 
 var ChooseFn = function (_a, ref) {
     var _b;
-    var _c = _a.noSearch, noSearch = _c === void 0 ? false : _c, _d = _a.scale, scale = _d === void 0 ? 'base' : _d, name = _a.name, _e = _a.recentValues, recentValues = _e === void 0 ? [] : _e, items = _a.items, loading = _a.loading, error = _a.error, getItem = _a.getItem, searchItems = _a.searchItems, itemValue = _a.itemValue, itemMatch = _a.itemMatch, renderItem = _a.renderItem, renderListItem = _a.renderListItem, CreateComponent = _a.CreateComponent, inline = _a.inline, _f = _a.align, align = _f === void 0 ? 'stretch' : _f, className = _a.className, dropdownClassName = _a.dropdownClassName, props = __rest(_a, ["noSearch", "scale", "name", "recentValues", "items", "loading", "error", "getItem", "searchItems", "itemValue", "itemMatch", "renderItem", "renderListItem", "CreateComponent", "inline", "align", "className", "dropdownClassName"]);
+    var _c = _a.noSearch, noSearch = _c === void 0 ? false : _c, name = _a.name, _d = _a.recentValues, recentValues = _d === void 0 ? [] : _d, items = _a.items, loading = _a.loading, error = _a.error, getItem = _a.getItem, searchItems = _a.searchItems, itemValue = _a.itemValue, itemMatch = _a.itemMatch, renderItem = _a.renderItem, renderListItem = _a.renderListItem, CreateComponent = _a.CreateComponent, inline = _a.inline, _e = _a.align, align = _e === void 0 ? 'stretch' : _e, className = _a.className, dropdownClassName = _a.dropdownClassName, props = __rest(_a, ["noSearch", "name", "recentValues", "items", "loading", "error", "getItem", "searchItems", "itemValue", "itemMatch", "renderItem", "renderListItem", "CreateComponent", "inline", "align", "className", "dropdownClassName"]);
     var inputRef = useRef();
     useImperativeHandle(ref, function () { return inputRef.current; });
-    var _g = useState(''), search = _g[0], setSearch = _g[1];
-    var _h = useState(''), internalValue = _h[0], setInternalValue = _h[1];
-    var context = useContext(Context$4);
-    var _j = useState(false), visible = _j[0], setVisible = _j[1];
-    var _k = useState(false), active = _k[0], setActive = _k[1];
+    var _f = useState(''), search = _f[0], setSearch = _f[1];
+    var _g = useState(''), internalValue = _g[0], setInternalValue = _g[1];
+    useContext(Context$4);
+    var _h = useState(false), visible = _h[0], setVisible = _h[1];
+    var _j = useState(false), active = _j[0], setActive = _j[1];
     useLayoutEffect(function () { setActive(visible); }, [visible]);
     var target = useRef(null);
-    var _l = useState(null), popper = _l[0], setPopper = _l[1];
+    var _k = useState(null), popper = _k[0], setPopper = _k[1];
     useOnOutsideClick(function () { if (internalError) {
         reset();
     } if (visible) {
         setVisible(false);
     } }, visible, target.current, popper);
-    var _m = useState(loading || false), internalLoading = _m[0], setInternalLoading = _m[1];
-    var _o = useState(error || false), internalError = _o[0], setInternalError = _o[1];
-    var _p = useState(noSearch && items ? items : []), searchResults = _p[0], setSearchResults = _p[1];
-    var _q = useState(recentValues), searchRecents = _q[0], setSearchRecents = _q[1];
+    var _l = useState(loading || false), internalLoading = _l[0], setInternalLoading = _l[1];
+    var _m = useState(error || false), internalError = _m[0], setInternalError = _m[1];
+    var _o = useState(noSearch && items ? items : []), searchResults = _o[0], setSearchResults = _o[1];
+    var _p = useState(recentValues), searchRecents = _p[0], setSearchRecents = _p[1];
     var searchRef = useRef();
-    var _r = useState(null), cursor = _r[0], setCursor = _r[1];
+    var _q = useState(null), cursor = _q[0], setCursor = _q[1];
     var searchRecentsLength = searchRecents.length;
-    var _s = React.useState([]), listRecentsRefs = _s[0], setlistRecentsRefs = _s[1];
+    var _r = React.useState([]), listRecentsRefs = _r[0], setlistRecentsRefs = _r[1];
     var searchResultsLength = searchResults.length;
-    var _t = React.useState([]), listResultsRefs = _t[0], setlistResultsRefs = _t[1];
+    var _s = React.useState([]), listResultsRefs = _s[0], setlistResultsRefs = _s[1];
     useEffect(function () {
         setlistRecentsRefs(Array(searchRecentsLength).fill(createRef(), 0, searchRecentsLength).map(function (_, i) { return listRecentsRefs[i] || createRef(); }));
     }, [searchRecentsLength]);
@@ -568,7 +562,7 @@ var ChooseFn = function (_a, ref) {
             }
         });
     }); };
-    return (jsxs("div", __assign({ className: classnames('relative inline-block', inline ? 'max-w-full' : 'w-full', controlText[scale || context.scale || 'base']) }, { children: [jsxs("div", __assign({ ref: target, tabIndex: active ? -1 : 0, onFocus: function () { if (!visible)
+    return (jsxs("div", __assign({ className: classnames('relative inline-block', inline ? 'max-w-full' : 'w-full') }, { children: [jsxs("div", __assign({ ref: target, tabIndex: active ? -1 : 0, onFocus: function () { if (!visible)
                     setVisible(true); }, onMouseDown: function (e) { e.preventDefault(); setVisible(!visible); }, onKeyDown: noSearch ? handleKeyDown : undefined, className: classnames('relative rounded', inline || 'border border-control-border', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none', className), style: inline ? { paddingRight: '1.25em' } : { padding: '0.5em 2em 0.5em 0.75em' } }, { children: [(!internalLoading && internalValue && renderItem(getItem(internalValue))) || jsx("span", { children: "\u00A0" }, void 0), jsxs("div", __assign({ className: "absolute inset-y-0 right-0 flex flex-row justify-center items-center cursor-pointer", style: { width: '1em', marginRight: inline ? '0' : '0.5em' } }, { children: [internalLoading &&
                                 jsx(Loading, {}, void 0), internalError &&
                                 jsx(SvgDangerIcon, { className: "text-red-500 stroke-current stroke-2" }, void 0), !internalLoading && !internalError &&
@@ -578,7 +572,7 @@ var ChooseFn = function (_a, ref) {
                         'right-0': align === 'end',
                         'inset-x-0': align === 'stretch'
                     }, dropdownClassName), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [!noSearch &&
-                            jsx(SearchInput, { ref: searchRef, scale: smallScale[scale || context.scale || 'base'], value: search, onChange: handleSearch, onKeyDown: handleKeyDown, disabled: internalError }, "input"), (searchRecents.length > 0) &&
+                            jsx(SearchInput, { ref: searchRef, value: search, onChange: handleSearch, onKeyDown: handleKeyDown, disabled: internalError }, "input"), (searchRecents.length > 0) &&
                             jsx("ul", __assign({ className: "m-0 p-0" }, { children: searchRecents.map(function (value, i) { return (jsx("li", __assign({ ref: listRecentsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, value); } : undefined, className: classnames('cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i && 'bg-primary-500') }, { children: renderListItem ? renderListItem(getItem(value)) : renderItem(getItem(value)) }), value)); }) }), void 0), (searchResults.length > 0) &&
                             jsxs(Fragment, { children: [(searchRecents.length > 0) &&
                                         jsx("div", { className: "h-px bg-control-border", style: { margin: '0.5em -0.75em' } }, void 0), jsx("ul", __assign({ className: "m-0 p-0" }, { children: searchResults.map(function (item, i) { return (jsx("li", __assign({ ref: listResultsRefs[i], onClick: !internalError ? function (e) { return handleClick(e, itemValue(item)); } : undefined, className: classnames('cursor-pointer my-0 -ml-3 -mr-3 pl-3 pr-3', 'hover:text-white hover:bg-secondary-500', cursor === i + searchRecents.length && 'bg-primary-500') }, { children: renderListItem ? renderListItem(item) : renderItem(item) }), itemValue(item))); }) }), void 0)] }, void 0), (search && searchResults.length === 0 && searchRecents.length === 0 && CreateComponent) &&
@@ -996,22 +990,29 @@ var namedDays = [
  * DatePicker. Select a date with one click.
  */
 var DatePicker = React.forwardRef(function (_a, ref) {
-    var _b;
-    var name = _a.name, _c = _a.scale, scale = _c === void 0 ? 'base' : _c, shortcuts = _a.shortcuts, placeholder = _a.placeholder, props = __rest(_a, ["name", "scale", "shortcuts", "placeholder"]);
-    var inputRef = useRef();
+    var name = _a.name, defaultValue = _a.defaultValue, value = _a.value, onChange = _a.onChange, _b = _a.shortcuts, shortcuts = _b === void 0 ? false : _b, _c = _a.parseDate, parseDate = _c === void 0 ? internalParseDate : _c, _d = _a.formatDate, formatDate = _d === void 0 ? internalFormatDate : _d, _e = _a.firstDayOfWeek, firstDayOfWeek = _e === void 0 ? 0 : _e, props = __rest(_a, ["name", "defaultValue", "value", "onChange", "shortcuts", "parseDate", "formatDate", "firstDayOfWeek"]);
+    var _f = useTranslation(), t = _f.t, ready = _f.ready;
+    var inputRef = useRef(null);
     useImperativeHandle(ref, function () { return inputRef.current; });
-    var _d = useState(''), internalValue = _d[0], setInternalValue = _d[1];
-    useEffect(function () { var _a; setInternalValue((_a = inputRef === null || inputRef === void 0 ? void 0 : inputRef.current) === null || _a === void 0 ? void 0 : _a.value); }, [(_b = inputRef === null || inputRef === void 0 ? void 0 : inputRef.current) === null || _b === void 0 ? void 0 : _b.value]);
-    var _e = useTranslation(), t = _e.t, ready = _e.ready;
-    var _f = useState(firstDate(internalValue)), calendar = _f[0], setCalendar = _f[1];
-    useEffect(function () { return setCalendar(firstDate(internalValue)); }, [internalValue]);
-    var _g = useState(false), show = _g[0], setShow = _g[1];
-    var _h = useState(null), target = _h[0], setTarget = _h[1];
-    var _j = useState(null), popper = _j[0], setPopper = _j[1];
+    // Maintain an internalValue to use the internal input as controlled,
+    // and only update internalValue only when the DatePicker is controlled.
+    var controlled = useState(value != null)[0];
+    var _g = useState(defaultValue || ''), internalValue = _g[0], setInternalValue = _g[1];
+    useEffect(function () { if (controlled) {
+        setInternalValue(value || '');
+    } }, [controlled, value]);
+    // Calendar is the normalized first date having the week of the current date
+    // starting at the firstDayOfWeek
+    // (has day = 1, hour = 12, minute = 0, second = 0 and millis = 0)
+    var _h = useState(startOfMonth(parseDate(defaultValue || ''))), calendar = _h[0], setCalendar = _h[1];
+    useEffect(function () { return setCalendar(startOfMonth(parseDate(internalValue))); }, [internalValue]);
+    // Popper states
+    var _j = useState(false), show = _j[0], setShow = _j[1];
+    var _k = useState(null), target = _k[0], setTarget = _k[1];
+    var _l = useState(null), popper = _l[0], setPopper = _l[1];
     useOnOutsideClick(function () { if (show) {
         setShow(!show);
     } }, show, target, popper);
-    var context = useContext(Context$4);
     // handlers
     var handleShow = function () { if (!show) {
         setShow(true);
@@ -1020,36 +1021,30 @@ var DatePicker = React.forwardRef(function (_a, ref) {
         setShow(false);
     } };
     var handleFocus = handleShow;
+    var handleBlur = function (e) {
+        handleFinalValue();
+    };
     var handleKeyDown = function (e) {
         switch (e.keyCode) {
             case 9: // tab
             case 13: // enter
-                // const ymd = parseDate(internalValue);
-                if (internalValue) {
-                    handleFinalChange();
-                }
-                handleHide();
+                handleFinalValueDate(parseDate(internalValue));
                 break;
             default:
                 handleShow();
         }
     };
-    var handleFinalChange = function (value) {
-        // const value = formatDate(ymd);
-        //onChange({ target: { name, value } } as React.ChangeEvent<HTMLInputElement>);
-        handleHide();
-    };
-    function setRefValue(event, element, value) {
-        var _a;
-        event.preventDefault();
-        event.stopPropagation();
-        var inputSetter = (_a = Object === null || Object === void 0 ? void 0 : Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')) === null || _a === void 0 ? void 0 : _a.set;
-        if (inputSetter) {
-            inputSetter.call(element.current, value);
-            var inputEvent = new Event('input', { bubbles: true });
-            element.current.dispatchEvent(inputEvent);
+    var handleChange = function (e) {
+        if (onChange) {
+            // bubble up change event regardless of 
+            // controlled or uncontrolled
+            onChange(e);
         }
-    }
+        if (value == null) {
+            // set internal value if uncontrolled
+            setInternalValue(e.target.value);
+        }
+    };
     // navigation
     var handleClickPrevMonth = function () {
         var c = new Date(calendar);
@@ -1058,6 +1053,7 @@ var DatePicker = React.forwardRef(function (_a, ref) {
     };
     var handleClickToday = function () {
         var c = new Date();
+        c.setDate(1);
         c.setHours(12, 0, 0, 0);
         setCalendar(c);
     };
@@ -1067,27 +1063,46 @@ var DatePicker = React.forwardRef(function (_a, ref) {
         setCalendar(c);
     };
     var handleClickDate = function (e, d) {
-        var value = formatDate([d.getFullYear(), d.getMonth(), d.getDate()]);
-        setRefValue(e, inputRef, value);
-        handleFinalChange();
+        handleFinalValueDate([d.getFullYear(), d.getMonth(), d.getDate()]);
         handleHide();
+    };
+    // handle final values
+    var handleFinalValue = function () {
+        var finalDate = parseDate(internalValue);
+        handleFinalValueDate(finalDate);
+    };
+    var handleFinalValueDate = function (finalDate) {
+        var finalValue = finalDate != null ? formatDate(finalDate) : '';
+        setFinalInputValue(finalValue);
+        handleHide();
+    };
+    var setFinalInputValue = function (inputValue) {
+        var _a;
+        var setter = (_a = Object === null || Object === void 0 ? void 0 : Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')) === null || _a === void 0 ? void 0 : _a.set;
+        if (setter && inputValue !== '') {
+            setter.call(inputRef.current, inputValue);
+            inputRef.current.dispatchEvent(new Event('input', { bubbles: true }));
+        }
     };
     // setup
     var today = new Date();
     today.setHours(12, 0, 0, 0);
     var v = parseDate(internalValue);
     var selected = v ? new Date(v[0], v[1], v[2], 12, 0, 0, 0) : null;
-    // calculate
-    var d = new Date(calendar.getTime());
-    d.setDate(1 - d.getDay()); // beginning of week containing beginning of month
-    var weeks = [];
-    for (var i = 0; i < 6; i++) {
-        var dates = [];
-        for (var j = 0; j < 7; j++, d.setDate(d.getDate() + 1)) {
-            dates.push(new Date(d.getTime()));
+    // calculate weeks
+    var weeks = useMemo(function () {
+        var first = new Date(calendar.getTime());
+        first.setDate(1 - first.getDay() + firstDayOfWeek); // beginning of week containing beginning of month
+        var weeks = [];
+        for (var i = 0; i < 6; i++) {
+            var dates = [];
+            for (var j = 0; j < 7; j++, first.setDate(first.getDate() + 1)) {
+                dates.push(new Date(first.getTime()));
+            }
+            weeks.push(dates);
         }
-        weeks.push(dates);
-    }
+        return weeks;
+    }, [calendar.getTime()]);
     // format
     function dayClasses(d) {
         var c = ['hover:text-white hover:bg-secondary-500'];
@@ -1103,16 +1118,16 @@ var DatePicker = React.forwardRef(function (_a, ref) {
         return c.join(' ');
     }
     // render
-    var months = ready ? t('months', { defaultValue: ['Janruary', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], returnObjects: true }) : null;
+    var months = ready ? t('months', { defaultValue: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], returnObjects: true }) : null;
     var days = ready ? t('shortDays', { defaultValue: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], returnObjects: true }) : [];
-    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: setTarget }, { children: jsx(Input, __assign({ type: "text", ref: inputRef, name: name, scale: context.scale || scale, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder, autoComplete: "off" }, props), void 0) }), void 0), ready && show &&
-                jsx("div", __assign({ ref: setPopper, className: "absolute left-0 mt-1 bg-content-fg border border-conteng-border rounded overflow-hidden z-10" }, { children: jsxs("div", __assign({ className: "flex flex-row" }, { children: [jsxs("div", { children: [jsxs("div", __assign({ className: "px-2 py-1 flex flex-row items-center justify-between bg-gray-400" }, { children: [jsxs("div", __assign({ className: "flex-grow text-center font-bold" }, { children: [months[calendar.getMonth()], " ", calendar.getFullYear()] }), void 0), jsxs("div", { children: [jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickPrevMonth }, { children: jsx(SvgAngleLeftIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "px-2 focus:outline-none", onClick: handleClickToday }, { children: jsx(SvgCircleIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickNextMonth }, { children: jsx(SvgAngleRightIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0)] }, void 0)] }), void 0), jsxs("table", __assign({ className: "table-fixed text-center" }, { children: [jsx("thead", { children: jsx("tr", { children: days.map(function (d, i) { return jsx("th", __assign({ className: "w-10 px-1" }, { children: d }), i); }) }, void 0) }, void 0), jsx("tbody", __assign({ className: "cursor-pointer" }, { children: weeks.map(function (w) {
+    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: setTarget }, { children: jsx(Input, __assign({ type: "text", ref: inputRef, name: name, defaultValue: defaultValue, value: value, onChange: handleChange, onFocus: handleFocus, onBlur: handleBlur, onMouseDown: handleFocus, onKeyDown: handleKeyDown, autoComplete: "off" }, props), void 0) }), void 0), ready && show &&
+                jsx("div", __assign({ ref: setPopper, onMouseDown: function (e) { e.preventDefault(); }, className: "absolute left-0 mt-1 bg-content-fg border border-content-border rounded overflow-hidden z-10" }, { children: jsxs("div", __assign({ className: "flex flex-row" }, { children: [jsxs("div", { children: [jsxs("div", __assign({ className: "px-2 py-1 flex flex-row items-center justify-between bg-gray-400" }, { children: [jsxs("div", __assign({ className: "flex-grow text-center font-bold" }, { children: [months[calendar.getMonth()], " ", calendar.getFullYear()] }), void 0), jsxs("div", __assign({ className: "flex-none space-x-2" }, { children: [jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickPrevMonth }, { children: jsx(SvgAngleLeftIcon, { className: "text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickToday }, { children: jsx(SvgCircleIcon, { className: "text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickNextMonth }, { children: jsx(SvgAngleRightIcon, { className: "text-content stroke-current stroke-2" }, void 0) }), void 0)] }), void 0)] }), void 0), jsxs("table", __assign({ className: "table-fixed text-center", style: { width: '21em' } }, { children: [jsx("thead", { children: jsx("tr", { children: weeks[0].map(function (d, i) { return jsx("th", __assign({ className: "", style: { padding: '0 0.5em', width: '3em' } }, { children: days[d.getDay()] }), i); }) }, void 0) }, void 0), jsx("tbody", __assign({ className: "cursor-pointer" }, { children: weeks.map(function (w) {
                                                     return jsx("tr", { children: w.map(function (d) { return jsx("td", __assign({ onClick: function (e) { return handleClickDate(e, d); }, className: dayClasses(d) }, { children: d.getDate() }), d.getTime()); }) }, w[0].getTime());
                                                 }) }), void 0)] }), void 0)] }, void 0), shortcuts &&
-                                jsx("div", __assign({ className: "flex flex-col justify-between bg-gray-300 cursor-pointer" }, { children: namedDays.map(function (s, i) { return jsx("div", __assign({ onClick: function (e) { return handleClickDate(e, s.date(new Date(today))); }, className: "px-2 hover:text-white hover:bg-secondary-500" }, { children: t("namedDays." + s.label, { defaultValue: s.label }) }), i); }) }), void 0)] }), void 0) }), void 0)] }), void 0));
+                                jsx("div", __assign({ className: "flex flex-col justify-between items-stretch bg-gray-300 cursor-pointer" }, { children: namedDays.map(function (s, i) { return jsx("div", __assign({ onClick: function (e) { return handleClickDate(e, s.date(new Date(today))); }, className: "px-2 truncate hover:text-white hover:bg-secondary-500" }, { children: t("namedDays." + s.label, { defaultValue: s.label }) }), i); }) }), void 0)] }), void 0) }), void 0)] }), void 0));
 });
 //
-// parse and format
+// utilities
 //
 /**
  * Return a date representing the first date of the parsed value or the first
@@ -1120,13 +1135,15 @@ var DatePicker = React.forwardRef(function (_a, ref) {
  *
  * @param {String} s - The string to parse
  */
-function firstDate(s) {
-    var ymd = parseDate(s);
-    var first = ymd ? new Date(ymd[0], ymd[1], ymd[2]) : new Date();
-    first.setHours(12, 0, 0, 0);
-    first.setDate(1);
-    return first;
+function startOfMonth(date) {
+    var start = date ? new Date(date[0], date[1], date[2]) : new Date();
+    start.setHours(12, 0, 0, 0);
+    start.setDate(1);
+    return start;
 }
+//
+// default parse and format
+//
 /**
  * Parses a simple date in the format dd-mm-yyyy.
  * It is very lininent because it parses correctly dd, dd-mm, and dd-mm-yyyy.
@@ -1135,11 +1152,14 @@ function firstDate(s) {
  * @param {String} s - The string to parse
  * @return {Array [ y, m, d ]} - The date represented as an array with a 0 based month
  */
-function parseDate(s) {
+function internalParseDate(s) {
     var parse = /^\s*([0-3]?\d)(?:-(?:([0-1]?\d)?(?:-(\d{4})?)?)?)?\s*$/i.exec(s);
     if (parse) {
         var now = new Date();
-        var d = +parse[1], m = parse[2] ? +parse[2] - 1 : now.getMonth(), y = parse[3] ? +parse[3] : now.getFullYear(), valid = new Date(y, m, d, 12, 0, 0, 0);
+        var d = +parse[1];
+        var m = parse[2] ? +parse[2] - 1 : now.getMonth();
+        var y = parse[3] ? +parse[3] : now.getFullYear();
+        var valid = new Date(y, m, d, 12, 0, 0, 0);
         if (valid.getFullYear() === y && valid.getMonth() === m && valid.getDate() === d) {
             return [y, m, d];
         }
@@ -1155,7 +1175,7 @@ function parseDate(s) {
  * @param {Array [ y, m, d ]} ymd - The date representes as an array with a 0 based month
  * @returns {String} s - The formated string
  */
-function formatDate(ymd) {
+function internalFormatDate(ymd) {
     var m = ymd[1] + 1;
     return (ymd[2] < 10 ? '0' + ymd[2] : ymd[2]) + '-' + (m < 10 ? '0' + m : m) + '-' + ymd[0];
 }
@@ -1259,19 +1279,19 @@ var SwatchPicker = React.forwardRef(function (_a, ref) {
  *
  */
 var TagPicker = function (_a) {
-    var _b = _a.scale, scale = _b === void 0 ? 'base' : _b, tags = _a.tags, tagValue = _a.tagValue, renderTag = _a.renderTag, onAdd = _a.onAdd, onRemove = _a.onRemove, onSearch = _a.onSearch, CreateComponent = _a.CreateComponent;
-    var context = useContext(Context$4);
-    var _c = useState(false), isVisible = _c[0], setIsVisible = _c[1];
-    var _d = useState(false), isUpdating = _d[0], setIsUpdating = _d[1];
-    var _e = useState(false); _e[0]; var setIsError = _e[1];
+    var tags = _a.tags, tagValue = _a.tagValue, renderTag = _a.renderTag, onAdd = _a.onAdd, onRemove = _a.onRemove, onSearch = _a.onSearch, CreateComponent = _a.CreateComponent;
+    useContext(Context$4);
+    var _b = useState(false), isVisible = _b[0], setIsVisible = _b[1];
+    var _c = useState(false), isUpdating = _c[0], setIsUpdating = _c[1];
+    var _d = useState(false); _d[0]; var setIsError = _d[1];
     var searchRef = useRef();
-    var _f = useState(null), target = _f[0], setTarget = _f[1];
-    var _g = useState(null), popper = _g[0], setPopper = _g[1];
+    var _e = useState(null), target = _e[0], setTarget = _e[1];
+    var _f = useState(null), popper = _f[0], setPopper = _f[1];
     useOnOutsideClick(function () { if (isVisible) {
         setIsVisible(false);
     } }, isVisible, target, popper);
-    var _h = useState(''), search = _h[0], setSearch = _h[1];
-    var _j = useState([]), searchResults = _j[0], setSearchResults = _j[1];
+    var _g = useState(''), search = _g[0], setSearch = _g[1];
+    var _h = useState([]), searchResults = _h[0], setSearchResults = _h[1];
     useEffect(function () { if (isVisible) {
         searchRef.current.focus();
     } }, [isVisible]);
@@ -1361,14 +1381,14 @@ var TagPicker = function (_a) {
         });
     }); };
     // render
-    return (jsxs("div", __assign({ className: classnames('relative w-full', controlText[scale || context.scale || 'base']) }, { children: [jsxs("div", __assign({ ref: setTarget, tabIndex: isVisible ? -1 : 0, onClick: show, onFocus: show, className: classnames('relative w-full lux-tag-space', 'rounded border border-control-border', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none'), style: { padding: '0.5em 2.75em 0.5em 0.75em' } }, { children: [(tags.length > 0) ?
+    return (jsxs("div", __assign({ className: classnames('relative w-full') }, { children: [jsxs("div", __assign({ ref: setTarget, tabIndex: isVisible ? -1 : 0, onClick: show, onFocus: show, className: classnames('relative w-full lux-tag-space', 'rounded border border-control-border', 'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none'), style: { padding: '0.5em 2.75em 0.5em 0.75em' } }, { children: [(tags.length > 0) ?
                         tags.map(function (tag) {
                             return jsx(React.Fragment, { children: renderTag(tag, (isVisible ? function () { return handleRemove(tag); } : undefined)) }, tagValue(tag));
                         }) :
                         jsx("span", { children: "\u00A0Placeholder" }, void 0), jsx("div", __assign({ className: "absolute inset-y-0 right-0 flex flex-row justify-center items-center cursor-pointer", style: { width: '2em' } }, { children: isUpdating ?
                             jsx(Loading, {}, void 0) :
                             jsx(SvgAngleDownIcon, { width: "1em", height: "1em", className: "inline text-control-border stroke-current stroke-2" }, void 0) }), void 0)] }), void 0), isVisible &&
-                jsxs("div", __assign({ ref: setPopper, className: classnames('absolute w-full max-h-72 overflow-auto', 'mt-2 space-y-2', 'bg-white', 'rounded border border-control-border'), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [jsx(SearchInput, { ref: searchRef, scale: smallScale[scale], value: search, onChange: handleSearch }, void 0), (searchResults.length > 0) &&
+                jsxs("div", __assign({ ref: setPopper, className: classnames('absolute w-full max-h-72 overflow-auto', 'mt-2 space-y-2', 'bg-white', 'rounded border border-control-border'), style: { padding: '0.5em 0.75em 0.5em 0.75em' } }, { children: [jsx(SearchInput, { ref: searchRef, value: search, onChange: handleSearch }, void 0), (searchResults.length > 0) &&
                             jsx("ul", __assign({ className: "space-y-1" }, { children: searchResults.map(function (tag) {
                                     return jsx("li", __assign({ onClick: function () { return handleAdd(tag); }, className: "cursor-pointer" }, { children: renderTag(tag) }), tagValue(tag));
                                 }) }), void 0), (search && searchResults.length === 0 && CreateComponent) &&
@@ -1381,26 +1401,31 @@ var noon = [12];
 var afternoon = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 var minutes = [15, 30, 45];
 /**
- * DatePicker. Select a date with one click.
+ * TimePicker. Select a time with one click.
  */
 var TimePicker = React.forwardRef(function (_a, ref) {
-    var _b;
-    var name = _a.name, _c = _a.scale, scale = _c === void 0 ? "base" : _c, placeholder = _a.placeholder, props = __rest(_a, ["name", "scale", "placeholder"]);
-    var inputRef = useRef();
+    var name = _a.name, defaultValue = _a.defaultValue, value = _a.value, onChange = _a.onChange, _b = _a.parseTime, parseTime = _b === void 0 ? internalParseTime : _b, _c = _a.formatHour, formatHour = _c === void 0 ? internalFormatHour : _c, _d = _a.formatTime, formatTime = _d === void 0 ? internalFormatTime : _d, props = __rest(_a, ["name", "defaultValue", "value", "onChange", "parseTime", "formatHour", "formatTime"]);
+    var _e = useTranslation(), t = _e.t; _e.ready;
+    var inputRef = useRef(null);
     useImperativeHandle(ref, function () { return inputRef.current; });
-    var _d = useState(''), internalValue = _d[0], setInternalValue = _d[1];
-    useEffect(function () { var _a; setInternalValue((_a = inputRef === null || inputRef === void 0 ? void 0 : inputRef.current) === null || _a === void 0 ? void 0 : _a.value); }, [(_b = inputRef === null || inputRef === void 0 ? void 0 : inputRef.current) === null || _b === void 0 ? void 0 : _b.value]);
-    var ready = useTranslation().ready;
-    var _e = useState(false), show = _e[0], setShow = _e[1];
-    var _f = useState(null), target = _f[0], setTarget = _f[1];
-    var _g = useState(null), popper = _g[0], setPopper = _g[1];
-    useOnOutsideClick(function () { if (show) {
-        setShow(false);
-    } }, show, target, popper);
+    // Maintain an internalValue to use the internal input as controlled,
+    // and only update internalValue only when the DatePicker is controlled.
+    var controlled = useState(value != null)[0];
+    var _f = useState(defaultValue || ''), internalValue = _f[0], setInternalValue = _f[1];
+    useEffect(function () { if (controlled) {
+        setInternalValue(value || '');
+    } }, [controlled, value]);
+    // 
     var times = useRef({ watch: 8 });
     var timesRef = useRef(null);
     useEffect(function () { scroll(); });
-    var context = useContext(Context$4);
+    // Popper states
+    var _g = useState(false), show = _g[0], setShow = _g[1];
+    var _h = useState(null), target = _h[0], setTarget = _h[1];
+    var _j = useState(null), popper = _j[0], setPopper = _j[1];
+    useOnOutsideClick(function () { if (show) {
+        setShow(false);
+    } }, show, target, popper);
     // handlers
     var handleShow = function () { if (!show) {
         setShow(true);
@@ -1409,36 +1434,30 @@ var TimePicker = React.forwardRef(function (_a, ref) {
         setShow(false);
     } };
     var handleFocus = handleShow;
+    var handleBlur = function (e) {
+        handleFinalValue();
+    };
     var handleKeyDown = function (e) {
         switch (e.keyCode) {
             case 9: // tab
             case 13: // enter
-                var hm = parseTime(internalValue);
-                if (hm) {
-                    handleFinalChange();
-                }
-                handleHide();
+                handleFinalValueTime(parseTime(internalValue));
                 break;
             default:
                 handleShow();
         }
     };
-    var handleFinalChange = function (hm) {
-        //const value = formatTime(hm);
-        //onChange({ target: { name, value } } as React.ChangeEvent<HTMLInputElement>);
-        handleHide();
-    };
-    function setRefValue(event, element, value) {
-        var _a;
-        event.preventDefault();
-        event.stopPropagation();
-        var inputSetter = (_a = Object === null || Object === void 0 ? void 0 : Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')) === null || _a === void 0 ? void 0 : _a.set;
-        if (inputSetter) {
-            inputSetter.call(element.current, value);
-            var inputEvent = new Event('input', { bubbles: true });
-            element.current.dispatchEvent(inputEvent);
+    var handleChange = function (e) {
+        if (onChange) {
+            // bubble up change event regardless of 
+            // controlled or uncontrolled
+            onChange(e);
         }
-    }
+        if (value == null) {
+            // set internal value if uncontrolled
+            setInternalValue(e.target.value);
+        }
+    };
     // navigation
     var handleClickPrevHour = function () {
         if (times.current.watch > 0) {
@@ -1456,39 +1475,67 @@ var TimePicker = React.forwardRef(function (_a, ref) {
             scroll();
         }
     };
-    var handleClickTime = function (e, hm) {
-        var value = formatTime(hm);
-        setRefValue(e, inputRef, value);
-        handleFinalChange();
+    var handleClickTime = function (e, time) {
+        handleFinalValueTime(time);
         handleHide();
     };
     var scroll = function () {
         if (timesRef.current) {
-            var t = timesRef.current;
-            var h = t.scrollHeight / 24;
-            t.scrollTop = times.current.watch * h;
+            var t_1 = timesRef.current;
+            var h = t_1.scrollHeight / 24;
+            t_1.scrollTop = times.current.watch * h;
+        }
+    };
+    // handle final values
+    var handleFinalValue = function () {
+        var finalTime = parseTime(internalValue);
+        handleFinalValueTime(finalTime);
+    };
+    var handleFinalValueTime = function (finalTime) {
+        var finalValue = finalTime != null ? formatTime(finalTime) : '';
+        setFinalInputValue(finalValue);
+        handleHide();
+    };
+    var setFinalInputValue = function (inputValue) {
+        var _a;
+        var setter = (_a = Object === null || Object === void 0 ? void 0 : Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')) === null || _a === void 0 ? void 0 : _a.set;
+        if (setter && inputValue !== '') {
+            setter.call(inputRef.current, inputValue);
+            inputRef.current.dispatchEvent(new Event('input', { bubbles: true }));
         }
     };
     // setup
+    var now = new Date();
+    now.getHours();
     var v = parseTime(internalValue);
     var selected = v ? v : [-1, -1];
     // format
-    function hourClasses(hm) {
-        return hm[0] === selected[0] ? 'bg-info-500 text-white text-xs group hover:text-xs hover:bg-secondary-300' : 'group text-xs hover:text-xs hover:bg-secondary-300';
+    function hourClasses(time) {
+        if (time[0] === selected[0]) {
+            return 'text-white bg-primary-500 group hover:bg-secondary-300';
+        }
+        if (time[0] === now.getHours()) {
+            return 'text-white bg-info-500 group hover:bg-secondary-300';
+        }
+        return 'group hover:bg-secondary-300';
     }
-    function hourMinuteClasses(hm) {
-        if (hm[0] === selected[0]) {
-            return hm[0] === selected[0] && hm[1] === selected[1] ?
-                'text-white    text-base group-hover:text-content hover:text-base                    hover:bg-secondary-500' :
-                'text-info-500           group-hover:text-content hover:text-base                    hover:bg-secondary-500';
+    function hourMinuteClasses(time) {
+        if (time[0] === selected[0]) {
+            if (time[1] === selected[1]) {
+                return 'text-xs text-white group-hover:text-content hover:bg-secondary-500';
+            }
+            else {
+                return 'text-xs text-primary-500 group-hover:text-content hover:bg-secondary-500';
+            }
         }
-        else {
-            return 'text-muted                                    hover:text-base hover:text-content hover:bg-secondary-500';
+        if (time[0] === now.getHours()) {
+            return 'text-xs text-white group-hover:text-content hover:bg-secondary-500';
         }
+        return 'text-xs text-muted group-hover:text-content hover:bg-secondary-500';
     }
     // render
-    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: setTarget }, { children: jsx(Input, __assign({ ref: inputRef, name: name, scale: context.scale || scale, onFocus: handleFocus, onKeyDown: handleKeyDown, placeholder: placeholder, autoComplete: "off" }, props), "input") }), void 0), ready && show &&
-                jsxs("div", __assign({ ref: setPopper, className: "absolute left-0 mt-1 bg-content-fg border border-content-border rounded overflow-hidden z-10" }, { children: [jsx("div", __assign({ className: "px-2 py-1 bg-gray-400" }, { children: jsxs("div", __assign({ className: "text-right" }, { children: [jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickPrevHour }, { children: jsx(SvgAngleUpIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "px-2 focus:outline-none", onClick: handleClickNoon }, { children: jsx(SvgCircleIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickNextHour }, { children: jsx(SvgAngleDownIcon, { className: "h-4 w-4 text-content stroke-current stroke-2" }, void 0) }), void 0)] }), void 0) }), void 0), jsx("div", __assign({ ref: timesRef, className: "h-64 overflow-scroll" }, { children: jsxs("table", __assign({ className: "table-fixed text-center" }, { children: [jsx("thead", { children: jsxs("tr", { children: [jsx("th", __assign({ className: "w-10" }, { children: "Hora" }), void 0), minutes.map(function (m) { return jsx("td", { className: "w-10" }, void 0); })] }, void 0) }, void 0), jsx("tbody", __assign({ className: "cursor-pointer" }, { children: morning.map(function (h) {
+    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: setTarget }, { children: jsx(Input, __assign({ type: "text", ref: inputRef, name: name, defaultValue: defaultValue, value: value, onChange: handleChange, onFocus: handleFocus, onBlur: handleBlur, onMouseDown: handleFocus, onKeyDown: handleKeyDown, autoComplete: "off" }, props), void 0) }), void 0), show &&
+                jsxs("div", __assign({ ref: setPopper, onMouseDown: function (e) { e.preventDefault(); }, className: "absolute left-0 mt-1 bg-content-fg border border-content-border rounded overflow-hidden z-10" }, { children: [jsxs("div", __assign({ className: "px-2 py-1 flex flex-row items-center justify-between bg-gray-400" }, { children: [jsx("div", __assign({ className: "flex-grow text-center font-bold" }, { children: t('hour', { defaultValue: 'Hour' }) }), void 0), jsxs("div", __assign({ className: " flex-none space-x-2" }, { children: [jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickPrevHour }, { children: jsx(SvgAngleUpIcon, { className: "text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickNoon }, { children: jsx(SvgCircleIcon, { className: "text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickNextHour }, { children: jsx(SvgAngleDownIcon, { className: "text-content stroke-current stroke-2" }, void 0) }), void 0)] }), void 0)] }), void 0), jsx("div", __assign({ ref: timesRef, className: "h-64 overflow-scroll" }, { children: jsxs("table", __assign({ className: "table-fixed text-center", style: { width: '12em' } }, { children: [jsx("thead", { children: jsxs("tr", { children: [jsx("th", { style: { width: '3em' } }, void 0), minutes.map(function (m) { return jsx("td", { className: "w-10", style: { width: '3em' } }, void 0); })] }, void 0) }, void 0), jsx("tbody", __assign({ className: "cursor-pointer" }, { children: morning.map(function (h) {
                                             return jsxs("tr", __assign({ className: hourClasses([h, 0]) }, { children: [jsx("th", __assign({ className: "text-base group-hover:text-content group-hover:bg-secondary-500", onClick: function (e) { return handleClickTime(e, [h, 0]); } }, { children: formatHour(h) }), void 0), minutes.map(function (m) {
                                                         return jsx("td", __assign({ onClick: function (e) { return handleClickTime(e, [h, m]); }, className: hourMinuteClasses([h, m]) }, { children: m }), m);
                                                     })] }), h);
@@ -1503,7 +1550,7 @@ var TimePicker = React.forwardRef(function (_a, ref) {
                                         }) }), void 0)] }), void 0) }), void 0)] }), void 0)] }), void 0));
 });
 //
-// parse and format
+// default parse and format
 //
 /**
  * Parses a time in the simple format hh:mm(am|pm).
@@ -1511,7 +1558,7 @@ var TimePicker = React.forwardRef(function (_a, ref) {
  * @param {String} s - The string to parse
  * @return {Array[h, m]} - The time represented as an array
  */
-function parseTime(s) {
+function internalParseTime(s) {
     var parse = /^\s*?([0-1]?\d)(?::([0-5]?\d)?)?\s*(AM?|PM?)?\s*$/i.exec(s);
     if (parse) {
         var h = +parse[1];
@@ -1541,7 +1588,7 @@ function parseTime(s) {
  *
  * @param Formats a time in
  */
-function formatHour(h) {
+function internalFormatHour(h) {
     return String(h <= 12 ? (h > 0 ? h : 12) : (h - 12));
 }
 /**
@@ -1550,7 +1597,7 @@ function formatHour(h) {
  * @param {Array[h, m]} hm - The time represented as an array
  * @returns {String} s - The formated string
  */
-function formatTime(hm) {
+function internalFormatTime(hm) {
     var h = hm[0], m = hm[1];
     if (h < 12) {
         if (h === 0) {

@@ -1,6 +1,5 @@
 import React, { ChangeEventHandler, ReactElement, Ref } from 'react';
 import { ComponentAlign } from './ComponentAlign';
-import { ComponentScale } from './ComponentScale';
 export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
     noSearch?: boolean;
     /** The default value for the choose component */
@@ -23,14 +22,13 @@ export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLA
         disabled: boolean;
         onSubmit: (submitting: void | Promise<void>) => void;
     }>;
-    scale?: ComponentScale;
     inline?: boolean;
     align?: ComponentAlign;
     className?: string;
     dropdownClassName?: string;
 }
 declare type ForwardRefFn<R> = <P = {}>(p: P & React.RefAttributes<R>) => ReactElement | null;
-export declare const ChooseFn: <T extends {}>({ noSearch, scale, name, recentValues, items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, renderListItem, CreateComponent, inline, align, className, dropdownClassName, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => JSX.Element;
+export declare const ChooseFn: <T extends {}>({ noSearch, name, recentValues, items, loading, error, getItem, searchItems, itemValue, itemMatch, renderItem, renderListItem, CreateComponent, inline, align, className, dropdownClassName, ...props }: ChooseProps<T>, ref: Ref<HTMLInputElement>) => JSX.Element;
 /**
  * Descripción
  *
