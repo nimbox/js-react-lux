@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
 
-export const useOnOutsideClick = (onOutsideClick: () => void, enable: boolean, ...elements: (HTMLElement | undefined | null)[]) => {
+export const useOnOutsideClick = (onOutsideClick: () => void, show: boolean, ...elements: (HTMLElement | undefined | null)[]) => {
 
     useEffect(() => {
 
-        if (enable) {
+        if (show) {
 
             const handleMouseDown = (event: MouseEvent) => {
                 const inside = elements.find(element => element && element.contains(event.target as Node));
@@ -19,6 +19,6 @@ export const useOnOutsideClick = (onOutsideClick: () => void, enable: boolean, .
 
         }
 
-    }, [enable, ...elements]);
+    }, [show, ...elements]);
 
 };
