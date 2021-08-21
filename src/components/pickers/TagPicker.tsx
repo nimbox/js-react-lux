@@ -15,8 +15,6 @@ import { Loading } from '../Loading';
 
 export interface TagPickerProps<T> {
 
-    scale?: ComponentScale;
-
     tags: T[];
     tagValue: (item: T) => string;
     renderTag: (item: T, onRemove?: () => void) => React.ReactNode;
@@ -52,7 +50,7 @@ export interface TagPickerProps<T> {
  * they are being resolved the component is shown in a `loading` state.
  *
  */
-export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, renderTag, onAdd, onRemove, onSearch, CreateComponent }: TagPickerProps<T>) => {
+export const TagPicker = <T extends {}>({ tags, tagValue, renderTag, onAdd, onRemove, onSearch, CreateComponent }: TagPickerProps<T>) => {
 
     const context = useContext(controlContext);
 
@@ -131,7 +129,7 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
     // render
 
     return (
-        <div className={classnames('relative w-full', controlText[scale || context.scale || 'base'])}>
+        <div className={classnames('relative w-full')}>
 
             <div ref={setTarget as LegacyRef<HTMLDivElement> | undefined}
                 tabIndex={isVisible ? -1 : 0}
@@ -176,7 +174,6 @@ export const TagPicker = <T extends {}>({ scale = 'base', tags, tagValue, render
                 >
 
                     <SearchInput ref={searchRef as any}
-                        scale={smallScale[scale]}
                         value={search} onChange={handleSearch}
                     />
 
