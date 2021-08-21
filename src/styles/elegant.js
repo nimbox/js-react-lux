@@ -103,10 +103,11 @@ module.exports = {
 
     plugins: [
 
-        plugin(function({ addBase, addComponents, config }) {
+        plugin(function({ addBase, addComponents, theme, config }) {
             addBase({ 'html': { fontSize: '14px' } });
             addComponents({
                 ...require('./lux'),
+                ...require('./control')({ theme }),
                 ...require('./postit'),
                 ...require('./tooltip'),
                 ...require('./popper')
