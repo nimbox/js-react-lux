@@ -10,24 +10,24 @@ import { ComponentScale, controlSize, controlSmallText, controlText } from './Co
 
 const CLASSES: { [key: string]: { [key: string]: string } } = {
     'filled': {
-        'primary': 'text-primary-800 bg-primary-500 hover:text-primary-900 hover:bg-primary-600 rounded',
-        'secondary': 'text-secondary-800 bg-secondary-500 hover:text-secondary-900 hover:bg-secondary-600 rounded',
-        'muted': 'text-gray-500 bg-gray-300 hover:text-gray-600 hover:bg-gray-400 rounded'
+        'primary': 'text-primary-800 bg-primary-500 border border-primary-500 hover:text-primary-900 hover:bg-primary-600 hover:border-primary-600 focus:ring-primary-500 rounded',
+        'secondary': 'text-secondary-800 bg-secondary-500 border border-secondary-500 hover:text-secondary-900 hover:bg-secondary-600 hover:border-secondary-600 focus:ring-secondary-500 rounded',
+        'muted': 'text-gray-500 bg-gray-300 border border-gray-300 hover:text-gray-600 hover:bg-gray-400 hover:border-gray-400 focus:ring-gray-300 rounded'
     },
     'text': {
-        'primary': 'text-primary-500 hover:text-primary-600 hover:bg-primary-100 rounded',
-        'secondary': 'text-secondary-500 hover:text-secondary-600 hover:bg-secondary-100 rounded',
-        'muted': 'text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded'
+        'primary': 'text-primary-500 border border-transparent hover:text-primary-600 hover:bg-primary-100 hover:border-primary-100 focus:ring-primary-500 rounded',
+        'secondary': 'text-secondary-500 border border-transparent hover:text-secondary-600 hover:bg-secondary-100 hover:border-secondary-100 focus:ring-secondary-500 rounded',
+        'muted': 'text-gray-400 border border-transparent hover:text-gray-500 hover:bg-gray-100 hover:border-gray-100 focus:ring-gray-300 rounded'
     },
     'outlined': {
-        'primary': 'text-primary-500 border border-primary-300 hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 rounded',
-        'secondary': 'text-secondary-500 border border-secondary-300 hover:text-secondary-600 hover:bg-secondary-100 hover:border-secondary-500 rounded',
-        'muted': 'text-gray-400 border border-gray-300 hover:text-gray-500 hover:bg-gray-100 hover:border-gray-500 rounded'
+        'primary': 'text-primary-500 border border-primary-300 hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 focus:ring-primary-500 rounded',
+        'secondary': 'text-secondary-500 border border-secondary-300 hover:text-secondary-600 hover:bg-secondary-100 hover:border-secondary-500 focus:ring-secondary-500 rounded',
+        'muted': 'text-gray-400 border border-gray-300 hover:text-gray-500 hover:bg-gray-100 hover:border-gray-500 focus:ring-gray-300 rounded'
     },
     'link': {
-        'primary': 'underline text-primary-500 hover:text-primary-600',
-        'secondary': 'underline text-secondary-500 hover:text-secondary-600',
-        'muted': 'underline text-gray-400 hover:text-gray-500'
+        'primary': 'underline text-primary-500 hover:text-primary-600 focus:ring-primary-500 rounded',
+        'secondary': 'underline text-secondary-500 hover:text-secondary-600 focus:ring-secondary-500 rounded',
+        'muted': 'underline text-gray-400 hover:text-gray-500 focus:ring-gray-300 rounded'
     }
 };
 
@@ -49,9 +49,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ color 
         <button {...props} ref={ref}
             className={classnames(
                 CLASSES[variant][color],
+                'lux-control-font',
+                { 'lux-control-padding': variant !== 'link' },
+                'focus:ring focus:ring-opacity-50 focus:outline-none',
                 'disabled:opacity-50 disabled:cursor-not-allowed'
             )}
-            style={variant !== 'link' ? { padding: '0.25em 0.75em' } : {}}
         >
 
             {(!start && !end) ?
