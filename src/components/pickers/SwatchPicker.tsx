@@ -1,94 +1,127 @@
-import { Placement } from '@popperjs/core';
 import classnames from 'classnames';
-import React, { useImperativeHandle, useState } from 'react';
-import ReactDOM from 'react-dom';
-import { usePopper } from 'react-popper';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { Input, InputProps } from '../controls/Input';
-import { sameWidth } from '../../utils/popper-modifiers';
-import swatches from '../../utils/flat-colors';
+import { setInputValue } from '../../utilities/setInputValue';
+import defaultSwatches from '../../utils/flat-colors';
+import { Input } from '../controls/Input';
+import { Popper } from '../Popper';
 
+
+//
+// SwatchPicker
+//
 
 export type SwatchPickerAlign = 'start' | 'stretch' | 'end';
 
-export interface SwatchPickerProps extends InputProps {
-    swatches?: string[];
+export interface SwatchPickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
+
+    /** Name used for the input element and returned in the change event. */
+    name?: string,
+
+    /** String representation of the color (for uncontrolled). */
+    defaultValue?: string,
+
+    /** String representation of the color (for controlled). */
+    value?: string,
+
+    /** Possible swatch colors. */
+    values?: string[];
+
+    /** Change event handler (for controlled). */
+    onChange?: React.ChangeEventHandler<HTMLInputElement>,
+
     align?: SwatchPickerAlign;
+
+    /** Classes to append to the popper element. */
     popperClassName?: string;
+
 }
 
-const placements: { [key in SwatchPickerAlign]: Placement } = {
-    'start': 'bottom-start',
-    'stretch': 'bottom',
-    'end': 'bottom-end'
-};
+export const SwatchPicker = React.forwardRef<HTMLInputElement, SwatchPickerProps>(({ name, defaultValue, value, values = defaultSwatches, onChange, align = 'stretch', popperClassName = 'grid grid-cols-5 w-32', onFocus, onBlur, ...props }, ref) => {
 
-export const SwatchPicker = React.forwardRef<HTMLInputElement, SwatchPickerProps>(({ swatches: values = swatches, align = 'stretch', popperClassName = 'grid grid-cols-5 w-32 overflow-hidden', onFocus, onBlur, ...props }, ref) => {
+    const inputRef = useRef<HTMLInputElement>(null);
+    useImperativeHandle(ref, () => inputRef.current!);
 
-    const [visible, setVisible] = useState(false);
+    // Maintain an internalValue to use the internal input as controlled,
+    // and only update internalValue only when the DatePicker is controlled.
+    const [internalValue, setInternalValue] = useState(defaultValue || '');
+    useEffect(() => { if (value != null) { setInternalValue(value || ''); } }, [value]);
 
-    const [target, setTarget] = useState<HTMLInputElement | null>(null);
-    const [popper, setPopper] = useState<HTMLDivElement | null>(null);
-    useOnOutsideClick(() => visible && setVisible(false), visible, target, popper);
+    const [show, setShow] = useState(false);
+    const popperRef = useRef<HTMLInputElement>(null);
+    useOnOutsideClick(() => { if (show) { setShow(!false); } }, show, inputRef.current, popperRef.current);
 
-    useImperativeHandle(ref, () => target!);
+    // handlers
 
-    const { styles, attributes } = usePopper(target, popper, {
-        placement: placements[align!],
-        modifiers: [
-            { name: 'offset', options: { offset: [0, 4] } },
-            ...(align === 'stretch' ? [sameWidth] : [])
-        ]
-    });
-
-    function handleOnFocus(event: React.FocusEvent<HTMLInputElement>) {
+    const handleOnFocus = (event: React.FocusEvent<HTMLInputElement>) => {
         if (onFocus) { onFocus(event); }
-        setVisible(true);
+        setShow(true);
     }
 
-    function handleOnBlur(event: React.FocusEvent<HTMLInputElement>) {
-        setVisible(false);
+    const handleOnBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+        setShow(false);
         if (onBlur) { onBlur(event); }
     }
 
-    function setValue(event: React.MouseEvent<HTMLDivElement, MouseEvent>, element: HTMLInputElement, swatch: string) {
-        event.preventDefault();
-        event.stopPropagation();
-        const inputSetter = Object?.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
-        if (inputSetter) {
-            inputSetter.call(element, swatch);
-            var inputEvent = new Event('input', { bubbles: true });
-            element.dispatchEvent(inputEvent);
-            element.select();
-            setVisible(false);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (onChange) {
+            // bubble up change event regardless of 
+            // controlled or uncontrolled
+            onChange(e);
+        }
+        if (value == null) {
+            // set internal value if uncontrolled
+            setInternalValue(e.target.value);
         }
     }
+
+    const handleClickSwatch = (swatch: string) => {
+        setInputValue(inputRef, swatch);
+        setShow(false);
+    };
+
+    const handleRandomClickSwatch = () => {
+        setInputValue(inputRef, values[Math.floor(Math.random() * values.length)]);
+        setShow(false);
+    };
+
+    // render
 
     return (
         <div className="relative inline-block w-full">
 
-            <Input type="text" ref={setTarget} {...props} maxLength={7} onClick={() => setVisible(true)} onFocus={handleOnFocus} onBlur={handleOnBlur} />
+            <Input type="text"
 
-            <div className="m-px absolute inset-y-0 right-0 rounded bg-red-500" style={{ width: '2.5em', backgroundColor: target?.value }}>
-                
-            </div>
+                ref={inputRef}
+                name={name}
 
-            {visible && ReactDOM.createPortal(
-                <div ref={setPopper}
-                    {...attributes.popper}
-                    className={classnames(
-                        'border border-control-border rounded',
-                        'bg-white cursor-pointer',
-                        popperClassName
-                    )}
-                    style={styles.popper}
-                >
+                defaultValue={defaultValue}
+                value={value}
+                onChange={handleChange}
+
+                onClick={() => setShow(true)}
+
+                onFocus={handleOnFocus}
+                onBlur={handleOnBlur}
+
+                {...props}
+
+            />
+
+            <div
+                onMouseDown={(e) => { e.preventDefault(); }}
+                onClick={handleRandomClickSwatch}
+                className="absolute inset-y-0 right-0 border border-control-border rounded bg-red-500 cursor-pointer"
+                style={{ width: '2em', backgroundColor: internalValue }}
+            />
+
+            {show &&
+                <Popper ref={popperRef} reference={inputRef.current!} onMouseDown={(e) => { e.preventDefault(); }} withSameWidth className={classnames('bg-content-fg border border-content-border rounded cursor-pointer', popperClassName)}>
                     {values.map((s, i) =>
-                        <div key={i} onMouseDown={(e) => setValue(e, target!, s)} style={{ backgroundColor: s }}>&nbsp;</div>
+                        <div key={i} onClick={() => handleClickSwatch(s)} style={{ backgroundColor: s }}>&nbsp;</div>
                     )}
-                </div>,
-                document.querySelector('body')!
-            )}
+                </Popper>
+            }
 
         </div>
     );

@@ -1,8 +1,11 @@
+import classnames from 'classnames';
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon, AngleUpIcon, CircleIcon } from '../../icons';
+import { setInputValue } from '../../utilities/setInputValue';
 import { Input } from '../controls/Input';
-import { useTranslation } from 'react-i18next';
+import { Popper } from '../Popper';
 
 
 //
@@ -32,6 +35,9 @@ interface TimePickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
     /** Format time function defaults to formatting [hh, mm] into hh:mm ampm (12 hour based). */
     formatTime?: (time: [number, number]) => string;
 
+    /** Classes to append to the popper element. */
+    popperClassName?: string;
+
 }
 
 // constants
@@ -45,9 +51,9 @@ const minutes = [15, 30, 45];
 /**
  * TimePicker. Select a time with one click.
  */
-export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps>(({ name, defaultValue, value, onChange, parseTime = internalParseTime, formatHour = internalFormatHour, formatTime = internalFormatTime, ...props }, ref) => {
+export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps>(({ name, defaultValue, value, onChange, parseTime = internalParseTime, formatHour = internalFormatHour, formatTime = internalFormatTime, popperClassName, ...props }, ref) => {
 
-    const { t, ready } = useTranslation();
+    const { t } = useTranslation();
 
     const inputRef = useRef<HTMLInputElement>(null);
     useImperativeHandle(ref, () => inputRef.current!);
@@ -65,19 +71,22 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps>(({
 
     // Popper states
     const [show, setShow] = useState(false);
-    const [target, setTarget] = useState<HTMLDivElement | null>(null);
-    const [popper, setPopper] = useState<HTMLDivElement | null>(null);
-    useOnOutsideClick(() => { if (show) { setShow(false); } }, show, target, popper);
+    const popperRef = useRef<HTMLInputElement>(null);
+    useOnOutsideClick(() => { if (show) { setShow(!false); } }, show, inputRef.current, popperRef.current);
 
     // handlers
 
-    const handleShow = () => { if (!show) { setShow(true); } }
-    const handleHide = () => { if (show) { setShow(false); } }
+    const handleShow = () => {
+        if (!show) { setShow(true); }
+    };
+    const handleHide = () => {
+        if (show) { setShow(false); }
+    };
 
     const handleFocus = handleShow;
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
         handleFinalValue();
-    }
+    };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         switch (e.keyCode) {
@@ -147,16 +156,8 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps>(({
 
     const handleFinalValueTime = (finalTime: [number, number] | null) => {
         const finalValue = finalTime != null ? formatTime(finalTime) : '';
-        setFinalInputValue(finalValue);
+        setInputValue(inputRef, finalValue);
         handleHide();
-    }
-
-    const setFinalInputValue = (inputValue: string) => {
-        const setter = Object?.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
-        if (setter && inputValue !== '') {
-            setter.call(inputRef.current, inputValue);
-            inputRef.current!.dispatchEvent(new Event('input', { bubbles: true }));
-        }
     }
 
     // setup
@@ -205,35 +206,33 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps>(({
     // render
 
     return (
-        <div className="relative">
+        <>
 
-            <div ref={setTarget}>
-                <Input type="text"
+            <Input type="text"
 
-                    ref={inputRef}
-                    name={name}
+                ref={inputRef}
+                name={name}
 
-                    defaultValue={defaultValue}
-                    value={value}
-                    onChange={handleChange}
+                defaultValue={defaultValue}
+                value={value}
+                onChange={handleChange}
 
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
 
-                    onMouseDown={handleFocus}
-                    onKeyDown={handleKeyDown}
+                onMouseDown={handleFocus}
+                onKeyDown={handleKeyDown}
 
-                    autoComplete="off"
+                autoComplete="off"
 
-                    {...props}
+                {...props}
 
-                />
-            </div>
+            />
 
             {show &&
-                <div ref={setPopper} onMouseDown={(e) => { e.preventDefault(); }} className="absolute left-0 mt-1 bg-content-fg border border-content-border rounded overflow-hidden z-10">
+                <Popper ref={popperRef} reference={inputRef.current!} onMouseDown={(e) => { e.preventDefault(); }} className={classnames('bg-content-fg border border-content-border rounded', popperClassName)}>
 
-                    <div className="px-2 py-1 flex flex-row items-center justify-between bg-gray-400">
+                    <div className="px-2 py-1 flex flex-row items-center justify-between bg-gray-400 rounded-t-sm">
                         <div className="flex-grow text-center font-bold">
                             {t('hour', { defaultValue: 'Hour' })}
                         </div>
@@ -290,10 +289,10 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps>(({
                         </table>
                     </div>
 
-                </div>
+                </Popper>
             }
 
-        </div>
+        </>
     );
 
 });
