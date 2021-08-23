@@ -4,15 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleLeftIcon, AngleRightIcon, CircleIcon } from '../../icons';
 import { setInputValue } from '../../utilities/setInputValue';
-import { Input } from '../controls/Input';
-import { Popper } from '../Popper';
+import { Input, InputProps } from '../controls/Input';
+import { Popper, PopperPlacement } from '../Popper';
 
 
 //
 // DatePicker
 //
 
-interface DatePickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface DatePickerProps extends InputProps {
 
     /** Name used for the input element and returned in the change event. */
     name?: string,
@@ -27,7 +27,7 @@ interface DatePickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
     onChange?: React.ChangeEventHandler<HTMLInputElement>,
 
     /** Wether to show the shortcuts menu. */
-    shortcuts?: boolean
+    withShortcuts?: boolean
 
     /** Parse date function defaults to parsing dd-mm-yyyy into [yyyy, mm, dd] (with zero based month). */
     parseDate?: (s: string) => [number, number, number] | null;
@@ -37,6 +37,9 @@ interface DatePickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
     /** The first day of the week to display in the calendar. */
     firstDayOfWeek?: 0 | 1;
+
+    /** Popper placement. */
+    placement?: PopperPlacement;
 
     /** Classes to append to the popper element. */
     popperClassName?: string;
@@ -59,7 +62,7 @@ const namedDays = [
 /**
  * DatePicker. Select a date with one click.
  */
-export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({ name, defaultValue, value, onChange, shortcuts = false, parseDate = internalParseDate, formatDate = internalFormatDate, firstDayOfWeek = 0, popperClassName, ...props }, ref) => {
+export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({ name, defaultValue, value, onChange, withShortcuts = false, parseDate = internalParseDate, formatDate = internalFormatDate, firstDayOfWeek = 0, placement, popperClassName, ...props }, ref) => {
 
     const { t } = useTranslation();
 
@@ -222,7 +225,11 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
             />
 
             {show &&
-                <Popper ref={popperRef} reference={inputRef.current!} onMouseDown={(e) => { e.preventDefault(); }} className={classNames('flex flex-row bg-content-fg border border-content-border rounded', popperClassName)}>
+                <Popper ref={popperRef} reference={inputRef.current!}
+                    onMouseDown={(e) => { e.preventDefault(); }}
+                    placement={placement}
+                    className={classNames('flex flex-row bg-content-fg border border-content-border rounded', popperClassName)}
+                >
 
                     <div>
 
@@ -265,7 +272,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
 
                     </div>
 
-                    {shortcuts &&
+                    {withShortcuts &&
                         <div className="flex flex-col justify-between items-stretch bg-gray-300 cursor-pointer">
                             {namedDays.map((s, i) => <div key={i} onClick={(e) => handleClickDate(e, s.date(new Date(today)))} className="px-2 truncate hover:text-white hover:bg-secondary-500">{t(`namedDays.${s.label}`, { defaultValue: s.label })}</div>)}
                         </div>

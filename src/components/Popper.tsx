@@ -10,12 +10,18 @@ import { sameWidth } from '../utilities/sameWidth';
 // Popper
 //
 
+export type PopperPlacement = Placement;
+
 export interface PopperProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+
     reference: Element;
-    placement?: Placement;
+    placement?: PopperPlacement;
+
     withArrow?: boolean;
     withSameWidth?: boolean;
+
     className?: string;
+
 }
 
 export const Popper = React.forwardRef<HTMLDivElement, PopperProps>(({ reference, placement = 'bottom-start', withArrow = false, withSameWidth = false, className, children, ...props }, ref) => {

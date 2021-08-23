@@ -3,8 +3,8 @@ import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { setInputValue } from '../../utilities/setInputValue';
 import defaultSwatches from '../../utils/flat-colors';
-import { Input } from '../controls/Input';
-import { Popper } from '../Popper';
+import { Input, InputProps } from '../controls/Input';
+import { Popper, PopperPlacement } from '../Popper';
 
 
 //
@@ -13,7 +13,7 @@ import { Popper } from '../Popper';
 
 export type SwatchPickerAlign = 'start' | 'stretch' | 'end';
 
-export interface SwatchPickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface SwatchPickerProps extends InputProps {
 
     /** Name used for the input element and returned in the change event. */
     name?: string,
@@ -30,14 +30,18 @@ export interface SwatchPickerProps extends React.InputHTMLAttributes<HTMLInputEl
     /** Change event handler (for controlled). */
     onChange?: React.ChangeEventHandler<HTMLInputElement>,
 
-    align?: SwatchPickerAlign;
+    /** Popper placement. */
+    placement?: PopperPlacement;
+
+    /** Set popper width to the same width of the reference element. */
+    withSameWidth?: boolean;
 
     /** Classes to append to the popper element. */
     popperClassName?: string;
 
 }
 
-export const SwatchPicker = React.forwardRef<HTMLInputElement, SwatchPickerProps>(({ name, defaultValue, value, values = defaultSwatches, onChange, align = 'stretch', popperClassName = 'grid grid-cols-5 w-32', onFocus, onBlur, ...props }, ref) => {
+export const SwatchPicker = React.forwardRef<HTMLInputElement, SwatchPickerProps>(({ name, defaultValue, value, values = defaultSwatches, onChange, placement, withSameWidth = true, popperClassName = 'grid grid-cols-5 w-32', onFocus, onBlur, ...props }, ref) => {
 
     const inputRef = useRef<HTMLInputElement>(null);
     useImperativeHandle(ref, () => inputRef.current!);
@@ -99,10 +103,12 @@ export const SwatchPicker = React.forwardRef<HTMLInputElement, SwatchPickerProps
                 value={value}
                 onChange={handleChange}
 
-                onClick={() => setShow(true)}
-
                 onFocus={handleOnFocus}
                 onBlur={handleOnBlur}
+
+                onClick={() => setShow(true)}
+
+                autoComplete="off"
 
                 {...props}
 
@@ -116,7 +122,12 @@ export const SwatchPicker = React.forwardRef<HTMLInputElement, SwatchPickerProps
             />
 
             {show &&
-                <Popper ref={popperRef} reference={inputRef.current!} onMouseDown={(e) => { e.preventDefault(); }} withSameWidth className={classnames('bg-content-fg border border-content-border rounded cursor-pointer', popperClassName)}>
+                <Popper ref={popperRef} reference={inputRef.current!}
+                    onMouseDown={(e) => { e.preventDefault(); }}
+                    placement={placement}
+                    withSameWidth={withSameWidth}
+                    className={classnames('bg-content-fg border border-content-border rounded cursor-pointer', popperClassName)}
+                >
                     {values.map((s, i) =>
                         <div key={i} onClick={() => handleClickSwatch(s)} style={{ backgroundColor: s }}>&nbsp;</div>
                     )}

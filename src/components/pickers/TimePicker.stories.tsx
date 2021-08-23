@@ -32,7 +32,7 @@ export const Controlled = () => {
 
 export const Uncontrolled = () => {
 
-    const ref = useRef<any>();
+    const ref = useRef<HTMLInputElement>(null);
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(ref.current.value); }
 
     return (
