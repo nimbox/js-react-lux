@@ -1668,11 +1668,11 @@ Select.Option = function (_a) {
 };
 
 var TextArea = React.forwardRef(function (_a, ref) {
-    var scale = _a.scale, error = _a.error, className = _a.className, style = _a.style, props = __rest(_a, ["scale", "error", "className", "style"]);
+    var error = _a.error, className = _a.className, props = __rest(_a, ["error", "className"]);
     var context = useContext(Context$4);
-    return (jsx("textarea", __assign({}, props, { ref: ref, className: classnames(controlText[scale || context.scale || 'base'], 'block w-full rounded border border-control-border', error || context.error ?
-            'border-danger-500 focus:border-danger-500 focus:ring focus:ring-danger-500' :
-            'focus:border-primary-500 focus:ring focus:ring-primary-500', 'focus:ring-opacity-50 focus:outline-none disabled:opacity-50', className), style: __assign({ padding: '0.5em 0.75em 0.5em 0.75em' }, style) }), void 0));
+    return (jsx("textarea", __assign({}, props, { ref: ref, className: classnames('block w-full', 'lux-control-font lux-control-padding', 'rounded border border-control-border', error || context.error ?
+            'text-danger-500 border-danger-500 focus:border-danger-500 focus:ring-danger-500 placeholder-danger-500' :
+            'focus:border-primary-500 focus:ring-primary-500 placeholder-control-border', 'focus:ring focus:ring-opacity-50 focus:outline-none', 'placeholder-opacity-40', 'disabled:opacity-50', className) }), void 0));
 });
 
 var Context$1 = createContext({ scale: 'base', value: [], onChange: function () { return null; } });
