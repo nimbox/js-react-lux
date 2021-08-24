@@ -53,7 +53,7 @@ export const SwatchPicker = React.forwardRef<HTMLInputElement, SwatchPickerProps
 
     const [show, setShow] = useState(false);
     const popperRef = useRef<HTMLInputElement>(null);
-    useOnOutsideClick(() => { if (show) { setShow(!false); } }, show, inputRef.current, popperRef.current);
+    useOnOutsideClick(show, () => { if (show) { setShow(false); } }, inputRef.current, popperRef.current);
 
     // handlers
 
@@ -115,7 +115,7 @@ export const SwatchPicker = React.forwardRef<HTMLInputElement, SwatchPickerProps
             />
 
             <div
-                onMouseDown={(e) => { e.preventDefault(); }}
+                onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); }}
                 onClick={handleRandomClickSwatch}
                 className="absolute inset-y-0 right-0 border border-control-border rounded bg-red-500 cursor-pointer"
                 style={{ width: '2em', backgroundColor: internalValue }}
@@ -123,7 +123,7 @@ export const SwatchPicker = React.forwardRef<HTMLInputElement, SwatchPickerProps
 
             {show &&
                 <Popper ref={popperRef} reference={inputRef.current!}
-                    onMouseDown={(e) => { e.preventDefault(); }}
+                    onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); }}
                     placement={placement}
                     withSameWidth={withSameWidth}
                     className={classnames('bg-content-fg border border-content-border rounded cursor-pointer', popperClassName)}

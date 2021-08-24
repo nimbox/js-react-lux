@@ -19,13 +19,13 @@ export interface PopupProps {
 
 export const Popup: FC<PopupProps> = ({ visible = false, onChangeVisible = (visible: boolean) => null, placement = 'bottom', Component, children }) => {
 
-    const [target, setTarget] = useState(null);
+    const [reference, setReference] = useState(null);
     const [popper, setPopper] = useState<HTMLDivElement | null>(null);
     const [arrow, setArrow] = useState<HTMLDivElement | null>(null);
 
-    useOnOutsideClick(() => visible && onChangeVisible(false), visible, target, popper);
+    useOnOutsideClick(visible, () => { if (visible) { onChangeVisible(false); } }, reference, popper);
 
-    const { styles, attributes } = usePopper(target, popper, {
+    const { styles, attributes } = usePopper(reference, popper, {
         placement,
         modifiers: [
             { name: 'offset', options: { offset: [0, 4] } },
@@ -35,10 +35,10 @@ export const Popup: FC<PopupProps> = ({ visible = false, onChangeVisible = (visi
 
     return (
         <>
-            {React.cloneElement(children, { ref: setTarget })}
+            {React.cloneElement(children, { ref: setReference })}
             {visible && ReactDOM.createPortal(
                 <div ref={setPopper} {...attributes.popper} className="z-30 popper-element text-base rounded border border-control-border bg-white" style={styles.popper}>
-                    <Component/>
+                    <Component />
                     <div ref={setArrow} {...attributes.arrow} className="popper-arrow" style={styles.arrow} />
                 </div>,
                 document.querySelector('#modal')!

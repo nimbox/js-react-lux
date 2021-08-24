@@ -72,7 +72,7 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps>(({
     // Popper states
     const [show, setShow] = useState(false);
     const popperRef = useRef<HTMLInputElement>(null);
-    useOnOutsideClick(() => { if (show) { setShow(!false); } }, show, inputRef.current, popperRef.current);
+    useOnOutsideClick(show, () => { if (show) { setShow(false); } }, inputRef.current, popperRef.current);
 
     // handlers
 
@@ -230,7 +230,10 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps>(({
             />
 
             {show &&
-                <Popper ref={popperRef} reference={inputRef.current!} onMouseDown={(e) => { e.preventDefault(); }} className={classnames('bg-content-fg border border-content-border rounded', popperClassName)}>
+                <Popper ref={popperRef} reference={inputRef.current!}
+                    onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                    className={classnames('bg-content-fg border border-content-border rounded', popperClassName)}
+                >
 
                     <div className="px-2 py-1 flex flex-row items-center justify-between bg-gray-400 rounded-t-sm">
                         <div className="flex-grow text-center font-bold">
@@ -249,7 +252,7 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps>(({
                             <thead>
                                 <tr>
                                     <th style={{ width: '3em' }}></th>
-                                    {minutes.map(m => <td className="w-10" style={{ width: '3em' }}></td>)}
+                                    {minutes.map(m => <td key={m} className="w-10" style={{ width: '3em' }}></td>)}
                                 </tr>
                             </thead>
 

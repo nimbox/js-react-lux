@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 
-export const useOnOutsideClick = (onOutsideClick: () => void, show: boolean, ...elements: (HTMLElement | undefined | null)[]) => {
+export const useOnOutsideClick = (show: boolean, onOutsideClick: () => void, ...elements: (HTMLElement | undefined | null)[]) => {
 
     useEffect(() => {
 

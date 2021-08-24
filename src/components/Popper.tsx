@@ -40,11 +40,11 @@ export const Popper = React.forwardRef<HTMLDivElement, PopperProps>(({ reference
     });
 
     return ReactDOM.createPortal(
-        <div ref={setPopper} {...attributes.popper} {...props} className={classnames('popper-element', className)} style={styles.popper}>
+        <div ref={setPopper} {...attributes.popper} {...props} className={classnames('z-40 popper-element', className)} style={styles.popper}>
             {children}
             {withArrow && <div ref={setArrow} className="popper-arrow" style={styles.arrow} />}
         </div>,
-        document.querySelector('body')!
+        document.querySelector('#modal')!
     );
 
 });

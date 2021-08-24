@@ -84,7 +84,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
     // Popper states
     const [show, setShow] = useState(false);
     const popperRef = useRef<HTMLInputElement>(null);
-    useOnOutsideClick(() => { if (show) { setShow(!false); } }, show, inputRef.current, popperRef.current);
+    useOnOutsideClick(show, () => { if (show) { setShow(false); } }, inputRef.current, popperRef.current);
 
     // handlers
 
@@ -226,7 +226,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
 
             {show &&
                 <Popper ref={popperRef} reference={inputRef.current!}
-                    onMouseDown={(e) => { e.preventDefault(); }}
+                    onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); }}
                     placement={placement}
                     className={classNames('flex flex-row bg-content-fg border border-content-border rounded', popperClassName)}
                 >

@@ -62,7 +62,7 @@ export const TagPicker = <T extends {}>({ tags, tagValue, renderTag, onAdd, onRe
 
     const [target, setTarget] = useState<HTMLDivElement | null>(null);
     const [popper, setPopper] = useState<HTMLDivElement | null>(null);
-    useOnOutsideClick(() => { if (isVisible) { setIsVisible(false); } }, isVisible, target, popper);
+    useOnOutsideClick(isVisible, () => { if (isVisible) { setIsVisible(false); } }, target, popper);
 
     const [search, setSearch] = useState('');
     const [searchResults, setSearchResults] = useState<T[]>([]);

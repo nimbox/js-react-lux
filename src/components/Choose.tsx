@@ -61,7 +61,7 @@ export const ChooseFn = <T extends {}>({ noSearch = false, name, recentValues = 
 
     const target = useRef<HTMLDivElement>(null);
     const [popper, setPopper] = useState<HTMLDivElement | null>(null);
-    useOnOutsideClick(() => { if (internalError) { reset(); } if (visible) { setVisible(false); } }, visible, target.current, popper);
+    useOnOutsideClick(visible, () => { if (internalError) { reset(); } if (visible) { setVisible(false); } }, target.current, popper);
 
     const [internalLoading, setInternalLoading] = useState(loading || false);
     const [internalError, setInternalError] = useState(error || false);
