@@ -113,6 +113,22 @@ export const RemEm = () => {
 
 };
 
+export const MoreRemAndEm = () => {
+
+    return (
+        <div>
+            <div className="text-xs">
+                <span style={{ fontSize: '1em' }}>texto1</span>
+                <span style={{ fontSize: '1rem' }}>texto1</span>
+            </div>
+            <div className="text-xl">
+                <span style={{ fontSize: '1em' }}>texto</span>
+                <span style={{ fontSize: '1rem' }}>texto</span>
+            </div>
+        </div>
+    );
+};
+
 export const UncontrolledAndControlled = () => {
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
