@@ -14,6 +14,8 @@ interface TimePickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
     formatHour?: (hour: number) => string;
     /** Format time function defaults to formatting [hh, mm] into hh:mm ampm (12 hour based). */
     formatTime?: (time: [number, number]) => string;
+    /** Classes to append to the popper element. */
+    popperClassName?: string;
 }
 /**
  * TimePicker. Select a time with one click.

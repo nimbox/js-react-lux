@@ -1,1 +1,1 @@
-export declare const useOnOutsideClick: (onOutsideClick: () => void, show: boolean, ...elements: (HTMLElement | undefined | null)[]) => void;
+export declare const useOnOutsideClick: (show: boolean, onOutsideClick: () => void, ...elements: (HTMLElement | undefined | null)[]) => void;

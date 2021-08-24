@@ -247,7 +247,7 @@ Card.Footer = function (_a) {
     return (jsx("div", __assign({ className: classnames('border-t border-content-border', className) }, { children: children }), void 0));
 };
 
-var useOnOutsideClick = function (onOutsideClick, show) {
+var useOnOutsideClick = function (show, onOutsideClick) {
     var elements = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         elements[_i - 2] = arguments[_i];
@@ -333,11 +333,11 @@ var ChooseFn = function (_a, ref) {
     useLayoutEffect(function () { setActive(visible); }, [visible]);
     var target = useRef(null);
     var _k = useState(null), popper = _k[0], setPopper = _k[1];
-    useOnOutsideClick(function () { if (internalError) {
+    useOnOutsideClick(visible, function () { if (internalError) {
         reset();
     } if (visible) {
         setVisible(false);
-    } }, visible, target.current, popper);
+    } }, target.current, popper);
     var _l = useState(loading || false), internalLoading = _l[0], setInternalLoading = _l[1];
     var _m = useState(error || false), internalError = _m[0], setInternalError = _m[1];
     var _o = useState(noSearch && items ? items : []), searchResults = _o[0], setSearchResults = _o[1];
@@ -617,18 +617,20 @@ var Loading = function (_a) {
 
 var Popup = function (_a) {
     var _b = _a.visible, visible = _b === void 0 ? false : _b, _c = _a.onChangeVisible, onChangeVisible = _c === void 0 ? function (visible) { return null; } : _c, _d = _a.placement, placement = _d === void 0 ? 'bottom' : _d, Component = _a.Component, children = _a.children;
-    var _e = useState(null), target = _e[0], setTarget = _e[1];
+    var _e = useState(null), reference = _e[0], setReference = _e[1];
     var _f = useState(null), popper = _f[0], setPopper = _f[1];
     var _g = useState(null), arrow = _g[0], setArrow = _g[1];
-    useOnOutsideClick(function () { return visible && onChangeVisible(false); }, visible, target, popper);
-    var _h = usePopper(target, popper, {
+    useOnOutsideClick(visible, function () { if (visible) {
+        onChangeVisible(false);
+    } }, reference, popper);
+    var _h = usePopper(reference, popper, {
         placement: placement,
         modifiers: [
             { name: 'offset', options: { offset: [0, 4] } },
             { name: 'arrow', options: { padding: 4, element: arrow } },
         ]
     }), styles = _h.styles, attributes = _h.attributes;
-    return (jsxs(Fragment, { children: [React.cloneElement(children, { ref: setTarget }), visible && ReactDOM.createPortal(jsxs("div", __assign({ ref: setPopper }, attributes.popper, { className: "z-30 popper-element text-base rounded border border-control-border bg-white", style: styles.popper }, { children: [jsx(Component, {}, void 0), jsx("div", __assign({ ref: setArrow }, attributes.arrow, { className: "popper-arrow", style: styles.arrow }), void 0)] }), void 0), document.querySelector('#modal'))] }, void 0));
+    return (jsxs(Fragment, { children: [React.cloneElement(children, { ref: setReference }), visible && ReactDOM.createPortal(jsxs("div", __assign({ ref: setPopper }, attributes.popper, { className: "z-30 popper-element text-base rounded border border-control-border bg-white", style: styles.popper }, { children: [jsx(Component, {}, void 0), jsx("div", __assign({ ref: setArrow }, attributes.arrow, { className: "popper-arrow", style: styles.arrow }), void 0)] }), void 0), document.querySelector('#modal'))] }, void 0));
 };
 
 var Postit = function (_a) {
@@ -967,6 +969,48 @@ function useColumns(_a) {
     return [columnsRef, placeholderRef, { item: item, isOver: isOver, canDrop: isOver && (placeholderIndex != null), placeholderIndex: isOver ? placeholderIndex : null }];
 }
 
+var setInputValue = function (inputRef, value) {
+    var _a;
+    var setter = (_a = Object === null || Object === void 0 ? void 0 : Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')) === null || _a === void 0 ? void 0 : _a.set;
+    if (setter && value !== '') {
+        setter.call(inputRef.current, value);
+        inputRef.current.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+};
+
+//
+// https://popper.js.org/docs/v2/modifiers/community-modifiers/
+// https://codesandbox.io/s/bitter-sky-pe3z9?file=/src/index.js:383-394
+//
+var sameWidth = {
+    name: 'sameWidth',
+    enabled: true,
+    phase: 'beforeWrite',
+    requires: ['computeStyles'],
+    fn: function (_a) {
+        var state = _a.state;
+        state.styles.popper.width = state.rects.reference.width + "px";
+    },
+    effect: function (_a) {
+        var state = _a.state;
+        state.elements.popper.style.width = state.elements.reference.offsetWidth + "px";
+    }
+};
+
+var Popper = React.forwardRef(function (_a, ref) {
+    var reference = _a.reference, _b = _a.placement, placement = _b === void 0 ? 'bottom-start' : _b, _c = _a.withArrow, withArrow = _c === void 0 ? false : _c, _d = _a.withSameWidth, withSameWidth = _d === void 0 ? false : _d, className = _a.className, children = _a.children, props = __rest(_a, ["reference", "placement", "withArrow", "withSameWidth", "className", "children"]);
+    var _e = useState(null), popper = _e[0], setPopper = _e[1];
+    var _f = useState(null), arrow = _f[0], setArrow = _f[1];
+    useImperativeHandle(ref, function () { return popper; });
+    var _g = usePopper(reference, popper, {
+        placement: placement,
+        modifiers: __spreadArray(__spreadArray([
+            { name: 'offset', options: { offset: [0, 4] } }
+        ], (withArrow ? [{ name: 'arrow', options: { element: arrow } }] : [])), (withSameWidth ? [sameWidth] : []))
+    }), styles = _g.styles, attributes = _g.attributes;
+    return ReactDOM.createPortal(jsxs("div", __assign({ ref: setPopper }, attributes.popper, props, { className: classnames('z-40 popper-element', className), style: styles.popper }, { children: [children, withArrow && jsx("div", { ref: setArrow, className: "popper-arrow", style: styles.arrow }, void 0)] }), void 0), document.querySelector('#modal'));
+});
+
 // constants
 var namedDays = [
     { label: 'tomorrow', date: function (t) { t.setDate(t.getDate() + 1); return t; } },
@@ -990,29 +1034,28 @@ var namedDays = [
  * DatePicker. Select a date with one click.
  */
 var DatePicker = React.forwardRef(function (_a, ref) {
-    var name = _a.name, defaultValue = _a.defaultValue, value = _a.value, onChange = _a.onChange, _b = _a.shortcuts, shortcuts = _b === void 0 ? false : _b, _c = _a.parseDate, parseDate = _c === void 0 ? internalParseDate : _c, _d = _a.formatDate, formatDate = _d === void 0 ? internalFormatDate : _d, _e = _a.firstDayOfWeek, firstDayOfWeek = _e === void 0 ? 0 : _e, props = __rest(_a, ["name", "defaultValue", "value", "onChange", "shortcuts", "parseDate", "formatDate", "firstDayOfWeek"]);
-    var _f = useTranslation(), t = _f.t, ready = _f.ready;
+    var name = _a.name, defaultValue = _a.defaultValue, value = _a.value, onChange = _a.onChange, _b = _a.withShortcuts, withShortcuts = _b === void 0 ? false : _b, _c = _a.parseDate, parseDate = _c === void 0 ? internalParseDate : _c, _d = _a.formatDate, formatDate = _d === void 0 ? internalFormatDate : _d, _e = _a.firstDayOfWeek, firstDayOfWeek = _e === void 0 ? 0 : _e, placement = _a.placement, popperClassName = _a.popperClassName, props = __rest(_a, ["name", "defaultValue", "value", "onChange", "withShortcuts", "parseDate", "formatDate", "firstDayOfWeek", "placement", "popperClassName"]);
+    var t = useTranslation().t;
     var inputRef = useRef(null);
     useImperativeHandle(ref, function () { return inputRef.current; });
     // Maintain an internalValue to use the internal input as controlled,
     // and only update internalValue only when the DatePicker is controlled.
     var controlled = useState(value != null)[0];
-    var _g = useState(defaultValue || ''), internalValue = _g[0], setInternalValue = _g[1];
+    var _f = useState(defaultValue || ''), internalValue = _f[0], setInternalValue = _f[1];
     useEffect(function () { if (controlled) {
         setInternalValue(value || '');
     } }, [controlled, value]);
     // Calendar is the normalized first date having the week of the current date
     // starting at the firstDayOfWeek
     // (has day = 1, hour = 12, minute = 0, second = 0 and millis = 0)
-    var _h = useState(startOfMonth(parseDate(defaultValue || ''))), calendar = _h[0], setCalendar = _h[1];
+    var _g = useState(startOfMonth(parseDate(defaultValue || ''))), calendar = _g[0], setCalendar = _g[1];
     useEffect(function () { return setCalendar(startOfMonth(parseDate(internalValue))); }, [internalValue]);
     // Popper states
-    var _j = useState(false), show = _j[0], setShow = _j[1];
-    var _k = useState(null), target = _k[0], setTarget = _k[1];
-    var _l = useState(null), popper = _l[0], setPopper = _l[1];
-    useOnOutsideClick(function () { if (show) {
-        setShow(!show);
-    } }, show, target, popper);
+    var _h = useState(false), show = _h[0], setShow = _h[1];
+    var popperRef = useRef(null);
+    useOnOutsideClick(show, function () { if (show) {
+        setShow(false);
+    } }, inputRef.current, popperRef.current);
     // handlers
     var handleShow = function () { if (!show) {
         setShow(true);
@@ -1073,16 +1116,8 @@ var DatePicker = React.forwardRef(function (_a, ref) {
     };
     var handleFinalValueDate = function (finalDate) {
         var finalValue = finalDate != null ? formatDate(finalDate) : '';
-        setFinalInputValue(finalValue);
+        setInputValue(inputRef, finalValue);
         handleHide();
-    };
-    var setFinalInputValue = function (inputValue) {
-        var _a;
-        var setter = (_a = Object === null || Object === void 0 ? void 0 : Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')) === null || _a === void 0 ? void 0 : _a.set;
-        if (setter && inputValue !== '') {
-            setter.call(inputRef.current, inputValue);
-            inputRef.current.dispatchEvent(new Event('input', { bubbles: true }));
-        }
     };
     // setup
     var today = new Date();
@@ -1118,13 +1153,17 @@ var DatePicker = React.forwardRef(function (_a, ref) {
         return c.join(' ');
     }
     // render
-    var months = ready ? t('months', { defaultValue: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], returnObjects: true }) : null;
-    var days = ready ? t('shortDays', { defaultValue: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], returnObjects: true }) : [];
-    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: setTarget }, { children: jsx(Input, __assign({ type: "text", ref: inputRef, name: name, defaultValue: defaultValue, value: value, onChange: handleChange, onFocus: handleFocus, onBlur: handleBlur, onMouseDown: handleFocus, onKeyDown: handleKeyDown, autoComplete: "off" }, props), void 0) }), void 0), ready && show &&
-                jsx("div", __assign({ ref: setPopper, onMouseDown: function (e) { e.preventDefault(); }, className: "absolute left-0 mt-1 bg-content-fg border border-content-border rounded overflow-hidden z-10" }, { children: jsxs("div", __assign({ className: "flex flex-row" }, { children: [jsxs("div", { children: [jsxs("div", __assign({ className: "px-2 py-1 flex flex-row items-center justify-between bg-gray-400" }, { children: [jsxs("div", __assign({ className: "flex-grow text-center font-bold" }, { children: [months[calendar.getMonth()], " ", calendar.getFullYear()] }), void 0), jsxs("div", __assign({ className: "flex-none space-x-2" }, { children: [jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickPrevMonth }, { children: jsx(SvgAngleLeftIcon, { className: "text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickToday }, { children: jsx(SvgCircleIcon, { className: "text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickNextMonth }, { children: jsx(SvgAngleRightIcon, { className: "text-content stroke-current stroke-2" }, void 0) }), void 0)] }), void 0)] }), void 0), jsxs("table", __assign({ className: "table-fixed text-center", style: { width: '21em' } }, { children: [jsx("thead", { children: jsx("tr", { children: weeks[0].map(function (d, i) { return jsx("th", __assign({ className: "", style: { padding: '0 0.5em', width: '3em' } }, { children: days[d.getDay()] }), i); }) }, void 0) }, void 0), jsx("tbody", __assign({ className: "cursor-pointer" }, { children: weeks.map(function (w) {
-                                                    return jsx("tr", { children: w.map(function (d) { return jsx("td", __assign({ onClick: function (e) { return handleClickDate(e, d); }, className: dayClasses(d) }, { children: d.getDate() }), d.getTime()); }) }, w[0].getTime());
-                                                }) }), void 0)] }), void 0)] }, void 0), shortcuts &&
-                                jsx("div", __assign({ className: "flex flex-col justify-between items-stretch bg-gray-300 cursor-pointer" }, { children: namedDays.map(function (s, i) { return jsx("div", __assign({ onClick: function (e) { return handleClickDate(e, s.date(new Date(today))); }, className: "px-2 truncate hover:text-white hover:bg-secondary-500" }, { children: t("namedDays." + s.label, { defaultValue: s.label }) }), i); }) }), void 0)] }), void 0) }), void 0)] }), void 0));
+    var months = t('months', { defaultValue: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], returnObjects: true });
+    var days = t('shortDays', { defaultValue: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], returnObjects: true });
+    return (jsxs(Fragment, { children: [jsx(Input, __assign({ type: "text", ref: inputRef, name: name, defaultValue: defaultValue, value: value, onChange: handleChange, onFocus: handleFocus, onBlur: handleBlur, onMouseDown: handleFocus, onKeyDown: handleKeyDown, autoComplete: "off" }, props), void 0), show &&
+                jsxs(Popper, __assign({ ref: popperRef, reference: inputRef.current, onMouseDown: function (e) { e.preventDefault(); e.stopPropagation(); }, placement: placement, className: classnames('flex flex-row bg-content-fg border border-content-border rounded', popperClassName) }, { children: [jsxs("div", { children: [jsxs("div", __assign({ className: "px-2 py-1 flex flex-row items-center justify-between bg-gray-400 rounded-t-sm" }, { children: [jsxs("div", __assign({ className: "flex-grow text-center font-bold" }, { children: [months[calendar.getMonth()], " ", calendar.getFullYear()] }), void 0), jsxs("div", __assign({ className: "flex-none space-x-2" }, { children: [jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickPrevMonth }, { children: jsx(SvgAngleLeftIcon, { className: "text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickToday }, { children: jsx(SvgCircleIcon, { className: "text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickNextMonth }, { children: jsx(SvgAngleRightIcon, { className: "text-content stroke-current stroke-2" }, void 0) }), void 0)] }), void 0)] }), void 0), jsxs("table", __assign({ className: "table-fixed text-center", style: { width: '21em' } }, { children: [jsx("thead", { children: jsx("tr", { children: weeks[0].map(function (d, i) {
+                                                    return jsx("th", __assign({ className: "", style: { padding: '0 0.5em', width: '3em' } }, { children: days[d.getDay()] }), i);
+                                                }) }, void 0) }, void 0), jsx("tbody", __assign({ className: "cursor-pointer" }, { children: weeks.map(function (w) {
+                                                return jsx("tr", { children: w.map(function (d) {
+                                                        return jsx("td", __assign({ onClick: function (e) { return handleClickDate(e, d); }, className: dayClasses(d) }, { children: d.getDate() }), d.getTime());
+                                                    }) }, w[0].getTime());
+                                            }) }), void 0)] }), void 0)] }, void 0), withShortcuts &&
+                            jsx("div", __assign({ className: "flex flex-col justify-between items-stretch bg-gray-300 cursor-pointer" }, { children: namedDays.map(function (s, i) { return jsx("div", __assign({ onClick: function (e) { return handleClickDate(e, s.date(new Date(today))); }, className: "px-2 truncate hover:text-white hover:bg-secondary-500" }, { children: t("namedDays." + s.label, { defaultValue: s.label }) }), i); }) }), void 0)] }), void 0)] }, void 0));
 });
 //
 // utilities
@@ -1180,79 +1219,66 @@ function internalFormatDate(ymd) {
     return (ymd[2] < 10 ? '0' + ymd[2] : ymd[2]) + '-' + (m < 10 ? '0' + m : m) + '-' + ymd[0];
 }
 
-//
-// https://popper.js.org/docs/v2/modifiers/community-modifiers/
-// https://codesandbox.io/s/bitter-sky-pe3z9?file=/src/index.js:383-394
-//
-var sameWidth = {
-    name: 'sameWidth',
-    enabled: true,
-    phase: 'beforeWrite',
-    requires: ['computeStyles'],
-    fn: function (_a) {
-        var state = _a.state;
-        state.styles.popper.width = state.rects.reference.width + "px";
-    },
-    effect: function (_a) {
-        var state = _a.state;
-        state.elements.popper.style.width = state.elements.reference.offsetWidth + "px";
-    }
-};
-
 /* eslint-disable import/no-anonymous-default-export */
-var swatches = [
+var defaultSwatches = [
     '#1abc9c', '#2ecc71', '#3498db', '#9b59b6', '#34495e',
     '#16a085', '#27ae60', '#2980b9', '#8e44ad', '#2c3e50',
     '#f1c40f', '#e67e22', '#e74c3c', '#ecf0f1', '#95a5a6',
     '#f39c12', '#d35400', '#c0392b', '#bdc3c7', '#7f8c8d'
 ];
 
-var placements = {
-    'start': 'bottom-start',
-    'stretch': 'bottom',
-    'end': 'bottom-end'
-};
 var SwatchPicker = React.forwardRef(function (_a, ref) {
-    var _b = _a.swatches, values = _b === void 0 ? swatches : _b, _c = _a.align, align = _c === void 0 ? 'stretch' : _c, _d = _a.popperClassName, popperClassName = _d === void 0 ? 'grid grid-cols-5 w-32 overflow-hidden' : _d, onFocus = _a.onFocus, onBlur = _a.onBlur, props = __rest(_a, ["swatches", "align", "popperClassName", "onFocus", "onBlur"]);
-    var _e = useState(false), visible = _e[0], setVisible = _e[1];
-    var _f = useState(null), target = _f[0], setTarget = _f[1];
-    var _g = useState(null), popper = _g[0], setPopper = _g[1];
-    useOnOutsideClick(function () { return visible && setVisible(false); }, visible, target, popper);
-    useImperativeHandle(ref, function () { return target; });
-    var _h = usePopper(target, popper, {
-        placement: placements[align],
-        modifiers: __spreadArray([
-            { name: 'offset', options: { offset: [0, 4] } }
-        ], (align === 'stretch' ? [sameWidth] : []))
-    }), styles = _h.styles, attributes = _h.attributes;
-    function handleOnFocus(event) {
+    var name = _a.name, defaultValue = _a.defaultValue, value = _a.value, _b = _a.values, values = _b === void 0 ? defaultSwatches : _b, onChange = _a.onChange, placement = _a.placement, _c = _a.withSameWidth, withSameWidth = _c === void 0 ? true : _c, _d = _a.popperClassName, popperClassName = _d === void 0 ? 'grid grid-cols-5 w-32' : _d, onFocus = _a.onFocus, onBlur = _a.onBlur, props = __rest(_a, ["name", "defaultValue", "value", "values", "onChange", "placement", "withSameWidth", "popperClassName", "onFocus", "onBlur"]);
+    var inputRef = useRef(null);
+    useImperativeHandle(ref, function () { return inputRef.current; });
+    // Maintain an internalValue to use the internal input as controlled,
+    // and only update internalValue only when the DatePicker is controlled.
+    var _e = useState(defaultValue || ''), internalValue = _e[0], setInternalValue = _e[1];
+    useEffect(function () { if (value != null) {
+        setInternalValue(value || '');
+    } }, [value]);
+    var _f = useState(false), show = _f[0], setShow = _f[1];
+    var popperRef = useRef(null);
+    useOnOutsideClick(show, function () { if (show) {
+        setShow(false);
+    } }, inputRef.current, popperRef.current);
+    // handlers
+    var handleOnFocus = function (event) {
         if (onFocus) {
             onFocus(event);
         }
-        setVisible(true);
-    }
-    function handleOnBlur(event) {
-        setVisible(false);
+        setShow(true);
+    };
+    var handleOnBlur = function (event) {
+        setShow(false);
         if (onBlur) {
             onBlur(event);
         }
-    }
-    function setValue(event, element, swatch) {
-        var _a;
-        event.preventDefault();
-        event.stopPropagation();
-        var inputSetter = (_a = Object === null || Object === void 0 ? void 0 : Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')) === null || _a === void 0 ? void 0 : _a.set;
-        if (inputSetter) {
-            inputSetter.call(element, swatch);
-            var inputEvent = new Event('input', { bubbles: true });
-            element.dispatchEvent(inputEvent);
-            element.select();
-            setVisible(false);
+    };
+    var handleChange = function (e) {
+        if (onChange) {
+            // bubble up change event regardless of 
+            // controlled or uncontrolled
+            onChange(e);
         }
-    }
-    return (jsxs("div", __assign({ className: "relative inline-block w-full" }, { children: [jsx(Input, __assign({ type: "text", ref: setTarget }, props, { maxLength: 7, onClick: function () { return setVisible(true); }, onFocus: handleOnFocus, onBlur: handleOnBlur }), void 0), jsx("div", { className: "m-px absolute inset-y-0 right-0 rounded bg-red-500", style: { width: '2.5em', backgroundColor: target === null || target === void 0 ? void 0 : target.value } }, void 0), visible && ReactDOM.createPortal(jsx("div", __assign({ ref: setPopper }, attributes.popper, { className: classnames('border border-control-border rounded', 'bg-white cursor-pointer', popperClassName), style: styles.popper }, { children: values.map(function (s, i) {
-                    return jsx("div", __assign({ onMouseDown: function (e) { return setValue(e, target, s); }, style: { backgroundColor: s } }, { children: "\u00A0" }), i);
-                }) }), void 0), document.querySelector('body'))] }), void 0));
+        if (value == null) {
+            // set internal value if uncontrolled
+            setInternalValue(e.target.value);
+        }
+    };
+    var handleClickSwatch = function (swatch) {
+        setInputValue(inputRef, swatch);
+        setShow(false);
+    };
+    var handleRandomClickSwatch = function () {
+        setInputValue(inputRef, values[Math.floor(Math.random() * values.length)]);
+        setShow(false);
+    };
+    // render
+    return (jsxs("div", __assign({ className: "relative inline-block w-full" }, { children: [jsx(Input, __assign({ type: "text", ref: inputRef, name: name, defaultValue: defaultValue, value: value, onChange: handleChange, onFocus: handleOnFocus, onBlur: handleOnBlur, onClick: function () { return setShow(true); }, autoComplete: "off" }, props), void 0), jsx("div", { onMouseDown: function (e) { e.preventDefault(); e.stopPropagation(); }, onClick: handleRandomClickSwatch, className: "absolute inset-y-0 right-0 border border-control-border rounded bg-red-500 cursor-pointer", style: { width: '2em', backgroundColor: internalValue } }, void 0), show &&
+                jsx(Popper, __assign({ ref: popperRef, reference: inputRef.current, onMouseDown: function (e) { e.preventDefault(); e.stopPropagation(); }, placement: placement, withSameWidth: withSameWidth, className: classnames('bg-content-fg border border-content-border rounded cursor-pointer', popperClassName) }, { children: values.map(function (s, i) {
+                        return jsx("div", __assign({ onClick: function () { return handleClickSwatch(s); }, style: { backgroundColor: s } }, { children: "\u00A0" }), i);
+                    }) }), void 0)] }), void 0));
 });
 
 /**
@@ -1287,9 +1313,9 @@ var TagPicker = function (_a) {
     var searchRef = useRef();
     var _e = useState(null), target = _e[0], setTarget = _e[1];
     var _f = useState(null), popper = _f[0], setPopper = _f[1];
-    useOnOutsideClick(function () { if (isVisible) {
+    useOnOutsideClick(isVisible, function () { if (isVisible) {
         setIsVisible(false);
-    } }, isVisible, target, popper);
+    } }, target, popper);
     var _g = useState(''), search = _g[0], setSearch = _g[1];
     var _h = useState([]), searchResults = _h[0], setSearchResults = _h[1];
     useEffect(function () { if (isVisible) {
@@ -1404,14 +1430,14 @@ var minutes = [15, 30, 45];
  * TimePicker. Select a time with one click.
  */
 var TimePicker = React.forwardRef(function (_a, ref) {
-    var name = _a.name, defaultValue = _a.defaultValue, value = _a.value, onChange = _a.onChange, _b = _a.parseTime, parseTime = _b === void 0 ? internalParseTime : _b, _c = _a.formatHour, formatHour = _c === void 0 ? internalFormatHour : _c, _d = _a.formatTime, formatTime = _d === void 0 ? internalFormatTime : _d, props = __rest(_a, ["name", "defaultValue", "value", "onChange", "parseTime", "formatHour", "formatTime"]);
-    var _e = useTranslation(), t = _e.t; _e.ready;
+    var name = _a.name, defaultValue = _a.defaultValue, value = _a.value, onChange = _a.onChange, _b = _a.parseTime, parseTime = _b === void 0 ? internalParseTime : _b, _c = _a.formatHour, formatHour = _c === void 0 ? internalFormatHour : _c, _d = _a.formatTime, formatTime = _d === void 0 ? internalFormatTime : _d, popperClassName = _a.popperClassName, props = __rest(_a, ["name", "defaultValue", "value", "onChange", "parseTime", "formatHour", "formatTime", "popperClassName"]);
+    var t = useTranslation().t;
     var inputRef = useRef(null);
     useImperativeHandle(ref, function () { return inputRef.current; });
     // Maintain an internalValue to use the internal input as controlled,
     // and only update internalValue only when the DatePicker is controlled.
     var controlled = useState(value != null)[0];
-    var _f = useState(defaultValue || ''), internalValue = _f[0], setInternalValue = _f[1];
+    var _e = useState(defaultValue || ''), internalValue = _e[0], setInternalValue = _e[1];
     useEffect(function () { if (controlled) {
         setInternalValue(value || '');
     } }, [controlled, value]);
@@ -1420,19 +1446,22 @@ var TimePicker = React.forwardRef(function (_a, ref) {
     var timesRef = useRef(null);
     useEffect(function () { scroll(); });
     // Popper states
-    var _g = useState(false), show = _g[0], setShow = _g[1];
-    var _h = useState(null), target = _h[0], setTarget = _h[1];
-    var _j = useState(null), popper = _j[0], setPopper = _j[1];
-    useOnOutsideClick(function () { if (show) {
+    var _f = useState(false), show = _f[0], setShow = _f[1];
+    var popperRef = useRef(null);
+    useOnOutsideClick(show, function () { if (show) {
         setShow(false);
-    } }, show, target, popper);
+    } }, inputRef.current, popperRef.current);
     // handlers
-    var handleShow = function () { if (!show) {
-        setShow(true);
-    } };
-    var handleHide = function () { if (show) {
-        setShow(false);
-    } };
+    var handleShow = function () {
+        if (!show) {
+            setShow(true);
+        }
+    };
+    var handleHide = function () {
+        if (show) {
+            setShow(false);
+        }
+    };
     var handleFocus = handleShow;
     var handleBlur = function (e) {
         handleFinalValue();
@@ -1493,16 +1522,8 @@ var TimePicker = React.forwardRef(function (_a, ref) {
     };
     var handleFinalValueTime = function (finalTime) {
         var finalValue = finalTime != null ? formatTime(finalTime) : '';
-        setFinalInputValue(finalValue);
+        setInputValue(inputRef, finalValue);
         handleHide();
-    };
-    var setFinalInputValue = function (inputValue) {
-        var _a;
-        var setter = (_a = Object === null || Object === void 0 ? void 0 : Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')) === null || _a === void 0 ? void 0 : _a.set;
-        if (setter && inputValue !== '') {
-            setter.call(inputRef.current, inputValue);
-            inputRef.current.dispatchEvent(new Event('input', { bubbles: true }));
-        }
     };
     // setup
     var now = new Date();
@@ -1534,8 +1555,8 @@ var TimePicker = React.forwardRef(function (_a, ref) {
         return 'text-xs text-muted group-hover:text-content hover:bg-secondary-500';
     }
     // render
-    return (jsxs("div", __assign({ className: "relative" }, { children: [jsx("div", __assign({ ref: setTarget }, { children: jsx(Input, __assign({ type: "text", ref: inputRef, name: name, defaultValue: defaultValue, value: value, onChange: handleChange, onFocus: handleFocus, onBlur: handleBlur, onMouseDown: handleFocus, onKeyDown: handleKeyDown, autoComplete: "off" }, props), void 0) }), void 0), show &&
-                jsxs("div", __assign({ ref: setPopper, onMouseDown: function (e) { e.preventDefault(); }, className: "absolute left-0 mt-1 bg-content-fg border border-content-border rounded overflow-hidden z-10" }, { children: [jsxs("div", __assign({ className: "px-2 py-1 flex flex-row items-center justify-between bg-gray-400" }, { children: [jsx("div", __assign({ className: "flex-grow text-center font-bold" }, { children: t('hour', { defaultValue: 'Hour' }) }), void 0), jsxs("div", __assign({ className: " flex-none space-x-2" }, { children: [jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickPrevHour }, { children: jsx(SvgAngleUpIcon, { className: "text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickNoon }, { children: jsx(SvgCircleIcon, { className: "text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickNextHour }, { children: jsx(SvgAngleDownIcon, { className: "text-content stroke-current stroke-2" }, void 0) }), void 0)] }), void 0)] }), void 0), jsx("div", __assign({ ref: timesRef, className: "h-64 overflow-scroll" }, { children: jsxs("table", __assign({ className: "table-fixed text-center", style: { width: '12em' } }, { children: [jsx("thead", { children: jsxs("tr", { children: [jsx("th", { style: { width: '3em' } }, void 0), minutes.map(function (m) { return jsx("td", { className: "w-10", style: { width: '3em' } }, void 0); })] }, void 0) }, void 0), jsx("tbody", __assign({ className: "cursor-pointer" }, { children: morning.map(function (h) {
+    return (jsxs(Fragment, { children: [jsx(Input, __assign({ type: "text", ref: inputRef, name: name, defaultValue: defaultValue, value: value, onChange: handleChange, onFocus: handleFocus, onBlur: handleBlur, onMouseDown: handleFocus, onKeyDown: handleKeyDown, autoComplete: "off" }, props), void 0), show &&
+                jsxs(Popper, __assign({ ref: popperRef, reference: inputRef.current, onMouseDown: function (e) { e.preventDefault(); e.stopPropagation(); }, className: classnames('bg-content-fg border border-content-border rounded', popperClassName) }, { children: [jsxs("div", __assign({ className: "px-2 py-1 flex flex-row items-center justify-between bg-gray-400 rounded-t-sm" }, { children: [jsx("div", __assign({ className: "flex-grow text-center font-bold" }, { children: t('hour', { defaultValue: 'Hour' }) }), void 0), jsxs("div", __assign({ className: " flex-none space-x-2" }, { children: [jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickPrevHour }, { children: jsx(SvgAngleUpIcon, { className: "text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickNoon }, { children: jsx(SvgCircleIcon, { className: "text-content stroke-current stroke-2" }, void 0) }), void 0), jsx("button", __assign({ type: "button", className: "focus:outline-none", onClick: handleClickNextHour }, { children: jsx(SvgAngleDownIcon, { className: "text-content stroke-current stroke-2" }, void 0) }), void 0)] }), void 0)] }), void 0), jsx("div", __assign({ ref: timesRef, className: "h-64 overflow-scroll" }, { children: jsxs("table", __assign({ className: "table-fixed text-center", style: { width: '12em' } }, { children: [jsx("thead", { children: jsxs("tr", { children: [jsx("th", { style: { width: '3em' } }, void 0), minutes.map(function (m) { return jsx("td", { className: "w-10", style: { width: '3em' } }, m); })] }, void 0) }, void 0), jsx("tbody", __assign({ className: "cursor-pointer" }, { children: morning.map(function (h) {
                                             return jsxs("tr", __assign({ className: hourClasses([h, 0]) }, { children: [jsx("th", __assign({ className: "text-base group-hover:text-content group-hover:bg-secondary-500", onClick: function (e) { return handleClickTime(e, [h, 0]); } }, { children: formatHour(h) }), void 0), minutes.map(function (m) {
                                                         return jsx("td", __assign({ onClick: function (e) { return handleClickTime(e, [h, m]); }, className: hourMinuteClasses([h, m]) }, { children: m }), m);
                                                     })] }), h);
@@ -1547,7 +1568,7 @@ var TimePicker = React.forwardRef(function (_a, ref) {
                                             return jsxs("tr", __assign({ className: hourClasses([h, 0]) }, { children: [jsx("th", __assign({ className: "text-base group-hover:text-content group-hover:bg-secondary-500", onClick: function (e) { return handleClickTime(e, [h, 0]); } }, { children: formatHour(h) }), void 0), minutes.map(function (m) {
                                                         return jsx("td", __assign({ onClick: function (e) { return handleClickTime(e, [h, m]); }, className: hourMinuteClasses([h, m]) }, { children: m }), m);
                                                     })] }), h);
-                                        }) }), void 0)] }), void 0) }), void 0)] }), void 0)] }), void 0));
+                                        }) }), void 0)] }), void 0) }), void 0)] }), void 0)] }, void 0));
 });
 //
 // default parse and format

@@ -106,7 +106,7 @@ module.exports = {
     plugins: [
 
         plugin(function({ addBase, addComponents, theme, config }) {
-            addBase({ 'html': { fontSize: '14px' } });
+            addBase({ 'html': { fontSize: '14px', lineHeight: '21px' } });
             addComponents({
                 ...require('./lux'),
                 ...require('./control')({ theme }),
