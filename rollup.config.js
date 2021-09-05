@@ -37,6 +37,12 @@ export default [{
             }
         }),
 
+        copy({
+            targets: [
+                { src: 'src/locales/*', dest: 'dist/locales' }
+            ]
+        }),
+
         filesize()
 
     ]
