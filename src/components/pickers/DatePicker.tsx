@@ -64,7 +64,7 @@ const namedDays = [
  */
 export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({ name, defaultValue, value, onChange, withShortcuts = false, parseDate = internalParseDate, formatDate = internalFormatDate, firstDayOfWeek = 0, placement, popperClassName, ...props }, ref) => {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation(['lux']);
 
     const inputRef = useRef<HTMLInputElement>(null);
     useImperativeHandle(ref, () => inputRef.current!);

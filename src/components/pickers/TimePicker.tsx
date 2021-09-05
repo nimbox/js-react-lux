@@ -53,7 +53,7 @@ const minutes = [15, 30, 45];
  */
 export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps>(({ name, defaultValue, value, onChange, parseTime = internalParseTime, formatHour = internalFormatHour, formatTime = internalFormatTime, popperClassName, ...props }, ref) => {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation(['lux']);
 
     const inputRef = useRef<HTMLInputElement>(null);
     useImperativeHandle(ref, () => inputRef.current!);

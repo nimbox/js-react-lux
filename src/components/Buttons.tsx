@@ -105,7 +105,7 @@ export interface MoreOptionsButtonProps {
 
 export const MoreOptionsButton: FC<MoreOptionsButtonProps> =
     ({ scale = 'base', value = false, onChange, className, children, ...props }) => {
-        const { t } = useTranslation();
+        const { t } = useTranslation(['lux']);
         return (
             <>
                 <span className={classnames(
