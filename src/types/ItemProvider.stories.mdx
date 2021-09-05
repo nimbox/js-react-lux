@@ -1,0 +1,109 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { useViewport, ViewportProvider } from '../hooks/useViewport';
+
+
+<Meta title="Types/ItemProvider"/>
+
+# ItemProvider
+
+There are many places in this library where data items are required.
+Usually this data is as simple as an array of values, and sometimes
+as complex as objects asynchronously retrieved from a GraphQL query. 
+In order to make the library more portable, we have created an 
+interface to isolate the fetching of the data and some classes to 
+facilitate the use on your code.
+
+The interface models an array of items of type `T` (any object) with 
+an identifier of type `I` (usually string).
+
+```js
+export interface ItemProvider<V, T> {
+    value: (item: T) => V;
+    get: (...values: V[]) => Promise<T[]> | T[];
+    find: (items: T[], q: V) => T[];
+    search: (q: V, n?: number) => Promise<T[]> | T[];
+}
+```
+
+
+In which:
+
+* __value__: Extracts the identifyiing value of the item.
+* __get__: Get one or many items associated to the given `values` (can be an 
+  asynchronous function returning a promise).
+* __find__: Filter the given array of `items` to match the query string `q`.
+* __search__: Retrieve items that match query string `q` from wherever they are,
+  and return at most `n` items (can be an asynchronous function returning a 
+  promise).
+
+## Array
+
+There is a very simple implementation for arrays called `ArrayItemProvider<V, T>`
+which takes an array. Given the following array:
+
+```js
+interface Item { 
+    value: string;
+    description: string
+}
+```
+
+```js
+const items : Item[] = [
+    { value: 'FR', description: 'French'},
+    { value: 'EN', description: 'English'},
+    { value: 'ES', description: 'Spanish'}
+];
+```
+
+The data providing function would be defined as:
+
+```js
+const provider = new ArrayItemProvider<string, Item>(
+    // the actual array
+    items,
+    // a value extractor function
+    (item: Item) => item.value, 
+    // a searching function used for both find and search since the data is local
+    (items: Item[], q: string) => { 
+        const regexp = new RegExp(q, 'i'); 
+        return items.filter(item => regexp.test(item.description)); 
+    }
+)
+```
+
+## Apollo Client
+
+When using an apollo query there are two possibilities. All the data comes from
+the server at once (usually time zones which are limited in number), or the data 
+is searched (usually contacts, products, etc, which can be in the thousands).
+
+### All at once
+
+```js
+const client = useApolloClient();
+const provider = new ApolloItemProvider(
+    client, 
+    SOME_QUERY
+    (item: Item) => item.value,
+    (items: Item[], q: string) => { 
+        const regexp = new RegExp(q, 'i'); 
+        return items.filter(item => regexp.test(item.description)); 
+    }
+)
+```
+
+### As searched
+
+```js
+const client = useApolloClient();
+const provider = new ApolloItemProvider(
+    client, 
+    SOME_QUERY
+    (item: Item) => item.value,
+    (items: Item[], q: string) => { 
+        const regexp = new RegExp(q, 'i'); 
+        return items.filter(item => regexp.test(item.description)); 
+    }
+)
+```
