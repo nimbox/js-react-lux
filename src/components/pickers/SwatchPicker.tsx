@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { setInputValue } from '../../utilities/setInputValue';
-import defaultSwatches from '../../utils/flat-colors';
+import defaultSwatches from '../../data/flat-colors';
 import { Input, InputProps } from '../controls/Input';
 import { Popper, PopperPlacement } from '../Popper';
 
