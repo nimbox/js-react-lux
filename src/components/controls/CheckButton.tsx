@@ -42,9 +42,9 @@ export const CheckButton: FC<CheckButtonProps> = ({ onFulfill, onReject, ['data-
                 onClick={onFulfill}
                 data-tooltip={dataTooltipFulfill}
                 className={classnames(
-                    'absolute inset-y-0 left-0 w-1/2',
+                    'absolute inset-y-0 left-0 w-1/2 box-content -m-px',
                     'hover:bg-primary-600',
-                    'border-r border-control-border checked:border-control-border',
+                    'border border-control-border checked:border-control-border',
                     'rounded'
                 )}
             >
