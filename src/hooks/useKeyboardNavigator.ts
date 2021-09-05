@@ -54,6 +54,7 @@ export const useKeyboardNavigator = (arrays: any[][]) => {
 
     return {
         cursor: cursor[1] === -1 ? null : cursor as [number, number] | null,
+        setCursor,
         handle,
         reset
     };
