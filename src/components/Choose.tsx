@@ -1,14 +1,13 @@
 import classnames from 'classnames';
 import _debounce from 'lodash/debounce';
 import React, { ChangeEventHandler, createRef, LegacyRef, ReactElement, Ref, RefObject, useCallback, useContext, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react';
-import { Loading } from '..';
 import { useOnOutsideClick } from '../hooks/useOnOutsideClick';
 import { DangerIcon } from '../icons';
 import AngleDownIcon from './../icons/AngleDownIcon';
 import { ComponentAlign } from './ComponentAlign';
-import { ComponentScale, controlText, smallScale } from './ComponentScale';
 import { Context as controlContext } from './controls/Control';
 import { SearchInput } from './controls/SearchInput';
+import { Loading } from './Loading';
 
 
 export interface ChooseProps<T> extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
