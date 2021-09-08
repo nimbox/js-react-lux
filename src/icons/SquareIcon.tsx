@@ -14,7 +14,7 @@ function SvgSquareIcon(props: React.SVGProps<SVGSVGElement>) {
       strokeLinejoin="round"
       {...props}
     >
-      <path className="square-icon_svg__st0" d="M6 6h20v20H6z" />
+      <path d="M6 6h20v20H6z" />
     </svg>
   );
 }

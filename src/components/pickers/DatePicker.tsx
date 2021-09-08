@@ -2,9 +2,11 @@ import classNames from 'classnames';
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { AngleLeftIcon, AngleRightIcon, CircleIcon } from '../../icons';
+import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon, SquareIcon } from '../../icons';
+import { consumeEvent } from '../../utilities/consumeEvent';
 import { setInputValue } from '../../utilities/setInputValue';
 import { Input, InputProps } from '../controls/Input';
+import { Ornament } from '../controls/Ornament';
 import { Popper, PopperPlacement } from '../Popper';
 
 
@@ -94,7 +96,11 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
     const handleFocus = handleShow;
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
         handleFinalValue();
-    }
+    };
+
+    const forceFocus = () => {
+        inputRef.current!.focus();
+    };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         switch (e.keyCode) {
@@ -105,7 +111,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
             default:
                 handleShow();
         }
-    }
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {
@@ -117,7 +123,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
             // set internal value if uncontrolled
             setInternalValue(e.target.value);
         }
-    }
+    };
 
     // navigation
 
@@ -150,14 +156,13 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
     const handleFinalValue = () => {
         const finalDate = parseDate(internalValue);
         handleFinalValueDate(finalDate);
-    }
+    };
 
     const handleFinalValueDate = (finalDate: [number, number, number] | null) => {
         const finalValue = finalDate != null ? formatDate(finalDate) : '';
         setInputValue(inputRef, finalValue);
         handleHide();
-    }
-
+    };
 
     // setup
 
@@ -202,6 +207,14 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
     const months = t('months', { defaultValue: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], returnObjects: true }) as string[];
     const days = t('shortDays', { defaultValue: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], returnObjects: true }) as string[];
 
+    const ornament = (
+        <Ornament position="end">
+            <div onClick={handleFocus} className="px-1 cursor-pointer">
+                <CalendarIcon style={{ fontSize: '1.5em' }} />
+            </div>
+        </Ornament>
+    );
+
     return (
         <>
             <Input type="text"
@@ -221,12 +234,14 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
 
                 autoComplete="off"
 
+                end={ornament}
+
                 {...props}
             />
 
             {show &&
                 <Popper ref={popperRef} reference={inputRef.current!}
-                    onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                    onMouseDown={consumeEvent}
                     placement={placement}
                     className={classNames('flex flex-row bg-content-fg border border-content-border rounded', popperClassName)}
                 >
