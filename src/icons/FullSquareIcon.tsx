@@ -1,6 +1,6 @@
 import * as React from "react";
 
-function SvgSearchIcon(props: React.SVGProps<SVGSVGElement>) {
+function SvgFullSquareIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -13,10 +13,9 @@ function SvgSearchIcon(props: React.SVGProps<SVGSVGElement>) {
       strokeLinejoin="round"
       {...props}
     >
-      <circle cx={14.5} cy={14.5} r={8.5} />
-      <path d="M26 26l-5.5-5.5" />
+      <path d="M0 0h32v32H0z" />
     </svg>
   );
 }
 
-export default SvgSearchIcon;
+export default SvgFullSquareIcon;
