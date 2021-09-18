@@ -1,14 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 
-export const useKeyboardNavigator = (arrays: any[][]) => {
+//
+// useKeyboardNavigator
+//
 
-    const [cursor, setCursor] = useState<[number, number]>([0, -1]);
-    useEffect(() => { setCursor([0, -1]); }, [...arrays]);
+export const useKeyboardNavigator = (lengths: number[]) => {
 
-    const handle = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const [selected, setSelected] = useState<[number, number]>([0, -1]);
+    useEffect(() => { setSelected([0, -1]); }, [lengths]);
 
-        let [group, line] = cursor;
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+
+        let [group, line] = selected;
 
         switch (e.key) {
 
@@ -17,12 +21,12 @@ export const useKeyboardNavigator = (arrays: any[][]) => {
                 e.preventDefault();
                 do {
                     if (line > 0) {
-                        setCursor([group, line - 1]);
+                        setSelected([group, line - 1]);
                         break;
                     } else {
                         group = group - 1;
                         if (group >= 0) {
-                            line = arrays[group].length;
+                            line = lengths[group];
                         }
                     }
                 } while (group >= 0);
@@ -33,14 +37,14 @@ export const useKeyboardNavigator = (arrays: any[][]) => {
 
                 e.preventDefault();
                 do {
-                    if (line + 1 < arrays[group].length) {
-                        setCursor([group, line + 1]);
+                    if (line + 1 < lengths[group]) {
+                        setSelected([group, line + 1]);
                         break;
                     } else {
                         group = group + 1;
                         line = -1;
                     }
-                } while (group < arrays.length);
+                } while (group < lengths.length);
 
                 break;
 
@@ -49,13 +53,13 @@ export const useKeyboardNavigator = (arrays: any[][]) => {
     };
 
     const reset = () => {
-        setCursor([0, -1]);
+        setSelected([0, -1]);
     }
 
     return {
-        cursor: cursor[1] === -1 ? null : cursor as [number, number] | null,
-        setCursor,
-        handle,
+        selected: (selected[1] === -1 ? null : selected) as [number, number] | null,
+        setSelected,
+        handleKeyDown,
         reset
     };
 
