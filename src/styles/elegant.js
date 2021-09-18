@@ -27,6 +27,7 @@ module.exports = {
                 'content-border': '#eaedf3',
 
                 'control-border': '#888888',
+                'control-border': 'pink',
                 'control-placeholder': '#a0a0a0',
 
                 'primary': {
@@ -124,7 +125,7 @@ module.exports = {
             backgroundColor: ['responsive', 'focus', 'group-hover', 'hover'],
             borderWidth: ['last'],
             margin: ['responsive', 'last'],
-            borderColor: ['hover', 'focus', 'checked', 'focus-within'],
+            borderColor: ['hover', 'focus', 'checked','focus-within'],
             visibility: ['group-hover', 'hover'],
             opacity: ['disabled'],
             strokeWidth: ['hover'],

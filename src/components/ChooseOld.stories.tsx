@@ -11,7 +11,7 @@ import { SearchInput } from './controls/SearchInput';
 // definition
 
 const definition = {
-    title: 'Component/Choose',
+    title: 'Component/ChooseOld',
     component: Choose,
     argTypes: {
         scale: { control: { type: 'select', options: ['xs', 'sm', 'base', 'lg'] } },

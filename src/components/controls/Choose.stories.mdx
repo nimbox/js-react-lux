@@ -1,0 +1,137 @@
+import { useState, useRef } from 'react';
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs/blocks';
+import { Choose } from './Choose';
+import { Input } from './Input';
+import { Button } from '../Buttons';
+import { action } from '@storybook/addon-actions';
+
+
+<Meta
+    title="Component/Controls/Choose" 
+    component={Choose}
+    parameters={{
+        layout: 'centered'
+    }}
+/>
+
+export const colors = [
+    { value: 'ffff00', name: 'Yellow' },
+    { value: '0000ff', name: 'Blue' },
+    { value: 'ff0000', name: 'Red' }
+];
+
+export const getColor = (query) => colors.find(c => c.value === query);
+export const searchColors = (query) => [ query ? colors.filter(c => c.name.includes(query)) : colors];
+
+# Choose
+
+This component is the input equivalent and asynchronous version of the
+ChoseOption. It is meant to be used as an `input` with forwarded
+references and class names.
+
+It is similar to `ChooseOption` with the following differences:
+
+* The input value is obtained via `getValue(option)` and should be a string.
+* Property `options` gets the options array (can be a `Promise`).
+* Property `option` is a function that given a value returns an option (can be 
+  a `Promise`).
+
+<ArgsTable of={Input} /> 
+
+
+## Controlled 
+
+<Canvas>
+    <Story name="Controlled">
+        {() => {
+            const [value, setValue] = useState('0000ff');
+            const handleChange = (e) => { setValue(e.target.value); action('onChange')(e.target.value); }
+            const handleSubmit = (e) => { e.preventDefault(); action('onSubmit')(value); }
+            return (
+                <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
+                    <Choose
+                        withSearch
+                        option={getColor}
+                        options={searchColors}
+                        value={value}
+                        onChange={handleChange}
+                        getValue={(option) => option.value}
+                        renderOption={({ option }) => <div>{option.name}</div>}
+                    />
+                    <Button>Submit</Button>
+                </form>
+            );
+        }}
+    </Story>
+</Canvas>
+
+
+## Uncontrolled 
+
+<Canvas>
+    <Story name="Uncontrolled">
+        {() => {
+            const ref = useRef();
+            const handleSubmit = (e) => { e.preventDefault(); action('onSubmit')(ref.current.value); }
+            return (
+                <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
+                    <Choose 
+                        ref={ref}
+                        withSearch
+                        option={(value) => colors.find(c => c.value === value)}
+                        options={searchColors}
+                        defaultValue={'0000ff'}
+                        getValue={(option) => option.value}
+                        renderOption={({ option }) => <div>{option.name}</div>}
+                    />
+                    <Button>Submit</Button>
+                </form>
+            );
+        }}
+    </Story>
+</Canvas>
+
+
+export const TemplateChoose = ({ withSearch }) => {
+    const [color, setColor] = useState('0000ff');
+    return (
+        <div>
+            <Choose 
+                withSearch={withSearch}
+                option={(value) => colors.find(c => c.value === value)}
+                options={searchColors}
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+                getValue={(option) => option.value}
+                renderOption={({ option }) => <div>{option.name}</div>}
+            />
+        </div>
+    );
+};
+
+export const Template = (args) => <TemplateChoose {...args}/>;
+
+
+# Tabbing
+
+Test that tabs in and out change the focus accordingly.
+
+<Canvas>
+    <Story name="Choose Tabbing Without Search">
+        <div className="w-96 grid grid-cols-3 space-x-2">
+            <Input type="text" defaultValue=""/>
+            <TemplateChoose/>
+            <Input type="text" defaultValue=""/>
+        </div>
+    </Story>
+</Canvas>
+
+<Canvas>
+    <Story name="Choose Tabbing With Search">
+        <div className="w-96 grid grid-cols-3 space-x-2">
+            <Input type="text" defaultValue=""/>
+            <TemplateChoose withSearch/>
+            <Input type="text" defaultValue=""/>
+        </div>
+    </Story>
+</Canvas>
