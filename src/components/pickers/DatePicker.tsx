@@ -6,7 +6,6 @@ import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon, SquareIcon } f
 import { consumeEvent } from '../../utilities/consumeEvent';
 import { setInputValue } from '../../utilities/setInputValue';
 import { Input, InputProps } from '../controls/Input';
-import { Ornament } from '../controls/Ornament';
 import { Popper, PopperPlacement } from '../Popper';
 
 
@@ -208,11 +207,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
     const days = t('shortDays', { defaultValue: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], returnObjects: true }) as string[];
 
     const ornament = (
-        <Ornament position="end">
-            <div onClick={handleFocus} className="px-1 cursor-pointer">
-                <CalendarIcon style={{ fontSize: '1.5em' }} />
-            </div>
-        </Ornament>
+        <CalendarIcon onClick={handleFocus} className="px-1 cursor-pointer" style={{ fontSize: '1.5em' }} />
     );
 
     return (

@@ -1,58 +1,86 @@
 import classnames from 'classnames';
-import React, { cloneElement, useContext, useImperativeHandle, useLayoutEffect, useRef } from 'react';
+import React, { useContext, useImperativeHandle, useRef, useState } from 'react';
 import { Context } from './Control';
+import { Wrapper, WrapperProps } from './Wrapper';
 
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+//
+// Input
+//
 
-    start?: React.ReactNode;
-    end?: React.ReactNode;
-
-    error?: boolean;
-
+export interface InputProps extends WrapperProps {
 }
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(({ start, end, error, className, ...props }, ref) => {
+export const Input = React.forwardRef<HTMLInputElement, InputProps & React.InputHTMLAttributes<HTMLInputElement>>((props, ref) => {
+
+    // properties
+
+    const {
+
+        variant,
+        withNoFull,
+
+        onFocus,
+        onBlur,
+        error,
+        disabled,
+
+        start,
+        end,
+
+        className,
+
+        ...inputProps
+
+    } = props;
+
+    // configuration
 
     const inputRef = useRef<HTMLInputElement>(null);
     useImperativeHandle(ref, () => inputRef.current!);
 
     const context = useContext(Context);
+    const [focus, setFocus] = useState(false);
 
-    const startRef = useRef<HTMLElement>(null);
-    useLayoutEffect(() => {
-        if (start) {
-            const width = startRef.current!.getBoundingClientRect().width;
-            inputRef.current!.style.paddingLeft = `${width}px`;
-        }
-    }, [start]);
+    const handleOnFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+        if (onFocus) { onFocus(e); }
+        setFocus(true);
+    }
+    const handleOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        setFocus(false);
+        if (onBlur) { onBlur(e); }
+    }
 
-    const endRef = useRef<HTMLElement>(null);
-    useLayoutEffect(() => {
-        if (end) {
-            const width = endRef.current!.getBoundingClientRect().width;
-            inputRef.current!.style.paddingRight = `${width}px`;
-        }
-    }, [end]);
-
+    // render
 
     return (
-        <div className="relative">
-            <input {...props} ref={inputRef} className={classnames(
-                'block w-full',
-                'lux-control-font lux-control-padding',
-                'rounded border border-control-border',
-                error || context.error ?
-                    'text-danger-500 border-danger-500 focus:border-danger-500 focus:ring-danger-500 placeholder-danger-500' :
-                    'focus:border-primary-500 focus:ring-primary-500 placeholder-control-border',
-                'focus:ring focus:ring-opacity-50 focus:outline-none',
-                'placeholder-opacity-40',
-                'disabled:opacity-50',
-                className)}
+        <Wrapper
+
+            variant={variant}
+            withNoFull={withNoFull}
+
+            focus={focus}
+            disabled={disabled}
+            error={error}
+
+            start={start}
+            end={end}
+
+        >
+            <input
+
+                ref={inputRef}
+
+                onFocus={handleOnFocus}
+                onBlur={handleOnBlur}
+                disabled={disabled}
+
+                className={classnames('block w-full outline-none focus:outline-none placeholder-opacity-40', { 'placeholder-danger-500': error || context.error }, className)}
+
+                {...inputProps}
+
             />
-            {start ? cloneElement(start as any, { ref: startRef }) : null}
-            {end ? cloneElement(end as any, { ref: endRef }) : null}
-        </div>
+        </Wrapper>
     );
 
 });

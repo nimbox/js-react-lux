@@ -5,7 +5,6 @@ import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon, AngleUpIcon, CircleIcon, ClockIcon } from '../../icons';
 import { setInputValue } from '../../utilities/setInputValue';
 import { Input } from '../controls/Input';
-import { Ornament } from '../controls/Ornament';
 import { Popper } from '../Popper';
 
 
@@ -207,11 +206,7 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps>(({
     // render
 
     const ornament = (
-        <Ornament position="end">
-            <div onClick={handleFocus} className="px-1 cursor-pointer">
-                <ClockIcon style={{ fontSize: '1.5em' }} />
-            </div>
-        </Ornament>
+        <ClockIcon onClick={handleFocus} className="px-1 cursor-pointer" style={{ fontSize: '1.5em' }} />
     );
 
     return (

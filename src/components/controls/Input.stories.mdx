@@ -1,14 +1,13 @@
 import { useState, useRef } from 'react';
-import { Meta, Story, Canvas } from '@storybook/addon-docs';
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
 import { action } from '@storybook/addon-actions';
 import { Input } from './Input';
 import { Button } from '../Buttons';
-import { Ornament } from './Ornament';
 import CircleIcon from '../../icons/CircleIcon';
 import SquareIcon from '../../icons/SquareIcon';
 
 
-<Meta title="Component/Inputs/Input" 
+<Meta title="Component/Controls/Input" 
     component={Input}
     parameters={{
         layout: 'centered'
@@ -17,6 +16,13 @@ import SquareIcon from '../../icons/SquareIcon';
 
 
 # Inputs
+
+This component behaves exactly the same way as an html `input` element. The
+`ref` and `className` of this component are forwarded to the internal `input`
+element. Beware that this `input` is wrapped in other components when setting
+the `className`.
+
+<ArgsTable of={Input} /> 
 
 ## Controlled 
 
@@ -84,18 +90,10 @@ import SquareIcon from '../../icons/SquareIcon';
             <Input type="text" 
                 defaultValue="" 
                 start={
-                    <Ornament position="start">
-                        <div className="px-2">
-                            <SquareIcon className="stroke-1"/>
-                        </div>
-                    </Ornament>
+                    <SquareIcon className="stroke-1"/>
                 }
                 end={
-                    <Ornament position="end">
-                        <div className="px-2">
-                        <CircleIcon/>
-                        </div>
-                    </Ornament>
+                    <CircleIcon className="stroke-1"/>
                 } 
                 placeholder="Enter name"
             />
