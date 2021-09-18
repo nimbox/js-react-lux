@@ -35,5 +35,6 @@
         "in-two-months": "in two months"
     },
     "hour": "Hour",
-    "minutes": "Minutes"
+    "minutes": "Minutes",
+    "loading": "Loading..."
 }
