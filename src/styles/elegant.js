@@ -114,7 +114,7 @@ module.exports = {
             })
         }),
 
-        require("@tailwindcss/forms")
+        // require("@tailwindcss/forms")
     ],
 
     variants: {
@@ -124,7 +124,7 @@ module.exports = {
             backgroundColor: ['responsive', 'focus', 'group-hover', 'hover'],
             borderWidth: ['last'],
             margin: ['responsive', 'last'],
-            borderColor: ['hover', 'focus', 'checked','focus-within'],
+            borderColor: ['hover', 'focus', 'checked', 'focus-within'],
             visibility: ['group-hover', 'hover'],
             opacity: ['disabled'],
             strokeWidth: ['hover'],
