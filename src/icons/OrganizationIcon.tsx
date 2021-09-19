@@ -9,7 +9,6 @@ function SvgOrganizationIcon(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 32 32"
       fill="none"
       stroke="currentColor"
-      strokeWidth={0.5}
       strokeLinecap="round"
       strokeLinejoin="round"
       {...props}
