@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import classnames from 'classnames';
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { Ref, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { consumeEvent } from '../utilities/consumeEvent';
 
 
@@ -48,14 +47,21 @@ export interface ChooseOptionListProps<G, O> {
     //
 
     /**
-     * Render the group label from the provided group. Defaults to `() => null`
-     * for no group labels.
+     * Render this element when there are no options. It there are no options
+     * and this function returns null, the component is rendered as null.
+     * Defaults to `() => null` 
+     */
+    renderNoOptions?: () => React.ReactNode;
+
+    /**
+     * Render the group label from the provided group. Defaults to 
+     * `() => null` for no group labels.
      */
     renderGroupLabel?: (props: { group: G }) => React.ReactNode
 
     /**
      * Render the option from the provided option. Defaults to 
-     * `({option }) => String(option)` 
+     * `({ option }) => String(option)` 
      */
     renderOption?: (props: { option: O }) => React.ReactNode;
 
@@ -67,27 +73,16 @@ export interface ChooseOptionListProps<G, O> {
      */
     onChoose: (option: O) => void;
 
-    //
-
-    /**
-     * Classname of the container.
-     */
-    className?: string;
-
-    /**
-     * Reference to the container.
-     */
-    containerRef?: React.Ref<HTMLDivElement>;
-
 }
 
 /**
- * ChooseOptionList. The list display for `ChooseOption`.
- * 
- * @param props 
- * @returns 
+ * ChooseOptionList. Container for options. Assume this elements acts
+ * as a `div` without any css classes or style.
  */
-export const ChooseOptionList = <G, O>(props: ChooseOptionListProps<G, O>) => {
+export const ChooseOptionList = React.forwardRef(<G, O>(
+    props: ChooseOptionListProps<G, O> & React.HTMLAttributes<HTMLDivElement>,
+    ref: Ref<HTMLDivElement>
+) => {
 
     // properties
 
@@ -100,13 +95,13 @@ export const ChooseOptionList = <G, O>(props: ChooseOptionListProps<G, O>) => {
 
         getOptions = defaultGetOptions,
 
+        renderNoOptions = defaultRenderNoOptions,
         renderGroupLabel = defaultRenderGroupLabel,
         renderOption = defaultRenderOption,
 
         onChoose,
 
-        className,
-        containerRef
+        ...divProps
 
     } = props;
 
@@ -118,12 +113,8 @@ export const ChooseOptionList = <G, O>(props: ChooseOptionListProps<G, O>) => {
     const optionsRef = useRef<(HTMLLIElement | null)[][]>();
     const [optionsRefAvailable, setOptionsRefAvailable] = useState(false);
     useEffect(() => {
-
-        console.log('populating refs', options);
-
         optionsRef.current = options.map(group => getOptions(group).map(option => null));
         setOptionsRefAvailable(true);
-
     }, [options, getOptions]);
 
     useLayoutEffect(() => {
@@ -143,34 +134,34 @@ export const ChooseOptionList = <G, O>(props: ChooseOptionListProps<G, O>) => {
         onChoose(getOptions(options[g])[i]);
     };
 
-    // render
+    // check for no options
 
     const optionsCount = useMemo(
         () => options.reduce((a, group) => a + getOptions(group).length, 0),
         [getOptions, options]
     );
-    if (optionsCount === 0) {
-        return null
-    }
+    const NoOptions = (optionsCount === 0) ? renderNoOptions() : null;
 
-    // render when there is at least one option
+    // render only when everything is ok and there are options
+
+    if (loading || error || (optionsCount === 0 && NoOptions == null)) {
+        return null;
+    }
 
     return (
         <div
-
-            ref={containerRef}
+            ref={ref}
             onMouseDown={consumeEvent}
-
-            className={className}
-            style={{ padding: '0.5em 0' }}
-
+            {...divProps}
         >
+
+            {NoOptions}
 
             {options.map((group, g) =>
                 getOptions(group).length > 0 &&
                 <div key={g}>
 
-                    <div style={{ padding: '0 0.5em' }}>
+                    <div className="lux-px-2em">
                         {renderGroupLabel({ group })}
                     </div>
 
@@ -184,13 +175,13 @@ export const ChooseOptionList = <G, O>(props: ChooseOptionListProps<G, O>) => {
                                 }}
                                 onClick={(e) => handleClick(e, g, i)}
                                 className={classnames(
+                                    'lux-px-2em',
                                     {
                                         'bg-primary-500': selected != null && selected[0] === g && selected[1] === i
                                     },
                                     'hover:bg-secondary-500',
                                     'cursor-pointer'
                                 )}
-                                style={{ padding: '0 0.5em' }}
                             >
                                 {renderOption({ option })}
                             </li>
@@ -203,10 +194,12 @@ export const ChooseOptionList = <G, O>(props: ChooseOptionListProps<G, O>) => {
         </div>
     );
 
-};
+});
 
 // default properties
 
 export const defaultGetOptions = <G, O>(group: G) => group as unknown as O[];
+
+export const defaultRenderNoOptions = () => null;
 export const defaultRenderGroupLabel = () => null;
 export const defaultRenderOption = <O,>({ option }: { option: O }) => String(option);

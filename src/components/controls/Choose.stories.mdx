@@ -92,6 +92,38 @@ It is similar to `ChooseOption` with the following differences:
 </Canvas>
 
 
+## Error
+
+<Canvas>
+    <Story name="Error">
+        {() => {
+            const [value, setValue] = useState('0000ff');
+            const handleChange = (e) => { setValue(e.target.value); action('onChange')(e.target.value); }
+            const handleSubmit = (e) => { e.preventDefault(); action('onSubmit')(value); }
+            return (
+                <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
+                    <Choose
+                        withSearch
+                        option={getColor}
+                        options={searchColors}
+                        value={value}
+                        error={true}
+                        onChange={handleChange}
+                        getValue={(option) => option.value}
+                        renderOption={({ option }) => <div>{option.name}</div>}
+                    />
+                    <Button>Submit</Button>
+                </form>
+            );
+        }}
+    </Story>
+</Canvas>
+
+
+# Tabbing
+
+Test that tabs in and out change the focus accordingly.
+
 export const TemplateChoose = ({ withSearch }) => {
     const [color, setColor] = useState('0000ff');
     return (
@@ -108,13 +140,6 @@ export const TemplateChoose = ({ withSearch }) => {
         </div>
     );
 };
-
-export const Template = (args) => <TemplateChoose {...args}/>;
-
-
-# Tabbing
-
-Test that tabs in and out change the focus accordingly.
 
 <Canvas>
     <Story name="Choose Tabbing Without Search">

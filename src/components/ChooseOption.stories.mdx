@@ -15,6 +15,8 @@ import { action } from '@storybook/addon-actions';
     }}
 />
 
+export const primaryColors = ['Yellow', 'Blue', 'Red'];
+
 export const colors = [ 
     { name: 'Primary', options: [
         { value: 'ffff00', name: 'Yellow' },
@@ -42,10 +44,9 @@ export const filteredColors = (value) => {
 
 # ChooseOption
 
-Controlled and synchronous component used by the more advanced `Choose`
-component. The objective behind this component is to provide a very customizable
-(albeit simple) interface for option selection with search and potential
-creation.
+Controlled and asynchronous component used to select from a list of options. The
+objective behind this component is to provide a very customizable (albeit
+simple) interface for option selection with search and potential creation.
 
 ## Data structure
 
@@ -91,13 +92,80 @@ extractor:
 
 ## ChooseOptionList
 
-This component only displays the groups, options, and selected option. 
+This component only displays the groups, options, and selected option. If there
+is loading or error nothing is rendered.
 
 <ArgsTable of={ChooseOptionList} /> 
 
 ### Simple ChooseOptionList
 
 To get the simplest option list just pass an array of array of string options.
+
+When `loading` or `error` nothing is rendered.
+
+<Canvas>
+    <Story name="Choose Option List With Loading">
+        <ChooseOptionList
+            loading={true}
+            onChoose={option => action('onChoose')(option)}
+            options={[['Yellow', 'Blue', 'Red']]} 
+            className="w-96 border border-control-border rounded"
+        />
+    </Story>
+</Canvas>
+
+<Canvas>
+    <Story name="Choose Option List With Error">
+        <ChooseOptionList
+            error={true}
+            onChoose={option => action('onChoose')(option)}
+            options={[['Yellow', 'Blue', 'Red']]} 
+            className="w-96 border border-control-border rounded"
+        />
+    </Story>
+</Canvas>
+
+When there are no options nothing is rendered.
+
+<Canvas>
+    <Story name="Choose Option List No Options">
+        <ChooseOptionList 
+            onChoose={option => action('onChoose')(option)}
+            options={[[]]} 
+            className="w-96 border border-control-border rounded"
+        />
+    </Story>
+</Canvas>
+
+When there are no options and a `renderNoOptions` function is passed, the result
+of the function is rendered.
+
+<Canvas>
+    <Story name="Choose Option List No Options with Render">
+        <ChooseOptionList 
+            onChoose={option => action('onChoose')(option)}
+            options={[[]]} 
+            renderNoOptions={() => <div className="text-center">No options!</div>}
+            className="w-96 border border-control-border rounded"
+        />
+    </Story>
+</Canvas>
+
+But when `loading` or `error` nothing is rendered.
+
+<Canvas>
+    <Story name="Choose Option List With Loading or Error With No Options Render">
+        <ChooseOptionList 
+            loading={true}
+            onChoose={option => action('onChoose')(option)}
+            options={[[]]} 
+            renderNoOptions={() => <div className="text-center">No options!</div>}
+            className="w-96 border border-control-border rounded"
+        />
+    </Story>
+</Canvas>
+
+When there are options.
 
 <Canvas>
     <Story name="Choose Option List">
@@ -109,10 +177,10 @@ To get the simplest option list just pass an array of array of string options.
     </Story>
 </Canvas>
 
-It is also simple to pass two sets of options.
+When there are two groups of options.
 
 <Canvas>
-    <Story name="Choose Option List Group">
+    <Story name="Choose Option List with Group">
         <ChooseOptionList
             onChoose={option => action('onChoose')(option)}
             options={[['Yellow', 'Blue', 'Red'], ['Green', 'Purple', 'Orange']]} 
@@ -124,7 +192,7 @@ It is also simple to pass two sets of options.
 To show a selection of one of the options pass a non null `selected` property.
 
 <Canvas>
-    <Story name="Choose Option List Selected">
+    <Story name="Choose Option List with Selected">
         <ChooseOptionList 
             onChoose={option => action('onChoose')(option)}
             options={[['Yellow', 'Blue', 'Red'], ['Green', 'Purple', 'Orange']]}
@@ -137,7 +205,7 @@ To show a selection of one of the options pass a non null `selected` property.
 The selection will be automatically be brought into view 
 
 <Canvas>
-    <Story name="Choose Option List Selected AutoScroll">
+    <Story name="Choose Option List with Selected and AutoScroll">
         <ChooseOptionList 
             onChoose={option => action('onChoose')(option)}
             options={[['Yellow', 'Blue', 'Red'], ['Green', 'Purple', 'Orange']]}
@@ -207,18 +275,18 @@ The `HTML` structure of `ChooseOptionList` is:
 
 ## ChooseOption
 
-This component uses the `ChooseOptionList` and adds a controlled search input
-and footer. The footer is mainly used to create options not present in the list.
-This is still a synchronous component but it provides the ui to signal `loading`
-and `error` states potentially used when doing asynchronous operations.
+Going from a simple `ChooseOptionList` to a `ChooseOption` option brings search
+capability and a footer (usually used for creating elements that where not found
+on the list). 
 
-Going from a simple choose option list to a choose option brings a search
-capability and a footer that is usually used for creating elements that where
-not found on the list. Going from one to the other only requires setting up the
-state of the search bar and the search function.
+This is an asyncrhonous component since it can receive a promise with the
+options. When waiting for the resolution of the promise the internal loading
+property is set to true and if there is an error the internal error property is
+set to true.
 
-The `ChooseOption`, when being used with search, requires that the options are
-filtered with a given query string.
+If `loading === true` then the internal options are [] and the error is null. If
+`loading !== true` then either internal options has the returned value or error
+has a non null value (but not both)
 
 <ArgsTable of={ChooseOption} /> 
 
@@ -242,6 +310,51 @@ The search function should:
 
 * Return an array of array of options (the same structure as before).
 * Return all options when the query is `null`, `undefined`, or the empty string.
+
+### Simple ChooseOption
+
+When loading (when the promise is in the process of being resolved) there is 
+loading icon next to the search bar.
+
+<Canvas>
+    <Story name="Choose Option with Loading">
+        {() => {
+            const options = async (value) => { 
+                await new Promise(resolve => setTimeout(() => resolve(), 2000));
+                return [ value ? primaryColors.filter(c => c.includes(value)) : primaryColors ];
+            }
+            return (
+                <ChooseOption
+                    withSearch
+                    onChoose={option => action('onChoose')(option)}
+                    options={options}
+                    className="w-96 border border-control-border rounded"
+                />
+            );
+        }}
+    </Story>
+</Canvas>
+
+When there is an error 
+
+<Canvas>
+    <Story name="Choose Option with Error">
+        {() => {
+            const options = async (value) => { 
+                await new Promise(resolve => setTimeout(() => resolve(), 1000));
+                throw new Error();
+            }
+            return (
+                <ChooseOption
+                    withSearch
+                    onChoose={option => action('onChoose')(option)}
+                    options={options}
+                    className="w-96 border border-control-border rounded"
+                />
+            );
+        }}
+    </Story>
+</Canvas>
 
 ### With Search
 

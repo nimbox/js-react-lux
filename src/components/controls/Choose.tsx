@@ -2,15 +2,18 @@ import _isFunction from 'lodash/isFunction';
 import React, { Ref, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon } from '../../icons';
-import { isControlled } from '../../utilities/isControlled';
 import { setInputValue } from '../../utilities/setInputValue';
 import { ChooseOption, ChooseOptionProps } from '../ChooseOption';
 import { defaultGetOptions, defaultRenderGroupLabel, defaultRenderOption } from '../ChooseOptionList';
 import { Delay } from '../Delay';
 import { Loading } from '../Loading';
-import { Popper, PopperPlacement, PopperProps } from '../Popper';
+import { Popper, PopperProps } from '../Popper';
 import { Wrapper, WrapperProps } from './Wrapper';
 
+
+//
+// Choose
+//
 
 export interface ChooseProps<G, O> extends WrapperProps,
     Pick<PopperProps, 'placement' | 'withArrow' | 'withSameWidth'>,
@@ -20,14 +23,14 @@ export interface ChooseProps<G, O> extends WrapperProps,
      * Function to convert a value to an option. If not provided, it
      * just iterates over all the options to check for a value match.
      */
-    option?: (value: string, options: G[]) => (O | undefined) | Promise<O | undefined>;
+    option: (value: string) => (O | undefined) | Promise<O | undefined>;
 
     /**
      * Function to provide options given a search query. This function
      * can return the options or a promise that resolves to the
      * options.
      */
-    options: G[] | Promise<G[]> | ((search: string) => (G[] | Promise<G[]>));
+    options: (G[] | Promise<G[]>) | ((search: string) => (G[] | Promise<G[]>));
 
     //
 
@@ -45,26 +48,18 @@ export interface ChooseProps<G, O> extends WrapperProps,
      */
     renderSelectedOption?: (props: { option: O }) => React.ReactNode;
 
-    //
-
-    /** 
-     * Classes to append to the input element. 
-     */
-    className?: string;
-
-    /** 
-     * Classes to append to the popper element. 
-     */
-    popperClassName?: string;
-
-    /** 
-     * Message to show when initializing is false but no item is present. 
-     */
-    placeholder?: string;
-
 }
 
-export const Choose = React.forwardRef(<G, O>(props: ChooseProps<G, O> & React.InputHTMLAttributes<HTMLInputElement>, ref: Ref<HTMLInputElement>) => {
+/**
+ * Choose is a controller or uncontrolled input that automatically
+ * renders the currently selected option as well calling the options
+ * promise while managing loading and error states. Assume this
+ * elements acts as an `input`.
+ */
+export const Choose = React.forwardRef(<G, O>(
+    props: ChooseProps<G, O> & React.InputHTMLAttributes<HTMLInputElement>,
+    ref: Ref<HTMLInputElement>
+) => {
 
     const {
 
@@ -92,6 +87,9 @@ export const Choose = React.forwardRef(<G, O>(props: ChooseProps<G, O> & React.I
         value,
         onChange,
 
+        error,
+        disabled,
+
         placeholder,
 
         ...inputProps
@@ -108,33 +106,28 @@ export const Choose = React.forwardRef(<G, O>(props: ChooseProps<G, O> & React.I
 
     // configuration
 
-    const chooseOptionRef = useRef(null);
+    // const [focus, setFocus] = useState(false);
+
+    const chooseOptionRef = useRef<HTMLInputElement & { handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void }>(null);
 
     const selectionRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     useImperativeHandle(ref, () => inputRef.current!);
 
-    const [controlled] = useState(isControlled({ type: 'text', value: props.value }));
-    const [initializing, setInitializing] = useState(false);
-
-    const [selectedOption, setSelectedOption] = useState<O | undefined>();
+    const [loading, setLoading] = useState(false);
+    const [loadedOption, setLoadedOption] = useState<O | undefined>();
 
     useEffect(() => {
-        setInitializing(true);
+        setLoading(true);
         (async () => {
-
-            // await new Promise(resolve => setTimeout(resolve, 5000));
-
-            const promisedOptions = await Promise.resolve(_isFunction(options) ? options('') : options);
-            const promisedOption = option == null ?
-                lookupGetItem(String(controlled ? value! : defaultValue!), promisedOptions, getValue, getOptions) :
-                await Promise.resolve(option(String(controlled ? value! : defaultValue!), promisedOptions));
-
-            setSelectedOption(promisedOption);
-            setInitializing(false);
-
+            try {
+                const promisedOption = await Promise.resolve(option(String(value != null ? value : defaultValue!)));
+                setLoadedOption(promisedOption);
+            } finally {
+                setLoading(false);
+            }
         })();
-    }, [defaultValue, value]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [option, defaultValue, value]);
 
     // popper show and hide
 
@@ -144,42 +137,16 @@ export const Choose = React.forwardRef(<G, O>(props: ChooseProps<G, O> & React.I
     useOnOutsideClick(show, () => { if (show) { setShow(false); } }, wrapperRef, popperRef);
 
     const handleShow = () => {
-
-        console.log('handle show');
-
         if (!show) {
             setShow(true);
         }
-
     };
     const handleHide = () => {
-
-        console.log('handle hide');
-
         setShow(false);
         wrapperRef?.focus();
-
     };
 
-
-    // choose handler
-
-    const handleChoose = (option: O) => {
-
-        const v = getValue(option);
-        setInputValue(inputRef, v);
-        if (value == null) {
-            setSelectedOption(option);
-        }
-
-        handleHide();
-
-    };
-
-    // mouseDown
-
-    // keyDown handlers
-
+    // handlers
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 
@@ -203,26 +170,35 @@ export const Choose = React.forwardRef(<G, O>(props: ChooseProps<G, O> & React.I
     }
 
     const handleMouseDown = (e: React.MouseEvent<HTMLInputElement>) => {
-
-        console.log('on handle mouse down');
-
         if (document.activeElement != null && document.activeElement === wrapperRef) {
-            console.log('do the show');
             e.preventDefault();
             handleShow();
         }
+    };
 
+    const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+        handleShow();
     };
 
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-
-        console.log('handle blur', show);
-        // if (show) {
-        //     setShow(false);
-        // }
-
+        if (!withSearch && show) {
+            setShow(false);
+        }
     };
 
+    // choose handlers
+
+    const handleChoose = (option: O) => {
+
+        const v = getValue(option);
+        setInputValue(inputRef, v);
+        if (value == null) {
+            setLoadedOption(option);
+        }
+
+        handleHide();
+
+    };
 
     // render
 
@@ -240,21 +216,34 @@ export const Choose = React.forwardRef(<G, O>(props: ChooseProps<G, O> & React.I
                 onKeyDown={handleKeyDown}
                 onMouseDown={handleMouseDown}
 
-                onFocus={handleShow}
+                onFocus={handleFocus}
                 onBlur={handleBlur}
 
+                disabled={disabled}
+                error={error}
 
                 end={
                     <>
-                        {initializing && <Delay><Loading /></Delay>}
-                        <AngleDownIcon className="cursor-pointer" />
+                        {loading && <Delay><Loading /></Delay>}
+                        <AngleDownIcon />
                     </>
                 }
+
+                className="cursor-pointer"
 
             >
 
                 <div ref={selectionRef} className="focus:bg-red-500">
-                    {initializing ? <>&nbsp;</> : (selectedOption ? (renderSelectedOption ? renderSelectedOption({ option: selectedOption }) : renderOption({ option: selectedOption })) : (placeholder ? <>{placeholder}</> : <>&nbsp;</>))}
+                    {loading ?
+                        <>&nbsp;</> :
+                        (loadedOption ?
+                            (renderSelectedOption ?
+                                renderSelectedOption({ option: loadedOption }) :
+                                renderOption({ option: loadedOption })) :
+                            (placeholder ?
+                                <>{placeholder}</> :
+                                <>&nbsp;</>))
+                    }
                 </div>
 
                 <input
@@ -278,9 +267,11 @@ export const Choose = React.forwardRef(<G, O>(props: ChooseProps<G, O> & React.I
 
             {show &&
                 <Popper
-                    ref={setPopperRef} reference={wrapperRef!}
-                    placement={placement} withArrow={withArrow} withSameWidth={withSameWidth}
-                    className="border border-control-border rounded"
+                    ref={setPopperRef}
+                    reference={wrapperRef!}
+                    placement={placement}
+                    withArrow={withArrow}
+                    withSameWidth={withSameWidth}
                 >
 
                     <ChooseOption
@@ -295,7 +286,6 @@ export const Choose = React.forwardRef(<G, O>(props: ChooseProps<G, O> & React.I
                         onHide={handleHide}
                         onChoose={handleChoose}
 
-                        error={undefined}
                         options={options}
 
                         getOptions={getOptions}
@@ -303,6 +293,8 @@ export const Choose = React.forwardRef(<G, O>(props: ChooseProps<G, O> & React.I
                         renderGroupLabel={renderGroupLabel}
                         renderOption={renderOption}
                         renderFooter={renderFooter}
+
+                        containerClassName="border border-control-border rounded"
 
                     />
 
@@ -314,22 +306,6 @@ export const Choose = React.forwardRef(<G, O>(props: ChooseProps<G, O> & React.I
 
 });
 
-//
-
-export const lookupGetItem = <G, O>(value: string, options: G[], getValue: (option: O) => string, getOptions: (group: G) => O[]) => {
-
-    if (value != null) {
-        for (let g of options) {
-            for (let i of getOptions(g)) {
-                if (getValue(i) === value) {
-                    return i;
-                }
-            }
-        }
-    }
-
-    return undefined;
-
-}
+// default properties
 
 export const defaultGetValue = <O,>(option: O) => String(option);

@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
+import React, { Ref, useContext, useLayoutEffect, useRef, useState } from 'react';
 import { Context } from './Control';
 
 
@@ -22,18 +22,18 @@ export interface WrapperProps {
     //
 
     /**
-    * Element in wrapper is focused. You need to intercept the onFocus and 
-    * onBlur of your element to set this value.
-    */
+     * Show the wrapper content as focused. You need to intercept the onFocus
+     * and onBlur of your element to set this value.
+     */
     focus?: boolean;
 
     /**
-     * Show the wrapper with content disabled interface (currently opacity 50%).
+     * Show the wrapper content as disabled (currently opacity 50%).
      */
     disabled?: boolean;
 
     /**
-     * Show the wrapper with an error interface (currently danger color).
+     * Show the wrapper content as error (currently danger color).
      */
     error?: boolean;
 
@@ -51,7 +51,15 @@ export interface WrapperProps {
 
 }
 
-export const Wrapper = React.forwardRef<HTMLDivElement, WrapperProps & React.HTMLAttributes<HTMLDivElement>>((props, ref) => {
+/**
+ * Wrapper. Container of all inputs that require a focus, disabled, or error 
+ * disply. Assume this elements acts as a `div` without any css classes or
+ * style.
+ */
+export const Wrapper = React.forwardRef((
+    props: WrapperProps & React.HTMLAttributes<HTMLDivElement>,
+    ref: Ref<HTMLDivElement>
+) => {
 
     // properties
 
@@ -71,6 +79,7 @@ export const Wrapper = React.forwardRef<HTMLDivElement, WrapperProps & React.HTM
         onBlur,
 
         children,
+        className,
 
         ...divProps
 
@@ -78,11 +87,7 @@ export const Wrapper = React.forwardRef<HTMLDivElement, WrapperProps & React.HTM
 
     // configuration
 
-
     const [padding, setPadding] = useState([0, 0]);
-
-    const context = useContext(Context);
-    const isError = context.error || error;
 
     // manage focus
 
@@ -100,7 +105,12 @@ export const Wrapper = React.forwardRef<HTMLDivElement, WrapperProps & React.HTM
 
     const isFocus = focus || internalFocus;
 
-    //
+    // manage error
+
+    const context = useContext(Context);
+    const isError = error || context.error;
+
+    // ornament references
 
     const startRef = useRef<HTMLDivElement>(null);
     const endRef = useRef<HTMLDivElement>(null);
@@ -118,7 +128,6 @@ export const Wrapper = React.forwardRef<HTMLDivElement, WrapperProps & React.HTM
     }, [start, end]);
 
     // render
-
 
     return (
         <div
@@ -169,7 +178,9 @@ export const Wrapper = React.forwardRef<HTMLDivElement, WrapperProps & React.HTM
                     'rounded-t'
                 ),
 
-                'outline-none focus:outline-none'
+                'outline-none focus:outline-none',
+
+                className
 
             )}
 
@@ -179,8 +190,16 @@ export const Wrapper = React.forwardRef<HTMLDivElement, WrapperProps & React.HTM
 
             <div
                 style={{
-                    ...(padding[0] > 0 && { paddingLeft: variant === 'inlined' ? `${padding[0]}px` : `calc(${padding[0]}px - 0.75em)` }),
-                    ...(padding[1] > 0 && { paddingRight: variant === 'inlined' ? `${padding[1]}px` : `calc(${padding[1]}px - 0.75em)` })
+                    ...(padding[0] > 0 && {
+                        paddingLeft: variant === 'inlined' ?
+                            `${padding[0]}px` :
+                            `calc(${padding[0]}px - 0.75em)`
+                    }),
+                    ...(padding[1] > 0 && {
+                        paddingRight: variant === 'inlined' ?
+                            `${padding[1]}px` :
+                            `calc(${padding[1]}px - 0.75em)`
+                    })
                 }}
             >
                 {children}
@@ -189,7 +208,9 @@ export const Wrapper = React.forwardRef<HTMLDivElement, WrapperProps & React.HTM
             {start &&
                 <div
                     ref={startRef}
-                    className={classnames('absolute inset-y-0 left-0 flex justify-start items-center')}
+                    className={classnames(
+                        'absolute inset-y-0 left-0 flex justify-start items-center'
+                    )}
                     style={{
                         paddingLeft: variant === 'inlined' ? '0.25em' : '0.75em',
                         paddingRight: '0.25em'
@@ -202,7 +223,11 @@ export const Wrapper = React.forwardRef<HTMLDivElement, WrapperProps & React.HTM
             {end &&
                 <div
                     ref={endRef}
-                    className={classnames('absolute inset-y-0 right-0', { 'lux-control-padding-end': variant !== 'inlined' }, 'flex justify-end items-center')}
+                    className={classnames(
+                        'absolute inset-y-0 right-0',
+                        { 'lux-control-padding-end': variant !== 'inlined' },
+                        'flex justify-end items-center'
+                    )}
                     style={{
                         paddingLeft: '0.25em',
                         paddingRight: variant === 'inlined' ? '0.25em' : '0.75em'
