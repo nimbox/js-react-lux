@@ -27,7 +27,7 @@ module.exports = {
                 'content-border': '#eaedf3',
 
                 'control-border': '#888888',
-                'control-border': 'pink',
+                // 'control-border': '#f54dae',
                 'control-placeholder': '#a0a0a0',
 
                 'primary': {
@@ -111,7 +111,7 @@ module.exports = {
                 ...require('./control')({ theme }),
                 ...require('./postit'),
                 ...require('./tooltip'),
-                ...require('./popper')
+                ...require('./popper')({ theme })
             })
         }),
 
