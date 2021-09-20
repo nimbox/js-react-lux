@@ -13,7 +13,7 @@ function SvgThumbTackIcon(props: React.SVGProps<SVGSVGElement>) {
       strokeLinejoin="round"
       {...props}
     >
-      <path d="M16 20v6M17.9 7.4l1.4 8.2c2.5.7 4.4 2.3 4.7 4.3h-4l-8 .1H8c.4-2 2.3-3.6 4.7-4.3l1.4-8.2s-1.3-.7-1.3-.9v-.2c0-.2.3-.3.5-.3h5.2c.3-.1.5.1.5.2v.2c.2.2-1.1.9-1.1.9z" />
+      <path d="M16 20v6M24 20c-.4-2-2.3-3.6-4.7-4.3l-.4-8.2s1.6-.5 1.6-1-1-.4-1-.4h-7s-1-.1-1 .4 1.6 1 1.6 1l-.4 8.2C10.3 16.4 8.4 18 8 20h16z" />
     </svg>
   );
 }
