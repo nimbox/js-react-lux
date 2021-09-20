@@ -2,7 +2,7 @@ export * from './components/Avatar';
 export * from './components/Badge';
 export * from './components/Buttons';
 export * from './components/Card';
-export * from './components/Choose';
+export * from './components/ChooseOption';
 export * from './components/Delay';
 export * from './components/Loading';
 export * from './components/Popup';
@@ -22,6 +22,7 @@ export * from './components/pickers/TimePicker';
 
 export * from './components/controls/CheckBox';
 export * from './components/controls/CheckButton';
+export * from './components/controls/Choose';
 export * from './components/controls/Control';
 export * from './components/controls/Input';
 export * from './components/controls/Radio';
@@ -32,5 +33,7 @@ export * from './components/RadioBar';
 
 export * from './hooks/useOnOutsideClick';
 export * from './hooks/useViewport';
+
+export * from './utilities/createQueryMatcher';
 
 export * from './layouts/helium/Helium';

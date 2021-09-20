@@ -129,7 +129,7 @@ export const ChooseOption = React.forwardRef(<G, O>(
     // configuration
 
     const [searching, setSearching] = useState(false);
-    const [error, setError] = useState<boolean>(false);
+    const [searchingError, setSearchingError] = useState<boolean>(false);
 
     const searchRef = useRef<{ cancel: (() => void) } | null>(null);
     const [searchValue, setSearchValue] = useState('');
@@ -148,7 +148,7 @@ export const ChooseOption = React.forwardRef(<G, O>(
                 }
             } catch (e) {
                 if (working) {
-                    setError(e != null);
+                    setSearchingError(e != null);
                 }
             } finally {
                 if (working) {
@@ -169,7 +169,7 @@ export const ChooseOption = React.forwardRef(<G, O>(
         }
 
         setSearching(true);
-        setError(false);
+        setSearchingError(false);
         searchRef.current = doSearch(search);
 
     }, 150), [doSearch]);
@@ -267,7 +267,7 @@ export const ChooseOption = React.forwardRef(<G, O>(
                         end={
                             <>
                                 {loading || searching ? <Delay><Loading /></Delay> : null}
-                                {error ? <WarningIcon className="text-danger-500" /> : <SearchIcon />}
+                                {searchingError ? <WarningIcon className="text-danger-500" /> : <SearchIcon />}
                             </>
                         }
 
@@ -278,7 +278,7 @@ export const ChooseOption = React.forwardRef(<G, O>(
             <ChooseOptionList
 
                 loading={loading || searching}
-                error={error}
+                error={searchingError}
                 options={searchedOptions}
                 selected={selected}
 

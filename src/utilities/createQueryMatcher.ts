@@ -4,10 +4,10 @@
  * @returns 
  */
 
-export function createQueryMatcher(query: string) {
+export function createQueryMatcher(query?: string | null): (value?: string | null) => boolean {
 
     if (query == null || query.trim().length === 0) {
-        return (value: string) => false;
+        return (value?: string | null) => false;
     }
 
     // tokenize  query
@@ -15,6 +15,6 @@ export function createQueryMatcher(query: string) {
     const tokens = query.split(' ');
     const expression = new RegExp(tokens.join(' | '), 'i');
 
-    return (value: string) => expression.test(value);
+    return (value?: string | null) => Boolean(value && expression.test(value));
 
 }

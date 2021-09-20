@@ -1,7 +1,7 @@
 import _isFunction from 'lodash/isFunction';
 import React, { Ref, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { AngleDownIcon } from '../../icons';
+import { AngleDownIcon, WarningIcon } from '../../icons';
 import { setInputValue } from '../../utilities/setInputValue';
 import { ChooseOption, ChooseOptionProps } from '../ChooseOption';
 import { defaultGetOptions, defaultRenderGroupLabel, defaultRenderOption } from '../ChooseOptionList';
@@ -114,17 +114,21 @@ export const Choose = React.forwardRef(<G, O>(
     const inputRef = useRef<HTMLInputElement>(null);
     useImperativeHandle(ref, () => inputRef.current!);
 
-    const [loading, setLoading] = useState(false);
+    const [initializing, setInitializing] = useState(false);
+    const [initializingError, setInitializingError] = useState(false);
     const [loadedOption, setLoadedOption] = useState<O | undefined>();
 
     useEffect(() => {
-        setLoading(true);
+        setInitializing(true);
+        setInitializingError(false);
         (async () => {
             try {
                 const promisedOption = await Promise.resolve(option(String(value != null ? value : defaultValue!)));
                 setLoadedOption(promisedOption);
+            } catch (e) {
+                setInitializingError(true);
             } finally {
-                setLoading(false);
+                setInitializing(false);
             }
         })();
     }, [option, defaultValue, value]);
@@ -224,8 +228,8 @@ export const Choose = React.forwardRef(<G, O>(
 
                 end={
                     <>
-                        {loading && <Delay><Loading /></Delay>}
-                        <AngleDownIcon />
+                        {initializing && <Delay><Loading /></Delay>}
+                        {initializingError ? <WarningIcon className="text-danger-500" /> : <AngleDownIcon />}
                     </>
                 }
 
@@ -234,7 +238,7 @@ export const Choose = React.forwardRef(<G, O>(
             >
 
                 <div ref={selectionRef} className="focus:bg-red-500">
-                    {loading ?
+                    {initializing ?
                         <>&nbsp;</> :
                         (loadedOption ?
                             (renderSelectedOption ?

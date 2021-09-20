@@ -1,15 +1,18 @@
-import React from "react";
-import { SearchIcon } from "../../icons";
-import { ComponentScale } from "../ComponentScale";
-import { IconInput, IconInputProps } from "./IconInput";
+import React, { Ref } from 'react';
+import { SearchIcon } from '../../icons';
+import { Input, InputProps } from './Input';
 
 
-export interface SearchProps {
-    scale?: ComponentScale;
-    error?: boolean;
-    className?: string;
+//
+// SearchInput
+//
+
+export interface SearchInputProps extends InputProps {
 }
 
-export const SearchInput = React.forwardRef(({ ...props }, ref) => (
-    <IconInput ref={ref} right={<SearchIcon width="1em" height="1em" className="text-control-border" style={{ strokeWidth: '0.25em'}}/>} {...props} />
-)) as React.ForwardRefExoticComponent<React.PropsWithoutRef<IconInputProps> & React.RefAttributes<HTMLInputElement>>;;
+export const SearchInput = React.forwardRef((
+    props: SearchInputProps & React.InputHTMLAttributes<HTMLInputElement>,
+    ref: Ref<HTMLInputElement>
+) => (
+    <Input ref={ref} end={<SearchIcon />} {...props} />
+));
