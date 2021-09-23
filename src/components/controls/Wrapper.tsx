@@ -12,7 +12,7 @@ export interface WrapperProps {
     /**
      * Variant to display the element. Defaults to 'outlined'.
      */
-    variant?: 'outlined' | 'filled' | 'inlined';
+    variant?: 'outlined' | 'filled' | 'inlined' | 'plain';
 
     /**
      * Disable full width on the block.
@@ -178,6 +178,10 @@ export const Wrapper = React.forwardRef((
                     'rounded-t'
                 ),
 
+                (variant === 'plain') && classnames(
+
+                ),
+
                 'outline-none focus:outline-none',
 
                 className
@@ -191,12 +195,12 @@ export const Wrapper = React.forwardRef((
             <div
                 style={{
                     ...(padding[0] > 0 && {
-                        paddingLeft: variant === 'inlined' ?
+                        paddingLeft: variant === 'inlined' || variant === 'plain' ?
                             `${padding[0]}px` :
                             `calc(${padding[0]}px - 0.75em)`
                     }),
                     ...(padding[1] > 0 && {
-                        paddingRight: variant === 'inlined' ?
+                        paddingRight: variant === 'inlined' || variant === 'plain' ?
                             `${padding[1]}px` :
                             `calc(${padding[1]}px - 0.75em)`
                     })
@@ -212,7 +216,7 @@ export const Wrapper = React.forwardRef((
                         'absolute inset-y-0 left-0 flex justify-start items-center'
                     )}
                     style={{
-                        paddingLeft: variant === 'inlined' ? '0.25em' : '0.75em',
+                        paddingLeft: variant === 'inlined' || variant === 'plain' ? '0.25em' : '0.75em',
                         paddingRight: '0.25em'
                     }}
                 >
@@ -225,12 +229,12 @@ export const Wrapper = React.forwardRef((
                     ref={endRef}
                     className={classnames(
                         'absolute inset-y-0 right-0',
-                        { 'lux-control-padding-end': variant !== 'inlined' },
+                        { 'lux-control-padding-end': variant !== 'inlined' && variant !== 'plain' },
                         'flex justify-end items-center'
                     )}
                     style={{
                         paddingLeft: '0.25em',
-                        paddingRight: variant === 'inlined' ? '0.25em' : '0.75em'
+                        paddingRight: variant === 'inlined' || variant === 'plain' ? '0.25em' : '0.75em'
                     }}
                 >
                     {end}
