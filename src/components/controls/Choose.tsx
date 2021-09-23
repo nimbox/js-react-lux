@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import _isFunction from 'lodash/isFunction';
 import React, { Ref, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
@@ -48,6 +49,13 @@ export interface ChooseProps<G, O> extends WrapperProps,
      */
     renderSelectedOption?: (props: { option: O }) => React.ReactNode;
 
+    //
+
+    /**
+     * Classes to pass to the ChooseOption container.
+     */
+    containerClassName?: string;
+
 }
 
 /**
@@ -91,6 +99,8 @@ export const Choose = React.forwardRef(<G, O>(
         disabled,
 
         placeholder,
+
+        containerClassName,
 
         ...inputProps
 
@@ -276,6 +286,7 @@ export const Choose = React.forwardRef(<G, O>(
                     placement={placement}
                     withArrow={withArrow}
                     withSameWidth={withSameWidth}
+                    className="control-bg"
                 >
 
                     <ChooseOption
@@ -298,7 +309,7 @@ export const Choose = React.forwardRef(<G, O>(
                         renderOption={renderOption}
                         renderFooter={renderFooter}
 
-                        containerClassName="border border-control-border rounded"
+                        containerClassName={classNames('border border-control-border rounded', containerClassName)}
 
                     />
 
