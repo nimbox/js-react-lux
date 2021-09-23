@@ -34,6 +34,6 @@ export * from './components/RadioBar';
 export * from './hooks/useOnOutsideClick';
 export * from './hooks/useViewport';
 
-export * from './utilities/createQueryMatcher';
+export * from './utilities/createSearchMatcher';
 
 export * from './layouts/helium/Helium';

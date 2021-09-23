@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChooseNew } from '../components/controls/Choose';
-import { createQueryMatcher } from '../utilities/createQueryMatcher';
+import { createSearchMatcher } from '../utilities/createSearchMatcher';
 import timezones from './timezones.json';
 
 
@@ -57,7 +57,7 @@ export const ZonePicker = React.forwardRef<HTMLInputElement, ZonePickerProps>((p
 
         } else {
 
-            const matcher = createQueryMatcher(q);
+            const matcher = createSearchMatcher(q);
             const recentItems = allRecentTimezones.filter(item => matcher(item.description));
             const allFilteredItems = allTimezones.filter(item => !recentValues.has(item.value) && matcher(item.description));
 
