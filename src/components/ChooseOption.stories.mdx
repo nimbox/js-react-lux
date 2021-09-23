@@ -3,7 +3,7 @@ import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs/blocks';
 import { ChooseOption } from './ChooseOption';
 import { ChooseOptionList } from './ChooseOptionList';
 import { useKeyboardNavigator } from '../hooks/useKeyboardNavigator';
-import { createQueryMatcher } from '../utilities/createQueryMatcher';
+import { createSearchMatcher } from '../utilities/createSearchMatcher';
 import { action } from '@storybook/addon-actions';
 
 
@@ -34,7 +34,7 @@ export const filteredColors = (value) => {
     if (value === '') {
         return colors;
     } else {
-        const matcher = createQueryMatcher(value);
+        const matcher = createSearchMatcher(value);
         return [ 
             { ...colors[0], options: colors[0].options.filter(o => matcher(o.name)) }, 
             { ...colors[1], options: colors[1].options.filter(o => matcher(o.name)) } 
