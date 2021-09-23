@@ -286,7 +286,7 @@ export const Choose = React.forwardRef(<G, O>(
                     placement={placement}
                     withArrow={withArrow}
                     withSameWidth={withSameWidth}
-                    className="control-bg"
+                    className="bg-control-bg"
                 >
 
                     <ChooseOption
