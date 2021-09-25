@@ -1,8 +1,9 @@
 import classNames from 'classnames';
+import _debounce from 'lodash/debounce';
 import _isFunction from 'lodash/isFunction';
-import React, { Ref, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { Ref, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { AngleDownIcon, WarningIcon } from '../../icons';
+import { AngleDownIcon, FullSquareIcon, WarningIcon } from '../../icons';
 import { setInputValue } from '../../utilities/setInputValue';
 import { ChooseOption, ChooseOptionProps } from '../ChooseOption';
 import { defaultGetOptions, defaultRenderGroupLabel, defaultRenderOption } from '../ChooseOptionList';
@@ -91,6 +92,9 @@ export const Choose = React.forwardRef(<G, O>(
         renderOption = defaultRenderOption,
         renderFooter,
 
+        start,
+        end,
+
         defaultValue,
         value,
         onChange,
@@ -99,6 +103,7 @@ export const Choose = React.forwardRef(<G, O>(
         disabled,
 
         placeholder,
+        className,
 
         containerClassName,
 
@@ -116,32 +121,90 @@ export const Choose = React.forwardRef(<G, O>(
 
     // configuration
 
-    // const [focus, setFocus] = useState(false);
-
     const chooseOptionRef = useRef<HTMLInputElement & { handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void }>(null);
+
+    // get selected option
+
+    const [loading, setLoading] = useState(false);
+    const [loadingError, setLoadingError] = useState(false);
+
+    const loadRef = useRef<{ cancel: (() => void) } | null>(null);
+    const [loadedOptionValue, setLoadedOptionValue] = useState(null);
+    const [loadedOption, setLoadedOption] = useState<O | undefined>();
+
+    const doLoad = useCallback((value) => {
+
+        let working = true;
+        (async () => {
+            try {
+                const promisedOption = await Promise.resolve(option(value));
+                if (working) {
+                    setLoadedOptionValue(value);
+                    setLoadedOption(promisedOption);
+                }
+            } catch (e) {
+                if (working) {
+                    setLoadingError(e != null);
+                }
+            } finally {
+                if (working) {
+                    loadRef.current = null;
+                    setLoading(false);
+                }
+            }
+        })();
+        return ({ cancel: () => { working = false; } });
+
+    }, [option]);
+
+    const handleLoad = useCallback(_debounce((value) => { // eslint-disable-line react-hooks/exhaustive-deps
+
+        if (value !== loadedOptionValue) {
+
+            if (loadRef.current) {
+                loadRef.current.cancel();
+            }
+
+            setLoading(true);
+            setLoadingError(false);
+            loadRef.current = doLoad(value);
+
+        }
+
+    }, 0), [doLoad, loadedOptionValue]);
+
+    useEffect(() => { 
+        const v = value || defaultValue || '';
+        handleLoad(v);
+    }, [handleLoad, value]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // When using `react-hook-form`, or anything that directly changes the html
+    // input element value via the `ref.current.value`, we need to intercept the
+    // reference we publish to detect those changes. We use a Proxy to check
+    // when the property `value` is set, and trigger an `option` load that
+    // eventually updates the `optionValue` and `loadedOption`. These two
+    // variables represents the current value for the component.
+    //
+    // This changes when either the value property changes (via the props) or
+    // when the ref.current.value is set to a different value than the one
+    // current value of the component.
+
+    const handler: ProxyHandler<HTMLInputElement> = {
+        get(target, property) {
+            return (target as any)[property];
+        },
+        set(target, property, value) {
+            if (property === 'value') {
+                handleLoad(value);
+            }
+            (target as any)[property] = value;
+            return true;
+        }
+    }
 
     const selectionRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
-    useImperativeHandle(ref, () => inputRef.current!);
-
-    const [initializing, setInitializing] = useState(false);
-    const [initializingError, setInitializingError] = useState(false);
-    const [loadedOption, setLoadedOption] = useState<O | undefined>();
-
-    useEffect(() => {
-        setInitializing(true);
-        setInitializingError(false);
-        (async () => {
-            try {
-                const promisedOption = await Promise.resolve(option(String(value != null ? value : defaultValue!)));
-                setLoadedOption(promisedOption);
-            } catch (e) {
-                setInitializingError(true);
-            } finally {
-                setInitializing(false);
-            }
-        })();
-    }, [option, defaultValue, value]);
+    useImperativeHandle(ref, () => inputRef.current ? new Proxy(inputRef.current, handler) : inputRef.current!);
 
     // popper show and hide
 
@@ -160,7 +223,7 @@ export const Choose = React.forwardRef(<G, O>(
         wrapperRef?.focus();
     };
 
-    // handlers
+    // handle keyboard and mouse
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 
@@ -190,6 +253,8 @@ export const Choose = React.forwardRef(<G, O>(
         }
     };
 
+    // handle focus
+
     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
         handleShow();
     };
@@ -200,18 +265,14 @@ export const Choose = React.forwardRef(<G, O>(
         }
     };
 
-    // choose handlers
+    // handlers
 
     const handleChoose = (option: O) => {
-
-        const v = getValue(option);
-        setInputValue(inputRef, v);
+        setInputValue(inputRef, getValue(option));
         if (value == null) {
             setLoadedOption(option);
         }
-
         handleHide();
-
     };
 
     // render
@@ -236,10 +297,12 @@ export const Choose = React.forwardRef(<G, O>(
                 disabled={disabled}
                 error={error}
 
+                start={start}
                 end={
                     <>
-                        {initializing && <Delay><Loading /></Delay>}
-                        {initializingError ? <WarningIcon className="text-danger-500" /> : <AngleDownIcon />}
+                        {end}
+                        {loading && <Delay><Loading colorClassName="text-control-border"/></Delay>}
+                        {loadingError ? <WarningIcon className="text-danger-500" /> : <AngleDownIcon className="text-control-border"/>}
                     </>
                 }
 
@@ -247,8 +310,11 @@ export const Choose = React.forwardRef(<G, O>(
 
             >
 
-                <div ref={selectionRef} className="focus:bg-red-500">
-                    {initializing ?
+                <div
+                    ref={selectionRef}
+                    className={className}
+                >
+                    {loading ?
                         <>&nbsp;</> :
                         (loadedOption ?
                             (renderSelectedOption ?
@@ -273,7 +339,7 @@ export const Choose = React.forwardRef(<G, O>(
 
                     {...inputProps}
 
-                    className="absolute inset-0 opacity-0 pointer-events-none"
+                    className="absolute inset-0 w-full text-center opacity-0 pointer-events-none"
 
                 />
 
@@ -302,7 +368,6 @@ export const Choose = React.forwardRef(<G, O>(
                         onChoose={handleChoose}
 
                         options={options}
-
                         getOptions={getOptions}
 
                         renderGroupLabel={renderGroupLabel}

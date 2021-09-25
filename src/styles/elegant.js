@@ -27,8 +27,8 @@ module.exports = {
                 'content-border': '#eaedf3',
 
                 'control-bg': defaultTheme.colors.white,
-                'control-border': '#888888',
-                // 'control-border': '#f54dae',
+                // 'control-border': '#888888',
+                'control-border': '#f54dae',
                 'control-placeholder': '#a0a0a0',
 
                 'primary': {

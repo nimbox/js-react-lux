@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-export const setInputValue = (inputRef: React.RefObject<HTMLInputElement>, value: string) => {
+export const setInputValue = (inputRef: React.RefObject<HTMLInputElement | HTMLSelectElement>, value: string) => {
     const setter = Object?.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
     if (setter && value !== '') {
         setter.call(inputRef.current, value);

@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
 import { Choose } from './Choose';
 import { Input } from './Input';
 import { Button } from '../Buttons';
@@ -7,6 +7,7 @@ import { action } from '@storybook/addon-actions';
 import { delay } from '../../utilities/delay';
 import { MockStore } from '../../test/MockStore';
 import { Avatar } from '../Avatar';
+import { useForm } from 'react-hook-form';
 
 
 <Meta
@@ -83,27 +84,31 @@ It is similar to `ChooseOption` with the following differences:
 
 ## Controlled 
 
+export const ControlledTemplate = (args) => {
+    const [value, setValue] = useState(args.value || '0000ff');
+    const handleChange = (e) => { setValue(e.target.value); action('onChange')(e.target.value); }
+    const handleSubmit = (e) => { e.preventDefault(); action('onSubmit')(value); }
+    return (
+        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
+            <Choose
+                withSearch
+                option={getColor}
+                options={searchColors}
+                value={value}
+                onChange={handleChange}
+                getValue={(option) => option.value}
+                renderOption={({ option }) => <div>{option.name}</div>}
+                error={args.error}
+                placeholder={args.placeholder}
+            />
+            <Button>Submit</Button>
+        </form>
+    );
+};
+
 <Canvas>
     <Story name="Controlled">
-        {() => {
-            const [value, setValue] = useState('0000ff');
-            const handleChange = (e) => { setValue(e.target.value); action('onChange')(e.target.value); }
-            const handleSubmit = (e) => { e.preventDefault(); action('onSubmit')(value); }
-            return (
-                <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
-                    <Choose
-                        withSearch
-                        option={getColor}
-                        options={searchColors}
-                        value={value}
-                        onChange={handleChange}
-                        getValue={(option) => option.value}
-                        renderOption={({ option }) => <div>{option.name}</div>}
-                    />
-                    <Button>Submit</Button>
-                </form>
-            );
-        }}
+        {ControlledTemplate.bind({})}
     </Story>
 </Canvas>
 
@@ -116,7 +121,7 @@ It is similar to `ChooseOption` with the following differences:
             const ref = useRef();
             const handleSubmit = (e) => { e.preventDefault(); action('onSubmit')(ref.current.value); }
             return (
-                <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
+                <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
                     <Choose 
                         ref={ref}
                         withSearch
@@ -137,27 +142,8 @@ It is similar to `ChooseOption` with the following differences:
 ## Error
 
 <Canvas>
-    <Story name="Control Error">
-        {() => {
-            const [value, setValue] = useState('0000ff');
-            const handleChange = (e) => { setValue(e.target.value); action('onChange')(e.target.value); }
-            const handleSubmit = (e) => { e.preventDefault(); action('onSubmit')(value); }
-            return (
-                <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
-                    <Choose
-                        withSearch
-                        option={getColor}
-                        options={searchColors}
-                        value={value}
-                        error={true}
-                        onChange={handleChange}
-                        getValue={(option) => option.value}
-                        renderOption={({ option }) => <div>{option.name}</div>}
-                    />
-                    <Button>Submit</Button>
-                </form>
-            );
-        }}
+    <Story name="Error" args={{ error: true }}>
+        {ControlledTemplate.bind({})}
     </Story>
 </Canvas>
 
@@ -165,28 +151,8 @@ It is similar to `ChooseOption` with the following differences:
 ## Placeholder
 
 <Canvas>
-    <Story name="Placeholder">
-        {() => {
-            const [value, setValue] = useState('0000ffx');
-            const handleChange = (e) => { setValue(e.target.value); action('onChange')(e.target.value); }
-            const handleSubmit = (e) => { e.preventDefault(); action('onSubmit')(value); }
-            return (
-                <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
-                    <Choose
-                        withSearch
-                        option={getColor}
-                        options={searchColors}
-                        value={value}
-                        error={true}
-                        onChange={handleChange}
-                        getValue={(option) => option.value}
-                        renderOption={({ option }) => <div>{option.name}</div>}
-                        placeholder={'Select color...'}
-                    />
-                    <Button>Submit</Button>
-                </form>
-            );
-        }}
+    <Story name="Placeholder"args={{ value: 'xxxxxx', placeholder: 'Select color...' }}>
+        {ControlledTemplate.bind({})}
     </Story>
 </Canvas>
 
@@ -202,7 +168,7 @@ Initializing happens when finding the option associated to the value.
             const handleChange = (e) => { setValue(e.target.value); action('onChange')(e.target.value); }
             const handleSubmit = (e) => { e.preventDefault(); action('onSubmit')(value); }
             return (
-                <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
+                <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
                     <Choose
                         withSearch
                         option={getColorForever}
@@ -230,7 +196,7 @@ Initializing fails if the `option` promise throws an `Error`.
             const handleChange = (e) => { setValue(e.target.value); action('onChange')(e.target.value); }
             const handleSubmit = (e) => { e.preventDefault(); action('onSubmit')(value); }
             return (
-                <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
+                <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
                     <Choose
                         withSearch
                         option={getColorError}
@@ -249,7 +215,6 @@ Initializing fails if the `option` promise throws an `Error`.
     </Story>
 </Canvas>
 
-
 # Customized Rendering
 
 <Canvas>
@@ -259,7 +224,7 @@ Initializing fails if the `option` promise throws an `Error`.
             const handleChange = (e) => { setValue(e.target.value); action('onChange')(e.target.value); }
             const handleSubmit = (e) => { e.preventDefault(); action('onSubmit')(value); }
             return (
-                <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
+                <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
                     <Choose
                         withSearch
                         withSameWidth
@@ -283,20 +248,18 @@ Initializing fails if the `option` promise throws an `Error`.
 
 Test that tabs change the focus.
 
-export const TemplateChoose = ({ withSearch }) => {
+export const TabbingTemplate = ({ withSearch }) => {
     const [color, setColor] = useState('0000ff');
     return (
-        <div>
-            <Choose 
-                withSearch={withSearch}
-                option={(value) => colors.find(c => c.value === value)}
-                options={searchColors}
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
-                getValue={(option) => option.value}
-                renderOption={({ option }) => <div>{option.name}</div>}
-            />
-        </div>
+        <Choose 
+            withSearch={withSearch}
+            option={(value) => colors.find(c => c.value === value)}
+            options={searchColors}
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+            getValue={(option) => option.value}
+            renderOption={({ option }) => <div>{option.name}</div>}
+        />
     );
 };
 
@@ -304,9 +267,9 @@ Without Search.
 
 <Canvas>
     <Story name="Tabbing Without Search">
-        <div className="w-96 grid grid-cols-3 space-x-2">
+        <div className="w-96 grid grid-cols-3 gap-2">
             <Input type="text" defaultValue=""/>
-            <TemplateChoose/>
+            <TabbingTemplate/>
             <Input type="text" defaultValue=""/>
         </div>
     </Story>
@@ -316,10 +279,35 @@ With Search.
 
 <Canvas>
     <Story name="Tabbing With Search">
-        <div className="w-96 grid grid-cols-3 space-x-2">
+        <div className="w-96 grid grid-cols-3 gap-2">
             <Input type="text" defaultValue=""/>
-            <TemplateChoose withSearch/>
+            <TabbingTemplate withSearch/>
             <Input type="text" defaultValue=""/>
         </div>
     </Story>
 </Canvas>
+
+# In React Hook form
+
+<Canvas>
+    <Story name="In React Hook Form">
+        {() => {
+            const { register, handleSubmit } = useForm({ defaultValues: { color: '0000ff' }});
+            const handleInternalSubmit = (data) => { action('onSubmit')(data); }
+            return (
+                <form onSubmit={handleSubmit(handleInternalSubmit)} className="w-96 flex flex-row items-center space-x-2">
+                    <Choose
+                        withSearch
+                        option={getColor}
+                        options={searchColors}
+                        {...register('color')}
+                        getValue={(option) => option.value}
+                        renderOption={({ option }) => <div>{option.name}</div>}
+                    />
+                    <Button>Submit</Button>
+                </form>
+            );
+        }}
+    </Story>
+</Canvas>
+

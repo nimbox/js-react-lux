@@ -3,7 +3,6 @@ import _debounce from 'lodash/debounce';
 import React, { LegacyRef, useContext, useEffect, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import AngleDownIcon from '../../icons/AngleDownIcon';
-import { ComponentScale, controlText, smallScale } from '../ComponentScale';
 import { Context as controlContext } from '../controls/Control';
 import { SearchInput } from '../controls/SearchInput';
 import { Loading } from '../Loading';
@@ -52,7 +51,7 @@ export interface TagPickerProps<T> {
  */
 export const TagPicker = <T extends {}>({ tags, tagValue, renderTag, onAdd, onRemove, onSearch, CreateComponent }: TagPickerProps<T>) => {
 
-    const context = useContext(controlContext);
+    // const context = useContext(controlContext);
 
     const [isVisible, setIsVisible] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);

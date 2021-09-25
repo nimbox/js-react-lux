@@ -75,7 +75,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps & React.Input
                 onBlur={handleOnBlur}
                 disabled={disabled}
 
-                className={classnames('block w-full outline-none focus:outline-none placeholder-opacity-40', { 'placeholder-danger-500': error || context.error }, className)}
+                className={classnames(
+                    'block w-full',
+                    'outline-none focus:outline-none',
+                    'placeholder-opacity-40', { 'placeholder-danger-500': error || context.error },
+                    className
+                )}
 
                 {...inputProps}
 

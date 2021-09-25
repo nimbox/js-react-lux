@@ -129,7 +129,7 @@ export const ChooseOption = React.forwardRef(<G, O>(
     // configuration
 
     const [searching, setSearching] = useState(false);
-    const [searchingError, setSearchingError] = useState<boolean>(false);
+    const [searchingError, setSearchingError] = useState(false);
 
     const searchRef = useRef<{ cancel: (() => void) } | null>(null);
     const [searchValue, setSearchValue] = useState('');
@@ -187,15 +187,6 @@ export const ChooseOption = React.forwardRef(<G, O>(
 
     // handlers
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (value != null) {
-            onChange!(e);
-        } else {
-            setSearchValue(e.target.value);
-            handleSearch(e.target.value);
-        }
-    };
-
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 
         switch (e.key) {
@@ -226,6 +217,15 @@ export const ChooseOption = React.forwardRef(<G, O>(
 
     };
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (value != null) {
+            onChange!(e);
+        } else {
+            setSearchValue(e.target.value);
+            handleSearch(e.target.value);
+        }
+    };
+
     const handleChoose = (selected: [number, number]) => {
         const group = searchedOptions[selected[0]];
         onChoose(getOptions(group)[selected[1]]);
@@ -238,13 +238,14 @@ export const ChooseOption = React.forwardRef(<G, O>(
 
     // render 
 
-    const footer = renderFooter ? renderFooter({ value, options: searchedOptions, selected }) : null;
+    const withFooter = renderFooter ? renderFooter({ value, options: searchedOptions, selected }) : null;
 
     return (
         <div
             ref={containerRef}
             className={classnames(
                 'relative max-h-96 flex flex-col divide-y divide-control-border overflow-y-auto',
+                'lux-empty-hidden',
                 containerClassName
             )}
         >
@@ -264,10 +265,13 @@ export const ChooseOption = React.forwardRef(<G, O>(
 
                         {...inputProps}
 
+                        start={
+                            <SearchIcon />
+                        }
                         end={
                             <>
                                 {loading || searching ? <Delay><Loading /></Delay> : null}
-                                {searchingError ? <WarningIcon className="text-danger-500" /> : <SearchIcon />}
+                                {searchingError ? <WarningIcon className="text-danger-500" /> : null}
                             </>
                         }
 
@@ -294,9 +298,9 @@ export const ChooseOption = React.forwardRef(<G, O>(
 
             />
 
-            {footer &&
+            {withFooter &&
                 <div className="flex-none">
-                    {footer}
+                    {withFooter}
                 </div>
             }
 
