@@ -1,5 +1,9 @@
 module.exports = {
 
+    '.lux-empty-hidden:empty': {
+        display: 'none'
+    },
+
     '.lux-tag-space': {
         lineHeight: 1.75,
     },
