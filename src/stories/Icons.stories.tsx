@@ -116,3 +116,13 @@ export const Simple = () => {
     );
 
 };
+
+
+export const SideBySide = () => {
+
+    return (
+        <div>
+            <icons.CalendarIcon className="inline-block"/><icons.ClockIcon className="inline-block"/>
+        </div>
+    );
+}
