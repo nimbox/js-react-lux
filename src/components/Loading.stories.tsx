@@ -8,7 +8,7 @@ const definition = {
     title: 'Component/Loading',
     component: Loading,
     argTypes: {
-        scale: { control: { type: 'select', options: ['xs', 'sm', 'base', 'lg'] } },
+        className: { control: { type: 'select', options: ['text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl', 'text-4xl'] } },
     }
 };
 export default definition;
@@ -16,15 +16,15 @@ export default definition;
 // parameterized
 
 export const Parameterized = (props: LoadingProps) => <Loading {...props} />;
-Parameterized.args = { scale: 'base', colorClassName: 'text-secondary-500' };
+Parameterized.args = { className: 'text-4xl', colorClassName: 'text-secondary-500' };
 
 // stories
 
 export const Base = (props: LoadingProps) => <Loading {...props} />;
-Base.args = { scale: 'base' };
+Base.args = { className: 'text-base' };
 
 export const Small = (props: LoadingProps) => <Loading {...props} />;
-Small.args = { scale: 'sm' };
+Small.args = { className: 'text-sm' };
 
-export const Large = (props: LoadingProps) => <Loading {...props} />;
-Large.args = { scale: 'lg' };
+export const ExtraLarge4 = (props: LoadingProps) => <Loading {...props} />;
+ExtraLarge4.args = { className: 'text-4xl' };

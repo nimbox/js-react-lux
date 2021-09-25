@@ -9,9 +9,9 @@ export interface LoadingProps {
 }
 
 export const Loading: FC<LoadingProps> = ({ className, colorClassName = 'text-primary-500' }) => (
-    <svg width="45" height="45" viewBox="0 0 45 45" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"
+    <svg width="44" height="44" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"
         className={classnames('inline-block', colorClassName, className)}
-        style={{ width: '2em', height: '2em' }}
+        style={{ width: '1em', height: '1em' }}
     >
         <g fill="none" fillRule="evenodd" transform="translate(1 1)" strokeWidth="2">
             <circle cx="22" cy="22" r="6" strokeOpacity="0">
