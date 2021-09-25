@@ -1,6 +1,6 @@
+/* eslint-disable import/no-anonymous-default-export */
 import React, { useState } from 'react';
-import { usePopper } from 'react-popper';
-import { TextAreaMarkup, TextAreaMarkupProps } from './TextAreaMarkup';
+import { TextAreaMarkup } from './TextAreaMarkup';
 
 
 // definition
@@ -12,7 +12,7 @@ export default {
 
 //  parameterized
 
-export const Parameterized = ({ }) => {
+export const Parameterized = () => {
 
     const [value, setValue] = useState("The first text");
 

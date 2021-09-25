@@ -1,7 +1,7 @@
 import { RefObject, useRef, useState } from 'react';
 import { useDrop, XYCoord } from 'react-dnd';
 import { COLUMN_TYPE, KanbanColumnItem, MoveColumnCallback } from './types';
-import getHorizontalIndex from './utils/getHorizontalIndex';
+import { getHorizontalIndex } from './utils/getHorizontalIndex';
 
 
 export interface UseColumnsProps {

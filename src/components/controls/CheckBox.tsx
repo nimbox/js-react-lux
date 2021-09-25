@@ -1,6 +1,5 @@
 import classnames from 'classnames';
-import React, { LegacyRef, useContext } from 'react';
-import { Context } from './Control';
+import React, { LegacyRef } from 'react';
 
 
 export interface CheckBoxProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
@@ -10,7 +9,7 @@ export interface CheckBoxProps extends React.DetailedHTMLProps<React.InputHTMLAt
 
 export const CheckBox = React.forwardRef<React.InputHTMLAttributes<HTMLInputElement>, CheckBoxProps>(({ className, children, ...props }, ref) => {
 
-    const context = useContext(Context);
+    // const context = useContext(Context);
 
     return (
         <input ref={ref as LegacyRef<HTMLInputElement> | undefined} type="checkbox" {...props}

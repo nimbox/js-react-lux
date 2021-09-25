@@ -46,13 +46,15 @@ export const Sortable: FC<SortableProps> = (({ onChange, scale = 'base', classNa
                 coppiedStateArray.splice(target, 0, prevItem[0]);
                 return coppiedStateArray;
             })
-        }, [findItem, childrenArray, setChildrenArray]);
+        }, [findItem, setChildrenArray]);
 
     return (
         <ul className={className}>
             {childrenArray.map((element) => {
                 if (React.isValidElement(element)) {
                     return <SortableItem type={type} onChange={moveItem} findItem={findItem} onUpdate={onChange} scale={scale}>{element}</SortableItem>;
+                } else {
+                    return null;
                 }
             })}
         </ul>
@@ -143,7 +145,7 @@ const useDraggable =
         preview(drop(refPreview));
 
         return [isDragging, isOver, ref, refPreview];
-        
+
     }
 
 

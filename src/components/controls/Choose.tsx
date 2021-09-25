@@ -3,7 +3,7 @@ import _debounce from 'lodash/debounce';
 import _isFunction from 'lodash/isFunction';
 import React, { Ref, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { AngleDownIcon, FullSquareIcon, WarningIcon } from '../../icons';
+import { AngleDownIcon, WarningIcon } from '../../icons';
 import { setInputValue } from '../../utilities/setInputValue';
 import { ChooseOption, ChooseOptionProps } from '../ChooseOption';
 import { defaultGetOptions, defaultRenderGroupLabel, defaultRenderOption } from '../ChooseOptionList';

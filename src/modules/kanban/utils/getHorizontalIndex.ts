@@ -1,7 +1,6 @@
 import { XYCoord } from 'react-dnd';
 
-
-export default (cardId: string, columns: HTMLElement, offset: XYCoord, placeholder?: HTMLElement) => {
+export const getHorizontalIndex = (cardId: string, columns: HTMLElement, offset: XYCoord, placeholder?: HTMLElement) => {
 
     const columnsRect = columns.getBoundingClientRect();
     const pointerX = offset.x - columnsRect.left;
@@ -26,7 +25,7 @@ export default (cardId: string, columns: HTMLElement, offset: XYCoord, placehold
     // if the index is on top the same column that is dragging
     // then make the index null
 
-    if (isColumnId(cardId, columns, index - 1)  || isColumnId(cardId, columns, i) ) {
+    if (isColumnId(cardId, columns, index - 1) || isColumnId(cardId, columns, i)) {
         index = null;
     }
 

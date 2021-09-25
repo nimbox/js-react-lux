@@ -22,7 +22,7 @@ export const TextAreaMarkup = React.forwardRef<HTMLTextAreaElement, TextAreaMark
     const [referenceElement, setReferenceElement] = useState();
     const [popperElement, setPopperElement] = useState();
     const [arrowElement, setArrowElement] = useState();
-    const { styles, attributes, update } = usePopper(referenceElement, popperElement, {
+    const { styles, attributes } = usePopper(referenceElement, popperElement, {
         placement: 'top-start',
         modifiers: [
             { name: 'arrow', options: { element: arrowElement } }

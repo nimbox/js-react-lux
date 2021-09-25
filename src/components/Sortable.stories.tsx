@@ -1,16 +1,15 @@
-import classnames from 'classnames';
+/* eslint-disable import/no-anonymous-default-export */
 import { useState } from 'react';
-import { controlScale } from './ComponentScale';
 import { Sortable } from './Sortable';
 
 
 // definition
 
-const definition = {
+export default {
     title: 'Component/Sortable',
     component: Sortable
 };
-export default definition;
+
 
 export const SortableList = () => {
 

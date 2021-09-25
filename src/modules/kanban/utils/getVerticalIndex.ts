@@ -1,7 +1,7 @@
 import { XYCoord } from 'react-dnd';
 
 
-export default (cardId: string, cards: HTMLElement, offset: XYCoord, placeholder?: HTMLElement) => {
+export const getVerticalIndex = (cardId: string, cards: HTMLElement, offset: XYCoord, placeholder?: HTMLElement) => {
 
     const cardsRect = cards.getBoundingClientRect();
     const pointerY = offset.y - cardsRect.top;
@@ -26,7 +26,7 @@ export default (cardId: string, cards: HTMLElement, offset: XYCoord, placeholder
     // if the index is on top the same card that is dragging
     // then make the index null
 
-    if (isCardId(cardId, cards, index - 1)  || isCardId(cardId, cards, i) ) {
+    if (isCardId(cardId, cards, index - 1) || isCardId(cardId, cards, i)) {
         index = null;
     }
 

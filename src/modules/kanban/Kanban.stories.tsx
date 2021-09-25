@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import classnames from 'classnames';
 import React, { FC } from 'react';
 import { PlusIcon } from '../../icons';

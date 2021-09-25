@@ -19,6 +19,6 @@ export const useOnOutsideClick = (show: boolean, onOutsideClick: () => void, ...
 
         }
 
-    }, [show, ...elements]);
+    }, [show, onOutsideClick, ...elements]); // eslint-disable-line react-hooks/exhaustive-deps
 
 };

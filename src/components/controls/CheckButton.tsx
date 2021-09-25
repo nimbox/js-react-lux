@@ -2,11 +2,10 @@ import classnames from 'classnames';
 import React, { FC } from 'react';
 import SvgCheckIcon from '../../icons/CheckIcon';
 import SvgCrossIcon from '../../icons/CrossIcon';
-// import check from '../../icons/check-icon.svg';
 
 
-const check = 'data:image/svg+xml;base64,' + window.btoa('<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="25,9 13.3,23 7,15.3 "/></svg>');
-const cross = 'data:image/svg+xml;base64,' + window.btoa('<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="8" x2="24" y2="24"/><line x1="24" y1="8" x2="8" y2="24"/></svg>');
+// const check = 'data:image/svg+xml;base64,' + window.btoa('<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="25,9 13.3,23 7,15.3 "/></svg>');
+// const cross = 'data:image/svg+xml;base64,' + window.btoa('<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="8" x2="24" y2="24"/><line x1="24" y1="8" x2="8" y2="24"/></svg>');
 
 
 export interface CheckButtonProps {
@@ -22,7 +21,22 @@ export interface CheckButtonProps {
 
 }
 
-export const CheckButton: FC<CheckButtonProps> = ({ onFulfill, onReject, ['data-tooltip']: dataTooltip, ['data-tooltip-fulfill']: dataTooltipFulfill, ['data-tooltip-reject']: dataTooltipReject }) => {
+export const CheckButton: FC<CheckButtonProps> = (props) => {
+
+    // properties
+
+    const {
+
+        onFulfill,
+        onReject,
+
+        'data-tooltip': dataTooltip,
+        'data-tooltip-fulfill': dataTooltipFulfill,
+        'data-tooltip-reject': dataTooltipReject
+
+    } = props;
+
+    // render
 
     return (
         <div tabIndex={0}

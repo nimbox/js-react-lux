@@ -1,7 +1,5 @@
 import classnames from 'classnames';
-import React, { useContext } from 'react';
-import { controlText } from '../ComponentScale';
-import { Context } from './Control';
+import React from 'react';
 
 
 export interface RadioProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
@@ -10,7 +8,7 @@ export interface RadioProps extends React.DetailedHTMLProps<React.InputHTMLAttri
 
 export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(({ error, className, children, ...props }, ref) => {
 
-    const context = useContext(Context);
+    // const context = useContext(Context);
 
     return children ?
         (
@@ -30,6 +28,6 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(({ error, cl
                 'focus:border-primary-500 focus:ring focus:ring-primary-500',
                 'focus:ring-opacity-50 focus:ring-offset-0 disabled:opacity-50')}
             />
-        )
+        );
 
 });

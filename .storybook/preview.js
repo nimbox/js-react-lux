@@ -10,7 +10,7 @@ export const globalTypes = {
     locale: {
         name: 'Locale',
         description: 'Locale to use for i18next translations',
-        defaultValue: 'light',
+        defaultValue: 'en',
         toolbar: {
             icon: 'flag',
             items: ['en', 'es'],

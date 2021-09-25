@@ -1,7 +1,5 @@
 import classnames from 'classnames';
 import React, { createContext, CSSProperties, FC, useContext } from 'react';
-import { getInitialProps } from 'react-i18next';
-import { ComponentScale, controlSmallText, controlText } from '../ComponentScale';
 
 
 export interface ControlProps {
@@ -86,7 +84,7 @@ Control.Message = (({ className, children }) => {
 
 Control.Error = (({ className, children }) => {
 
-    const context = useContext(Context);
+    // const context = useContext(Context);
 
     return children ? (
         <div className={classnames(

@@ -33,7 +33,10 @@ export function useCard<T extends HTMLElement>(id: string): [RefObject<T>, UseCa
     }), [id]);
 
     drag(cardRef);
-    useEffect(() => { cardRef.current!.setAttribute('data-kanban-card-id', id); }, []);
+    useEffect(
+        () => { cardRef.current!.setAttribute('data-kanban-card-id', id); },
+        [id]
+    );
 
     return ([cardRef, { isDragging: item?.id === id }]);
 

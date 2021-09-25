@@ -33,7 +33,10 @@ export function useColumn<T extends HTMLElement>(id: string): [RefObject<T>, Use
     }), [id]);
 
     drag(columnRef);
-    useEffect(() => { columnRef.current!.setAttribute('data-kanban-column-id', id); }, []);
+    useEffect(
+        () => { columnRef.current!.setAttribute('data-kanban-column-id', id); },
+        [id]
+    );
 
     return ([columnRef, { isDragging: item?.id === id }]);
 

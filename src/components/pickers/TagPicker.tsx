@@ -1,9 +1,8 @@
 import classnames from 'classnames';
 import _debounce from 'lodash/debounce';
-import React, { LegacyRef, useContext, useEffect, useRef, useState } from 'react';
+import React, { LegacyRef, useEffect, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import AngleDownIcon from '../../icons/AngleDownIcon';
-import { Context as controlContext } from '../controls/Control';
 import { SearchInput } from '../controls/SearchInput';
 import { Loading } from '../Loading';
 
@@ -128,7 +127,7 @@ export const TagPicker = <T extends {}>({ tags, tagValue, renderTag, onAdd, onRe
     // render
 
     return (
-        <div className={classnames('relative w-full')}>
+        <div className={classnames('relative w-full', { 'text-danger': isError })}>
 
             <div ref={setTarget as LegacyRef<HTMLDivElement> | undefined}
                 tabIndex={isVisible ? -1 : 0}

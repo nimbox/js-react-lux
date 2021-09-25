@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon, SquareIcon } from '../../icons';
+import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon } from '../../icons';
 import { consumeEvent } from '../../utilities/consumeEvent';
 import { setInputValue } from '../../utilities/setInputValue';
 import { Input, InputProps } from '../controls/Input';
@@ -80,7 +80,10 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
     // starting at the firstDayOfWeek
     // (has day = 1, hour = 12, minute = 0, second = 0 and millis = 0)
     const [calendar, setCalendar] = useState(startOfMonth(parseDate(defaultValue || '')));
-    useEffect(() => setCalendar(startOfMonth(parseDate(internalValue))), [internalValue]);
+    useEffect(
+        () => setCalendar(startOfMonth(parseDate(internalValue))),
+        [parseDate, internalValue]
+    );
 
     // Popper states
     const [show, setShow] = useState(false);
@@ -95,10 +98,6 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
     const handleFocus = handleShow;
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
         handleFinalValue();
-    };
-
-    const forceFocus = () => {
-        inputRef.current!.focus();
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -185,7 +184,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
             weeks.push(dates);
         }
         return weeks;
-    }, [calendar.getTime()]);
+    }, [calendar, firstDayOfWeek]);
 
     // format
 

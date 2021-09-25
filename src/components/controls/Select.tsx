@@ -218,8 +218,8 @@ const CustomSelect = React.forwardRef<HTMLSelectElement, SelectProps & React.Inp
 
     // configuration
 
+    // const context = useContext(Context);
     const chooseOptionRef = useRef<HTMLInputElement & { handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void }>(null);
-    const context = useContext(Context);
 
     // convert children into options
 
