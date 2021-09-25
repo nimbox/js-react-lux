@@ -13,7 +13,7 @@ function SvgClockIcon(props: React.SVGProps<SVGSVGElement>) {
       strokeLinejoin="round"
       {...props}
     >
-      <circle cx={16} cy={16} r={10} />
+      <circle cx={16} cy={16} r={11} />
       <path d="M16 10v6h3" />
     </svg>
   );
