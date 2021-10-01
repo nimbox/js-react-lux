@@ -49,10 +49,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ color 
         <button {...props} ref={ref}
             className={classnames(
                 CLASSES[variant][color],
-                'lux-control-font',
                 { 'lux-control-padding': variant !== 'link' },
                 'focus:ring focus:ring-opacity-50 focus:outline-none',
-                'disabled:opacity-50 disabled:cursor-not-allowed'
+                'disabled:opacity-50 disabled:cursor-not-allowed',
+                className
             )}
         >
 

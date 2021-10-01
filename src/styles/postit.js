@@ -12,7 +12,7 @@ module.exports = {
 
         width: '100%',
         minWidth: '64px',
-        minHeight: '5rem',
+        minHeight: '44px',
 
         padding: '1rem',
 

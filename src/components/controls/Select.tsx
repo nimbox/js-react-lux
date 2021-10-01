@@ -1,5 +1,5 @@
 import { default as classnames, default as classNames } from 'classnames';
-import React, { FC, useCallback, useContext, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import React, { FC, Ref, useCallback, useContext, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon } from '../../icons';
 import { setInputValue } from '../../utilities/setInputValue';
@@ -56,21 +56,24 @@ interface SelectContextProps {
 
 const SelectContext = React.createContext<SelectContextProps>({ withNative: false });
 
-export const Select = React.forwardRef<HTMLSelectElement, SelectProps & React.InputHTMLAttributes<HTMLSelectElement>>((props, ref) => {
+export const SelectFN = React.forwardRef<HTMLSelectElement | HTMLInputElement, SelectProps & (React.SelectHTMLAttributes<HTMLSelectElement> | React.InputHTMLAttributes<HTMLInputElement>)>((props, ref) => {
 
     if (props?.withNative) {
-        return <NativeSelect ref={ref} {...props} />
+        return <NativeSelect ref={ref as Ref<HTMLSelectElement>} {...(props as SelectProps & (React.SelectHTMLAttributes<HTMLSelectElement>))} />
     }
-    return <CustomSelect ref={ref} {...props} />
 
-}) as React.ForwardRefExoticComponent<React.PropsWithoutRef<SelectProps> & React.RefAttributes<HTMLSelectElement>> & SelectSubComponents;
+    return <CustomSelect ref={ref as Ref<HTMLInputElement>} {...(props as (SelectProps & React.InputHTMLAttributes<HTMLInputElement>)) } />
 
+});
+
+
+export const Select = SelectFN as (typeof SelectFN & SelectSubComponents);
 
 //
 // NativeSelect
 //
 
-const NativeSelect = React.forwardRef<HTMLSelectElement, SelectProps & React.InputHTMLAttributes<HTMLSelectElement>>((props, ref) => {
+const NativeSelect = React.forwardRef<HTMLSelectElement, SelectProps & React.SelectHTMLAttributes<HTMLSelectElement>>((props, ref) => {
 
     // properties
 
@@ -105,7 +108,7 @@ const NativeSelect = React.forwardRef<HTMLSelectElement, SelectProps & React.Inp
 
     const context = useContext(Context);
 
-    const selectRef = useRef<HTMLInputElement>(null);
+    const selectRef = useRef<HTMLSelectElement>(null);
     useImperativeHandle(ref, () => selectRef.current!);
 
     // manage focus
@@ -179,7 +182,7 @@ const NativeSelect = React.forwardRef<HTMLSelectElement, SelectProps & React.Inp
 // CustomSelect
 //
 
-const CustomSelect = React.forwardRef<HTMLSelectElement, SelectProps & React.InputHTMLAttributes<HTMLSelectElement>>((props, ref) => {
+const CustomSelect = React.forwardRef<HTMLInputElement, SelectProps & React.InputHTMLAttributes<HTMLInputElement>>((props, ref) => {
 
     const {
 
@@ -205,6 +208,7 @@ const CustomSelect = React.forwardRef<HTMLSelectElement, SelectProps & React.Inp
         error,
         disabled,
 
+        tabIndex = 0,
         placeholder,
         className,
 
@@ -335,6 +339,7 @@ const CustomSelect = React.forwardRef<HTMLSelectElement, SelectProps & React.Inp
     const handleChoose = (option: React.ReactElement) => {
         setInputValue(selectRef, option.props.value);
         if (value == null) {
+            console.log('loaded options');
             setLoadedOption(option);
         }
         handleHide();
@@ -349,7 +354,7 @@ const CustomSelect = React.forwardRef<HTMLSelectElement, SelectProps & React.Inp
             <Wrapper
 
                 ref={setWrapperRef}
-                tabIndex={0}
+                tabIndex={tabIndex}
 
                 variant={variant}
                 withNoFull={withNoFull}
@@ -426,8 +431,6 @@ const CustomSelect = React.forwardRef<HTMLSelectElement, SelectProps & React.Inp
                         onChoose={handleChoose}
 
                         options={options}
-                        getOptions={(group: React.ReactElement) => group}
-
                         renderOption={({ option }) => <>{option}</>}
 
                         containerClassName={classNames('border border-control-border rounded', containerClassName)}

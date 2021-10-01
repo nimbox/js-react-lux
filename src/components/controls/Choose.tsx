@@ -102,6 +102,7 @@ export const Choose = React.forwardRef(<G, O>(
         error,
         disabled,
 
+        tabIndex = 0,
         placeholder,
         className,
 
@@ -283,7 +284,7 @@ export const Choose = React.forwardRef(<G, O>(
             <Wrapper
 
                 ref={setWrapperRef}
-                tabIndex={0}
+                tabIndex={tabIndex}
 
                 variant={variant}
                 withNoFull={withNoFull}
