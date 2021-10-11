@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon, AngleUpIcon, CircleIcon, ClockIcon } from '../../icons';
 import { setInputValue } from '../../utilities/setInputValue';
-import { Input } from '../controls/Input';
+import { Input, InputProps } from '../controls/Input';
 import { Popper } from '../Popper';
 
 
@@ -12,7 +12,7 @@ import { Popper } from '../Popper';
 // TimePicker
 //
 
-interface TimePickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface TimePickerProps extends InputProps {
 
     /** Name used for the input element and returned in the change event. */
     name?: string,
@@ -51,7 +51,28 @@ const minutes = [15, 30, 45];
 /**
  * TimePicker. Select a time with one click.
  */
-export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps>(({ name, defaultValue, value, onChange, parseTime = internalParseTime, formatHour = internalFormatHour, formatTime = internalFormatTime, popperClassName, ...props }, ref) => {
+export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & React.InputHTMLAttributes<HTMLInputElement>>((props, ref) => {
+
+    // properties
+
+    const {
+        name,
+        defaultValue,
+        value,
+        onChange,
+
+        parseTime = internalParseTime,
+        formatHour = internalFormatHour,
+        formatTime = internalFormatTime,
+
+        popperClassName,
+
+        ...inputProps
+
+    } = props;
+
+    // configuration
+
 
     const { t } = useTranslation(['lux']);
 
@@ -205,10 +226,6 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps>(({
 
     // render
 
-    const ornament = (
-        <ClockIcon onClick={handleFocus} className="px-1 cursor-pointer" style={{ fontSize: '1.5em' }} />
-    );
-
     return (
         <>
 
@@ -229,9 +246,9 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps>(({
 
                 autoComplete="off"
 
-                end={ornament}
+                end={<ClockIcon onClick={handleFocus} className="px-1 cursor-pointer" style={{ fontSize: '1.5em' }} />}
 
-                {...props}
+                {...inputProps}
 
             />
 

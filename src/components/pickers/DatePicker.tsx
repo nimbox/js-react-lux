@@ -63,7 +63,30 @@ const namedDays = [
 /**
  * DatePicker. Select a date with one click.
  */
-export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({ name, defaultValue, value, onChange, withShortcuts = false, parseDate = internalParseDate, formatDate = internalFormatDate, firstDayOfWeek = 0, placement, popperClassName, ...props }, ref) => {
+export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & React.InputHTMLAttributes<HTMLInputElement>>((props, ref) => {
+
+    // properties
+
+    const {
+
+        name,
+        defaultValue,
+        value,
+        onChange,
+
+        withShortcuts = false,
+        parseDate = internalParseDate,
+        formatDate = internalFormatDate,
+
+        firstDayOfWeek = 0,
+        placement,
+        popperClassName,
+
+        ...inputProps
+
+    } = props;
+
+    // configuration
 
     const { t } = useTranslation(['lux']);
 
@@ -205,10 +228,6 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
     const months = t('months', { defaultValue: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], returnObjects: true }) as string[];
     const days = t('shortDays', { defaultValue: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], returnObjects: true }) as string[];
 
-    const ornament = (
-        <CalendarIcon onClick={handleFocus} className="px-1 cursor-pointer" style={{ fontSize: '1.5em' }} />
-    );
-
     return (
         <>
             <Input type="text"
@@ -228,9 +247,9 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(({
 
                 autoComplete="off"
 
-                end={ornament}
+                end={<CalendarIcon onClick={handleFocus} className="px-1 cursor-pointer" style={{ fontSize: '1.5em' }} />}
 
-                {...props}
+                {...inputProps}
             />
 
             {show &&
