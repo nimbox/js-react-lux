@@ -1,3 +1,4 @@
+import classnames from 'classnames';
 import classNames from 'classnames';
 import _debounce from 'lodash/debounce';
 import _isFunction from 'lodash/isFunction';
@@ -174,7 +175,7 @@ export const Choose = React.forwardRef(<G, O>(
 
     }, 0), [doLoad, loadedOptionValue]);
 
-    useEffect(() => { 
+    useEffect(() => {
         const v = value || defaultValue || '';
         handleLoad(v);
     }, [handleLoad, value]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -302,8 +303,8 @@ export const Choose = React.forwardRef(<G, O>(
                 end={
                     <>
                         {end}
-                        {loading && <Delay><Loading colorClassName="text-control-border"/></Delay>}
-                        {loadingError ? <WarningIcon className="text-danger-500" /> : <AngleDownIcon className="text-control-border"/>}
+                        {loading && <Delay><Loading colorClassName="text-control-border" /></Delay>}
+                        {loadingError ? <WarningIcon className="text-danger-500" /> : <AngleDownIcon className="text-control-border" />}
                     </>
                 }
 
@@ -313,7 +314,7 @@ export const Choose = React.forwardRef(<G, O>(
 
                 <div
                     ref={selectionRef}
-                    className={className}
+                    className={classnames('truncate', className)}
                 >
                     {loading ?
                         <>&nbsp;</> :
@@ -322,7 +323,7 @@ export const Choose = React.forwardRef(<G, O>(
                                 renderSelectedOption({ option: loadedOption }) :
                                 renderOption({ option: loadedOption })) :
                             (placeholder ?
-                                <>{placeholder}</> :
+                                <span className="text-control-placeholder opacity-40">{placeholder}</span> :
                                 <>&nbsp;</>))
                     }
                 </div>

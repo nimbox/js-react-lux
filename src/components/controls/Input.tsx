@@ -78,7 +78,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps & React.Input
                 className={classnames(
                     'block w-full',
                     'outline-none focus:outline-none',
-                    'placeholder-opacity-40', { 'placeholder-danger-500': error || context.error },
+                    error || context.error ? 'placeholder-danger-500' : 'placeholder-control-placeholder',
+                    'placeholder-opacity-40',
                     className
                 )}
 

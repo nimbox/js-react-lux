@@ -1,29 +1,92 @@
 import classnames from 'classnames';
-import React, { useContext } from 'react';
+import React, { useContext, useImperativeHandle, useRef, useState } from 'react';
 import { Context } from './Control';
+import { Wrapper, WrapperProps } from './Wrapper';
 
 
-export interface TextAreaProps extends React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement> {
-    error?: boolean;
+//
+// TextArea
+//
+
+export interface TextAreaProps extends WrapperProps {
 }
 
-export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(({ error, className, ...props }, ref) => {
+export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps & React.InputHTMLAttributes<HTMLTextAreaElement>>((props, ref) => {
+
+    // properties
+
+    const {
+
+        variant,
+        withNoFull,
+
+        onFocus,
+        onBlur,
+        error,
+        disabled,
+
+        start,
+        end,
+
+        className,
+
+        ...textAreaProps
+
+    } = props;
+
+    // configuration
+
+    const textAreaRef = useRef<HTMLTextAreaElement>(null);
+    useImperativeHandle(ref, () => textAreaRef.current!);
 
     const context = useContext(Context);
+    const [focus, setFocus] = useState(false);
+
+    const handleOnFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+        if (onFocus) { onFocus(e); }
+        setFocus(true);
+    }
+    const handleOnBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+        setFocus(false);
+        if (onBlur) { onBlur(e); }
+    }
+
+    // render
 
     return (
-        <textarea {...props} ref={ref} className={classnames(
-            'block w-full',
-            'lux-control-font lux-control-padding',
-            'rounded border border-control-border',
-            error || context.error ?
-                'text-danger-500 border-danger-500 focus:border-danger-500 focus:ring-danger-500 placeholder-danger-500' :
-                'focus:border-primary-500 focus:ring-primary-500 placeholder-control-border',
-            'focus:ring focus:ring-opacity-50 focus:outline-none',
-            'placeholder-opacity-40',
-            'disabled:opacity-50',
-            className)}
-        />
+        <Wrapper
+
+            variant={variant}
+            withNoFull={withNoFull}
+
+            focus={focus}
+            disabled={disabled}
+            error={error}
+
+            start={start}
+            end={end}
+
+        >
+            <textarea
+
+                ref={textAreaRef}
+
+                onFocus={handleOnFocus}
+                onBlur={handleOnBlur}
+                disabled={disabled}
+
+                className={classnames(
+                    'block w-full',
+                    'outline-none focus:outline-none',
+                    error || context.error ? 'placeholder-danger-500' : 'placeholder-control-placeholder',
+                    'placeholder-opacity-40',
+                    className
+                )}
+
+                {...textAreaProps}
+
+            />
+        </Wrapper>
     );
 
 });

@@ -382,12 +382,12 @@ const CustomSelect = React.forwardRef<HTMLInputElement, SelectProps & React.Inpu
 
                 <div
                     ref={selectionRef}
-                    className={className}
+                    className={classnames('truncate', className)}
                 >
                     {loadedOption ?
-                        <>{loadedOption.props.children}</> :
+                        <span>{loadedOption.props.children}</span> :
                         placeholder ?
-                            <>{placeholder}</> :
+                            <span className="text-control-placeholder opacity-40">{placeholder}</span> :
                             <>&nbsp;</>
                     }
                 </div>
