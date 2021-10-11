@@ -5,6 +5,8 @@ import { CrossIcon, DangerIcon, InfoIcon, SuccessIcon, WarningIcon } from "../ic
 
 
 //
+// Toast
+//
 
 export type ToastContainerLocation = 'top-right';
 
@@ -100,7 +102,7 @@ export const ToastProvider: FC<ToastProviderProps> = ({ location = 'top-right', 
 
 export const ToastContainer: FC<{}> = ({ children }) => {
     return (
-        <div className="fixed w-64 p-2 pt-20 inset-y-0 right-0 space-y-2 pointer-events-none">
+        <div className="fixed w-64 p-2 pt-20 inset-y-0 right-0 space-y-2 pointer-events-none z-50">
             {children}
         </div>
     );

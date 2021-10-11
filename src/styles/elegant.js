@@ -26,10 +26,13 @@ module.exports = {
                 'content-fg': defaultTheme.colors.white,
                 'content-border': '#eaedf3',
 
-                'control-bg': defaultTheme.colors.white,
+                // 'control-bg': defaultTheme.colors.white,
                 // 'control-border': '#888888',
-                'control-border': '#f54dae',
-                'control-placeholder': '#a0a0a0',
+                // 'control-placeholder': '#a0a0a0',
+
+                'control-bg': '#DDDDDD',
+                'control-border': '#F012BE',
+                'control-placeholder': '#0074D9',
 
                 'primary': {
                     100: '#daedef',
