@@ -25,6 +25,7 @@ export * from './components/controls/CheckButton';
 export * from './components/controls/Choose';
 export * from './components/controls/Control';
 export * from './components/controls/Input';
+export * from './components/controls/SearchInput';
 export * from './components/controls/Radio';
 export * from './components/controls/Select';
 export * from './components/controls/TextArea';

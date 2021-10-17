@@ -14,5 +14,5 @@ export const SearchInput = React.forwardRef((
     props: SearchInputProps & React.InputHTMLAttributes<HTMLInputElement>,
     ref: Ref<HTMLInputElement>
 ) => (
-    <Input ref={ref} end={<SearchIcon />} {...props} />
+    <Input ref={ref} start={<SearchIcon />} {...props} />
 ));

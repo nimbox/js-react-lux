@@ -279,16 +279,19 @@ const MainSide: FC<{ className?: string }> = ({ className, children }) => {
                     mountClassName="translate-x-full"
                     showClassName="translate-0"
                 >
-                    {children}
+                    <div className={className}>
+                        {children}
+                    </div>
                 </ShowTransition>
             </>
             :
             <div className={classnames(
                 'w-1/3',
-                'bg-content-fg', 'border-l border-content-border',
-
+                'bg-content-fg', 'border-l border-content-border'
             )}>
-                {children}
+                <div className={className}>
+                    {children}
+                </div>
             </div>
     );
 
