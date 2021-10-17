@@ -19,6 +19,7 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps & Re
 
         variant,
         withNoFull,
+        withFullHeight,
 
         onFocus,
         onBlur,
@@ -58,6 +59,7 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps & Re
 
             variant={variant}
             withNoFull={withNoFull}
+            withFullHeight={withFullHeight}
 
             focus={focus}
             disabled={disabled}
@@ -77,6 +79,7 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps & Re
 
                 className={classnames(
                     'block w-full',
+                    withFullHeight ? 'h-full' : null,
                     'outline-none focus:outline-none',
                     error || context.error ? 'placeholder-danger-500' : 'placeholder-control-placeholder',
                     'placeholder-opacity-40',

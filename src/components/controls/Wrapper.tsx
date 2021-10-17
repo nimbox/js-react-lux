@@ -19,6 +19,11 @@ export interface WrapperProps {
      */
     withNoFull?: boolean;
 
+    /**
+     * Enable full height on the block.
+     */
+    withFullHeight?: boolean;
+
     //
 
     /**
@@ -67,6 +72,7 @@ export const Wrapper = React.forwardRef((
 
         variant = 'outlined',
         withNoFull = false,
+        withFullHeight = false,
 
         focus,
         disabled,
@@ -141,6 +147,7 @@ export const Wrapper = React.forwardRef((
 
                 'relative',
                 withNoFull ? 'inline-block' : 'block w-full',
+                withFullHeight ? 'h-full' : null,
 
                 (variant === 'outlined') && classnames(
                     'lux-control-padding',
@@ -193,6 +200,9 @@ export const Wrapper = React.forwardRef((
         >
 
             <div
+                className={classnames(
+                    withFullHeight ? 'h-full' : null,
+                )}
                 style={{
                     ...(padding[0] > 0 && {
                         paddingLeft: variant === 'inlined' || variant === 'plain' ?

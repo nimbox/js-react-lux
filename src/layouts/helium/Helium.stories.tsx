@@ -1,42 +1,30 @@
 /* eslint-disable import/no-anonymous-default-export */
 import React, { useState } from 'react';
 import { CrossIcon, HamburgerIcon, NimboxIcon } from '../../icons';
-import '../../index.css';
-import { Header, Helium, Main, Navigator, Panel, Toggle } from './Helium';
+import { Header, Helium, Main, Navigator, Panel, ToggleNavigator } from './Helium';
 
 
-export default { title: 'Layout/Helium' };
+export default {
+    title: 'Layout/Helium',
+    parameters: {
+        layout: 'fullscreen'
+    }
+};
 
 export const Simple = () => {
 
-    const [navigator, setNavigator] = useState(true);
-
     return (
 
-        <Helium navigator={navigator} setNavigator={(s) => setNavigator(s)}>
+        <Helium>
 
-            <Header className="px-3 pl-0 flex flex-row justify-between items-stretch">
-
-                <div className="h-full flex flex-row items-center">
-
-                    <Toggle always={true}><HamburgerIcon className="w-8 h-8 fill-current" /></Toggle>
-
-                </div>
-
-                <div className="h-full flex flex-row items-center space-x-3 bg-red-500">
-
-                    <div className="">Other</div>
-                    <div>Some</div>
-
-                </div>
-
+            <Header className="flex flex-row justify-center items-center">
+                <div>Header</div>
             </Header>
 
             <Navigator>
 
                 <Navigator.Header className="pl-3 flex flex-row items-center justify-between">
                     <NimboxIcon className="w-8 h-8" />
-                    <Toggle always={false}><CrossIcon className="w-8 h-8 stroke-2" /></Toggle>
                 </Navigator.Header>
 
                 <Navigator.Content className="p-3">
@@ -75,17 +63,15 @@ export const Simple = () => {
 
             <Main>
 
-                <Main.Content className="p-3">
+                <Main.Content className="px-3 py-2">
                     <div>first</div>
                     {[...Array(100)].map(() => <div>content</div>)}
                 </Main.Content >
 
-                {true &&
-                    <Main.Side className="p-3">
-                        <div>first</div>
-                        {[...Array(2)].map(() => <div>side</div>)}
-                    </Main.Side>
-                }
+                <Main.Side className="px-3 py-2">
+                    <div>first</div>
+                    {[...Array(2)].map(() => <div>side</div>)}
+                </Main.Side>
 
             </Main>
 
