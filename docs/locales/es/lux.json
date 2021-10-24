@@ -1,0 +1,40 @@
+{
+    "more-options": "Más opciones",
+    "less-options": "Menos opciones",
+    "months": [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre"
+    ],
+    "shortDays": [
+        "Dom",
+        "Lun",
+        "Mar",
+        "Mie",
+        "Jue",
+        "Vie",
+        "Sab"
+    ],
+    "namedDays": {
+        "tomorrow": "mañana",
+        "day-after-tomorrow": "pasado mañana",
+        "this-friday": "este viernes",
+        "next-monday": "el lunes que viene",
+        "next-friday": "el viernes que viene",
+        "in-two-weeks": "en dos semanas",
+        "next-month": "el mes que viene",
+        "in-two-months": "en dos meses"
+    },
+    "hour": "Hora",
+    "minutes": "Minutos",
+    "loading": "Cargando..."
+}

@@ -1,0 +1,51 @@
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs';
+import { Postit } from './Postit'
+
+<Meta title="Component/Postit" component={Postit}/>
+
+
+# Postit
+
+Postit notes are a great way to hightlight relevant information in a page. 
+
+<Preview>
+    <Story name="Basic">
+        <Postit className="w-1/5">The content</Postit>
+    </Story>
+</Preview>
+
+When empty.
+
+<Preview>
+    <Story name="Empty">
+        <Postit className="w-1/5 py-0"></Postit>
+    </Story>
+</Preview>
+
+Multiple widths.
+
+<Preview>
+  <Story name="Multiple widths">
+        <div className="grid grid-cols-1 gap-2">
+            <Postit className="postit w-1/4">The content</Postit>
+            <Postit className="postit w-2/4">The content</Postit>
+            <Postit className="postit w-3/4">The content</Postit>
+            <Postit className="postit w-4/4">The content</Postit>
+        </div>
+  </Story>
+</Preview>
+
+They can expand multiple witdhts, but bare in mind that there is a minimum with
+and height of `minWidth: '64px'` and `minHeight: '5rem'`. If the `Postit` is 
+smaller the shadow will show through.
+
+<Preview>
+    <Story name="To small">
+        <Postit className="min-w-0 min-h-0 w-8 h-8"></Postit>
+  </Story>
+</Preview>
+
+
+# Props
+
+<Props of={Postit}/>

@@ -1,0 +1,536 @@
+import { useMemo, useState, useCallback } from 'react';
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import { ChooseOption } from './ChooseOption';
+import { ChooseOptionList } from './ChooseOptionList';
+import { useKeyboardNavigator } from '../hooks/useKeyboardNavigator';
+import { createSearchMatcher } from '../utilities/createSearchMatcher';
+import { action } from '@storybook/addon-actions';
+
+
+<Meta 
+    title="Component/ChooseOption" 
+    component={ChooseOption} 
+    parameters={{
+        layout: 'centered'
+    }}
+/>
+
+export const primaryColors = ['Yellow', 'Blue', 'Red'];
+
+export const colors = [ 
+    { name: 'Primary', options: [
+        { value: 'ffff00', name: 'Yellow' },
+        { value: '0000ff', name: 'Blue' },
+        { value: 'ff0000', name: 'Red' }
+    ] },
+    { name: 'Secondary', options: [
+        { value: '00ff00', name: 'Green' },
+        { value: '800080', name: 'Purple' },
+        { value: 'ffa500', name: 'Orange' }
+    ] }
+];
+
+export const filteredColors = (value) => {
+    if (value === '') {
+        return colors;
+    } else {
+        const matcher = createSearchMatcher(value);
+        return [ 
+            { ...colors[0], options: colors[0].options.filter(o => matcher(o.name)) }, 
+            { ...colors[1], options: colors[1].options.filter(o => matcher(o.name)) } 
+        ];
+    }
+};
+
+# ChooseOption
+
+Controlled and asynchronous component used to select from a list of options. The
+objective behind this component is to provide a very customizable (albeit
+simple) interface for option selection with search and potential creation.
+
+## Data structure
+
+This component assumes that options come in groups. If you don't want groups, 
+you need to create one group with your options. Hence the basic data structure 
+would be:
+
+```js
+const colors = [ ['Yellow', 'Blue', 'Red'] ];
+```
+
+Notice the actual options are inside another array, representing the first
+group. Having two or more groups is very simple, just keep adding arrays:
+
+```js
+const colors = [ ['Yellow', 'Blue', 'Red'], ['Green', 'Purple', 'Orange'] ];
+```
+
+The structure can be enhanced by using objects for groups and options like this:
+
+```js
+const colors = [ 
+    { name: 'Primary', options: [
+        { value: 'ffff00', name: 'Yellow' },
+        { value: '0000ff', name: 'Blue' },
+        { value: 'ff0000', name: 'Red' }
+    ] },
+    { name: 'Secondary', options: [
+        { value: '00ff00', name: 'Green' },
+        { value: '800080', name: 'Purple' },
+        { value: 'ffa500', name: 'Orange' }
+    ] }
+];
+```
+
+When using these more complete data structures you need to provide one
+extractor:
+
+* __`getOptions(group)`__. Get the options for the given group. This function
+  returns the options associated to the provided group. In our case it would be
+  something like `(group) => group.options`. __By default__ this extractor is 
+  `(group) => group` which assumes that the options come in an array.
+
+## ChooseOptionList
+
+This component only displays the groups, options, and selected option. If there
+is loading or error nothing is rendered.
+
+<ArgsTable of={ChooseOptionList} /> 
+
+### Simple ChooseOptionList
+
+To get the simplest option list just pass an array of array of string options.
+
+When `loading` or `error` nothing is rendered.
+
+<Canvas>
+    <Story name="Choose Option List With Loading">
+        <ChooseOptionList
+            loading={true}
+            onChoose={option => action('onChoose')(option)}
+            options={[['Yellow', 'Blue', 'Red']]} 
+            className="w-96 border border-control-border rounded"
+        />
+    </Story>
+</Canvas>
+
+<Canvas>
+    <Story name="Choose Option List With Error">
+        <ChooseOptionList
+            error={true}
+            onChoose={option => action('onChoose')(option)}
+            options={[['Yellow', 'Blue', 'Red']]} 
+            className="w-96 border border-control-border rounded"
+        />
+    </Story>
+</Canvas>
+
+When there are no options nothing is rendered.
+
+<Canvas>
+    <Story name="Choose Option List No Options">
+        <ChooseOptionList 
+            onChoose={option => action('onChoose')(option)}
+            options={[[]]} 
+            className="w-96 border border-control-border rounded"
+        />
+    </Story>
+</Canvas>
+
+When there are no options and a `renderNoOptions` function is passed, the result
+of the function is rendered.
+
+<Canvas>
+    <Story name="Choose Option List No Options with Render">
+        <ChooseOptionList 
+            onChoose={option => action('onChoose')(option)}
+            options={[[]]} 
+            renderNoOptions={() => <div className="text-center">No options!</div>}
+            className="w-96 border border-control-border rounded"
+        />
+    </Story>
+</Canvas>
+
+But when `loading` or `error` nothing is rendered.
+
+<Canvas>
+    <Story name="Choose Option List With Loading or Error With No Options Render">
+        <ChooseOptionList 
+            loading={true}
+            onChoose={option => action('onChoose')(option)}
+            options={[[]]} 
+            renderNoOptions={() => <div className="text-center">No options!</div>}
+            className="w-96 border border-control-border rounded"
+        />
+    </Story>
+</Canvas>
+
+When there are options.
+
+<Canvas>
+    <Story name="Choose Option List">
+        <ChooseOptionList 
+            onChoose={option => action('onChoose')(option)}
+            options={[['Yellow', 'Blue', 'Red']]} 
+            className="w-96 border border-control-border rounded"
+        />
+    </Story>
+</Canvas>
+
+When there are two groups of options.
+
+<Canvas>
+    <Story name="Choose Option List with Group">
+        <ChooseOptionList
+            onChoose={option => action('onChoose')(option)}
+            options={[['Yellow', 'Blue', 'Red'], ['Green', 'Purple', 'Orange']]} 
+            className="w-96 border border-control-border rounded"
+        />
+    </Story>
+</Canvas>
+
+To show a selection of one of the options pass a non null `selected` property.
+
+<Canvas>
+    <Story name="Choose Option List with Selected">
+        <ChooseOptionList 
+            onChoose={option => action('onChoose')(option)}
+            options={[['Yellow', 'Blue', 'Red'], ['Green', 'Purple', 'Orange']]}
+            selected={[0, 0]}
+            className="w-96 border border-control-border rounded"
+        />
+    </Story>
+</Canvas>
+
+The selection will be automatically be brought into view 
+
+<Canvas>
+    <Story name="Choose Option List with Selected and AutoScroll">
+        <ChooseOptionList 
+            onChoose={option => action('onChoose')(option)}
+            options={[['Yellow', 'Blue', 'Red'], ['Green', 'Purple', 'Orange']]}
+            selected={[1, 2]}
+            className="w-96 border border-control-border rounded max-h-16 overflow-y-scroll"
+        />
+    </Story>
+</Canvas>
+
+### Customized ChooseOptionList
+
+When the data gets more complicated you can provide the necessary options
+accessor and rendering functions to render the list as you want.
+
+<Canvas>
+    <Story name="Choose Option List With Render">
+        <ChooseOptionList 
+            onChoose={option => action('onChoose')(option)}
+            options={[ 
+                { name: 'Primary', options: [
+                    { value: 'ffff00', name: 'Yellow' },
+                    { value: '0000ff', name: 'Blue' },
+                    { value: 'ff0000', name: 'Red' }
+                ] },
+                { name: 'Secondary', options: [
+                    { value: '00ff00', name: 'Green' },
+                    { value: '800080', name: 'Purple' },
+                    { value: 'ffa500', name: 'Orange' }
+                ] }
+            ]}
+            selected={[1, 2]}
+            getOptions={(group) => group.options}
+            renderGroupLabel={({ group }) => 
+                <div className="font-bold">
+                    {group.name} ({group.options.length})
+                </div>
+            }
+            renderOption={({ option }) => 
+                <div className="flex flex-row justify-between items-center">
+                    <span className="text-base">{option.name}</span>
+                    <span className="text-sm text-gray-300">{option.value}</span>
+                </div>
+            }
+            className="w-96 border border-control-border rounded"
+        />
+    </Story>
+</Canvas>
+
+### HTML Structure
+
+The `HTML` structure of `ChooseOptionList` is:
+
+```html
+<div ref={container}>
+    <div> <!-- group -->
+        <div>
+            <!-- rendered group label -->
+        <div>
+        <ul>
+            <li>
+                <!-- rendered option -->
+            </li>
+        <ul>
+    </div>
+</div>
+```
+
+## ChooseOption
+
+Going from a simple `ChooseOptionList` to a `ChooseOption` option brings search
+capability and a footer (usually used for creating elements that where not found
+on the list). 
+
+This is an asyncrhonous component since it can receive a promise with the
+options. When waiting for the resolution of the promise the internal loading
+property is set to true and if there is an error the internal error property is
+set to true.
+
+If `loading === true` then the internal options are [] and the error is null. If
+`loading !== true` then either internal options has the returned value or error
+has a non null value (but not both)
+
+<ArgsTable of={ChooseOption} /> 
+
+### Search function
+
+To achieve search this instead of providing an array of options, provide a
+function that takes a query parameter and returns the array of options.
+
+```js
+const colors = [ ['Yellow', 'Blue', 'Red'] ];
+const options = (value) => [ value ? 
+    colors.filter(c => c.includes(value)) :
+    colors
+];
+```
+
+This example is only a very simple search function but it can be as a complex
+as you desire, since it is part of your code.
+
+The search function should:
+
+* Return an array of array of options (the same structure as before).
+* Return all options when the query is `null`, `undefined`, or the empty string.
+
+### Simple ChooseOption
+
+When loading (when the promise is in the process of being resolved) there is 
+loading icon next to the search bar.
+
+<Canvas>
+    <Story name="Choose Option with Loading">
+        {() => {
+            const options = async (value) => { 
+                await new Promise(resolve => setTimeout(() => resolve(), 2000));
+                return [ value ? primaryColors.filter(c => c.includes(value)) : primaryColors ];
+            }
+            return (
+                <ChooseOption
+                    withSearch
+                    onChoose={option => action('onChoose')(option)}
+                    options={options}
+                    className="w-96 border border-control-border rounded"
+                />
+            );
+        }}
+    </Story>
+</Canvas>
+
+When there is an error 
+
+<Canvas>
+    <Story name="Choose Option with Error">
+        {() => {
+            const options = async (value) => { 
+                await new Promise(resolve => setTimeout(() => resolve(), 1000));
+                throw new Error();
+            }
+            return (
+                <ChooseOption
+                    withSearch
+                    onChoose={option => action('onChoose')(option)}
+                    options={options}
+                    className="w-96 border border-control-border rounded"
+                />
+            );
+        }}
+    </Story>
+</Canvas>
+
+### With Search
+
+<Canvas>
+    <Story name="Choose Option With Search">
+        {() => {
+            const colors = useMemo(() => ['Yellow', 'Blue', 'Red'], []);
+            const options = useCallback((value) => [ value ? 
+                colors.filter(c => c.includes(value)) : colors
+            ], [colors]);
+            return (
+                <ChooseOption
+                    withSearch
+                    onChoose={option => action('onChoose')(option)}
+                    options={options}
+                    className="w-96 border border-control-border rounded"
+                />
+            );
+        }}
+    </Story>
+</Canvas>
+
+### With KeyboardNavigator Hook
+
+The component accepts a property called `selected` of type `[number, number] |
+null` that highlights a field. This is usually changed with the keyboard up and
+down keys. To facilitated this process there is a hook called
+`useKeyboardNavigator` that takes the options data lengths and returns a handler
+for the internal `onKeyDown` event to pass to the search input.
+
+Just add the following lines to your component and pass the `selected` and and
+`handleKeyDown` as properties to the choose list.
+
+```js
+const optionsLengths = useMemo(() => options.map(group => group.length), [options]);
+const { selected, handleKeyDown } = useKeyboardNavigator(optionsLengths);
+```
+
+To get the possibility to move the selection with the keyboard.
+
+<Canvas>
+    <Story name="Choose Option With Search and Selected">
+        {() => {
+            const colors = useMemo(() => ['Yellow', 'Blue', 'Red'], []);
+            const options = useCallback((value) => [ value ? 
+                colors.filter(c => c.includes(value)) : colors
+            ], [colors]);
+            return (
+                <ChooseOption
+                    withSearch
+                    onChoose={option => action('onChoose')(option)}
+                    options={options}
+                    className="w-96 border border-control-border rounded"
+                />
+            );
+        }}
+    </Story>
+</Canvas>
+
+
+### With Footer
+
+The component accepts a property called `renderFooter` that receives a component
+with the following properties:
+
+* **`value`**. The value displayed on the search input.
+* **`options`**. The options displayed in the component.
+* **`selected`**. The selected option or null if there is no current selection.
+
+With this options you can provide any functionality you need, but it usually
+used to create missing elements in the list.
+
+<Canvas>
+    <Story name="Choose Option With Search and Selected and Footer">
+        {() => {
+            const colors = useMemo(() => ['Yellow', 'Blue', 'Red'], []);
+            const [value, setValue] = useState('');
+            const options = useMemo(() => [ value ? 
+                colors.filter(c => c.includes(value)) : colors
+            ], [colors, value]);
+            const optionsLengths = useMemo(() => options.map(group => group.length), [options]);
+            const { selected, handleKeyDown } = useKeyboardNavigator(optionsLengths);
+            return (
+                <ChooseOption
+                    withSearch
+                    value={value}
+                    onChange={e => setValue(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    onChoose={option => action('onChoose')(option)}
+                    options={options}
+                    selected={selected}
+                    renderFooter={({ value, options, selected }) => 
+                        <div className="bg-gray-100" style={{ padding: '0.5em 0.5em' }}>
+                            <div className="flex flex-row justify-between items-center">
+                                <span>Value</span>
+                                <span>{value}</span>
+                            </div>
+                            <div className="flex flex-row justify-between items-center">
+                                <span>Options</span>
+                                <span>{JSON.stringify(options)}</span>
+                            </div>
+                            <div className="flex flex-row justify-between items-center">
+                                <span>Selected</span>
+                                <span>{JSON.stringify(selected)}</span>
+                            </div>
+                        </div>
+                    }
+                    className="w-96 border border-control-border rounded"
+                />
+            );
+        }}
+    </Story>
+</Canvas>
+
+### With Everything
+
+With the kitchen sink.
+
+<Canvas>
+    <Story name="Choose Option With Everything">
+        {() => {
+            return (
+                <div>
+                    <ChooseOption
+                        withSearch
+                        onChoose={option => action('onChoose')(option)}
+                        options={filteredColors}
+                        getOptions={(group) => group.options}
+                        renderGroupLabel={({ group }) => 
+                            <div className="font-bold">
+                                {group.name} ({group.options.length})
+                            </div>
+                        }
+                        renderOption={({ option }) => 
+                            <div className="flex flex-row justify-between items-center">
+                                <span className="text-base">{option.name}</span>
+                                <span className="text-sm text-gray-300">{option.value}</span>
+                            </div>
+                        }
+                        renderFooter={({ value, options, selected }) => 
+                            <div className="bg-gray-100" style={{ padding: '0.5em 0.5em' }}>
+                                <div className="flex flex-row justify-between items-center">
+                                    <span>Value</span>
+                                    <span>{value}</span>
+                                </div>
+                                <div className="flex flex-row justify-between items-center">
+                                    <span>Options</span>
+                                    <span>{JSON.stringify(options)}</span>
+                                </div>
+                                <div className="flex flex-row justify-between items-center">
+                                    <span>Selected</span>
+                                    <span>{JSON.stringify(selected)}</span>
+                                </div>
+                            </div>
+                        }
+                        className="w-96 border border-control-border rounded"
+                    />
+                </div>
+            );
+        }}
+    </Story>
+</Canvas>
+
+
+### HTML Structure
+
+The `HTML` structure of the `ChooseOption` is:
+
+```html
+<div ref={container}>
+    <div>
+        <Input>
+    </div>
+    <ChooseOptionList/>
+    <div>
+        <!-- render footer -->
+    </div>
+</div>
+```

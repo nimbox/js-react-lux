@@ -1,0 +1,86 @@
+import classnames from 'classnames';
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+import { CheckBox } from './CheckBox';
+import { CheckButton } from './CheckButton';
+
+
+export const Label = (props) => <span className={classnames('border-t border-b', props.className)}>{props.children}</span>;
+
+
+<Meta title="Component/Controls/CheckBox" component={CheckBox} />
+
+# CheckBox
+
+A simple formatted wrapper around the `<input type="checkbox"/>`.
+
+<Canvas>
+    <Story name="Simple">
+        <div><CheckBox defaultChecked={false}/> <Label>Unchecked</Label></div>
+        <div><CheckBox defaultChecked={true}/> <Label>Checked</Label></div>
+        <div><CheckBox defaultChecked={false} disabled/> <Label>Unchecked and Disabled</Label></div>
+        <div><CheckBox defaultChecked={true} disabled/> <Label>Checked and Disabled</Label></div>
+        <div><CheckBox defaultChecked={false} focus/> <Label>Checked and Disabled</Label></div>
+        <div><CheckBox defaultChecked={true} focus/> <Label>Checked and Disabled</Label></div>
+    </Story>
+</Canvas>
+
+Sizes with the font size attribute by using relative units.
+
+<Canvas>
+    <Story name="Multiple Sizes">
+        <div className="space-y-2">
+        <div className="flex flex-row justify-between">
+            <div className="text-xs">
+                <CheckBox checked="true"/> <Label>Checked</Label>
+            </div>
+            <div className="text-sm">
+                <CheckBox checked="true"/> <Label>Checked</Label>
+            </div>
+            <div className="text-base">
+                <CheckBox checked="true"/> <Label>Checked</Label>
+            </div>
+            <div className="text-lg">
+                <CheckBox checked="true"/> <Label>Checked</Label>
+            </div>
+        </div>
+        <div className="flex flex-row justify-between">
+            <div className="text-xl">
+                <CheckBox checked="true"/> <Label>Checked</Label>
+            </div>
+            <div className="text-2xl">
+                <CheckBox checked="true"/> <Label>Checked</Label>
+            </div>
+            <div className="text-3xl">
+                <CheckBox checked="true"/> <Label>Checked</Label>
+            </div>
+            <div className="text-4xl">
+                <CheckBox checked="true"/> <Label>Checked</Label>
+            </div>
+        </div>
+        </div>
+    </Story>
+</Canvas>
+
+Inside an inline flex
+
+<Canvas>
+    <Story name="Inside Inline Flex">
+        <div className="text-base space-y-2">
+            Before <span className="inline-flex flex-row items-center space-x-1">
+                <CheckBox checked="true"/> 
+                <Label className="self-baseline">Checked</Label>
+            </span> after
+        </div>
+    </Story>
+</Canvas>
+
+<Canvas>
+    <Story name="CheckBox Button">
+        <div className="text-base">
+            <CheckBox />
+            <CheckButton />
+        </div>
+    </Story>
+</Canvas>
+
+

@@ -1,0 +1,93 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs';
+
+
+<Meta title="Component/Tooltip"/>
+
+# Tooltip
+
+There are two types of tooltips. 
+
+## Simple
+
+Simple tooltips are plain CSS and are completely handled by the browser by using
+the attribute `data-tooltip` on any element. They don't require any javascript 
+or produce any overhead. They are useful for showing simple and short one liners.
+
+<Preview>
+    <Story name="Basic">
+        <div className="inline-block px-3 py-2 border rounded bg-red-100" data-tooltip="Hover text">Hover over me</div>
+    </Story>
+</Preview>
+
+You can show or hide the tooltip by adding of removing the `data-tooltip-show` 
+attribute from the element.
+
+<Preview>
+    <Story name="Always show">
+        <div className="inline-block px-3 py-2 border rounded bg-red-100" data-tooltip="Hover text" data-tooltip-show>No need to over over me</div>
+    </Story>
+</Preview>
+
+When applying to different text sizes it positions accordingly
+
+<Preview>
+    <Story name="Applied to different sizes">
+        <div className="p-10 flex flex-row justify-between items-center">
+            <span className="text-xs bg-red-100" data-tooltip="Hover text" data-tooltip-show>Extra Small</span>
+            <span className="text-sm bg-red-100" data-tooltip="Hover text" data-tooltip-show>Small</span>
+            <span className="text-base bg-red-100" data-tooltip="Hover text" data-tooltip-show>Base</span>
+            <span className="text-lg bg-red-100" data-tooltip="Hover text" data-tooltip-show>Large</span>
+            <span className="text-xl bg-red-100" data-tooltip="Hover text" data-tooltip-show>Extra Large</span>
+        </div>
+    </Story>
+</Preview>
+
+
+It even works on svg using `foreignObject` element. Set the svg's overflow class
+to 'visible' because it might hide the tooltip. Two attributes are required: 
+
+* `has-svg-tooltip` which signals the container over which to hover to show the tooltip.
+* `svg-tooltip` on the `foreignObject` that holds the actual tooltip. Bare in
+mind that the tooltip inside the foreinObject is just a regular tooltip with the 
+`data-tooltip-show` atribute enabled.
+
+The standard way to do it is
+
+```
+<foreignObject x={8} y={0} width={1} height={1} className="svg-tooltip">
+    <body xmlns="http://www.w3.org/1999/xhtml">
+        <div data-tooltip="Hover text" data-tooltip-show/>
+    </body>
+</foreignObject>
+```
+
+The `body` element is required for this to work on Safari and the `xmlns` 
+is required to comply with the namespacing for the document. Also the body is 
+css formatted to be `position: 'fixed'` because otherwise the position is not
+correct.
+
+<Preview>
+    <Story name="SVG" parameters={{ docs: { inlineStories: false } }}>
+        <svg width={256} height={64} style={{ overflow: 'visible' }}>
+            <circle cx={16} cy={16} r={16} fill="gray">
+                <title>This is the title</title>
+            </circle>
+            <g transform="translate(64, 32)" className="has-svg-tooltip">
+                <rect x={0} y={0} width={32} height={32} fill="gray"/>
+                <foreignObject x={8} y={0} width={1} height={1} className="svg-tooltip">
+                    <body xmlns="http://www.w3.org/1999/xhtml">
+                        <div data-tooltip="Hover text" data-tooltip-show />
+                    </body>
+                </foreignObject>
+            </g>
+        </svg>
+    </Story>
+</Preview>
+
+## Complex
+
+Complex tooltips are the ones with more elaborated than one liners and that
+require more formatting. They are rendered exactly with the same display
+characteristics, but are handled by the application and not the browser.
+
+

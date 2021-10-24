@@ -1,0 +1,103 @@
+import { useState, useRef } from 'react';
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import { action } from '@storybook/addon-actions';
+import { Input } from './Input';
+import { Button } from '../Buttons';
+import CircleIcon from '../../icons/CircleIcon';
+import SquareIcon from '../../icons/SquareIcon';
+
+
+<Meta title="Component/Controls/Input" 
+    component={Input}
+    parameters={{
+        layout: 'centered'
+    }}
+/>
+
+
+# Inputs
+
+This component behaves exactly the same way as an html `input` element. The
+`ref` and `className` of this component are forwarded to the internal `input`
+element. Beware that this `input` is wrapped in other components when setting
+the `className`.
+
+<ArgsTable of={Input} /> 
+
+## Controlled 
+
+<Canvas>
+    <Story name="Controlled">
+        {() => {
+            const [value, setValue] = useState('Katniss');
+            const handleChange = (e) => { setValue(e.target.value); action('onChange')(e.target.value); }
+            const handleSubmit = (e) => { e.preventDefault(); action('onSubmit')(value); }
+            return (
+                <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
+                    <Input type="text" value={value} onChange={handleChange} placeholder="Enter name"/>
+                    <Button>Submit</Button>
+                </form>
+            );
+        }}
+    </Story>
+</Canvas>
+
+## Uncontrolled
+
+<Canvas>
+    <Story name="Uncontrolled">
+        {() => {
+            const ref = useRef();
+            const handleSubmit = (e) => { e.preventDefault(); action('onSubmit')(ref.current.value); }
+            return (
+                <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
+                    <Input type="text" ref={ref} defaultValue="Katniss" placeholder="Enter name"/>
+                    <Button>Submit</Button>
+                </form>
+            );
+        }}
+    </Story>
+</Canvas>
+
+## Error
+
+<Canvas>
+    <Story name="Error">
+        <form className="w-96 flex flex-row items-center space-x-2">
+            <Input type="text" error={true} defaultValue="" placeholder="Enter name"/>
+            <Button>Submit</Button>
+        </form>
+    </Story>
+</Canvas>
+
+## Placeholder
+
+<Canvas>
+    <Story name="Placeholder">
+        <form className="w-96 flex flex-row items-center space-x-2">
+            <Input type="text" defaultValue="" placeholder="Enter name"/>
+            <Button>Submit</Button>
+        </form>
+    </Story>
+</Canvas>
+
+
+## With Adornments
+
+<Canvas>
+    <Story name="Start Adornment">
+        <form className="w-96 flex flex-row items-center space-x-2">
+            <Input type="text" 
+                defaultValue="" 
+                start={
+                    <SquareIcon className="stroke-1"/>
+                }
+                end={
+                    <CircleIcon className="stroke-1"/>
+                } 
+                placeholder="Enter name"
+            />
+            <Button>Submit</Button>
+        </form>
+    </Story>
+</Canvas>

@@ -1,0 +1,276 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+import { Tag, TagProps, Cross } from './Tag';
+import { Input } from './controls/Input';
+import classnames from 'classnames';
+import { controlScale } from './ComponentScale';
+import { action } from '@storybook/addon-actions';
+
+export const handleClick = () => action('onClick')('clicked');
+export const handleDelete = () => action('onDelete')('deleted');
+
+
+<Meta title="Component/Tag" component={Tag} />
+
+
+# Introduction
+
+It is very cumbersome to create a tag that has text truncated with ellipsis 
+because getting the vertical align right is not very easy. It all starts from
+the CSS spec:
+
+> The baseline of an 'inline-block' is the baseline of its last line box in 
+> the normal flow, unless it has either no in-flow line boxes or if its 
+> 'overflow' property has a computed value other than 'visible', in which case 
+> the baseline is the bottom margin edge.
+
+Having an inline block with text truncate requires an overflow hidden will yield
+an out of vertical align element:
+
+<Canvas>
+<div>
+    before <span className="inline-block max-w-full truncate bg-red-100">tex</span> after
+</div>
+<div className="bg-gray-100">
+    before <span className="inline-block max-w-full truncate bg-red-100">tex text text text text text text text text text text text text  text text text  text text text  text text text</span> after
+</div>
+</Canvas>
+
+The way we are working with is to do a flex container having the truncated
+element inside and making the compounded element's baseline be the truncated
+text.
+
+<Canvas>
+<div>
+    before <span className="inline-flex flex-row max-w-full bg-red-200">
+        <span className="inline-block max-w-full truncate bg-red-100">tex</span> 
+    </span> after
+</div>
+<div className="bg-gray-100">
+    before <span className="inline-flex flex-row max-w-full bg-red-200">
+        <span className="inline-block max-w-full truncate bg-red-100">tex text text text text text text text text text text text text  text text text  text text text  text text text</span> 
+    </span> after
+</div>
+</Canvas>
+
+Adding the delete icon creates a new problem of alignment which we takled by
+givign the truncated text a height and line height of `1em`
+
+<Canvas>
+<div>
+    before <span className="inline-flex flex-row items-baseline py-0.5 max-w-full bg-red-200">
+        <Cross className="flex-none self-center bg-red-300" width="0.75em" height="0.75em"/>
+        <span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex</span> 
+    </span> after
+</div>
+<div className="bg-gray-100">
+    before <span className="inline-flex flex-row items-baseline py-0.5 max-w-full bg-red-200">
+        <Cross className="flex-none self-center bg-red-300" width="0.75em" height="0.75em"/>
+        <span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex text text text text text text text text text text text text  text text text  text text text  text text text</span> 
+    </span> after
+</div>
+</Canvas>
+
+The rest is accomplished with horizontal padding and margin.
+
+<Canvas>
+<div>
+    before <span className="inline-flex flex-row items-baseline px-1 py-0.5 max-w-full bg-red-200 rounded rounded-full">
+        <Cross className="flex-none self-center bg-red-300 rounded rounded-full" width="0.75em" height="0.75em" style={{ marginRight: '0.25em' }}/>
+        <span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex</span> 
+    </span> after
+</div>
+<div className="bg-gray-100">
+    before <span className="inline-flex flex-row items-baseline px-1 py-0.5 max-w-full bg-red-200 rounded rounded-full">
+        <Cross className="flex-none self-center bg-red-300 rounded rounded-full" width="0.75em" height="0.75em" style={{ marginRight: '0.25em' }}/>
+        <span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex text text text text text text text text text text text text  text text text  text text text  text text text</span> 
+    </span> after
+</div>
+</Canvas>
+
+# Base
+
+## Scale
+
+The size of the tag is derived from the size of the text that contains it. If
+the text was `sm` the tag will be rendered as `sm`.
+
+<Canvas>
+    <Story name="Different Scales Same Base">
+        <div className="p-2">
+            <span className="text-sm"><span className="bg-red-100">Text Small XXX</span> <Tag>Tag</Tag> </span>
+            <span className="text-base"><span className="bg-red-100">Text Base XXX</span> <Tag>Tag</Tag> </span>
+            <span className="text-lg"><span className="bg-red-100">Text Large XXX</span> <Tag>Tag</Tag> </span>
+            <span className="text-xl"><span className="bg-red-100">Text Extra Large XXX</span> <Tag>Tag</Tag> </span>
+        </div>
+    </Story>
+</Canvas>
+
+Having the ondelete or not should render the element of the same size shifting 
+the internal padding to accommodate the extra `cross` icon.
+
+<Canvas>
+    <Story name="With and Without Same Width">
+        <div className="flex flex-row justify-between items-center">
+        <div className="text-xs">
+            <div><Tag>TagXÉ</Tag></div>
+            <div><Tag onDelete={handleDelete}>TagXÉ</Tag></div>
+        </div>
+        <div className="text-sm">
+            <div><Tag>TagXÉ</Tag></div>
+            <div><Tag onDelete={handleDelete}>TagXÉ</Tag></div>
+        </div>
+        <div className="text-base">
+            <div><Tag>TagXÉ</Tag></div>
+            <div><Tag onDelete={handleDelete}>TagXÉ</Tag></div>
+        </div>
+        <div className="text-lg">
+            <div><Tag>TagXÉ</Tag></div>
+            <div><Tag onDelete={handleDelete}>TagXÉ</Tag></div>
+        </div>
+        <div className="text-xl">
+            <div><Tag>TagXÉ</Tag></div>
+            <div><Tag onDelete={handleDelete}>TagXÉ</Tag></div>
+        </div>
+        </div>
+    </Story>
+</Canvas>
+
+## Actions
+
+Depending on the action the hover has different effect:
+
+<Canvas>
+    <Story name="With Different actions">
+        <div className="flex flex-row justify-between items-center">
+            <div><Tag>Plain</Tag></div>
+            <div><Tag onClick={handleClick}>With onClick</Tag></div>
+            <div><Tag onDelete={handleDelete}>With onDelete</Tag></div>
+            <div><Tag onClick={handleClick} onDelete={handleDelete}>Width onClick and onDelete</Tag></div>
+        </div>
+    </Story>
+</Canvas>
+
+
+## Spacing
+
+Sometimes it is required to place tags in a line and have some space between 
+them. This can be done with spaces or via an utility class `lux-tag-space`.
+
+<Canvas>
+    <Story name="Spacing With Spaces">
+        <span>before <Tag>Plain</Tag> <Tag>Plain</Tag> <Tag>Plain</Tag> after</span>
+    </Story>
+</Canvas>
+
+<Canvas>
+    <Story name="Spacing with Utility Class">
+        <span>before 
+            <span className="lux-tag-space">
+                <Tag>Plain</Tag> 
+                <Tag>Plain</Tag> 
+                <Tag>Plain</Tag> 
+            </span>
+        after</span>
+    </Story>
+</Canvas>
+
+<Canvas>
+    <Story name="Spacing with Utility Class Multi Line">
+        <div className="lux-tag-space text-base">
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+            <Tag>Plain</Tag> 
+        </div>
+    </Story>
+</Canvas>
+
+## Inside inputs
+
+Finally we need to make sure that it fits appropriately inside the
+equivalent of an input element.
+
+<Canvas>
+    <Story name="Inside an Input Extra Small">
+        <div className="flex flex-row space-x-2 items-start">
+            <div className={classnames('flex-1 w-full lux-tag-space rounded border border-control-border', controlScale['xs'])}>
+                <Tag>Plain</Tag>
+                <Tag>Plain</Tag>
+                <Tag onDelete={handleDelete}>With onDelete</Tag>
+                <Tag onDelete={handleDelete}>With onDelete</Tag>
+                <Tag>Plain</Tag>
+            </div>
+            <div className="flex-1">
+                <Input scale="xs" type="text" defaultValue="Plain"/>
+            </div>
+        </div>
+    </Story>
+</Canvas>
+
+<Canvas>
+    <Story name="Inside an Input Small">
+        <div className="flex flex-row space-x-2 items-start">
+            <div className={classnames('flex-1 w-full lux-tag-space rounded border border-control-border', controlScale['sm'])}>
+                <Tag>Plain</Tag>
+                <Tag>Plain</Tag>
+                <Tag onDelete={handleDelete}>With onDelete</Tag>
+                <Tag onDelete={handleDelete}>With onDelete</Tag>
+                <Tag>Plain</Tag>
+            </div>
+            <div className="flex-1">
+                <Input scale="sm" type="text" defaultValue="Plain"/>
+            </div>
+        </div>
+    </Story>
+</Canvas>
+
+<Canvas>
+    <Story name="Inside an Input Base">
+        <div className="flex flex-row space-x-2 items-start">
+            <div className={classnames('flex-1 block w-full lux-tag-space rounded border border-control-border', controlScale['base'])}>
+                <Tag>Plain</Tag>
+                <Tag>Plain</Tag>
+                <Tag onDelete={handleDelete}>With onDelete</Tag>
+                <Tag onDelete={handleDelete}>With onDelete</Tag>
+                <Tag>Plain</Tag>
+            </div>
+            <div className="flex-1">
+                <Input scale="base" type="text" defaultValue="Plain"/>
+            </div>
+        </div>
+    </Story>
+</Canvas>
+
+<Canvas>
+    <Story name="Inside an Input Large">
+        <div className="flex flex-row space-x-2 items-start">
+            <div className={classnames('flex-1 w-full lux-tag-space rounded border border-control-border', controlScale['lg'])}>
+                <Tag>Plain</Tag>
+                <Tag>Plain</Tag>
+                <Tag onDelete={handleDelete}>With onDelete</Tag>
+                <Tag>Plain</Tag>
+            </div>
+            <div className="flex-1">
+                <Input scale="lg" type="text" defaultValue="Plain"/>
+            </div>
+        </div>
+    </Story>
+</Canvas>
