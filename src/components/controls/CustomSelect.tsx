@@ -35,7 +35,7 @@ export const CustomSelect: CustomSelectComponent = (({ scale = 'base', value, la
 
     const [target, setTarget] = useState<HTMLDivElement | null>(null);
     const [popper, setPopper] = useState<HTMLDivElement | null>(null);
-    useOnOutsideClick(() => {if (isVisible) { setIsVisible(false); } }, isVisible, target, popper);
+    useOnOutsideClick(isVisible, () => { if (isVisible) { setIsVisible(false); } }, target, popper);
 
 
     return (
@@ -46,12 +46,12 @@ export const CustomSelect: CustomSelectComponent = (({ scale = 'base', value, la
                     'focus:border-primary-500 focus:ring focus:ring-primary-500',
                     'focus:ring-opacity-50 focus:outline-none',
                     'pr-8 text-right truncate cursor-pointer',
-                    controlScale[scale || context.scale || 'base'])} onClick={(() => setIsVisible(!isVisible))}>
+                )} onClick={(() => setIsVisible(!isVisible))}>
                     {label(value) || <span>&nbsp;</span>}
                     <div className="absolute top-1/2 right-1">
                         < AngleDownIcon className={classnames(
-                            'stroke-current stroke-2',
-                            controlIconSmallMarginSize[scale || context.scale || 'base'])} />
+                            'stroke-current stroke-2'
+                        )} />
                     </div>
                 </div>
                 {isVisible && React.Children.count(children) !== 0 &&

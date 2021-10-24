@@ -1,31 +1,75 @@
 import classnames from 'classnames';
-import classNames from 'classnames';
-import _debounce from 'lodash/debounce';
-import _isFunction from 'lodash/isFunction';
-import React, { Ref, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { AngleDownIcon, WarningIcon } from '../../icons';
-import { setInputValue } from '../../utilities/setInputValue';
 import { ChooseOption, ChooseOptionProps } from '../ChooseOption';
 import { defaultGetOptions, defaultRenderGroupLabel, defaultRenderOption } from '../ChooseOptionList';
-import { Delay } from '../Delay';
-import { Loading } from '../Loading';
 import { Popper, PopperProps } from '../Popper';
+import { defaultGetValue } from './Choose';
 import { Wrapper, WrapperProps } from './Wrapper';
+import _debounce from 'lodash/debounce';
+import _isFunction from 'lodash/isFunction';
+import { Loading } from '../Loading';
+import { AngleDownIcon, WarningIcon } from '../../icons';
+import { Delay } from '../Delay';
 
 
 //
 // Choose
 //
 
-export interface ChooseProps<G, O> extends WrapperProps,
-    Pick<PopperProps, 'placement' | 'withArrow' | 'withSameWidth'>,
-    Pick<ChooseOptionProps<G, O>, 'withSearch' | 'getOptions' | 'renderGroupLabel' | 'renderOption' | 'renderFooter'> {
+export type ChooseProps<G, O> = ChooseOneProps<G, O> | ChooseMultipleProps<G, O>;
+
+export interface ChooseOneProps<G, O> extends BaseChooseProps<G, O> {
+
+    /**
+     * 
+     */
+    withMultiple?: false;
+
+    /**
+     * The values to display as selected.
+     */
+    value?: string;
 
     /** 
      * Function to convert a value to an option.
      */
     option: (value: string) => (O | undefined) | Promise<O | undefined>;
+
+}
+
+export interface ChooseMultipleProps<G, O> extends BaseChooseProps<G, O> {
+
+    /**
+     * 
+     */
+    withMultiple?: true;
+
+    /**
+     * The values to display as selected.
+     */
+    value?: string[];
+
+    /** 
+     * Function to convert a value to an option.
+     */
+    option: (values: string[]) => (O | undefined)[] | Promise<(O | undefined)[]>;
+
+}
+
+export interface BaseChooseProps<G, O> extends WrapperProps,
+    Pick<PopperProps, 'placement' | 'withArrow' | 'withSameWidth'>,
+    Pick<ChooseOptionProps<G, O>, 'withSearch' | 'getOptions' | 'renderGroupLabel' | 'renderOption' | 'renderFooter'> {
+
+    /**
+     * 
+     */
+    withMultiple?: boolean;
+
+    /**
+     * Callback when an option is chosen from the list.
+     */
+    onChoose?: (value: string) => void;
 
     /**
      * Function to provide options given a search query. This function can
@@ -45,11 +89,21 @@ export interface ChooseProps<G, O> extends WrapperProps,
 
     /**
      * Render the selected option from the provided option. Defaults
-     * to `renderOption`.
+     * to multipe renders of `renderOption`.
      */
-    renderSelectedOption?: (props: { option: O }) => React.ReactNode;
+    renderSelection?: (props: { active: boolean, option: O }) => React.ReactNode;
 
-    //
+    // styling
+
+    /**
+     * 
+     */
+    placeholder?: string;
+
+    /**
+     * 
+     */
+    className?: string;
 
     /**
      * Classes to pass to the ChooseOption container.
@@ -58,22 +112,16 @@ export interface ChooseProps<G, O> extends WrapperProps,
 
 }
 
-/**
- * Choose is a controller or uncontrolled input that automatically
- * renders the currently selected option as well calling the options
- * promise while managing loading and error states. Assume this
- * elements acts as an `input`.
- */
-export const Choose = React.forwardRef(<G, O>(
-    props: ChooseProps<G, O> & React.InputHTMLAttributes<HTMLInputElement>,
-    ref: Ref<HTMLInputElement>
-) => {
+
+
+export const ChooseMultiple: <G, O>(props: ChooseProps<G, O>) => React.ReactElement = <G,O>(props: ChooseProps<G, O>) => {
 
     const {
 
         variant,
         withNoFull,
 
+        withMultiple = false,
         withSearch,
 
         option,
@@ -86,7 +134,7 @@ export const Choose = React.forwardRef(<G, O>(
         withArrow = false,
         withSameWidth = false,
 
-        renderSelectedOption,
+        renderSelection,
         renderGroupLabel = defaultRenderGroupLabel,
         renderOption = defaultRenderOption,
         renderFooter,
@@ -94,20 +142,16 @@ export const Choose = React.forwardRef(<G, O>(
         start,
         end,
 
-        defaultValue,
         value,
-        onChange,
+        // onChange,
 
         error,
         disabled,
 
-        tabIndex = 0,
         placeholder,
         className,
 
-        containerClassName,
-
-        ...inputProps
+        containerClassName
 
     } = props;
 
@@ -130,7 +174,7 @@ export const Choose = React.forwardRef(<G, O>(
 
     const loadRef = useRef<{ cancel: (() => void) } | null>(null);
     const [loadedOptionValue, setLoadedOptionValue] = useState(null);
-    const [loadedOption, setLoadedOption] = useState<O | undefined>();
+    const [loadedOption, setLoadedOption] = useState<any>();
 
     const doLoad = useCallback((value) => {
 
@@ -140,7 +184,7 @@ export const Choose = React.forwardRef(<G, O>(
                 const promisedOption = await Promise.resolve(option(value));
                 if (working) {
                     setLoadedOptionValue(value);
-                    setLoadedOption(promisedOption);
+                    setLoadedOption(promisedOption as any);
                 }
             } catch (e) {
                 if (working) {
@@ -174,37 +218,8 @@ export const Choose = React.forwardRef(<G, O>(
     }, 0), [doLoad, loadedOptionValue]);
 
     useEffect(() => {
-        const v = value || defaultValue || '';
-        handleLoad(v);
-    }, [handleLoad, value]); // eslint-disable-line react-hooks/exhaustive-deps
-
-    // When using `react-hook-form`, or anything that directly changes the html
-    // input element value via the `ref.current.value`, we need to intercept the
-    // reference we publish to detect those changes. We use a Proxy to check
-    // when the property `value` is set, and trigger an `option` load that
-    // eventually updates the `optionValue` and `loadedOption`. These two
-    // variables represents the current value for the component.
-    //
-    // This changes when either the value property changes (via the props) or
-    // when the ref.current.value is set to a different value than the one
-    // current value of the component.
-
-    const handler: ProxyHandler<HTMLInputElement> = {
-        get(target, property) {
-            return (target as any)[property];
-        },
-        set(target, property, value) {
-            if (property === 'value') {
-                handleLoad(value);
-            }
-            (target as any)[property] = value;
-            return true;
-        }
-    }
-
-    const selectionRef = useRef<HTMLDivElement>(null);
-    const inputRef = useRef<HTMLInputElement>(null);
-    useImperativeHandle(ref, () => inputRef.current ? new Proxy(inputRef.current, handler) : inputRef.current!);
+        handleLoad(value);
+    }, [handleLoad, value]);
 
     // popper show and hide
 
@@ -247,6 +262,7 @@ export const Choose = React.forwardRef(<G, O>(
     }
 
     const handleMouseDown = (e: React.MouseEvent<HTMLInputElement>) => {
+        console.log('handleMouseDown', document.activeElement, wrapperRef);
         if (document.activeElement != null && document.activeElement === wrapperRef) {
             e.preventDefault();
             handleShow();
@@ -268,22 +284,24 @@ export const Choose = React.forwardRef(<G, O>(
     // handlers
 
     const handleChoose = (option: O) => {
-        setInputValue(inputRef, getValue(option));
-        if (value == null) {
-            setLoadedOption(option);
-        }
+        // setInputValue(inputRef, getValue(option));
+        // if (value == null) {
+        //     setLoadedOption(option);
+        // }
+        console.log('option', option);
         handleHide();
     };
 
     // render
 
+    console.log('render');
+
     return (
         <>
-
             <Wrapper
 
                 ref={setWrapperRef}
-                tabIndex={tabIndex}
+                tabIndex={0}
 
                 variant={variant}
                 withNoFull={withNoFull}
@@ -302,7 +320,7 @@ export const Choose = React.forwardRef(<G, O>(
                     <>
                         {end}
                         {loading && <Delay><Loading colorClassName="text-control-border" /></Delay>}
-                        {loadingError ? <WarningIcon className="text-danger-500" /> : <AngleDownIcon className="text-control-border" />}
+                        {loadingError ? <WarningIcon className="text-danger-500 stroke-2" /> : <AngleDownIcon className="text-control-border stroke-2" />}
                     </>
                 }
 
@@ -310,38 +328,13 @@ export const Choose = React.forwardRef(<G, O>(
 
             >
 
-                <div
-                    ref={selectionRef}
-                    className={classnames('truncate', className)}
-                >
-                    {loading ?
-                        <>&nbsp;</> :
-                        (loadedOption ?
-                            (renderSelectedOption ?
-                                renderSelectedOption({ option: loadedOption }) :
-                                renderOption({ option: loadedOption })) :
-                            (placeholder ?
-                                <span className="text-control-placeholder opacity-40">{placeholder}</span> :
-                                <>&nbsp;</>))
-                    }
-                </div>
-
-                <input
-
-                    type="text"
-                    tabIndex={-1}
-
-                    ref={inputRef}
-
-                    defaultValue={defaultValue}
-                    value={value}
-                    onChange={onChange}
-
-                    {...inputProps}
-
-                    className="absolute inset-0 w-full text-center opacity-0 pointer-events-none"
-
-                />
+                {!loadedOption ?
+                    <span>{placeholder}</span>
+                    :
+                    <span className={className}>
+                        {withMultiple ? loadedOption.map((option: O) => renderOption({ option })) : renderOption({ option: loadedOption })}
+                    </span>
+                }
 
             </Wrapper>
 
@@ -356,7 +349,6 @@ export const Choose = React.forwardRef(<G, O>(
                 >
 
                     <ChooseOption
-
 
                         ref={chooseOptionRef}
 
@@ -374,7 +366,7 @@ export const Choose = React.forwardRef(<G, O>(
                         renderOption={renderOption}
                         renderFooter={renderFooter}
 
-                        containerClassName={classNames('border border-control-border rounded', containerClassName)}
+                        containerClassName={classnames('border border-control-border rounded', containerClassName)}
 
                     />
 
@@ -384,8 +376,4 @@ export const Choose = React.forwardRef(<G, O>(
         </>
     );
 
-});
-
-// default properties
-
-export const defaultGetValue = <O,>(option: O) => String(option);
+};

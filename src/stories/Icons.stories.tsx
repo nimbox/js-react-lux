@@ -13,7 +13,7 @@ export default {
 
 
 const Tile: React.FC<{ icon: string, className?: string }> = ({ icon, className }) => {
-    const Icon = icons[icon];
+    const Icon = (icons as any)[icon];
     return (
         <div className="text-center">
             <div className="h-32 flex flex-row justify-center items-center">

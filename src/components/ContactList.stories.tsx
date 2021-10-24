@@ -10,13 +10,12 @@ const definition = {
     component: Contact,
     parameters: { actions: { argTypesRegex: '^on.*' } },
     argTypes: {
-        scale: { control: { type: 'select', options: ['xs', 'sm', 'base', 'lg'] } },
         isDraggable: { control: { type: 'boolean' } }
     }
 };
 export default definition;
 
-export const ContactList = ({ scale, ...props }: ContactElementProps) => {
+export const ContactList = ({ ...props }: ContactElementProps) => {
 
     const contacts = [
         {
@@ -57,21 +56,18 @@ export const ContactList = ({ scale, ...props }: ContactElementProps) => {
 
     return (
         <div>
-            <Sortable onChange={onChange} scale={scale}>
+            <Sortable onChange={onChange}>
                 {contacts
                     .map((item) => (
                         <Contact
-                            render={item.text}
-                            scale={scale}
-                        >
-                            <Sortable onChange={onChange} scale={scale}  >
+                            render={item.text}>
+                            <Sortable onChange={onChange}>
                                 {item.elements
                                     .map(item => (
                                         <ContactElement
                                             type={item.type}
                                             render={item.text}
                                             locus={item.locus}
-                                            scale={scale}
                                         />
                                     ))}
                             </Sortable>
@@ -82,4 +78,4 @@ export const ContactList = ({ scale, ...props }: ContactElementProps) => {
 
     )
 };
-ContactList.args = { scale: 'base' };
+ContactList.args = {};

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChooseNew } from '../components/controls/Choose';
+import { Choose } from '../components/controls/Choose';
 import { createSearchMatcher } from '../utilities/createSearchMatcher';
 import timezones from './timezones.json';
 
@@ -68,11 +68,11 @@ export const ZonePicker = React.forwardRef<HTMLInputElement, ZonePickerProps>((p
     };
 
     return (
-        <ChooseNew
+        <Choose
 
             withSearch
 
-            option={getOption}
+            option={getOption as any}
             options={getOptions}
 
             value={value}
@@ -93,9 +93,9 @@ export const ZonePicker = React.forwardRef<HTMLInputElement, ZonePickerProps>((p
                     {option.description} 👍🏻
                 </span>
             }
-            renderCreate={({ searchValue }) =>
+            renderFooter={({ options }) =>
                 <div className="px-3 py-2 bg-gray-100">
-                    Crear {searchValue}
+                    Crear {options.values}
                 </div>
             }
 

@@ -19,9 +19,9 @@ export const TextAreaMarkup = React.forwardRef<HTMLTextAreaElement, TextAreaMark
 
     const context = useContext(Context);
 
-    const [referenceElement, setReferenceElement] = useState();
-    const [popperElement, setPopperElement] = useState();
-    const [arrowElement, setArrowElement] = useState();
+    const [referenceElement, setReferenceElement] = useState<HTMLTextAreaElement | null>(null);
+    const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
+    const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null);
     const { styles, attributes } = usePopper(referenceElement, popperElement, {
         placement: 'top-start',
         modifiers: [
@@ -33,7 +33,6 @@ export const TextAreaMarkup = React.forwardRef<HTMLTextAreaElement, TextAreaMark
         <div>
 
             <textarea {...props} ref={setReferenceElement} className={classnames(
-                controlScale[scale || context.scale || 'base'],
                 'block w-full rounded border border-control-border',
                 error || context.error ?
                     'border-danger-500 focus:border-danger-500 focus:ring focus:ring-danger-500' :

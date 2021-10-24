@@ -10,11 +10,10 @@ export interface ContactElementProps {
     type: string;
     locus?: string;
     render: string;
-    scale?: ComponentScale;
     className?: string;
 }
 
-export const ContactElement: FC<ContactElementProps> = ({ type, locus, render, scale, className, ...props }) => {
+export const ContactElement: FC<ContactElementProps> = ({ type, locus, render, className, ...props }) => {
 
     let Icon = MessageIcon;
     switch (type) {
@@ -32,16 +31,14 @@ export const ContactElement: FC<ContactElementProps> = ({ type, locus, render, s
             className)} >
             <span className={classnames(
                 'self-center flex flex-row items-center justify-center')}>
-                <Icon className={classnames(
-                    { 'h-3 w-3': scale === 'xs', 'h-4 w-4': scale === 'sm' || scale === 'base', 'h-5 w-5': scale === 'lg' },
-                    'stroke-current stroke-1')} />
+                <Icon className={classnames('stroke-current stroke-1')} />
             </span>
-            <Button link scale={scale} className='truncate'>
+            <Button variant="link" className='truncate'>
                 {render}
             </Button>
             <span className={classnames(
                 'flex flex-row rounded-full bg-primary-600 text-white px-1 py-0',
-                controlSmallText[scale || 'xs'])}>
+            )}>
                 {locus}
             </span>
         </span>

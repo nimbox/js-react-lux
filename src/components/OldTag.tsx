@@ -26,20 +26,14 @@ export const Tag: FC<TagProps> = (({ scale, color: backgroundColor, onClick, onD
             className)}>
             {show &&
                 <span className={classnames(
-                    'self-center rounded-full flex flex-shrink-0 items-center justify-center',
-                    controlSmallSize[scale || context.scale || 'base'])}>
+                    'self-center rounded-full flex flex-shrink-0 items-center justify-center'
+                )}>
                     <CrossIcon onClick={onDelete} className={classnames(
                         { 'h-2.5 w-2.5': scale === 'xs', 'h-3 w-3': scale === 'sm' || scale === 'base', 'h-3.5 w-3.5': scale === 'lg' },
                         'stroke-current stroke-2 ')} />
                 </span>}
             <span className={classnames(
-                'self-auto truncate',
-                tagText[scale || context.scale || 'base'],
-                !show ? {
-                    'px-2': scale === 'xs',
-                    'px-2.5': scale === 'sm',
-                    'px-3': scale === 'base' || scale === 'lg',
-                } : 'pr-0.5',
+                'self-auto truncate'
             )}>
                 {children}
             </span>

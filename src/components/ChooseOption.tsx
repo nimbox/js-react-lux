@@ -240,6 +240,8 @@ export const ChooseOption = React.forwardRef(<G, O>(
 
     const withFooter = renderFooter ? renderFooter({ value, options: searchedOptions, selected }) : null;
 
+    console.log('searchedOptions', searchedOptions);
+
     return (
         <div
             ref={containerRef}

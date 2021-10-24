@@ -60,7 +60,7 @@ const initialTags = [store.get('id1')!, store.get('id2')!, store.get('id10')!];
 // parameterized
 
 
-export const Template = ({ scale, ...props }: TagPickerProps<StoryTag>) => {
+export const Template = ({ ...props }: TagPickerProps<StoryTag>) => {
 
     const [tags, setTags] = useState(initialTags);
 
@@ -93,10 +93,10 @@ export const Template = ({ scale, ...props }: TagPickerProps<StoryTag>) => {
         return (
             <div className="space-y-2">
                 <div className="grid grid-cols-4 gap-2">
-                    <Input scale="sm" type="text" value={search} disabled={true} className="col-span-3" />
-                    <SwatchPicker scale="sm" swatches={swatches} value={color} onChange={(e) => setColor(e.target.value)} disabled={disabled} popperClassName="grid grid-cols-5" />
+                    <Input type="text" value={search} disabled={true} className="col-span-3" />
+                    <SwatchPicker values={swatches} value={color} onChange={(e) => setColor(e.target.value)} disabled={disabled} popperClassName="grid grid-cols-5" />
                 </div>
-                <Button scale="sm" type="button" disabled={disabled} onClick={() => onSubmit(handleCreate(search, color))}>
+                <Button type="button" disabled={disabled} onClick={() => onSubmit(handleCreate(search, color))}>
                     Crear
                 </Button>
             </div>
@@ -112,7 +112,7 @@ export const Template = ({ scale, ...props }: TagPickerProps<StoryTag>) => {
                 <Input type="text" />
             </div>
 
-            <TagPicker scale={scale}
+            <TagPicker
 
                 tags={tags}
                 tagValue={(tag) => tag.id}

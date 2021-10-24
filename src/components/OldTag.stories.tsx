@@ -24,7 +24,7 @@ export const Parameterized = ({ scale, color, children, ...props }: TagProps & {
             { del && <Tag scale={scale} color={color} >
                 {children}
              </Tag> }
-             {!del && <Button link onClick={() => setDelete(true)} className="text-lg m-2">Ver etiqueta</Button>}
+             {!del && <Button variant="link" onClick={() => setDelete(true)} className="text-lg m-2">Ver etiqueta</Button>}
         </div>
     );
 }

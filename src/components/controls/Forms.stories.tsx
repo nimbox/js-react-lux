@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { Button } from '../Buttons';
 import { CheckBox } from './CheckBox';
 import { Control, ControlProps } from './Control';
@@ -9,7 +10,7 @@ import { TextArea } from './TextArea';
 
 // definition
 
-const definition = {
+export default {
     title: 'Component/Controls/Form',
     component: Input,
     argTypes: {
@@ -17,11 +18,10 @@ const definition = {
         error: { control: { type: 'boolean' } }
     }
 };
-export default definition;
 
 //  parameterized
 
-export const Parameterized = ({ scale, error, ...props }: ControlProps & { options: string[] }) => {
+export const Parameterized = ({ error, ...props }: ControlProps & { options: string[] }) => {
 
     return (
         <div className="mt-8 max-w-full">
@@ -33,27 +33,27 @@ export const Parameterized = ({ scale, error, ...props }: ControlProps & { optio
                     </Control>
                 </div>
                 <div>
-                    <Control scale={scale} error={error}>
+                    <Control error={error}>
                         <Control.Label badge="1/60">Apellido</Control.Label>
-                        <Input type="text" scale={scale} />
+                        <Input type="text" />
                     </Control>
                 </div>
                 <div className="col-span-2" >
-                    <Control scale={scale} error={error}>
+                    <Control error={error}>
                         <Control.Label >Email</Control.Label>
-                        <Input type="email" scale={scale} />
+                        <Input type="email" />
                         <Control.Message>Por favor introduce tu asd ja sdlkjas dlkjas dlkjasdl  klasd lkjas dlkjasdlkj asdlkj asldkj alskdj laskdj laksjd laksdj lakjsd</Control.Message>
                         {error && <Control.Error>Introduce un correo válido</Control.Error>}
                     </Control>
                 </div>
                 <div className="col-span-2">
-                    <Control scale={scale} error={error}>
+                    <Control error={error}>
                         <Control.Label >Dirección</Control.Label>
-                        <TextArea scale={scale} />
+                        <TextArea />
                     </Control>
                 </div>
                 <div className="">
-                    <Control scale={scale}>
+                    <Control >
                         <Control.Label >País</Control.Label>
                         <Select>
                             <Select.Option value="DO">República Dominicana</Select.Option>
@@ -62,18 +62,18 @@ export const Parameterized = ({ scale, error, ...props }: ControlProps & { optio
                     </Control>
                 </div>
                 <div className="col-span-2">
-                    <Control scale={scale}>
-                        <CheckBox scale={scale}>Acepto los términos</CheckBox>
+                    <Control >
+                        <CheckBox/>Acepto los términos
                     </Control>
                 </div>
                 <div className="col-span-2">
-                    <Control scale={scale}>
-                        <Radio scale={scale}>Quiero recibir promociones y novedades</Radio>
+                    <Control >
+                        <Radio/>Quiero recibir promociones y novedades
                     </Control>
                 </div>
                 <div className="inline">
-                    <Button scale={scale} className="mr-4" >Enviar</Button>
-                    <Button secondary scale={scale} >Cancelar</Button>
+                    <Button className="mr-4" >Enviar</Button>
+                    <Button color="secondary"  >Cancelar</Button>
                 </div>
             </div>
         </div>

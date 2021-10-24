@@ -63,7 +63,7 @@ export const Sortable: FC<SortableProps> = (({ onChange, scale = 'base', classNa
 
 const SortableItem: FC<SortableItemProps> = (({ type, onChange, findItem, onUpdate, scale = 'base', children }) => {
 
-    const [isDragging, isOver, ref, refPreview] = useDraggable((children as ReactChild | ReactFragment | ReactPortal).key, type, onChange, findItem, onUpdate);
+    const [isDragging, isOver, ref, refPreview] = useDraggable((children as any).key, type, onChange, findItem, onUpdate);
     const [, drop] = useDrop(() => ({ accept: type }));
     const [hover, setHover] = useState(false);
 

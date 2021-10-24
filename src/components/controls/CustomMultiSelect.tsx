@@ -35,11 +35,11 @@ export const CustomMultiSelect: CustomMultiSelectComponent = (({ scale = 'base',
 
     const [target, setTarget] = useState<HTMLDivElement | null>(null);
     const [popper, setPopper] = useState<HTMLDivElement | null>(null);
-    useOnOutsideClick(() => { if (isVisible) { setIsVisible(false); } }, isVisible, target, popper);
+    useOnOutsideClick(isVisible, () => { if (isVisible) { setIsVisible(false); } }, target, popper);
 
 
     return (
-        <Context.Provider value={{ scale, value, onChange }}>
+        <Context.Provider value={{ value, onChange }}>
             <div className={classnames('relative inline-block w-full', className)}>
                 <div ref={setTarget as LegacyRef<HTMLDivElement> | undefined} tabIndex={0} className={classnames(
                     'relative border border-control-border rounded',
@@ -50,8 +50,8 @@ export const CustomMultiSelect: CustomMultiSelectComponent = (({ scale = 'base',
                     {label(value) || <span>&nbsp;</span>}
                     <div className="absolute top-1/2 right-1 ">
                         < AngleDownIcon className={classnames(
-                            'stroke-current stroke-2',
-                            controlIconSmallMarginSize[scale || context.scale || 'base'])} />
+                            'stroke-current stroke-2'
+                        )} />
                     </div>
                 </div>
                 {isVisible && React.Children.count(children) !== 0 &&

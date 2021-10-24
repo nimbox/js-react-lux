@@ -26,3 +26,4 @@ yarn-error.log*
 
 dist/.watchmanconfig
 .vscode
+/storybook-static

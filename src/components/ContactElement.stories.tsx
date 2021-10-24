@@ -9,13 +9,12 @@ const definition = {
     component: ContactElement,
     parameters: { actions: { argTypesRegex: '^on.*' } },
     argTypes: {
-        scale: { control: { type: 'select', options: ['xs', 'sm', 'base', 'lg'] } },
         isDraggable: { control: { type: 'boolean' } }
     }
 };
 export default definition;
 
-export const ContactElements = ({ scale, ...props }: ContactElementProps) => {
+export const ContactElements = (props: ContactElementProps) => {
 
     const contactElements = [
         { value: 1, text: 'kalzuro@nimbox.com', locus: 'work', type: 'email' },
@@ -32,14 +31,13 @@ export const ContactElements = ({ scale, ...props }: ContactElementProps) => {
 
     return (
         <div className="p-2">
-            <Sortable onChange={onChange} scale={scale}>
+            <Sortable onChange={onChange}>
                 {contactElements
                     .map(item => (
                         <ContactElement
                             type={item.type}
                             render={item.text}
                             locus={item.locus}
-                            scale={scale}
                         />
                     ))}
             </Sortable>
@@ -47,4 +45,4 @@ export const ContactElements = ({ scale, ...props }: ContactElementProps) => {
 
     )
 };
-ContactElements.args = { scale: 'base' };
+ContactElements.args = {};

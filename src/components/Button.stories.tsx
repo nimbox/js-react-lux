@@ -71,27 +71,27 @@ PrimaryRoundDanger.args = { scale: 'base', color: 'danger', children: <CrossIcon
 export const PrimaryAlignment = () =>
     <div className="space-x-4">
         <span>Before</span>
-        <Button scale="sm">Primary</Button>
         <Button>Primary</Button>
-        <Button scale="lg">Primary</Button>
+        <Button>Primary</Button>
+        <Button>Primary</Button>
         <span>After</span>
     </div >;
 
 export const SecondaryAlignment = () =>
     <div className="space-x-4">
         <span>Before</span>
-        <Button secondary scale="sm">Secondary</Button>
-        <Button secondary>Secondary</Button>
-        <Button secondary scale="lg">Secondary</Button>
+        <Button color="secondary">Secondary</Button>
+        <Button color="secondary">Secondary</Button>
+        <Button color="secondary">Secondary</Button>
         <span>After</span>
     </div >;
 
 export const LinkPrimaryAlignment = () =>
     <div className="space-x-4">
         <span>Before</span>
-        <Button link scale="sm">Primary</Button>
-        <Button link >Primary</Button>
-        <Button link scale="lg">Primary</Button>
+        <Button  variant="link">Primary</Button>
+        <Button variant="link">Primary</Button>
+        <Button variant="link">Primary</Button>
         <span>After</span>
     </div>;
 
@@ -99,9 +99,9 @@ export const LinkPrimaryAlignment = () =>
 export const LinkSecondaryAlignment = () =>
     <div className="space-x-4">
         <span>Before</span>
-        <Button link secondary scale="sm">Secondary</Button>
-        <Button link secondary >Secondary</Button>
-        <Button link secondary scale="lg">Secondary</Button>
+        <Button variant="link" color="secondary">Secondary</Button>
+        <Button variant="link" color="secondary">Secondary</Button>
+        <Button variant="link" color="secondary">Secondary</Button>
         <span>After</span>
     </div>;
 

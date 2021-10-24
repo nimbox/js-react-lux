@@ -1,11 +1,9 @@
 import classnames from 'classnames';
-import React, { createContext, CSSProperties, FC, MouseEventHandler, useContext, useEffect, useState } from 'react';
+import React, { createContext, FC, MouseEventHandler, useContext, useEffect, useState } from 'react';
 import { ShowTransition } from '../../components/transitions/ShowTransition';
 import { useViewport } from '../../hooks/useViewport';
-import AngleLeftIcon from '../../icons/AngleLeftIcon';
-import HamburgerIcon from '../../icons/HamburgerIcon';
-import { animated, useTransition } from 'react-spring';
-import { CrossIcon } from '../../icons';
+import { AngleLeftIcon, CrossIcon, HamburgerIcon } from '../../icons';
+
 
 //
 // helium
@@ -13,7 +11,7 @@ import { CrossIcon } from '../../icons';
 
 // context
 
-interface ContextProps {
+export interface ContextProps {
 
     isCompact: boolean;
 
@@ -36,6 +34,8 @@ const Context = createContext<ContextProps>({
     setShowMainSide: () => null
 
 });
+
+export const useHelium = () => useContext(Context);
 
 // layout
 

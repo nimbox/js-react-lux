@@ -46,7 +46,7 @@ export const Controlled = () => {
 export const Uncontrolled = () => {
 
     const ref = useRef<HTMLInputElement>(null);
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(ref.current.value); }
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(ref.current!.value); }
 
     return (
         <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
@@ -64,7 +64,7 @@ export const WithShortcuts = () => {
     return (
         <div className="w-48 text-xs">
             <div>Select Date</div>
-            <DatePicker name="date" shortcuts={true} value={date} onChange={(d) => setDate(d.target.value)} />
+            <DatePicker name="date" withShortcuts={true} value={date} onChange={(d) => setDate(d.target.value)} />
         </div>
     );
 
