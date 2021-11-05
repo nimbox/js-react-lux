@@ -2,16 +2,24 @@ import classnames from 'classnames';
 import _debounce from 'lodash/debounce';
 import React, { LegacyRef, useEffect, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
+import { WarningIcon } from '../../icons';
 import AngleDownIcon from '../../icons/AngleDownIcon';
+import { consumeEvent } from '../../utilities/consumeEvent';
+import { ChooseOption, ChooseOptionProps } from '../choose/ChooseOption';
 import { SearchInput } from '../controls/SearchInput';
+import { Wrapper, WrapperProps } from '../controls/Wrapper';
+import { Delay } from '../Delay';
 import { Loading } from '../Loading';
+import { Popper, PopperProps } from '../Popper';
 
 
 //
 // TagPicker
 //
 
-export interface TagPickerProps<T> {
+export interface TagPickerProps<T> extends WrapperProps,
+    Pick<PopperProps, 'placement' | 'withArrow' | 'withSameWidth'>,
+    Pick<ChooseOptionProps<T[], T>, 'withSearch' | 'getOptions' | 'renderGroupLabel' | 'renderOption' | 'renderFooter'> {
 
     tags: T[];
     tagValue: (item: T) => string;
@@ -22,6 +30,23 @@ export interface TagPickerProps<T> {
     onSearch: (q: string) => T[] | Promise<T[]>;
 
     CreateComponent?: React.FC<{ search: string; disabled: boolean; onSubmit: (submitting: void | Promise<void>) => void }>
+
+    // styling
+
+    /**
+     * 
+     */
+    placeholder?: string;
+
+    /**
+     * 
+     */
+    className?: string;
+
+    /**
+     * Classes to pass to the ChooseOption container.
+     */
+    containerClassName?: string;
 
 }
 
@@ -48,6 +73,199 @@ export interface TagPickerProps<T> {
  * they are being resolved the component is shown in a `loading` state.
  *
  */
+// export const TagPicker = <T extends {}>(props: TagPickerProps<T>) => {
+
+
+//     const {
+
+//         variant,
+//         withNoFull,
+
+//         tags,
+//         tagValue,
+//         renderTag,
+
+//         placement = 'bottom-start',
+//         withArrow = false,
+//         withSameWidth = false,
+
+//         onAdd,
+//         onRemove,
+
+//         onSearch,
+//         CreateComponent,
+
+//         start,
+//         end,
+
+//         error,
+//         disabled,
+
+//         placeholder,
+//         className,
+
+//         containerClassName
+
+
+//     } = props;
+
+//     // configuration
+
+//     const chooseOptionRef = useRef<HTMLInputElement & { handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void }>(null);
+
+//     // popper show and hide
+
+//     const [show, setShow] = useState(false);
+//     const [wrapperRef, setWrapperRef] = useState<HTMLDivElement | null>(null);
+//     const [popperRef, setPopperRef] = useState<HTMLDivElement | null>(null);
+//     useOnOutsideClick(show, () => { if (show) { setShow(false); } }, wrapperRef, popperRef);
+
+//     const handleShow = () => {
+//         if (!show) {
+//             setShow(true);
+//         }
+//     };
+//     const handleHide = () => {
+//         setShow(false);
+//         wrapperRef?.focus();
+//     };
+
+//     // handle keyboard and mouse
+
+//     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+
+//         switch (e.key) {
+
+//             case 'Escape':
+//                 handleHide();
+//                 break;
+
+//             case 'ArrowUp':
+//             case 'ArrowDown':
+//                 handleShow();
+//                 break;
+
+//         }
+
+//         if (show) {
+//             chooseOptionRef.current!.handleKeyDown(e);
+//         }
+
+//     }
+
+//     const handleMouseDown = (e: React.MouseEvent<HTMLInputElement>) => {
+//         if (document.activeElement != null && document.activeElement === wrapperRef) {
+//             e.preventDefault();
+//             handleShow();
+//         }
+//     };
+
+//     // handle focus
+
+//     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+//         handleShow();
+//     };
+
+//     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+//         handleHide();
+//     };
+
+
+//     // render
+
+//     return (
+//         <>
+
+//             <Wrapper
+
+//                 ref={setWrapperRef}
+//                 tabIndex={0}
+
+//                 variant={variant}
+//                 withNoFull={withNoFull}
+
+//                 onKeyDown={handleKeyDown}
+//                 onMouseDown={handleMouseDown}
+
+//                 onFocus={handleFocus}
+//                 onBlur={handleBlur}
+
+//                 disabled={disabled}
+//                 error={error}
+
+//                 start={start}
+//                 end={
+//                     <>
+//                         {end}
+//                         {loading && <Delay><Loading colorClassName="text-control-border" /></Delay>}
+//                         {loadingError ? <WarningIcon className="text-danger-500 stroke-2" /> : <AngleDownIcon className="text-control-border stroke-2" />}
+//                     </>
+//                 }
+
+//                 className="cursor-pointer"
+
+//             >
+
+//                 {(!tags || tags.length === 0) ?
+//                     <div>{placeholder ?? <>&nbsp;</>}</div>
+//                     :
+//                     <div onMouseDown={e => show && consumeEvent(e)} className={classnames(className)}>
+//                         {tags.map(tag => renderTag({ tag, onRemove: () => console.log('remove') })) }
+//                     </div>
+//                 }
+
+//             </Wrapper>
+
+//             {show &&
+//                 <Popper
+//                     ref={setPopperRef}
+//                     reference={wrapperRef!}
+//                     placement={placement}
+//                     withArrow={withArrow}
+//                     withSameWidth={withSameWidth}
+//                     className="bg-control-bg"
+//                 >
+
+//                     <ChooseOption
+
+//                         ref={chooseOptionRef}
+
+//                         withSearch={withSearch}
+
+//                         onBlur={handleHide}
+
+//                         onHide={handleHide}
+//                         onChoose={handleChoose}
+
+//                         options={options}
+//                         getOptions={getOptions}
+
+//                         renderGroupLabel={renderGroupLabel}
+//                         renderOption={renderOption}
+//                         renderFooter={renderFooter}
+
+//                         containerClassName={classnames('border border-control-border rounded', containerClassName)}
+
+//                     />
+
+//                 </Popper>
+//             }
+
+//         </>
+//     );
+
+// };
+
+
+
+
+
+
+
+
+
+
+
 export const TagPicker = <T extends {}>({ tags, tagValue, renderTag, onAdd, onRemove, onSearch, CreateComponent }: TagPickerProps<T>) => {
 
     // const context = useContext(controlContext);

@@ -25,9 +25,33 @@ export const Template = ({inside, ...args}) => <Wrapper {...args}>{inside}</Wrap
     <Story name="Template" args={{ focus: false, disabled: false, error: false, inside: 'Inside' }}>
         {Template.bind({ })}
     </Story>
+    <Story name="Template Undefined" args={{ focus: false, disabled: false, error: false }}>
+        {Template.bind({ })}
+    </Story>
+    <Story name="Template Empty" args={{ focus: false, disabled: false, error: false, inside: '' }}>
+        {Template.bind({ })}
+    </Story>
+    <Story name="Template Space" args={{ focus: false, disabled: false, error: false, inside: '  ' }}>
+        {Template.bind({ })}
+    </Story>
 </Canvas>
 
 <ArgsTable of={Wrapper} /> 
+
+## Structure
+
+In orde to use referenes and classes is important to understand where the `ref`
+and `className` properties endup in the HTML structure.
+
+```html
+<div ref={ref}>                       <!-- relative -->
+    <div className={className}>       <!-- absolute and min height-->
+       {children}
+    </div>
+    {start && <div>start icons</div>} <!-- absolute left -->
+    {end && <div>end icons</div>}     <!--  absolute right -->
+<div>
+```
 
 ## Variants
 

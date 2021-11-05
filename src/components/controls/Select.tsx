@@ -3,7 +3,7 @@ import React, { FC, Ref, useCallback, useContext, useEffect, useImperativeHandle
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon } from '../../icons';
 import { setInputValue } from '../../utilities/setInputValue';
-import { ChooseOption } from '../ChooseOption';
+import { ChooseOption } from '../choose/ChooseOption';
 import { Popper, PopperProps } from '../Popper';
 import { Context } from './Control';
 import { Wrapper, WrapperProps } from './Wrapper';
@@ -82,7 +82,7 @@ const NativeSelect = React.forwardRef<HTMLSelectElement, SelectProps & React.Sel
         withNative,
 
         variant,
-        withNoFull,
+        withFullWidth: withNoFull,
 
         onFocus,
         onBlur,
@@ -131,7 +131,7 @@ const NativeSelect = React.forwardRef<HTMLSelectElement, SelectProps & React.Sel
             <Wrapper
 
                 variant={variant}
-                withNoFull={withNoFull}
+                withFullWidth={withNoFull}
 
                 focus={focus}
                 error={error}
@@ -189,7 +189,7 @@ const CustomSelect = React.forwardRef<HTMLInputElement, SelectProps & React.Inpu
         withNative,
 
         variant,
-        withNoFull,
+        withFullWidth: withNoFull,
 
         placement = 'bottom-start',
         withArrow = false,
@@ -357,7 +357,7 @@ const CustomSelect = React.forwardRef<HTMLInputElement, SelectProps & React.Inpu
                 tabIndex={tabIndex}
 
                 variant={variant}
-                withNoFull={withNoFull}
+                withFullWidth={withNoFull}
 
                 onKeyDown={handleKeyDown}
                 onMouseDown={handleMouseDown}
@@ -430,7 +430,7 @@ const CustomSelect = React.forwardRef<HTMLInputElement, SelectProps & React.Inpu
                         onHide={handleHide}
                         onChoose={handleChoose}
 
-                        options={options}
+                        searchOptions={options}
                         renderOption={({ option }) => <>{option}</>}
 
                         containerClassName={classNames('border border-control-border rounded', containerClassName)}

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import React from 'react';
 import { CheckIcon, CrossIcon } from '../icons';
 import { Button, ButtonProps, RoundButton, RoundButtonProps } from './Buttons';
@@ -5,7 +6,7 @@ import { Button, ButtonProps, RoundButton, RoundButtonProps } from './Buttons';
 
 // definition
 
-const definition = {
+export default {
     title: 'Component/Button1',
     component: Button,
     argTypes: {
@@ -15,7 +16,6 @@ const definition = {
         children: { control: { type: 'text' } }
     }
 };
-export default definition;
 
 type BaseProps = React.ButtonHTMLAttributes<HTMLButtonElement> & ButtonProps;
 

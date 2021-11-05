@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import React, { Ref, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { consumeEvent } from '../utilities/consumeEvent';
+import { consumeEvent } from '../../utilities/consumeEvent';
 
 
 //
@@ -137,7 +137,11 @@ export const ChooseOptionList = React.forwardRef(<G, O>(
     // check for no options
 
     const optionsCount = useMemo(
-        () => options.reduce((a, group) => a + getOptions(group).length, 0),
+        () => {
+            console.log('options', options);
+
+            return options.reduce((a, group) => a + getOptions(group).length, 0);
+        },
         [getOptions, options]
     );
     const NoOptions = (optionsCount === 0) ? renderNoOptions() : null;

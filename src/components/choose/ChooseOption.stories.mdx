@@ -2,13 +2,13 @@ import { useMemo, useState, useCallback } from 'react';
 import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
 import { ChooseOption } from './ChooseOption';
 import { ChooseOptionList } from './ChooseOptionList';
-import { useKeyboardNavigator } from '../hooks/useKeyboardNavigator';
-import { createSearchMatcher } from '../utilities/createSearchMatcher';
+import { useKeyboardNavigator } from '../../hooks/useKeyboardNavigator';
+import { createSearchMatcher } from '../../utilities/createSearchMatcher';
 import { action } from '@storybook/addon-actions';
 
 
 <Meta 
-    title="Component/ChooseOption" 
+    title="Component/Choose/ChooseOption" 
     component={ChooseOption} 
     parameters={{
         layout: 'centered'
@@ -319,15 +319,15 @@ loading icon next to the search bar.
 <Canvas>
     <Story name="Choose Option with Loading">
         {() => {
-            const options = async (value) => { 
+            const searchOptions = async (value) => { 
                 await new Promise(resolve => setTimeout(() => resolve(), 2000));
                 return [ value ? primaryColors.filter(c => c.includes(value)) : primaryColors ];
             }
             return (
                 <ChooseOption
                     withSearch
+                    searchOptions={searchOptions}
                     onChoose={option => action('onChoose')(option)}
-                    options={options}
                     className="w-96 border border-control-border rounded"
                 />
             );
@@ -340,15 +340,15 @@ When there is an error
 <Canvas>
     <Story name="Choose Option with Error">
         {() => {
-            const options = async (value) => { 
+            const searchOptions = async (value) => { 
                 await new Promise(resolve => setTimeout(() => resolve(), 1000));
                 throw new Error();
             }
             return (
                 <ChooseOption
                     withSearch
+                    searchOptions={searchOptions}
                     onChoose={option => action('onChoose')(option)}
-                    options={options}
                     className="w-96 border border-control-border rounded"
                 />
             );
@@ -362,14 +362,14 @@ When there is an error
     <Story name="Choose Option With Search">
         {() => {
             const colors = useMemo(() => ['Yellow', 'Blue', 'Red'], []);
-            const options = useCallback((value) => [ value ? 
+            const searchOptions = useCallback((value) => [ value ? 
                 colors.filter(c => c.includes(value)) : colors
             ], [colors]);
             return (
                 <ChooseOption
                     withSearch
+                    searchOptions={searchOptions}
                     onChoose={option => action('onChoose')(option)}
-                    options={options}
                     className="w-96 border border-control-border rounded"
                 />
             );
@@ -399,14 +399,14 @@ To get the possibility to move the selection with the keyboard.
     <Story name="Choose Option With Search and Selected">
         {() => {
             const colors = useMemo(() => ['Yellow', 'Blue', 'Red'], []);
-            const options = useCallback((value) => [ value ? 
+            const searchOptions = useCallback((value) => [ value ? 
                 colors.filter(c => c.includes(value)) : colors
             ], [colors]);
             return (
                 <ChooseOption
                     withSearch
                     onChoose={option => action('onChoose')(option)}
-                    options={options}
+                    searchOptions={searchOptions}
                     className="w-96 border border-control-border rounded"
                 />
             );
@@ -432,10 +432,10 @@ used to create missing elements in the list.
         {() => {
             const colors = useMemo(() => ['Yellow', 'Blue', 'Red'], []);
             const [value, setValue] = useState('');
-            const options = useMemo(() => [ value ? 
+            const searchOptions = useMemo(() => [ value ? 
                 colors.filter(c => c.includes(value)) : colors
             ], [colors, value]);
-            const optionsLengths = useMemo(() => options.map(group => group.length), [options]);
+            const optionsLengths = useMemo(() => searchOptions.map(group => group.length), [searchOptions]);
             const { selected, handleKeyDown } = useKeyboardNavigator(optionsLengths);
             return (
                 <ChooseOption
@@ -444,7 +444,7 @@ used to create missing elements in the list.
                     onChange={e => setValue(e.target.value)}
                     onKeyDown={handleKeyDown}
                     onChoose={option => action('onChoose')(option)}
-                    options={options}
+                    searchOptions={searchOptions}
                     selected={selected}
                     renderFooter={({ value, options, selected }) => 
                         <div className="bg-gray-100" style={{ padding: '0.5em 0.5em' }}>
@@ -481,7 +481,7 @@ With the kitchen sink.
                     <ChooseOption
                         withSearch
                         onChoose={option => action('onChoose')(option)}
-                        options={filteredColors}
+                        searchOptions={filteredColors}
                         getOptions={(group) => group.options}
                         renderGroupLabel={({ group }) => 
                             <div className="font-bold">

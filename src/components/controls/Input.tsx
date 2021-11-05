@@ -18,7 +18,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps & React.Input
     const {
 
         variant,
-        withNoFull,
+        withFullWidth: withNoFull,
 
         onFocus,
         onBlur,
@@ -57,7 +57,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps & React.Input
         <Wrapper
 
             variant={variant}
-            withNoFull={withNoFull}
+            withFullWidth={withNoFull}
 
             focus={focus}
             disabled={disabled}
