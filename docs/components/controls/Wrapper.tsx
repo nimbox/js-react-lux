@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React, { Ref, useContext, useLayoutEffect, useRef, useState } from 'react';
 import { Context } from './Control';
-
+import { isString } from 'lodash';
 
 //
 // Wrapper
@@ -15,12 +15,12 @@ export interface WrapperProps {
     variant?: 'outlined' | 'filled' | 'inlined' | 'plain';
 
     /**
-     * Disable full width on the block.
+     * Enable full width on the block. True by default.
      */
-    withNoFull?: boolean;
+    withFullWidth?: boolean;
 
     /**
-     * Enable full height on the block.
+     * Enable full height on the block. False By default.
      */
     withFullHeight?: boolean;
 
@@ -71,7 +71,7 @@ export const Wrapper = React.forwardRef((
     const {
 
         variant = 'outlined',
-        withNoFull = false,
+        withFullWidth = true,
         withFullHeight = false,
 
         focus,
@@ -146,7 +146,7 @@ export const Wrapper = React.forwardRef((
             className={classnames(
 
                 'relative',
-                withNoFull ? 'inline-block' : 'block w-full',
+                withFullWidth ? 'block w-full' : 'inline-block',
                 withFullHeight ? 'h-full' : null,
 
                 (variant === 'outlined') && classnames(
@@ -189,9 +189,7 @@ export const Wrapper = React.forwardRef((
 
                 ),
 
-                'outline-none focus:outline-none',
-
-                className
+                'outline-none focus:outline-none'
 
             )}
 
@@ -202,6 +200,7 @@ export const Wrapper = React.forwardRef((
             <div
                 className={classnames(
                     withFullHeight ? 'h-full' : null,
+                    className
                 )}
                 style={{
                     ...(padding[0] > 0 && {
@@ -216,7 +215,7 @@ export const Wrapper = React.forwardRef((
                     })
                 }}
             >
-                {children}
+                {children && (!isString(children) || children.trim().length > 0) ?  children : <>&nbsp;</>}
             </div>
 
             {start &&

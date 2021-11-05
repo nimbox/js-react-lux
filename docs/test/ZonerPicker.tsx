@@ -1,5 +1,5 @@
 import React from 'react';
-import { Choose } from '../components/controls/Choose';
+import { ChooseInput } from '../components/controls/ChooseInput';
 import { createSearchMatcher } from '../utilities/createSearchMatcher';
 import timezones from './timezones.json';
 
@@ -68,7 +68,7 @@ export const ZonePicker = React.forwardRef<HTMLInputElement, ZonePickerProps>((p
     };
 
     return (
-        <Choose
+        <ChooseInput
 
             withSearch
 

@@ -2,11 +2,12 @@ import classnames from 'classnames';
 import _debounce from 'lodash/debounce';
 import _isFunction from 'lodash/isFunction';
 import React, { Ref, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { Delay, Loading } from '..';
-import { useKeyboardNavigator } from '../hooks/useKeyboardNavigator';
-import { SearchIcon, WarningIcon } from '../icons';
+import { Delay } from '../Delay';
+import { Loading } from '../Loading';
+import { useKeyboardNavigator } from '../../hooks/useKeyboardNavigator';
+import { SearchIcon, WarningIcon } from '../../icons';
 import { ChooseOptionList, ChooseOptionListProps, defaultGetOptions, defaultRenderGroupLabel, defaultRenderNoOptions, defaultRenderOption } from './ChooseOptionList';
-import { Input } from './controls/Input';
+import { Input } from '../controls/Input';
 
 
 //
@@ -15,13 +16,19 @@ import { Input } from './controls/Input';
 
 export interface ChooseOptionNoOptionsProps {
 
-    value?: string | ReadonlyArray<string> | number | undefined;
+    /**
+     * The search input value.
+     */
+    value?: string;
 
 }
 
 export interface ChooseOptionFooterProps<G, O> extends Pick<ChooseOptionListProps<G, O>, 'options' | 'selected'> {
 
-    value?: string | ReadonlyArray<string> | number | undefined;
+    /**
+     * The search input value.
+     */
+    value?: string;
 
 }
 
@@ -41,7 +48,7 @@ export interface ChooseOptionProps<G, O> extends Omit<ChooseOptionListProps<G, O
      * can return the options or a promise that resolves to the
      * options.
      */
-    options: G[] | Promise<G[]> | ((search: string) => (G[] | Promise<G[]>));
+    searchOptions: G[] | Promise<G[]> | ((search: string) => (G[] | Promise<G[]>));
 
     //
 
@@ -92,7 +99,7 @@ export const ChooseOption = React.forwardRef(<G, O>(
         withSearch = false,
 
         loading,
-        options,
+        searchOptions,
 
         getOptions = defaultGetOptions,
 
@@ -121,7 +128,7 @@ export const ChooseOption = React.forwardRef(<G, O>(
     // assertions
 
     if (process.env.NODE_ENV !== 'production') {
-        if (withSearch && !_isFunction(options)) {
+        if (withSearch && !_isFunction(searchOptions)) {
             console.error('Provided withSearch parameter without providing an option provider function.  Try setting options to (search ) => [[ ... ]]');
         }
     }
@@ -142,7 +149,7 @@ export const ChooseOption = React.forwardRef(<G, O>(
         let working = true;
         (async () => {
             try {
-                const promisedOptions = await Promise.resolve(_isFunction(options) ? options(search) : options);
+                const promisedOptions = await Promise.resolve(_isFunction(searchOptions) ? searchOptions(search) : searchOptions);
                 if (working) {
                     setSearchedOptions(promisedOptions);
                 }
@@ -160,7 +167,7 @@ export const ChooseOption = React.forwardRef(<G, O>(
 
         return ({ cancel: () => { working = false; } });
 
-    }, [options]);
+    }, [searchOptions]);
 
     const handleSearch = useCallback(_debounce((search) => { // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -238,9 +245,7 @@ export const ChooseOption = React.forwardRef(<G, O>(
 
     // render 
 
-    const withFooter = renderFooter ? renderFooter({ value, options: searchedOptions, selected }) : null;
-
-    console.log('searchedOptions', searchedOptions);
+    const withFooter = renderFooter ? renderFooter({ value: value as any, options: searchedOptions, selected }) : null;
 
     return (
         <div
@@ -290,7 +295,7 @@ export const ChooseOption = React.forwardRef(<G, O>(
 
                 getOptions={getOptions}
 
-                renderNoOptions={() => renderNoOptions({ value })}
+                renderNoOptions={() => renderNoOptions({ value: value as any })}
                 renderGroupLabel={renderGroupLabel}
                 renderOption={renderOption}
 

@@ -6,8 +6,8 @@ import React, { Ref, useCallback, useEffect, useImperativeHandle, useRef, useSta
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon, WarningIcon } from '../../icons';
 import { setInputValue } from '../../utilities/setInputValue';
-import { ChooseOption, ChooseOptionProps } from '../ChooseOption';
-import { defaultGetOptions, defaultRenderGroupLabel, defaultRenderOption } from '../ChooseOptionList';
+import { ChooseOption, ChooseOptionProps } from '../choose/ChooseOption';
+import { defaultGetOptions, defaultRenderGroupLabel, defaultRenderOption } from '../choose/ChooseOptionList';
 import { Delay } from '../Delay';
 import { Loading } from '../Loading';
 import { Popper, PopperProps } from '../Popper';
@@ -18,7 +18,7 @@ import { Wrapper, WrapperProps } from './Wrapper';
 // Choose
 //
 
-export interface ChooseProps<G, O> extends WrapperProps,
+export interface ChooseInputProps<G, O> extends WrapperProps,
     Pick<PopperProps, 'placement' | 'withArrow' | 'withSameWidth'>,
     Pick<ChooseOptionProps<G, O>, 'withSearch' | 'getOptions' | 'renderGroupLabel' | 'renderOption' | 'renderFooter'> {
 
@@ -64,15 +64,15 @@ export interface ChooseProps<G, O> extends WrapperProps,
  * promise while managing loading and error states. Assume this
  * elements acts as an `input`.
  */
-export const Choose = React.forwardRef(<G, O>(
-    props: ChooseProps<G, O> & React.InputHTMLAttributes<HTMLInputElement>,
+export const ChooseInput = React.forwardRef(<G, O>(
+    props: ChooseInputProps<G, O> & React.InputHTMLAttributes<HTMLInputElement>,
     ref: Ref<HTMLInputElement>
 ) => {
 
     const {
 
         variant,
-        withNoFull,
+        withFullWidth: withNoFull,
 
         withSearch,
 
@@ -286,7 +286,7 @@ export const Choose = React.forwardRef(<G, O>(
                 tabIndex={tabIndex}
 
                 variant={variant}
-                withNoFull={withNoFull}
+                withFullWidth={withNoFull}
 
                 onKeyDown={handleKeyDown}
                 onMouseDown={handleMouseDown}
@@ -367,7 +367,7 @@ export const Choose = React.forwardRef(<G, O>(
                         onHide={handleHide}
                         onChoose={handleChoose}
 
-                        options={options}
+                        searchOptions={options}
                         getOptions={getOptions}
 
                         renderGroupLabel={renderGroupLabel}

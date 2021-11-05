@@ -1292,6 +1292,10 @@ html {
   flex-direction: column;
 }
 
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
 .content-center {
   align-content: center;
 }
@@ -1326,6 +1330,11 @@ html {
 
 .justify-between {
   justify-content: space-between;
+}
+
+.gap-1 {
+  grid-gap: 0.25rem;
+  gap: 0.25rem;
 }
 
 .gap-2 {
@@ -2402,4 +2411,4 @@ html {
 }
 
 
-/*# sourceMappingURL=main.163b0d13.chunk.css.map*/
+/*# sourceMappingURL=main.de93fa4e.chunk.css.map*/
