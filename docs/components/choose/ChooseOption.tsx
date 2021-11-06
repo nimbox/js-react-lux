@@ -2,12 +2,13 @@ import classnames from 'classnames';
 import _debounce from 'lodash/debounce';
 import _isFunction from 'lodash/isFunction';
 import React, { Ref, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { Delay } from '../Delay';
-import { Loading } from '../Loading';
 import { useKeyboardNavigator } from '../../hooks/useKeyboardNavigator';
 import { SearchIcon, WarningIcon } from '../../icons';
-import { ChooseOptionList, ChooseOptionListProps, defaultGetOptions, defaultRenderGroupLabel, defaultRenderNoOptions, defaultRenderOption } from './ChooseOptionList';
 import { Input } from '../controls/Input';
+import { SearchInput } from '../controls/SearchInput';
+import { Delay } from '../Delay';
+import { Loading } from '../Loading';
+import { ChooseOptionList, ChooseOptionListProps, defaultGetOptions, defaultRenderGroupLabel, defaultRenderNoOptions, defaultRenderOption } from './ChooseOptionList';
 
 
 //
@@ -70,26 +71,20 @@ export interface ChooseOptionProps<G, O> extends Omit<ChooseOptionListProps<G, O
     onHide?: () => void;
 
     /**
-    * Reference to the container.
-    */
-    containerRef?: React.Ref<HTMLDivElement>;
-
-    /**
-     * Classname of the container.
+     * Reference to the container.
      */
-    containerClassName?: string;
+    inputRef?: React.Ref<HTMLInputElement>;
 
 }
 
 /**
- * ChooseOption is a controlled or uncontrolled input that automatically calls
- * the options promise and manages the loading and error state. Assume this
- * elements acts as an `input`. If you need access to the `div` container use
- * `containerRef` and `containerClassName`.
+ * ChooseOption is a `div` that internally has an `input` that can be accessed
+ * via its `inputRef` (usually to set its focus). The input automatically calls
+ * the options promise and manages the loading and error state.
  */
 export const ChooseOption = React.forwardRef(<G, O>(
-    props: ChooseOptionProps<G, O> & React.InputHTMLAttributes<HTMLInputElement>,
-    ref: Ref<HTMLInputElement & { handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void }>
+    props: ChooseOptionProps<G, O> & React.InputHTMLAttributes<HTMLDivElement>,
+    ref: Ref<HTMLDivElement>
 ) => {
 
     // properties
@@ -108,6 +103,7 @@ export const ChooseOption = React.forwardRef(<G, O>(
         renderOption = defaultRenderOption,
         renderFooter,
 
+        inputRef,
         defaultValue,
         value,
         onChange,
@@ -117,10 +113,9 @@ export const ChooseOption = React.forwardRef(<G, O>(
         onHide,
         onChoose,
 
-        containerRef,
-        containerClassName,
+        className,
 
-        ...inputProps
+        ...divProps
 
 
     } = props;
@@ -182,14 +177,19 @@ export const ChooseOption = React.forwardRef(<G, O>(
     }, 150), [doSearch]);
 
     useEffect(() => {
+
         const search = String(value != null ? value : (defaultValue || ''));
+
         setSearchValue(search);
         handleSearch(search);
+
     }, [handleSearch, defaultValue, value]);
 
     //
 
-    const optionsLengths = useMemo(() => searchedOptions.map(group => getOptions(group).length), [searchedOptions, getOptions]);
+    const optionsLengths = useMemo(() => {
+        return searchedOptions.map(group => getOptions(group).length);
+    }, [searchedOptions, getOptions]);
     const { selected, handleKeyDown: navigatorHandleKeyDown } = useKeyboardNavigator(optionsLengths);
 
     // handlers
@@ -204,7 +204,7 @@ export const ChooseOption = React.forwardRef(<G, O>(
                 }
                 break;
 
-            case 'Tab':
+            // case 'Tab':
             case 'Enter':
 
                 if (selected != null) {
@@ -240,8 +240,8 @@ export const ChooseOption = React.forwardRef(<G, O>(
 
     // prepare the input reference to the parent element
 
-    const inputRef = useRef<HTMLInputElement>(null);
-    useImperativeHandle(ref, () => ({ ...inputRef.current!, handleKeyDown }));
+    const internalInputRef = useRef<HTMLInputElement>(null);
+    useImperativeHandle(inputRef, () => ({ ...internalInputRef.current!, handleKeyDown }));
 
     // render 
 
@@ -249,32 +249,26 @@ export const ChooseOption = React.forwardRef(<G, O>(
 
     return (
         <div
-            ref={containerRef}
+            ref={ref}
+            {...divProps}
             className={classnames(
                 'relative max-h-96 flex flex-col divide-y divide-control-border overflow-y-auto',
                 'lux-empty-hidden',
-                containerClassName
+                className
             )}
         >
 
             {withSearch &&
                 <div className="flex-none lux-p-2em">
-                    <Input
+                    <SearchInput
 
-                        ref={inputRef}
-
-                        type="text"
+                        ref={internalInputRef}
                         autoFocus
 
                         value={searchValue}
                         onChange={handleChange}
                         onKeyDown={handleKeyDown}
 
-                        {...inputProps}
-
-                        start={
-                            <SearchIcon />
-                        }
                         end={
                             <>
                                 {loading || searching ? <Delay><Loading /></Delay> : null}
@@ -290,6 +284,7 @@ export const ChooseOption = React.forwardRef(<G, O>(
 
                 loading={loading || searching}
                 error={searchingError}
+
                 options={searchedOptions}
                 selected={selected}
 
@@ -311,7 +306,7 @@ export const ChooseOption = React.forwardRef(<G, O>(
                 </div>
             }
 
-        </div >
+        </div>
     );
 
 });

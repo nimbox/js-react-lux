@@ -374,7 +374,7 @@ export const ChooseInput = React.forwardRef(<G, O>(
                         renderOption={renderOption}
                         renderFooter={renderFooter}
 
-                        containerClassName={classNames('border border-control-border rounded', containerClassName)}
+                        className={classNames('border border-control-border rounded', containerClassName)}
 
                     />
 

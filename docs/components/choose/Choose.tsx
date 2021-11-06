@@ -1,10 +1,8 @@
 import classnames from 'classnames';
-import _debounce from 'lodash/debounce';
 import _isFunction from 'lodash/isFunction';
-import React, { FC, Ref, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { FC, Ref, useImperativeHandle, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon, WarningIcon } from '../../icons';
-import { consumeEvent } from '../../utilities/consumeEvent';
 import { Wrapper, WrapperProps } from '../controls/Wrapper';
 import { Delay } from '../Delay';
 import { Loading } from '../Loading';
@@ -95,7 +93,8 @@ export const Choose = React.forwardRef(<G, O>(
 
     // configuration
 
-    const chooseOptionRef = useRef<HTMLInputElement & { handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void }>(null);
+    const chooseOptionRef = useRef<HTMLDivElement>(null);
+    const chooseOptionInputRef = useRef<HTMLInputElement & { handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void }>(null);
 
     // popper show and hide
 
@@ -134,41 +133,31 @@ export const Choose = React.forwardRef(<G, O>(
         }
 
         if (show) {
-            chooseOptionRef.current!.handleKeyDown(e);
+            chooseOptionInputRef.current!.handleKeyDown(e);
         }
 
     }
 
-    console.log('defining handleClick', show);
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-
-        console.log('handleClick', show);
-
-        if (show) {
-            console.log('handleClick', show);
-            e.preventDefault();
-            e.stopPropagation();
-            handleShow();
-        }
-
-
-        // if (document.activeElement != null && document.activeElement === wrapperRef) { 
-
-
+        console.log('handleClick');
+        // setShow(!show);
     };
 
     // handle focus
 
     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-        console.log('handleFocus');
         handleShow();
-        e.stopPropagation();
     };
 
-    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-        if (!withSearch && show) {
-            setShow(false);
-        }
+    const handleMultipleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        setTimeout(() => {
+            if (!(wrapperRef?.contains(document.activeElement) === true || (chooseOptionRef.current != null && chooseOptionRef.current?.contains(document.activeElement) === true))) {
+                if (show) {
+                    wrapperRef?.focus();
+                    setShow(false);
+                }
+            }
+        }, 0);
     };
 
     // handlers
@@ -194,7 +183,7 @@ export const Choose = React.forwardRef(<G, O>(
                 onClickCapture={handleClick}
 
                 onFocus={handleFocus}
-                onBlur={handleBlur}
+                onBlur={handleMultipleBlur}
 
                 disabled={disabled}
                 error={error}
@@ -230,7 +219,7 @@ export const Choose = React.forwardRef(<G, O>(
 
                         withSearch={withSearch}
 
-                        onBlur={handleHide}
+                        onBlur={handleMultipleBlur}
 
                         onHide={handleHide}
                         onChoose={handleChoose}
@@ -242,7 +231,7 @@ export const Choose = React.forwardRef(<G, O>(
                         renderOption={renderOption}
                         renderFooter={renderFooter}
 
-                        containerClassName={classnames('border border-control-border rounded', containerClassName)}
+                        className={classnames('border border-control-border rounded', containerClassName)}
 
                     />
 

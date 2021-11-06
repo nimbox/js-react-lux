@@ -75,7 +75,6 @@ export const Base = () => {
 
     const linkTag = (tag: StoryTag) => {
         console.log('linkTag');
-
     };
 
     console.log('tags', tags);
@@ -90,19 +89,22 @@ export const Base = () => {
                     // loading={true}
                     // loadingError={true}
 
-                    withSearch={false}
+                    withSearch={true}
 
                     searchOptions={searchOptions}
                     renderOption={({ option }) => <Tag>{option.description}</Tag>}
+
+                    renderFooter={() => <div className="p-2"><Input defaultValue="asd" /></div>}
 
                     onChoose={(tag) => addTag(tag)}
 
                     className="flex flex-row flex-wrap gap-1 cursor-pointer"
 
                 >
+
                     {({ show }) =>
                         (!tags || tags.length === 0) ?
-                            <>Coloca una etiqueta por aquí...</>
+                            <>Add tag...</>
                             :
                             tags.map(tag =>
                                 <Tag
@@ -110,10 +112,58 @@ export const Base = () => {
                                     onClick={!show ? () => linkTag(tag) : undefined}
                                     onDelete={show ? () => removeTag(tag) : undefined}
                                 >
-                                    <a href="#/" onClick={(e) => { e.stopPropagation(); return true; }}>{tag.description}</a>
+                                    {show ?
+                                        <>{tag.description}</>
+                                        :
+                                        <a href="#/" onMouseDown={(e) => { e.preventDefault(); }}>{tag.description}</a>
+                                    }
                                 </Tag>
                             )
                     }
+
+                </Choose>
+            </div>
+            <Input defaultValue="" />
+        </div >
+    );
+
+};
+
+
+
+export const FocusOrClick = () => {
+
+
+
+
+
+
+
+    return (
+        <div className="w-full grid grid-cols-4 gap-4 items-center">
+            <Input defaultValue="" />
+            <div className="col-span-2">
+                <Choose<StoryTag[], StoryTag>
+
+                    variant="outlined"
+                    // loading={true}
+                    // loadingError={true}
+
+                    withSearch={true}
+
+                    searchOptions={async (search: string) => [await store.search(search)]}
+                    renderOption={({ option }) => <Tag>{option.description}</Tag>}
+
+                    renderFooter={() => <div><Input defaultValue="asd" /></div>}
+
+                    onChoose={(tag) => console.log('onChoose')}
+
+                    className="flex flex-row flex-wrap gap-1 cursor-pointer"
+
+                >
+
+                    Internal
+
                 </Choose>
             </div>
             <Input defaultValue="" />
