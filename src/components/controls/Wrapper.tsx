@@ -225,7 +225,7 @@ export const Wrapper = React.forwardRef((
                         'absolute inset-y-0 left-0 flex justify-start items-center'
                     )}
                     style={{
-                        paddingLeft: variant === 'inlined' || variant === 'plain' ? '0.25em' : '0.75em',
+                        paddingLeft: variant === 'inlined' || variant === 'plain' ? '0.25em' : '0.5em',
                         paddingRight: '0.25em'
                     }}
                 >
@@ -243,7 +243,7 @@ export const Wrapper = React.forwardRef((
                     )}
                     style={{
                         paddingLeft: '0.25em',
-                        paddingRight: variant === 'inlined' || variant === 'plain' ? '0.25em' : '0.75em'
+                        paddingRight: variant === 'inlined' || variant === 'plain' ? '0.25em' : '0.5em'
                     }}
                 >
                     {end}

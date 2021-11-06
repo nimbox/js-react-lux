@@ -433,7 +433,7 @@ const CustomSelect = React.forwardRef<HTMLInputElement, SelectProps & React.Inpu
                         searchOptions={options}
                         renderOption={({ option }) => <>{option}</>}
 
-                        containerClassName={classNames('border border-control-border rounded', containerClassName)}
+                        className={classNames('border border-control-border rounded', containerClassName)}
 
                     />
 
