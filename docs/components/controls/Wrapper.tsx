@@ -100,6 +100,7 @@ export const Wrapper = React.forwardRef((
     const [internalFocus, setInternalFocus] = useState(false);
 
     const handleOnFocus = (e: React.FocusEvent<HTMLDivElement>) => {
+        console.log('handleOnFocus');
         setInternalFocus(true);
         if (onFocus) { onFocus(e); }
     }
@@ -107,6 +108,7 @@ export const Wrapper = React.forwardRef((
     const handleOnBlur = (e: React.FocusEvent<HTMLDivElement>) => {
         if (onBlur) { onBlur(e); }
         setInternalFocus(false);
+        console.log('handleOnBlur');
     }
 
     const isFocus = focus || internalFocus;

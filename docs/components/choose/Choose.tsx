@@ -2,6 +2,7 @@ import classnames from 'classnames';
 import _isFunction from 'lodash/isFunction';
 import React, { FC, Ref, useImperativeHandle, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
+import { usePreviousState } from '../../hooks/usePreviousState';
 import { AngleDownIcon, WarningIcon } from '../../icons';
 import { Wrapper, WrapperProps } from '../controls/Wrapper';
 import { Delay } from '../Delay';
@@ -23,6 +24,8 @@ export interface ChooseProps<G, O> extends WrapperProps,
     loading?: boolean;
 
     loadingError?: boolean;
+
+    withHideOnChoose?: boolean;
 
     // styling
 
@@ -58,7 +61,7 @@ export const Choose = React.forwardRef(<G, O>(
     const {
 
         variant,
-        withFullWidth: withNoFull,
+        withFullWidth,
 
         withSearch,
 
@@ -77,6 +80,7 @@ export const Choose = React.forwardRef(<G, O>(
         renderFooter,
 
         onChoose,
+        withHideOnChoose = true,
 
         start,
         end,
@@ -99,6 +103,8 @@ export const Choose = React.forwardRef(<G, O>(
     // popper show and hide
 
     const [show, setShow] = useState(false);
+    const previousShow = usePreviousState(show);
+
     const [wrapperRef, setWrapperRef] = useState<HTMLDivElement | null>(null);
     const [popperRef, setPopperRef] = useState<HTMLDivElement | null>(null);
     useOnOutsideClick(show, () => { if (show) { setShow(false); } }, wrapperRef, popperRef);
@@ -132,42 +138,43 @@ export const Choose = React.forwardRef(<G, O>(
 
         }
 
-        if (show) {
-            chooseOptionInputRef.current!.handleKeyDown(e);
+        if (show && chooseOptionInputRef.current) {
+            chooseOptionInputRef.current.handleKeyDown(e);
         }
 
     }
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        console.log('handleClick');
-        // setShow(!show);
+        if (document.activeElement === wrapperRef) {
+            setShow(!show)
+        }
     };
 
     // handle focus
 
     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-        handleShow();
+        if (!previousShow) {
+            handleShow();
+        }
     };
 
-    const handleMultipleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-        setTimeout(() => {
-            if (!(wrapperRef?.contains(document.activeElement) === true || (chooseOptionRef.current != null && chooseOptionRef.current?.contains(document.activeElement) === true))) {
-                if (show) {
-                    wrapperRef?.focus();
-                    setShow(false);
-                }
-            }
-        }, 0);
+    const handleLimitFocus = (e: React.FocusEvent<HTMLDivElement>) => {
+        wrapperRef?.focus();
+        handleHide();
     };
 
     // handlers
 
     const handleChoose = (option: O) => {
         onChoose(option);
-        handleHide();
+        if (withHideOnChoose) {
+            handleHide();
+        }
     };
 
     // render
+
+    console.log('render', show, previousShow);
 
     return (
         <>
@@ -177,13 +184,11 @@ export const Choose = React.forwardRef(<G, O>(
                 tabIndex={0}
 
                 variant={variant}
-                withFullWidth={withNoFull}
+                withFullWidth={withFullWidth}
 
                 onKeyDown={handleKeyDown}
-                onClickCapture={handleClick}
-
+                onClick={handleClick}
                 onFocus={handleFocus}
-                onBlur={handleMultipleBlur}
 
                 disabled={disabled}
                 error={error}
@@ -200,26 +205,32 @@ export const Choose = React.forwardRef(<G, O>(
                 className={className}
 
             >
+
                 {_isFunction(children) ? children({ show }) : children}
+
             </Wrapper>
 
             {show &&
                 <Popper
+
                     ref={setPopperRef}
                     reference={wrapperRef!}
+
                     placement={placement}
                     withArrow={withArrow}
                     withSameWidth={withSameWidth}
+
                     className="bg-control-bg"
+
                 >
+
+                    <div tabIndex={0} onFocus={handleLimitFocus} />
 
                     <ChooseOption
 
                         ref={chooseOptionRef}
 
                         withSearch={withSearch}
-
-                        onBlur={handleMultipleBlur}
 
                         onHide={handleHide}
                         onChoose={handleChoose}
@@ -234,6 +245,8 @@ export const Choose = React.forwardRef(<G, O>(
                         className={classnames('border border-control-border rounded', containerClassName)}
 
                     />
+
+                    <div tabIndex={0} onFocus={handleLimitFocus} />
 
                 </Popper>
             }
