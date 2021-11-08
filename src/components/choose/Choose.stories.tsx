@@ -4,7 +4,7 @@ import { default as colors } from '../../data/flat-colors';
 import _, { remove } from 'lodash';
 import { MockStore } from '../../test/MockStore';
 import { Input } from '../controls/Input';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Tag } from '../Tag';
 import { consumeEvent } from '../../utilities/consumeEvent';
 
@@ -68,20 +68,24 @@ export const Base = () => {
         setTags(tags => [...tags, tag]);
     };
 
-    const removeTag = (tag: StoryTag) => {
+    const removeTag = (tag: StoryTag, e: React.MouseEvent) => {
         console.log('removeTag');
         setTags(tags => tags.filter(t => t.id !== tag.id));
+        e.preventDefault();
+        e.stopPropagation();
     };
 
-    const linkTag = (tag: StoryTag) => {
+    const linkTag = (tag: StoryTag, e: React.MouseEvent) => {
         console.log('linkTag');
+        e.preventDefault();
+        e.stopPropagation();
     };
 
     console.log('tags', tags);
 
     return (
         <div className="w-full grid grid-cols-4 gap-4 items-center">
-            <Input defaultValue="" />
+            <Input defaultValue="before" />
             <div className="col-span-2">
                 <Choose<StoryTag[], StoryTag>
 
@@ -99,6 +103,7 @@ export const Base = () => {
                     onChoose={(tag) => addTag(tag)}
 
                     className="flex flex-row flex-wrap gap-1 cursor-pointer"
+                    containerClassName="w-96"
 
                 >
 
@@ -109,21 +114,22 @@ export const Base = () => {
                             tags.map(tag =>
                                 <Tag
                                     key={tag.id}
-                                    onClick={!show ? () => linkTag(tag) : undefined}
-                                    onDelete={show ? () => removeTag(tag) : undefined}
+                                    onClick={!show ? (e) => linkTag(tag, e) : undefined}
+                                    onDelete={show ? (e) => removeTag(tag, e) : undefined}
                                 >
-                                    {show ?
+                                    {tag.description}
+                                    {/* {show ?
                                         <>{tag.description}</>
                                         :
-                                        <a href="#/" onMouseDown={(e) => { e.preventDefault(); }}>{tag.description}</a>
-                                    }
+                                        <a href="#/" tabIndex={-1} onMouseDown={(e) => { e.preventDefault(); }}>{tag.description}</a>
+                                    } */}
                                 </Tag>
                             )
                     }
 
                 </Choose>
             </div>
-            <Input defaultValue="" />
+            <Input defaultValue="after" />
         </div >
     );
 

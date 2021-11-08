@@ -3,6 +3,10 @@ import React, { FC, SVGProps, useMemo, useState } from 'react';
 import tinycolor from 'tinycolor2';
 
 
+//
+// Tag
+//
+
 export const Cross: FC<SVGProps<SVGSVGElement> & { showCross: boolean; crossColor: string; circleColor: string; }> = ({ showCross, crossColor, circleColor, ...props }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -22,8 +26,8 @@ export interface TagProps {
     color?: string;
     background?: string;
 
-    onClick?: (e: any) => void;
-    onDelete?: () => void;
+    onClick?: (e: React.MouseEvent) => void;
+    onDelete?: (e: React.MouseEvent) => void;
 
 }
 
@@ -41,26 +45,40 @@ export const Tag: FC<TagProps> = ({ color: propertyColor = '#906090', background
             className='inline-flex flex-row items-baseline max-w-full rounded-full'
             style={{ lineHeight: '1', paddingLeft: '0.25em', paddingTop: '0.125em', paddingRight: '0.5em', paddingBottom: '0.125em', color, backgroundColor }}
         >
+
             <Cross
+
                 showCross={!!onDelete}
+
                 onMouseEnter={() => setHoverColor(crossBackgroundHoverColor)}
                 onMouseLeave={() => setHoverColor(crossBackgroundColor)}
-                onClick={() => onDelete && onDelete()}
+
+                onMouseDownCapture={(e) => { e.preventDefault(); }}
+                onClick={(e) => onDelete && onDelete(e)}
+
                 crossColor={color}
                 circleColor={onDelete ? hoverColor : crossBackgroundColor}
+
                 className="block flex-none self-center cursor-pointer"
                 style={{ marginRight: '0.125em' }}
+
             />
+
             <span
+
+                onMouseDownCapture={(e) => { e.stopPropagation(); e.preventDefault(); }}
                 onClick={!onDelete ? onClick : undefined}
+
                 className={classnames(
                     'block flex-1 max-w-full truncate',
                     { 'hover:underline cursor-pointer': onClick && !onDelete }
                 )}
                 style={{ height: '1.2em', lineHeight: '1.2em' }}
+
             >
                 {children}
             </span>
+
         </span>
     );
 
