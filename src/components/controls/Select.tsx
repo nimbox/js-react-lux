@@ -3,7 +3,7 @@ import React, { FC, Ref, useCallback, useContext, useEffect, useImperativeHandle
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon } from '../../icons';
 import { setInputValue } from '../../utilities/setInputValue';
-import { ChooseOption } from '../choose/ChooseOption';
+import { SearchableChooseOption } from '../choose/SearchableChooseOption';
 import { Popper, PopperProps } from '../Popper';
 import { Context } from './Control';
 import { Wrapper, WrapperProps } from './Wrapper';
@@ -22,7 +22,7 @@ export interface SelectOptionProps {
 }
 
 export interface SelectProps extends WrapperProps,
-    Pick<PopperProps, 'placement' | 'withArrow' | 'withSameWidth'> {
+    Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'> {
 
     /**
      * Display the native version of the the control. Useful when thinking about
@@ -191,7 +191,7 @@ const CustomSelect = React.forwardRef<HTMLInputElement, SelectProps & React.Inpu
         variant,
         withFullWidth: withNoFull,
 
-        placement = 'bottom-start',
+        withPlacement: placement = 'bottom-start',
         withArrow = false,
         withSameWidth = false,
 
@@ -415,13 +415,13 @@ const CustomSelect = React.forwardRef<HTMLInputElement, SelectProps & React.Inpu
                 <Popper
                     ref={setPopperRef}
                     reference={wrapperRef!}
-                    placement={placement}
+                    withPlacement={placement}
                     withArrow={withArrow}
                     withSameWidth={withSameWidth}
                     className="bg-control-bg"
                 >
 
-                    <ChooseOption
+                    <SearchableChooseOption
 
                         ref={chooseOptionRef}
 
@@ -430,7 +430,7 @@ const CustomSelect = React.forwardRef<HTMLInputElement, SelectProps & React.Inpu
                         onHide={handleHide}
                         onChoose={handleChoose}
 
-                        searchOptions={options}
+                        provider={options}
                         renderOption={({ option }) => <>{option}</>}
 
                         className={classNames('border border-control-border rounded', containerClassName)}

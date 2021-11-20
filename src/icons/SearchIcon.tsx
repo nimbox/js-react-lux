@@ -13,8 +13,8 @@ function SvgSearchIcon(props: React.SVGProps<SVGSVGElement>) {
       strokeLinejoin="round"
       {...props}
     >
-      <circle cx={12.5} cy={12.5} r={11.5} />
-      <path d="M31.5 31.5L21.384 21.384" />
+      <circle cx={14} cy={14} r={12} />
+      <path d="M30 30l-7.5-7.5" />
     </svg>
   );
 }

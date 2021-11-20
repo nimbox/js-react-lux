@@ -33,3 +33,56 @@ export const BlurBubbleUp = () => {
     );
 
 };
+
+export const FocusBubbleUpDivInput = () => {
+
+    return (
+        <div
+            onFocus={(e) => action('onFocus')('div')}
+            onBlur={(e) => action('onBlur')('div')}
+        >
+            <input
+                onFocus={(e) => action('onFocus')('input')}
+                onBlur={(e) => action('onBlur')('input')}
+                className="border"
+            />
+        </div>
+    );
+
+};
+
+export const FocusBubbleUpDiv = () => {
+
+    return (
+        <div
+            tabIndex={0}
+            onFocus={(e) => action('onFocus')('div')}
+            onBlur={(e) => action('onBlur')('div')}
+            className="border"
+        >
+            Content
+        </div>
+    );
+
+};
+
+export const FocusBubbleUpDivDiv = () => {
+
+    return (
+        <div
+            tabIndex={0}
+            onFocus={(e) => action('onFocus')('div out')}
+            onBlur={(e) => action('onBlur')('div out')}
+            className="border"
+        >
+            <div
+                onFocus={(e) => action('onFocus')('div')}
+                onBlur={(e) => action('onBlur')('div')}
+                className="border"
+            >
+                Content
+            </div>
+        </div>
+    );
+
+};

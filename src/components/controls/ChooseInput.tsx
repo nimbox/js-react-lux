@@ -6,8 +6,8 @@ import React, { Ref, useCallback, useEffect, useImperativeHandle, useRef, useSta
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon, WarningIcon } from '../../icons';
 import { setInputValue } from '../../utilities/setInputValue';
-import { ChooseOption, ChooseOptionProps } from '../choose/ChooseOption';
-import { defaultGetOptions, defaultRenderGroupLabel, defaultRenderOption } from '../choose/ChooseOptionList';
+import { SearchableChooseOption, SearchableChooseOptionProps } from '../choose/SearchableChooseOption';
+import { defaultGetOptions, DEFAULT_RENDER_GROUP_LABEL, DEFAULT_RENDER_OPTION } from '../choose/ChooseOption';
 import { Delay } from '../Delay';
 import { Loading } from '../Loading';
 import { Popper, PopperProps } from '../Popper';
@@ -19,8 +19,8 @@ import { Wrapper, WrapperProps } from './Wrapper';
 //
 
 export interface ChooseInputProps<G, O> extends WrapperProps,
-    Pick<PopperProps, 'placement' | 'withArrow' | 'withSameWidth'>,
-    Pick<ChooseOptionProps<G, O>, 'withSearch' | 'getOptions' | 'renderGroupLabel' | 'renderOption' | 'renderFooter'> {
+    Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'>,
+    Pick<SearchableChooseOptionProps<G, O>, 'withSearch' | 'getOptions' | 'renderGroupLabel' | 'renderOption' | 'renderFooter'> {
 
     /** 
      * Function to convert a value to an option.
@@ -80,15 +80,15 @@ export const ChooseInput = React.forwardRef(<G, O>(
         options,
 
         getValue = defaultGetValue,
-        getOptions = defaultGetOptions,
+        extractor: getOptions = defaultGetOptions,
 
-        placement = 'bottom-start',
+        withPlacement: placement = 'bottom-start',
         withArrow = false,
         withSameWidth = false,
 
         renderSelectedOption,
-        renderGroupLabel = defaultRenderGroupLabel,
-        renderOption = defaultRenderOption,
+        renderGroupLabel = DEFAULT_RENDER_GROUP_LABEL,
+        renderOption = DEFAULT_RENDER_OPTION,
         renderFooter,
 
         start,
@@ -349,13 +349,13 @@ export const ChooseInput = React.forwardRef(<G, O>(
                 <Popper
                     ref={setPopperRef}
                     reference={wrapperRef!}
-                    placement={placement}
+                    withPlacement={placement}
                     withArrow={withArrow}
                     withSameWidth={withSameWidth}
                     className="bg-control-bg"
                 >
 
-                    <ChooseOption
+                    <SearchableChooseOption
 
 
                         ref={chooseOptionRef}
@@ -367,8 +367,8 @@ export const ChooseInput = React.forwardRef(<G, O>(
                         onHide={handleHide}
                         onChoose={handleChoose}
 
-                        searchOptions={options}
-                        getOptions={getOptions}
+                        provider={options}
+                        extractor={getOptions}
 
                         renderGroupLabel={renderGroupLabel}
                         renderOption={renderOption}

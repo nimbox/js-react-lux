@@ -17,6 +17,34 @@ module.exports = {
         marginBottom: '0.5em'
     },
 
+    '.lux-p-0\\.5em': {
+        padding: '0.125em'
+    },
+
+    '.lux-px-0\\.5em': {
+        paddingLeft: '0.125em',
+        paddingRight: '0.125em'
+    },
+
+    '.lux-py-0\\.5em': {
+        paddingTop: '0.125em',
+        paddingBottom: '0.125em'
+    },
+
+    '.lux-p-1em': {
+        padding: '0.25em'
+    },
+
+    '.lux-px-1em': {
+        paddingLeft: '0.25em',
+        paddingRight: '0.25em'
+    },
+
+    '.lux-py-1em': {
+        paddingTop: '0.25em',
+        paddingBottom: '0.25em'
+    },
+
     '.lux-p-2em': {
         padding: '0.5em'
     },

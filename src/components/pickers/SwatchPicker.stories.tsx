@@ -13,18 +13,19 @@ export default {
     }
 };
 
-export const Template = ({ placement, withSameWidth, error, popperClassName }: SwatchPickerProps) => {
+export const Template = ({ withPlacement: placement, withArrow, withSameWidth, error, popperClassName }: SwatchPickerProps) => {
     return (
         <div className="w-96">
-            <SwatchPicker defaultValue="#906090" error={error} placement={placement} withSameWidth={withSameWidth} popperClassName={popperClassName} placeholder="Select color" />
+            <SwatchPicker defaultValue="#906090" error={error} withPlacement={placement} withArrow={withArrow} withSameWidth={withSameWidth} popperClassName={popperClassName} placeholder="Select color" />
         </div>
     );
 };
 Template.args = {
     error: false,
     placement: 'bottom-start',
-    withSameWidth: true,
-    popperClassName: 'grid grid-cols-5 w-32'
+    withArrow: true,
+    withSameWidth: false,
+    popperClassName: 'p-2 w-64 grid grid-cols-5 cursor-pointer'
 };
 
 export const Controlled = () => {
@@ -36,7 +37,7 @@ export const Controlled = () => {
 
     return (
         <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
-            <SwatchPicker name="date" value={color} onChange={handleChange} placeholder="Enter color"/>
+            <SwatchPicker name="date" value={color} onChange={handleChange} placeholder="Select color" />
             <Button>Submit</Button>
         </form>
     );
@@ -50,7 +51,7 @@ export const Uncontrolled = () => {
 
     return (
         <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
-            <SwatchPicker ref={ref} name="date" defaultValue="#906090" placeholder="Enter color"/>
+            <SwatchPicker ref={ref} name="date" defaultValue="#906090" placeholder="Select color" />
             <Button>Submit</Button>
         </form>
     );

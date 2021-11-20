@@ -80,18 +80,17 @@ not extend the full with of its container.
 </Canvas>
 
 <Canvas>
-    <Story name="Variant Outlined With Not Full">
-        <Wrapper variant="outlined" withNoFull>With Not Full</Wrapper>
+    <Story name="Variant Outlined Without Full Width">
+        <Wrapper variant="outlined" withFullWidth={false}>With Not Full</Wrapper>
     </Story>
 </Canvas>
-
 
 This is helpful to to the an `inlined` variant withing some text.
 
 <Canvas>
-    <Story name="Variant Inlined With Not Full">
+    <Story name="Variant Inlined Without Full Width">
         <div>
-            Please select <Wrapper variant="inlined" withNoFull end={<AngleDownIcon className="stroke-1"/>}>user</Wrapper> responsible for the task.
+            Please select <Wrapper variant="inlined" withFullWidth={false} end={<AngleDownIcon className="stroke-1"/>}>user</Wrapper> responsible for the task.
         </div>
     </Story>
 </Canvas>
@@ -102,16 +101,16 @@ This is helpful to to the an `inlined` variant withing some text.
 When the wrapper is around basic text.
 
 <Canvas>
-    <Story name="Plain" args={{ focus: false, disabled: false, error: false, inside: 'Plain' }}>
+    <Story name="Plain" args={{ tabIndex: 0, focus: false, disabled: false, error: false, inside: 'Plain' }}>
         {Template.bind({})}
     </Story>
-    <Story name="Focus" args={{ focus: true, disabled: false, error: false, inside: 'Focus' }}>
+    <Story name="Focus" args={{ tabIndex: 0, focus: true, disabled: false, error: false, inside: 'Focus' }}>
         {Template.bind({})}
     </Story>
-    <Story name="Error" args={{ focus: false, disabled: false, error: true, inside: 'Error' }}>
+    <Story name="Error" args={{ tabIndex: 0, focus: false, disabled: false, error: true, inside: 'Error' }}>
         {Template.bind({})}
     </Story>
-    <Story name="Focus Error" args={{ focus: true, disabled: false, error: true, inside: 'Focus Error' }}>
+    <Story name="Focus Error" args={{ tabIndex: 0, focus: true, disabled: false, error: true, inside: 'Focus Error' }}>
         {Template.bind({})}
     </Story>
 </Canvas>

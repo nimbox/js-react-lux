@@ -78,7 +78,7 @@ export const ZonePicker = React.forwardRef<HTMLInputElement, ZonePickerProps>((p
             value={value}
             onChange={onChange}
 
-            getOptions={(group) => group.options}
+            extractor={(group) => group.options}
 
             getValue={(item: Option) => item.value}
             renderSelectedOption={({ option }) => <>{option ? option.description : 'Select...'}</>}

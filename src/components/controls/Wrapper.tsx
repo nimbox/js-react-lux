@@ -74,18 +74,19 @@ export const Wrapper = React.forwardRef((
         withFullWidth = true,
         withFullHeight = false,
 
-        focus,
         disabled,
         error,
 
         start,
         end,
 
+        focus,
         onFocus,
         onBlur,
 
-        children,
         className,
+
+        children,
 
         ...divProps
 
@@ -99,16 +100,14 @@ export const Wrapper = React.forwardRef((
 
     const [internalFocus, setInternalFocus] = useState(false);
 
-    const handleOnFocus = (e: React.FocusEvent<HTMLDivElement>) => {
-        console.log('handleOnFocus');
+    const handleFocus = (e: React.FocusEvent<HTMLDivElement>) => {
         setInternalFocus(true);
-        if (onFocus) { onFocus(e); }
+        onFocus?.(e)
     }
 
-    const handleOnBlur = (e: React.FocusEvent<HTMLDivElement>) => {
-        if (onBlur) { onBlur(e); }
+    const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+        onBlur?.(e);
         setInternalFocus(false);
-        console.log('handleOnBlur');
     }
 
     const isFocus = focus || internalFocus;
@@ -138,12 +137,12 @@ export const Wrapper = React.forwardRef((
     // render
 
     return (
-        <div
+        <div 
 
             ref={ref}
 
-            onFocus={handleOnFocus}
-            onBlur={handleOnBlur}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
 
             className={classnames(
 
@@ -176,8 +175,8 @@ export const Wrapper = React.forwardRef((
                                 'border-b-2 border-primary-500'
                             ) :
                             (isError ?
-                                'border-b text-danger-500 border-danger-500' :
-                                'border-b border-control-border'
+                                'mb-px border-b text-danger-500 border-danger-500' :
+                                'mb-px border-b border-control-border'
                             )
                 ),
 
@@ -191,7 +190,9 @@ export const Wrapper = React.forwardRef((
 
                 ),
 
-                'outline-none focus:outline-none'
+                'outline-none focus:outline-none overflow-hidden',
+
+                className,
 
             )}
 
@@ -217,7 +218,7 @@ export const Wrapper = React.forwardRef((
                     })
                 }}
             >
-                {children && (!isString(children) || children.trim().length > 0) ?  children : <>&nbsp;</>}
+                {children && (!isString(children) || children.trim().length > 0) ? children : <>&nbsp;</>}
             </div>
 
             {start &&
@@ -227,7 +228,8 @@ export const Wrapper = React.forwardRef((
                         'absolute inset-y-0 left-0 flex justify-start items-center'
                     )}
                     style={{
-                        paddingLeft: variant === 'inlined' || variant === 'plain' ? '0.25em' : '0.5em',
+                        // paddingLeft: variant === 'inlined' || variant === 'plain' ? '0.25em' : '0.5em',
+                        paddingLeft: 0,
                         paddingRight: '0.25em'
                     }}
                 >
@@ -245,7 +247,8 @@ export const Wrapper = React.forwardRef((
                     )}
                     style={{
                         paddingLeft: '0.25em',
-                        paddingRight: variant === 'inlined' || variant === 'plain' ? '0.25em' : '0.5em'
+                        // paddingRight: variant === 'inlined' || variant === 'plain' ? '0.25em' : '0.5em'
+                        paddingRight: 0
                     }}
                 >
                     {end}

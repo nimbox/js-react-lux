@@ -1,14 +1,19 @@
+
 import classnames from 'classnames';
 import React, { Ref, useContext, useImperativeHandle, useRef, useState } from 'react';
+import { PopperProps } from '../Popper';
 import { Context } from './Control';
-import { Wrapper, WrapperProps } from './Wrapper';
+import { WrapperProps } from './Wrapper';
+import { WrapperPopper } from './WrapperPopper';
 
 
 //
-// Input
+// InputPopper
 //
 
-export interface InputProps extends WrapperProps {
+export interface InputPopperProps extends WrapperProps, Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'> {
+
+    // for input
 
     /** Name used for the input element and returned in the change event. */
     name?: string,
@@ -22,10 +27,24 @@ export interface InputProps extends WrapperProps {
     /** Change event handler (for controlled). */
     onChange?: React.ChangeEventHandler<HTMLInputElement>,
 
+    // for popper
+
+    /** Show popper. */
+    show?: boolean;
+
+    /** Callback to invoke when needing to show popper. */
+    onShow?: () => void;
+
+    /** Callback to invoke when needing to hide popper.. */
+    onHide?: () => void;
+
+    /** Callback that returns the element to include inside the popper. */
+    popper: () => React.ReactElement;
+
 }
 
-export const Input = React.forwardRef((
-    props: InputProps & React.InputHTMLAttributes<HTMLInputElement>,
+export const InputPopper = React.forwardRef((
+    props: InputPopperProps & React.InputHTMLAttributes<HTMLInputElement>,
     ref: Ref<HTMLInputElement>
 ) => {
 
@@ -47,25 +66,47 @@ export const Input = React.forwardRef((
 
         className,
 
+        withPlacement: placement,
+        withArrow,
+        withSameWidth,
+
+        show,
+        onShow,
+        onHide,
+
+        popper,
+
         ...inputProps
 
     } = props;
 
     // configuration
 
+    const wrapperRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     useImperativeHandle(ref, () => inputRef.current!);
 
     const context = useContext(Context);
 
-    const [focus, setFocus] = useState(false);
+    const handleMouseDown = () => {
+        if (document.activeElement === inputRef.current) {
+            console.log('is active');
+            if (show) {
+                onHide!();
+            } else {
+                onShow!();
+            }
+        }
+    }
 
+    const [focus, setFocus] = useState(false);
     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
         onFocus?.(e);
         setFocus(true);
+        onShow?.(); 
     }
-
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        onHide?.();
         setFocus(false);
         onBlur?.(e);
     }
@@ -73,7 +114,9 @@ export const Input = React.forwardRef((
     // render
 
     return (
-        <Wrapper
+        <WrapperPopper
+
+            ref={wrapperRef}
 
             variant={variant}
             withFullWidth={withFullWidth}
@@ -85,10 +128,20 @@ export const Input = React.forwardRef((
             start={start}
             end={end}
 
+            withPlacement={placement}
+            withArrow={withArrow}
+            withSameWidth={withSameWidth}
+
+            show={show}
+            onHide={onHide}
+            popper={popper}
+
         >
             <input
 
                 ref={inputRef}
+
+                onMouseDown={handleMouseDown}
 
                 onFocus={handleFocus}
                 onBlur={handleBlur}
@@ -105,7 +158,7 @@ export const Input = React.forwardRef((
                 {...inputProps}
 
             />
-        </Wrapper>
+        </WrapperPopper>
     );
 
 });

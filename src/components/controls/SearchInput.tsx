@@ -16,25 +16,44 @@ export const SearchInput = React.forwardRef((
     ref: Ref<HTMLInputElement>
 ) => {
 
-    const { end, ...inputProps } = props;
+    // Properties
+
+    const {
+        end,
+        ...inputProps
+    } = props;
+
+    // State
 
     const inputRef = useRef<HTMLInputElement>(null);
     useImperativeHandle(ref, () => inputRef.current!);
 
-    const handleClickClear = (e: React.MouseEvent) => {
+    // Handlers
+
+    const handleClearMouseDown = (e: React.MouseEvent) => {
+        e.preventDefault();
         setInputValue(inputRef, '');
     };
 
+    // Render
+
     return (
-        <Input ref={inputRef}
+        <Input
+            ref={inputRef}
             {...inputProps}
-            start={<SearchIcon className="pointer-events-none" />}
+            start={
+                <SearchIcon
+                    className="pointer-events-none"
+                    style={{ marginLeft: '0.5em' }}
+                />
+            }
             end={
                 <>
                     {end}
                     <CircleCross
-                        onClick={handleClickClear}
+                        onMouseDown={handleClearMouseDown}
                         className="cursor-pointer"
+                        style={{ marginRight: '0.5em' }}
                     />
                 </>
             }

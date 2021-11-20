@@ -1,257 +1,228 @@
 import classnames from 'classnames';
-import _isFunction from 'lodash/isFunction';
-import React, { FC, Ref, useImperativeHandle, useRef, useState } from 'react';
-import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { usePreviousState } from '../../hooks/usePreviousState';
-import { AngleDownIcon, WarningIcon } from '../../icons';
-import { Wrapper, WrapperProps } from '../controls/Wrapper';
-import { Delay } from '../Delay';
-import { Loading } from '../Loading';
-import { Popper, PopperProps } from '../Popper';
+import React, { Ref, useCallback, useContext, useImperativeHandle, useRef, useState } from 'react';
+import { ChooseInput } from '../..';
+import { useOptions, UseOptionsProps, UseOptionsProvider } from '../../hooks/useOptions';
+import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
+import { AngleDownIcon } from '../../icons';
+import { consumeEvent } from '../../utilities/consumeEvent';
+import { Context } from '../controls/Control';
+import { WrapperProps } from '../controls/Wrapper';
+import { WrapperPopper } from '../controls/WrapperPopper';
 import { ChooseOption, ChooseOptionProps } from './ChooseOption';
-import { defaultGetOptions, defaultRenderGroupLabel, defaultRenderOption } from './ChooseOptionList';
 
 
-//
-// Choose
-//
-
-export interface ChooseProps<G, O> extends WrapperProps,
-    Pick<PopperProps, 'placement' | 'withArrow' | 'withSameWidth'>,
-    Pick<ChooseOptionProps<G, O>, 'withSearch' | 'getOptions' | 'searchOptions' | 'renderGroupLabel' | 'renderOption' | 'renderFooter' | 'onChoose'> {
-
-
-    loading?: boolean;
-
-    loadingError?: boolean;
+export interface ChooseProps<G, O> extends
+    WrapperProps,
+    Pick<ChooseOptionProps<G, O>, 'extractor' | 'onChoose' | 'renderEmpty' | 'renderGroupLabel' | 'renderOption'> {
 
     withHideOnChoose?: boolean;
 
-    // styling
+    provider: G[] | Promise<G[]>;
+    providerProps?: UseOptionsProps<G, O>;
 
-    /**
-     * 
-     */
-    className?: string;
+    identifier: (option: O) => string;
 
-    /**
-     * Classes to pass to the ChooseOption container.
-     */
-    containerClassName?: string;
-
-    /**
-     * 
-     */
-    children: FC<ChooseRenderProps> | React.ReactNode | undefined;
+    renderChoosen?: ({ option }: { option: O }) => React.ReactNode;
 
 }
-
-export interface ChooseRenderProps {
-
-    show: boolean;
-
-}
-
 
 export const Choose = React.forwardRef(<G, O>(
     props: ChooseProps<G, O> & React.InputHTMLAttributes<HTMLInputElement>,
-    ref: Ref<HTMLDivElement>
+    ref: Ref<HTMLInputElement>
 ) => {
 
+    // Properties
+
     const {
+
+        withHideOnChoose,
+
+        provider,
+        providerProps,
+        identifier,
 
         variant,
         withFullWidth,
 
-        withSearch,
+        onFocus,
+        onBlur,
 
-        searchOptions,
-        getOptions = defaultGetOptions,
-
-        loading,
-        loadingError,
-
-        placement = 'bottom-start',
-        withArrow = false,
-        withSameWidth = false,
-
-        renderGroupLabel = defaultRenderGroupLabel,
-        renderOption = defaultRenderOption,
-        renderFooter,
-
-        onChoose,
-        withHideOnChoose = true,
+        error: inputError,
+        disabled,
 
         start,
         end,
 
-        error,
-        disabled,
-
         className,
-        containerClassName,
 
-        children
+        // choose options
+
+        extractor,
+        onChoose,
+
+        renderEmpty,
+        renderGroupLabel,
+        renderOption,
+        renderChoosen = ({ option }) => String(option),
+
+        children,
+
+        ...inputProps
 
     } = props;
 
-    // configuration
 
-    const chooseOptionRef = useRef<HTMLDivElement>(null);
-    const chooseOptionInputRef = useRef<HTMLInputElement & { handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void }>(null);
+    // State
 
-    // popper show and hide
+    const [show, setShow] = useState(true);
+    const wrapperRef = useRef<HTMLDivElement>(null);
 
-    const [show, setShow] = useState(false);
-    const previousShow = usePreviousState(show);
+    const { options, loading, error } = useOptions(provider);
+    const { selected, onKeyDown: onNavigatorKeyDown } = useOptionsKeyNavigator(options, { extractor, onChoose: handleChoose })
 
-    const [wrapperRef, setWrapperRef] = useState<HTMLDivElement | null>(null);
-    const [popperRef, setPopperRef] = useState<HTMLDivElement | null>(null);
-    useOnOutsideClick(show, () => { if (show) { setShow(false); } }, wrapperRef, popperRef);
+    // Handlers
 
-    useImperativeHandle(ref, () => wrapperRef!);
+    const internalInputRef = useRef<HTMLInputElement>(null);
+    useImperativeHandle(ref, () => internalInputRef.current!);
 
-    const handleShow = () => {
-        if (!show) {
-            setShow(true);
-        }
-    };
-    const handleHide = () => {
-        setShow(false);
-        wrapperRef?.focus();
-    };
+    const context = useContext(Context);
+    const [focus, setFocus] = useState(false);
 
-    // handle keyboard and mouse
+    // show and hide
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleShow = useCallback(() => setShow(true), []);
+    const handleToggle = useCallback(() => setShow(show => !show), []);
+    const handleHide = useCallback(() => setShow(false), []);
 
-        switch (e.key) {
+    // show on focus or click
 
-            case 'Escape':
-                handleHide();
-                break;
+    const isMouseDown = useRef(false);
 
-            case 'ArrowUp':
-            case 'ArrowDown':
-                handleShow();
-                break;
-
-        }
-
-        if (show && chooseOptionInputRef.current) {
-            chooseOptionInputRef.current.handleKeyDown(e);
-        }
-
-    }
-
-    const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (document.activeElement === wrapperRef) {
-            setShow(!show)
-        }
-    };
-
-    // handle focus
+    const handleMouseDown = useCallback((e: React.MouseEvent) => {
+        isMouseDown.current = true;
+    }, []);
 
     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-        if (!previousShow) {
+        onFocus?.(e);
+        setFocus(true);
+        if (!isMouseDown.current) {
             handleShow();
         }
+    }
+
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        setFocus(false);
+        onBlur?.(e);
+    }
+
+    const handleClick = useCallback(() => {
+        handleToggle();
+    }, [handleToggle]);
+
+    const handleMouseUp = useCallback((e: React.MouseEvent) => {
+        isMouseDown.current = false;
+    }, []);
+
+    function handleChoose(option: O) {
+
+        console.log('handleChoose', identifier(option), option);
+        setShow(false);
+
+        // onChoose(option);
+        // if (show && withHideOnChoose) {
+        //     setShow(false);
+        //     wrapperRef.current?.focus();
+        // }
+
     };
 
-    const handleLimitFocus = (e: React.FocusEvent<HTMLDivElement>) => {
-        wrapperRef?.focus();
-        handleHide();
-    };
+    // Popper
 
-    // handlers
 
-    const handleChoose = (option: O) => {
-        onChoose(option);
-        if (withHideOnChoose) {
-            handleHide();
-        }
-    };
+    const choosen = () => (
+        <div>asd</div>
+    );
 
-    // render
+    const popper = () => (
+        <ChooseOption
 
-    console.log('render', show, previousShow);
+            options={options}
+            selected={selected}
+
+            extractor={extractor}
+            onChoose={handleChoose}
+
+            renderEmpty={renderEmpty}
+            renderGroupLabel={renderGroupLabel}
+            renderOption={renderOption}
+
+            onMouseDown={consumeEvent}
+
+            className="divide-y-2"
+
+        />
+    );
+
+    // Render
 
     return (
-        <>
-            <Wrapper
+        <WrapperPopper
 
-                ref={setWrapperRef}
-                tabIndex={0}
+            ref={wrapperRef}
+            // tabIndex={0}
 
-                variant={variant}
-                withFullWidth={withFullWidth}
+            variant={variant}
+            withFullWidth={withFullWidth}
 
-                onKeyDown={handleKeyDown}
-                onClick={handleClick}
-                onFocus={handleFocus}
+            show={show}
+            popper={popper}
 
-                disabled={disabled}
-                error={error}
+            focus={focus}
+            disabled={disabled}
+            error={error}
 
-                start={start}
-                end={
-                    <>
-                        {end}
-                        {loading && <Delay><Loading colorClassName="text-control-border" /></Delay>}
-                        {loadingError ? <WarningIcon className="text-danger-500 stroke-2" /> : <AngleDownIcon className="text-control-border stroke-2" />}
-                    </>
-                }
+            onKeyDown={onNavigatorKeyDown}
 
-                className={className}
+            onMouseDown={handleMouseDown}
+            // onFocus={handleFocus}
+            // onBlur={handleBlur}
+            onClick={handleClick}
+            onMouseUp={handleMouseUp}
 
-            >
-
-                {_isFunction(children) ? children({ show }) : children}
-
-            </Wrapper>
-
-            {show &&
-                <Popper
-
-                    ref={setPopperRef}
-                    reference={wrapperRef!}
-
-                    placement={placement}
-                    withArrow={withArrow}
-                    withSameWidth={withSameWidth}
-
-                    className="bg-control-bg"
-
-                >
-
-                    <div tabIndex={0} onFocus={handleLimitFocus} />
-
-                    <ChooseOption
-
-                        ref={chooseOptionRef}
-
-                        withSearch={withSearch}
-
-                        onHide={handleHide}
-                        onChoose={handleChoose}
-
-                        searchOptions={searchOptions}
-                        getOptions={getOptions}
-
-                        renderGroupLabel={renderGroupLabel}
-                        renderOption={renderOption}
-                        renderFooter={renderFooter}
-
-                        className={classnames('border border-control-border rounded', containerClassName)}
-
-                    />
-
-                    <div tabIndex={0} onFocus={handleLimitFocus} />
-
-                </Popper>
+            start={start}
+            end={
+                <>
+                    {end}
+                    <AngleDownIcon className="text-control-border stroke-2" style={{ marginRight: '0.5em' }} />
+                </>
             }
 
-        </>
+            className="cursor-pointer"
+
+        >
+
+            <input
+
+                type="text"
+
+                defaultValue="ricardo"
+
+                // ref={inputRef}
+
+                onFocus={() => setFocus(true)}
+                onBlur={() => setFocus(false)}
+
+                // defaultValue={defaultValue}
+                // value={value}
+                // onChange={onChange}
+
+                // {...inputProps}
+
+                // className="absolute inset-0 w-full text-center opacity-20 pointer-events-none"
+
+            />
+
+        </WrapperPopper>
     );
 
 });

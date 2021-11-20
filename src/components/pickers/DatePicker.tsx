@@ -255,7 +255,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
             {show &&
                 <Popper ref={popperRef} reference={inputRef.current!}
                     onMouseDown={consumeEvent}
-                    placement={placement}
+                    withPlacement={placement}
                     className={classNames('flex flex-row bg-content-fg border border-content-border rounded', popperClassName)}
                 >
 

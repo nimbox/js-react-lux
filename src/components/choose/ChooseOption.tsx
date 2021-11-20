@@ -1,308 +1,217 @@
 import classnames from 'classnames';
-import _debounce from 'lodash/debounce';
-import _isFunction from 'lodash/isFunction';
-import React, { Ref, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { useKeyboardNavigator } from '../../hooks/useKeyboardNavigator';
-import { SearchIcon, WarningIcon } from '../../icons';
-import { Input } from '../controls/Input';
-import { SearchInput } from '../controls/SearchInput';
-import { Delay } from '../Delay';
-import { Loading } from '../Loading';
-import { ChooseOptionList, ChooseOptionListProps, defaultGetOptions, defaultRenderGroupLabel, defaultRenderNoOptions, defaultRenderOption } from './ChooseOptionList';
+import React, { Ref, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { DEFAULT_ON_CHOOSE, DEFAULT_RENDER_GROUP_LABEL, DEFAULT_RENDER_OPTION, EXTRACTOR } from './options';
 
 
 //
 // ChooseOption
 //
 
-export interface ChooseOptionNoOptionsProps {
+export interface ChooseOptionProps<G, O> {
 
     /**
-     * The search input value.
+     * The data structure representing groups and options. Given a `Group`
+     * interface and an `Option` interface, it has to be the case that `options`
+     * is options is an array of `Group` and for each element in that array
+     * `getOptions(group)` provides an array of `Option`.
      */
-    value?: string;
+    options?: G[] | null;
 
-}
+    /** 
+     * Display a loading indicator as part of the list. The data that
+     * needs to be shown is on its way. (Does nothing for now).
+     * @default `false`
+     */
+    loading?: boolean;
 
-export interface ChooseOptionFooterProps<G, O> extends Pick<ChooseOptionListProps<G, O>, 'options' | 'selected'> {
+    /** 
+     * Display an error indicator as part of the list. The data did not load
+     * correctly. (Does nothing for now).
+     * @default `false`
+     */
+    error?: any;
 
     /**
-     * The search input value.
+     * The index for the element that needs to be shown as selected. This is
+     * used to draw a `cursor` like visualization when navigating with the 
+     * keyboard.
      */
-    value?: string;
-
-}
-
-export interface ChooseOptionProps<G, O> extends Omit<ChooseOptionListProps<G, O>, 'error' | 'options' | 'selected' | 'renderNoOptions'> {
-
-    /**
-     * Add a search bar at the top. When this option is set you need to control
-     * the `value` and provide the `onChange` handler in order to provide the
-     * filtered options.
-     */
-    withSearch?: boolean;
+    selected?: [number, number] | null;
 
     //
 
     /**
-     * Function to provide options given a search query. This function
-     * can return the options or a promise that resolves to the
-     * options.
+     * Extractor to get the options of a given group.
+     * @default `(group) => group`
      */
-    searchOptions: G[] | Promise<G[]> | ((search: string) => (G[] | Promise<G[]>));
+    extractor?: (group: G) => O[];
+
+    /**
+    * Handler to call when one of the elements is clicked inside the list. The
+    * handler receives the option. 
+    */
+    onChoose?: (option: O) => void;
 
     //
 
     /**
      * Render this element when there are no options. It there are no options
      * and this function returns null, the component is rendered as null.
-     * Defaults to `() => null` 
+     * @default `() => null`
      */
-    renderNoOptions?: (props: ChooseOptionNoOptionsProps) => React.ReactNode;
+    renderEmpty?: () => React.ReactNode;
 
     /**
-     * Render the footer with the given properties.
+     * Render the group label from the provided group.
+     * @default `() => null`
      */
-    renderFooter?: (props: ChooseOptionFooterProps<G, O>) => React.ReactNode;
+    renderGroupLabel?: (props: { group: G }) => React.ReactNode
 
     /**
-     * Callback to call when escape is pressed.
+     * Render the option from the provided option.
+     * @default `({ option }) => String(option)`
      */
-    onHide?: () => void;
+    renderOption?: (props: { option: O }) => React.ReactNode;
+
+    //
 
     /**
-     * Reference to the container.
+     * The class name to use for the root div element.
+     * @default `blank`
      */
-    inputRef?: React.Ref<HTMLInputElement>;
+    className?: string;
 
 }
 
 /**
- * ChooseOption is a `div` that internally has an `input` that can be accessed
- * via its `inputRef` (usually to set its focus). The input automatically calls
- * the options promise and manages the loading and error state.
+ * Component to choose from a list of options. When an option is clicked on the
+ * `onChoose` callback is called with the option. Treat this component as an
+ * unstyled `div`.
+ *
+ * The options are be provided in groups, so in the usual case, an array with
+ * the array of options is required (note the double brackets at the begining
+ * and the end): 
+ *
+ * ```js
+ * [[ 'Yellow', 'Blue', 'Red' ]]
+ * [[ 'Yellow', 'Blue', 'Red' ], [ 'Green', 'Purple', 'Orange' ]]
+ * ```
  */
 export const ChooseOption = React.forwardRef(<G, O>(
-    props: ChooseOptionProps<G, O> & React.InputHTMLAttributes<HTMLDivElement>,
+    props: ChooseOptionProps<G, O> & React.HTMLAttributes<HTMLDivElement>,
     ref: Ref<HTMLDivElement>
 ) => {
 
-    // properties
+    // Properties
 
     const {
 
-        withSearch = false,
+        options,
+        loading = false,
+        error = false,
+        selected,
 
-        loading,
-        searchOptions,
+        extractor = EXTRACTOR,
+        onChoose = DEFAULT_ON_CHOOSE,
 
-        getOptions = defaultGetOptions,
-
-        renderNoOptions = defaultRenderNoOptions,
-        renderGroupLabel = defaultRenderGroupLabel,
-        renderOption = defaultRenderOption,
-        renderFooter,
-
-        inputRef,
-        defaultValue,
-        value,
-        onChange,
-
-        onKeyDown,
-
-        onHide,
-        onChoose,
+        renderEmpty,
+        renderGroupLabel = DEFAULT_RENDER_GROUP_LABEL,
+        renderOption = DEFAULT_RENDER_OPTION,
 
         className,
 
         ...divProps
 
-
     } = props;
 
-    // assertions
+    // Configuration
 
-    if (process.env.NODE_ENV !== 'production') {
-        if (withSearch && !_isFunction(searchOptions)) {
-            console.error('Provided withSearch parameter without providing an option provider function.  Try setting options to (search ) => [[ ... ]]');
-        }
-    }
+    // Create option references to scroll into view when the chosen
+    // option changes.
 
-    // configuration
-
-    const [searching, setSearching] = useState(false);
-    const [searchingError, setSearchingError] = useState(false);
-
-    const searchRef = useRef<{ cancel: (() => void) } | null>(null);
-    const [searchValue, setSearchValue] = useState('');
-    const [searchedOptions, setSearchedOptions] = useState<G[]>([]);
-
-    // search logic
-
-    const doSearch = useCallback((search) => {
-
-        let working = true;
-        (async () => {
-            try {
-                const promisedOptions = await Promise.resolve(_isFunction(searchOptions) ? searchOptions(search) : searchOptions);
-                if (working) {
-                    setSearchedOptions(promisedOptions);
-                }
-            } catch (e) {
-                if (working) {
-                    setSearchingError(e != null);
-                }
-            } finally {
-                if (working) {
-                    searchRef.current = null;
-                    setSearching(false);
-                }
-            }
-        })();
-
-        return ({ cancel: () => { working = false; } });
-
-    }, [searchOptions]);
-
-    const handleSearch = useCallback(_debounce((search) => { // eslint-disable-line react-hooks/exhaustive-deps
-
-        if (searchRef.current) {
-            searchRef.current.cancel();
-        }
-
-        setSearching(true);
-        setSearchingError(false);
-        searchRef.current = doSearch(search);
-
-    }, 150), [doSearch]);
-
+    const optionsRef = useRef<(HTMLLIElement | null)[][]>();
+    const [optionsRefAvailable, setOptionsRefAvailable] = useState(false);
     useEffect(() => {
+        optionsRef.current = options != null ?
+            options.map(group => extractor(group).map(option => null)) : [];
+        setOptionsRefAvailable(true);
+    }, [options, extractor]);
 
-        const search = String(value != null ? value : (defaultValue || ''));
-
-        setSearchValue(search);
-        handleSearch(search);
-
-    }, [handleSearch, defaultValue, value]);
-
-    //
-
-    const optionsLengths = useMemo(() => {
-        return searchedOptions.map(group => getOptions(group).length);
-    }, [searchedOptions, getOptions]);
-    const { selected, handleKeyDown: navigatorHandleKeyDown } = useKeyboardNavigator(optionsLengths);
-
-    // handlers
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-
-        switch (e.key) {
-
-            case 'Escape':
-                if (onHide) {
-                    onHide();
-                }
-                break;
-
-            // case 'Tab':
-            case 'Enter':
-
-                if (selected != null) {
-                    e.preventDefault();
-                    handleChoose(selected);
-                } else {
-                    if (onHide) {
-                        onHide();
-                    }
-                }
-
-                break;
-
+    useLayoutEffect(() => {
+        if (optionsRef.current != null && selected != null) {
+            const li = optionsRef.current?.[selected[0]][selected[1]];
+            if (li) {
+                /// li.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+            }
         }
+    }, [optionsRefAvailable, selected]);
 
-        navigatorHandleKeyDown(e);
+    // Handlers
 
+    const handleClick = (e: React.MouseEvent<HTMLLIElement>, g: number, i: number) => {
+        onChoose(extractor(options![g])[i]);
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (value != null) {
-            onChange!(e);
-        } else {
-            setSearchValue(e.target.value);
-            handleSearch(e.target.value);
-        }
-    };
+    // Render empty
 
-    const handleChoose = (selected: [number, number]) => {
-        const group = searchedOptions[selected[0]];
-        onChoose(getOptions(group)[selected[1]]);
-    };
+    const optionsCount = useMemo(() =>
+        options != null ? options.reduce((a, group) => a + extractor(group).length, 0) : 0,
+        [extractor, options]
+    );
 
-    // prepare the input reference to the parent element
+    const empty = useMemo(() =>
+        (!loading && optionsCount === 0) ? renderEmpty?.() : null,
+        [loading, renderEmpty, optionsCount]
+    );
 
-    const internalInputRef = useRef<HTMLInputElement>(null);
-    useImperativeHandle(inputRef, () => ({ ...internalInputRef.current!, handleKeyDown }));
+    // Render Label
 
-    // render 
+    const groupLabel = useCallback((group: G) => {
+        const label = renderGroupLabel?.({ group });
+        return label ? <div className="lux-px-2em lux-py-0.5em">{label}</div> : null;
+    }, [renderGroupLabel]);
 
-    const withFooter = renderFooter ? renderFooter({ value: value as any, options: searchedOptions, selected }) : null;
+    // Render
 
     return (
-        <div
-            ref={ref}
-            {...divProps}
-            className={classnames(
-                'relative max-h-96 flex flex-col divide-y divide-control-border overflow-y-auto',
-                'lux-empty-hidden',
-                className
-            )}
-        >
+        <div ref={ref} {...divProps} className={className}>
 
-            {withSearch &&
-                <div className="flex-none lux-p-2em">
-                    <SearchInput
+            {optionsCount === 0 ?
+                empty
+                :
+                <div className={classnames({'pointer-events-none': loading })}>
+                    {options!.map((group, g) =>
+                        extractor(group).length > 0 &&
+                        <div key={g}>
 
-                        ref={internalInputRef}
-                        autoFocus
+                            {groupLabel(group)}
 
-                        value={searchValue}
-                        onChange={handleChange}
-                        onKeyDown={handleKeyDown}
+                            <ul className="list-none">
+                                {extractor(group).map((option, i) =>
+                                    <li key={i}
+                                        ref={element => {
+                                            if (
+                                                optionsRef.current != null &&
+                                                g < optionsRef.current.length
+                                            ) {
+                                                optionsRef.current[g][i] = element;
+                                            }
+                                        }}
+                                        onClick={(e) => handleClick(e, g, i)}
+                                        className={classnames(
+                                            'lux-px-2em lux-py-0.5em',
+                                            { 'bg-primary-500': !loading && selected != null && selected[0] === g && selected[1] === i },
+                                            'hover:bg-secondary-500',
+                                            'cursor-pointer'
+                                        )}
+                                    >
+                                        {renderOption({ option })}
+                                    </li>
+                                )}
+                            </ul>
 
-                        end={
-                            <>
-                                {loading || searching ? <Delay><Loading /></Delay> : null}
-                                {searchingError ? <WarningIcon className="text-danger-500" /> : null}
-                            </>
-                        }
-
-                    />
-                </div>
-            }
-
-            <ChooseOptionList
-
-                loading={loading || searching}
-                error={searchingError}
-
-                options={searchedOptions}
-                selected={selected}
-
-                getOptions={getOptions}
-
-                renderNoOptions={() => renderNoOptions({ value: value as any })}
-                renderGroupLabel={renderGroupLabel}
-                renderOption={renderOption}
-
-                onChoose={onChoose}
-
-                className="flex-1 min-h-0 lux-py-2em overflow-y-auto"
-
-            />
-
-            {withFooter &&
-                <div className="flex-none">
-                    {withFooter}
+                        </div>
+                    )}
                 </div>
             }
 

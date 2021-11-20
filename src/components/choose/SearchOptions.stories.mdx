@@ -1,0 +1,108 @@
+import { action } from '@storybook/addon-actions';
+import { Canvas, Meta, Story } from '@storybook/addon-docs';
+import { useCallback, useState } from 'react';
+import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
+import { useSearchOptions } from '../../hooks/useSearchOptions';
+import { createSearchMatcher } from '../../utilities/createSearchMatcher';
+import { ChooseOption } from './ChooseOption';
+import { SearchOptions } from './SearchOptions';
+
+
+<Meta
+    title="Component/Choose/SearchOptions"
+    component={SearchOptions}
+    argTypes={{
+        options: { table: { category: 'Data' } },
+        loading: { table: { category: 'Data' } },
+        error: { table: { category: 'Data' } },
+        selected: { table: { category: 'Data' } },
+        extractor: { table: { category: 'Choose' } },
+        onChoose: { table: { category: 'Choose' } },
+        renderEmtpy: { table: { category: 'Renderers' } },
+        renderGroupLabel: { table: { category: 'Renderers' } },
+        renderOption: { table: { category: 'Renderers' } },
+        className: { table: { category: 'Styling' } },
+    }}
+/>
+
+
+export const colors = [
+    {
+        name: 'Primary', options: [
+            { value: 'ffff00', name: 'Yellow' },
+            { value: '0000ff', name: 'Blue' },
+            { value: 'ff0000', name: 'Red' }
+        ]
+    },
+    {
+        name: 'Secondary', options: [
+            { value: '00ff00', name: 'Green' },
+            { value: '800080', name: 'Purple' },
+            { value: 'ffa500', name: 'Orange' }
+        ]
+    }
+];
+
+export const provider = async (value) => {
+    await new Promise(resolve => setTimeout(() => resolve(), 2000));
+    if (value == null || value.trim() === '') {
+        return colors;
+    } else {
+        const matcher = createSearchMatcher(value.trim());
+        return [
+            { ...colors[0], options: colors[0].options.filter(o => matcher(o.name)) },
+            { ...colors[1], options: colors[1].options.filter(o => matcher(o.name)) }
+        ];
+    }
+};
+
+
+# SearchOptions
+
+This is an input derived from `SearchInput` that works with two hooks:
+`useSearchOptions` `useOptionsKeyNavigator`. These elements together with
+`ChooseOption` create a searchable list of options. 
+
+<Canvas>
+    <Story name="Default">
+        {() => {
+            const extractor = useCallback((group) => group.options, []);
+            const handleChoose = (option) => {
+                action('onChoose')(option); 
+                setValue('');
+                search('');
+            };
+            const [value, setValue] = useState('');
+            const { options, loading, error, search } = useSearchOptions(provider);
+            const { selected, onKeyDown } = useOptionsKeyNavigator(options, { extractor, onChoose: handleChoose });
+            const handleChange = (e) => {
+                setValue(e.target.value);
+                search(e.target.value);
+            };
+            return (
+                <div className="w-96 text-base border border-control-border rounded overflow-hidden">
+                    <div className="lux-p-2em">
+                        <SearchOptions 
+                            loading={loading} 
+                            error={error}
+                            value={value} 
+                            onChange={handleChange} 
+                            onKeyDown={onKeyDown}
+                        />
+                    </div>
+                    <ChooseOption
+                        options={options}
+                        loading={loading}
+                        error={error}
+                        selected={selected}
+                        extractor={extractor}
+                        onChoose={handleChoose}
+                        renderEmtpy={() => 'No options'}
+                        renderGroupLabel={({ group }) => <span>{group.name}</span>}
+                        renderOption={({ option }) => <span className="lux-px-2em italic">{option.name}</span>}
+                    />
+                </div>
+            );
+        }}
+    </Story>
+</Canvas>

@@ -5,7 +5,7 @@ import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { WarningIcon } from '../../icons';
 import AngleDownIcon from '../../icons/AngleDownIcon';
 import { consumeEvent } from '../../utilities/consumeEvent';
-import { ChooseOption, ChooseOptionProps } from '../choose/ChooseOption';
+import { SearchableChooseOption, SearchableChooseOptionProps } from '../choose/SearchableChooseOption';
 import { SearchInput } from '../controls/SearchInput';
 import { Wrapper, WrapperProps } from '../controls/Wrapper';
 import { Delay } from '../Delay';
@@ -18,8 +18,8 @@ import { Popper, PopperProps } from '../Popper';
 //
 
 export interface TagPickerProps<T> extends WrapperProps,
-    Pick<PopperProps, 'placement' | 'withArrow' | 'withSameWidth'>,
-    Pick<ChooseOptionProps<T[], T>, 'withSearch' | 'getOptions' | 'renderGroupLabel' | 'renderOption' | 'renderFooter'> {
+    Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'>,
+    Pick<SearchableChooseOptionProps<T[], T>, 'withSearch' | 'getOptions' | 'renderGroupLabel' | 'renderOption' | 'renderFooter'> {
 
     tags: T[];
     tagValue: (item: T) => string;
