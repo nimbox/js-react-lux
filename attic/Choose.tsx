@@ -259,7 +259,7 @@ export const Choose = React.forwardRef(<G, O>(
             tabIndex={0}
 
             show={show}
-            onHide={handleHide}
+            onChangeShow={setShow}
             popper={popper}
 
             onKeyDown={handleKeyDown}

@@ -1,9 +1,9 @@
 import React, { Ref, useCallback, useRef, useState } from 'react';
-import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
-import { UseSearchOptionsProps, UseSearchOptionsProvider, useSearchOptions } from '../../hooks/useSearchOptions';
-import { AngleDownIcon } from '../../icons';
-import { WrapperPopper } from '../controls/WrapperPopper';
-import { OptionsExtractor } from './options';
+import { useOptionsKeyNavigator } from '../src/hooks/useOptionsKeyNavigator';
+import { UseSearchOptionsProps, UseSearchOptionsProvider, useSearchOptions } from '../src/hooks/useSearchOptions';
+import { AngleDownIcon } from '../src/icons';
+import { WrapperPopper } from '../src/components/controls/WrapperPopper';
+import { OptionsExtractor } from '../src/components/choose/options';
 import { SearchableChooseOption, SearchableChooseOptionProps } from './SearchableChooseOption';
 
 
@@ -166,8 +166,8 @@ export const SearchableChoose = React.forwardRef(<G, O>(
 
             show={show}
             onHide={handleHide}
-            onTabOutside={handleHide}
-            popper={popper}
+            onPopperBlur={handleHide}
+            renderPopper={popper}
 
             onKeyDown={show ? onKeyDown : undefined}
 

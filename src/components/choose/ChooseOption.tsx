@@ -1,104 +1,47 @@
-import classnames from 'classnames';
-import React, { Ref, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { DEFAULT_ON_CHOOSE, DEFAULT_RENDER_GROUP_LABEL, DEFAULT_RENDER_OPTION, EXTRACTOR } from './options';
+import _isFunction from 'lodash/isFunction';
+import React, { Ref, useState } from 'react';
+import { useOptions, UseOptionsProps, UseOptionsSupplier } from '../../hooks/useOptions';
+import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
+import { consumeEvent } from '../../utilities/consumeEvent';
+import { SearchInput } from '../controls/SearchInput';
+import { ChooseOptionList, ChooseOptionListProps } from './ChooseOptionList';
+import { EXTRACTOR } from './options';
 
 
 //
 // ChooseOption
 //
 
-export interface ChooseOptionProps<G, O> {
+export interface ChooseOptionProps<O, G = O[]> extends
+    Pick<ChooseOptionListProps<O, G>, 'extractor' | 'onChoose' | 'renderEmpty' | 'renderGroupLabel' | 'renderOption'> {
 
     /**
-     * The data structure representing groups and options. Given a `Group`
-     * interface and an `Option` interface, it has to be the case that `options`
-     * is options is an array of `Group` and for each element in that array
-     * `getOptions(group)` provides an array of `Option`.
-     */
-    options?: G[] | null;
-
-    /** 
-     * Display a loading indicator as part of the list. The data that
-     * needs to be shown is on its way. (Does nothing for now).
+     * Add a search input. An exception is thrown at development time if this
+     * option is set to true and the supplier is not a function.
      * @default `false`
      */
-    loading?: boolean;
+    withSearch?: boolean,
 
-    /** 
-     * Display an error indicator as part of the list. The data did not load
-     * correctly. (Does nothing for now).
-     * @default `false`
+    /**
+     * Supplier to pass to `useOptions` to get the options.
      */
-    error?: any;
+    supplier: UseOptionsSupplier<G>;
 
     /**
-     * The index for the element that needs to be shown as selected. This is
-     * used to draw a `cursor` like visualization when navigating with the 
-     * keyboard.
+     * Properties to pass to `useOptions to get the options.
      */
-    selected?: [number, number] | null;
-
-    //
+    supplierProps?: UseOptionsProps<O, G>;
 
     /**
-     * Extractor to get the options of a given group.
-     * @default `(group) => group`
-     */
-    extractor?: (group: G) => O[];
-
-    /**
-    * Handler to call when one of the elements is clicked inside the list. The
-    * handler receives the option. 
-    */
-    onChoose?: (option: O) => void;
-
-    //
-
-    /**
-     * Render this element when there are no options. It there are no options
-     * and this function returns null, the component is rendered as null.
-     * @default `() => null`
-     */
-    renderEmpty?: () => React.ReactNode;
-
-    /**
-     * Render the group label from the provided group.
-     * @default `() => null`
-     */
-    renderGroupLabel?: (props: { group: G }) => React.ReactNode
-
-    /**
-     * Render the option from the provided option.
-     * @default `({ option }) => String(option)`
-     */
-    renderOption?: (props: { option: O }) => React.ReactNode;
-
-    //
-
-    /**
-     * The class name to use for the root div element.
-     * @default `blank`
+     * Class name of the container div.
+     * @default `divide-y divide-control-border`
      */
     className?: string;
 
 }
 
-/**
- * Component to choose from a list of options. When an option is clicked on the
- * `onChoose` callback is called with the option. Treat this component as an
- * unstyled `div`.
- *
- * The options are be provided in groups, so in the usual case, an array with
- * the array of options is required (note the double brackets at the begining
- * and the end): 
- *
- * ```js
- * [[ 'Yellow', 'Blue', 'Red' ]]
- * [[ 'Yellow', 'Blue', 'Red' ], [ 'Green', 'Purple', 'Orange' ]]
- * ```
- */
-export const ChooseOption = React.forwardRef(<G, O>(
-    props: ChooseOptionProps<G, O> & React.HTMLAttributes<HTMLDivElement>,
+export const ChooseOption = React.forwardRef(<O, G = O[]>(
+    props: ChooseOptionProps<O, G> & React.HTMLAttributes<HTMLDivElement>,
     ref: Ref<HTMLDivElement>
 ) => {
 
@@ -106,114 +49,82 @@ export const ChooseOption = React.forwardRef(<G, O>(
 
     const {
 
-        options,
-        loading = false,
-        error = false,
-        selected,
+        withSearch = false,
+
+        supplier,
+        supplierProps,
 
         extractor = EXTRACTOR,
-        onChoose = DEFAULT_ON_CHOOSE,
+        onChoose,
 
         renderEmpty,
-        renderGroupLabel = DEFAULT_RENDER_GROUP_LABEL,
-        renderOption = DEFAULT_RENDER_OPTION,
+        renderGroupLabel,
+        renderOption,
 
-        className,
-
-        ...divProps
+        className = 'divide-y divide-control-border',
 
     } = props;
 
-    // Configuration
+    // Assertions
 
-    // Create option references to scroll into view when the chosen
-    // option changes.
-
-    const optionsRef = useRef<(HTMLLIElement | null)[][]>();
-    const [optionsRefAvailable, setOptionsRefAvailable] = useState(false);
-    useEffect(() => {
-        optionsRef.current = options != null ?
-            options.map(group => extractor(group).map(option => null)) : [];
-        setOptionsRefAvailable(true);
-    }, [options, extractor]);
-
-    useLayoutEffect(() => {
-        if (optionsRef.current != null && selected != null) {
-            const li = optionsRef.current?.[selected[0]][selected[1]];
-            if (li) {
-                /// li.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-            }
+    if (process.env.NODE_ENV !== 'production') {
+        if (withSearch && !_isFunction(supplier)) {
+            console.error('Provided withSearch parameter without providing an option supplier function.  Try setting options to `(query) => [[ ... ]]`.');
         }
-    }, [optionsRefAvailable, selected]);
+    }
+
+    // State
+
+    const [searchValue, setSearchValue] = useState<string>('');
+
+    // Options
+
+    const { options, loading, error, search } = useOptions(supplier, supplierProps);
+    const { selected, onKeyDown } = useOptionsKeyNavigator(options, { extractor, onChoose })
 
     // Handlers
 
-    const handleClick = (e: React.MouseEvent<HTMLLIElement>, g: number, i: number) => {
-        onChoose(extractor(options![g])[i]);
+    const handleChangeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setSearchValue(value);
+        search(value);
     };
-
-    // Render empty
-
-    const optionsCount = useMemo(() =>
-        options != null ? options.reduce((a, group) => a + extractor(group).length, 0) : 0,
-        [extractor, options]
-    );
-
-    const empty = useMemo(() =>
-        (!loading && optionsCount === 0) ? renderEmpty?.() : null,
-        [loading, renderEmpty, optionsCount]
-    );
-
-    // Render Label
-
-    const groupLabel = useCallback((group: G) => {
-        const label = renderGroupLabel?.({ group });
-        return label ? <div className="lux-px-2em lux-py-0.5em">{label}</div> : null;
-    }, [renderGroupLabel]);
 
     // Render
 
     return (
-        <div ref={ref} {...divProps} className={className}>
+        <div ref={ref} className={className}>
 
-            {optionsCount === 0 ?
-                empty
-                :
-                <div className={classnames({'pointer-events-none': loading })}>
-                    {options!.map((group, g) =>
-                        extractor(group).length > 0 &&
-                        <div key={g}>
-
-                            {groupLabel(group)}
-
-                            <ul className="list-none">
-                                {extractor(group).map((option, i) =>
-                                    <li key={i}
-                                        ref={element => {
-                                            if (
-                                                optionsRef.current != null &&
-                                                g < optionsRef.current.length
-                                            ) {
-                                                optionsRef.current[g][i] = element;
-                                            }
-                                        }}
-                                        onClick={(e) => handleClick(e, g, i)}
-                                        className={classnames(
-                                            'lux-px-2em lux-py-0.5em',
-                                            { 'bg-primary-500': !loading && selected != null && selected[0] === g && selected[1] === i },
-                                            'hover:bg-secondary-500',
-                                            'cursor-pointer'
-                                        )}
-                                    >
-                                        {renderOption({ option })}
-                                    </li>
-                                )}
-                            </ul>
-
-                        </div>
-                    )}
+            {withSearch &&
+                <div className="lux-p-2em">
+                    <SearchInput
+                        autoFocus
+                        loading={loading}
+                        loadingError={error}
+                        value={searchValue}
+                        onChange={handleChangeSearchValue}
+                        onKeyDown={onKeyDown}
+                    />
                 </div>
             }
+
+            <ChooseOptionList
+
+                options={options}
+                selected={selected}
+
+                extractor={extractor}
+                onChoose={onChoose}
+
+                renderEmpty={renderEmpty}
+                renderGroupLabel={renderGroupLabel}
+                renderOption={renderOption}
+
+                onMouseDown={consumeEvent}
+
+                className="divide-y"
+
+            />
 
         </div>
     );

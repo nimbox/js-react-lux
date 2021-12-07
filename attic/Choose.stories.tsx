@@ -1,19 +1,17 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { Choose } from './Choose';
-import { default as colors } from '../src/data/flat-colors';
-import _, { remove } from 'lodash';
-import { MockStore } from '../src/test/MockStore';
-import { Input } from '../src/components/controls/Input';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Tag } from '../src/components/Tag';
-import { consumeEvent } from '../src/utilities/consumeEvent';
-import { useSearchableOptions } from '../src/hooks/useSearchableOptions';
-import { WrapperPopper } from '../src/components/controls/WrapperPopper';
-import { SearchInput } from '../src/components/controls/SearchInput';
+import _ from 'lodash';
+import React, { useCallback, useMemo, useState } from 'react';
 import { ChooseOption } from '../src/components/choose/ChooseOption';
-import { AngleDownIcon } from '../src/icons';
-import { getActiveElement } from '../src/utilities/getActiveElement';
 import { SearchableChooseOption } from '../src/components/choose/SearchableChooseOption';
+import { Input } from '../src/components/controls/Input';
+import { SearchInput } from '../src/components/controls/SearchInput';
+import { WrapperPopper } from '../src/components/controls/WrapperPopper';
+import { Tag } from '../src/components/Tag';
+import { default as colors } from '../src/data/flat-colors';
+import { useSearchableOptions } from '../src/hooks/useSearchableOptions';
+import { AngleDownIcon } from '../src/icons';
+import { MockStore } from '../src/test/MockStore';
+import { Choose } from './Choose';
 
 
 // definition

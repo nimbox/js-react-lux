@@ -1,19 +1,19 @@
 import { action } from '@storybook/addon-actions';
 import { ArgsTable, Canvas, Meta, Story } from '@storybook/addon-docs';
-import { ChooseOption } from './ChooseOption';
+import { ChooseOptionList  } from './ChooseOptionList';
 
 
 <Meta
-    title="Component/Choose/ChooseOption"
-    component={ChooseOption}
+    title="Component/Choose/ChooseOptionList"
+    component={ChooseOptionList}
     argTypes={{
         options: { table: { category: 'Data' } },
         loading: { table: { category: 'Data' } },
-        error: { table: { category: 'Data' } },
+        loadingError: { table: { category: 'Data' } },
         selected: { table: { category: 'Data' } },
         extractor: { table: { category: 'Choose' } },
         onChoose: { table: { category: 'Choose' } },
-        renderEmtpy: { table: { category: 'Renderers' } },
+        renderEmpty: { table: { category: 'Renderers' } },
         renderGroupLabel: { table: { category: 'Renderers' } },
         renderOption: { table: { category: 'Renderers' } },
         className: { table: { category: 'Styling' } },
@@ -41,7 +41,7 @@ export const colors = [
 ];
 
 
-# ChooseOption
+# ChooseOptionList
 
 Component to choose from a list of options. When an option is clicked  the
 `onChoose` callback is called with the option. Treat this component as an
@@ -66,16 +66,16 @@ end):
     <Story name="Default" args={{ 
         options: colors,
         loading: false,
-        error: false,
+        loadingError: false,
         selected: [1, 1],
         className: 'w-96 text-base border border-control-border rounded overflow-hidden'
     }}>
         {({ ...args }) => 
-            <ChooseOption 
+            <ChooseOptionList 
                 {...args}
                 extractor={(group) => group.options}
                 onChoose={option => action('onChoose')(option)}
-                renderEmtpy={() => 'No options'}
+                renderEmpty={() => 'No options'}
                 renderGroupLabel={({ group }) => <span>{group.name}</span>}
                 renderOption={({ option }) => <span className="lux-px-2em italic">{option.name}</span>}
             />
@@ -135,7 +135,7 @@ extractor:
 
 ## HTML Structure
 
-The `HTML` structure of `ChooseOption` is:
+The `HTML` structure of `ChooseOptionList` is:
 
 When is empty (undefined or null or empty array):
 
@@ -166,82 +166,16 @@ When there is at least one option:
 
 ## Stories
 
-This component only displays the groups, options, and selected option.If there
-is loading or error nothing is rendered.
+This component only displays the groups, options, and selected option. If there
+is `loading` or `loading error` nothing is rendered.
 
-### When options are loading or there is an error
+### Standard use
 
-To get the simplest option list just pass an array of array of string options.
-
-When `loading` or `error` nothing is rendered.
-
-<Canvas>
-    <Story name="Choose Option List With Loading">
-        <ChooseOption
-            options={[['Yellow', 'Blue', 'Red']]}
-            loading={true}
-            onChoose={option => action('onChoose')(option)}
-            className="w-96 border border-control-border rounded overflow-hidden"
-        />
-    </Story>
-</Canvas >
-
-<Canvas>
-    <Story name="Choose Option List With Error">
-        <ChooseOption
-            options={[['Yellow', 'Blue', 'Red']]}
-            error={true}
-            onChoose={option => action('onChoose')(option)}
-            className="w-96 border border-control-border rounded overflow-hidden"
-        />
-    </Story>
-</Canvas>
-
-When there are no options nothing is rendered.
-
-<Canvas>
-    <Story name="Choose Option List No Options">
-        <ChooseOption
-            options={[[]]}
-            onChoose={option => action('onChoose')(option)}
-            className="w-96 border border-control-border rounded overflow-hidden"
-        />
-    </Story>
-</Canvas >
-
-When there are no options and a `renderEmtpy` function is passed, the result
-of the function is rendered.
-
-<Canvas>
-    <Story name="Choose Option List No Options with Render">
-        <ChooseOption
-            options={[[]]}
-            onChoose={option => action('onChoose')(option)}
-            renderEmtpy={() => <div className="text-center">No options!</div>}
-            className="w-96 border border-control-border rounded overflow-hidden"
-        />
-    </Story>
-</Canvas >
-
-But when `loading` or `error` nothing is rendered.
-
-<Canvas>
-    <Story name="Choose Option List With Loading or Error With No Options Render">
-        <ChooseOption
-            options={[[]]}
-            loading={true}
-            onChoose={option => action('onChoose')(option)}
-            renderEmtpy={() => <div className="text-center">No options!</div>}
-            className="w-96 border border-control-border rounded overflow-hidden"
-        />
-    </Story>
-</Canvas >
-
-When there are options.
+The options are rendered when present.
 
 <Canvas>
     <Story name="Choose Option List">
-        <ChooseOption
+        <ChooseOptionList
             options={[['Yellow', 'Blue', 'Red']]}
             onChoose={option => action('onChoose')(option)}
             className="w-96 border border-control-border rounded overflow-hidden"
@@ -253,7 +187,7 @@ When there are two groups of options.
 
 <Canvas>
     <Story name="Choose Option List with Group">
-        <ChooseOption
+        <ChooseOptionList
             onChoose={option => action('onChoose')(option)}
             options={[['Yellow', 'Blue', 'Red'], ['Green', 'Purple', 'Orange']]}
             className="w-96 border border-control-border rounded overflow-hidden"
@@ -261,13 +195,67 @@ When there are two groups of options.
     </Story>
 </Canvas >
 
+When there are no options nothing is rendered.
+
+<Canvas>
+    <Story name="Choose Option List No Options">
+        <ChooseOptionList
+            options={[[]]}
+            onChoose={option => action('onChoose')(option)}
+            className="w-96 border border-control-border rounded overflow-hidden"
+        />
+    </Story>
+</Canvas >
+
+When there are no options but a `renderEmpty` function is passed, the result of
+the function is rendered.
+
+<Canvas>
+    <Story name="Choose Option List No Options with Render Empty">
+        <ChooseOptionList
+            options={[[]]}
+            onChoose={option => action('onChoose')(option)}
+            renderEmpty={() => <div className="text-center">No options!</div>}
+            className="w-96 border border-control-border rounded overflow-hidden"
+        />
+    </Story>
+</Canvas >
+
+
+### When loading or there is an error while loading
+
+When there are options but `loading` or `loadingError` are set, nothing is
+rendered.
+
+<Canvas>
+    <Story name="Choose Option List With Loading">
+        <ChooseOptionList
+            options={[['Yellow', 'Blue', 'Red']]}
+            loading={true}
+            onChoose={option => action('onChoose')(option)}
+            className="w-96 border border-control-border rounded overflow-hidden"
+        />
+    </Story>
+</Canvas >
+
+<Canvas>
+    <Story name="Choose Option List With Loading Error">
+        <ChooseOptionList
+            options={[['Yellow', 'Blue', 'Red']]}
+            loadingError={true}
+            onChoose={option => action('onChoose')(option)}
+            className="w-96 border border-control-border rounded overflow-hidden"
+        />
+    </Story>
+</Canvas>
+
 ### When a selection is set
 
 To show a selection of one of the options pass a non null `selected` property.
 
 <Canvas>
     <Story name="Choose Option List with Selected">
-        <ChooseOption
+        <ChooseOptionList
             options={[['Yellow', 'Blue', 'Red'], ['Green', 'Purple', 'Orange']]}
             selected={[0, 0]}
             onChoose={option => action('onChoose')(option)}
@@ -280,7 +268,7 @@ The selection will be automatically be brought into view.
 
 <Canvas>
     <Story name="Choose Option List with Selected and AutoScroll">
-        <ChooseOption
+        <ChooseOptionList
             options={[['Yellow', 'Blue', 'Red'], ['Green', 'Purple', 'Orange']]}
             selected={[1, 2]}
             onChoose={option => action('onChoose')(option)}
@@ -293,37 +281,37 @@ The selection will be automatically be brought into view.
 
 <Canvas>
     <Story name="Choose Option List Extra Small">
-        <ChooseOption
+        <ChooseOptionList
             options={[['Yellow', 'Blue', 'Red']]}
             className="w-32 text-xs border border-control-border rounded overflow-hidden"
         />
     </Story>
     <Story name="Choose Option List Small">
-        <ChooseOption
+        <ChooseOptionList
             options={[['Yellow', 'Blue', 'Red']]}
             className="w-32 text-sm border border-control-border rounded overflow-hidden"
         />
     </Story>
     <Story name="Choose Option List Base">
-        <ChooseOption
+        <ChooseOptionList
             options={[['Yellow', 'Blue', 'Red']]}
             className="w-32 text-base border border-control-border rounded overflow-hidden"
         />
     </Story>
     <Story name="Choose Option List Large">
-        <ChooseOption
+        <ChooseOptionList
             options={[['Yellow', 'Blue', 'Red']]}
             className="w-32 text-lg border border-control-border rounded overflow-hidden"
         />
     </Story>
     <Story name="Choose Option List Extra Large">
-        <ChooseOption
+        <ChooseOptionList
             options={[['Yellow', 'Blue', 'Red']]}
             className="w-32 text-xl border border-control-border rounded overflow-hidden"
         />
     </Story>
     <Story name="Choose Option List Extra Extra Large">
-        <ChooseOption
+        <ChooseOptionList
             options={[['Yellow', 'Blue', 'Red']]}
             className="w-32 text-2xl border border-control-border rounded overflow-hidden"
         />
@@ -337,7 +325,7 @@ extractor and rendering functions to render the list as you want.
 
 <Canvas>
     <Story name="Choose Option List With Render">
-        <ChooseOption
+        <ChooseOptionList
             options={[
                 {
                     name: 'Primary', options: [

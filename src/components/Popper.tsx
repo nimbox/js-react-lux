@@ -1,6 +1,6 @@
 import { Placement } from '@popperjs/core';
 import classnames from 'classnames';
-import React, { useImperativeHandle, useState } from 'react';
+import React, { useCallback, useImperativeHandle, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { usePopper } from 'react-popper';
 import { sameWidth } from '../utilities/sameWidth';
@@ -24,7 +24,11 @@ export interface PopperProps extends React.HTMLAttributes<HTMLDivElement> {
 
 }
 
-export const Popper = React.forwardRef<HTMLDivElement, PopperProps>((props, popperRef) => {
+export interface HTMLPopperElement extends HTMLDivElement {
+    forceUpdate: (() => void) | null;
+};
+
+export const Popper = React.forwardRef<HTMLPopperElement, PopperProps>((props, popperRef) => {
 
     // properties
 
@@ -48,9 +52,8 @@ export const Popper = React.forwardRef<HTMLDivElement, PopperProps>((props, popp
 
     const [internalPopperRef, setInternalPopperRef] = useState<HTMLDivElement | null>(null);
     const [internalArrowRef, setInternalArrowRef] = useState<HTMLDivElement | null>(null);
-    useImperativeHandle(popperRef, () => internalPopperRef!);
 
-    const { styles, attributes } = usePopper(reference, internalPopperRef, {
+    const { styles, attributes, forceUpdate } = usePopper(reference, internalPopperRef, {
         placement: withPlacement,
         modifiers: [
             { name: 'offset', options: { offset: [0, 4] } },
@@ -59,10 +62,15 @@ export const Popper = React.forwardRef<HTMLDivElement, PopperProps>((props, popp
         ]
     });
 
+    useImperativeHandle(popperRef, () =>
+        internalPopperRef != null ? Object.assign(internalPopperRef, { forceUpdate }) : null!,
+        [internalPopperRef, forceUpdate]
+    );
+
     // render
 
     return ReactDOM.createPortal(
-        <div ref={setInternalPopperRef} {...divProps} {...attributes.popper} className={classnames('z-40 popper-element', className)} style={styles.popper}>
+        <div ref={setInternalPopperRef} {...divProps} {...attributes.popper} className={classnames('z-50 popper-element', className)} style={styles.popper}>
             {children}
             {withArrow && <div ref={setInternalArrowRef} className="popper-arrow" style={styles.arrow} />}
         </div>,

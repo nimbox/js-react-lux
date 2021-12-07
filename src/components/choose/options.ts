@@ -2,7 +2,7 @@
 /**
  * 
  */
-export type OptionsExtractor<G, O> = (group: G) => O[];
+export type OptionsExtractor<O, G> = (group: G) => O[];
 
 /**
  * Default extractor for options. Assumes that the options come in an
@@ -11,7 +11,7 @@ export type OptionsExtractor<G, O> = (group: G) => O[];
  * @param group 
  * @returns 
  */
-export const EXTRACTOR = <G, O>(group: G) => group as unknown as O[];
+export const EXTRACTOR = <O, G>(group: G) => group as unknown as O[];
 
 
 /**

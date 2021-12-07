@@ -1,14 +1,16 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { action } from '@storybook/addon-actions';
 import React, { ChangeEvent, useRef, useState } from 'react';
-import { Input } from '..';
+import { Wrapper } from '..';
+import { Input } from '../components/controls/Input';
+import { Tag } from '../components/Tag';
 
 
-const definition = {
+export default {
     title: 'Sandbox/Ricardo',
     parameters: { layout: 'centered' }
 };
-export default definition;
+
 
 export const Inline = () => {
 
@@ -141,3 +143,18 @@ export const UncontrolledAndControlled = () => {
     );
 
 };
+
+
+export const TagContainer = () => {
+
+    return (
+        <div className="w-96">
+            <Wrapper className="max-w-full flex flex-row flex-wrap items-center gap-1">
+                <Tag className="truncate">Very long text to see if truncation kicks in. Still more text to fill the space.</Tag>
+                <Tag className="truncate">Very Short.</Tag>
+                <Tag className="truncate">Average size tag.</Tag>
+            </Wrapper>
+        </div>
+    );
+
+}

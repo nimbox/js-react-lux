@@ -6,7 +6,7 @@ import { EXTRACTOR } from '../components/choose/options';
 // useOptionsKeyNavigator
 //
 
-export interface OptionsNavigatorProps<G, O> {
+export interface OptionsNavigatorProps<O, G> {
 
     /**
      * Handler to call when one of the elements is choosen by enter or tab. The
@@ -51,7 +51,7 @@ export interface OptionsNavigatorReturn {
  * @param lengths 
  * @returns 
  */
-export const useOptionsKeyNavigator = <G, O>(options: G[] | undefined, props?: OptionsNavigatorProps<G, O>): OptionsNavigatorReturn => {
+export const useOptionsKeyNavigator = <O, G>(options: G[] | undefined, props?: OptionsNavigatorProps<O, G>): OptionsNavigatorReturn => {
 
     // Properties
 
@@ -68,7 +68,6 @@ export const useOptionsKeyNavigator = <G, O>(options: G[] | undefined, props?: O
 
     const [selected, setSelected] = useState<[number, number]>([0, -1]);
     useEffect(() => { 
-        console.log('reset selected');
         setSelected([0, -1]); 
     }, [lengths]);
 
@@ -79,8 +78,6 @@ export const useOptionsKeyNavigator = <G, O>(options: G[] | undefined, props?: O
     }
 
     const onKeyDown = useCallback((e: React.KeyboardEvent) => {
-
-        console.log('onKeyDown', e.key, selected);
 
         let [group, line] = selected;
 

@@ -1,13 +1,7 @@
 import React, { FC, Ref, useMemo, useState } from 'react';
-import { OptionsNavigatorReturn } from '../../hooks/useOptionsKeyNavigator';
-import { UseSearchOptionsReturn } from '../../hooks/useSearchOptions';
-import { WarningIcon } from '../../icons';
-import { SearchInput } from '../controls/SearchInput';
-import { Delay } from '../Delay';
-import { Loading } from '../Loading';
+import { AsyncSearchInput } from '../controls/AsyncSearchInput';
 import { ChooseOption, ChooseOptionProps } from './ChooseOption';
 import { DEFAULT_RENDER_GROUP_LABEL, DEFAULT_RENDER_NO_OPTIONS, DEFAULT_RENDER_OPTION, EXTRACTOR } from './options';
-import { SearchOptions } from './SearchOptions';
 
 
 //
@@ -137,7 +131,7 @@ export const SearchableChooseOption = React.forwardRef(<G, O>(
         <div {...divProps}>
 
             <div className="lux-p-2em">
-                <SearchOptions
+                <AsyncSearchInput
 
                     autoFocus={autoFocus}
 

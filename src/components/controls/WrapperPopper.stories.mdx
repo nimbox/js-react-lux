@@ -22,16 +22,16 @@ property to represent the `popper` element.
 export const Template = ({inside, ...args}) => <Wrapper {...args}>{inside}</Wrapper>
 
 <Canvas>
-    <Story name="Template" args={{ focus: false, disabled: false, error: false, inside: 'Inside' }}>
+    <Story name="Template" args={{ disabled: false, error: false, inside: 'Inside' }}>
         {Template.bind({ })}
     </Story>
-    <Story name="Template Undefined" args={{ focus: false, disabled: false, error: false }}>
+    <Story name="Template Undefined" args={{ disabled: false, error: false }}>
         {Template.bind({ })}
     </Story>
-    <Story name="Template Empty" args={{ focus: false, disabled: false, error: false, inside: '' }}>
+    <Story name="Template Empty" args={{ disabled: false, error: false, inside: '' }}>
         {Template.bind({ })}
     </Story>
-    <Story name="Template Space" args={{ focus: false, disabled: false, error: false, inside: '  ' }}>
+    <Story name="Template Space" args={{ disabled: false, error: false, inside: '  ' }}>
         {Template.bind({ })}
     </Story>
 </Canvas>
@@ -68,9 +68,9 @@ export const TemplateClick = ({variant, withFullWidth, ...args}) => {
             variant={variant}
             withFullWidth={withFullWidth}
             show={show}
-            onHide={() => setShow(false)}
+            onChangeShow={setShow}
             withArrow={true}
-            popper={() => <div className="p-4">World!</div>}
+            renderPopper={() => <div className="p-4">World!</div>}
             onClick={() => setShow(!show)}
         >
             Hello
@@ -85,9 +85,9 @@ export const TemplateHover = ({variant, withFullWidth, ...args}) => {
             variant={variant}
             withFullWidth={withFullWidth}
             show={show}
-            onHide={() => setShow(false)}
+            onChangeShow={setShow}
             withArrow={true}
-            popper={() => <div className="p-4">World!</div>}
+            renderPopper={() => <div className="p-4">World!</div>}
             onMouseEnter={() => setShow(true)}
             onMouseLeave={() => setShow(false)}
         >
@@ -145,8 +145,130 @@ This is helpful to to the an `inlined` variant withing some text.
 <Canvas>
     <Story name="Variant Inlined Without Full Width">
         <div>
-            Please select <WrapperPopper variant="inlined" withFullWidth={false} end={<AngleDownIcon className="stroke-1"/>} show={true} withArrow={true} popper={() => <div className="p-4">World!</div>}>user</WrapperPopper> responsible for the task.
+            Please select <WrapperPopper variant="inlined" withFullWidth={false} end={<AngleDownIcon className="stroke-1"/>} defaultShow={true} withArrow={true} renderPopper={() => <div className="p-4">World!</div>}>user</WrapperPopper> responsible for the task.
         </div>
     </Story>
 </Canvas>
 
+### OnFocus
+
+
+When focusing on the wrapper itself.
+
+export const TemplateFocus = ({variant, withFullWidth, ...args}) => {
+    const [show, setShow] = useState(false);
+    return (
+        <WrapperPopper 
+            tabIndex={0}
+            variant={variant}
+            withFullWidth={withFullWidth}
+            show={show}
+            onChangeShow={setShow}
+            withArrow={true}
+            renderPopper={() => <div className="p-4">World!</div>}
+        >
+            Hello
+        </WrapperPopper>
+    );
+};
+
+<Canvas>
+    <Story name="Variant Outlined Focus" args={{variant: 'outlined'}}>
+        {TemplateFocus.bind({ })}
+    </Story>
+    <Story name="Variant Filled Focus" args={{variant: 'filled'}}>
+        {TemplateFocus.bind({ })}
+    </Story>
+    <Story name="Variant Inline Focus" args={{variant: 'inlined'}}>
+        {TemplateFocus.bind({ })}
+    </Story>
+</Canvas>
+
+When focusing inside an input element controlled.
+
+export const TemplateFocusInputControlled = ({variant, withFullWidth, ...args}) => {
+    const [show, setShow] = useState(false);
+    return (
+        <WrapperPopper 
+            variant={variant}
+            withFullWidth={withFullWidth}
+            show={show}
+            onChangeShow={setShow}
+            withArrow={true}
+            renderPopper={() => <div className="p-4">World!</div>}
+        >
+            <input className="bg-transparent outline-none focus:outline-none"/>
+        </WrapperPopper>
+    );
+};
+
+<Canvas>
+    <Story name="Variant Outlined Focus Input Controlled" args={{variant: 'outlined'}}>
+        {TemplateFocusInputControlled.bind({ })}
+    </Story>
+    <Story name="Variant Filled Focus Input Controlled" args={{variant: 'filled'}}>
+        {TemplateFocusInputControlled.bind({ })}
+    </Story>
+    <Story name="Variant Inline Focus Input Controlled" args={{variant: 'inlined'}}>
+        {TemplateFocusInputControlled.bind({ })}
+    </Story>
+</Canvas>
+
+When focusing inside an input element uncontrolled.
+
+export const TemplateFocusInputUncontrolled = ({variant, withFullWidth, ...args}) => {
+    return (
+        <WrapperPopper 
+            variant={variant}
+            withFullWidth={withFullWidth}
+            defaultShow={false}
+            withArrow={true}
+            renderPopper={() => <div className="p-4">World!</div>}
+        >
+            <input className="bg-transparent outline-none focus:outline-none"/>
+        </WrapperPopper>
+    );
+};
+
+<Canvas>
+    <Story name="Variant Outlined Focus Input Uncontrolled" args={{variant: 'outlined'}}>
+        {TemplateFocusInputUncontrolled.bind({ })}
+    </Story>
+    <Story name="Variant Filled Focus Input Uncontrolled" args={{variant: 'filled'}}>
+        {TemplateFocusInputUncontrolled.bind({ })}
+    </Story>
+    <Story name="Variant Inline Focus Input ContrUncontrolledolled" args={{variant: 'inlined'}}>
+        {TemplateFocusInputUncontrolled.bind({ })}
+    </Story>
+</Canvas>
+
+When focusing inside an input element without responding to the click toggle.
+
+export const TemplateFocusInputNoToggle = ({variant, withFullWidth, ...args}) => {
+    const [show, setShow] = useState(false);
+    return (
+        <WrapperPopper 
+            variant={variant}
+            withToggle={false}
+            withFullWidth={withFullWidth}
+            show={show}
+            onChangeShow={setShow}
+            withArrow={true}
+            renderPopper={() => <div className="p-4">World!</div>}
+        >
+            <input defaultValue="asd" onChange={setShow} className="bg-transparent outline-none focus:outline-none"/>
+        </WrapperPopper>
+    );
+};
+
+<Canvas>
+    <Story name="Variant Outlined Focus Input No Toggle" args={{variant: 'outlined'}}>
+        {TemplateFocusInputNoToggle.bind({ })}
+    </Story>
+    <Story name="Variant Filled Focus Input No Toggle" args={{variant: 'filled'}}>
+        {TemplateFocusInputNoToggle.bind({ })}
+    </Story>
+    <Story name="Variant Inline Focus Input No Toggle" args={{variant: 'inlined'}}>
+        {TemplateFocusInputNoToggle.bind({ })}
+    </Story>
+</Canvas>

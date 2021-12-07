@@ -61,7 +61,6 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps & Re
             withFullWidth={withNoFull}
             withFullHeight={withFullHeight}
 
-            focus={focus}
             disabled={disabled}
             error={error}
 

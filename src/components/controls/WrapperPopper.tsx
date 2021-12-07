@@ -1,7 +1,7 @@
-import React, { Ref, useImperativeHandle, useRef, useState } from 'react';
+import React, { Ref, useCallback, useImperativeHandle, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { getActiveElement } from '../../utilities/getActiveElement';
-import { Popper, PopperProps } from '../Popper';
+import { HTMLPopperElement, Popper, PopperProps } from '../Popper';
 import { Wrapper, WrapperProps } from './Wrapper';
 
 
@@ -12,16 +12,40 @@ import { Wrapper, WrapperProps } from './Wrapper';
 export interface WrapperPopperProps extends WrapperProps,
     Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'> {
 
-    popperRef?: Ref<HTMLDivElement>;
+    /**
+     * Toggle visibiiity of the popper when a click is detected on the wrapper.
+     * @default true
+     */
+    withToggle?: boolean;
+
+    // popper
+
+    popperRef?: Ref<HTMLPopperElement>;
+
+    defaultShow?: boolean;
 
     show?: boolean;
 
-    onHide?: () => void;
+    onChangeShow: (show: boolean) => void;
 
-    onTabOutside?: () => void;
+    // popper
 
-    popper: () => React.ReactElement;
+    /**
+     * Render the popper.
+     */
+    renderPopper: () => React.ReactElement;
 
+    /**
+     * Called when tabbing inside the popper reaches the begining or the end.
+     * This is done by adding two selectable, but invisisble, divs, one before
+     * and one after all the elements of the popper.
+     */
+    onPopperBlur?: () => void;
+
+    /**
+     * Class name to apply to the popper.
+     * @default `bg-control-bg border border-control-border rounded overflow-hidden filter drop-shadow`
+     */
     popperClassName?: string;
 
 }
@@ -31,73 +55,128 @@ export const WrapperPopper = React.forwardRef((
     wrapperRef: Ref<HTMLDivElement>
 ) => {
 
-    // properties
+    // Properties
 
     const {
+
+        // Wrapper
+
+        disabled,
+        error,
+
+        onFocus,
+        onBlur,
+
+        // Popper 
+
+        popperRef,
 
         withPlacement,
         withArrow,
         withSameWidth,
 
-        popperRef,
+        // WrapperPopper
 
-        show = false,
-        onHide,
-        onTabOutside,
+        withToggle = true,
 
-        onFocus,
-        onBlur,
+        defaultShow,
+        show: propsShow,
+        onChangeShow: propsOnChangeShow,
 
-        popper,
-        popperClassName,
+        renderPopper,
+        onPopperBlur,
+        popperClassName = 'max-h-96 overflow-y-scroll bg-control-bg border border-control-border rounded filter drop-shadow',
+
+        //
 
         children,
+
+        // wrapper
 
         ...wrapperProps
 
     } = props;
 
+    // Assertions
 
-    // configuration
+    if (process.env.NODE_ENV !== 'production') {
+        if (propsShow !== null && propsOnChangeShow == null) {
+            console.error('You provided a `show` prop without an `onChangeShow` handler.');
+        }
+    }
 
-    // const internalWrapperRef = useRef<HTMLDivElement>(null);
-    // const internalPopperRef = useRef<HTMLDivElement>(null);
+    // State
+
+    const isShowControlled = propsShow != null;
+    const [internalShow, setInternalShow] = useState(defaultShow != null ? defaultShow : false);
+    const show = isShowControlled ? propsShow! : internalShow;
+
+    // Handlers
+
+    const handleShow = useCallback(() => {
+        propsOnChangeShow?.(true);
+        if (!isShowControlled) {
+            setInternalShow(true);
+        }
+    }, [isShowControlled, propsOnChangeShow]);
+
+    const handleHide = useCallback(() => {
+        if (!isShowControlled) {
+            setInternalShow(false);
+        }
+        propsOnChangeShow?.(false);
+    }, [isShowControlled, propsOnChangeShow]);
 
     const [internalWrapperRef, setInternalWrapperRef] = useState<HTMLDivElement | null>(null);
-    const [internalPopperRef, setInternalPopperRef] = useState<HTMLDivElement | null>(null);
-
-    useOnOutsideClick(show, () => onHide?.(), internalWrapperRef, internalPopperRef);
-
     useImperativeHandle(wrapperRef, () => internalWrapperRef!);
+
+    const [internalPopperRef, setInternalPopperRef] = useState<HTMLPopperElement | null>(null);
     useImperativeHandle(popperRef, () => internalPopperRef!);
 
-    // handlers
+    useOnOutsideClick(show, handleHide, internalWrapperRef, internalPopperRef);
 
-    const [internalFocus, setInternalFocus] = useState(false);
+    // Wrapper handlers
 
     // Hide the popper if a blur events happens in the wrapper or the popper and
     // the next active element is outside of both. This handles the case when
     // another element is focused programmatically and not because of a keypress
     // or mousedown. 
 
-    const handleWrapperFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-        onFocus?.(e);
-        setInternalFocus(true);
-    }
+    const isShowOnFocus = useRef(false);
 
-    const handleWrapperBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+    const handleWrapperFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
+        onFocus?.(e);
+        handleShow();
+        isShowOnFocus.current = true;
+    }, [handleShow, onFocus]);
+
+    const handleWrapperBlur = useCallback((e: React.FocusEvent<HTMLDivElement>) => {
         setTimeout(() => {
             const activeElement = getActiveElement();
             if (
                 !(activeElement == null) &&
                 (internalPopperRef != null && !internalPopperRef.contains(activeElement))
             ) {
-                onHide?.();
+                handleHide();
             }
         }, 0);
-        setInternalFocus(false);
         onBlur?.(e);
-    };
+    }, [internalPopperRef, handleHide, onBlur]);
+
+    const handleWrapperClick = useCallback(() => {
+        if (!isShowOnFocus.current) {
+            if (withToggle) {
+                if (show) {
+                    handleHide();
+                } else {
+                    handleShow();
+                }
+            }
+        }
+        isShowOnFocus.current = false;
+    }, [withToggle, show, handleShow, handleHide]);
+
+    // Popper handlers
 
     const handlePopperBlur = (e: React.FocusEvent<HTMLDivElement>) => {
         setTimeout(() => {
@@ -107,7 +186,7 @@ export const WrapperPopper = React.forwardRef((
                 !(internalWrapperRef != null && internalWrapperRef?.contains(activeElement)) &&
                 !(internalPopperRef != null && internalPopperRef?.contains(activeElement))
             ) {
-                onHide?.();
+                handleHide();
             }
         }, 0);
     };
@@ -115,12 +194,12 @@ export const WrapperPopper = React.forwardRef((
     // Hide the popper it a focus event is received before or after any of the
     // focusable elements inside the popper.
 
-    const handlePopperLimitFocus = (e: React.FocusEvent<HTMLDivElement>) => {
+    const handlePopperLimitBlur = (e: React.FocusEvent<HTMLDivElement>) => {
         e.target.blur();
-        onTabOutside?.();
+        onPopperBlur?.();
     };
 
-    // render
+    // Render
 
     return (
         <>
@@ -129,9 +208,12 @@ export const WrapperPopper = React.forwardRef((
 
                 ref={setInternalWrapperRef}
 
-                focus={internalFocus}
+                disabled={disabled}
+                error={error}
+
                 onFocus={handleWrapperFocus}
                 onBlur={handleWrapperBlur}
+                onClick={handleWrapperClick}
 
                 {...wrapperProps}
 
@@ -141,7 +223,7 @@ export const WrapperPopper = React.forwardRef((
 
             </Wrapper>
 
-            {show &&
+            {show && !disabled &&
 
                 <Popper
 
@@ -154,13 +236,13 @@ export const WrapperPopper = React.forwardRef((
 
                     onBlur={handlePopperBlur}
 
-                    className="bg-control-bg border border-control-border rounded overflow-hidden filter drop-shadow-lg"
+                    className={popperClassName}
 
                 >
 
-                    {onTabOutside && <div tabIndex={0} onFocus={handlePopperLimitFocus} />}
-                    {popper()}
-                    {onTabOutside && <div tabIndex={0} onFocus={handlePopperLimitFocus} />}
+                    {onPopperBlur && <div tabIndex={0} onFocus={handlePopperLimitBlur} />}
+                    {renderPopper()}
+                    {onPopperBlur && <div tabIndex={0} onFocus={handlePopperLimitBlur} />}
 
                 </Popper>
             }

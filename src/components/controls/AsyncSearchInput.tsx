@@ -7,7 +7,7 @@ import { WarningIcon } from '../../icons';
 // SearchOptions
 //
 
-export interface SearchOptionsProps extends Omit<SearchInputProps, 'end'> {
+export interface AsyncSearchInputProps extends SearchInputProps {
 
     /** 
      * Display a loading indicator as part of the input. The data that needs to
@@ -28,8 +28,8 @@ export interface SearchOptionsProps extends Omit<SearchInputProps, 'end'> {
 /**
  * 
  */
-export const SearchOptions = React.forwardRef((
-    props: SearchOptionsProps & React.InputHTMLAttributes<HTMLInputElement>,
+export const AsyncSearchInput = React.forwardRef((
+    props: AsyncSearchInputProps & React.InputHTMLAttributes<HTMLInputElement>,
     ref: Ref<HTMLInputElement>
 ) => {
 
@@ -38,6 +38,7 @@ export const SearchOptions = React.forwardRef((
     const {
         loading,
         error,
+        end,
         ...inputProps
     } = props;
 
@@ -49,6 +50,7 @@ export const SearchOptions = React.forwardRef((
             {...inputProps}
             end={
                 <>
+                    {end}
                     {loading ? <Delay><Loading style={{ marginRight: '0.5em' }} /></Delay> : null}
                     {error ? <WarningIcon className="text-danger-500" style={{ marginRight: '0.5em' }} /> : null}
                 </>

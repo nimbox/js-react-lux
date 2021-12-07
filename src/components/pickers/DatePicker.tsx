@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon } from '../../icons';
 import { consumeEvent } from '../../utilities/consumeEvent';
-import { setInputValue } from '../../utilities/setInputValue';
+import { setRefInputValue } from '../../utilities/setRefInputValue';
 import { Input, InputProps } from '../controls/Input';
-import { Popper, PopperPlacement } from '../Popper';
+import { HTMLPopperElement, Popper, PopperPlacement } from '../Popper';
 
 
 //
@@ -110,7 +110,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
 
     // Popper states
     const [show, setShow] = useState(false);
-    const popperRef = useRef<HTMLInputElement>(null);
+    const popperRef = useRef<HTMLPopperElement>(null);
     useOnOutsideClick(show, () => { if (show) { setShow(false); } }, inputRef.current, popperRef.current);
 
     // handlers
@@ -181,7 +181,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
 
     const handleFinalValueDate = (finalDate: [number, number, number] | null) => {
         const finalValue = finalDate != null ? formatDate(finalDate) : '';
-        setInputValue(inputRef, finalValue);
+        setRefInputValue(inputRef, finalValue);
         handleHide();
     };
 

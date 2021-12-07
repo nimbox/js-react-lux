@@ -2,8 +2,8 @@ import { default as classnames, default as classNames } from 'classnames';
 import React, { FC, Ref, useCallback, useContext, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon } from '../../icons';
-import { setInputValue } from '../../utilities/setInputValue';
-import { SearchableChooseOption } from '../choose/SearchableChooseOption';
+import { setRefInputValue } from '../../utilities/setRefInputValue';
+import { Choose } from '../choose/Choose';
 import { Popper, PopperProps } from '../Popper';
 import { Context } from './Control';
 import { Wrapper, WrapperProps } from './Wrapper';
@@ -133,7 +133,6 @@ const NativeSelect = React.forwardRef<HTMLSelectElement, SelectProps & React.Sel
                 variant={variant}
                 withFullWidth={withNoFull}
 
-                focus={focus}
                 error={error}
                 disabled={disabled}
 
@@ -224,6 +223,7 @@ const CustomSelect = React.forwardRef<HTMLInputElement, SelectProps & React.Inpu
 
     // const context = useContext(Context);
     const chooseOptionRef = useRef<HTMLInputElement & { handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void }>(null);
+
 
     // convert children into options
 
@@ -337,7 +337,7 @@ const CustomSelect = React.forwardRef<HTMLInputElement, SelectProps & React.Inpu
     // handlers
 
     const handleChoose = (option: React.ReactElement) => {
-        setInputValue(selectRef, option.props.value);
+        setRefInputValue(selectRef, option.props.value);
         if (value == null) {
             console.log('loaded options');
             setLoadedOption(option);
@@ -421,21 +421,20 @@ const CustomSelect = React.forwardRef<HTMLInputElement, SelectProps & React.Inpu
                     className="bg-control-bg"
                 >
 
-                    <SearchableChooseOption
+                    {/* <Choose
 
                         ref={chooseOptionRef}
 
                         onBlur={handleHide}
 
-                        onHide={handleHide}
-                        onChoose={handleChoose}
+                        onChoose={() => null}
 
                         provider={options}
                         renderOption={({ option }) => <>{option}</>}
 
                         className={classNames('border border-control-border rounded', containerClassName)}
 
-                    />
+                    /> */}
 
                 </Popper>
             }

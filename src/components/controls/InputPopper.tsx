@@ -1,156 +1,122 @@
 
 import classnames from 'classnames';
-import React, { Ref, useContext, useImperativeHandle, useRef, useState } from 'react';
-import { PopperProps } from '../Popper';
+import React, { Ref, useContext, useImperativeHandle, useRef } from 'react';
 import { Context } from './Control';
-import { WrapperProps } from './Wrapper';
-import { WrapperPopper } from './WrapperPopper';
+import { WrapperPopper, WrapperPopperProps } from './WrapperPopper';
 
 
 //
 // InputPopper
 //
 
-export interface InputPopperProps extends WrapperProps, Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'> {
+export interface InputPopperProps extends WrapperPopperProps {
 
-    // for input
+    // Input
 
-    /** Name used for the input element and returned in the change event. */
+    /** 
+     * Name used for the input element and returned in the change event. 
+     */
     name?: string,
 
-    /** String representation of the color (for uncontrolled). */
+    /** 
+     * String representation of the color (for uncontrolled). 
+     */
     defaultValue?: string,
 
-    /** String representation of the color (for controlled). */
+    /** 
+     * String representation of the color (for controlled). 
+     */
     value?: string,
 
-    /** Change event handler (for controlled). */
+    /** 
+     * Change event handler (for controlled). 
+     */
     onChange?: React.ChangeEventHandler<HTMLInputElement>,
-
-    // for popper
-
-    /** Show popper. */
-    show?: boolean;
-
-    /** Callback to invoke when needing to show popper. */
-    onShow?: () => void;
-
-    /** Callback to invoke when needing to hide popper.. */
-    onHide?: () => void;
-
-    /** Callback that returns the element to include inside the popper. */
-    popper: () => React.ReactElement;
 
 }
 
 export const InputPopper = React.forwardRef((
     props: InputPopperProps & React.InputHTMLAttributes<HTMLInputElement>,
-    ref: Ref<HTMLInputElement>
+    inputRef: Ref<HTMLInputElement>
 ) => {
 
-    // properties
+    // Properties
 
     const {
 
+        // Wrapper
+
         variant,
         withFullWidth,
+        withFullHeight,
 
-        onFocus,
-        onBlur,
-
-        error,
         disabled,
+        error,
 
         start,
         end,
 
-        className,
+        // Popper
 
-        withPlacement: placement,
+        withPlacement,
         withArrow,
         withSameWidth,
 
+        defaultShow,
         show,
-        onShow,
-        onHide,
+        onChangeShow,
 
-        popper,
+        renderPopper,
+
+        // Input
+
+        className,
 
         ...inputProps
 
     } = props;
 
-    // configuration
-
-    const wrapperRef = useRef<HTMLDivElement>(null);
-    const inputRef = useRef<HTMLInputElement>(null);
-    useImperativeHandle(ref, () => inputRef.current!);
+    // State
 
     const context = useContext(Context);
+    const isError = error || context.error;;
 
-    const handleMouseDown = () => {
-        if (document.activeElement === inputRef.current) {
-            console.log('is active');
-            if (show) {
-                onHide!();
-            } else {
-                onShow!();
-            }
-        }
-    }
-
-    const [focus, setFocus] = useState(false);
-    const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-        onFocus?.(e);
-        setFocus(true);
-        onShow?.(); 
-    }
-    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-        onHide?.();
-        setFocus(false);
-        onBlur?.(e);
-    }
-
-    // render
+    // Render
 
     return (
         <WrapperPopper
 
-            ref={wrapperRef}
-
             variant={variant}
             withFullWidth={withFullWidth}
+            withFullHeight={withFullHeight}
 
-            focus={focus}
             disabled={disabled}
             error={error}
 
             start={start}
             end={end}
 
-            withPlacement={placement}
+            withPlacement={withPlacement}
             withArrow={withArrow}
             withSameWidth={withSameWidth}
 
+            defaultShow={defaultShow}
             show={show}
-            onHide={onHide}
-            popper={popper}
+            onChangeShow={onChangeShow}
+
+            renderPopper={renderPopper}
 
         >
             <input
 
                 ref={inputRef}
 
-                onMouseDown={handleMouseDown}
-
-                onFocus={handleFocus}
-                onBlur={handleBlur}
                 disabled={disabled}
 
                 className={classnames(
                     'block w-full',
                     'outline-none focus:outline-none',
-                    error || context.error ? 'placeholder-danger-500' : 'placeholder-control-placeholder',
+                    isError ? 'placeholder-danger-500' : 'placeholder-control-placeholder',
                     'placeholder-opacity-40',
                     className
                 )}

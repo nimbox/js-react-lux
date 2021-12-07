@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React, { Ref, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { setInputValue } from '../../utilities/setInputValue';
+import { setRefInputValue } from '../../utilities/setRefInputValue';
 import defaultSwatches from '../../data/flat-colors';
 import { Input, InputProps } from '../controls/Input';
 import { Popper, PopperPlacement, PopperProps } from '../Popper';
@@ -112,12 +112,12 @@ export const SwatchPicker = React.forwardRef((
     }
 
     const handleClickSwatch = (swatch: string) => {
-        setInputValue(inputRef, swatch);
+        setRefInputValue(inputRef, swatch);
         setShow(false);
     };
 
     const handleRandomClickSwatch = () => {
-        setInputValue(inputRef, values[Math.floor(Math.random() * values.length)]);
+        setRefInputValue(inputRef, values[Math.floor(Math.random() * values.length)]);
         setShow(false);
     };
 

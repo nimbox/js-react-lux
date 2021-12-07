@@ -1,7 +1,10 @@
-import React, { Ref, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { Ref, useImperativeHandle, useState } from 'react';
+import tinycolor from 'tinycolor2';
 import defaultSwatches from '../../data/flat-colors';
+import { useObservableValueRef } from '../../hooks/useObservableValueRef';
+import { RefreshIcon } from '../../icons';
 import { consumeEvent } from '../../utilities/consumeEvent';
-import { setInputValue } from '../../utilities/setInputValue';
+import { setRefInputValue } from '../../utilities/setRefInputValue';
 import { InputProps } from '../controls/Input';
 import { InputPopper } from '../controls/InputPopper';
 import { PopperProps } from '../Popper';
@@ -15,105 +18,114 @@ export interface SwatchPickerProps extends
     InputProps,
     Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'> {
 
-    /** Possible swatch colors. */
+    // SwatchPicker
+
+    /** 
+     * Possible swatch colors.
+     * @default defaultSwatches
+     */
     values?: string[];
 
-    /** Classes to append to the popper element. Defaults to 'p-2 w-64 grid grid-cols-5 cursor-pointer'. */
+    // Popper
+
+    /** 
+     * Classes to append to the popper element. 
+     * @default 'w-64 lux-p-2em grid grid-cols-5 cursor-pointer'
+     */
     popperClassName?: string;
 
 }
 
 export const SwatchPicker = React.forwardRef((
     props: SwatchPickerProps & React.InputHTMLAttributes<HTMLInputElement>,
-    ref: Ref<HTMLInputElement>
+    inputRef: Ref<HTMLInputElement>
 ) => {
 
-    // properties
+    // Properties
 
     const {
 
+        // SwatchPicker
+
         defaultValue,
-        value,
+        value: propsValue,
         onChange,
 
         values = defaultSwatches,
 
-        onFocus,
-        onBlur,
+        // Popper
 
-        withPlacement: placement,
+        withPlacement,
         withArrow,
         withSameWidth,
 
-        popperClassName = 'p-2 w-64 grid grid-cols-5 cursor-pointer',
+        popperClassName = 'w-64 lux-p-2em grid grid-cols-5 cursor-pointer',
+
+        // input
 
         ...inputProps
 
     } = props;
 
-    // configuration
-
-    const inputRef = useRef<HTMLInputElement>(null);
-    useImperativeHandle(ref, () => inputRef.current!);
+    // State
 
     const [show, setShow] = useState(false);
-    const handleShow = () => setShow(true);
-    const handleHide = () => setShow(false);
 
-    // Maintain an internalValue to use the internal input as controlled,
-    // and only update internalValue when the picker is controlled.
-    const [internalValue, setInternalValue] = useState(defaultValue || '');
-    useEffect(() => { if (value != null) { setInternalValue(value || ''); } }, [value]);
+    const internalInputRef = useObservableValueRef<HTMLInputElement>(null, { onSet: () => console.log('onSet') });
+    // const [internalInputRef, setInternalInputRef] = useState<HTMLInputElement | null>(null);
 
-    // handlers
+    const isControlled = propsValue != null;
+    const [internalValue, setInternalValue] = useState(defaultValue ?? '');
+    const value = isControlled ? propsValue : internalValue;
+
+    // Colors
+
+    const valueColor = tinycolor(value);
+    const color = valueColor.isValid() && valueColor.isDark() ? 'white' : 'black';
+    const backgroundColor = valueColor.isValid() ? value : 'white';
+
+    useImperativeHandle(inputRef, () => internalInputRef.current!);
+
+    // Handlers
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (onChange) {
-            // bubble up change event regardless of 
-            // controlled or uncontrolled
-            onChange(e);
-        }
-        if (value == null) {
-            // set internal value if uncontrolled
+        if (!isControlled) {
             setInternalValue(e.target.value);
         }
-    }
-
-    // handler
-
-    const handleClickSwatch = (swatch: string) => {
-        setInputValue(inputRef, swatch);
-        handleHide();
+        onChange?.(e);
     };
 
-    const handleRandomClickSwatch = () => {
-        setInputValue(inputRef, values[Math.floor(Math.random() * values.length)]);
+    const handleClickSwatch = (e: React.MouseEvent, swatch: string) => {
+        consumeEvent(e);
+        setRefInputValue(internalInputRef, swatch);
+        setShow(false);
     };
 
-    // adornment
-
-    const adornment = () => {
-        return (
-            <div
-                onMouseDown={consumeEvent}
-                onClick={handleRandomClickSwatch}
-                className="h-full rounded-l cursor-pointer"
-                style={{ width: '2em', backgroundColor: internalValue }}
-            />
-        );
+    const handleRandomClickSwatch = (e: React.MouseEvent) => {
+        consumeEvent(e);
+        setRefInputValue(internalInputRef, values[Math.floor(Math.random() * values.length)]);
     };
 
-    // popper
+    // Adornment
 
-    const popper = () => {
-        return (
-            <div onMouseDown={consumeEvent} className={popperClassName}>
-                {values.map((s, i) =>
-                    <div key={i} onClick={() => handleClickSwatch(s)} style={{ backgroundColor: s }}>&nbsp;</div>
-                )}
-            </div>
-        );
-    };
+    const adornment = () => (
+        <RefreshIcon
+            onMouseDown={consumeEvent}
+            onClick={handleRandomClickSwatch}
+            className="h-full lux-p-1em border-l border-control-border rounded-l cursor-pointer"
+            style={{ width: '2em', color, backgroundColor }}
+        />
+    );
+
+    // Popper
+
+    const popper = () => (
+        <div onMouseDown={consumeEvent} className={popperClassName}>
+            {values.map((s, i) =>
+                <div key={i} onClick={(e) => handleClickSwatch(e, s)} style={{ backgroundColor: s }}>&nbsp;</div>
+            )}
+        </div>
+    );
 
     // render
 
@@ -121,23 +133,23 @@ export const SwatchPicker = React.forwardRef((
 
         <InputPopper
 
-            ref={inputRef}
+            ref={internalInputRef}
 
             variant="outlined"
 
-            value={value}
+            {...!isControlled ? { defaultValue } : undefined}
+            {...isControlled ? { value } : undefined}
             onChange={handleChange}
 
             end={adornment()}
 
-            withPlacement={placement}
+            withPlacement={withPlacement}
             withArrow={withArrow}
             withSameWidth={withSameWidth}
 
             show={show}
-            onShow={handleShow}
-            onHide={handleHide}
-            popper={popper}
+            onChangeShow={setShow}
+            renderPopper={popper}
 
             {...inputProps}
 

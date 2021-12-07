@@ -24,25 +24,61 @@ export const Cross: FC<SVGProps<SVGSVGElement> & { showCross: boolean; crossColo
 export interface TagProps {
 
     color?: string;
-    background?: string;
+    backgroundColor?: string;
 
-    onClick?: (e: React.MouseEvent) => void;
     onDelete?: (e: React.MouseEvent) => void;
+
+    containerClassName?: string;
+    className?: string;
 
 }
 
-export const Tag: FC<TagProps> = ({ color: propertyColor = '#906090', background: propertyBackground, onClick, onDelete, children }) => {
+export const Tag: FC<TagProps> = (props) => {
 
-    const color = useMemo(() => (!propertyBackground ? (tinycolor(propertyColor).isDark() ? 'white' : 'black') : propertyColor), [propertyColor, propertyBackground]);
-    const backgroundColor = useMemo(() => !propertyBackground ? propertyColor : propertyBackground, [propertyColor, propertyBackground]);
+    // Properties
 
-    const crossBackgroundColor = useMemo(() => tinycolor(backgroundColor).darken(5).toString(), [backgroundColor]);
-    const crossBackgroundHoverColor = useMemo(() => tinycolor(crossBackgroundColor).darken(10).toString(), [crossBackgroundColor]);
+    const {
+
+        color: propertyColor = '#906090',
+        backgroundColor: propertyBackgroundColor,
+
+        onDelete,
+
+        containerClassName,
+
+        children,
+        className,
+
+        ...spanProps
+
+    } = props;
+
+    // State
+
+    const color = useMemo(() =>
+    (!propertyBackgroundColor ?
+        (tinycolor(propertyColor).isDark() ? 'white' : 'black') :
+        propertyColor),
+        [propertyColor, propertyBackgroundColor]);
+    const backgroundColor = useMemo(() =>
+        !propertyBackgroundColor ?
+            propertyColor :
+            propertyBackgroundColor,
+        [propertyColor, propertyBackgroundColor]);
+
+    const crossBackgroundColor = useMemo(() =>
+        tinycolor(backgroundColor).darken(5).toString(),
+        [backgroundColor]);
+    const crossBackgroundHoverColor = useMemo(() =>
+        tinycolor(crossBackgroundColor).darken(10).toString(),
+        [crossBackgroundColor]);
     const [hoverColor, setHoverColor] = useState(crossBackgroundColor);
+
+    // Render
 
     return (
         <span
-            className='inline-flex flex-row items-baseline max-w-full rounded-full'
+            className={classnames("inline-flex flex-row items-baseline max-w-full rounded-full", containerClassName)}
             style={{ lineHeight: '1', paddingLeft: '0.25em', paddingTop: '0.125em', paddingRight: '0.5em', paddingBottom: '0.125em', color, backgroundColor }}
         >
 
@@ -53,8 +89,7 @@ export const Tag: FC<TagProps> = ({ color: propertyColor = '#906090', background
                 onMouseEnter={() => setHoverColor(crossBackgroundHoverColor)}
                 onMouseLeave={() => setHoverColor(crossBackgroundColor)}
 
-                onMouseDownCapture={(e) => { e.preventDefault(); }}
-                onClick={(e) => onDelete && onDelete(e)}
+                onClick={(e) => onDelete?.(e)}
 
                 crossColor={color}
                 circleColor={onDelete ? hoverColor : crossBackgroundColor}
@@ -65,16 +100,9 @@ export const Tag: FC<TagProps> = ({ color: propertyColor = '#906090', background
             />
 
             <span
-
-                onMouseDownCapture={(e) => { e.stopPropagation(); e.preventDefault(); }}
-                onClick={!onDelete ? onClick : undefined}
-
-                className={classnames(
-                    'block flex-1 max-w-full truncate',
-                    { 'hover:underline cursor-pointer': onClick && !onDelete }
-                )}
+                className={classnames('block flex-shrink min-w-0 max-w-full', className)}
                 style={{ height: '1.2em', lineHeight: '1.2em' }}
-
+                {...spanProps}
             >
                 {children}
             </span>

@@ -27,12 +27,6 @@ export interface WrapperProps {
     //
 
     /**
-     * Show the wrapper content as focused. You need to intercept the onFocus
-     * and onBlur of your element to set this value.
-     */
-    focus?: boolean;
-
-    /**
      * Show the wrapper content as disabled (currently opacity 50%).
      */
     disabled?: boolean;
@@ -80,7 +74,6 @@ export const Wrapper = React.forwardRef((
         start,
         end,
 
-        focus,
         onFocus,
         onBlur,
 
@@ -98,19 +91,17 @@ export const Wrapper = React.forwardRef((
 
     // manage focus
 
-    const [internalFocus, setInternalFocus] = useState(false);
+    const [focus, setFocus] = useState(false);
 
     const handleFocus = (e: React.FocusEvent<HTMLDivElement>) => {
-        setInternalFocus(true);
+        setFocus(true);
         onFocus?.(e)
     }
 
     const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
         onBlur?.(e);
-        setInternalFocus(false);
+        setFocus(false);
     }
-
-    const isFocus = focus || internalFocus;
 
     // manage error
 
@@ -137,7 +128,7 @@ export const Wrapper = React.forwardRef((
     // render
 
     return (
-        <div 
+        <div
 
             ref={ref}
 
@@ -155,7 +146,7 @@ export const Wrapper = React.forwardRef((
                     'rounded border',
                     disabled ?
                         'opacity-50' :
-                        isFocus ?
+                        focus ?
                             (isError ?
                                 'text-danger-500 border-danger-500 ring ring-danger-500 ring-opacity-50' :
                                 'border-primary-500 ring ring-primary-500 ring-opacity-50'
@@ -169,7 +160,7 @@ export const Wrapper = React.forwardRef((
                 (variant === 'filled' || variant === 'inlined') && classnames(
                     disabled ?
                         'border-b opacity-50' :
-                        isFocus ?
+                        focus ?
                             (isError ?
                                 'border-b-2 text-danger-500 border-danger-500' :
                                 'border-b-2 border-primary-500'
@@ -241,9 +232,7 @@ export const Wrapper = React.forwardRef((
                 <div
                     ref={endRef}
                     className={classnames(
-                        'absolute inset-y-0 right-0',
-                        { 'lux-control-padding-end': variant !== 'inlined' && variant !== 'plain' },
-                        'flex justify-end items-center'
+                        'absolute inset-y-0 right-0 flex justify-end items-center'
                     )}
                     style={{
                         paddingLeft: '0.25em',

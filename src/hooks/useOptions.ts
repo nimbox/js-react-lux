@@ -1,22 +1,36 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import _debounce from 'lodash/debounce';
+import _isFunction from 'lodash/isFunction';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 
 //
 // useOptions
 //
 
-export type UseOptionsProvider<G> = G[] | Promise<G[]>;
 
-export interface UseOptionsProps<G, O> {
+/**
+ * Supplier for a group of options or a function that returns a group of
+ * options.
+ */
+export type UseOptionsSupplier<G> = G[] | Promise<G[]> | ((query?: string) => G[] | Promise<G[]>);
+
+export interface UseOptionsProps<O, G> {
+
+    /**
+     * Milliseconds to debounce the search. Default is `0`.
+     */
+    debounce?: number;
 
 }
 
-export interface UseOptionsReturn<G, O> {
+
+export interface UseOptionsReturn<O, G> {
 
     /**
-     * The options returned by the provider.
+     * The options returned by the supplier.
      */
-    options?: G[];
+    options: G[] | undefined;
 
     /**
      * A flag to indicate if the options are loading.
@@ -35,39 +49,69 @@ export interface UseOptionsReturn<G, O> {
      */
     cancel: () => void;
 
+    /**
+     * The function to redo a search with the provided search string.
+     */
+    search: (query?: string) => void;
+
 }
 
 /**
- * Loads the options and returns a series of values to manage asyncrhonous
- * calls. Provider must be an array of groups, a promise that returns an array
- * of groups.  If there is an error while resolving the promise the error will
- * be available in the `error` property and the `options` will be `undefined`.
+ * Returns the options from the `supplier` which can take on two possible
+ * structures:
  *
- * The provider must be a constant between calls using equals. So make sure to
- * memoize it. 
+ * * It can be a `G[]` or a `Promise<G[]>`
+ * * It can be a function that, given a query, returns a `G[]` or a
+ *   `Promise<G[]>`.
  *
- * @param provider 
+ * The hook returns a set of variables `options`, `loading` and `error` with the
+ * options from the `supplier` and a function `cancel` cancel the `Promise`. The
+ * variables `loading`, `error` and the function `cancel` only make sense when
+ * using a `Promise`. When the `cancel` method is called, the `Promise` is let
+ * to complete, but the `options` will be `undefined`, `loading` will be `false'
+ * and `error` will be an `Error` signaling the cancellation, regardles of the
+ * outcome of the `Promise`.
+ *
+ * When the `supplier` is a function the hook also returns a `search` function
+ * that can be used invoke a new search and update the `options`, `loading`, and
+ * `error` variables.
+ *
+ * The `supplier` must be a constant between calls using equals. So make sure to
+ * memoize it.
+ *
+ * The initial options are obtained directly from the provided by `G[]` or a
+ * `Promise<G[]>` or by calling `supplier()`. Take care to either return all the
+ * options or no options, depending on your intended use.
+ *
+ * @param supplier 
  * @param props 
- * @returns {UseOptionsReturn} the values to use inside your components.
+ * @returns 
  */
-export const useOptions = <G, O>(provider: G[] | Promise<G[]>, props?: UseOptionsProps<G, O>): UseOptionsReturn<G, O> => {
+export const useOptions = <O, G>(supplier: UseOptionsSupplier<G>, props?: UseOptionsProps<O, G>): UseOptionsReturn<O, G> => {
+
+    // Properties
+
+    const {
+        debounce = 0,
+    } = props || {};
 
     // State
 
     const [options, setOptions] = useState<G[] | undefined>(undefined);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<any>(null);
 
-    const searchRef = useRef<{ cancel: (() => void) } | null>(null);
+    const execution = useRef<{ cancel: (() => void) } | null>(null);
 
     // Load logic
 
-    const doSearch = useCallback(() => {
+    const load = useCallback((query?: string) => {
 
         let working = true;
         (async () => {
             try {
-                const promisedOptions = await Promise.resolve(provider);
+                const isSearchable = _isFunction(supplier);
+                const promisedOptions = await Promise.resolve(isSearchable ? supplier(query) : supplier);
                 if (working) {
                     setOptions(promisedOptions);
                 }
@@ -78,7 +122,7 @@ export const useOptions = <G, O>(provider: G[] | Promise<G[]>, props?: UseOption
                 }
             } finally {
                 if (working) {
-                    searchRef.current = null;
+                    execution.current = null;
                     setLoading(false);
                 }
             }
@@ -86,27 +130,35 @@ export const useOptions = <G, O>(provider: G[] | Promise<G[]>, props?: UseOption
 
         return ({ cancel: () => { working = false; } });
 
-    }, [provider]);
+    }, [supplier]);
 
     const cancel = useCallback(() => {
 
-        if (searchRef.current) {
+        if (execution.current) {
             setLoading(false);
             setError(new Error('Cancelled'));
-            searchRef.current.cancel();
+            execution.current.cancel();
         }
 
     }, []);
 
-    const handleSearch = useCallback(() => {
+    // Search
+
+    const handleSearch = useCallback((query?: string) => {
 
         cancel();
 
         setLoading(true);
         setError(null);
-        searchRef.current = doSearch();
+        execution.current = load(query);
 
-    }, [doSearch, cancel]);
+    }, [load, cancel]);
+
+    const search = useMemo(() => {
+        return _debounce((search) => handleSearch(search), debounce);
+    }, [handleSearch, debounce]);
+
+    // Initialization
 
     useEffect(() => {
         handleSearch();
@@ -120,6 +172,7 @@ export const useOptions = <G, O>(provider: G[] | Promise<G[]>, props?: UseOption
         loading,
         error,
 
+        search,
         cancel
 
     };

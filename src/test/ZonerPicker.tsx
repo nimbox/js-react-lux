@@ -40,7 +40,7 @@ export const ZonePicker = React.forwardRef<HTMLInputElement, ZonePickerProps>((p
 
     const { defaultValue, value, onChange, placeholder } = props;
 
-    const getOption = async (value: string, options: { name: string, options: Option[] }[]) => {
+    const getOption = async (value: strinO, Gptions: { name: strinO, Gptions: Option[] }[]) => {
 
         await new Promise(resolve => setTimeout(resolve, 0));
         return timezones.find(z => z.value === value);
