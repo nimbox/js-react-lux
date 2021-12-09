@@ -1,7 +1,6 @@
 
-import classnames from 'classnames';
-import React, { Ref, useContext, useImperativeHandle, useRef } from 'react';
-import { Context } from './Control';
+import React, { Ref } from 'react';
+import { PlainInput } from './PlainInput';
 import { WrapperPopper, WrapperPopperProps } from './WrapperPopper';
 
 
@@ -11,6 +10,10 @@ import { WrapperPopper, WrapperPopperProps } from './WrapperPopper';
 
 export interface InputPopperProps extends WrapperPopperProps {
 
+    // Wrapper
+
+    wrapperClassName?: string;
+
     // Input
 
     /** 
@@ -19,22 +22,26 @@ export interface InputPopperProps extends WrapperPopperProps {
     name?: string,
 
     /** 
-     * String representation of the color (for uncontrolled). 
+     * Default value for the uncontrolled version.
      */
     defaultValue?: string,
 
     /** 
-     * String representation of the color (for controlled). 
+     * Value for the controlled version.
      */
     value?: string,
 
     /** 
-     * Change event handler (for controlled). 
+     * Change event handler (for uncontrolled and controlled).
      */
     onChange?: React.ChangeEventHandler<HTMLInputElement>,
 
 }
 
+/**
+ * InputPopper is a wrapper for the input element that provides a customizable
+ * popper.
+ */
 export const InputPopper = React.forwardRef((
     props: InputPopperProps & React.InputHTMLAttributes<HTMLInputElement>,
     inputRef: Ref<HTMLInputElement>
@@ -56,6 +63,8 @@ export const InputPopper = React.forwardRef((
         start,
         end,
 
+        wrapperClassName,
+
         // Popper
 
         withPlacement,
@@ -75,11 +84,6 @@ export const InputPopper = React.forwardRef((
         ...inputProps
 
     } = props;
-
-    // State
-
-    const context = useContext(Context);
-    const isError = error || context.error;;
 
     // Render
 
@@ -106,24 +110,21 @@ export const InputPopper = React.forwardRef((
 
             renderPopper={renderPopper}
 
+            className={wrapperClassName}
+
         >
-            <input
+
+            <PlainInput
 
                 ref={inputRef}
 
                 disabled={disabled}
-
-                className={classnames(
-                    'block w-full',
-                    'outline-none focus:outline-none',
-                    isError ? 'placeholder-danger-500' : 'placeholder-control-placeholder',
-                    'placeholder-opacity-40',
-                    className
-                )}
+                error={error}
 
                 {...inputProps}
 
             />
+
         </WrapperPopper>
     );
 
