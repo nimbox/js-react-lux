@@ -1,7 +1,8 @@
 import classnames from 'classnames';
+import { isString } from 'lodash';
 import React, { Ref, useContext, useLayoutEffect, useRef, useState } from 'react';
 import { Context } from './Control';
-import { isString } from 'lodash';
+
 
 //
 // Wrapper
@@ -10,17 +11,20 @@ import { isString } from 'lodash';
 export interface WrapperProps {
 
     /**
-     * Variant to display the element. Defaults to 'outlined'.
+     * Variant to display the element.
+     * @default 'outlined'
      */
     variant?: 'outlined' | 'filled' | 'inlined' | 'plain';
 
     /**
      * Enable full width on the block. True by default.
+     * @default true
      */
     withFullWidth?: boolean;
 
     /**
      * Enable full height on the block. False By default.
+     * @default false
      */
     withFullHeight?: boolean;
 
@@ -78,6 +82,7 @@ export const Wrapper = React.forwardRef((
         onBlur,
 
         className,
+        style,
 
         children,
 
@@ -113,16 +118,16 @@ export const Wrapper = React.forwardRef((
     const startRef = useRef<HTMLDivElement>(null);
     const endRef = useRef<HTMLDivElement>(null);
     useLayoutEffect(() => {
-        let [left, right] = [0, 0];
+        let [startPadding, endPadding] = [0, 0];
         if (start) {
             const width = startRef.current!.getBoundingClientRect().width;
-            left = width;
+            startPadding = width;
         }
         if (end) {
             const width = endRef.current!.getBoundingClientRect().width;
-            right = width;
+            endPadding = width;
         }
-        setPadding([left, right]);
+        setPadding([startPadding, endPadding]);
     }, [start, end]);
 
     // render
@@ -137,7 +142,8 @@ export const Wrapper = React.forwardRef((
 
             className={classnames(
 
-                'relative',
+                'relative max-w-full',
+
                 withFullWidth ? 'block w-full' : 'inline-block',
                 withFullHeight ? 'h-full' : null,
 
@@ -177,52 +183,33 @@ export const Wrapper = React.forwardRef((
                     'rounded-t'
                 ),
 
-                (variant === 'plain') && classnames(
-
-                ),
-
-                'outline-none focus:outline-none overflow-hidden',
+                'outline-none focus:outline-none',
 
                 className,
 
             )}
 
+            style={{
+                ...(padding[0] > 0 && {
+                    paddingLeft: `calc(${padding[0]}px + 0.35em)`
+                }),
+                ...(padding[1] > 0 && {
+                    paddingRight: `calc(${padding[1]}px + 0.35em)`
+                })
+            }}
+
             {...divProps}
 
         >
 
-            <div
-                className={classnames(
-                    withFullHeight ? 'h-full' : null,
-                    className
-                )}
-                style={{
-                    ...(padding[0] > 0 && {
-                        paddingLeft: variant === 'inlined' || variant === 'plain' ?
-                            `${padding[0]}px` :
-                            `calc(${padding[0]}px - 0.75em)`
-                    }),
-                    ...(padding[1] > 0 && {
-                        paddingRight: variant === 'inlined' || variant === 'plain' ?
-                            `${padding[1]}px` :
-                            `calc(${padding[1]}px - 0.75em)`
-                    })
-                }}
-            >
-                {children && (!isString(children) || children.trim().length > 0) ? children : <>&nbsp;</>}
-            </div>
+            {children && (!isString(children) || children.trim().length > 0) ? children : <>&nbsp;</>}
+
+            {/* Adornments */}
 
             {start &&
                 <div
                     ref={startRef}
-                    className={classnames(
-                        'absolute inset-y-0 left-0 flex justify-start items-center'
-                    )}
-                    style={{
-                        // paddingLeft: variant === 'inlined' || variant === 'plain' ? '0.25em' : '0.5em',
-                        paddingLeft: 0,
-                        paddingRight: '0.25em'
-                    }}
+                    className={classnames('absolute inset-y-0 left-0 flex flex-row justify-start items-center')}
                 >
                     {start}
                 </div>
@@ -231,14 +218,7 @@ export const Wrapper = React.forwardRef((
             {end &&
                 <div
                     ref={endRef}
-                    className={classnames(
-                        'absolute inset-y-0 right-0 flex justify-end items-center'
-                    )}
-                    style={{
-                        paddingLeft: '0.25em',
-                        // paddingRight: variant === 'inlined' || variant === 'plain' ? '0.25em' : '0.5em'
-                        paddingRight: 0
-                    }}
+                    className={classnames('absolute inset-y-0 right-0 flex flex-row justify-end items-center')}
                 >
                     {end}
                 </div>
