@@ -3,7 +3,6 @@ import React, { FC } from "react";
 import { MessageIcon } from "../icons";
 import PhoneIcon from "../icons/PhoneIcon";
 import { Button } from "./Buttons";
-import { ComponentScale, controlSmallText } from "./ComponentScale";
 
 
 export interface ContactElementProps {

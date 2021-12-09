@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { useContext, useImperativeHandle, useRef, useState } from 'react';
+import React, { useContext, useImperativeHandle, useRef } from 'react';
 import { Context } from './Control';
 import { Wrapper, WrapperProps } from './Wrapper';
 
@@ -18,11 +18,9 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps & Re
     const {
 
         variant,
-        withFullWidth: withNoFull,
+        withFullWidth,
         withFullHeight,
 
-        onFocus,
-        onBlur,
         error,
         disabled,
 
@@ -41,16 +39,6 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps & Re
     useImperativeHandle(ref, () => textAreaRef.current!);
 
     const context = useContext(Context);
-    const [focus, setFocus] = useState(false);
-
-    const handleOnFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {
-        if (onFocus) { onFocus(e); }
-        setFocus(true);
-    }
-    const handleOnBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
-        setFocus(false);
-        if (onBlur) { onBlur(e); }
-    }
 
     // render
 
@@ -58,7 +46,7 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps & Re
         <Wrapper
 
             variant={variant}
-            withFullWidth={withNoFull}
+            withFullWidth={withFullWidth}
             withFullHeight={withFullHeight}
 
             disabled={disabled}
@@ -72,8 +60,6 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps & Re
 
                 ref={textAreaRef}
 
-                onFocus={handleOnFocus}
-                onBlur={handleOnBlur}
                 disabled={disabled}
 
                 className={classnames(

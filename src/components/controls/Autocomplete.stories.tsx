@@ -85,7 +85,7 @@ export const Default = () => {
 
 const Template = React.forwardRef<
     HTMLInputElement,
-    Partial<AutocompleteProps<Group, Option>> & React.InputHTMLAttributes<HTMLInputElement>
+    Partial<AutocompleteProps<Option, Group>> & React.InputHTMLAttributes<HTMLInputElement>
 >((props, ref) => {
 
     return (

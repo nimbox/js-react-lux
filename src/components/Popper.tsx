@@ -1,6 +1,6 @@
 import { Placement } from '@popperjs/core';
 import classnames from 'classnames';
-import React, { useCallback, useImperativeHandle, useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { usePopper } from 'react-popper';
 import { sameWidth } from '../utilities/sameWidth';

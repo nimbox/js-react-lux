@@ -25,7 +25,7 @@ export const UsingUseRef = () => {
 
 export const UsingUseState = () => {
 
-    const [ref, setRef] = useState<HTMLDivElement | null>(null);
+    const [, setRef] = useState<HTMLDivElement | null>(null);
 
     console.log('render');
 
@@ -41,8 +41,10 @@ export const UsingUseState = () => {
 
 export const UsingObervableRef = () => {
 
-    const ref = useObservableValueRef<HTMLInputElement>(null, (value) => {
-        console.log('value changed to', value);
+    const ref = useObservableValueRef<HTMLInputElement>(null, {
+        onSet: (value) => {
+            console.log('value changed to', value);
+        }
     });
 
     const handleGetClick = () => {
@@ -59,7 +61,7 @@ export const UsingObervableRef = () => {
     return (
         <div>
             <div>
-                <input ref={ref} defaultValue="Hello"/>
+                <input ref={ref} defaultValue="Hello" />
             </div>
             <div className="space-x-2">
                 <Button onClick={handleGetClick}>Get</Button>

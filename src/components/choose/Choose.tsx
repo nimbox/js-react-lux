@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import _isFunction from 'lodash/isFunction';
-import React, { Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react';
 import { Delay, Loading } from '../..';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { useOption, UseOptionChooser, UseOptionProps } from '../../hooks/useOption';

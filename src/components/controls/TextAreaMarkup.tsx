@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React, { useContext, useState } from 'react';
 import { usePopper } from 'react-popper';
-import { ComponentScale, controlScale } from '../ComponentScale';
+import { ComponentScale } from '../ComponentScale';
 import { Context } from './Control';
 
 

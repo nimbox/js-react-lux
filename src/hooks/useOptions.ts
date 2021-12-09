@@ -13,7 +13,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
  * Supplier for a group of options or a function that returns a group of
  * options.
  */
-export type UseOptionsSupplier<G> = G[] | Promise<G[]> | ((query?: string) => G[] | Promise<G[]>);
+export type UseOptionsSupplier<G> = (G[] | Promise<G[]>) | ((query?: string) => G[] | Promise<G[]>);
 
 export interface UseOptionsProps<O, G> {
 

@@ -1,9 +1,7 @@
-import { default as classnames, default as classNames } from 'classnames';
+import { default as classnames } from 'classnames';
 import React, { FC, Ref, useCallback, useContext, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon } from '../../icons';
-import { setRefInputValue } from '../../utilities/setRefInputValue';
-import { Choose } from '../choose/Choose';
 import { Popper, PopperProps } from '../Popper';
 import { Context } from './Control';
 import { Wrapper, WrapperProps } from './Wrapper';
@@ -62,7 +60,7 @@ export const SelectFN = React.forwardRef<HTMLSelectElement | HTMLInputElement, S
         return <NativeSelect ref={ref as Ref<HTMLSelectElement>} {...(props as SelectProps & (React.SelectHTMLAttributes<HTMLSelectElement>))} />
     }
 
-    return <CustomSelect ref={ref as Ref<HTMLInputElement>} {...(props as (SelectProps & React.InputHTMLAttributes<HTMLInputElement>)) } />
+    return <CustomSelect ref={ref as Ref<HTMLInputElement>} {...(props as (SelectProps & React.InputHTMLAttributes<HTMLInputElement>))} />
 
 });
 
@@ -113,7 +111,7 @@ const NativeSelect = React.forwardRef<HTMLSelectElement, SelectProps & React.Sel
 
     // manage focus
 
-    const [focus, setFocus] = useState(false);
+    const [, setFocus] = useState(false);
     const handleFocus = (e: React.FocusEvent<HTMLSelectElement>) => {
         if (onFocus) { onFocus(e); }
         setFocus(true);
@@ -336,14 +334,14 @@ const CustomSelect = React.forwardRef<HTMLInputElement, SelectProps & React.Inpu
 
     // handlers
 
-    const handleChoose = (option: React.ReactElement) => {
-        setRefInputValue(selectRef, option.props.value);
-        if (value == null) {
-            console.log('loaded options');
-            setLoadedOption(option);
-        }
-        handleHide();
-    };
+    // const handleChoose = (option: React.ReactElement) => {
+    //     setRefInputValue(selectRef, option.props.value);
+    //     if (value == null) {
+    //         console.log('loaded options');
+    //         setLoadedOption(option);
+    //     }
+    //     handleHide();
+    // };
 
     // render
 

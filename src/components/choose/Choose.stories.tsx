@@ -98,7 +98,7 @@ export const Default = () => {
 
 const Template = React.forwardRef<
     HTMLInputElement,
-    Partial<ChooseProps<Group, Option>> & React.InputHTMLAttributes<HTMLInputElement>
+    Partial<ChooseProps<Option, Group>> & React.InputHTMLAttributes<HTMLInputElement>
 >((props, ref) => {
 
     return (
