@@ -8,6 +8,7 @@ import { setRefInputValue } from '../../utilities/setRefInputValue';
 import { InputProps } from '../controls/Input';
 import { InputPopper } from '../controls/InputPopper';
 import { PopperProps } from '../Popper';
+import classnames from 'classnames';
 
 
 //
@@ -18,6 +19,20 @@ export interface SwatchPickerProps extends
     InputProps,
     Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'> {
 
+    // Wrapper
+
+    /**
+     * Classes to append to the wrapper component.
+     */
+    wrapperClassName?: string;
+
+    // Popper
+
+    /** 
+     * Classes to append to the popper component.
+     */
+    popperClassName?: string;
+
     // SwatchPicker
 
     /** 
@@ -26,16 +41,12 @@ export interface SwatchPickerProps extends
      */
     values?: string[];
 
-    // Popper
-
-    /** 
-     * Classes to append to the popper element. 
-     * @default 'w-64 lux-p-2em grid grid-cols-5 cursor-pointer'
-     */
-    popperClassName?: string;
-
 }
 
+/**
+ * A color picker that allows the user to select a color from a list of
+ * swatches.
+ */
 export const SwatchPicker = React.forwardRef((
     props: SwatchPickerProps & React.InputHTMLAttributes<HTMLInputElement>,
     inputRef: Ref<HTMLInputElement>
@@ -45,21 +56,22 @@ export const SwatchPicker = React.forwardRef((
 
     const {
 
+        // Wrapper
+
+        variant = 'outlined',
+        wrapperClassName,
+
+        // Popper
+
+        popperClassName = 'w-64 lux-p-2em grid grid-cols-5 cursor-pointer',
+
         // SwatchPicker
 
-        defaultValue,
+        defaultValue: propsDefaultValue,
         value: propsValue,
         onChange,
 
         values = defaultSwatches,
-
-        // Popper
-
-        withPlacement,
-        withArrow,
-        withSameWidth,
-
-        popperClassName = 'w-64 lux-p-2em grid grid-cols-5 cursor-pointer',
 
         // input
 
@@ -71,11 +83,11 @@ export const SwatchPicker = React.forwardRef((
 
     const [show, setShow] = useState(false);
 
-    const internalInputRef = useObservableValueRef<HTMLInputElement>(null, { onSet: () => console.log('onSet') });
-    // const [internalInputRef, setInternalInputRef] = useState<HTMLInputElement | null>(null);
+    const internalInputRef = useObservableValueRef<HTMLInputElement>(null);
+    useImperativeHandle(inputRef, () => internalInputRef.current!);
 
     const isControlled = propsValue != null;
-    const [internalValue, setInternalValue] = useState(defaultValue ?? '');
+    const [internalValue, setInternalValue] = useState(propsDefaultValue ?? '');
     const value = isControlled ? propsValue : internalValue;
 
     // Colors
@@ -83,8 +95,6 @@ export const SwatchPicker = React.forwardRef((
     const valueColor = tinycolor(value);
     const color = valueColor.isValid() && valueColor.isDark() ? 'white' : 'black';
     const backgroundColor = valueColor.isValid() ? value : 'white';
-
-    useImperativeHandle(inputRef, () => internalInputRef.current!);
 
     // Handlers
 
@@ -112,8 +122,21 @@ export const SwatchPicker = React.forwardRef((
         <RefreshIcon
             onMouseDown={consumeEvent}
             onClick={handleRandomClickSwatch}
-            className="h-full lux-p-1em border-l border-control-border rounded-l cursor-pointer"
-            style={{ width: '2em', color, backgroundColor }}
+            className={classnames(
+                'h-full w-full lux-p-1em  border-control-border cursor-pointer',
+                {
+                    '-m-px border rounded': variant === 'outlined',
+                    'h-full border-l border-t border-r rounded-t': variant === 'filled',
+                    'h-full border-l border-t border-r': variant === 'inlined',
+                    'h-full': variant === 'plain'
+                }
+            )}
+            style={{
+                ...(variant === 'outlined' && { with: 'calc(2em + 2px)', height: 'calc(100% + 2px)' }),
+                ...(variant === 'filled' && { width: '2em' }),
+                ...((variant === 'inlined' || variant === 'plain') && { width: '1.5em' }),
+                color, backgroundColor
+            }}
         />
     );
 
@@ -133,23 +156,27 @@ export const SwatchPicker = React.forwardRef((
 
         <InputPopper
 
-            ref={internalInputRef}
+            // Wrapper
 
-            variant="outlined"
-
-            {...!isControlled ? { defaultValue } : undefined}
-            {...isControlled ? { value } : undefined}
-            onChange={handleChange}
+            variant={variant}
+            wrapperClassName={wrapperClassName}
 
             end={adornment()}
 
-            withPlacement={withPlacement}
-            withArrow={withArrow}
-            withSameWidth={withSameWidth}
+            // Popper 
 
             show={show}
             onChangeShow={setShow}
+
             renderPopper={popper}
+
+            // Input
+
+            ref={internalInputRef}
+
+            {...!isControlled ? { defaultValue: propsDefaultValue } : undefined}
+            {...isControlled ? { value: value } : undefined}
+            onChange={handleChange}
 
             {...inputProps}
 

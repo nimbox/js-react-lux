@@ -13,7 +13,12 @@ export default {
     }
 };
 
-export const Template = ({ withPlacement, withArrow, withSameWidth, error, popperClassName }: SwatchPickerProps) => {
+
+//
+// Default
+//
+
+export const Default = ({ withPlacement, withArrow, withSameWidth, error, popperClassName }: SwatchPickerProps) => {
     return (
         <div className="w-96">
             <SwatchPicker
@@ -32,13 +37,17 @@ export const Template = ({ withPlacement, withArrow, withSameWidth, error, poppe
         </div>
     );
 };
-Template.args = {
+Default.args = {
     error: false,
-    placement: 'bottom-start',
+    withPlacement: 'bottom-start',
     withArrow: true,
     withSameWidth: false,
     popperClassName: 'w-64 lux-p-2em grid grid-cols-5 overflow-hidden cursor-pointer'
 };
+
+//
+// Stories
+//
 
 export const Controlled = () => {
 
@@ -49,7 +58,7 @@ export const Controlled = () => {
 
     return (
         <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
-            <SwatchPicker name="date" value={color} onChange={handleChange} placeholder="Select color" />
+            <SwatchPicker name="color" value={color} onChange={handleChange} placeholder="Select color" />
             <Button>Submit</Button>
         </form>
     );
@@ -64,7 +73,7 @@ export const Uncontrolled = () => {
 
     return (
         <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
-            <SwatchPicker ref={ref} name="date" defaultValue="#906090" onChange={handleChange} placeholder="Select color" />
+            <SwatchPicker ref={ref} name="color" defaultValue="#906090" onChange={handleChange} placeholder="Select color" />
             <Button>Submit</Button>
         </form>
     );
@@ -79,7 +88,7 @@ export const Direct = () => {
 
     return (
         <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
-            <SwatchPicker ref={ref} name="date" defaultValue="#906090" onChange={handleChange} placeholder="Select color" />
+            <SwatchPicker ref={ref} name="color" defaultValue="#906090" onChange={handleChange} placeholder="Select color" />
             <Button>Submit</Button>
             <Button type="button" onClick={() => ref.current!.value = '#ffff00'}>Set</Button>
         </form>
@@ -95,7 +104,7 @@ export const Focus = () => {
 
     return (
         <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
-            <SwatchPicker ref={ref} name="date" defaultValue="#906090" onChange={handleChange} placeholder="Select color" />
+            <SwatchPicker ref={ref} name="color" defaultValue="#906090" onChange={handleChange} placeholder="Select color" />
             <Button onClick={() => {
 
                 // const f = ref.current!.focus;
@@ -109,4 +118,32 @@ export const Focus = () => {
         </form>
     );
 
+};
+
+export const VariantsAndSizes = () => {
+    return (
+        <div className="grid grid-cols-4 items-baseline gap-4">
+
+            <SwatchPicker variant="outlined" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-xs" />
+            <SwatchPicker variant="filled" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-xs" />
+            <SwatchPicker variant="inlined" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-xs" />
+            <SwatchPicker variant="plain" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-xs" />
+
+            <SwatchPicker variant="outlined" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-base" />
+            <SwatchPicker variant="filled" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-base" />
+            <SwatchPicker variant="inlined" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-base" />
+            <SwatchPicker variant="plain" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-base" />
+
+            <SwatchPicker variant="outlined" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-lg" />
+            <SwatchPicker variant="filled" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-lg" />
+            <SwatchPicker variant="inlined" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-lg" />
+            <SwatchPicker variant="plain" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-lg" />
+
+            <SwatchPicker variant="outlined" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-2xl" />
+            <SwatchPicker variant="filled" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-2xl" />
+            <SwatchPicker variant="inlined" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-2xl" />
+            <SwatchPicker variant="plain" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-2xl" />
+
+        </div>
+    );
 };
