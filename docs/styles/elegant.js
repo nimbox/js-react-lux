@@ -30,7 +30,7 @@ module.exports = {
                 'control-border': '#888888',
                 'control-placeholder': '#a0a0a0',
 
-                // 'control-bg': '#DDDDDD',
+                // 'control-bg': '#fef3fb',
                 // 'control-border': '#F012BE',
                 // 'control-placeholder': '#0074D9',
 

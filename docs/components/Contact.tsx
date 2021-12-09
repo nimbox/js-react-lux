@@ -2,7 +2,6 @@ import classnames from "classnames";
 import { FC } from "react";
 import { NimboxIcon } from "../icons";
 import { Button } from "./Buttons";
-import { ComponentScale } from "./ComponentScale";
 
 
 export interface ContactProps {

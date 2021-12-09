@@ -38,20 +38,76 @@ export const Template = ({inside, ...args}) => <Wrapper {...args}>{inside}</Wrap
 
 <ArgsTable of={Wrapper} /> 
 
+## Design
+
+The wrapper should behave as an `inline-block` element, meaning that it should
+keep the baseline when embedded in other inline elements. To achieve this, the
+basic structure is to wrap the children inside an `inline-block` `div` and let
+the content dictate the baseline.
+
+### Maintain the baseline
+
+<Canvas>
+    <div>
+        <span className="text-xs underline">before</span>
+        <span className="inline-block max-w-full text-lg underline p-4 bg-red-100">wrapper</span>
+        <span className="text-4xl underline">after</span>
+    </div>
+</Canvas>
+
+### Extend to full width
+
+<Canvas>
+    <div>
+        <span className="text-xs underline">before</span>
+        <span className="inline-block max-w-full w-full text-lg underline p-4 bg-red-100 truncate">wrapper</span>
+        <span className="text-4xl underline">after</span>
+    </div>
+</Canvas>
+
+### Truncate content
+
+<Canvas>
+    <div className="w-48">
+        <span className="text-xs underline">before</span>
+        <span className="inline-block max-w-full w-full text-lg underline p-4 bg-red-100 truncate">The night is dark and full of terrors</span>
+        <span className="text-4xl underline">after</span>
+    </div>
+</Canvas>
+
+### Truncate inside flex while keeping the baseline
+
+<Canvas>
+    <div className="w-96 flex flex-row items-baseline">
+        <span className="text-xs underline">before</span>
+        <span className="flex-auto inline-block max-w-full w-full text-lg underline p-4 bg-red-100 truncate">The night is dark and full of terrors</span>
+        <span className="text-4xl underline">after</span>
+    </div>
+</Canvas>
+
+
 ## Structure
 
-In orde to use referenes and classes is important to understand where the `ref`
-and `className` properties endup in the HTML structure.
+In order to use referenes and classes it is important to understand where the
+`ref` and `className` properties endup in the HTML structure.
 
 ```html
-<div ref={ref}>                       <!-- relative -->
-    <div className={className}>       <!-- absolute and min height-->
-       {children}
-    </div>
+<div ref={ref} className={className}> <!-- relative -->
+    {children}
     {start && <div>start icons</div>} <!-- absolute left -->
     {end && <div>end icons</div>}     <!--  absolute right -->
 <div>
 ```
+
+The `className` needs to be applied carefully, since it will interact with other
+classes. In particular:
+
+* Do not apply any margins or paddings to the wrapper.
+* Do not apply foreground colors, background colors or opacity to the wrapper.
+* Do not apply borders or rounded corners to the wrapper.
+* If you need to trucate the content add `overflow-hidden` and `truncate` but 
+  remember that the baseline will become the bottom of the wrapper. 
+
 
 ## Variants
 
@@ -68,30 +124,32 @@ There are three variants for this component of `outlined`, `filled`, and
     <Story name="Variant Inline">
         <Wrapper variant="inlined">Hola</Wrapper>
     </Story>
+    <Story name="Variant Plain">
+        <Wrapper variant="plain">Hola</Wrapper>
+    </Story>
 </Canvas>
 
-Additionally add `withNoFull` to make the element an `inline-block` and to 
+Additionally add `withFullWidth={false}` to make the element an `inline-block` and to 
 not extend the full with of its container.
 
 <Canvas>
     <Story name="Variant Outlined With Full">
-        <Wrapper variant="outlined">With Full</Wrapper>
+        <Wrapper variant="outlined">With Full Width = true</Wrapper>
     </Story>
 </Canvas>
 
 <Canvas>
-    <Story name="Variant Outlined With Not Full">
-        <Wrapper variant="outlined" withNoFull>With Not Full</Wrapper>
+    <Story name="Variant Outlined Without Full Width">
+        <Wrapper variant="outlined" withFullWidth={false}>With Full Width = false</Wrapper>
     </Story>
 </Canvas>
-
 
 This is helpful to to the an `inlined` variant withing some text.
 
 <Canvas>
-    <Story name="Variant Inlined With Not Full">
+    <Story name="Variant Inlined Without Full Width">
         <div>
-            Please select <Wrapper variant="inlined" withNoFull end={<AngleDownIcon className="stroke-1"/>}>user</Wrapper> responsible for the task.
+            Please select <Wrapper tabIndex={0} variant="inlined" withFullWidth={false} end={<AngleDownIcon className="stroke-1"/>}>user</Wrapper> responsible for the task.
         </div>
     </Story>
 </Canvas>
@@ -102,16 +160,16 @@ This is helpful to to the an `inlined` variant withing some text.
 When the wrapper is around basic text.
 
 <Canvas>
-    <Story name="Plain" args={{ focus: false, disabled: false, error: false, inside: 'Plain' }}>
+    <Story name="Plain" args={{ tabIndex: 0, focus: false, disabled: false, error: false, inside: 'Plain' }}>
         {Template.bind({})}
     </Story>
-    <Story name="Focus" args={{ focus: true, disabled: false, error: false, inside: 'Focus' }}>
+    <Story name="Focus" args={{ tabIndex: 0, focus: true, disabled: false, error: false, inside: 'Focus' }}>
         {Template.bind({})}
     </Story>
-    <Story name="Error" args={{ focus: false, disabled: false, error: true, inside: 'Error' }}>
+    <Story name="Error" args={{ tabIndex: 0, focus: false, disabled: false, error: true, inside: 'Error' }}>
         {Template.bind({})}
     </Story>
-    <Story name="Focus Error" args={{ focus: true, disabled: false, error: true, inside: 'Focus Error' }}>
+    <Story name="Focus Error" args={{ tabIndex: 0, focus: true, disabled: false, error: true, inside: 'Focus Error' }}>
         {Template.bind({})}
     </Story>
 </Canvas>
@@ -215,15 +273,46 @@ or end and with items vertically centered.  The content is padded on the left
 and right to leave space for the ornaments.
 
 export const TemplateOrnament = ({inside, ...args}) => (
-    <Wrapper {...args}>
-        <span className="inline-block w-full bg-gray-100">{inside}</span>
-    </Wrapper>
+    <div>
+        <span>before</span>
+        <Wrapper {...args} withFullWidth={false} className="bg-green-100">
+            <span className="inline-block w-full bg-gray-100">{inside}</span>
+        </Wrapper>
+        <span>after</span>
+    </div>
 );
+
+Without.
+
+<Canvas>
+    <Story name="Outlined No Ornament Start" args={{ variant: 'outlined', inside: 'wrapped' }}>
+        {TemplateOrnament.bind({})}
+    </Story>
+    <Story name="Filled No Ornament Start" args={{ variant: 'filled', inside: 'wrapped' }}>
+        {TemplateOrnament.bind({})}
+    </Story>
+    <Story name="Inlined No Ornament Start" args={{ variant: 'inlined', inside: 'wrapped' }}>
+        {TemplateOrnament.bind({})}
+    </Story>
+    <Story name="Plain No Ornament Start" args={{ variant: 'plain', inside: 'wrapped' }}>
+        {TemplateOrnament.bind({})}
+    </Story>
+</Canvas>
+
 
 At the start.
 
 <Canvas>
-    <Story name="Ornament Start" args={{ inside: 'Start', start: <FullSquareIcon/> }}>
+    <Story name="Outlined Ornament Start" args={{ variant: 'outlined', inside: 'wrapped', start: <FullSquareIcon/> }}>
+        {TemplateOrnament.bind({})}
+    </Story>
+    <Story name="Filled Ornament Start" args={{ variant: 'filled', inside: 'wrapped', start: <FullSquareIcon/> }}>
+        {TemplateOrnament.bind({})}
+    </Story>
+    <Story name="Inlined Ornament Start" args={{ variant: 'inlined', inside: 'wrapped', start: <FullSquareIcon/> }}>
+        {TemplateOrnament.bind({})}
+    </Story>
+    <Story name="Plain Ornament Start" args={{ variant: 'plain', inside: 'wrapped', start: <FullSquareIcon/> }}>
         {TemplateOrnament.bind({})}
     </Story>
 </Canvas>
@@ -231,23 +320,33 @@ At the start.
 At the end.
 
 <Canvas>
-    <Story name="Ornament End" args={{ inside: 'Start', end: <FullSquareIcon/> }}>
+    <Story name="Outlined Ornament End" args={{ variant: 'outlined', inside: 'wrapped', end: <FullSquareIcon/> }}>
+        {TemplateOrnament.bind({})}
+    </Story>
+    <Story name="Filled Ornament End" args={{ variant: 'filled', inside: 'wrapped', end: <FullSquareIcon/> }}>
+        {TemplateOrnament.bind({})}
+    </Story>
+    <Story name="Inlined Ornament End" args={{ variant: 'inlined', inside: 'wrapped', end: <FullSquareIcon/> }}>
+        {TemplateOrnament.bind({})}
+    </Story>
+    <Story name="Plain Ornament End" args={{ variant: 'plain', inside: 'wrapped', end: <FullSquareIcon/> }}>
         {TemplateOrnament.bind({})}
     </Story>
 </Canvas>
 
-On Both sides.
+On both sides.
 
 <Canvas>
-    <Story name="Ornament Start End" args={{ inside: 'Start', start: <FullSquareIcon/>, end: <FullSquareIcon/> }}>
+    <Story name="Outlined Ornament Start End" args={{ variant: 'filled', inside: 'wrapped', start: <FullSquareIcon/>, end: <FullSquareIcon/> }}>
         {TemplateOrnament.bind({})}
     </Story>
-</Canvas>
-
-Multiple ornaments on any side.
-
-<Canvas>
-    <Story name="Ornament Multiple" args={{ inside: 'Start', end: <><Loading/><FullSquareIcon/></> }}>
+    <Story name="Filled Ornament Start End" args={{ variant: 'filled', inside: 'wrapped', start: <FullSquareIcon/>, end: <FullSquareIcon/> }}>
+        {TemplateOrnament.bind({})}
+    </Story>
+    <Story name="Inlined Ornament Start End" args={{ variant: 'inlined', inside: 'wrapped', start: <FullSquareIcon/>, end: <FullSquareIcon/> }}>
+        {TemplateOrnament.bind({})}
+    </Story>
+    <Story name="Plain Ornament Start End" args={{ variant: 'plain', inside: 'wrapped', start: <FullSquareIcon/>, end: <FullSquareIcon/> }}>
         {TemplateOrnament.bind({})}
     </Story>
 </Canvas>

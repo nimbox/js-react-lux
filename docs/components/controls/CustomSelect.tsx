@@ -3,8 +3,7 @@ import React, { createContext, FC, LegacyRef, useContext, useState } from 'react
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon } from '../../icons';
 import { ComponentAlign } from '../ComponentAlign';
-import { ComponentScale, controlIconSmallMarginSize, controlScale } from '../ComponentScale';
-import { Context as controlContext } from './Control';
+import { ComponentScale, controlScale } from '../ComponentScale';
 
 
 export interface CustomSelectProps {
@@ -30,7 +29,6 @@ interface CustomSelectComponent extends FC<CustomSelectProps> {
 
 export const CustomSelect: CustomSelectComponent = (({ scale = 'base', value, label, onChange, align, className, children }) => {
 
-    const context = useContext(controlContext);
     const [isVisible, setIsVisible] = useState(false);
 
     const [target, setTarget] = useState<HTMLDivElement | null>(null);

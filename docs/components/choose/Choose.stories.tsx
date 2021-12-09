@@ -1,15 +1,10 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { Choose } from './Choose';
-import { default as colors } from '../../data/flat-colors';
-import _, { remove } from 'lodash';
-import { MockStore } from '../../test/MockStore';
-import { Input } from '../controls/Input';
-import React, { useState } from 'react';
-import { Tag } from '../Tag';
-import { consumeEvent } from '../../utilities/consumeEvent';
+import { action } from '@storybook/addon-actions';
+import React, { useRef, useState } from 'react';
+import { createSearchMatcher } from '../../utilities/createSearchMatcher';
+import { Button } from '../Buttons';
+import { Choose, ChooseProps } from './Choose';
 
-
-// definition
 
 export default {
     title: 'Component/Choose/Choose',
@@ -19,161 +14,275 @@ export default {
     }
 };
 
-// stories
-
-const color = () => colors[_.random(0, colors.length)];
-
-interface StoryTag {
-    id: string;
-    description: string;
-    color: string;
+interface Option {
+    value: string;
+    name: string;
 }
 
-const store = new MockStore<StoryTag>([
-    { id: 'id1', description: 'kalzuro', color: color() },
-    { id: 'id2', description: 'jmeza', color: color() },
-    { id: 'id3', description: 'rmarimon', color: color() },
-    { id: 'id4', description: 'jcastellanos', color: color() },
-    { id: 'id5', description: 'svegas', color: color() },
-    { id: 'id6', description: 'etorres', color: color() },
-    { id: 'id7', description: 'phernandez', color: color() },
-    { id: 'id8', description: 'llara', color: color() },
-    { id: 'id9', description: 'kalvarez', color: color() },
-    { id: 'id10', description: 'etiqueta1wfewfwefwfwefnkwenfkwnefkwnfkwe', color: color() },
-    { id: 'id11', description: 'etiqueta2', color: color() },
-    { id: 'id22', description: 'etiqueta3', color: color() }
-],
-    (value: string) => (item: StoryTag) => item.id === value,
-    (q: string) => {
-        const lowerq = q.toLowerCase();
-        return (item: StoryTag) => item.description.toLowerCase().includes(lowerq);
+interface Group {
+    name: string;
+    options: Option[];
+}
+
+const colors: Group[] = [
+    {
+        name: 'Primary', options: [
+            { value: 'ffff00', name: 'Yellow' },
+            { value: '0000ff', name: 'Blue' },
+            { value: 'ff0000', name: 'Red' }
+        ]
+    },
+    {
+        name: 'Secondary', options: [
+            { value: '00ff00', name: 'Green' },
+            { value: '800080', name: 'Purple' },
+            { value: 'ffa500', name: 'Orange' }
+        ]
     }
-);
+];
 
-const initialTags = [
-    { id: 'id3', description: 'rmarimon', color: color() },
-    { id: 'id4', description: 'jcastellanos', color: color() }
-]
+const extractor = (group: Group): Option[] => group.options;
+const identifier = (color: Option) => color.value;
 
-export const Base = () => {
+const chooser =  (value?: string | ReadonlyArray<string> | number | undefined) =>  {
+    // await new Promise(resolve => setTimeout(() => resolve(undefined), 100));
+    const option = colors.map(group => extractor(group).find(o => identifier(o) === value)).find(o => o != null);
+    return option;
+};
 
-    const [tags, setTags] = useState<StoryTag[]>(initialTags);
-
-    const searchOptions = async (search: string) => {
-        return [await store.search(search)];
+const provider =  (query?: string) => {
+    // await new Promise(resolve => setTimeout(() => resolve(undefined), 100));
+    if (query == null || query.trim() === '') {
+        return colors;
+    } else {
+        const matcher = createSearchMatcher(query.trim());
+        return [
+            { ...colors[0], options: colors[0].options.filter(o => matcher(o.name)) },
+            { ...colors[1], options: colors[1].options.filter(o => matcher(o.name)) }
+        ];
     }
+};
 
-    const addTag = (tag: StoryTag) => {
-        console.log('addTag');
-        setTags(tags => [...tags, tag]);
-    };
+//
+// Stories
+//
 
-    const removeTag = (tag: StoryTag, e: React.MouseEvent) => {
-        console.log('removeTag');
-        setTags(tags => tags.filter(t => t.id !== tag.id));
-        e.preventDefault();
-        e.stopPropagation();
-    };
+export const Default = () => {
 
-    const linkTag = (tag: StoryTag, e: React.MouseEvent) => {
-        console.log('linkTag');
-        e.preventDefault();
-        e.stopPropagation();
-    };
-
-    console.log('tags', tags);
+    const [value, setValue] = useState('800080');
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { setValue(e.target.value); action('onChange')(e.target.value); }
+    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(value); }
 
     return (
-        <div className="w-full grid grid-cols-4 gap-4 items-center">
-            <Input defaultValue="before" />
-            <div className="col-span-2">
-                <Choose<StoryTag[], StoryTag>
+        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
+            <Choose
 
-                    variant="outlined"
-                    // loading={true}
-                    // loadingError={true}
+                supplier={provider}
+                extractor={extractor}
+                identifier={identifier}
 
-                    withSearch={true}
+                value={value}
+                onChange={handleChange}
 
-                    searchOptions={searchOptions}
-                    renderOption={({ option }) => <Tag>{option.description}</Tag>}
+                renderEmpty={() => 'No options'}
+                renderGroupLabel={({ group }) => <span>{group.name}</span>}
+                renderOption={({ option }) => <span className="lux-px-2em italic">{option.name}</span>}
+                renderChosen={({ option }) => <span>{option.name}</span>}
 
-                    renderFooter={() => <div className="p-2"><Input defaultValue="asd" /></div>}
+            />
+            <Button>Submit</Button>
+        </form>
+    );
 
-                    onChoose={(tag) => addTag(tag)}
+};
 
-                    className="flex flex-row flex-wrap gap-1 cursor-pointer"
-                    containerClassName="w-96"
+const Template = React.forwardRef<
+    HTMLInputElement,
+    Partial<ChooseProps<Option, Group>> & React.InputHTMLAttributes<HTMLInputElement>
+>((props, ref) => {
 
-                >
+    return (
+        <Choose
 
-                    {({ show }) =>
-                        (!tags || tags.length === 0) ?
-                            <>Add tag...</>
-                            :
-                            tags.map(tag =>
-                                <Tag
-                                    key={tag.id}
-                                    onClick={!show ? (e) => linkTag(tag, e) : undefined}
-                                    onDelete={show ? (e) => removeTag(tag, e) : undefined}
-                                >
-                                    {tag.description}
-                                    {/* {show ?
-                                        <>{tag.description}</>
-                                        :
-                                        <a href="#/" tabIndex={-1} onMouseDown={(e) => { e.preventDefault(); }}>{tag.description}</a>
-                                    } */}
-                                </Tag>
-                            )
-                    }
+            ref={ref}
 
-                </Choose>
-            </div>
-            <Input defaultValue="after" />
-        </div >
+            withSearch={true}
+
+            chooser={chooser}
+            supplier={provider}
+            extractor={extractor}
+            identifier={identifier}
+
+            withArrow={true}
+            withSameWidth={true}
+
+            renderEmpty={() => 'No options'}
+            renderGroupLabel={({ group }) => <span>{group.name}</span>}
+            renderOption={({ option }) => <span className="lux-px-2em italic">{option.name}</span>}
+            renderChosen={({ option }) => <span>{option.name}</span>}
+
+            placeholder="Select color"
+
+            {...props}
+
+        />
+    );
+
+});
+
+export const Controlled = () => {
+
+    const [value, setValue] = useState('800080');
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { setValue(e.target.value); action('onChange')(e.target.value); }
+    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(value); }
+
+    return (
+        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
+            <Template
+                value={value}
+                onChange={handleChange}
+            />
+            <Button>Submit</Button>
+        </form>
+    );
+
+};
+
+export const Uncontrolled = () => {
+
+    const ref = useRef<HTMLInputElement>(null);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
+    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
+
+    return (
+        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
+            <Template
+                ref={ref}
+                defaultValue="800080"
+                onChange={handleChange}
+            />
+            <Button>Submit</Button>
+        </form>
+    );
+
+};
+
+export const Direct = () => {
+
+    const ref = useRef<HTMLInputElement>(null);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
+    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
+
+    return (
+        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
+            <Template
+                ref={ref}
+                defaultValue="800080"
+                onChange={handleChange}
+            />
+            <Button>Submit</Button>
+            <Button type="button" onClick={() => ref.current!.value = 'ffff00'}>Set</Button>
+        </form>
+    );
+
+};
+
+export const Disabled = () => {
+
+    const ref = useRef<HTMLInputElement>(null);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
+    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
+
+    return (
+        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
+            <Template
+                ref={ref}
+                disabled={true}
+                defaultValue="800080"
+                onChange={handleChange}
+            />
+            <Button>Submit</Button>
+        </form>
+    );
+
+};
+
+export const Error = () => {
+
+    const ref = useRef<HTMLInputElement>(null);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
+    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
+
+    return (
+        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
+            <Template
+                ref={ref}
+                error={true}
+                defaultValue="800080"
+                onChange={handleChange}
+            />
+            <Button>Submit</Button>
+        </form>
     );
 
 };
 
 
+export const Placeholder = () => {
 
-export const FocusOrClick = () => {
-
-
-
-
-
-
+    const ref = useRef<HTMLInputElement>(null);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
+    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
 
     return (
-        <div className="w-full grid grid-cols-4 gap-4 items-center">
-            <Input defaultValue="" />
-            <div className="col-span-2">
-                <Choose<StoryTag[], StoryTag>
+        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
+            <Template
+                ref={ref}
+                onChange={handleChange}
+                placeholder="Choose a color"
+            />
+            <Button>Submit</Button>
+        </form>
+    );
 
-                    variant="outlined"
-                    // loading={true}
-                    // loadingError={true}
+};
 
-                    withSearch={true}
+export const PlaceholderDisabled = () => {
 
-                    searchOptions={async (search: string) => [await store.search(search)]}
-                    renderOption={({ option }) => <Tag>{option.description}</Tag>}
+    const ref = useRef<HTMLInputElement>(null);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
+    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
 
-                    renderFooter={() => <div><Input defaultValue="asd" /></div>}
+    return (
+        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
+            <Template
+                ref={ref}
+                disabled={true}
+                onChange={handleChange}
+                placeholder="Choose a color"
+            />
+            <Button>Submit</Button>
+        </form>
+    );
 
-                    onChoose={(tag) => console.log('onChoose')}
+};
 
-                    className="flex flex-row flex-wrap gap-1 cursor-pointer"
+export const PlaceholderError = () => {
 
-                >
+    const ref = useRef<HTMLInputElement>(null);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
+    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
 
-                    Internal
-
-                </Choose>
-            </div>
-            <Input defaultValue="" />
-        </div >
+    return (
+        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
+            <Template
+                ref={ref}
+                error={true}
+                onChange={handleChange}
+                placeholder="Choose a color"
+            />
+            <Button>Submit</Button>
+        </form>
     );
 
 };

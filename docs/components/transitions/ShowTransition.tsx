@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { FC, useEffect, useLayoutEffect, useState } from 'react';
+import { FC, useLayoutEffect, useState } from 'react';
 
 
 export interface ShowTransitionProps extends React.HTMLAttributes<HTMLDivElement> {

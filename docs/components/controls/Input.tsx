@@ -1,6 +1,5 @@
-import classnames from 'classnames';
-import React, { useContext, useImperativeHandle, useRef, useState } from 'react';
-import { Context } from './Control';
+import React, { Ref } from 'react';
+import { PlainInput } from './PlainInput';
 import { Wrapper, WrapperProps } from './Wrapper';
 
 
@@ -9,24 +8,43 @@ import { Wrapper, WrapperProps } from './Wrapper';
 //
 
 export interface InputProps extends WrapperProps {
+
+    /** Name used for the input element and returned in the change event. */
+    name?: string,
+
+    /** String representation of the color (for uncontrolled). */
+    defaultValue?: string,
+
+    /** String representation of the color (for controlled). */
+    value?: string,
+
+    /** Change event handler (for controlled). */
+    onChange?: React.ChangeEventHandler<HTMLInputElement>,
+
 }
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps & React.InputHTMLAttributes<HTMLInputElement>>((props, ref) => {
+export const Input = React.forwardRef((
+    props: InputProps & React.InputHTMLAttributes<HTMLInputElement>,
+    inputRef: Ref<HTMLInputElement>
+) => {
 
     // properties
 
     const {
 
-        variant,
-        withFullWidth: withNoFull,
+        // Wrapper
 
-        onFocus,
-        onBlur,
-        error,
+        variant,
+        withFullWidth,
+        withFullHeight,
+
         disabled,
+        error,
 
         start,
         end,
+
+        // Input
 
         className,
 
@@ -34,32 +52,16 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps & React.Input
 
     } = props;
 
-    // configuration
-
-    const inputRef = useRef<HTMLInputElement>(null);
-    useImperativeHandle(ref, () => inputRef.current!);
-
-    const context = useContext(Context);
-    const [focus, setFocus] = useState(false);
-
-    const handleOnFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-        if (onFocus) { onFocus(e); }
-        setFocus(true);
-    }
-    const handleOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-        setFocus(false);
-        if (onBlur) { onBlur(e); }
-    }
-
     // render
 
     return (
+
         <Wrapper
 
             variant={variant}
-            withFullWidth={withNoFull}
+            withFullWidth={withFullWidth}
+            withFullHeight={withFullHeight}
 
-            focus={focus}
             disabled={disabled}
             error={error}
 
@@ -67,26 +69,20 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps & React.Input
             end={end}
 
         >
-            <input
+
+            <PlainInput
 
                 ref={inputRef}
 
-                onFocus={handleOnFocus}
-                onBlur={handleOnBlur}
                 disabled={disabled}
-
-                className={classnames(
-                    'block w-full',
-                    'outline-none focus:outline-none',
-                    error || context.error ? 'placeholder-danger-500' : 'placeholder-control-placeholder',
-                    'placeholder-opacity-40',
-                    className
-                )}
+                error={error}
 
                 {...inputProps}
 
             />
+
         </Wrapper>
+
     );
 
 });

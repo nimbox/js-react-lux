@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
-import React, { useState } from 'react';
-import { CrossIcon, HamburgerIcon, NimboxIcon } from '../../icons';
-import { Header, Helium, Main, Navigator, Panel, ToggleNavigator } from './Helium';
+import React from 'react';
+import { NimboxIcon } from '../../icons';
+import { Header, Helium, Main, Navigator, Panel } from './Helium';
 
 
 export default {

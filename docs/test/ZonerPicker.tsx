@@ -1,5 +1,6 @@
-import React from 'react';
-import { ChooseInput } from '../components/controls/ChooseInput';
+import React, { useCallback } from 'react';
+import { UseOptionsSupplier } from '..';
+import { Choose } from '../components/choose/Choose';
 import { createSearchMatcher } from '../utilities/createSearchMatcher';
 import timezones from './timezones.json';
 
@@ -40,24 +41,24 @@ export const ZonePicker = React.forwardRef<HTMLInputElement, ZonePickerProps>((p
 
     const { defaultValue, value, onChange, placeholder } = props;
 
-    const getOption = async (value: string, options: { name: string, options: Option[] }[]) => {
+    const chooser = useCallback(async (value: string) => {
 
         await new Promise(resolve => setTimeout(resolve, 0));
         return timezones.find(z => z.value === value);
 
-    };
+    }, []);
 
-    const getOptions = async (q: string) => {
+    const supplier = useCallback(async (query: string): Promise<Array<{ name: string, options: Option[] }>> => {
 
         await new Promise(resolve => setTimeout(resolve, 0));
 
-        if (!q || q.trim().length === 0) {
+        if (!query || query.trim().length === 0) {
 
             return [{ name: 'Usuals', options: allRecentTimezones }, { name: 'Filtered', options: [] }];
 
         } else {
 
-            const matcher = createSearchMatcher(q);
+            const matcher = createSearchMatcher(query);
             const recentItems = allRecentTimezones.filter(item => matcher(item.description));
             const allFilteredItems = allTimezones.filter(item => !recentValues.has(item.value) && matcher(item.description));
 
@@ -65,23 +66,23 @@ export const ZonePicker = React.forwardRef<HTMLInputElement, ZonePickerProps>((p
 
         }
 
-    };
+    }, []);
 
     return (
-        <ChooseInput
+        <Choose<Option, { name: string, options: Option[] }>
 
             withSearch
 
-            option={getOption as any}
-            options={getOptions}
+            chooser={chooser as any}
+            supplier={supplier as any}
 
             value={value}
             onChange={onChange}
 
-            getOptions={(group) => group.options}
+            extractor={(group) => group.options}
+            identifier={(item: Option) => item.value}
 
-            getValue={(item: Option) => item.value}
-            renderSelectedOption={({ option }) => <>{option ? option.description : 'Select...'}</>}
+            renderChosen={({ option }) => <>{option ? option.description : 'Select...'}</>}
 
             renderGroupLabel={({ group }) =>
                 <span className="font-bold">
@@ -92,11 +93,6 @@ export const ZonePicker = React.forwardRef<HTMLInputElement, ZonePickerProps>((p
                 <span>
                     {option.description} 👍🏻
                 </span>
-            }
-            renderFooter={({ options }) =>
-                <div className="px-3 py-2 bg-gray-100">
-                    Crear {options.values}
-                </div>
             }
 
             placeholder={placeholder}

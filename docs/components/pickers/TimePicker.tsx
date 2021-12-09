@@ -3,9 +3,9 @@ import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon, AngleUpIcon, CircleIcon, ClockIcon } from '../../icons';
-import { setInputValue } from '../../utilities/setInputValue';
+import { setRefInputValue } from '../../utilities/setRefInputValue';
 import { Input, InputProps } from '../controls/Input';
-import { Popper } from '../Popper';
+import { HTMLPopperElement, Popper } from '../Popper';
 
 
 //
@@ -92,7 +92,7 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
 
     // Popper states
     const [show, setShow] = useState(false);
-    const popperRef = useRef<HTMLInputElement>(null);
+    const popperRef = useRef<HTMLPopperElement>(null);
     useOnOutsideClick(show, () => { if (show) { setShow(false); } }, inputRef.current, popperRef.current);
 
     // handlers
@@ -177,7 +177,7 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
 
     const handleFinalValueTime = (finalTime: [number, number] | null) => {
         const finalValue = finalTime != null ? formatTime(finalTime) : '';
-        setInputValue(inputRef, finalValue);
+        setRefInputValue(inputRef, finalValue);
         handleHide();
     }
 

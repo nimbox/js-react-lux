@@ -3,10 +3,14 @@ import React, { createContext, CSSProperties, FC, useContext } from 'react';
 
 
 export interface ControlProps {
-    withNoFull?: boolean;
+    
+    withFullWidth?: boolean;
+    
     error?: boolean,
+
     className?: string;
     style?: CSSProperties;
+
 }
 
 export interface ControlLabelProps {
@@ -26,7 +30,8 @@ export interface ControlComponent extends FC<ControlProps> {
 export const Control: ControlComponent = (props) => {
 
     const {
-        withNoFull = false,
+
+        withFullWidth = true,
         error = false,
         className,
         style,
@@ -38,7 +43,7 @@ export const Control: ControlComponent = (props) => {
             <div
                 className={classnames(
                     'flex flex-col',
-                    { 'w-full': !withNoFull },
+                    { 'w-full': withFullWidth },
                     className
                 )}
                 style={style}
@@ -56,7 +61,7 @@ Control.Label = (({ className, children }) => {
 
     return (
         <label className={classnames(
-            'block w-full',
+            'block truncate',
             'uppercase tracking-tighter',
             context.error ? 'text-danger-500' : 'text-control-border',
             className

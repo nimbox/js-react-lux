@@ -1,6 +1,6 @@
 import React, { Ref, useImperativeHandle, useRef } from 'react';
 import { CircleCross, SearchIcon } from '../../icons';
-import { setInputValue } from '../../utilities/setInputValue';
+import { setRefInputValue } from '../../utilities/setRefInputValue';
 import { Input, InputProps } from './Input';
 
 
@@ -8,7 +8,22 @@ import { Input, InputProps } from './Input';
 // SearchInput
 //
 
-export interface SearchInputProps extends Omit<InputProps, 'start'> {
+export interface SearchInputProps extends InputProps {
+
+    /** 
+    * Display a loading indicator as part of the input. The data that needs to
+    * be shown is on its way.
+    * @default `false`
+    */
+    loading?: boolean;
+
+    /** 
+     * Display an error indicator as part of the input. The data did not load
+     * correctly.
+     * @default `false`
+     */
+    loadingError?: any;
+
 }
 
 export const SearchInput = React.forwardRef((
@@ -16,25 +31,54 @@ export const SearchInput = React.forwardRef((
     ref: Ref<HTMLInputElement>
 ) => {
 
-    const { end, ...inputProps } = props;
+    // Properties
+
+    const {
+
+        loading,
+        loadingError,
+
+        start,
+        end,
+
+        ...inputProps
+
+    } = props;
+
+    // State
 
     const inputRef = useRef<HTMLInputElement>(null);
     useImperativeHandle(ref, () => inputRef.current!);
 
-    const handleClickClear = (e: React.MouseEvent) => {
-        setInputValue(inputRef, '');
+    // Handlers
+
+    const handleClearMouseDown = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setRefInputValue(inputRef, '');
     };
 
+    // Render
+
     return (
-        <Input ref={inputRef}
+        <Input
+            ref={inputRef}
             {...inputProps}
-            start={<SearchIcon className="pointer-events-none" />}
+            start={
+                <>
+                    <SearchIcon
+                        className="pointer-events-none"
+                        style={{ marginLeft: '0.5em' }}
+                    />
+                    {start}
+                </>
+            }
             end={
                 <>
                     {end}
                     <CircleCross
-                        onClick={handleClickClear}
+                        onMouseDown={handleClearMouseDown}
                         className="cursor-pointer"
+                        style={{ marginRight: '0.5em' }}
                     />
                 </>
             }

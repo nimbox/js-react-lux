@@ -16,7 +16,7 @@ export interface PopperProps extends React.HTMLAttributes<HTMLDivElement> {
 
     reference: Element;
 
-    placement?: PopperPlacement;
+    withPlacement?: PopperPlacement;
     withArrow?: boolean;
     withSameWidth?: boolean;
 
@@ -24,47 +24,55 @@ export interface PopperProps extends React.HTMLAttributes<HTMLDivElement> {
 
 }
 
-export const Popper = React.forwardRef<HTMLDivElement, PopperProps>((props, ref) => {
+export interface HTMLPopperElement extends HTMLDivElement {
+    forceUpdate: (() => void) | null;
+};
+
+export const Popper = React.forwardRef<HTMLPopperElement, PopperProps>((props, popperRef) => {
 
     // properties
 
-    const { 
-        
-        reference, 
+    const {
 
-        placement = 'bottom-start', 
-        withArrow = false, 
-        withSameWidth = false, 
-        
-        className, 
-        
+        reference,
+
+        withPlacement = 'bottom-start',
+        withArrow = false,
+        withSameWidth = false,
+
+        className,
+
         children,
 
-        ...divProps 
-    
+        ...divProps
+
     } = props;
 
     // configuration
 
-    const [popper, setPopper] = useState<HTMLDivElement | null>(null);
-    const [arrow, setArrow] = useState<HTMLDivElement | null>(null);
-    useImperativeHandle(ref, () => popper!);
+    const [internalPopperRef, setInternalPopperRef] = useState<HTMLDivElement | null>(null);
+    const [internalArrowRef, setInternalArrowRef] = useState<HTMLDivElement | null>(null);
 
-    const { styles, attributes } = usePopper(reference, popper, {
-        placement,
+    const { styles, attributes, forceUpdate } = usePopper(reference, internalPopperRef, {
+        placement: withPlacement,
         modifiers: [
             { name: 'offset', options: { offset: [0, 4] } },
-            ...(withArrow ? [{ name: 'arrow', options: { element: arrow } }] : []),
+            ...(withArrow ? [{ name: 'arrow', options: { element: internalArrowRef } }] : []),
             ...(withSameWidth ? [sameWidth] : [])
         ]
     });
 
+    useImperativeHandle(popperRef, () =>
+        internalPopperRef != null ? Object.assign(internalPopperRef, { forceUpdate }) : null!,
+        [internalPopperRef, forceUpdate]
+    );
+
     // render
 
     return ReactDOM.createPortal(
-        <div ref={setPopper} {...attributes.popper} {...divProps} className={classnames('z-40 popper-element', className)} style={styles.popper}>
+        <div ref={setInternalPopperRef} {...divProps} {...attributes.popper} className={classnames('z-50 popper-element', className)} style={styles.popper}>
             {children}
-            {withArrow && <div ref={setArrow} className="popper-arrow" style={styles.arrow} />}
+            {withArrow && <div ref={setInternalArrowRef} className="popper-arrow" style={styles.arrow} />}
         </div>,
         document.querySelector('#modal')!
     );
