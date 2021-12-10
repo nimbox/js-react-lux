@@ -114,7 +114,7 @@ module.exports = {
                 ...require('./lux'),
                 ...require('./control')({ theme }),
                 ...require('./postit'),
-                // ...require('./tooltip'),
+                ...require('./tooltip'),
                 ...require('./popper')({ theme })
             })
         }),

@@ -35,9 +35,10 @@ export * from './components/controls/TextArea';
 export * from './components/controls/Wrapper';
 export * from './components/controls/WrapperPopper';
 
+export * from './popper/TooltipProvider'
+
 export * from './components/RadioBar';
 
-export * from './hooks/useCountOptions';
 export * from './hooks/useOnOutsideClick';
 export * from './hooks/useOption';
 export * from './hooks/useOptions';
