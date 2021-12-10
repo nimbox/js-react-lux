@@ -667,6 +667,50 @@ html {
   z-index: -1;
 }
 
+.tooltip-element {
+  position: relative;
+  padding: 0.125em 0.5em;
+  color: #ffffff;
+  background-color: #222222;
+  box-shadow: 1px 1px 3px #222222;
+  border-radius: 4px;
+}
+
+.tooltip-element .tooltip-arrow {
+  position: absolute;
+  width: 1em;
+  height: 1em;
+}
+
+.tooltip-element .tooltip-arrow::before {
+  content: "";
+  margin: auto;
+  display: block;
+  osition: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.tooltip-element .tooltip-arrow::after {
+  content: "";
+  margin: auto;
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.tooltip-element {
+  opacity: 0;
+}
+
+.tooltip-element.tooltip-visible {
+  opacity: 1;
+  transition: opacity 0.1s ease 0.5s;
+}
+
 .popper-element .popper-arrow {
   position: absolute;
   width: 1rem;
@@ -2384,4 +2428,4 @@ html {
 }
 
 
-/*# sourceMappingURL=main.aba3a201.chunk.css.map*/
+/*# sourceMappingURL=main.fa17f3e0.chunk.css.map*/

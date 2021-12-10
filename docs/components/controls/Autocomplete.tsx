@@ -1,5 +1,5 @@
 import React, { Ref, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { useCountOptions } from '../../hooks/useCountOptions';
+import { useOptionsCount } from '../../hooks/useOptionsCount';
 import { useOptions, UseOptionsProps, UseOptionsSupplier } from '../../hooks/useOptions';
 import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
 import { WarningIcon } from '../../icons';
@@ -125,7 +125,7 @@ export const Autocomplete = React.forwardRef(<O, G = O[]>(
         useOptions(supplier, supplierProps);
     const { selected, onKeyDown: onNavigatorKeyDown } =
         useOptionsKeyNavigator(options, { extractor, onChoose: handleChoose })
-    const count = useCountOptions(options, extractor);
+    const count = useOptionsCount(options, extractor);
 
     // Show
 
