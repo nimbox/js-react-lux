@@ -2,8 +2,9 @@ const elegant = require('./src/styles/elegant.js')
 
 module.exports = {
 
-    purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
-    darkMode: false,
+    content: [
+        './src/**/*.{js,jsx,ts,tsx}'
+    ],
 
     theme: elegant.theme,
     variants: elegant.variants,
