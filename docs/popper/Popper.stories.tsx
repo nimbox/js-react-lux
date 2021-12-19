@@ -1,6 +1,6 @@
-import React, { useState, useRef, FC, useLayoutEffect } from 'react';
-import { usePopper } from 'react-popper';
 import classnames from 'classnames';
+import React, { FC, useLayoutEffect, useRef, useState } from 'react';
+import { usePopper } from 'react-popper';
 
 // popper
 
