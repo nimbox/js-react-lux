@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
-    "./icons": {
+    "./icons/": {
       "types": "./dist/icons/index.d.ts",
       "import": "./dist/icons/index.js"
     },
