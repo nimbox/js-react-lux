@@ -17,6 +17,9 @@
       ]
     }
   },
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
     "start": "react-scripts start",
     "build": "rm -rf dist/* && npm run build:icons && rollup -c",
