@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
-    "./icons": "./dist/icons/index.js",
+    "./icons/": "./dist/icons/index.js",
     "./styles/elegant": "./dist/styles/elegant.js"
   },
   "scripts": {
