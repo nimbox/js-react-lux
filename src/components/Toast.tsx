@@ -1,7 +1,7 @@
-import classNames from "classnames";
-import React, { createContext, FC, useContext, useEffect, useState } from "react";
+import classNames from 'classnames';
+import React, { createContext, FC, useContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { CrossIcon, DangerIcon, InfoIcon, SuccessIcon, WarningIcon } from "../icons";
+import { CrossIcon, DangerIcon, InfoIcon, SuccessIcon, WarningIcon } from '../icons';
 
 
 //

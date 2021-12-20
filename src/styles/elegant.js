@@ -2,6 +2,7 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 const plugin = require('tailwindcss/plugin');
 
 
+
 module.exports = {
 
     theme: {
@@ -119,23 +120,6 @@ module.exports = {
             })
         }),
 
-        // require("@tailwindcss/forms")
-    ],
-
-    variants: {
-        extend: {
-            fontSize: ['responsive', 'group-hover', 'hover'],
-            textColor: ['responsive', 'focus', 'group-hover', 'hover'],
-            backgroundColor: ['responsive', 'focus', 'group-hover', 'hover'],
-            borderWidth: ['last'],
-            margin: ['responsive', 'last'],
-            borderColor: ['hover', 'focus', 'checked','focus-within'],
-            visibility: ['group-hover', 'hover'],
-            opacity: ['disabled'],
-            strokeWidth: ['hover'],
-            display: ['group-hover', 'hover'],
-            cursor: ['disabled']
-        }
-    }
+    ]
 
 };
