@@ -7,11 +7,13 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
-    "./icons/": {
-      "types": "./dist/icons/index.d.ts",
-      "import": "./dist/icons/index.js"
-    },
+    "./icons": "./dist/icons/index.js",
     "./styles/elegant": "./dist/styles/elegant.js"
+  },
+  "typesVersions": {
+    "*": {
+      "icons": ["./dist/icons/index.d.ts"]
+    }
   },
   "scripts": {
     "start": "react-scripts start",
