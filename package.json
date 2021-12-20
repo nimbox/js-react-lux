@@ -21,7 +21,7 @@
     "storybook": "start-storybook -p 6096 -s ./src",
     "build-storybook": "build-storybook -s ./src",
     "preversion": "npm install && npm run build",
-    "postversion": "git push origin master --follow-tags && npm publish"
+    "postversion": "git push origin main --follow-tags && npm publish"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@nimbox"
