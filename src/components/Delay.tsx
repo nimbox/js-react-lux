@@ -13,6 +13,6 @@ export const Delay: FC<{ delay?: number }> = ({ delay = 250, children }) => {
         return () => clearTimeout(timeout);
     }, [delay, setShow]);
 
-    return show ? children as React.ReactElement : null;
-    
+    return show ? <>{children}</> : null;
+
 }

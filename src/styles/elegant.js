@@ -24,10 +24,10 @@ module.exports = {
                 'muted': '#9ea0a5',
 
                 'content-bg': '#fbfbfb',
-                'content-fg': defaultTheme.colors.white,
+                'content-fg': '#ffffff',
                 'content-border': '#eaedf3',
 
-                'control-bg': defaultTheme.colors.white,
+                'control-bg': '#ffffff',
                 'control-border': '#888888',
                 'control-placeholder': '#a0a0a0',
 
