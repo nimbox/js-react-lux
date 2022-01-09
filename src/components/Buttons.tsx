@@ -10,7 +10,7 @@ import { ComponentScale, controlSize, controlSmallText, controlText } from './Co
 
 const CLASSES: { [key: string]: { [key: string]: string } } = {
     'filled': {
-        'primary': 'text-primary-800 bg-primary-500 border border-primary-500 hover:text-primary-900 hover:bg-primary-600 hover:border-primary-600 focus:ring-primary-500 rounded filter drop-shadow',
+        'primary': 'text-white bg-primary-500 border border-primary-500 hover:text-white hover:bg-primary-600 hover:border-primary-600 focus:ring-primary-500 rounded filter drop-shadow',
         'secondary': 'text-secondary-800 bg-secondary-500 border border-secondary-500 hover:text-secondary-900 hover:bg-secondary-600 hover:border-secondary-600 focus:ring-secondary-500 rounded',
         'muted': 'text-gray-500 bg-gray-300 border border-gray-300 hover:text-gray-600 hover:bg-gray-400 hover:border-gray-400 focus:ring-gray-300 rounded'
     },
