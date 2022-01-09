@@ -424,7 +424,7 @@ export const Choose = React.forwardRef(<O, G = O[]>(
                 value={propsValue}
                 onChange={handleChange}
 
-                className="absolute inset-0 w-full text-black text-center opacity-50 pointer-events-none"
+                className="absolute inset-0 w-full text-black text-center opacity-0 pointer-events-none"
 
                 {...inputProps}
 

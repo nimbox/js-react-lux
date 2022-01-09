@@ -64,7 +64,7 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps & Re
 
                 className={classnames(
                     'block w-full',
-                    withFullHeight ? 'h-full' : null,
+                    'bg-transparent',
                     'outline-none focus:outline-none',
                     error || context.error ? 'placeholder-danger-500' : 'placeholder-control-placeholder',
                     'placeholder-opacity-40',
