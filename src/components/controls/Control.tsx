@@ -42,7 +42,6 @@ export const Control: ControlComponent = (props) => {
         <Context.Provider value={{ error }}>
             <div
                 className={classnames(
-                    'flex flex-col',
                     { 'w-full': withFullWidth },
                     className
                 )}
