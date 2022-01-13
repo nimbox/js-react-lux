@@ -301,18 +301,18 @@ Main.Side = MainSide;
 // panel
 
 interface PanelComponent<P> extends FC<P> {
-    Group: FC<{ className?: string }>,
-    Item: FC<{ active: boolean, className?: string }>,
+    Group: FC<{ className?: string }>;
+    Item: FC<{ active: boolean, className?: string }>;
 }
 
 export const Panel: PanelComponent<{ className?: string }> = ({ className, children }) => (
-    <div className={classnames('flex flex-col', className)}>
+    <div className={classnames('flex flex-col text-gray-100', className)}>
         {children}
     </div>
 );
 
 Panel.Group = ({ className, children }) => (
-    <div className={classnames('px-3 py-2 text-xs text-muted uppercase', className)}>
+    <div className={classnames('px-3 py-2 text-xs text-gray-400 uppercase', className)}>
         {children}
     </div>
 );
