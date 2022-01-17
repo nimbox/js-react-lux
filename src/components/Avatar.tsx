@@ -1,3 +1,4 @@
+import { relative } from 'path/posix';
 import React, { FC } from 'react';
 import tinycolor from 'tinycolor2';
 
@@ -36,28 +37,49 @@ export const Avatar: FC<AvatarProps> = ({ src, initials, color, backgroundColor 
     if (src) {
         return (
             <span
-                className="inline-flex flex-row justify-center content-center rounded-full overflow-hidden"
+                className="inline-block rounded-full overflow-hidden"
                 style={{
                     width: '1.5em',
-                    verticalAlign: '10%'
+                    height: '1.5em',
+                    position: 'relative',
+                    verticalAlign: '-0.4em',
                 }}
             >
                 <span
-                    className="w-full bg-center bg-cover"
-                    style={{ fontSize: '0.5em', backgroundImage: `url(${src})` }}>&nbsp;</span>
+                    className="inline-block w-full h-full absolute text-center bg-center bg-cover"
+                    style={{
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        fontSize: '0.5em',
+                        backgroundImage: `url(${src})`
+                    }}
+                >
+                    &nbsp;
+                </span>
             </span>
         );
     } else {
         return (
             <span
-                className="inline-flex flex-row justify-center content-center rounded-full overflow-hidden"
+                className="inline-block rounded-full overflow-hidden"
                 style={{
                     width: '1.5em',
-                    verticalAlign: '10%',
+                    height: '1.5em',
+                    position: 'relative',
+                    verticalAlign: '-0.4em',
                     color: c, backgroundColor: bg
                 }}
             >
-                <span style={{ fontSize: '0.5em' }}>{initials}</span>
+                <span
+                    className="inline-block w-full absolute text-center"
+                    style={{
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        fontSize: '0.5em'
+                    }}
+                >
+                    {initials}
+                </span>
             </span>
         );
     }
