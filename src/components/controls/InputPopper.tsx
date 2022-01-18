@@ -54,9 +54,6 @@ export const InputPopper = React.forwardRef((
         // Wrapper
 
         variant,
-        withFullWidth,
-        withFullHeight,
-
         disabled,
         error,
 
@@ -91,9 +88,6 @@ export const InputPopper = React.forwardRef((
         <WrapperPopper
 
             variant={variant}
-            withFullWidth={withFullWidth}
-            withFullHeight={withFullHeight}
-
             disabled={disabled}
             error={error}
 

@@ -35,9 +35,6 @@ export const Input = React.forwardRef((
         // Wrapper
 
         variant,
-        withFullWidth,
-        withFullHeight,
-
         disabled,
         error,
 
@@ -59,9 +56,6 @@ export const Input = React.forwardRef((
         <Wrapper
 
             variant={variant}
-            withFullWidth={withFullWidth}
-            withFullHeight={withFullHeight}
-
             disabled={disabled}
             error={error}
 

@@ -80,7 +80,6 @@ const NativeSelect = React.forwardRef<HTMLSelectElement, SelectProps & React.Sel
         withNative,
 
         variant,
-        withFullWidth: withNoFull,
 
         onFocus,
         onBlur,
@@ -129,8 +128,6 @@ const NativeSelect = React.forwardRef<HTMLSelectElement, SelectProps & React.Sel
             <Wrapper
 
                 variant={variant}
-                withFullWidth={withNoFull}
-
                 error={error}
                 disabled={disabled}
 
@@ -186,7 +183,6 @@ const CustomSelect = React.forwardRef<HTMLInputElement, SelectProps & React.Inpu
         withNative,
 
         variant,
-        withFullWidth: withNoFull,
 
         withPlacement: placement = 'bottom-start',
         withArrow = false,
@@ -355,7 +351,6 @@ const CustomSelect = React.forwardRef<HTMLInputElement, SelectProps & React.Inpu
                 tabIndex={tabIndex}
 
                 variant={variant}
-                withFullWidth={withNoFull}
 
                 onKeyDown={handleKeyDown}
                 onMouseDown={handleMouseDown}

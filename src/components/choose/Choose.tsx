@@ -105,9 +105,6 @@ export const Choose = React.forwardRef(<O, G = O[]>(
         // Wrapper
 
         variant,
-        withFullWidth,
-        withFullHeight,
-
         disabled,
         error,
 
@@ -436,9 +433,6 @@ export const Choose = React.forwardRef(<O, G = O[]>(
             // Wrapper
 
             variant={variant}
-            withFullWidth={withFullWidth}
-            withFullHeight={withFullHeight}
-
             error={error}
             disabled={disabled}
 

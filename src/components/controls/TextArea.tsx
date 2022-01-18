@@ -18,9 +18,6 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps & Re
     const {
 
         variant,
-        withFullWidth,
-        withFullHeight,
-
         error,
         disabled,
 
@@ -46,9 +43,6 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps & Re
         <Wrapper
 
             variant={variant}
-            withFullWidth={withFullWidth}
-            withFullHeight={withFullHeight}
-
             disabled={disabled}
             error={error}
 

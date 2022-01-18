@@ -48,6 +48,8 @@ export interface WrapperPopperProps extends WrapperProps,
      */
     popperClassName?: string;
 
+    
+
 }
 
 export const WrapperPopper = React.forwardRef((

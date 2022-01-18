@@ -17,20 +17,6 @@ export interface WrapperProps {
     variant?: 'outlined' | 'filled' | 'inlined' | 'plain';
 
     /**
-     * Enable full width on the block. True by default.
-     * @default true
-     */
-    withFullWidth?: boolean;
-
-    /**
-     * Enable full height on the block. False By default.
-     * @default false
-     */
-    withFullHeight?: boolean;
-
-    //
-
-    /**
      * Show the wrapper content as disabled (currently opacity 50%).
      */
     disabled?: boolean;
@@ -52,6 +38,15 @@ export interface WrapperProps {
      */
     end?: React.ReactNode;
 
+    /**
+     * Classes to apply to the wrapper. The provided classes are appended to the
+     * classes used for formatting the wrapper. The default is `w-full`, but if
+     * you provide other classes they override the `w-full` class, but not the
+     * formatting classes.
+     * @default `block w-full`
+     */
+    className?: string;
+
 }
 
 /**
@@ -69,9 +64,6 @@ export const Wrapper = React.forwardRef((
     const {
 
         variant = 'outlined',
-        withFullWidth = true,
-        withFullHeight = false,
-
         disabled,
         error,
 
@@ -81,9 +73,8 @@ export const Wrapper = React.forwardRef((
         onFocus,
         onBlur,
 
-        className,
+        className = 'block w-full',
         style,
-
         children,
 
         ...divProps
@@ -142,10 +133,7 @@ export const Wrapper = React.forwardRef((
 
             className={classnames(
 
-                'relative max-w-full',
-
-                withFullWidth ? 'block w-full' : 'inline-block',
-                withFullHeight ? 'h-full' : null,
+                'relative',
 
                 (variant === 'outlined') && classnames(
                     'lux-control-padding',

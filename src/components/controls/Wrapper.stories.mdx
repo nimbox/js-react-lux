@@ -1,7 +1,6 @@
 import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
 import { Wrapper } from './Wrapper';
 import classnames from 'classnames';
-import { Loading } from '../Loading';
 import FullSquareIcon from '../../icons/FullSquareIcon';
 import AngleDownIcon from '../../icons/AngleDownIcon';
 
@@ -129,8 +128,9 @@ There are three variants for this component of `outlined`, `filled`, and
     </Story>
 </Canvas>
 
-Additionally add `withFullWidth={false}` to make the element an `inline-block` and to 
-not extend the full with of its container.
+You can use the `className="inline-block"` to disable the block level and full
+width. Remember that if you set the `className` but still want the full width 
+you will need to add `w-full` to the `className`.
 
 <Canvas>
     <Story name="Variant Outlined With Full">
@@ -140,7 +140,7 @@ not extend the full with of its container.
 
 <Canvas>
     <Story name="Variant Outlined Without Full Width">
-        <Wrapper variant="outlined" withFullWidth={false}>With Full Width = false</Wrapper>
+        <Wrapper variant="outlined" className="inline-block">With Full Width = false</Wrapper>
     </Story>
 </Canvas>
 
@@ -149,7 +149,7 @@ This is helpful to to the an `inlined` variant withing some text.
 <Canvas>
     <Story name="Variant Inlined Without Full Width">
         <div>
-            Please select <Wrapper tabIndex={0} variant="inlined" withFullWidth={false} end={<AngleDownIcon className="stroke-1"/>}>user</Wrapper> responsible for the task.
+            Please select <Wrapper tabIndex={0} variant="inlined" end={<AngleDownIcon className="stroke-1"/>} className="inline-block">user</Wrapper> responsible for the task.
         </div>
     </Story>
 </Canvas>
@@ -275,7 +275,7 @@ and right to leave space for the ornaments.
 export const TemplateOrnament = ({inside, ...args}) => (
     <div>
         <span>before</span>
-        <Wrapper {...args} withFullWidth={false} className="bg-green-100">
+        <Wrapper {...args} className="inline-block bg-green-100">
             <span className="inline-block w-full bg-gray-100">{inside}</span>
         </Wrapper>
         <span>after</span>

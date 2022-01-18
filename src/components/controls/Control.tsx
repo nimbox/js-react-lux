@@ -3,9 +3,7 @@ import React, { createContext, CSSProperties, FC, useContext } from 'react';
 
 
 export interface ControlProps {
-    
-    withFullWidth?: boolean;
-    
+
     error?: boolean,
 
     className?: string;
@@ -30,8 +28,6 @@ export interface ControlComponent extends FC<ControlProps> {
 export const Control: ControlComponent = (props) => {
 
     const {
-
-        withFullWidth = true,
         error = false,
         className,
         style,
@@ -41,10 +37,7 @@ export const Control: ControlComponent = (props) => {
     return (
         <Context.Provider value={{ error }}>
             <div
-                className={classnames(
-                    { 'w-full': withFullWidth },
-                    className
-                )}
+                className={className}
                 style={style}
             >
                 {children}
