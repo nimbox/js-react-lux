@@ -1,10 +1,9 @@
 import classnames from 'classnames';
 import _isFunction from 'lodash/isFunction';
-import React, { Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react';
-import { Delay, Loading } from '../..';
+import React, { Ref, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
-import { useOption, UseOptionChooser, UseOptionProps } from '../../hooks/useOption';
-import { useOptions, UseOptionsProps, UseOptionsSupplier } from '../../hooks/useOptions';
+import { UseOptionChooser } from '../../hooks/useOption';
+import { UseOptionsSupplier } from '../../hooks/useOptions';
 import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
 import { AngleDownIcon, CircleCross, WarningIcon } from '../../icons';
 import { consumeEvent } from '../../utilities/consumeEvent';
@@ -13,6 +12,8 @@ import { Placeholder } from '../controls/Placeholder';
 import { SearchInput } from '../controls/SearchInput';
 import { WrapperProps } from '../controls/Wrapper';
 import { WrapperPopper } from '../controls/WrapperPopper';
+import { Delay } from '../Delay';
+import { Loading } from '../Loading';
 import { PopperProps } from '../Popper';
 import { ChooseOptionList, ChooseOptionListProps } from './ChooseOptionList';
 import { DEFAULT_RENDER_OPTION, EXTRACTOR } from './options';
@@ -50,16 +51,27 @@ export interface ChooseProps<O, G = O[]> extends
 
     //
 
+    /**
+     * A function that searches for an option where `value` equals
+     * `extractor(option)`. If no option is found it shall return `undefined.
+     * This function is only used when no option is found in the ones provided
+     * by the `supplier`. Promises are allowed since this parameter is used via
+     * `Promise.resolve(chooser)`.
+     */
     chooser?: UseOptionChooser<O>;
 
-    chooserProps?: UseOptionProps<O>;
-
-    supplier: UseOptionsSupplier<G>;
-
-    supplierProps?: UseOptionsProps<O, G>;
+    /**
+     * A value for groups of options or a function that takes a query string and
+     * returns a group of options. Promises are allowed since this parameter is
+     * used via `Promise.resolve(supplier)`.
+     */
+    supplier: UseOptionsSupplier<G>
 
     //
 
+    /**
+     * Function to extract the id from an option.
+     */
     identifier: (option: O) => string | number | undefined;
 
     /**
@@ -121,12 +133,9 @@ export const Choose = React.forwardRef(<O, G = O[]>(
         withClear = false,
 
         chooser,
-        chooserProps,
-
         supplier,
-        supplierProps,
-        identifier,
 
+        identifier,
         extractor = EXTRACTOR,
 
         renderEmpty,
@@ -162,148 +171,207 @@ export const Choose = React.forwardRef(<O, G = O[]>(
     const [show, setShow] = useState(false);
     const [query, setQuery] = useState<string>('');
 
+    const isControlled = propsValue != null;
+    const [chosenValue, setChosenValue] = useState<string | ReadonlyArray<string> | number | undefined>(isControlled ? propsValue : propsDefaultValue);
+    const [chosenOption, setChosenOption] = useState<O | undefined>(undefined);
+
+    // Make sure the `chosenValue` is set to whatever the current `value` is.
+    const value = isControlled ? propsValue : chosenValue;
+    if (value !== chosenValue) {
+        setChosenValue(value);
+    }
+
+    // References
+
     const internalInputRef = useObservableValueRef<HTMLInputElement>(null);
     useImperativeHandle(inputRef, () => internalInputRef.current!);
 
-    const isControlled = propsValue != null;
-    const [internalValue, setInternalValue] = useState<string | ReadonlyArray<string> | number | undefined>(propsDefaultValue ?? '');
-    const value = isControlled ? propsValue : internalValue;
-
     // Options
 
-    const { option: loadedOption, loading: loadingOption, error: loadingOptionError, get: getOption } = useOption(chooser);
-    const { options: loadedOptions, loading: loadingOptions, error: loadingOptionsError, search: searchOptions } = useOptions(supplier, supplierProps);
+    const [options, setOptions] = useState<G[]>([]);
+    const [loading, setLoading] = useState(0);
+    const [loadingError, setLoadingError] = useState<any>(null);
 
-    // Update `chosenOption` when `loadedOption` changes.
-    const [chosenOption, setChosenOption] = useState<O | undefined>(undefined);
+    // Search for the given query in the supplier. Set the loaded options to the
+    // returned value or set the loadingError accordingly.
+    const searchOptions = useCallback(async (query?: string) => {
+        try {
+            setLoading(l => l + 1);
+            const isSearchable = _isFunction(supplier);
+            setLoadingError(null);
+            setOptions(await Promise.resolve(isSearchable ? supplier(query) : supplier));
+        } catch (error) {
+            setOptions([]);
+            setLoadingError(error);
+        } finally {
+            setLoading(l => l - 1);
+        }
+    }, [supplier]);
+
+    // Load the options from the supplier upon mounting. Remember that
+    // `loadedOptions` can be the options or an error.
     useEffect(() => {
-        setChosenOption(loadedOption);
-    }, [loadedOption]);
+        searchOptions();
+    }, [searchOptions]);
 
-    // Populate the `chosenOption` based on the provided `value`. This method
-    // tries to set the `chosenOption` minimizing the number of queries to the
-    // backend.
-    const populateChosenOption = useCallback((value) => {
+    // Find the `chosenOption` based on the `chosenValue`. Be careful to do
+    // the search with the least number of requests as possible.
+    useEffect(() => {
 
-        // First, set the `internalValue` to `value`, so that the `chosenOption`
-        // is matched to it (via the `identifier` function).
-        if (!isControlled) {
-            setInternalValue(value);
-        }
+        // We need to know if the effect has gone stale. If it it has, then do
+        // nothing with the responses and do not change the state because new
+        // data is available.
+        let working = true;
 
-        // If no `value` is available, set the chosen to `undefined` so that the
-        // `placeholder` shows.
-        if (value == null) {
-            setChosenOption(undefined);
-            return;
-        }
+        async function doEffect() {
 
-        // If the the `value` is the current `chosenOption` (via the
-        // `identifier` function), then we already have it and there is no need
-        // to get it again.
-        if (chosenOption != null && identifier(chosenOption) === value) {
-            return;
-        }
+            // If `chosenValue` is not present, then reset the
+            // `chosenOption` to `undefined`.
+            if (chosenValue == null) {
+                if (chosenOption != null) {
+                    if (working) {
+                        setChosenOption(undefined);
+                        return;
+                    }
+                }
+            }
 
-        // If the value is already in the loaded options (via the `identifier`
-        // function), then we already have it and there is no need to get it
-        // again.
-        if (loadedOptions && loadedOptions.length > 0) {
-            const option = loadedOptions
-                .map(group => extractor(group).find(o => identifier(o) === value))
-                .find(o => o != null);
-            if (option != null) {
-                setChosenOption(option);
+            // If `chosenValue` represents the current `chosenOption`,
+            // then do nothing.
+            if (chosenOption != null && chosenValue === identifier(chosenOption)) {
                 return;
             }
+
+            // If there is a `loadedOptions` promise, then wait for it to
+            // complete (it might already have) and try to find the
+            // `chosenValue` in the the resulting options.
+            try {
+                setLoading(l => l + 1);
+                if (options != null) {
+                    setLoadingError(null);
+                    const promisedOptions = await options;
+                    if (working) {
+                        const option = promisedOptions
+                            .map(group => extractor(group).find(o => identifier(o) === chosenValue))
+                            .find(o => o != null);
+                        if (option != null) {
+                            setChosenOption(option);
+                            return;
+                        }
+                    }
+                }
+            } catch (e) {
+                setLoadingError(e);
+            } finally {
+                setLoading(l => l - 1);
+            }
+
+            // It `chosenValue` was not found on `loadedOptions`, then use the
+            // `chooser` (it it is available) to load the option.
+            try {
+                setLoading(l => l + 1);
+                if (chooser) {
+                    setLoadingError(null);
+                    const promisedOption = await Promise.resolve(chooser(chosenValue));
+                    if (working) {
+                        if (promisedOption) {
+                            setChosenOption(promisedOption);
+                            return;
+                        }
+                    }
+                }
+            } catch (e) {
+                setLoadingError(e);
+            } finally {
+                setLoading(l => l - 1);
+            }
+
+            // If still nothing is found then we have a `chosenValue` that does
+            // not correspond to an option. Reset the `chosenValue` and the
+            // `chosenOption` to `undefined` and register a loading error.
+            if (working) {
+                setChosenValue(undefined);
+                setChosenOption(undefined);
+            }
+
         }
 
-        // Finally, set the `chosenOption` to `undefined`, to rended the
-        // placehlder, and dispatch the `get` from the `useOption`. The
-        // `getOption` function is a no-op if there is no chooser. 
-        setChosenOption(undefined);
-        getOption(value);
+        doEffect();
 
-    }, [isControlled, chosenOption, loadedOptions, extractor, identifier, getOption]);
+        return () => { working = false; };
 
-    // Populate the chosen option if the value changed. This needs to be a
-    // `useLayoutEffect` because we need to dispatch the `getOption` before the
-    // current render.
-    useLayoutEffect(() => {
-        populateChosenOption(value);
-    }, [populateChosenOption, value]);
+    }, [chosenValue, chosenOption, options, chooser, supplier, identifier, extractor])
 
     // Handle Choose
 
-    const handleChoose = useCallback((option: O) => {
+    const handleChoose = useCallback(async (option: O) => {
 
         const value = identifier(option);
 
         // Set the internal value/chosenOption state and the input value.
         if (!isControlled) {
-            setInternalValue(value);
+            setChosenValue(value);
         }
         setChosenOption(option);
         setRefInputValue(internalInputRef, value);
 
-        // Reset the query and reload the `undefined` options.
-        // Hide the popper.
+        // Reset the query.
         setQuery('');
         searchOptions();
+
+        // Hide de popper if necessary.
         if (withHideOnChoose) {
             setShow(false);
         }
 
-    }, [isControlled, identifier, internalInputRef, searchOptions, withHideOnChoose]);
+    }, [identifier, isControlled, internalInputRef, withHideOnChoose, searchOptions]);
 
     // Options
 
-    const { selected, onKeyDown: onNavigatorKeyDown } = useOptionsKeyNavigator(loadedOptions, { extractor, onChoose: handleChoose })
-
+    const { selected, onKeyDown: onNavigatorKeyDown } = useOptionsKeyNavigator(options, { extractor, onChoose: handleChoose })
 
     // Action Handlers
 
-    const handleClear = () => {
+    const handleClearQuery = () => {
 
-        // Set the internal value/chosenOption state and the input value.
+        // Clear the chosen value and option.
         if (!isControlled) {
-            setInternalValue('');
+            setChosenValue('');
         }
         setChosenOption(undefined);
         setRefInputValue(internalInputRef, '');
 
-        // Reset the query and reload the `undefined` options.
+        // Reset the query.
         setQuery('');
         searchOptions();
 
     };
 
     const handleChangeQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
+
         const value = e.target.value;
         setQuery(value);
         searchOptions(value);
+
     };
 
     const handleClearClick = (e: React.MouseEvent) => {
         e.stopPropagation(); // Prevent wrapper click.
-        handleClear();
+        handleClearQuery();
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!isControlled) {
-            setInternalValue(e.target.value);
-        }
+        setChosenValue(e.target.value);
         onChange?.(e);
     };
 
+    // Popper
+
     const handlePopperBlur = () => {
 
-        // Reset and hide the popper.
+        // Reset the query.
         setQuery('');
         searchOptions();
-        // setShow(false);
-
-        console.log('hiding popper');
 
         // Focus the wrapper to continue tabbing.
         wrapperRef.current?.focus();
@@ -314,7 +382,7 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
     const option = () => (
         <Placeholder error={error} placeholder={placeholder}>
-            {chosenOption ? renderChosen({ option: chosenOption }) : null}
+            {chosenOption ? renderChosen({ option: chosenOption }) : <>&nbsp;</>}
         </Placeholder>
     );
 
@@ -327,8 +395,8 @@ export const Choose = React.forwardRef(<O, G = O[]>(
                 <div className="lux-p-2em">
                     <SearchInput
                         autoFocus
-                        loading={loadingOption || loadingOptions}
-                        loadingError={loadingOptionsError}
+                        loading={loading > 0}
+                        loadingError={loadingError}
                         value={query}
                         onChange={handleChangeQuery}
                         onKeyDown={onNavigatorKeyDown}
@@ -338,7 +406,7 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
             <ChooseOptionList
 
-                options={loadedOptions}
+                options={options}
                 selected={selected}
 
                 extractor={extractor}
@@ -359,8 +427,6 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
     // Render
 
-    console.log('choose', 'render');
-
     return (
         <WrapperPopper
 
@@ -380,8 +446,8 @@ export const Choose = React.forwardRef(<O, G = O[]>(
             end={
                 <>
                     {end}
-                    {loadingOption || loadingOptions ? <Delay><Loading style={{ marginRight: '0.5em' }} /></Delay> : null}
-                    {loadingOptionError || loadingOptionsError ? <WarningIcon className="text-danger-500" style={{ marginRight: '0.5em' }} /> : null}
+                    {loading ? <Delay><Loading style={{ marginRight: '0.5em' }} /></Delay> : null}
+                    {loadingError ? <WarningIcon className="text-danger-500" style={{ marginRight: '0.5em' }} /> : null}
                     {withClear &&
                         <CircleCross
                             onClick={handleClearClick}

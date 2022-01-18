@@ -44,14 +44,14 @@ const colors: Group[] = [
 const extractor = (group: Group): Option[] => group.options;
 const identifier = (color: Option) => color.value;
 
-const chooser =  (value?: string | ReadonlyArray<string> | number | undefined) =>  {
-    // await new Promise(resolve => setTimeout(() => resolve(undefined), 100));
+const chooser =  async (value?: string | ReadonlyArray<string> | number | undefined) =>  {
+    // await new Promise(resolve => setTimeout(() => resolve(undefined), 2000));
     const option = colors.map(group => extractor(group).find(o => identifier(o) === value)).find(o => o != null);
     return option;
 };
 
-const provider =  (query?: string) => {
-    // await new Promise(resolve => setTimeout(() => resolve(undefined), 100));
+const provider =  async (query?: string) => {
+    // await new Promise(resolve => setTimeout(() => resolve(undefined), 2000));
     if (query == null || query.trim() === '') {
         return colors;
     } else {
