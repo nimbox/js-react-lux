@@ -28,10 +28,13 @@ export interface ControlComponent extends FC<ControlProps> {
 export const Control: ControlComponent = (props) => {
 
     const {
+
         error = false,
-        className,
+
+        className = 'block w-full',
         style,
         children
+
     } = props;
 
     return (

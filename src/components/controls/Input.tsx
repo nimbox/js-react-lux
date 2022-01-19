@@ -9,17 +9,30 @@ import { Wrapper, WrapperProps } from './Wrapper';
 
 export interface InputProps extends WrapperProps {
 
-    /** Name used for the input element and returned in the change event. */
-    name?: string,
+    /** 
+     * Name used for the input element and returned in the change event. 
+     */
+    name?: string;
 
-    /** String representation of the color (for uncontrolled). */
-    defaultValue?: string,
+    /** 
+     * String representation of the color (for uncontrolled). 
+     */
+    defaultValue?: string;
 
-    /** String representation of the color (for controlled). */
-    value?: string,
+    /** 
+     * String representation of the color (for controlled). 
+     */
+    value?: string;
 
-    /** Change event handler (for controlled). */
-    onChange?: React.ChangeEventHandler<HTMLInputElement>,
+    /** 
+     * Change event handler (for controlled). 
+     */
+    onChange?: React.ChangeEventHandler<HTMLInputElement>;
+
+    /**
+     * Class name to pass to the wrapper.
+     */
+    wrapperClassName?: string;
 
 }
 
@@ -41,9 +54,9 @@ export const Input = React.forwardRef((
         start,
         end,
 
-        // Input
+        wrapperClassName, 
 
-        className,
+        // Input
 
         ...inputProps
 
@@ -61,6 +74,8 @@ export const Input = React.forwardRef((
 
             start={start}
             end={end}
+
+            className={wrapperClassName}
 
         >
 
