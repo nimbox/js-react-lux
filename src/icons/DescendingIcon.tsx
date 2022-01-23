@@ -13,7 +13,7 @@ const SvgDescendingIcon = (props: SVGProps<SVGSVGElement>) => (
     strokeLinejoin="round"
     {...props}
   >
-    <path d="M26 6H6M23.5 12.8h-15M21 19.4H11M18.5 26h-5" />
+    <path d="M26 9H6M23 13.8H9M20 18.4h-8M17 23h-2" />
   </svg>
 );
 

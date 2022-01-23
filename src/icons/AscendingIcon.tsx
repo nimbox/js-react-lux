@@ -13,7 +13,7 @@ const SvgAscendingIcon = (props: SVGProps<SVGSVGElement>) => (
     strokeLinejoin="round"
     {...props}
   >
-    <path d="M13.5 6h5M11 12.6h10M8.5 19.2h15M6 26h20" />
+    <path d="M15 9h2M12 13.6h8M9 18.2h14M6 23h20" />
   </svg>
 );
 

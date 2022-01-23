@@ -1,7 +1,7 @@
 import * as React from "react";
 import { SVGProps } from "react";
 
-const SvgAngleLeftIcon = (props: SVGProps<SVGSVGElement>) => (
+const SvgSortableIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
@@ -13,8 +13,8 @@ const SvgAngleLeftIcon = (props: SVGProps<SVGSVGElement>) => (
     strokeLinejoin="round"
     {...props}
   >
-    <path d="m20 26-8-10 8-10" />
+    <path d="M15 5h2M10.5 9h11M6 13h20M26 19H6M21.5 23h-11M17 27h-2" />
   </svg>
 );
 
-export default SvgAngleLeftIcon;
+export default SvgSortableIcon;

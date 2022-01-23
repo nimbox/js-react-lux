@@ -1,5 +1,6 @@
 export { default as AscendingIcon } from "./AscendingIcon";
 export { default as DescendingIcon } from "./DescendingIcon";
+export { default as SortableIcon } from "./SortableIcon";
 export { default as AngleDownIcon } from "./AngleDownIcon";
 export { default as AngleLeftIcon } from "./AngleLeftIcon";
 export { default as AngleRightIcon } from "./AngleRightIcon";

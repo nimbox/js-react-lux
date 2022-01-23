@@ -13,8 +13,8 @@ const SvgSuccessIcon = (props: SVGProps<SVGSVGElement>) => (
     strokeLinejoin="round"
     {...props}
   >
-    <path className="success-icon_svg__st0" d="M25 9 13.3 23 7 15.3" />
-    <circle className="success-icon_svg__st0" cx={16} cy={16} r={15} />
+    <path d="M25 9 13.3 23 7 15.3" />
+    <circle cx={16} cy={16} r={15} />
   </svg>
 );
 

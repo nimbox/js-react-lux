@@ -13,7 +13,7 @@ const SvgAngleDownIcon = (props: SVGProps<SVGSVGElement>) => (
     strokeLinejoin="round"
     {...props}
   >
-    <path className="angle-down-icon_svg__st0" d="m26 12-10 8-10-8" />
+    <path d="m26 12-10 8-10-8" />
   </svg>
 );
 
