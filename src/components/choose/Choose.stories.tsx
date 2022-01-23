@@ -1,6 +1,8 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { action } from '@storybook/addon-actions';
+import { useEffect } from '@storybook/addons';
 import React, { useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { createSearchMatcher } from '../../utilities/createSearchMatcher';
 import { Button } from '../Buttons';
 import { Choose, ChooseProps } from './Choose';
@@ -44,13 +46,13 @@ const colors: Group[] = [
 const extractor = (group: Group): Option[] => group.options;
 const identifier = (color: Option) => color.value;
 
-const chooser =  async (value?: string | ReadonlyArray<string> | number | undefined) =>  {
+const chooser = async (value?: string | ReadonlyArray<string> | number | undefined) => {
     // await new Promise(resolve => setTimeout(() => resolve(undefined), 2000));
     const option = colors.map(group => extractor(group).find(o => identifier(o) === value)).find(o => o != null);
     return option;
 };
 
-const provider =  async (query?: string) => {
+const provider = async (query?: string) => {
     // await new Promise(resolve => setTimeout(() => resolve(undefined), 2000));
     if (query == null || query.trim() === '') {
         return colors;
@@ -182,6 +184,35 @@ export const Direct = () => {
             />
             <Button>Submit</Button>
             <Button type="button" onClick={() => ref.current!.value = 'ffff00'}>Set</Button>
+        </form>
+    );
+
+};
+
+export const ReactHookFormDefault = () => {
+
+    const { register, handleSubmit } = useForm({ defaultValues: { color: '0000ff' } });
+    const handleFormSubmit = (data: any) => { action('onSubmit')(data); }
+
+    return (
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="w-96 flex flex-row items-center space-x-2">
+            <Template {...register('color')} />
+            <Button>Submit</Button>
+        </form>
+    );
+
+};
+
+export const ReactHookFormReset = () => {
+
+    const { register, reset, handleSubmit } = useForm();
+    useEffect(() => { reset({ color: '0000ff' }); }, [reset]);
+    const handleFormSubmit = (data: any) => { action('onSubmit')(data); }
+
+    return (
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="w-96 flex flex-row items-center space-x-2">
+            <Template {...register('color')} />
+            <Button>Submit</Button>
         </form>
     );
 

@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import _isFunction from 'lodash/isFunction';
-import React, { Ref, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { UseOptionChooser } from '../../hooks/useOption';
 import { UseOptionsSupplier } from '../../hooks/useOptions';
@@ -172,8 +172,10 @@ export const Choose = React.forwardRef(<O, G = O[]>(
     const [chosenValue, setChosenValue] = useState<string | ReadonlyArray<string> | number | undefined>(isControlled ? propsValue : propsDefaultValue);
     const [chosenOption, setChosenOption] = useState<O | undefined>(undefined);
 
-    // Make sure the `chosenValue` is set to whatever the current `value` is.
+    // This is the real value.
     const value = isControlled ? propsValue : chosenValue;
+
+    // Make sure the `chosenValue` is set to whatever the real `value` is.
     if (value !== chosenValue) {
         setChosenValue(value);
     }
@@ -189,47 +191,80 @@ export const Choose = React.forwardRef(<O, G = O[]>(
     const [loading, setLoading] = useState(0);
     const [loadingError, setLoadingError] = useState<any>(null);
 
-    // Search for the given query in the supplier. Set the loaded options to the
-    // returned value or set the loadingError accordingly.
-    const searchOptions = useCallback(async (query?: string) => {
-        try {
-            setLoading(l => l + 1);
-            const isSearchable = _isFunction(supplier);
-            setLoadingError(null);
-            setOptions(await Promise.resolve(isSearchable ? supplier(query) : supplier));
-        } catch (error) {
-            setOptions([]);
-            setLoadingError(error);
-        } finally {
-            setLoading(l => l - 1);
+    // Memoize the `supplier` response as a promise, when the `query` changes.
+    
+    const getPromisedOptions = useMemo(async () => {
+
+        const isSearchable = _isFunction(supplier);
+        return Promise.resolve(isSearchable ? supplier(query) : supplier)
+
+    }, [query, supplier]);
+
+    // Instead of memoizing the `chooser`, make it a callable function that can
+    // be invoked whenever it is necessary. The `chosenOption` only changes when
+    // the `chosenValue` changes, but we need to fire this only when necessary
+    // to reduce backend searches.
+    const getPromisedChosenOption = useCallback(async (chosenValue: string) => {
+
+        // Check that the `chosenValue` is not already one of
+        // the promised options.
+        const promisedOptions = await getPromisedOptions;
+        const option = promisedOptions
+            .map(group => extractor(group).find(o => identifier(o) === chosenValue))
+            .find(o => o != null);
+        if (option != null) {
+            return option;
         }
-    }, [supplier]);
 
-    // Load the options from the supplier upon mounting. Remember that
-    // `loadedOptions` can be the options or an error.
+        // Get the `chosenValue` from the chooser, if one is present.
+        if (chooser) {
+            return Promise.resolve(chooser(chosenValue));
+        }
+
+        // The `chosenValue` can not be found.
+        return undefined;
+
+    }, [getPromisedOptions, chooser, extractor, identifier]);
+
+    // Wait for the `getPromisedOptions` to settle to display the optiopn list.
     useEffect(() => {
-        searchOptions();
-    }, [searchOptions]);
 
-    // Find the `chosenOption` based on the `chosenValue`. Be careful to do
-    // the search with the least number of requests as possible.
-    useEffect(() => {
-
-        // We need to know if the effect has gone stale. If it it has, then do
-        // nothing with the responses and do not change the state because new
-        // data is available.
         let working = true;
+        async function doEffect() {
 
+            setLoading(l => l + 1);
+            setLoadingError(undefined);
+            try {
+                const promisedOptions = await getPromisedOptions;
+                if (working) {
+                    setOptions(promisedOptions);
+                }
+            } catch (e) {
+                setOptions([]);
+                setLoadingError(e);
+            } finally {
+                setLoading(l => l - 1);
+            }
+        }
+
+        doEffect();
+        return () => { working = false; };
+
+    }, [getPromisedOptions]);
+
+    // Wait for the `getPromisedChosenOption` to settle to display the chosen
+    // option.
+    useEffect(() => {
+
+        let working = true;
         async function doEffect() {
 
             // If `chosenValue` is not present, then reset the
             // `chosenOption` to `undefined`.
             if (chosenValue == null) {
-                if (chosenOption != null) {
-                    if (working) {
-                        setChosenOption(undefined);
-                        return;
-                    }
+                if (working) {
+                    setChosenOption(undefined);
+                    return;
                 }
             }
 
@@ -239,65 +274,29 @@ export const Choose = React.forwardRef(<O, G = O[]>(
                 return;
             }
 
-            // If there is a `loadedOptions` promise, then wait for it to
-            // complete (it might already have) and try to find the
-            // `chosenValue` in the the resulting options.
+            // Wait for the promisedChosenOption to settle.
+            setLoading(l => l + 1);
+            setLoadingError(undefined);
             try {
-                setLoading(l => l + 1);
-                if (options != null) {
-                    setLoadingError(null);
-                    const promisedOptions = await options;
-                    if (working) {
-                        const option = promisedOptions
-                            .map(group => extractor(group).find(o => identifier(o) === chosenValue))
-                            .find(o => o != null);
-                        if (option != null) {
-                            setChosenOption(option);
-                            return;
-                        }
+                const promisedChosenOption = await getPromisedChosenOption(chosenValue as string);
+                if (working) {
+                    if (promisedChosenOption) {
+                        setChosenOption(promisedChosenOption);
                     }
                 }
             } catch (e) {
                 setLoadingError(e);
-            } finally {
-                setLoading(l => l - 1);
-            }
-
-            // It `chosenValue` was not found on `loadedOptions`, then use the
-            // `chooser` (it it is available) to load the option.
-            try {
-                setLoading(l => l + 1);
-                if (chooser) {
-                    setLoadingError(null);
-                    const promisedOption = await Promise.resolve(chooser(chosenValue));
-                    if (working) {
-                        if (promisedOption) {
-                            setChosenOption(promisedOption);
-                            return;
-                        }
-                    }
-                }
-            } catch (e) {
-                setLoadingError(e);
-            } finally {
-                setLoading(l => l - 1);
-            }
-
-            // If still nothing is found then we have a `chosenValue` that does
-            // not correspond to an option. Reset the `chosenValue` and the
-            // `chosenOption` to `undefined` and register a loading error.
-            if (working) {
-                setChosenValue(undefined);
                 setChosenOption(undefined);
+            } finally {
+                setLoading(l => l - 1);
             }
 
         }
 
         doEffect();
-
         return () => { working = false; };
 
-    }, [chosenValue, chosenOption, options, chooser, supplier, identifier, extractor])
+    }, [chosenValue, chosenOption, getPromisedChosenOption, chooser, supplier, identifier, extractor])
 
     // Handle Choose
 
@@ -314,14 +313,14 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
         // Reset the query.
         setQuery('');
-        searchOptions();
 
         // Hide de popper if necessary.
         if (withHideOnChoose) {
+            internalInputRef.current!.focus();
             setShow(false);
         }
 
-    }, [identifier, isControlled, internalInputRef, withHideOnChoose, searchOptions]);
+    }, [identifier, isControlled, internalInputRef, withHideOnChoose]);
 
     // Options
 
@@ -340,7 +339,6 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
         // Reset the query.
         setQuery('');
-        searchOptions();
 
     };
 
@@ -348,7 +346,6 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
         const value = e.target.value;
         setQuery(value);
-        searchOptions(value);
 
     };
 
@@ -368,7 +365,6 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
         // Reset the query.
         setQuery('');
-        searchOptions();
 
         // Focus the wrapper to continue tabbing.
         wrapperRef.current?.focus();
@@ -484,7 +480,7 @@ export const Choose = React.forwardRef(<O, G = O[]>(
                 value={propsValue}
                 onChange={handleChange}
 
-                className="absolute inset-0 w-full text-black text-center opacity-0 pointer-events-none"
+                className="absolute inset-0 w-full text-black text-center opacity-10 pointer-events-none"
 
                 {...inputProps}
 
