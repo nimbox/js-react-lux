@@ -44,7 +44,7 @@ export interface WrapperPopperProps extends WrapperProps,
 
     /**
      * Class name to apply to the popper.
-     * @default `bg-control-bg border border-control-border rounded overflow-hidden filter drop-shadow`
+     * @default `max-h-96 overflow-y-scroll bg-control-bg border border-control-border rounded filter drop-shadow`
      */
     popperClassName?: string;
 
