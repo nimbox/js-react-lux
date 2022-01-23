@@ -70,7 +70,7 @@ export const useToast = () => {
 
 //
 
-export const ToastProvider: FC<ToastProviderProps> = ({ location = 'top-right', autoDelete = true, autoDeleteTimeout = 5000, children }) => {
+export const ToastProvider: FC<ToastProviderProps> = ({ location = 'top-right', autoDelete = true, autoDeleteTimeout = 3000, children }) => {
 
     const [toasts, setToasts] = useState<ToastItem[]>([]);
 
@@ -146,12 +146,12 @@ export const Toast: FC<ToastProps> = ({ type, component, autoDelete = true, auto
             'pointer-events-auto'
         )}>
             <div>
-                <IconType className="w-6 h-6 stroke-2" />
+                <IconType className="flex-none w-6 h-6 stroke-2" />
             </div>
-            <div className="flex-grow">
+            <div className="flex-grow min-w-0 break-all">
                 {component}
             </div>
-            <div onClick={onDelete} className="cursor-pointer"><CrossIcon className="w-6 h-6 stroke-2" /></div>
+            <div onClick={onDelete} className="flex-none cursor-pointer"><CrossIcon className="w-6 h-6 stroke-2" /></div>
         </div>
     );
 
