@@ -110,7 +110,7 @@ export default [{
         typescript({
             clean: true,
             tsconfigOverride: {
-                include: ["src/icons"],
+                include: ["src/figures"],
                 exclude: ["stories/**/*", "**/*.stories.tsx", "src/i18n.tsx"]
             }
         }),
