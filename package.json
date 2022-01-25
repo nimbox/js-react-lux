@@ -15,6 +15,9 @@
     "*": {
       "icons": [
         "./dist/icons/index.d.ts"
+      ],
+      "figures": [
+        "./dist/figures/index.d.ts"
       ]
     }
   },
