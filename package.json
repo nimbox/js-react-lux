@@ -8,6 +8,7 @@
   "exports": {
     ".": "./dist/index.js",
     "./icons": "./dist/icons/index.js",
+    "./figures": "./dist/figures/index.js",
     "./styles/elegant": "./dist/styles/elegant.js"
   },
   "typesVersions": {
