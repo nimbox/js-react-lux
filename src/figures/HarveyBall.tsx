@@ -21,10 +21,26 @@ export interface HarveyBallProps {
      */
     color?: string;
 
-    /** Color of the background. The background might not be seen if the cover
-     * is greater than 100. 
+    /** 
+     * Color of the background. The background might not be seen if the cover is
+     * greater than 100. 
      */
     backgroundColor?: string;
+
+    /**
+     * The tooltip to place in the foreign object.
+     */
+    'data-tooltip'?: string;
+
+    /**
+     * Classes applied to the svg element.
+     */
+    className?: string;
+
+    /**
+     * Classes applied to the div containing the children.
+     */
+    foreignClassName?: string;
 
 }
 
@@ -40,7 +56,12 @@ export const HarveyBall: FC<HarveyBallProps & SVGProps<SVGSVGElement>> = (props)
         color = '#000000',
         backgroundColor = '#ffffff',
 
-        children
+        'data-tooltip': dataTooltip,
+
+        foreignClassName,
+        children,
+
+        ...svgProps
 
     } = props;
 
@@ -58,10 +79,10 @@ export const HarveyBall: FC<HarveyBallProps & SVGProps<SVGSVGElement>> = (props)
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="10em"
-            height="10em"
+            width="100"
+            height="100"
             viewBox="0 0 100 100"
-            {...props}
+            {...svgProps}
         >
             {cover < 100 ?
                 <circle cx="50" cy="50" r={50} strokeWidth={0} fill={backgroundColor} /> :
@@ -80,7 +101,7 @@ export const HarveyBall: FC<HarveyBallProps & SVGProps<SVGSVGElement>> = (props)
             }
             {children &&
                 <foreignObject x="0" y="0" width="100" height="100">
-                    <div data-xmlns="http://www.w3.org/1999/xhtml" className="w-full h-full">
+                    <div data-xmlns="http://www.w3.org/1999/xhtml" data-tooltip={dataTooltip} className={foreignClassName}>
                         {children}
                     </div>
                 </foreignObject>
