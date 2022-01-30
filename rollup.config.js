@@ -49,7 +49,7 @@ export default [{
 
 }, {
 
-    input: 'src/icons/index.tsx',
+    input: 'src/icons/index.ts',
     output: [{
         dir: 'dist/icons',
         format: 'esm',
