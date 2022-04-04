@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import React, { createContext, FC, MouseEventHandler, useContext, useEffect, useState } from 'react';
 import { ShowTransition } from '../../components/transitions/ShowTransition';
 import { useViewport } from '../../hooks/useViewport';
-import { AngleLeftIcon, CrossIcon, HamburgerIcon } from '../../icons';
+import { AngleLeftIcon, CrossIcon, HamburgerIcon,  } from '../../icons/components';
 
 
 //

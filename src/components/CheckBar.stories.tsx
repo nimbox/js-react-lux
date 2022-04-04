@@ -18,10 +18,10 @@ export default {
 
 //  parameterized
 
-export const Parameterized = ({ scale, value: initial, options, ...props }: CheckBarProps & { options: string[] }) => {
+export const Parameterized = ({ value: initial, options, ...props }: CheckBarProps & { options: string[] }) => {
     const [value, onChange] = useState(initial.map(i => +i));
     return (
-        <CheckBar scale={scale} value={value} onChange={onChange}>
+        <CheckBar value={value} onChange={onChange}>
             {options.map((o, i) => <CheckBar.Option value={i}>{o}</CheckBar.Option>)}
         </CheckBar>
     );
@@ -30,10 +30,10 @@ Parameterized.args = { scale: 'base', value: [1], options: ['1', '2', '3', '6', 
 
 // stories
 
-const Template: Story<CheckBarProps> = ({ scale }) => {
+const Template: Story<CheckBarProps> = () => {
     const [value, onChange] = useState([1]);
     return (
-        <CheckBar scale={scale} value={value} onChange={onChange}>
+        <CheckBar value={value} onChange={onChange}>
             <CheckBar.Option value={1}>1</CheckBar.Option>
             <CheckBar.Option value={2}>2</CheckBar.Option>
             <CheckBar.Option value={3}>3</CheckBar.Option>
@@ -44,13 +44,13 @@ const Template: Story<CheckBarProps> = ({ scale }) => {
 };
 
 export const Extra_Small = Template.bind({});
-Extra_Small.args = { scale: 'xs' };
+Extra_Small.args = {};
 
 export const Small = Template.bind({});
-Small.args = { scale: 'sm' };
+Small.args = {};
 
 export const Base = Template.bind({});
-Base.args = { scale: 'base' };
+Base.args = {};
 
 export const Large = Template.bind({});
-Large.args = { scale: 'lg' };
+Large.args = {};

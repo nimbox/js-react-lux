@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon } from '../../icons';
+import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon } from '../../icons/components';
 import { consumeEvent } from '../../utilities/consumeEvent';
 import { setRefInputValue } from '../../utilities/setRefInputValue';
 import { Input, InputProps } from '../controls/Input';

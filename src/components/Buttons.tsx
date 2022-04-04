@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React, { FC, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AngleRightIcon } from '../icons';
+import { AngleRightIcon } from '../icons/components';
 import { ComponentColor } from './ComponentColor';
 import { ComponentScale, controlSize, controlSmallText, controlText } from './ComponentScale';
 

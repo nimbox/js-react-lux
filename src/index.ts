@@ -38,6 +38,7 @@ export * from './components/controls/WrapperPopper';
 
 export * from './popper/TooltipProvider'
 
+export * from './components/CheckBar';
 export * from './components/RadioBar';
 
 export * from './hooks/useOnOutsideClick';

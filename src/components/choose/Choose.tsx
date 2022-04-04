@@ -1,11 +1,11 @@
 import classnames from 'classnames';
 import _isFunction from 'lodash/isFunction';
-import React, { Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { Ref, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { UseOptionChooser } from '../../hooks/useOption';
 import { UseOptionsSupplier } from '../../hooks/useOptions';
 import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
-import { AngleDownIcon, CircleCross, WarningIcon } from '../../icons';
+import { AngleDownIcon, CircleCrossIcon, WarningIcon } from '../../icons/components';
 import { consumeEvent } from '../../utilities/consumeEvent';
 import { setRefInputValue } from '../../utilities/setRefInputValue';
 import { Placeholder } from '../controls/Placeholder';
@@ -439,7 +439,7 @@ export const Choose = React.forwardRef(<O, G = O[]>(
                     {loading ? <Delay><Loading style={{ marginRight: '0.5em' }} /></Delay> : null}
                     {loadingError ? <WarningIcon className="text-danger-500" style={{ marginRight: '0.5em' }} /> : null}
                     {withClear &&
-                        <CircleCross
+                        <CircleCrossIcon
                             onClick={handleClearClick}
                             style={{ marginRight: '0.5em' }}
                         />

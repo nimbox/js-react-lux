@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React, { createContext, FC, LegacyRef, useContext, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { AngleDownIcon } from '../../icons';
+import { AngleDownIcon } from '../../icons/components';
 import { ComponentAlign } from '../ComponentAlign';
 import { ComponentScale, controlScale } from '../ComponentScale';
 

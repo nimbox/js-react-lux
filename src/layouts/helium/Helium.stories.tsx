@@ -1,6 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 import React from 'react';
-import { NimboxIcon } from '../../icons';
+import { NimboxIcon } from '../../icons/components';
 import { Header, Helium, Main, Navigator, Panel } from './Helium';
 
 

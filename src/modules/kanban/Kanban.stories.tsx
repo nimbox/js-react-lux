@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import classnames from 'classnames';
 import React, { FC } from 'react';
-import { PlusIcon } from '../../icons';
+import { PlusIcon } from '../../icons/components';
 import { Card, Column, uniqueCard, uniqueColumn, useKanbanStore } from '../../test/useKanbanStore';
 import { KanbanProvider, useKanbanContext } from './Kanban';
 import { MoveCardCallback, MoveColumnCallback } from './types';

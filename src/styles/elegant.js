@@ -116,7 +116,8 @@ module.exports = {
                 ...require('./control')({ theme }),
                 ...require('./postit'),
                 ...require('./tooltip'),
-                ...require('./popper')({ theme })
+                ...require('./popper')({ theme }),
+                ...require('./age'),
             })
         }),
 

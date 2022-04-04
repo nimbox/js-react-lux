@@ -1,6 +1,6 @@
 import React, { Ref } from 'react';
 import { Delay, Loading, SearchInput, SearchInputProps } from '../..';
-import { WarningIcon } from '../../icons';
+import { WarningIcon } from '../../icons/components';
 
 
 //

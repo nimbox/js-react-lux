@@ -1,5 +1,5 @@
 import React, { Ref, useImperativeHandle, useRef } from 'react';
-import { CircleCross, SearchIcon } from '../../icons';
+import { CircleCrossIcon, SearchIcon } from '../../icons/components';
 import { setRefInputValue } from '../../utilities/setRefInputValue';
 import { Input, InputProps } from './Input';
 
@@ -75,7 +75,7 @@ export const SearchInput = React.forwardRef((
             end={
                 <>
                     {end}
-                    <CircleCross
+                    <CircleCrossIcon
                         onMouseDown={handleClearMouseDown}
                         className="cursor-pointer"
                         style={{ marginRight: '0.5em' }}

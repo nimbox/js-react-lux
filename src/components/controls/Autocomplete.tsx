@@ -2,7 +2,7 @@ import React, { Ref, useEffect, useImperativeHandle, useRef, useState } from 're
 import { useOptionsCount } from '../../hooks/useOptionsCount';
 import { useOptions, UseOptionsProps, UseOptionsSupplier } from '../../hooks/useOptions';
 import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
-import { WarningIcon } from '../../icons';
+import { WarningIcon } from '../../icons/components';
 import { consumeEvent } from '../../utilities/consumeEvent';
 import { setRefInputValue } from '../../utilities/setRefInputValue';
 import { ChooseOptionList, ChooseOptionListProps } from '../choose/ChooseOptionList';

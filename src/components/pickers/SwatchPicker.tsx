@@ -2,7 +2,7 @@ import React, { Ref, useImperativeHandle, useState } from 'react';
 import tinycolor from 'tinycolor2';
 import defaultSwatches from '../../data/flat-colors';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
-import { RefreshIcon } from '../../icons';
+import { RefreshIcon } from '../../icons/components';
 import { consumeEvent } from '../../utilities/consumeEvent';
 import { setRefInputValue } from '../../utilities/setRefInputValue';
 import { InputProps } from '../controls/Input';

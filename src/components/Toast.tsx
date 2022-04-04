@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { createContext, FC, useContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { CrossIcon, DangerIcon, InfoIcon, SuccessIcon, WarningIcon } from '../icons';
+import { CrossIcon, DangerIcon, InformationIcon, SuccessIcon, WarningIcon } from '../icons/components';
 
 
 //
@@ -20,7 +20,7 @@ export interface ToastItemContent {
 
 const Icon: { [key in ToastItemType]: FC<{ className: string }> } = {
     'success': ({ className }) => <SuccessIcon className={className} />,
-    'info': ({ className }) => <InfoIcon className={className} />,
+    'info': ({ className }) => <InformationIcon className={className} />,
     'warning': ({ className }) => <WarningIcon className={className} />,
     'danger': ({ className }) => <DangerIcon className={className} />
 };

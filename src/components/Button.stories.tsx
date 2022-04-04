@@ -1,6 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 import React from 'react';
-import { CheckIcon, CrossIcon } from '../icons';
+import { CheckIcon, CrossIcon } from '../icons/components';
 import { Button, ButtonProps, RoundButton, RoundButtonProps } from './Buttons';
 
 

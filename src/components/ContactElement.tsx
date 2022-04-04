@@ -1,7 +1,6 @@
 import classnames from "classnames";
 import React, { FC } from "react";
-import { MessageIcon } from "../icons";
-import PhoneIcon from "../icons/PhoneIcon";
+import { MessageIcon, PhoneIcon } from "../icons/components";
 import { Button } from "./Buttons";
 
 

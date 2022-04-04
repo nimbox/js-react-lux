@@ -1,7 +1,7 @@
 import { default as classnames } from 'classnames';
 import React, { FC, Ref, useCallback, useContext, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { AngleDownIcon } from '../../icons';
+import { AngleDownIcon } from '../../icons/components';
 import { Popper, PopperProps } from '../Popper';
 import { Context } from './Control';
 import { Wrapper, WrapperProps } from './Wrapper';

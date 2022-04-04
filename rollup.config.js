@@ -49,7 +49,7 @@ export default [{
 
 }, {
 
-    input: 'src/icons/index.ts',
+    input: 'src/icons/components/index.ts',
     output: [{
         dir: 'dist/icons',
         format: 'esm',
@@ -74,7 +74,7 @@ export default [{
         typescript({
             clean: true,
             tsconfigOverride: {
-                include: ["src/icons"],
+                include: ["src/icons/components"],
                 exclude: ["stories/**/*", "**/*.stories.tsx", "src/i18n.tsx"]
             }
         }),
