@@ -13,7 +13,7 @@ export default {
     parameters: {
         layout: 'centered'
     }
-}
+};
 
 interface Option {
     value: string;

@@ -1,10 +1,11 @@
+/* eslint-disable import/no-anonymous-default-export */
 import React, { useState } from 'react';
 import { CustomSelect, CustomSelectProps } from './CustomSelect';
 
 
 // definition
 
-const definition = {
+export default {
     title: 'Component/Controls/CustomSelect',
     component: CustomSelect,
     argTypes: {
@@ -13,7 +14,6 @@ const definition = {
         align: { control: { type: 'radio', options: ['start', 'end', 'stretch'] } }
     }
 };
-export default definition;
 
 //  parameterized
 

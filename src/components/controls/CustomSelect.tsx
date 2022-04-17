@@ -23,7 +23,7 @@ export interface CustomSelectOptionProps {
 type ContextProps = Pick<CustomSelectProps, 'scale' | 'value' | 'onChange'>;
 const Context = createContext<ContextProps>({ scale: 'base', value: [], onChange: () => [] });
 
-interface CustomSelectComponent extends FC<CustomSelectProps> {
+export interface CustomSelectComponent extends FC<CustomSelectProps> {
     Option: FC<CustomSelectOptionProps>;
 }
 
