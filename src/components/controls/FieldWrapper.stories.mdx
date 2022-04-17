@@ -1,0 +1,30 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Component/Controls/FieldWrapperDoc" 
+    parameters={{
+        layout: 'centered'
+    }}
+/>
+
+
+# Field
+
+Fields are used to collect data from the user. They can be input boxes,
+pull-down menus, or other types of input. They can have some next that moves
+from placeholder to label and they can have various rendering variants. We are
+relying heavily on how material design renders fields.
+
+The basic for a field is:
+
+```html
+<div className="relative lux-field-filled lux-field-empty">
+    <label className="absolute">Label</label>
+    <div className="inline-flex">
+        {start && <div className="flex-none">start</div>}
+        <div className="flex-auto">{children}</div>
+        {end && <div className="flex-none">end</div>}
+        <div className="absolute inset-0" /> <!-- line decorations -->
+    </div>
+    <p>Messages</p>
+</div>
+```

@@ -2,7 +2,6 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 const plugin = require('tailwindcss/plugin');
 
 
-
 module.exports = {
 
     theme: {
@@ -29,7 +28,14 @@ module.exports = {
 
                 'control-bg': '#ffffff',
                 'control-border': '#888888',
+                'control-fill': '#f0f0f0',
                 'control-placeholder': '#a0a0a0',
+
+                'control-border-hover': '#888888',
+                'control-fill-hover': '#e8e8e8',
+
+                'control-border-disabled': '#c0c0c0',
+                'control-fill-disabled': '#f8f8f8',
 
                 // 'control-bg': '#fef3fb',
                 // 'control-border': '#F012BE',

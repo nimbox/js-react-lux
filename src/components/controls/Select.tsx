@@ -87,8 +87,8 @@ const NativeSelect = React.forwardRef<HTMLSelectElement, SelectProps & React.Sel
         start,
         end,
 
-        error,
         disabled,
+        error,
 
         placeholder,
         className,
@@ -128,8 +128,9 @@ const NativeSelect = React.forwardRef<HTMLSelectElement, SelectProps & React.Sel
             <Wrapper
 
                 variant={variant}
-                error={error}
+
                 disabled={disabled}
+                error={error}
 
                 start={start}
                 end={
