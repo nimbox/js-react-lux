@@ -7,6 +7,7 @@ const SvgClock = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 32 32"
     width="1em"
     height="1em"
+    fill="currentColor"
     {...props}
   >
     <path d="M16 32C8 32 1.5 25.5 1.5 17.5S8 3 16 3s14.5 6.5 14.5 14.5S24 32 16 32Zm0-26C9.66 6 4.5 11.16 4.5 17.5S9.66 29 16 29s11.5-5.16 11.5-11.5S22.34 6 16 6Z" />

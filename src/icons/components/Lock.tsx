@@ -7,6 +7,7 @@ const SvgLock = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 32 32"
     width="1em"
     height="1em"
+    fill="currentColor"
     {...props}
   >
     <path d="M24.5 30h-17C5.57 30 4 28.43 4 26.5v-11C4 13.57 5.57 12 7.5 12h17c1.93 0 3.5 1.57 3.5 3.5v11c0 1.93-1.57 3.5-3.5 3.5Zm-17-15c-.28 0-.5.22-.5.5v11c0 .28.22.5.5.5h17c.28 0 .5-.22.5-.5v-11c0-.28-.22-.5-.5-.5h-17Z" />

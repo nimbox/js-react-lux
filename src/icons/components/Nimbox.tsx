@@ -7,6 +7,7 @@ const SvgNimbox = (props: SVGProps<SVGSVGElement>) => (
     width="1em"
     height="1em"
     viewBox="0 0 216.833 227.492"
+    fill="currentColor"
     {...props}
   >
     <path fill="#F7CE3C" d="m42.111 98.075 66.325-6.472v15.281z" />

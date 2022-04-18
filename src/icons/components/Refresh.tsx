@@ -7,6 +7,7 @@ const SvgRefresh = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 32 32"
     width="1em"
     height="1em"
+    fill="currentColor"
     {...props}
   >
     <path d="M20.71 20.71c-.39-.39-.26-.71.29-.71h6c.55 0 1 .45 1 1v6c0 .55-.32.68-.71.29L20.7 20.7ZM11.29 11.29c.39.39.26.71-.29.71H5c-.55 0-1-.45-1-1V5c0-.55.32-.68.71-.29l6.59 6.59Z" />

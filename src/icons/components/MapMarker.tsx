@@ -7,6 +7,7 @@ const SvgMapMarker = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 32 32"
     width="1em"
     height="1em"
+    fill="currentColor"
     {...props}
   >
     <circle cx={16} cy={14.5} r={4} />

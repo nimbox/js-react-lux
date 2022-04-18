@@ -7,6 +7,7 @@ const SvgThumbsDown = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 32 32"
     width="1em"
     height="1em"
+    fill="currentColor"
     {...props}
   >
     <path d="M28.5 22h-2c-1.93 0-3.5-1.57-3.5-3.5v-15C23 1.57 24.57 0 26.5 0h2C30.43 0 32 1.57 32 3.5v15c0 1.93-1.57 3.5-3.5 3.5Zm-2-19c-.28 0-.5.22-.5.5v15c0 .28.22.5.5.5h2c.28 0 .5-.22.5-.5v-15c0-.28-.22-.5-.5-.5h-2Z" />

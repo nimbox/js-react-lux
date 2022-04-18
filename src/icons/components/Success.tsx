@@ -7,6 +7,7 @@ const SvgSuccess = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 32 32"
     width="1em"
     height="1em"
+    fill="currentColor"
     {...props}
   >
     <path d="M14 22.5a1.5 1.5 0 0 1-1.17-.56l-4-5c-.52-.65-.41-1.59.23-2.11.65-.52 1.59-.41 2.11.23L14 18.6l6.83-8.54c.52-.65 1.46-.75 2.11-.23.65.52.75 1.46.23 2.11l-8 10c-.28.36-.71.56-1.17.56Z" />

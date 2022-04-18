@@ -62,7 +62,7 @@ export const OneRemFilled = () => (
         <h1 className="text-xl mb-2">Default</h1>
         <div className="grid grid-cols-8 gap-4">
             {Object.keys(icons).sort().map((i) =>
-                <Tile icon={i} className="w-4 h-4 text-red-500 fill-current" />
+                <Tile icon={i} className="w-4 h-4 text-red-500" />
             )}
         </div>
     </div>
@@ -73,7 +73,7 @@ export const TwoRemFilled = () => (
         <h1 className="text-xl mb-2">Default</h1>
         <div className="grid grid-cols-8 gap-4">
             {Object.keys(icons).sort().map((i) =>
-                <Tile icon={i} className="w-8 h-8 text-red-500 fill-current" />
+                <Tile icon={i} className="w-8 h-8 text-red-500" />
             )}
         </div>
     </div>
@@ -81,6 +81,6 @@ export const TwoRemFilled = () => (
 
 export const ForInputs = () => (
     <div>
-        <icons.CalendarIcon className="inline-block" /><icons.ClockIcon className="inline-block" />
+        <icons.CalendarIcon className="" /><icons.ClockIcon className="" />
     </div>
 );

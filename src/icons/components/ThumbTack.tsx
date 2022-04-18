@@ -7,6 +7,7 @@ const SvgThumbTack = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 32 32"
     width="1em"
     height="1em"
+    fill="currentColor"
     {...props}
   >
     <path d="M29.33 30.86c-.38 0-.77-.15-1.06-.44l-8.13-8.13c-.59-.59-.59-1.54 0-2.12s1.54-.59 2.12 0l8.13 8.13c.59.59.59 1.54 0 2.12-.29.29-.68.44-1.06.44Z" />

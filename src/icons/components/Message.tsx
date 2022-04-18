@@ -7,6 +7,7 @@ const SvgMessage = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 32 32"
     width="1em"
     height="1em"
+    fill="currentColor"
     {...props}
   >
     <path d="M28.5 28h-25C1.57 28 0 26.43 0 24.5v-17C0 5.57 1.57 4 3.5 4h25C30.43 4 32 5.57 32 7.5v17c0 1.93-1.57 3.5-3.5 3.5ZM3.5 7c-.28 0-.5.22-.5.5v17c0 .28.22.5.5.5h25c.28 0 .5-.22.5-.5v-17c0-.28-.22-.5-.5-.5h-25Z" />

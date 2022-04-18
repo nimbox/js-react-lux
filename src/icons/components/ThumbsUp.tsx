@@ -7,6 +7,7 @@ const SvgThumbsUp = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 32 32"
     width="1em"
     height="1em"
+    fill="currentColor"
     {...props}
   >
     <path d="M5.5 32.04h-2c-1.93 0-3.5-1.57-3.5-3.5V13.5C0 11.57 1.57 10 3.5 10h2C7.43 10 9 11.57 9 13.5v15.04c0 1.93-1.57 3.5-3.5 3.5ZM3.5 13c-.28 0-.5.22-.5.5v15.04c0 .28.22.5.5.5h2c.28 0 .5-.22.5-.5V13.5c0-.28-.22-.5-.5-.5h-2Z" />

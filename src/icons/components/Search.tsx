@@ -7,6 +7,7 @@ const SvgSearch = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 32 32"
     width="1em"
     height="1em"
+    fill="currentColor"
     {...props}
   >
     <path d="M14 26C7.38 26 2 20.62 2 14S7.38 2 14 2s12 5.38 12 12-5.38 12-12 12Zm0-21c-4.96 0-9 4.04-9 9s4.04 9 9 9 9-4.04 9-9-4.04-9-9-9Z" />

@@ -7,6 +7,7 @@ const SvgGroup = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 32 32"
     width="1em"
     height="1em"
+    fill="currentColor"
     {...props}
   >
     <path d="M20.5 27.5c-.83 0-1.5-.67-1.5-1.5 0-4.41-3.36-8-7.5-8S4 21.59 4 26c0 .83-.67 1.5-1.5 1.5S1 26.83 1 26c0-6.07 4.71-11 10.5-11S22 19.93 22 26c0 .83-.67 1.5-1.5 1.5Z" />

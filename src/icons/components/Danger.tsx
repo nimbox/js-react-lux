@@ -7,6 +7,7 @@ const SvgDanger = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 32 32"
     width="1em"
     height="1em"
+    fill="currentColor"
     {...props}
   >
     <path d="M16.75 16.66c-.41.18-1.09.18-1.5 0s-.75-1.61-.75-2.16V11c0-.55.18-1.41.41-1.91 0 0 .26-.59 1.09-.59s1.09.59 1.09.59c.22.5.41 1.36.41 1.91v3.5c0 .55-.34 1.98-.75 2.16Z" />

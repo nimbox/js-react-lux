@@ -7,6 +7,7 @@ const SvgAnniversary = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 32 32"
     width="1em"
     height="1em"
+    fill="currentColor"
     {...props}
   >
     <path d="M26.5 32h-21C3.57 32 2 30.43 2 28.5v-21C2 5.57 3.57 4 5.5 4h21C28.43 4 30 5.57 30 7.5v21c0 1.93-1.57 3.5-3.5 3.5ZM5.5 7c-.28 0-.5.22-.5.5v21c0 .28.22.5.5.5h21c.28 0 .5-.22.5-.5v-21c0-.28-.22-.5-.5-.5h-21Z" />
