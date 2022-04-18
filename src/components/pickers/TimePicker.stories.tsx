@@ -2,7 +2,7 @@
 import { action } from "@storybook/addon-actions";
 import React, { useRef, useState } from 'react';
 import '../../index.css';
-import { Button } from "../Buttons";
+import { Button } from "../Button";
 import { TimePicker } from './TimePicker';
 
 

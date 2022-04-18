@@ -1,0 +1,124 @@
+import { useState } from 'react';
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+import { CheckBar } from '../components/CheckBar';
+import { RadioBar } from '../components/RadioBar';
+import { Button } from '../components/Button';
+import { controlScale } from '../components/ComponentScale';
+import { FullCircleIcon, FullSquareIcon } from '../icons/components';
+
+
+export const CheckboxBarSample = ({ scale }) => {
+    const [value, onChange] = useState([1]);
+    return (
+        <CheckBar scale={scale} value={value} onChange={onChange}>
+            <CheckBar.Option value={1}>1</CheckBar.Option>
+            <CheckBar.Option value={2}>2</CheckBar.Option>
+            <CheckBar.Option value={3}>3</CheckBar.Option>
+            <CheckBar.Option value={6}>6</CheckBar.Option>
+            <CheckBar.Option value={12}>12 months</CheckBar.Option>
+        </CheckBar>
+    );
+};
+
+export const RadioBarSample = ({ scale }) => {
+    const [value, onChange] = useState([1]);
+    return (
+        <RadioBar scale={scale} value={value} onChange={onChange}>
+            <RadioBar.Option value={1}>1</RadioBar.Option>
+            <RadioBar.Option value={2}>2</RadioBar.Option>
+            <RadioBar.Option value={3}>3</RadioBar.Option>
+            <RadioBar.Option value={6}>6</RadioBar.Option>
+            <RadioBar.Option value={12}>12 months</RadioBar.Option>
+        </RadioBar>
+    );
+};
+
+
+<Meta title="Standards/Scales and Paddings"/>
+
+# Components
+
+Components required a very strict set of rules so that they don't become a
+nightmare to extend and maintain. This document is intended to provide the rules
+that we have used to create the components. Please do not deviate. 
+
+## Sizes
+
+We are using a basic font scale for `html` of `14px`.  Most sites use `16px` as
+the default font scale, but since our applications are very data intensive we
+need to pack more density. We tried `12px` but the smaller scales were really to
+small.
+
+When applying the default scalings from tailwind we end up with these scales. We
+are only using `rems` as units so `px` are only for reference.
+
+<Canvas>
+    <div>
+        <div className="text-xs">The quick brown fox jumps over the lazy dog (xs 0.75rem 10.5px)</div>
+        <div className="text-sm">The quick brown fox jumps over the lazy dog (sm 0.875rem 12.5px)</div>
+        <div className="text-base">The quick brown fox jumps over the lazy dog (base 1rem 14px)</div>
+        <div className="text-lg">The quick brown fox jumps over the lazy dog (lg 1.125rem 15.75px)</div>
+        <div className="text-xl">The quick brown fox jumps over the lazy dog (xl 1.75rem 17.5px)</div>
+    </div>
+</Canvas>
+
+## Layouts
+
+There are various layouts that are used all over the components. We adhere to 
+this set of rules based on the layout.
+
+### Adorned with start or end elements
+
+Fields and buttons can have adornments at the start and end of them. These
+adornments are usually icons, but can be anything. We want this layout to
+maintain the baseline of the field or button to use them inline. 
+
+The structure is:
+
+<Canvas isExpanded={true}>
+<div className="text-center">
+    Before
+    <div className="inline-flex items-baseline bg-green-100">
+        <div className="flex-none self-center flex items-center" style={{ height: 0, marginRight: '0.75em' }}>
+            <FullSquareIcon className="bg-red-100 text-xs"/>
+        </div>
+        <div className="flex-1 bg-blue-100">
+            THE CONTENT
+        </div>
+        <div className="flex-none self-center flex items-center" style={{ height: 0, marginLeft: '0.75em' }}>
+            <FullSquareIcon className="bg-red-100 text-4xl"/>
+        </div>
+    </div>
+    After
+</div>
+</Canvas>
+
+With the above structure and markup we guarantee that:
+
+* The baseline is maintained with the provided content but the adornments are
+  centered. Notice the `items-baseline` on the base div and the `self-center` on
+  the `start` and `end` adornments.
+* The height of the adornment does not affect the height of the content. Notice 
+  the `height: 0` to limit the height but to maintain the adornments centered.
+  For some reason `h-0` does not work.
+
+We have created the base css classes to facilitate this layout.
+
+<Canvas isExpanded={true}>
+<div className="text-center">
+    Before
+    <div className="lux-adorn bg-green-100">
+        <div className="lux-adorn-start">
+            <FullSquareIcon className="bg-red-100 text-xs"/>
+        </div>
+        <div className="lux-adorn-content bg-blue-100">
+            THE CONTENT
+        </div>
+        <div className="lux-adorn-end">
+            <FullSquareIcon className="bg-red-100 text-4xl"/>
+        </div>
+    </div>
+    After
+</div>
+</Canvas>
+

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MoreOptionsButton, MoreOptionsButtonProps } from './Buttons';
+import { MoreOptionsButton, MoreOptionsButtonProps } from './Button';
 
 
 // definition

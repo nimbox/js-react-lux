@@ -3,6 +3,9 @@ const path = require('path');
 module.exports = {
     icon: true,
     expandProps: true,
+    svgProps: {
+        'fill': 'currentColor',
+    },
     indexTemplate: (filePaths) => {
         const exportEntries = filePaths.map((filePath) => {
             const basename = path.basename(filePath, path.extname(filePath));

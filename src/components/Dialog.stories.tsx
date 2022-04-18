@@ -1,6 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 import React, { useState } from 'react';
-import { Button } from './Buttons';
+import { Button } from './Button';
 import { Close } from './Close';
 import { Dialog } from './Dialog';
 
@@ -37,7 +37,7 @@ export const Simple = () => {
                 </Dialog.Body>
 
                 <Dialog.Footer className="px-3 py-2 flex flex-row justify-end space-x-2 items-center">
-                    <Button color="secondary" onClick={() => setVisible(false)}>Cancel</Button>
+                    <Button semantic="secondary" onClick={() => setVisible(false)}>Cancel</Button>
                     <Button onClick={() => setVisible(false)}>Ok</Button>
                 </Dialog.Footer>
 

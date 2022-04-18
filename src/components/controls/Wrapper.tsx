@@ -51,7 +51,7 @@ export interface WrapperProps {
 
 /**
  * Wrapper. Container of all inputs that require a focus, disabled, or error 
- * disply. Assume this elements acts as a `div` without any css classes or
+ * display. Assume this elements acts as a `div` without any css classes or
  * style.
  */
 export const Wrapper = React.forwardRef((

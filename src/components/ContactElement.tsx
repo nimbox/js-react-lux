@@ -1,7 +1,7 @@
 import classnames from "classnames";
 import React, { FC } from "react";
 import { MessageIcon, PhoneIcon } from "../icons/components";
-import { Button } from "./Buttons";
+import { Button } from "./Button";
 
 
 export interface ContactElementProps {

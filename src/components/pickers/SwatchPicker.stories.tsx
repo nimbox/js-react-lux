@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { action } from '@storybook/addon-actions';
 import { useRef, useState } from 'react';
-import { Button } from '../Buttons';
+import { Button } from '../Button';
 import { SwatchPicker, SwatchPickerProps } from './SwatchPicker';
 
 

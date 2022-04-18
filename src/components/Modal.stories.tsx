@@ -1,6 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 import React, { useState } from 'react';
-import { Button } from './Buttons';
+import { Button } from './Button';
 import { Modal } from './Modal';
 
 

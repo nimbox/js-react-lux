@@ -1,6 +1,6 @@
 import { Meta, Story, Canvas } from '@storybook/addon-docs';
-import { Button } from './Buttons';
-import { EditIcon, AngleRightIcon } from '../icons/components';
+import { Button } from './Button';
+import { FullSquareIcon, EditIcon, AngleRightIcon } from '../icons/components';
 
 
 <Meta title="Component/Buttons" 
@@ -11,22 +11,13 @@ import { EditIcon, AngleRightIcon } from '../icons/components';
 
 Buttons are everywhere
 
-export const Template = ({ children, ...args }) => <Button {...args}>{children}</Button>;
-
 <Canvas>
-    <Story name="Template" args={{ color: 'primary', variant: 'filled', children: 'Content' }} parameters={{ layout:'centered' }}>
-        {Template.bind({})}
-    </Story>
-</Canvas>
-
-<Canvas>
-    <Story name="Sizes">
-        <div className="flex flex-row justify-between items-baseline">
-            <span className="text-xs">Extra Small <Button>Extra Small</Button></span>
-            <span className="text-sm">Small <Button>Small</Button></span>
-            <span className="text-base">Base <Button>Base</Button></span>
-            <span className="text-lg">Large <Button>Large</Button></span>
-            <span className="text-xl">Extra Large <Button>Extra Large</Button></span>
+    <Story name="Baseline">
+        <div className="text-center">
+            <Button semantic="primary" variant="filled">filled</Button>
+            <Button semantic="primary" variant="outlined">Outlined</Button>
+            <Button semantic="primary" variant="text">text</Button>
+            <Button semantic="primary" variant="link">Link</Button>
         </div>
     </Story>
 </Canvas>
@@ -35,66 +26,95 @@ export const Template = ({ children, ...args }) => <Button {...args}>{children}<
     <Story name="Variants">
         <div className="space-y-2">
             <div className="flex flex-row justify-between items-baseline">
-                <Button color="primary" variant="filled">filled</Button>
-                <Button color="primary" variant="text">text</Button>
-                <Button color="primary" variant="outlined">Outlined</Button>
-                <Button color="primary" variant="link">Link</Button>
+                <Button semantic="primary" variant="filled">filled</Button>
+                <Button semantic="primary" variant="outlined">Outlined</Button>
+                <Button semantic="primary" variant="text">text</Button>
+                <Button semantic="primary" variant="link">Link</Button>
             </div>
             <div className="flex flex-row justify-between items-baseline">
-                <Button color="secondary" variant="filled">filled</Button>
-                <Button color="secondary" variant="text">text</Button>
-                <Button color="secondary" variant="outlined">Outlined</Button>
-                <Button color="secondary" variant="link">Link</Button>
+                <Button semantic="secondary" variant="filled">filled</Button>
+                <Button semantic="secondary" variant="outlined">Outlined</Button>
+                <Button semantic="secondary" variant="text">text</Button>
+                <Button semantic="secondary" variant="link">Link</Button>
             </div>
             <div className="flex flex-row justify-between items-baseline">
-                <Button color="muted" variant="filled">filled</Button>
-                <Button color="muted" variant="text">text</Button>
-                <Button color="muted" variant="outlined">Outlined</Button>
-                <Button color="muted" variant="link">Link</Button>
+                <Button semantic="muted" variant="filled">filled</Button>
+                <Button semantic="muted" variant="outlined">Outlined</Button>
+                <Button semantic="muted" variant="text">text</Button>
+                <Button semantic="muted" variant="link">Link</Button>
+            </div>
+            <div className="flex flex-row justify-between items-baseline">
+                <Button semantic="danger" variant="filled">filled</Button>
+                <Button semantic="danger" variant="outlined">Outlined</Button>
+                <Button semantic="danger" variant="text">text</Button>
+                <Button semantic="danger" variant="link">Link</Button>
             </div>
         </div>
     </Story>
 </Canvas>
 
-Icons, or any other react node, can be placed at the start or at the end of the 
-button. The placement is done with a flex row layou in which the only growing 
-part is the children. The child elements are wrapped inside a span to make sure
-that it can grow. 
+<Canvas>
+    <Story name="Adornments">
+        <div className="space-y-2">
+            <div className="flex flex-row justify-between items-baseline">
+                <Button semantic="primary" variant="filled" start={<FullSquareIcon/>} end={<FullSquareIcon/>}>FilledX</Button>
+                <Button semantic="primary" variant="outlined">Outlined</Button>
+                <Button semantic="primary" variant="text">text</Button>
+                <Button semantic="primary" variant="link">Link</Button>
+            </div>
+            <div className="flex flex-row justify-between items-baseline">
+                <Button semantic="secondary" variant="filled">filled</Button>
+                <Button semantic="secondary" variant="outlined">Outlined</Button>
+                <Button semantic="secondary" variant="text">text</Button>
+                <Button semantic="secondary" variant="link">Link</Button>
+            </div>
+            <div className="flex flex-row justify-between items-baseline">
+                <Button semantic="muted" variant="filled">filled</Button>
+                <Button semantic="muted" variant="outlined">Outlined</Button>
+                <Button semantic="muted" variant="text">text</Button>
+                <Button semantic="muted" variant="link">Link</Button>
+            </div>
+            <div className="flex flex-row justify-between items-baseline">
+                <Button semantic="danger" variant="filled">filled</Button>
+                <Button semantic="danger" variant="outlined">Outlined</Button>
+                <Button semantic="danger" variant="text">text</Button>
+                <Button semantic="danger" variant="link">Link</Button>
+            </div>
+        </div>
+    </Story>
+</Canvas>
 
 <Canvas>
     <Story name="With icons">
         <div className="text-center space-x-2 text-base">
-            <Button color="muted" variant="outlined" start={<EditIcon className="stroke-2"/>}>Edit</Button>
-            <Button color="muted" variant="outlined" end={<AngleRightIcon className="stroke-2"/>}>Continue</Button>
+            <Button variant="outlined" semantic="muted" start={<EditIcon/>}>Edit</Button>
+            <Button variant="outlined" semantic="muted" end={<AngleRightIcon/>}>Continue</Button>
         </div>
     </Story>
 </Canvas>
-
 
 <Canvas>
     <Story name="With shared baseline">
         <div className="space-y-2">
             <div className="text-center space-x-2 text-base">
                 <span>Edit</span>
-                <Button color="muted" variant="outlined">Edit</Button>
-                <Button color="muted" variant="outlined" start={<EditIcon className="stroke-2"/>}>Edit</Button>
-                <Button color="muted" variant="outlined" end={<AngleRightIcon className="stroke-2"/>}>Continue</Button>
-                <Button color="muted" variant="outlined">Continue</Button>
+                <Button semantic="muted" variant="outlined">Edit</Button>
+                <Button semantic="muted" variant="outlined" start={<EditIcon className="stroke-2"/>}>Edit</Button>
+                <Button semantic="muted" variant="outlined" end={<AngleRightIcon className="stroke-2"/>}>Continue</Button>
+                <Button semantic="muted" variant="outlined">Continue</Button>
                 <span>Continue</span>
             </div>
             <div className="text-center space-x-2 text-base">
                 <span>Edit</span>
-                <Button color="muted" variant="text">Edit</Button>
-                <Button color="muted" variant="text" start={<EditIcon className="stroke-2"/>}>Edit</Button>
-                <Button color="muted" variant="text" end={<AngleRightIcon className="stroke-2"/>}>Continue</Button>
-                <Button color="muted" variant="text">Continue</Button>
+                <Button semantic="muted" variant="text">Edit</Button>
+                <Button semantic="muted" variant="text" start={<EditIcon className="stroke-2"/>}>Edit</Button>
+                <Button semantic="muted" variant="text" end={<AngleRightIcon className="stroke-2"/>}>Continue</Button>
+                <Button semantic="muted" variant="text">Continue</Button>
                 <span>Continue</span>
             </div>
         </div>
     </Story>
 </Canvas>
-
-
 
 <Canvas>
     <Story name="All are same height">

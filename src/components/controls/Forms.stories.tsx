@@ -1,5 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { Button } from '../Buttons';
+import { Button } from '../Button';
 import { CheckBox } from './CheckBox';
 import { Control, ControlProps } from './Control';
 import { Input } from './Input';
@@ -73,7 +73,7 @@ export const Parameterized = ({ error, ...props }: ControlProps & { options: str
                 </div>
                 <div className="inline">
                     <Button className="mr-4" >Enviar</Button>
-                    <Button color="secondary"  >Cancelar</Button>
+                    <Button semantic="secondary"  >Cancelar</Button>
                 </div>
             </div>
         </div>

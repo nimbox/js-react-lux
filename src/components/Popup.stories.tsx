@@ -2,7 +2,7 @@
 import { action } from '@storybook/addon-actions';
 import { Story } from '@storybook/react';
 import React, { FC, useState } from 'react';
-import { Button } from './Buttons';
+import { Button } from './Button';
 import { Popup, PopupProps } from './Popup';
 
 

@@ -1,0 +1,274 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import { Wrapper } from './Wrapper';
+import { FieldPopper } from './FieldPopper';
+import { AngleDownIcon } from '../../icons/components';
+import { useState } from 'react';
+
+
+<Meta 
+    title="Component/controls/FieldPopper" 
+    component={FieldPopper} 
+    parameters={{
+        layout: 'centered'
+    }}
+/>
+
+# FieldPopper
+
+This is an extension the `Field` component that manages a popper associated to
+it. It provides all the same properties as a `Field`, but also adds a `popper`
+property to represent the `popper` element.
+
+export const Template = ({inside, ...args}) => <Wrapper {...args}>{inside}</Wrapper>
+
+<Canvas>
+    <Story name="Template" args={{ disabled: false, error: false, inside: 'Inside' }}>
+        {Template.bind({ })}
+    </Story>
+    <Story name="Template Undefined" args={{ disabled: false, error: false }}>
+        {Template.bind({ })}
+    </Story>
+    <Story name="Template Empty" args={{ disabled: false, error: false, inside: '' }}>
+        {Template.bind({ })}
+    </Story>
+    <Story name="Template Space" args={{ disabled: false, error: false, inside: '  ' }}>
+        {Template.bind({ })}
+    </Story>
+</Canvas>
+
+<ArgsTable of={Wrapper} /> 
+
+## Structure
+
+In orde to use referenes and classes is important to understand where the `ref`
+and `className` properties endup in the HTML structure.
+
+```html
+<div ref={ref}>                       <!-- relative -->
+    <div className={className}>       <!-- absolute and min height-->
+       {children}
+    </div>
+    {start && <div>start icons</div>} <!-- absolute left -->
+    {end && <div>end icons</div>}     <!--  absolute right -->
+<div>
+<div>
+    {popper}                          <!-- the popper only when show === true --> 
+</div>
+```
+
+## Variants
+
+There are three variants for this component of `outlined`, `filled`, and
+`inlined`. Typically using `outlined`.
+
+export const TemplateClick = ({variant, ...args}) => {
+    const [show, setShow] = useState(true);
+    return (
+        <FieldPopper 
+            variant={variant}
+            show={show}
+            onChangeShow={setShow}
+            withArrow={true}
+            renderPopper={() => <div className="p-4">World!</div>}
+            onClick={() => setShow(!show)}
+            {...args}
+        >
+            Hello
+        </FieldPopper>
+    );
+};
+
+export const TemplateHover = ({variant, ...args}) => {
+    const [show, setShow] = useState(false);
+    return (
+        <FieldPopper 
+            variant={variant}
+            show={show}
+            onChangeShow={setShow}
+            withArrow={true}
+            renderPopper={() => <div className="p-4">World!</div>}
+            onMouseEnter={() => setShow(true)}
+            onMouseLeave={() => setShow(false)}
+            {...args}
+        >
+            Hello
+        </FieldPopper>
+    );
+};
+
+### OnClick
+
+<Canvas>
+    <Story name="Variant Outlined Click" args={{ variant: 'outlined' }}>
+        {TemplateClick.bind({ })}
+    </Story>
+    <Story name="Variant Filled Click" args={{ variant: 'filled' }}>
+        {TemplateClick.bind({ })}
+    </Story>
+    <Story name="Variant Inline Click" args={{ variant: 'inlined' }}>
+        {TemplateClick.bind({ })}
+    </Story>
+</Canvas>
+
+### OnHover
+
+<Canvas>
+    <Story name="Variant Outlined Hover" args={{variant: 'outlined'}}>
+        {TemplateHover.bind({ })}
+    </Story>
+    <Story name="Variant Filled Hover" args={{variant: 'filled'}}>
+        {TemplateHover.bind({ })}
+    </Story>
+    <Story name="Variant Inline Hover" args={{variant: 'inlined'}}>
+        {TemplateHover.bind({ })}
+    </Story>
+</Canvas>
+
+Additionally add `withNoFull` to make the element an `inline-block` and to 
+not extend the full with of its container.
+
+<Canvas>
+    <Story name="Variant Outlined With Full" args={{ variant: 'outlined', className: 'block w-full' }}>
+        {TemplateHover.bind({ })}
+    </Story>
+</Canvas>
+
+<Canvas>
+    <Story name="Variant Outlined Without Full Width" args={{ variant: 'outlined', className: 'inline-block' }}>>
+        {TemplateHover.bind({ })}
+    </Story>
+</Canvas>
+
+
+This is helpful to to the an `inlined` variant withing some text.
+
+<Canvas>
+    <Story name="Variant Inlined Without Full Width">
+        <div>
+            Please select <FieldPopper variant="inlined" end={<AngleDownIcon className="stroke-1"/>} defaultShow={true} withArrow={true} renderPopper={() => <div className="p-4">World!</div>} className="inline-block">user</FieldPopper> responsible for the task.
+        </div>
+    </Story>
+</Canvas>
+
+### OnFocus
+
+
+When focusing on the wrapper itself.
+
+export const TemplateFocus = ({variant, ...args}) => {
+    const [show, setShow] = useState(false);
+    return (
+        <FieldPopper 
+            tabIndex={0}
+            variant={variant}
+            show={show}
+            onChangeShow={setShow}
+            withArrow={true}
+            renderPopper={() => <div className="p-4">World!</div>}
+            {...args}
+        >
+            Hello
+        </FieldPopper>
+    );
+};
+
+<Canvas>
+    <Story name="Variant Outlined Focus" args={{variant: 'outlined'}}>
+        {TemplateFocus.bind({ })}
+    </Story>
+    <Story name="Variant Filled Focus" args={{variant: 'filled'}}>
+        {TemplateFocus.bind({ })}
+    </Story>
+    <Story name="Variant Inline Focus" args={{variant: 'inlined'}}>
+        {TemplateFocus.bind({ })}
+    </Story>
+</Canvas>
+
+When focusing inside an input element controlled.
+
+export const TemplateFocusInputControlled = ({variant, ...args}) => {
+    const [show, setShow] = useState(false);
+    return (
+        <FieldPopper 
+            variant={variant}
+            show={show}
+            onChangeShow={setShow}
+            withArrow={true}
+            renderPopper={() => <div className="p-4">World!</div>}
+            {...args}
+        >
+            <input className="bg-transparent outline-none focus:outline-none"/>
+        </FieldPopper>
+    );
+};
+
+<Canvas>
+    <Story name="Variant Outlined Focus Input Controlled" args={{variant: 'outlined'}}>
+        {TemplateFocusInputControlled.bind({ })}
+    </Story>
+    <Story name="Variant Filled Focus Input Controlled" args={{variant: 'filled'}}>
+        {TemplateFocusInputControlled.bind({ })}
+    </Story>
+    <Story name="Variant Inline Focus Input Controlled" args={{variant: 'inlined'}}>
+        {TemplateFocusInputControlled.bind({ })}
+    </Story>
+</Canvas>
+
+When focusing inside an input element uncontrolled.
+
+export const TemplateFocusInputUncontrolled = ({variant, ...args}) => {
+    return (
+        <FieldPopper 
+            variant={variant}
+            defaultShow={false}
+            withArrow={true}
+            renderPopper={() => <div className="p-4">World!</div>}
+            {...args}
+        >
+            <input className="bg-transparent outline-none focus:outline-none"/>
+        </FieldPopper>
+    );
+};
+
+<Canvas>
+    <Story name="Variant Outlined Focus Input Uncontrolled" args={{variant: 'outlined'}}>
+        {TemplateFocusInputUncontrolled.bind({ })}
+    </Story>
+    <Story name="Variant Filled Focus Input Uncontrolled" args={{variant: 'filled'}}>
+        {TemplateFocusInputUncontrolled.bind({ })}
+    </Story>
+    <Story name="Variant Inline Focus Input ContrUncontrolledolled" args={{variant: 'inlined'}}>
+        {TemplateFocusInputUncontrolled.bind({ })}
+    </Story>
+</Canvas>
+
+When focusing inside an input element without responding to the click toggle.
+
+export const TemplateFocusInputNoToggle = ({variant, ...args}) => {
+    const [show, setShow] = useState(false);
+    return (
+        <FieldPopper 
+            variant={variant}
+            withToggle={false}
+            show={show}
+            onChangeShow={setShow}
+            withArrow={true}
+            renderPopper={() => <div className="p-4">World!</div>}
+            {...args}
+        >
+            <input defaultValue="asd" onChange={setShow} className="bg-transparent outline-none focus:outline-none"/>
+        </FieldPopper>
+    );
+};
+
+<Canvas>
+    <Story name="Variant Outlined Focus Input No Toggle" args={{variant: 'outlined'}}>
+        {TemplateFocusInputNoToggle.bind({ })}
+    </Story>
+    <Story name="Variant Filled Focus Input No Toggle" args={{variant: 'filled'}}>
+        {TemplateFocusInputNoToggle.bind({ })}
+    </Story>
+    <Story name="Variant Inline Focus Input No Toggle" args={{variant: 'inlined'}}>
+        {TemplateFocusInputNoToggle.bind({ })}
+    </Story>
+</Canvas>

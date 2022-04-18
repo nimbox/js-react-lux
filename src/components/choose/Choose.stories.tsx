@@ -4,7 +4,7 @@ import { useEffect } from '@storybook/addons';
 import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createSearchMatcher } from '../../utilities/createSearchMatcher';
-import { Button } from '../Buttons';
+import { Button } from '../Button';
 import { Choose, ChooseProps } from './Choose';
 
 

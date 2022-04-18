@@ -1,11 +1,16 @@
 import classNames from 'classnames';
-import { FC, ReactElement } from 'react';
+import React from 'react';
+import { FC, ReactElement, Ref } from 'react';
 
 
 export type FieldVariant = 'outlined' | 'filled' | 'inlined';
 
-export interface FieldProps {
+export interface FieldProps extends React.HTMLAttributes<HTMLDivElement> {
 
+    /**
+     * Variant to display the element.
+     * @default 'outlined'
+     */
     variant?: FieldVariant;
 
     label?: string;
@@ -14,24 +19,47 @@ export interface FieldProps {
     hasFocus?: boolean;
     hasValue?: boolean;
 
+    /**
+     * Show the wrapper content as disabled (currently opacity 50%).
+     */
     disabled?: boolean;
+
+    /**
+     * Show the wrapper content as error (currently danger color).
+     */
     error?: boolean;
 
+    //
+
+    /**
+     * Ornament to place at the start of the field.
+     */
     start?: ReactElement;
+
+    /**
+     * Ornament to place at the end of the field.
+     */
     end?: ReactElement;
 
+
+    /**
+     * classes to apply to the wrapper. There is a div surronding the wrapper
+     * so that it doesn't conflict with the layout of the component.
+     */
     className?: string;
 
 }
 
 
 /**
- * Field. this is the documentation.
- * 
- * @param props 
- * @returns 
+ * Field. Container of all inputs that require a focus, disabled, or error
+ * display. Assume this elements acts as a `div` without any css classes or
+ * style.
+ *
  */
-export const Field: FC<FieldProps> = (props) => {
+export const Field = React.forwardRef<HTMLDivElement, FieldProps>((props, ref) => {
+
+    // Properties
 
     const {
 
@@ -50,31 +78,39 @@ export const Field: FC<FieldProps> = (props) => {
         end,
 
         className,
+        children,
 
-        children
+        ...divProps
 
     } = props;
 
     return (
-        <div className={classNames('lux-field', {
+        <div
 
-            'lux-field-has-label': label,
-            'lux-field-shrink': shrink || (hasFocus || hasValue),
+            ref={ref}
+            {...divProps}
 
-            'lux-field-has-focus': hasFocus,
-            'lux-field-has-value': hasValue,
+            className={classNames('lux-field', {
 
-            'lux-field-outlined': variant === 'outlined',
-            'lux-field-filled': variant === 'filled',
-            'lux-field-inlined': variant === 'inlined',
+                'lux-field-has-label': label,
+                'lux-field-shrink': shrink || (hasFocus || hasValue),
 
-            'lux-field-has-start': start != null,
-            'lux-field-has-end': end != null,
+                'lux-field-has-focus': hasFocus,
+                'lux-field-has-value': hasValue,
 
-            'lux-field-has-disabled': disabled,
-            'lux-field-has-error': error
+                'lux-field-outlined': variant === 'outlined',
+                'lux-field-filled': variant === 'filled',
+                'lux-field-inlined': variant === 'inlined',
 
-        }, className)}>
+                'lux-field-has-start': start != null,
+                'lux-field-has-end': end != null,
+
+                'lux-field-disabled': disabled,
+                'lux-field-error': error
+
+            }, className)}
+
+        >
 
             <div className="lux-field-content">
 
@@ -118,4 +154,4 @@ export const Field: FC<FieldProps> = (props) => {
         </div>
     );
 
-};
+});

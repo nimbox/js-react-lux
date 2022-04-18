@@ -6,7 +6,7 @@ import { Radio } from './Radio';
 import { Select } from './Select';
 
 
-// definition
+// Definition
 
 const definition = {
     title: 'Component/Controls/Control',
@@ -18,7 +18,7 @@ const definition = {
 };
 export default definition;
 
-//  parameterized
+//  Parameterized
 
 export const Parameterized = ({ error = false, ...props }: ControlProps & { options: string[] }) => {
 

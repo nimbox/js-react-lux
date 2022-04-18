@@ -3,7 +3,7 @@ import { action } from '@storybook/addon-actions';
 import React, { useRef, useState } from 'react';
 import { CircleIcon, SquareIcon } from '../../icons/components';
 import { createSearchMatcher } from '../../utilities/createSearchMatcher';
-import { Button } from '../Buttons';
+import { Button } from '../Button';
 import { Autocomplete, AutocompleteProps } from './Autocomplete';
 
 

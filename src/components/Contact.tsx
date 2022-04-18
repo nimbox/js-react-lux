@@ -1,7 +1,7 @@
 import classnames from "classnames";
 import { FC } from "react";
 import { NimboxIcon } from "../icons/components";
-import { Button } from "./Buttons";
+import { Button } from "./Button";
 
 
 export interface ContactProps {
