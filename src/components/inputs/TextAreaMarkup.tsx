@@ -1,7 +1,6 @@
 import classnames from 'classnames';
 import React, { useContext, useState } from 'react';
 import { usePopper } from 'react-popper';
-import { ComponentScale } from '../ComponentScale';
 import { Context } from './Control';
 
 
@@ -11,11 +10,10 @@ import { Context } from './Control';
 //
 
 export interface TextAreaMarkupProps extends React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement> {
-    scale?: ComponentScale;
     error?: boolean;
 }
 
-export const TextAreaMarkup = React.forwardRef<HTMLTextAreaElement, TextAreaMarkupProps>(({ scale, error, className, ...props }, ref) => {
+export const TextAreaMarkup = React.forwardRef<HTMLTextAreaElement, TextAreaMarkupProps>(({ error, className, ...props }, ref) => {
 
     const context = useContext(Context);
 

@@ -3,7 +3,6 @@ import { Meta, Story, Canvas } from '@storybook/addon-docs';
 import { CheckBar } from '../components/CheckBar';
 import { RadioBar } from '../components/RadioBar';
 import { Button } from '../components/Button';
-import { controlScale } from '../components/ComponentScale';
 import { FullCircleIcon, FullSquareIcon } from '../icons/components';
 
 
@@ -107,14 +106,14 @@ We have created the base css classes to facilitate this layout.
 <Canvas isExpanded={true}>
 <div className="text-center">
     Before
-    <div className="lux-adorn bg-green-100">
-        <div className="lux-adorn-start">
+    <div className="lux-crux bg-green-100">
+        <div className="lux-crux-start">
             <FullSquareIcon className="bg-red-100 text-xs"/>
         </div>
-        <div className="lux-adorn-content bg-blue-100">
+        <div className="lux-crux-content bg-blue-100">
             THE CONTENT
         </div>
-        <div className="lux-adorn-end">
+        <div className="lux-crux-end">
             <FullSquareIcon className="bg-red-100 text-4xl"/>
         </div>
     </div>
@@ -122,3 +121,22 @@ We have created the base css classes to facilitate this layout.
 </div>
 </Canvas>
 
+There is a particular case in which we need to use this layout without content.
+For example a button with no text and an icon. In this case the content must be
+a zero width space to keep the baseline, and the base div requires the
+additional class `lux-crux-empty` to make sure the margins are correct.
+
+<Canvas isExpanded={true}>
+<div className="text-center">
+    Before
+    <div className="lux-crux lux-crux-empty bg-green-100">
+        <div className="lux-crux-content">
+            &#8203;
+        </div>
+        <div className="lux-crux-end">
+            <FullSquareIcon className="bg-red-100 text-4xl"/>
+        </div>
+    </div>
+    After
+</div>
+</Canvas>

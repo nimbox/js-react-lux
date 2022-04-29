@@ -5,7 +5,7 @@ import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon } from '../../icons/components';
 import { consumeEvent } from '../../utilities/consumeEvent';
 import { setRefInputValue } from '../../utilities/setRefInputValue';
-import { Input, InputProps } from '../controls/Input';
+import { Input, InputProps } from '../inputs/Input';
 import { HTMLPopperElement, Popper, PopperPlacement } from '../Popper';
 
 

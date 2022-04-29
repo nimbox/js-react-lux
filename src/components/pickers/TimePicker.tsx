@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon, AngleUpIcon, CircleIcon, ClockIcon } from '../../icons/components';
 import { setRefInputValue } from '../../utilities/setRefInputValue';
-import { Input, InputProps } from '../controls/Input';
+import { Input, InputProps } from '../inputs/Input';
 import { HTMLPopperElement, Popper } from '../Popper';
 
 

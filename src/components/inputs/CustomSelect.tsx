@@ -3,11 +3,9 @@ import React, { createContext, FC, LegacyRef, useContext, useState } from 'react
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon } from '../../icons/components';
 import { ComponentAlign } from '../ComponentAlign';
-import { ComponentScale, controlScale } from '../ComponentScale';
 
 
 export interface CustomSelectProps {
-    scale?: ComponentScale;
     value: any;
     label: (t: any) => string | JSX.Element;
     onChange: (value: any) => void;
@@ -20,14 +18,14 @@ export interface CustomSelectOptionProps {
     className?: string;
 }
 
-type ContextProps = Pick<CustomSelectProps, 'scale' | 'value' | 'onChange'>;
-const Context = createContext<ContextProps>({ scale: 'base', value: [], onChange: () => [] });
+type ContextProps = Pick<CustomSelectProps, 'value' | 'onChange'>;
+const Context = createContext<ContextProps>({ value: [], onChange: () => [] });
 
 export interface CustomSelectComponent extends FC<CustomSelectProps> {
     Option: FC<CustomSelectOptionProps>;
 }
 
-export const CustomSelect: CustomSelectComponent = (({ scale = 'base', value, label, onChange, align, className, children }) => {
+export const CustomSelect: CustomSelectComponent = (({  value, label, onChange, align, className, children }) => {
 
     const [isVisible, setIsVisible] = useState(false);
 
@@ -37,7 +35,7 @@ export const CustomSelect: CustomSelectComponent = (({ scale = 'base', value, la
 
 
     return (
-        <Context.Provider value={{ scale, value, onChange }}>
+        <Context.Provider value={{ value, onChange }}>
             <div className={classnames('relative inline-block w-full', className)}>
                 <div ref={setTarget as LegacyRef<HTMLDivElement> | undefined} tabIndex={0} className={classnames(
                     'relative border border-control-border rounded',
@@ -80,7 +78,6 @@ CustomSelect.Option = (({ value, className, children }) => {
     return (
         <div onClick={onClick} className={classnames(
             'block',
-            controlScale[context.scale || 'base'],
             {
                 'text-white bg-primary-500': context.value === value
             },

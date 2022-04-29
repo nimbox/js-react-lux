@@ -31,7 +31,8 @@ module.exports = {
                 'control-fill': '#f0f0f0',
                 'control-placeholder': '#a0a0a0',
 
-                'control-border-hover': '#888888',
+                // 'control-border-hover': 'pink',
+                'control-border-hover': '#000000',
                 'control-fill-hover': '#e8e8e8',
 
                 'control-border-disabled': '#c0c0c0',

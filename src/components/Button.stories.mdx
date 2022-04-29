@@ -94,6 +94,16 @@ Buttons are everywhere
 </Canvas>
 
 <Canvas>
+    <Story name="With no content and icons">
+        <div className="text-center space-x-2 text-base">
+            <Button variant="outlined" semantic="muted" start={<EditIcon/>}/>
+            <Button variant="outlined" semantic="muted" end={<AngleRightIcon/>}/>
+            <Button variant="outlined" semantic="muted" start={<EditIcon/>} end={<AngleRightIcon/>}/>
+        </div>
+    </Story>
+</Canvas>
+
+<Canvas>
     <Story name="With shared baseline">
         <div className="space-y-2">
             <div className="text-center space-x-2 text-base">

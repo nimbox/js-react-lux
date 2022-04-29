@@ -3,7 +3,6 @@ import React, { FC, ReactElement, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AngleRightIcon } from '../icons/components';
 import { ComponentColor } from './ComponentColor';
-import { ComponentScale, controlSize, controlSmallText, controlText } from './ComponentScale';
 
 
 // Button
@@ -108,7 +107,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, r
             ref={ref}
             {...buttonProps}
 
-            className={classNames('lux-button lux-adorn', {
+            className={classNames('lux-crux lux-button', {
+
+                'lux-crux-empty': children == null,
 
                 'lux-button-filled': variant === 'filled',
                 'lux-button-outlined': variant === 'outlined',
@@ -125,17 +126,17 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, r
         >
 
             {start &&
-                <div className="lux-adorn-start">
+                <div className="lux-crux-start">
                     {start}
                 </div>
             }
 
-            <div className="lux-adorn-content">
-                {children}
+            <div className="lux-crux-content">
+                {children || <>&#8203;</>}  {/* Use a zero width space to keep the baseline when no children is present. */}
             </div>
 
             {end &&
-                <div className="lux-adorn-end">
+                <div className="lux-crux-end">
                     {end}
                 </div>
             }
@@ -193,37 +194,3 @@ export const RoundButton: FC<RoundButtonProps> = ({ semantic: color = 'primary',
     );
 
 };
-
-export interface MoreOptionsButtonProps {
-    value: boolean;
-    onChange: (value: boolean) => void;
-    className?: string;
-}
-
-export const MoreOptionsButton: FC<MoreOptionsButtonProps> =
-    ({ value = false, onChange, className, children, ...props }) => {
-        const { t } = useTranslation(['lux']);
-        return (
-            <>
-                <span
-                    className={classNames(
-                        'relative text-primary-500 hover:text-primary-700 cursor-pointer', className
-                    )}
-                    onClick={() => onChange(!value)}
-                    {...props}
-                >
-
-                    <span className="absolute inset-y-0 left-0 flex flex-row justify-center items-center"
-                        style={{ width: '1em' }}>
-                        <AngleRightIcon width="1em" height="1em"
-                            className={classNames('inline stroke-current stroke-2 transform', { 'rotate-90': value }, 'transition duration-150 ease-in-out transtition-transform')} />
-                    </span>
-
-                    <span style={{ paddingLeft: '1.25em' }} >
-                        {!value ? t('more-options') : t('less-options')}
-                    </span>
-                </span>
-                {value && children}
-            </>
-        );
-    };

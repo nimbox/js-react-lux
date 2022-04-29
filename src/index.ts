@@ -23,18 +23,18 @@ export * from './components/pickers/DatePicker';
 export * from './components/pickers/SwatchPicker';
 export * from './components/pickers/TimePicker';
 
-export * from './components/controls/Autocomplete';
-export * from './components/controls/CheckBox';
-export * from './components/controls/CheckButton';
-export * from './components/controls/Control';
-export * from './components/controls/Input';
-export * from './components/controls/SearchInput';
-export * from './components/controls/AsyncSearchInput';
-export * from './components/controls/Radio';
-export * from './components/controls/Select';
-export * from './components/controls/TextArea';
-export * from './components/controls/Wrapper';
-export * from './components/controls/WrapperPopper';
+export * from './components/inputs/Autocomplete';
+export * from './components/inputs/CheckBox';
+export * from './components/inputs/CheckButton';
+export * from './components/inputs/Control';
+export * from './components/inputs/Input';
+export * from './components/inputs/SearchInput';
+export * from './components/inputs/AsyncSearchInput';
+export * from './components/inputs/Radio';
+export * from './components/inputs/Select';
+export * from './components/inputs/TextArea';
+export * from './components/inputs/Wrapper';
+export * from './components/inputs/WrapperPopper';
 
 export * from './popper/TooltipProvider'
 

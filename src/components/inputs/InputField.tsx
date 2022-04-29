@@ -25,7 +25,7 @@ export const InputField = (props: InputFieldProps): ReactElement => {
         defaultValue,
         value,
 
-        hasFocus: hasFocusProp,
+        focus: hasFocusProp,
         hasValue: hasValueProp,
 
         disabled,
@@ -59,10 +59,9 @@ export const InputField = (props: InputFieldProps): ReactElement => {
             variant={variant}
 
             label={label}
-            shrink={shrink}
+            shrink={shrink || (hasFocus || hasValue)}
 
-            hasFocus={hasFocusProp || hasFocus}
-            hasValue={hasValueProp || hasValue}
+            focus={hasFocusProp || hasFocus}
 
             disabled={disabled}
             error={error}

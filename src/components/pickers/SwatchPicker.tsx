@@ -5,8 +5,8 @@ import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { RefreshIcon } from '../../icons/components';
 import { consumeEvent } from '../../utilities/consumeEvent';
 import { setRefInputValue } from '../../utilities/setRefInputValue';
-import { InputProps } from '../controls/Input';
-import { InputPopper } from '../controls/InputPopper';
+import { InputProps } from '../inputs/Input';
+import { InputPopper } from '../inputs/InputPopper';
 import { PopperProps } from '../Popper';
 import classnames from 'classnames';
 

@@ -17,13 +17,13 @@ export default {
 
 //  parameterized
 
-export const Parameterized = ({ scale, value: initial, options, align, ...props }: CustomSelectProps & { options: string[] }) => {
+export const Parameterized = ({  value: initial, options, align, ...props }: CustomSelectProps & { options: string[] }) => {
 
     const [value, onChange] = useState(+initial);
     const label = (value: any) => (options[value]);
 
     return (
-        <CustomSelect scale={scale} label={label} className='' align={align} value={value} onChange={onChange}>
+        <CustomSelect label={label} className='' align={align} value={value} onChange={onChange}>
             {options.map((o, i) => <CustomSelect.Option value={i}>{o}</CustomSelect.Option>)}
         </CustomSelect>
     );

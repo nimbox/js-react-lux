@@ -3,7 +3,7 @@ import { action } from '@storybook/addon-actions';
 import React, { ChangeEvent, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Wrapper } from '..';
-import { Input } from '../components/controls/Input';
+import { Input } from '../components/inputs/Input';
 import { Tag } from '../components/Tag';
 
 

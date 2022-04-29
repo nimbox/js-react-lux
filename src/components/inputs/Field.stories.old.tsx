@@ -64,7 +64,7 @@ const Parameterized = (props: InputFieldProps) => {
 export const S00_Readme = () => (
     <div className="">
         Field is a wrapper for all controls to guarantee a consistent look and feel.
-        The filled variant is a little bit wonky when using start icons, do avoid. 
+        The filled variant is a little bit wonky when using start icons, do avoid.
         We have made our best effort to render something that looks not as bad.
     </div>
 );
@@ -72,37 +72,37 @@ export const S00_Readme = () => (
 export const S11_HasNoFocusHasNoValue = () => <Parameterized />;
 export const S12_HasNoFocusHasValue = () => <Parameterized hasValue={true} />;
 
-export const S13_HasFocusHasNoValue = () => <Parameterized hasFocus={true} />;
-export const S14_HasFocusHasValue = () => <Parameterized hasFocus={true} hasValue={true} />;
+export const S13_HasFocusHasNoValue = () => <Parameterized focus={true} />;
+export const S14_HasFocusHasValue = () => <Parameterized focus={true} hasValue={true} />;
 
 export const S21_HasNoFocusHasNoValueStart = () => <Parameterized start={<FullSquareIcon />} />;
 export const S22_HasNoFocusHasValueStart = () => <Parameterized hasValue={true} start={<FullSquareIcon />} />;
 
-export const S23_HasFocusHasNoValueStart = () => <Parameterized hasFocus={true} start={<FullSquareIcon />} />;
-export const S24_HasFocusHasValueStart = () => <Parameterized hasFocus={true} hasValue={true} start={<FullSquareIcon />} />;
+export const S23_HasFocusHasNoValueStart = () => <Parameterized focus={true} start={<FullSquareIcon />} />;
+export const S24_HasFocusHasValueStart = () => <Parameterized focus={true} hasValue={true} start={<FullSquareIcon />} />;
 
 export const S31_HasNoFocusHasNoValueEnd = () => <Parameterized end={<FullSquareIcon />} />;
 export const S32_HasNoFocusHasValueEnd = () => <Parameterized hasValue={true} end={<FullSquareIcon />} />;
 
-export const S33_HasFocusHasNoValueEnd = () => <Parameterized hasFocus={true} end={<FullSquareIcon />} />;
-export const S34_HasFocusHasValueEnd = () => <Parameterized hasFocus={true} hasValue={true} end={<FullSquareIcon />} />;
+export const S33_HasFocusHasNoValueEnd = () => <Parameterized focus={true} end={<FullSquareIcon />} />;
+export const S34_HasFocusHasValueEnd = () => <Parameterized focus={true} hasValue={true} end={<FullSquareIcon />} />;
 
 export const S41_HasNoFocusHasNoValueStartEnd = () => <Parameterized start={<FullSquareIcon />} end={<FullSquareIcon />} />;
 export const S42_HasNoFocusHasValueStartEnd = () => <Parameterized start={<FullSquareIcon />} hasValue={true} end={<FullSquareIcon />} />;
 
-export const S43_HasFocusHasNoValueStartEnd = () => <Parameterized start={<FullSquareIcon />} hasFocus={true} end={<FullSquareIcon />} />;
-export const S44_HasFocusHasValueStartEnd = () => <Parameterized start={<FullSquareIcon />} hasFocus={true} hasValue={true} end={<FullSquareIcon />} />;
+export const S43_HasFocusHasNoValueStartEnd = () => <Parameterized start={<FullSquareIcon />} focus={true} end={<FullSquareIcon />} />;
+export const S44_HasFocusHasValueStartEnd = () => <Parameterized start={<FullSquareIcon />} focus={true} hasValue={true} end={<FullSquareIcon />} />;
 
 export const S51_HasNoFocusHasNoValueStartEndError = () => <Parameterized error={true} start={<FullSquareIcon />} end={<FullSquareIcon />} />;
 export const S52_HasNoFocusHasValueStartEndError = () => <Parameterized error={true} start={<FullSquareIcon />} hasValue={true} end={<FullSquareIcon />} />;
 
-export const S53_HasFocusHasNoValueStartEndError = () => <Parameterized error={true} start={<FullSquareIcon />} hasFocus={true} end={<FullSquareIcon />} />;
-export const S54_HasFocusHasValueStartEndError = () => <Parameterized error={true} start={<FullSquareIcon />} hasFocus={true} hasValue={true} end={<FullSquareIcon />} />;
+export const S53_HasFocusHasNoValueStartEndError = () => <Parameterized error={true} start={<FullSquareIcon />} focus={true} end={<FullSquareIcon />} />;
+export const S54_HasFocusHasValueStartEndError = () => <Parameterized error={true} start={<FullSquareIcon />} focus={true} hasValue={true} end={<FullSquareIcon />} />;
 
 export const S61_HasNoFocusHasNoValueStartEndDisabled = () => <Parameterized disabled={true} start={<FullSquareIcon />} end={<FullSquareIcon />} />;
 export const S62_HasNoFocusHasValueStartEndDisabled = () => <Parameterized disabled={true} start={<FullSquareIcon />} hasValue={true} end={<FullSquareIcon />} />;
-export const S63_HasFocusHasNoValueStartEndDisabled = () => <Parameterized disabled={true} start={<FullSquareIcon />} hasFocus={true} end={<FullSquareIcon />} />;
-export const S64_HasFocusHasValueStartEndDisabled = () => <Parameterized disabled={true} start={<FullSquareIcon />} hasFocus={true} hasValue={true} end={<FullSquareIcon />} />;
+export const S63_HasFocusHasNoValueStartEndDisabled = () => <Parameterized disabled={true} start={<FullSquareIcon />} focus={true} end={<FullSquareIcon />} />;
+export const S64_HasFocusHasValueStartEndDisabled = () => <Parameterized disabled={true} start={<FullSquareIcon />} focus={true} hasValue={true} end={<FullSquareIcon />} />;
 
 export const S81_Select = () => <Parameterized end={<AngleDownIcon />} />;
 export const S82_Date = () => <Parameterized label="Date" end={<CalendarIcon />} />;
@@ -111,3 +111,28 @@ export const S83_Time = () => <Parameterized label="Time" end={<ClockIcon />} />
 export const S91_Select = () => <Parameterized end={<AngleDownIcon />} />;
 export const S92_Date = () => <Parameterized label={""} end={<CalendarIcon />} />;
 export const S93_Time = () => <Parameterized label={""} end={<ClockIcon />} />;
+
+export const SA1_EmptyStart = () => (
+    <div>
+        <span>Before</span>
+        <Field
+
+            variant="inlined"
+
+            // label={label}
+            // shrink={shrink}
+
+            // hasFocus={hasFocusProp || hasFocus}
+            // hasValue={hasValueProp || hasValue}
+
+            // disabled={disabled}
+            // error={error}
+
+            end={<AngleDownIcon />}
+
+
+        />
+        <span>After</span>
+
+    </div>
+);

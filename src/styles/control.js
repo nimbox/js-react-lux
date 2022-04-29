@@ -2,15 +2,14 @@ const {
     relative
 } = require('path');
 
-const fieldVerticalPadding = 1.5;
-const fieldHorizontalPadding = 0.75;
+const fieldVerticalPadding = 1.5; // For top and bottom.
+const fieldHorizontalPadding = 1.5; // For left and right.
 const fieldLabelScale = 0.75;
+const fieldLabelHorizontalPadding = 0.25; // For left and right.
 
 module.exports = ({
     theme
 }) => {
-
-    console.log('colors', theme('colors'));
 
     const controls = {
 
@@ -23,14 +22,14 @@ module.exports = ({
             padding: '0.35em 0.75em'
         },
 
-        // Adorn Container
+        // Crux Container
 
-        '.lux-adorn': {
+        '.lux-crux': {
 
             display: 'inline-flex',
             alignItems: 'baseline',
 
-            '.lux-adorn-start': {
+            '.lux-crux-start': {
 
                 flex: 'none',
                 alignSelf: 'center',
@@ -39,13 +38,13 @@ module.exports = ({
                 alignItems: 'center',
 
                 height: 0,
-                marginRight: `${fieldHorizontalPadding / 2}em`,
+                marginRight: `${fieldHorizontalPadding / 4}em`,
 
                 fill: 'current-color'
 
             },
 
-            '.lux-adorn-content': {
+            '.lux-crux-content': {
 
                 display: 'inline-flex',
                 alignItems: 'baseline',
@@ -54,7 +53,7 @@ module.exports = ({
 
             },
 
-            '.lux-adorn-end': {
+            '.lux-crux-end': {
 
                 flex: 'none',
                 alignSelf: 'center',
@@ -63,11 +62,24 @@ module.exports = ({
                 alignItems: 'center',
 
                 height: 0,
-                marginLeft: `${fieldHorizontalPadding / 2}em`,
+                marginLeft: `${fieldHorizontalPadding / 4}em`,
 
                 fill: 'current-color'
 
-            }
+            },
+
+            '&.lux-crux-empty': {
+
+                '.lux-crux-start': {
+                    marginRight: 0
+                },
+
+                '.lux-crux-end': {
+                    marginLeft: 0
+                }
+
+            },
+
 
         },
 
@@ -77,7 +89,7 @@ module.exports = ({
 
             '&.lux-button-filled': {
 
-                padding: `${fieldVerticalPadding / 2}em ${fieldHorizontalPadding}em ${fieldVerticalPadding / 2}em ${fieldHorizontalPadding}em`,
+                padding: `${fieldVerticalPadding / 2}em ${fieldHorizontalPadding / 2}em ${fieldVerticalPadding / 2}em ${fieldHorizontalPadding / 2}em`,
 
                 backgroundColor: theme('colors.primary.500'),
 
@@ -124,7 +136,7 @@ module.exports = ({
 
             '&.lux-button-outlined': {
 
-                padding: `calc(${fieldVerticalPadding / 2}em - 1px) calc(${fieldHorizontalPadding}em - 1px) calc(${fieldVerticalPadding / 2}em - 1px) calc(${fieldHorizontalPadding}em - 1px)`,
+                padding: `calc(${fieldVerticalPadding / 2}em - 1px) calc(${fieldHorizontalPadding / 2}em - 1px) calc(${fieldVerticalPadding / 2}em - 1px) calc(${fieldHorizontalPadding / 2}em - 1px)`,
 
                 borderWidth: '1px',
                 borderRadius: theme('borderRadius.DEFAULT'),
@@ -165,7 +177,7 @@ module.exports = ({
 
             '&.lux-button-text': {
 
-                padding: `${fieldVerticalPadding / 2}em ${fieldHorizontalPadding}em ${fieldVerticalPadding / 2}em ${fieldHorizontalPadding}em`,
+                padding: `${fieldVerticalPadding / 2}em ${fieldHorizontalPadding / 2}em ${fieldVerticalPadding / 2}em ${fieldHorizontalPadding / 2}em`,
 
                 borderRadius: theme('borderRadius.DEFAULT'),
 
@@ -240,14 +252,12 @@ module.exports = ({
                 }
             }
 
-
         },
 
         // Field Container
 
         '.lux-field': {
 
-            display: 'inline-block',
             position: 'relative',
 
             '.lux-field-label': {
@@ -256,19 +266,19 @@ module.exports = ({
                 left: 0,
                 top: 0,
 
+                // overflow: 'hidden',
+                // textOverflow: 'ellipsis',
+                // whiteSpace: 'nowrap',
+
                 color: theme('colors.control-placeholder'),
 
                 pointerEvents: 'none'
 
             },
 
-            // When in `shrink` state, the label is posisitioned against the 
-            // `lux-field`. When is not in `shrink` state, the label is positioned
-            // against the `lux-field-content-main`.
-
-            '.lux-field-content-main': {
-                position: 'relative'
-            },
+            // When in `shrink` state, the label is posisitioned against the
+            // `lux-field`. When is not in `shrink` state, the label is
+            // positioned against the `lux-field-content`.
 
             '&.lux-field-shrink': {
 
@@ -276,79 +286,33 @@ module.exports = ({
                     color: theme('colors.control-border'),
                 },
 
-                '.lux-field-content-main': {
+                '.lux-field-content': {
                     position: 'static'
                 }
 
             },
 
             '.lux-field-content': {
+                position: 'relative',
+                width: '100%'
+            },
 
-                display: 'inline-flex',
-                alignItems: 'baseline',
+            '.lux-field-border': {
 
-                width: '100%',
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
 
-                transition: 'background-color 200ms cubic-bezier(0, 0, 0.2, 1) 0ms',
-
-                '.lux-field-content-start': {
-
-                    display: 'flex',
-                    alignItems: 'center',
-
-                    height: '1em',
-                    marginRight: `${fieldHorizontalPadding / 2}em`,
-
-                    flex: 'none',
-                    alignSelf: 'center',
-
-                },
-
-                '.lux-field-content-main': {
-
-                    minWidth: 0,
-                    flex: '1 1 auto',
-
-                },
-
-                '.lux-field-content-end': {
-
-                    display: 'flex',
-                    alignItems: 'center',
-
-                    height: '1em',
-                    marginLeft: `${fieldHorizontalPadding / 2}em`,
-
-                    flex: 'none',
-                    alignSelf: 'center'
-
-                },
-
-                '.lux-field-border': {
-
-                    position: 'absolute',
-                    left: 0,
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
-
-                    pointerEvents: 'none',
-
-                    transition: 'border-color 200ms cubic-bezier(0, 0, 0.2, 1) 0ms'
-
-                }
+                pointerEvents: 'none'
 
             },
 
+
             '&.lux-field-outlined': {
 
-                '.lux-field-label': {},
-
-                '.lux-field-content': {
-
-                    padding: `${fieldVerticalPadding / 2}em ${fieldHorizontalPadding}em ${fieldVerticalPadding / 2}em ${fieldHorizontalPadding}em`,
-
-                },
+                padding: `${fieldVerticalPadding / 2}em ${fieldHorizontalPadding / 2}em ${fieldVerticalPadding / 2}em ${fieldHorizontalPadding / 2}em`,
 
                 '.lux-field-border': {
 
@@ -358,9 +322,7 @@ module.exports = ({
                     borderRadius: theme('borderRadius.DEFAULT'),
 
                     'legend': {
-
                         display: 'none'
-
                     }
 
                 },
@@ -368,10 +330,13 @@ module.exports = ({
                 '&.lux-field-shrink': {
 
                     '.lux-field-label': {
-                        left: `${fieldHorizontalPadding / fieldLabelScale}em`,
+
+                        left: `${(fieldHorizontalPadding / 2) / fieldLabelScale}em`,
                         top: 0,
+
                         fontSize: `${fieldLabelScale}em`,
                         lineHeight: 0,
+
                     },
 
                     '.lux-field-border': {
@@ -380,13 +345,14 @@ module.exports = ({
 
                             display: 'inherit',
 
-                            marginLeft: '0.5em',
-                            padding: '0 0.25em',
+                            marginLeft: `${fieldHorizontalPadding / 2 - fieldLabelHorizontalPadding}em`,
+                            padding: `0 ${fieldLabelHorizontalPadding}em`,
+
+                            fontSize: `${fieldLabelScale}em`,
                             lineHeight: 0,
 
                             '& > span': {
                                 visibility: 'hidden',
-                                fontSize: `${fieldLabelScale}em`,
                             }
 
                         }
@@ -401,35 +367,25 @@ module.exports = ({
             '&.lux-field-filled': {
 
                 '.lux-field-label': {
-
-                    top: `${ -fieldVerticalPadding * 3 / 10}em`,
-
+                    top: `${-fieldVerticalPadding * 3 / 10}em`,
                 },
 
-                '.lux-field-content': {
-
-                    padding: `${fieldVerticalPadding / 2}em ${fieldHorizontalPadding}em ${fieldVerticalPadding / 2}em ${fieldHorizontalPadding}em`,
-
-                    backgroundColor: theme('colors.control-fill'),
-                    borderRadius: theme('borderRadius.DEFAULT'),
-
-                },
+                padding: `${fieldVerticalPadding / 2}em ${fieldHorizontalPadding / 2}em ${fieldVerticalPadding / 2}em ${fieldHorizontalPadding / 2}em`,
+                backgroundColor: theme('colors.control-fill'),
+                borderRadius: theme('borderRadius.DEFAULT'),
 
                 '&.lux-field-has-label': {
 
-                    '.lux-field-content': {
+                    padding: `${fieldVerticalPadding * 8 / 10}em ${fieldHorizontalPadding / 2}em ${fieldVerticalPadding * 2 / 10}em ${fieldHorizontalPadding / 2}em`,
 
-                        padding: `${fieldVerticalPadding * 8 / 10}em ${fieldHorizontalPadding}em ${fieldVerticalPadding * 2 / 10}em ${fieldHorizontalPadding}em`,
+                    '.lux-field-start': {
+                        transform: `translateY(-${fieldVerticalPadding * 3 / 10}em)`
+                    },
 
-                        '.lux-field-content-start': {
-                            transform: `translateY(-${fieldVerticalPadding * 3 / 10}em)`
-                        },
-
-                        '.lux-field-content-end': {
-                            transform: `translateY(-${fieldVerticalPadding * 3 / 10}em)`
-                        }
-
+                    '.lux-field-end': {
+                        transform: `translateY(-${fieldVerticalPadding * 3 / 10}em)`
                     }
+
                 },
 
                 '.lux-field-border': {
@@ -444,20 +400,18 @@ module.exports = ({
                 '&.lux-field-shrink': {
 
                     '.lux-field-label': {
-                        left: `${fieldHorizontalPadding / fieldLabelScale}em`,
-                        top: `${ fieldVerticalPadding * 6 / 10}em`,
+                        left: `${(fieldHorizontalPadding / 2) / fieldLabelScale}em`,
+                        top: `${fieldVerticalPadding * 6 / 10}em`,
                         fontSize: `${fieldLabelScale}em`,
                         lineHeight: 0,
                     },
 
                 },
 
-                '&.lux-field-has-focus.lux-field-has-start,&.lux-field-has-value.lux-field-has-start': {
+                '&.lux-field-shrink.lux-field-has-start': {
 
-                    '.lux-field-content': {
-                        '.lux-field-content-start': {
-                            transform: 'none'
-                        }
+                    '.lux-field-start': {
+                        transform: 'none'
                     }
 
                 }
@@ -466,13 +420,7 @@ module.exports = ({
 
             '&.lux-field-inlined': {
 
-                '.lux-field-label': {},
-
-                '.lux-field-content': {
-
-                    padding: `${fieldVerticalPadding * 2 / 10}em 0 ${fieldVerticalPadding * 0 / 10}em 0`,
-
-                },
+                padding: `${fieldVerticalPadding * 2 / 10}em 0 ${fieldVerticalPadding * 0 / 10}em 0`,
 
                 '.lux-field-border': {
 
@@ -500,22 +448,20 @@ module.exports = ({
 
                 '&.lux-field-outlined': {
                     '.lux-field-border': {
-                        borderWidth: 2,
+                        borderWidth: 1,
                     }
                 },
 
                 '&.lux-field-filled': {
-                    '.lux-field-content': {
-                        backgroundColor: theme('colors.control-fill-hover'),
-                    },
+                    backgroundColor: theme('colors.control-fill-hover'),
                     '.lux-field-border': {
-                        borderBottomWidth: 2,
+                        borderBottomWidth: 1,
                     }
                 },
 
                 '&.lux-field-inlined': {
                     '.lux-field-border': {
-                        borderBottomWidth: 2,
+                        borderBottomWidth: 1,
                     }
                 },
 
@@ -525,7 +471,7 @@ module.exports = ({
 
             },
 
-            '&:focus-within, &.lux-field-has-focus': {
+            '&:focus-within, &.lux-field-focus': {
 
                 '.lux-field-label': {
                     color: theme('colors.primary.500')
@@ -561,15 +507,11 @@ module.exports = ({
                     color: theme('colors.control-border-disabled')
                 },
 
-
                 '&.lux-field-filled': {
-                    '.lux-field-content': {
-                        backgroundColor: theme('colors.control-fill-disabled'),
-                    }
+                    backgroundColor: theme('colors.control-fill-disabled'),
                 },
 
                 '.lux-field-border': {
-                    borderStyle: 'dashed',
                     borderColor: theme('colors.control-border-disabled')
                 },
 
@@ -580,7 +522,6 @@ module.exports = ({
                 '.lux-field-label': {
                     color: theme('colors.danger.500')
                 },
-
 
                 '.lux-field-border': {
                     borderColor: theme('colors.danger.500')

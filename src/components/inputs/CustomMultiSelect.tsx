@@ -3,11 +3,9 @@ import React, { createContext, FC, LegacyRef, useContext, useState } from 'react
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon } from '../../icons/components';
 import { ComponentAlign } from '../ComponentAlign';
-import { ComponentScale, controlScale } from '../ComponentScale';
 
 
 export interface CustomMultiSelectProps {
-    scale?: ComponentScale;
     label: (t: any) => string;
     value: any[];
     onChange: (value: any) => void;
@@ -20,14 +18,14 @@ export interface CustomMultiSelectContentProps {
     className?: string;
 }
 
-type ContextProps = Pick<CustomMultiSelectProps, 'scale' | 'value' | 'onChange'>;
-const Context = createContext<ContextProps>({ scale: 'base', value: [], onChange: () => [] });
+type ContextProps = Pick<CustomMultiSelectProps, 'value' | 'onChange'>;
+const Context = createContext<ContextProps>({ value: [], onChange: () => [] });
 
 interface CustomMultiSelectComponent extends FC<CustomMultiSelectProps> {
     Option: FC<CustomMultiSelectContentProps>;
 }
 
-export const CustomMultiSelect: CustomMultiSelectComponent = (({ scale = 'base', label, value, onChange, align, className, children }) => {
+export const CustomMultiSelect: CustomMultiSelectComponent = (({ label, value, onChange, align, className, children }) => {
 
     const [isVisible, setIsVisible] = useState(false);
 
@@ -44,7 +42,7 @@ export const CustomMultiSelect: CustomMultiSelectComponent = (({ scale = 'base',
                     'focus:border-primary-500 focus:ring focus:ring-primary-500',
                     'focus:ring-opacity-50 focus:outline-none',
                     'px-2 py-0 pr-8 truncate cursor-pointer',
-                    controlScale[scale])} onClick={(() => setIsVisible(!isVisible))}>
+                )} onClick={(() => setIsVisible(!isVisible))}>
                     {label(value) || <span>&nbsp;</span>}
                     <div className="absolute top-1/2 right-1 ">
                         < AngleDownIcon className={classnames(
@@ -89,7 +87,6 @@ CustomMultiSelect.Option = (({ value, className, children }) => {
     return (
         <div onClick={onClick} className={classnames(
             'px-2 py-0',
-            controlScale[context.scale ? context.scale : 'base'],
             {
                 'text-white bg-primary-500': context.value.indexOf(value) >= 0
             },

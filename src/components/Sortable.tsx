@@ -3,17 +3,14 @@ import React, { FC, LegacyRef, ReactElement, useCallback, useEffect, useRef, use
 import { useDrag, useDrop } from "react-dnd";
 import { v4 as uuidv4 } from 'uuid';
 import { DragIcon } from '../icons/components';
-import { ComponentScale, controlIconSmallMarginSize } from './ComponentScale';
 
 
 export interface SortableProps {
-    scale?: ComponentScale;
     onChange: (source: number, target: number) => void;
     className?: string;
 }
 
 interface SortableItemProps {
-    scale?: ComponentScale;
     type: string;
     findItem: (value: React.Key) => { child: React.ReactChild | React.ReactFragment | React.ReactPortal, index: number };
     onChange: (value: React.Key, target: number) => void;
@@ -21,7 +18,7 @@ interface SortableItemProps {
 
 }
 
-export const Sortable: FC<SortableProps> = (({ onChange, scale = 'base', className, children }) => {
+export const Sortable: FC<SortableProps> = (({ onChange, className, children }) => {
 
     const [childrenArray, setChildrenArray] = useState<(React.ReactChild | React.ReactFragment | React.ReactPortal)[]>([]);
     useEffect(() => setChildrenArray(React.Children.toArray(children)), [setChildrenArray, children]);
@@ -52,7 +49,7 @@ export const Sortable: FC<SortableProps> = (({ onChange, scale = 'base', classNa
         <ul className={className}>
             {childrenArray.map((element) => {
                 if (React.isValidElement(element)) {
-                    return <SortableItem type={type} onChange={moveItem} findItem={findItem} onUpdate={onChange} scale={scale}>{element}</SortableItem>;
+                    return <SortableItem type={type} onChange={moveItem} findItem={findItem} onUpdate={onChange} >{element}</SortableItem>;
                 } else {
                     return null;
                 }
@@ -61,7 +58,7 @@ export const Sortable: FC<SortableProps> = (({ onChange, scale = 'base', classNa
     );
 });
 
-const SortableItem: FC<SortableItemProps> = (({ type, onChange, findItem, onUpdate, scale = 'base', children }) => {
+const SortableItem: FC<SortableItemProps> = (({ type, onChange, findItem, onUpdate, children }) => {
 
     const [isDragging, isOver, ref, refPreview] = useDraggable((children as any).key, type, onChange, findItem, onUpdate);
     const [, drop] = useDrop(() => ({ accept: type }));
@@ -71,7 +68,7 @@ const SortableItem: FC<SortableItemProps> = (({ type, onChange, findItem, onUpda
         <li ref={drop} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
             <div ref={(refPreview as LegacyRef<HTMLDivElement> | undefined)} className={classnames(
                 'relative ',
-                { '-ml-3 pl-3': scale === 'xs', '-ml-4 pl-4': scale === 'sm', '-ml-5 pl-5': scale === 'base', '-ml-6 pl-6': scale === 'lg' })}>
+                {  })}>
                 <div className="">
                     {React.cloneElement(children as ReactElement, {
                         style: { opacity: isOver ? 0 : 1 }
@@ -80,7 +77,6 @@ const SortableItem: FC<SortableItemProps> = (({ type, onChange, findItem, onUpda
                 <div ref={(ref as LegacyRef<HTMLDivElement> | undefined)} className={classnames(
                     'absolute  top-1/2 left-0 cursor-move')} >
                     {(hover && !isDragging) && <DragIcon className={classnames(
-                        controlIconSmallMarginSize[scale || 'base'],
                         'stroke-current stroke-1')} />}
                 </div>
             </div>

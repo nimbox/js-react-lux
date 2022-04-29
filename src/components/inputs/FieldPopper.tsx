@@ -210,7 +210,7 @@ export const FieldPopper = React.forwardRef((
 
                 ref={setInternalFieldRef}
 
-                hasFocus={show}
+                focus={show}
 
                 disabled={disabled}
                 error={error}

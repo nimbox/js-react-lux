@@ -2,7 +2,6 @@
 import { Story } from '@storybook/react';
 import React, { useState } from 'react';
 import { CheckBar, CheckBarProps } from './CheckBar';
-import { controlScale } from './ComponentScale';
 
 
 // definition
@@ -11,7 +10,6 @@ export default {
     title: 'Component/CheckBar',
     component: CheckBar,
     argTypes: {
-        scale: { control: { type: 'select', options: Object.keys(controlScale) } },
         value: { control: { type: 'array' } },
     }
 };
