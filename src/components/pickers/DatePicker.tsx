@@ -70,6 +70,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
     const {
 
         name,
+
         defaultValue,
         value,
         onChange,
@@ -247,7 +248,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
 
                 autoComplete="off"
 
-                end={<CalendarIcon onClick={handleFocus} className="px-1 cursor-pointer" style={{ fontSize: '1.5em' }} />}
+                end={<CalendarIcon onClick={handleFocus} className="cursor-pointer" />}
 
                 {...inputProps}
             />

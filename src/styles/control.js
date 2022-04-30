@@ -49,8 +49,6 @@ module.exports = ({
                 display: 'inline-flex',
                 alignItems: 'baseline',
 
-                width: '100%',
-
             },
 
             '.lux-crux-end': {
@@ -292,10 +290,19 @@ module.exports = ({
 
             },
 
+            '.lux-field-start': {
+                color: theme('colors.control-border')
+            },
+
             '.lux-field-content': {
                 position: 'relative',
                 width: '100%'
             },
+
+            '.lux-field-end': {
+                color: theme('colors.control-border')
+            },
+
 
             '.lux-field-border': {
 
@@ -446,6 +453,18 @@ module.exports = ({
 
             '&:hover': {
 
+                '.lux-field-start': {
+                    color: theme('colors.control-border-hover')
+                },
+
+                '.lux-field-end': {
+                    color: theme('colors.control-border-hover')
+                },
+
+                '.lux-field-border': {
+                    borderColor: theme('colors.control-border-hover')
+                },
+
                 '&.lux-field-outlined': {
                     '.lux-field-border': {
                         borderWidth: 1,
@@ -465,15 +484,19 @@ module.exports = ({
                     }
                 },
 
-                '.lux-field-border': {
-                    borderColor: theme('colors.control-border-hover')
-                }
-
             },
 
             '&:focus-within, &.lux-field-focus': {
 
                 '.lux-field-label': {
+                    color: theme('colors.primary.500')
+                },
+
+                '.lux-field-start': {
+                    color: theme('colors.primary.500')
+                },
+
+                '.lux-field-end': {
                     color: theme('colors.primary.500')
                 },
 
@@ -507,6 +530,14 @@ module.exports = ({
                     color: theme('colors.control-border-disabled')
                 },
 
+                '.lux-field-start': {
+                    color: theme('colors.control-border-disabled')
+                },
+
+                '.lux-field-end': {
+                    color: theme('colors.control-border-disabled')
+                },
+
                 '&.lux-field-filled': {
                     backgroundColor: theme('colors.control-fill-disabled'),
                 },
@@ -520,6 +551,14 @@ module.exports = ({
             '&.lux-field-error': {
 
                 '.lux-field-label': {
+                    color: theme('colors.danger.500')
+                },
+
+                '.lux-field-start': {
+                    color: theme('colors.danger.500')
+                },
+
+                '.lux-field-end': {
                     color: theme('colors.danger.500')
                 },
 

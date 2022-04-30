@@ -6,7 +6,7 @@ import { DatePicker, DatePickerProps } from './DatePicker';
 
 
 export default {
-    title: 'Component/Picker/DatePicker',
+    title: 'Components/Pickers/DatePicker',
     component: DatePicker,
     parameters: {
         layout: 'centered'

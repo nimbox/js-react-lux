@@ -1,13 +1,14 @@
+import classNames from 'classnames';
 import React, { Ref } from 'react';
+import { Field, FieldProps } from './Field';
 import { PlainInput } from './PlainInput';
-import { Wrapper, WrapperProps } from './Wrapper';
 
 
 //
 // Input
 //
 
-export interface InputProps extends WrapperProps {
+export interface InputProps extends FieldProps {
 
     /** 
      * Name used for the input element and returned in the change event. 
@@ -30,9 +31,9 @@ export interface InputProps extends WrapperProps {
     onChange?: React.ChangeEventHandler<HTMLInputElement>;
 
     /**
-     * Class name to pass to the wrapper.
+     * Class name to pass to the field.
      */
-    wrapperClassName?: string;
+    fieldClassName?: string;
 
 }
 
@@ -41,41 +42,47 @@ export const Input = React.forwardRef((
     inputRef: Ref<HTMLInputElement>
 ) => {
 
-    // properties
+    // Properties
 
     const {
 
-        // Wrapper
+        // Field
 
         variant,
-        disabled,
-        error,
 
         start,
         end,
 
-        wrapperClassName, 
+        disabled,
+        error,
+
+        fullWidth,
+        fullHeight,
+        fieldClassName,
 
         // Input
 
+        className,
         ...inputProps
 
     } = props;
 
-    // render
+    // Render
 
     return (
-
-        <Wrapper
+        <Field
 
             variant={variant}
-            disabled={disabled}
-            error={error}
 
             start={start}
             end={end}
 
-            className={wrapperClassName}
+            disabled={disabled}
+            error={error}
+
+            fullWidth={fullWidth}
+            fullHeight={fullHeight}
+            className={fieldClassName}
 
         >
 
@@ -86,12 +93,13 @@ export const Input = React.forwardRef((
                 disabled={disabled}
                 error={error}
 
+                className={classNames(className, { 'w-full': fullWidth, 'h-full': fullHeight })}
+
                 {...inputProps}
 
             />
 
-        </Wrapper>
-
+        </Field>
     );
 
 });

@@ -24,7 +24,7 @@ export interface SwatchPickerProps extends
     /**
      * Classes to append to the wrapper component.
      */
-    wrapperClassName?: string;
+    fieldClassName?: string;
 
     // Popper
 
@@ -59,7 +59,7 @@ export const SwatchPicker = React.forwardRef((
         // Wrapper
 
         variant = 'outlined',
-        wrapperClassName,
+        fieldClassName: wrapperClassName,
 
         // Popper
 

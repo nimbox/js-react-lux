@@ -74,15 +74,13 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 /**
- * Default button is of `type` `button` instead of the default `submit`.
+ * 
  */
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 
     // Properties
 
     const {
-
-        type = 'button',
 
         variant = 'filled',
         semantic = 'primary',
@@ -102,10 +100,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, r
     return (
         <button
 
-            type={type}
-
             ref={ref}
-            {...buttonProps}
 
             className={classNames('lux-crux lux-button', {
 
@@ -122,6 +117,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, r
                 'lux-button-danger': semantic === 'danger',
 
             }, className)}
+
+            {...buttonProps}
 
         >
 

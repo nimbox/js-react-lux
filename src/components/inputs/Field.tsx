@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React, { ReactElement } from 'react';
 
 
-export type FieldVariant = 'outlined' | 'filled' | 'inlined';
+export type FieldVariant = 'outlined' | 'filled' | 'inlined' | 'plain';
 
 export interface FieldProps extends React.HTMLAttributes<HTMLDivElement> {
 
@@ -61,6 +61,16 @@ export interface FieldProps extends React.HTMLAttributes<HTMLDivElement> {
     // Styling
 
     /**
+     * Force the field to be at full width. 
+     */
+    fullWidth?: boolean;
+
+    /**
+     * Force the field to be at full height.
+     */
+    fullHeight?: boolean;
+
+    /**
      * classes to apply to the wrapper. There is a div surronding the wrapper
      * so that it doesn't conflict with the layout of the component.
      */
@@ -92,6 +102,8 @@ export const Field = React.forwardRef<HTMLDivElement, FieldProps>((props, ref) =
         disabled = false,
         error = false,
 
+        fullWidth = false,
+        fullHeight = false,
         className,
 
         children,
@@ -130,8 +142,11 @@ export const Field = React.forwardRef<HTMLDivElement, FieldProps>((props, ref) =
 
                 'lux-field-outlined': variant === 'outlined',
                 'lux-field-filled': variant === 'filled',
-                'lux-field-inlined': variant === 'inlined',
+                'lux-field-inlined': variant === 'inlined'
 
+            }, {
+                'w-full': fullWidth,
+                'h-full': fullHeight,
             }, className)}>
 
             {start &&
@@ -140,7 +155,10 @@ export const Field = React.forwardRef<HTMLDivElement, FieldProps>((props, ref) =
                 </div>
             }
 
-            <div className="lux-crux-content lux-field-content">
+            <div className={classNames('lux-crux-content lux-field-content', {
+                'w-full': fullWidth,
+                'h-full': fullHeight,
+            })}>
                 {label &&
                     <label className={classNames('lux-field-label')}>
                         {label}

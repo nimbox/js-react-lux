@@ -13,7 +13,7 @@ export interface FieldPopperProps extends FieldProps,
     Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'> {
 
     /**
-     * Toggle visibiiity of the popper when a click is detected on the field.
+     * Toggle visibility of the popper when a click is detected on the field.
      * @default true
      */
     withToggle?: boolean;

@@ -7,7 +7,7 @@ import { CircleIcon } from '../../icons/components';
 import { SquareIcon } from '../../icons/components';
 
 
-<Meta title="Component/Controls/Input" 
+<Meta title="Components/Inputs/Input" 
     component={Input}
     parameters={{
         layout: 'centered'
@@ -35,7 +35,7 @@ the `className`.
             return (
                 <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
                     <Input type="text" value={value} onChange={handleChange} placeholder="Enter name"/>
-                    <Button>Submit</Button>
+                    <Button type="submit">Submit</Button>
                 </form>
             );
         }}
@@ -52,7 +52,7 @@ the `className`.
             return (
                 <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
                     <Input type="text" ref={ref} defaultValue="Katniss" placeholder="Enter name"/>
-                    <Button>Submit</Button>
+                    <Button type="submit">Submit</Button>
                 </form>
             );
         }}
@@ -65,7 +65,7 @@ the `className`.
     <Story name="Error">
         <form className="w-96 flex flex-row items-center space-x-2">
             <Input type="text" error={true} defaultValue="" placeholder="Enter name"/>
-            <Button>Submit</Button>
+            <Button type="submit">Submit</Button>
         </form>
     </Story>
 </Canvas>
@@ -76,7 +76,7 @@ the `className`.
     <Story name="Placeholder">
         <form className="w-96 flex flex-row items-center space-x-2">
             <Input type="text" defaultValue="" placeholder="Enter name"/>
-            <Button>Submit</Button>
+            <Button type="submit">Submit</Button>
         </form>
     </Story>
 </Canvas>
@@ -87,17 +87,14 @@ the `className`.
 <Canvas>
     <Story name="Start Adornment">
         <form className="w-96 flex flex-row items-center space-x-2">
-            <Input type="text" 
+            <Input 
+                type="text" 
                 defaultValue="" 
-                start={
-                    <SquareIcon className="stroke-1"/>
-                }
-                end={
-                    <CircleIcon className="stroke-1"/>
-                } 
+                start={<SquareIcon className="stroke-1"/>}
+                end={<CircleIcon className="stroke-1"/>} 
                 placeholder="Enter name"
             />
-            <Button>Submit</Button>
+            <Button type="submit">Submit</Button>
         </form>
     </Story>
 </Canvas>

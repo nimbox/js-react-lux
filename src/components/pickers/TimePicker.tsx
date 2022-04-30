@@ -224,7 +224,11 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
 
     }
 
-    // render
+    // Render Popper
+
+    
+
+    // Render
 
     return (
         <>
@@ -246,7 +250,7 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
 
                 autoComplete="off"
 
-                end={<ClockIcon onClick={handleFocus} className="px-1 cursor-pointer" style={{ fontSize: '1.5em' }} />}
+                end={<ClockIcon onClick={handleFocus} className="cursor-pointer" />}
 
                 {...inputProps}
 

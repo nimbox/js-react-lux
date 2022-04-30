@@ -65,21 +65,14 @@ export const SearchInput = React.forwardRef((
             {...inputProps}
             start={
                 <>
-                    <SearchIcon
-                        className="pointer-events-none"
-                        style={{ marginLeft: '0.5em' }}
-                    />
+                    <SearchIcon className="pointer-events-none" />
                     {start}
                 </>
             }
             end={
                 <>
                     {end}
-                    <CircleCrossIcon
-                        onMouseDown={handleClearMouseDown}
-                        className="cursor-pointer"
-                        style={{ marginRight: '0.5em' }}
-                    />
+                    <CircleCrossIcon onMouseDown={handleClearMouseDown} className="cursor-pointer" />
                 </>
             }
         />

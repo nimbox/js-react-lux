@@ -70,39 +70,39 @@ export const S00_Readme = () => (
 );
 
 export const S11_HasNoFocusHasNoValue = () => <Parameterized />;
-export const S12_HasNoFocusHasValue = () => <Parameterized hasValue={true} />;
+export const S12_HasNoFocusHasValue = () => <Parameterized shrink={true} />;
 
 export const S13_HasFocusHasNoValue = () => <Parameterized focus={true} />;
-export const S14_HasFocusHasValue = () => <Parameterized focus={true} hasValue={true} />;
+export const S14_HasFocusHasValue = () => <Parameterized focus={true} shrink={true} />;
 
 export const S21_HasNoFocusHasNoValueStart = () => <Parameterized start={<FullSquareIcon />} />;
-export const S22_HasNoFocusHasValueStart = () => <Parameterized hasValue={true} start={<FullSquareIcon />} />;
+export const S22_HasNoFocusHasValueStart = () => <Parameterized shrink={true} start={<FullSquareIcon />} />;
 
 export const S23_HasFocusHasNoValueStart = () => <Parameterized focus={true} start={<FullSquareIcon />} />;
-export const S24_HasFocusHasValueStart = () => <Parameterized focus={true} hasValue={true} start={<FullSquareIcon />} />;
+export const S24_HasFocusHasValueStart = () => <Parameterized focus={true} shrink={true} start={<FullSquareIcon />} />;
 
 export const S31_HasNoFocusHasNoValueEnd = () => <Parameterized end={<FullSquareIcon />} />;
-export const S32_HasNoFocusHasValueEnd = () => <Parameterized hasValue={true} end={<FullSquareIcon />} />;
+export const S32_HasNoFocusHasValueEnd = () => <Parameterized shrink={true} end={<FullSquareIcon />} />;
 
 export const S33_HasFocusHasNoValueEnd = () => <Parameterized focus={true} end={<FullSquareIcon />} />;
-export const S34_HasFocusHasValueEnd = () => <Parameterized focus={true} hasValue={true} end={<FullSquareIcon />} />;
+export const S34_HasFocusHasValueEnd = () => <Parameterized focus={true} shrink={true} end={<FullSquareIcon />} />;
 
 export const S41_HasNoFocusHasNoValueStartEnd = () => <Parameterized start={<FullSquareIcon />} end={<FullSquareIcon />} />;
-export const S42_HasNoFocusHasValueStartEnd = () => <Parameterized start={<FullSquareIcon />} hasValue={true} end={<FullSquareIcon />} />;
+export const S42_HasNoFocusHasValueStartEnd = () => <Parameterized start={<FullSquareIcon />} shrink={true} end={<FullSquareIcon />} />;
 
 export const S43_HasFocusHasNoValueStartEnd = () => <Parameterized start={<FullSquareIcon />} focus={true} end={<FullSquareIcon />} />;
-export const S44_HasFocusHasValueStartEnd = () => <Parameterized start={<FullSquareIcon />} focus={true} hasValue={true} end={<FullSquareIcon />} />;
+export const S44_HasFocusHasValueStartEnd = () => <Parameterized start={<FullSquareIcon />} focus={true} shrink={true} end={<FullSquareIcon />} />;
 
 export const S51_HasNoFocusHasNoValueStartEndError = () => <Parameterized error={true} start={<FullSquareIcon />} end={<FullSquareIcon />} />;
-export const S52_HasNoFocusHasValueStartEndError = () => <Parameterized error={true} start={<FullSquareIcon />} hasValue={true} end={<FullSquareIcon />} />;
+export const S52_HasNoFocusHasValueStartEndError = () => <Parameterized error={true} start={<FullSquareIcon />} shrink={true} end={<FullSquareIcon />} />;
 
 export const S53_HasFocusHasNoValueStartEndError = () => <Parameterized error={true} start={<FullSquareIcon />} focus={true} end={<FullSquareIcon />} />;
-export const S54_HasFocusHasValueStartEndError = () => <Parameterized error={true} start={<FullSquareIcon />} focus={true} hasValue={true} end={<FullSquareIcon />} />;
+export const S54_HasFocusHasValueStartEndError = () => <Parameterized error={true} start={<FullSquareIcon />} focus={true} shrink={true} end={<FullSquareIcon />} />;
 
 export const S61_HasNoFocusHasNoValueStartEndDisabled = () => <Parameterized disabled={true} start={<FullSquareIcon />} end={<FullSquareIcon />} />;
-export const S62_HasNoFocusHasValueStartEndDisabled = () => <Parameterized disabled={true} start={<FullSquareIcon />} hasValue={true} end={<FullSquareIcon />} />;
+export const S62_HasNoFocusHasValueStartEndDisabled = () => <Parameterized disabled={true} start={<FullSquareIcon />} shrink={true} end={<FullSquareIcon />} />;
 export const S63_HasFocusHasNoValueStartEndDisabled = () => <Parameterized disabled={true} start={<FullSquareIcon />} focus={true} end={<FullSquareIcon />} />;
-export const S64_HasFocusHasValueStartEndDisabled = () => <Parameterized disabled={true} start={<FullSquareIcon />} focus={true} hasValue={true} end={<FullSquareIcon />} />;
+export const S64_HasFocusHasValueStartEndDisabled = () => <Parameterized disabled={true} start={<FullSquareIcon />} focus={true} shrink={true} end={<FullSquareIcon />} />;
 
 export const S81_Select = () => <Parameterized end={<AngleDownIcon />} />;
 export const S82_Date = () => <Parameterized label="Date" end={<CalendarIcon />} />;

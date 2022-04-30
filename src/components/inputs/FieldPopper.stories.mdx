@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 
 <Meta 
-    title="Component/controls/FieldPopper" 
+    title="Components/inputs/FieldPopper" 
     component={FieldPopper} 
     parameters={{
         layout: 'centered'
@@ -145,7 +145,7 @@ This is helpful to to the an `inlined` variant withing some text.
 <Canvas>
     <Story name="Variant Inlined Without Full Width">
         <div>
-            Please select <FieldPopper variant="inlined" end={<AngleDownIcon className="stroke-1"/>} defaultShow={true} withArrow={true} renderPopper={() => <div className="p-4">World!</div>} className="inline-block">user</FieldPopper> responsible for the task.
+            Please select <FieldPopper variant="inlined" end={<AngleDownIcon className="stroke-1"/>} defaultShow={true} withArrow={true} renderPopper={() => <div className="p-4">World!</div>}>user</FieldPopper> responsible for the task.
         </div>
     </Story>
 </Canvas>

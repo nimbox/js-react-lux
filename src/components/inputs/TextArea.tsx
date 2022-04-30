@@ -1,74 +1,83 @@
-import classnames from 'classnames';
-import React, { useContext, useImperativeHandle, useRef } from 'react';
-import { Context } from './Control';
-import { Wrapper, WrapperProps } from './Wrapper';
+import classNames from 'classnames';
+import React, { Ref } from 'react';
+import { Field, FieldProps } from './Field';
+import { PlainTextArea } from './PlainTextArea';
 
 
 //
 // TextArea
 //
 
-export interface TextAreaProps extends WrapperProps {
+export interface TextAreaProps extends FieldProps {
+
+    /**
+     * Class name to pass to the field.
+     */
+    fieldClassName?: string;
+
 }
 
-export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps & React.InputHTMLAttributes<HTMLTextAreaElement>>((props, ref) => {
+export const TextArea = React.forwardRef((
+    props: TextAreaProps & React.InputHTMLAttributes<HTMLTextAreaElement>,
+    textAreaRef: Ref<HTMLTextAreaElement>
+) => {
 
-    // properties
+    // Properties
 
     const {
 
+        // Field
+
         variant,
-        error,
-        disabled,
 
         start,
         end,
 
-        className,
+        disabled,
+        error,
 
+        fullWidth,
+        fullHeight,
+        fieldClassName,
+
+        // Input
+
+        className,
         ...textAreaProps
 
     } = props;
 
-    // configuration
-
-    const textAreaRef = useRef<HTMLTextAreaElement>(null);
-    useImperativeHandle(ref, () => textAreaRef.current!);
-
-    const context = useContext(Context);
-
-    // render
+    // Render
 
     return (
-        <Wrapper
+        <Field
 
             variant={variant}
-            disabled={disabled}
-            error={error}
 
             start={start}
             end={end}
 
+            disabled={disabled}
+            error={error}
+
+            fullWidth={fullWidth}
+            fullHeight={fullHeight}
+            className={fieldClassName}
+
         >
-            <textarea
+            <PlainTextArea
 
                 ref={textAreaRef}
 
                 disabled={disabled}
+                error={error}
 
-                className={classnames(
-                    'block w-full',
-                    'bg-transparent',
-                    'outline-none focus:outline-none',
-                    error || context.error ? 'placeholder-danger-500' : 'placeholder-control-placeholder',
-                    'placeholder-opacity-40',
-                    className
-                )}
+                className={classNames(className, { 'w-full': fullWidth, 'h-full': fullHeight })}
 
                 {...textAreaProps}
 
             />
-        </Wrapper>
+        </Field>
     );
 
 });

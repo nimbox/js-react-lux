@@ -20,19 +20,16 @@ export const InputField = (props: InputFieldProps): ReactElement => {
         variant,
 
         label,
-        shrink,
+        start,
+        end,
 
         defaultValue,
         value,
 
+        shrink,
         focus: hasFocusProp,
-        hasValue: hasValueProp,
-
         disabled,
         error,
-
-        start,
-        end,
 
         className,
         fieldClassName
@@ -59,15 +56,13 @@ export const InputField = (props: InputFieldProps): ReactElement => {
             variant={variant}
 
             label={label}
-            shrink={shrink || (hasFocus || hasValue)}
-
-            focus={hasFocusProp || hasFocus}
-
-            disabled={disabled}
-            error={error}
-
             start={start}
             end={end}
+
+            shrink={shrink || hasFocus || hasValue}
+            focus={hasFocusProp || hasFocus}
+            disabled={disabled}
+            error={error}
 
             className={classNames('', fieldClassName)}
 

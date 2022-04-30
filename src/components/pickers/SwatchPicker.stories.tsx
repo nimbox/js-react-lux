@@ -124,25 +124,25 @@ export const VariantsAndSizes = () => {
     return (
         <div className="grid grid-cols-4 items-baseline gap-4">
 
-            <SwatchPicker variant="outlined" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-xs" />
-            <SwatchPicker variant="filled" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-xs" />
-            <SwatchPicker variant="inlined" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-xs" />
-            <SwatchPicker variant="plain" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-xs" />
+            <SwatchPicker variant="outlined" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-xs" />
+            <SwatchPicker variant="filled" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-xs" />
+            <SwatchPicker variant="inlined" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-xs" />
+            <SwatchPicker variant="plain" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-xs" />
 
-            <SwatchPicker variant="outlined" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-base" />
-            <SwatchPicker variant="filled" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-base" />
-            <SwatchPicker variant="inlined" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-base" />
-            <SwatchPicker variant="plain" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-base" />
+            <SwatchPicker variant="outlined" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-base" />
+            <SwatchPicker variant="filled" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-base" />
+            <SwatchPicker variant="inlined" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-base" />
+            <SwatchPicker variant="plain" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-base" />
 
-            <SwatchPicker variant="outlined" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-lg" />
-            <SwatchPicker variant="filled" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-lg" />
-            <SwatchPicker variant="inlined" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-lg" />
-            <SwatchPicker variant="plain" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-lg" />
+            <SwatchPicker variant="outlined" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-lg" />
+            <SwatchPicker variant="filled" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-lg" />
+            <SwatchPicker variant="inlined" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-lg" />
+            <SwatchPicker variant="plain" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-lg" />
 
-            <SwatchPicker variant="outlined" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-2xl" />
-            <SwatchPicker variant="filled" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-2xl" />
-            <SwatchPicker variant="inlined" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-2xl" />
-            <SwatchPicker variant="plain" name="color" defaultValue="#906090" placeholder="Select color" wrapperClassName="text-2xl" />
+            <SwatchPicker variant="outlined" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-2xl" />
+            <SwatchPicker variant="filled" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-2xl" />
+            <SwatchPicker variant="inlined" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-2xl" />
+            <SwatchPicker variant="plain" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-2xl" />
 
         </div>
     );
