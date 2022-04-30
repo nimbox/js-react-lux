@@ -105,6 +105,7 @@ export const Choose = React.forwardRef(<O, G = O[]>(
         // Wrapper
 
         variant,
+
         disabled,
         error,
 
@@ -429,6 +430,7 @@ export const Choose = React.forwardRef(<O, G = O[]>(
             // Wrapper
 
             variant={variant}
+
             error={error}
             disabled={disabled}
 

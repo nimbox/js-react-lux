@@ -1,46 +1,73 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon, AngleUpIcon, CircleIcon, ClockIcon } from '../../icons/components';
+import { consumeEvent } from '../../utilities/consumeEvent';
 import { setRefInputValue } from '../../utilities/setRefInputValue';
-import { Input, InputProps } from '../inputs/Input';
-import { HTMLPopperElement, Popper } from '../Popper';
+import { FieldPopper } from '../inputs/FieldPopper';
+import { InputProps } from '../inputs/Input';
+import { PlainInput } from '../inputs/PlainInput';
+import { HTMLPopperElement, PopperProps } from '../Popper';
 
 
 //
 // TimePicker
 //
 
-interface TimePickerProps extends InputProps {
+interface TimePickerProps extends
+    InputProps,
+    Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'> {
 
-    /** Name used for the input element and returned in the change event. */
+    // Input
+
+    /** 
+     * Name used for the input element and returned in the change event. 
+     */
     name?: string,
 
-    /** String representation of the time (for uncontrolled). */
+    /** 
+     * String representation of the time (for uncontrolled). 
+     */
     defaultValue?: string,
 
-    /** String representation of the time (for controlled). */
+    /** 
+     * String representation of the time (for controlled). 
+     */
     value?: string,
 
-    /** Change event handler (for controlled). */
+    /** 
+     * Change event handler (for controlled). 
+     */
     onChange?: React.ChangeEventHandler<HTMLInputElement>,
 
-    /** Parse time function defaults to parsing dd:mm ampm into [hh, mm]. */
+    // Configuration
+
+    /** 
+     * Parse time function defaults to parsing dd:mm ampm into [hh, mm]. 
+     */
     parseTime?: (s: string) => [number, number] | null;
 
-    /** Format hour function defaults to formatting [hh] into hh (12 hour based). */
+    /** 
+     * Format hour function defaults to formatting [hh] into hh (12 hour based). 
+     */
     formatHour?: (hour: number) => string;
 
-    /** Format time function defaults to formatting [hh, mm] into hh:mm ampm (12 hour based). */
+    /** 
+     * Format time function defaults to formatting [hh, mm] into hh:mm ampm (12 hour based). 
+     */
     formatTime?: (time: [number, number]) => string;
 
-    /** Classes to append to the popper element. */
+    // Styling
+
+    /** 
+     * Classes to append to the popper element. 
+     */
     popperClassName?: string;
 
 }
 
-// constants
+// Constants
 
 const morning = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 const noon = [12];
@@ -56,6 +83,7 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
     // properties
 
     const {
+
         name,
         defaultValue,
         value,
@@ -65,7 +93,15 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
         formatHour = internalFormatHour,
         formatTime = internalFormatTime,
 
+        // Popper
+
+        withPlacement,
+        withArrow,
+        withSameWidth,
+
         popperClassName,
+
+        // Input
 
         ...inputProps
 
@@ -85,17 +121,19 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
     const [internalValue, setInternalValue] = useState(defaultValue || '');
     useEffect(() => { if (controlled) { setInternalValue(value || ''); } }, [controlled, value]);
 
-    // 
+    // State
+
     const times = useRef({ watch: 8 });
     const timesRef = useRef<HTMLDivElement>(null);
     useEffect(() => { scroll() });
 
     // Popper states
+
     const [show, setShow] = useState(false);
     const popperRef = useRef<HTMLPopperElement>(null);
     useOnOutsideClick(show, () => { if (show) { setShow(false); } }, inputRef.current, popperRef.current);
 
-    // handlers
+    // Handlers
 
     const handleShow = () => {
         if (!show) { setShow(true); }
@@ -110,23 +148,21 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
-        switch (e.keyCode) {
-            case 9: // tab
-            case 13: // enter
+
+        switch (e.key) {
+            case 'Tab': // tab
+            case 'Enter': // enter
                 handleFinalValueTime(parseTime(internalValue));
                 break;
 
             default:
                 handleShow();
         }
+
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (onChange) {
-            // bubble up change event regardless of 
-            // controlled or uncontrolled
-            onChange(e);
-        }
+        onChange?.(e);
         if (value == null) {
             // set internal value if uncontrolled
             setInternalValue(e.target.value);
@@ -226,14 +262,95 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
 
     // Render Popper
 
-    
+    const renderTime = () => (
+        <div onMouseDown={consumeEvent}>
+
+            <div className="px-2 py-1 flex flex-row items-center justify-between border-b border-control-border">
+                <div className="flex-grow text-center font-bold">
+                    {/* {t('hour', { defaultValue: 'Hour' })} */}
+                </div>
+                <div className="flex-none space-x-2">
+                    <button type="button" className="focus:outline-none" onClick={handleClickPrevHour}><AngleUpIcon /></button>
+                    <button type="button" className="focus:outline-none" onClick={handleClickNoon}><CircleIcon /></button>
+                    <button type="button" className="focus:outline-none" onClick={handleClickNextHour}><AngleDownIcon /></button>
+                </div>
+            </div>
+
+            <div ref={timesRef} className="h-64 overflow-scroll">
+                <table className="table-fixed text-center" style={{ width: '12em' }}>
+
+                    <thead>
+                        <tr>
+                            <th style={{ width: '3em' }}></th>
+                            {minutes.map(m => <td key={m} className="w-10" style={{ width: '3em' }}></td>)}
+                        </tr>
+                    </thead>
+
+                    <tbody className="cursor-pointer">
+                        {morning.map(h =>
+                            <tr key={h} className={hourClasses([h, 0])}>
+                                <th className="text-base group-hover:text-content group-hover:bg-secondary-500" onClick={e => handleClickTime(e, [h, 0])}>{formatHour(h)}</th>
+                                {minutes.map(m =>
+                                    <td key={m} onClick={e => handleClickTime(e, [h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
+                                )}
+                            </tr>
+                        )}
+                    </tbody>
+
+                    <tbody className="bg-gray-200 cursor-pointer">
+                        {noon.map(h =>
+                            <tr key={h} className={hourClasses([h, 0])}>
+                                <th className="text-base group-hover:text-content group-hover:bg-secondary-500" onClick={e => handleClickTime(e, [h, 0])}>{formatHour(h)}</th>
+                                {minutes.map(m =>
+                                    <td key={m} onClick={e => handleClickTime(e, [h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
+                                )}
+                            </tr>
+                        )}
+                    </tbody>
+
+                    <tbody className="cursor-pointer">
+                        {afternoon.map(h =>
+                            <tr key={h} className={hourClasses([h, 0])}>
+                                <th className="text-base group-hover:text-content group-hover:bg-secondary-500" onClick={e => handleClickTime(e, [h, 0])}>{formatHour(h)}</th>
+                                {minutes.map(m =>
+                                    <td key={m} onClick={e => handleClickTime(e, [h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
+                                )}
+                            </tr>
+                        )}
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    );
+
 
     // Render
 
     return (
-        <>
+        <FieldPopper
 
-            <Input type="text"
+            withToggle={false}
+
+            show={show}
+            onChangeShow={setShow}
+
+            end={<ClockIcon onClick={handleFocus} className="cursor-pointer" />}
+
+             // Popper
+
+             withPlacement={withPlacement}
+             withArrow={withArrow}
+             withSameWidth={withSameWidth}
+
+             renderPopper={renderTime}
+
+            popperClassName={popperClassName}
+
+        >
+
+            <PlainInput type="text"
 
                 ref={inputRef}
                 name={name}
@@ -245,91 +362,23 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
                 onFocus={handleFocus}
                 onBlur={handleBlur}
 
-                onMouseDown={handleFocus}
                 onKeyDown={handleKeyDown}
 
                 autoComplete="off"
-
-                end={<ClockIcon onClick={handleFocus} className="cursor-pointer" />}
 
                 {...inputProps}
 
             />
 
-            {show &&
-                <Popper ref={popperRef} reference={inputRef.current!}
-                    onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                    className={classnames('bg-content-fg border border-content-border rounded', popperClassName)}
-                >
+        </FieldPopper>
 
-                    <div className="px-2 py-1 flex flex-row items-center justify-between bg-gray-400 rounded-t-sm">
-                        <div className="flex-grow text-center font-bold">
-                            {t('hour', { defaultValue: 'Hour' })}
-                        </div>
-                        <div className=" flex-none space-x-2">
-                            <button type="button" className="focus:outline-none" onClick={handleClickPrevHour}><AngleUpIcon className="text-content stroke-current stroke-2" /></button>
-                            <button type="button" className="focus:outline-none" onClick={handleClickNoon}><CircleIcon className="text-content stroke-current stroke-2" /></button>
-                            <button type="button" className="focus:outline-none" onClick={handleClickNextHour}><AngleDownIcon className="text-content stroke-current stroke-2" /></button>
-                        </div>
-                    </div>
-
-                    <div ref={timesRef} className="h-64 overflow-scroll">
-                        <table className="table-fixed text-center" style={{ width: '12em' }}>
-
-                            <thead>
-                                <tr>
-                                    <th style={{ width: '3em' }}></th>
-                                    {minutes.map(m => <td key={m} className="w-10" style={{ width: '3em' }}></td>)}
-                                </tr>
-                            </thead>
-
-                            <tbody className="cursor-pointer">
-                                {morning.map(h =>
-                                    <tr key={h} className={hourClasses([h, 0])}>
-                                        <th className="text-base group-hover:text-content group-hover:bg-secondary-500" onClick={e => handleClickTime(e, [h, 0])}>{formatHour(h)}</th>
-                                        {minutes.map(m =>
-                                            <td key={m} onClick={e => handleClickTime(e, [h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
-                                        )}
-                                    </tr>
-                                )}
-                            </tbody>
-
-                            <tbody className="bg-gray-200 cursor-pointer">
-                                {noon.map(h =>
-                                    <tr key={h} className={hourClasses([h, 0])}>
-                                        <th className="text-base group-hover:text-content group-hover:bg-secondary-500" onClick={e => handleClickTime(e, [h, 0])}>{formatHour(h)}</th>
-                                        {minutes.map(m =>
-                                            <td key={m} onClick={e => handleClickTime(e, [h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
-                                        )}
-                                    </tr>
-                                )}
-                            </tbody>
-
-                            <tbody className="cursor-pointer">
-                                {afternoon.map(h =>
-                                    <tr key={h} className={hourClasses([h, 0])}>
-                                        <th className="text-base group-hover:text-content group-hover:bg-secondary-500" onClick={e => handleClickTime(e, [h, 0])}>{formatHour(h)}</th>
-                                        {minutes.map(m =>
-                                            <td key={m} onClick={e => handleClickTime(e, [h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
-                                        )}
-                                    </tr>
-                                )}
-                            </tbody>
-
-                        </table>
-                    </div>
-
-                </Popper>
-            }
-
-        </>
     );
 
 });
 
 
 //
-// default parse and format
+// Default parse and format
 //
 
 /**

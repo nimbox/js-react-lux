@@ -24,6 +24,7 @@ export const Default = ({ withPlacement, withArrow, withSameWidth, error, popper
             <SwatchPicker
 
                 defaultValue="#906090"
+                
                 error={error}
 
                 withPlacement={withPlacement}

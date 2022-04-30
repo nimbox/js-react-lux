@@ -5,42 +5,66 @@ import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon } from '../../icons/components';
 import { consumeEvent } from '../../utilities/consumeEvent';
 import { setRefInputValue } from '../../utilities/setRefInputValue';
-import { Input, InputProps } from '../inputs/Input';
-import { HTMLPopperElement, Popper, PopperPlacement } from '../Popper';
+import { FieldPopper, FieldPopperProps } from '../inputs/FieldPopper';
+import { PlainInput } from '../inputs/PlainInput';
+import { HTMLPopperElement, PopperProps } from '../Popper';
 
 
 //
 // DatePicker
 //
 
-export interface DatePickerProps extends InputProps {
+export interface DatePickerProps extends
+    FieldPopperProps,
+    Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'> {
 
-    /** Name used for the input element and returned in the change event. */
+    // Input
+
+    /** 
+     * Name used for the input element and returned in the change event.
+     */
     name?: string,
 
-    /** String representation of the date (for uncontrolled). */
+    /** 
+     * String representation of the date (for uncontrolled).
+     */
     defaultValue?: string,
 
-    /** String representation of the date (for controlled). */
+    /** 
+     * String representation of the date (for controlled).
+     */
     value?: string,
 
-    /** Change event handler (for controlled). */
+    /** 
+     * Change event handler (for controlled). 
+     */
     onChange?: React.ChangeEventHandler<HTMLInputElement>,
+
+    // Configuration
+
+    /** 
+     * Parse date function defaults to parsing dd-mm-yyyy into [yyyy, mm, dd]
+     * (with zero based month). 
+     */
+    parseDate?: (s: string) => [number, number, number] | null;
+
+    /** 
+     * Format date function defaults to formatting [yyyy, mm, dd] (with zero
+     * based month) into dd-mm-yyy. 
+     */
+    formatDate?: (date: [number, number, number]) => string;
+
+    /** 
+     * The first day of the week to display in the calendar. 
+     */
+    firstDayOfWeek?: 0 | 1;
+
+    // Styling
+
+    fieldClassName?: string;
 
     /** Wether to show the shortcuts menu. */
     withShortcuts?: boolean
-
-    /** Parse date function defaults to parsing dd-mm-yyyy into [yyyy, mm, dd] (with zero based month). */
-    parseDate?: (s: string) => [number, number, number] | null;
-
-    /** Format date function defaults to formatting [yyyy, mm, dd] (with zero based month) into dd-mm-yyy. */
-    formatDate?: (date: [number, number, number]) => string;
-
-    /** The first day of the week to display in the calendar. */
-    firstDayOfWeek?: 0 | 1;
-
-    /** Popper placement. */
-    placement?: PopperPlacement;
 
     /** Classes to append to the popper element. */
     popperClassName?: string;
@@ -69,8 +93,9 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
 
     const {
 
-        name,
+        // Picker
 
+        name,
         defaultValue,
         value,
         onChange,
@@ -80,8 +105,22 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
         formatDate = internalFormatDate,
 
         firstDayOfWeek = 0,
-        placement,
+
+        // FieldPopper
+
+        withToggle,
+
+        fieldClassName,
+
+        // Popper
+
+        withPlacement,
+        withArrow,
+        withSameWidth,
+
         popperClassName,
+
+        // Input
 
         ...inputProps
 
@@ -224,14 +263,94 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
 
     }
 
-    // render
+    // Render Popper
+
+    const renderDate = () => (
+        <div onMouseDown={consumeEvent} className={classNames('flex flex-row', popperClassName)}>
+
+            <div>
+
+                <div className="px-2 py-1 flex flex-row items-center justify-between border-b border-control-border">
+                    <div className="flex-grow text-center font-bold">
+                        {months![calendar.getMonth()]} {calendar.getFullYear()}
+                    </div>
+                    <div className="flex-none space-x-2">
+                        <button type="button" className="focus:outline-none" onClick={handleClickPrevMonth}><AngleLeftIcon /></button>
+                        <button type="button" className="focus:outline-none" onClick={handleClickToday}><CircleIcon /></button>
+                        <button type="button" className="focus:outline-none" onClick={handleClickNextMonth}><AngleRightIcon /></button>
+                    </div>
+                </div>
+
+                <table className="table-fixed text-center" style={{ width: '21em' }}>
+
+                    <thead>
+                        <tr>
+                            {weeks[0].map((d, i) =>
+                                <th key={i} className="" style={{ padding: '0 0.5em', width: '3em' }}>
+                                    {days[d.getDay()]}
+                                </th>)
+                            }
+                        </tr>
+                    </thead>
+
+                    <tbody className="cursor-pointer">
+                        {weeks.map(w =>
+                            <tr key={w[0].getTime()}>
+                                {w.map(d =>
+                                    <td key={d.getTime()} onClick={(e) => handleClickDate(e, d)} className={dayClasses(d)}>
+                                        {d.getDate()}
+                                    </td>
+                                )}
+                            </tr>
+                        )}
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {withShortcuts &&
+                <div className="flex flex-col justify-between items-stretch border-l border-control-border cursor-pointer">
+                    {namedDays.map((s, i) => <div key={i} onClick={(e) => handleClickDate(e, s.date(new Date(today)))} className="px-2 truncate hover:text-white hover:bg-secondary-500">{t(`namedDays.${s.label}`, { defaultValue: s.label })}</div>)}
+                </div>
+            }
+
+        </div>
+    );
 
     const months = t('months', { defaultValue: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], returnObjects: true }) as string[];
     const days = t('shortDays', { defaultValue: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], returnObjects: true }) as string[];
 
+    // Render
+
     return (
-        <>
-            <Input type="text"
+
+        <FieldPopper
+
+            // FieldPopper
+
+            withToggle={withToggle}
+
+            end={<CalendarIcon onClick={handleFocus} className="cursor-pointer" />}
+
+            fieldClassName={fieldClassName}
+
+            // Popper
+
+            show={show}
+            onChangeShow={setShow}
+
+            withPlacement={withPlacement}
+            withArrow={withArrow}
+            withSameWidth={withSameWidth}
+
+            renderPopper={renderDate}
+
+            popperClassName={popperClassName}
+
+        >
+
+            <PlainInput type="text"
 
                 ref={inputRef}
                 name={name}
@@ -243,81 +362,23 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
                 onFocus={handleFocus}
                 onBlur={handleBlur}
 
-                onMouseDown={handleFocus}
                 onKeyDown={handleKeyDown}
 
                 autoComplete="off"
 
-                end={<CalendarIcon onClick={handleFocus} className="cursor-pointer" />}
-
                 {...inputProps}
+
             />
 
-            {show &&
-                <Popper ref={popperRef} reference={inputRef.current!}
-                    onMouseDown={consumeEvent}
-                    withPlacement={placement}
-                    className={classNames('flex flex-row bg-content-fg border border-content-border rounded', popperClassName)}
-                >
+        </FieldPopper>
 
-                    <div>
-
-                        <div className="px-2 py-1 flex flex-row items-center justify-between bg-gray-400 rounded-t-sm">
-                            <div className="flex-grow text-center font-bold">
-                                {months![calendar.getMonth()]} {calendar.getFullYear()}
-                            </div>
-                            <div className="flex-none space-x-2">
-                                <button type="button" className="focus:outline-none" onClick={handleClickPrevMonth}><AngleLeftIcon className="text-content stroke-current stroke-2" /></button>
-                                <button type="button" className="focus:outline-none" onClick={handleClickToday}><CircleIcon className="text-content stroke-current stroke-2" /></button>
-                                <button type="button" className="focus:outline-none" onClick={handleClickNextMonth}><AngleRightIcon className="text-content stroke-current stroke-2" /></button>
-                            </div>
-                        </div>
-
-                        <table className="table-fixed text-center" style={{ width: '21em' }}>
-
-                            <thead>
-                                <tr>
-                                    {weeks[0].map((d, i) =>
-                                        <th key={i} className="" style={{ padding: '0 0.5em', width: '3em' }}>
-                                            {days[d.getDay()]}
-                                        </th>)
-                                    }
-                                </tr>
-                            </thead>
-
-                            <tbody className="cursor-pointer">
-                                {weeks.map(w =>
-                                    <tr key={w[0].getTime()}>
-                                        {w.map(d =>
-                                            <td key={d.getTime()} onClick={(e) => handleClickDate(e, d)} className={dayClasses(d)}>
-                                                {d.getDate()}
-                                            </td>
-                                        )}
-                                    </tr>
-                                )}
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                    {withShortcuts &&
-                        <div className="flex flex-col justify-between items-stretch bg-gray-300 cursor-pointer">
-                            {namedDays.map((s, i) => <div key={i} onClick={(e) => handleClickDate(e, s.date(new Date(today)))} className="px-2 truncate hover:text-white hover:bg-secondary-500">{t(`namedDays.${s.label}`, { defaultValue: s.label })}</div>)}
-                        </div>
-                    }
-
-                </Popper>
-            }
-
-        </>
     );
 
 });
 
 
 //
-// utilities
+// Utilities
 //
 
 /**
@@ -337,7 +398,7 @@ function startOfMonth(date: [number, number, number] | null): Date {
 }
 
 //
-// default parse and format
+// Default parse and format
 //
 
 /**

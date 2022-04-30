@@ -28,7 +28,11 @@ export interface FieldPopperProps extends FieldProps,
 
     onChangeShow: (show: boolean) => void;
 
-    // popper
+    // Field
+
+    fieldClassName?: string;
+
+    // Popper
 
     /**
      * Render the popper.
@@ -52,6 +56,21 @@ export interface FieldPopperProps extends FieldProps,
 
 }
 
+/**
+ * FieldPopper.
+ *
+ * When using this component with inputs there are two possible situations: the
+ * elements in the popper don't require focus (click only selection), or there
+ * are elements in the popper that can be focused (fields inside the popper).
+ *
+ * Clickable only. Requires that the rendered popper consumes all mouse events
+ * so that the focus never leaves the input in the field. This can be done with
+ * `onMouseDown={consumeEvent}` at the highest level element of the popper. Take
+ * a look at `DatePicker` to see how this is done.
+ *
+ * Focusable. Take a look at `Choose` to see how this is done.
+ * 
+ */
 export const FieldPopper = React.forwardRef((
     props: FieldPopperProps & React.HTMLAttributes<HTMLDivElement>,
     fieldRef: Ref<HTMLDivElement>
@@ -85,9 +104,13 @@ export const FieldPopper = React.forwardRef((
         show: showProp,
         onChangeShow: onChangeShowProp,
 
+        fieldClassName,
+
+        //
+
         renderPopper,
         onPopperBlur,
-        popperClassName = 'max-h-96 overflow-y-scroll bg-control-bg border border-control-border rounded filter drop-shadow',
+        popperClassName = 'bg-control-bg border border-control-border rounded drop-shadow',
 
         //
 
@@ -218,6 +241,8 @@ export const FieldPopper = React.forwardRef((
                 onFocus={handleFieldFocus}
                 onBlur={handleFieldBlur}
                 onClick={handleFieldClick}
+
+                className={fieldClassName}
 
                 {...fieldProps}
 

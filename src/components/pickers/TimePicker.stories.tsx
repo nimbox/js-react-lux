@@ -7,7 +7,7 @@ import { TimePicker } from './TimePicker';
 
 
 export default {
-    title: 'Component/Picker/TimePicker',
+    title: 'Components/Pickers/TimePicker',
     parameters: {
         layout: 'centered'
     }
@@ -37,7 +37,7 @@ export const Uncontrolled = () => {
 
     return (
         <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
-            <TimePicker name="time" ref={ref} defaultValue='08:30am' />
+            <TimePicker ref={ref} name="time" defaultValue='08:30am' />
             <Button>Submit</Button>
         </form>
     );

@@ -68,7 +68,7 @@ const SortableItem: FC<SortableItemProps> = (({ type, onChange, findItem, onUpda
         <li ref={drop} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
             <div ref={(refPreview as LegacyRef<HTMLDivElement> | undefined)} className={classnames(
                 'relative ',
-                {  })}>
+                {})}>
                 <div className="">
                     {React.cloneElement(children as ReactElement, {
                         style: { opacity: isOver ? 0 : 1 }
@@ -115,10 +115,10 @@ const useDraggable =
             [value, originalIndex, onChange],
         )
 
-        const [{ isOver }, drop] = useDrop(
+        const [{ isOver }, drop]: any = useDrop(
             () => ({
                 accept: type,
-                collect(monitor) {
+                collect(monitor: any) {
                     return {
                         isOver: monitor.isOver()
                     }
@@ -133,7 +133,7 @@ const useDraggable =
                         onChange(draggedValue, target);
                     }
                 },
-            }),
+            }) as any,
             [findItem, onChange],
         );
 
