@@ -1,4 +1,6 @@
-import React, { Ref, useCallback, useImperativeHandle, useRef, useState } from 'react';
+import classNames from 'classnames';
+import React, { forwardRef, HTMLAttributes, Ref, useCallback, useImperativeHandle, useRef, useState } from 'react';
+import { useInternalize } from '../../hooks/useInternalize';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { getActiveElement } from '../../utilities/getActiveElement';
 import { HTMLPopperElement, Popper, PopperProps } from '../Popper';
@@ -12,32 +14,41 @@ import { Field, FieldProps } from './Field';
 export interface FieldPopperProps extends FieldProps,
     Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'> {
 
+    // Popper
+
+    /**
+     * Popper reference in case you need to do something with the popper itself.
+     */
+    popperRef?: Ref<HTMLPopperElement>;
+
+    /**
+     * Class name to apply to the popper.
+     * @default bg-control-bg border border-control-border rounded drop-shadow
+     */
+    popperClassName?: string;
+
+    // FieldPopper
+
+    /**
+     * Default show value (for uncontrolled).
+     */
+    defaultShow?: boolean;
+
+    /**
+     * Show value (for controlled).
+     */
+    show?: boolean;
+
+    /**
+     * Change show event handler (for controlled).
+     */
+    onChangeShow: (show: boolean) => void;
+
     /**
      * Toggle visibility of the popper when a click is detected on the field.
      * @default true
      */
     withToggle?: boolean;
-
-    // popper
-
-    popperRef?: Ref<HTMLPopperElement>;
-
-    defaultShow?: boolean;
-
-    show?: boolean;
-
-    onChangeShow: (show: boolean) => void;
-
-    // Field
-
-    fieldClassName?: string;
-
-    // Popper
-
-    /**
-     * Render the popper.
-     */
-    renderPopper: () => React.ReactElement;
 
     /**
      * Called when tabbing inside the popper reaches the begining or the end.
@@ -47,17 +58,15 @@ export interface FieldPopperProps extends FieldProps,
     onPopperBlur?: () => void;
 
     /**
-     * Class name to apply to the popper.
-     * @default `max-h-96 overflow-y-scroll bg-control-bg border border-control-border rounded filter drop-shadow`
+     * Render the popper.
      */
-    popperClassName?: string;
-
-
+    renderPopper: () => React.ReactElement;
 
 }
 
 /**
- * FieldPopper.
+ * FieldPopper. Container of all inputs that require a popper to display or
+ * input further information.
  *
  * When using this component with inputs there are two possible situations: the
  * elements in the popper don't require focus (click only selection), or there
@@ -69,10 +78,10 @@ export interface FieldPopperProps extends FieldProps,
  * a look at `DatePicker` to see how this is done.
  *
  * Focusable. Take a look at `Choose` to see how this is done.
- * 
+ *
  */
-export const FieldPopper = React.forwardRef((
-    props: FieldPopperProps & React.HTMLAttributes<HTMLDivElement>,
+export const FieldPopper = forwardRef((
+    props: FieldPopperProps & HTMLAttributes<HTMLDivElement>,
     fieldRef: Ref<HTMLDivElement>
 ) => {
 
@@ -88,6 +97,8 @@ export const FieldPopper = React.forwardRef((
         onFocus,
         onBlur,
 
+        children,
+
         // Popper 
 
         popperRef,
@@ -96,25 +107,19 @@ export const FieldPopper = React.forwardRef((
         withArrow,
         withSameWidth,
 
+        popperClassName,
+
         // FieldPopper
+
+        defaultShow,
+        show,
+        onChangeShow,
 
         withToggle = true,
 
-        defaultShow: defaultShowProp,
-        show: showProp,
-        onChangeShow: onChangeShowProp,
-
-        fieldClassName,
-
-        //
+        onPopperBlur,
 
         renderPopper,
-        onPopperBlur,
-        popperClassName = 'bg-control-bg border border-control-border rounded drop-shadow',
-
-        //
-
-        children,
 
         // Rest of field
 
@@ -125,32 +130,16 @@ export const FieldPopper = React.forwardRef((
     // Assertions
 
     if (process.env.NODE_ENV !== 'production') {
-        if (showProp !== null && onChangeShowProp == null) {
+        if (show !== null && onChangeShow == null) {
             console.error('You provided a `show` prop without an `onChangeShow` handler.');
         }
     }
 
-    // State
+    // Internalize `show`
 
-    const isShowControlled = showProp != null;
-    const [internalShow, setInternalShow] = useState(defaultShowProp != null ? defaultShowProp : false);
-    const show = isShowControlled ? showProp! : internalShow;
+    const [internalShow, handleChangeInternalShow] = useInternalize(false, defaultShow, show, onChangeShow);
 
-    // Handlers
-
-    const handleShow = useCallback(() => {
-        onChangeShowProp?.(true);
-        if (!isShowControlled) {
-            setInternalShow(true);
-        }
-    }, [isShowControlled, onChangeShowProp]);
-
-    const handleHide = useCallback(() => {
-        if (!isShowControlled) {
-            setInternalShow(false);
-        }
-        onChangeShowProp?.(false);
-    }, [isShowControlled, onChangeShowProp]);
+    // Clone references
 
     const [internalFieldRef, setInternalFieldRef] = useState<HTMLDivElement | null>(null);
     useImperativeHandle(fieldRef, () => internalFieldRef!);
@@ -158,7 +147,10 @@ export const FieldPopper = React.forwardRef((
     const [internalPopperRef, setInternalPopperRef] = useState<HTMLPopperElement | null>(null);
     useImperativeHandle(popperRef, () => internalPopperRef!);
 
-    useOnOutsideClick(show, handleHide, internalFieldRef, internalPopperRef);
+    // Hide when clicking outside the field or the popper
+
+    const handleHide = useCallback(() => handleChangeInternalShow(false), [handleChangeInternalShow]);
+    useOnOutsideClick(internalShow, handleHide, internalFieldRef, internalPopperRef);
 
     // Field handlers
 
@@ -171,9 +163,9 @@ export const FieldPopper = React.forwardRef((
 
     const handleFieldFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
         onFocus?.(e);
-        handleShow();
+        handleChangeInternalShow(true);
         isShowOnFocus.current = true;
-    }, [handleShow, onFocus]);
+    }, [onFocus, handleChangeInternalShow]);
 
     const handleFieldBlur = useCallback((e: React.FocusEvent<HTMLDivElement>) => {
         setTimeout(() => {
@@ -182,24 +174,20 @@ export const FieldPopper = React.forwardRef((
                 !(activeElement == null) &&
                 (internalPopperRef != null && !internalPopperRef.contains(activeElement))
             ) {
-                handleHide();
+                handleChangeInternalShow(false);
             }
         }, 0);
         onBlur?.(e);
-    }, [internalPopperRef, handleHide, onBlur]);
+    }, [internalPopperRef, handleChangeInternalShow, onBlur]);
 
     const handleFieldClick = useCallback(() => {
         if (!isShowOnFocus.current) {
             if (withToggle) {
-                if (show) {
-                    handleHide();
-                } else {
-                    handleShow();
-                }
+                handleChangeInternalShow(!internalShow);
             }
         }
         isShowOnFocus.current = false;
-    }, [withToggle, show, handleShow, handleHide]);
+    }, [withToggle, internalShow, handleChangeInternalShow]);
 
     // Popper handlers
 
@@ -211,7 +199,7 @@ export const FieldPopper = React.forwardRef((
                 !(internalFieldRef != null && internalFieldRef?.contains(activeElement)) &&
                 !(internalPopperRef != null && internalPopperRef?.contains(activeElement))
             ) {
-                handleHide();
+                handleChangeInternalShow(false);
             }
         }, 0);
     };
@@ -233,16 +221,13 @@ export const FieldPopper = React.forwardRef((
 
                 ref={setInternalFieldRef}
 
-                focus={show}
-
+                focus={internalShow}
                 disabled={disabled}
                 error={error}
 
                 onFocus={handleFieldFocus}
                 onBlur={handleFieldBlur}
                 onClick={handleFieldClick}
-
-                className={fieldClassName}
 
                 {...fieldProps}
 
@@ -252,7 +237,7 @@ export const FieldPopper = React.forwardRef((
 
             </Field>
 
-            {show && !disabled &&
+            {internalShow && !disabled &&
 
                 <Popper
 
@@ -265,7 +250,7 @@ export const FieldPopper = React.forwardRef((
 
                     onBlur={handlePopperBlur}
 
-                    className={popperClassName}
+                    className={classNames('bg-control-bg border border-control-border rounded drop-shadow', popperClassName)}
 
                 >
 

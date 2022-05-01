@@ -111,7 +111,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, r
                 'lux-button-text': variant === 'text',
                 'lux-button-link': variant === 'link',
 
-                'lux-button-primary': semantic === 'primary',
+                'lux-button-primary drop-shadow': semantic === 'primary',
                 'lux-button-secondary': semantic === 'secondary',
                 'lux-button-muted': semantic === 'muted',
                 'lux-button-danger': semantic === 'danger',

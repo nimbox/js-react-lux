@@ -1,5 +1,6 @@
 import classNames from 'classnames';
-import React, { Ref } from 'react';
+import React, { ChangeEventHandler, forwardRef, InputHTMLAttributes, Ref } from 'react';
+import { useInternalizeInput } from '../../hooks/useInternalizeInput';
 import { Field, FieldProps } from './Field';
 import { PlainInput } from './PlainInput';
 
@@ -8,7 +9,16 @@ import { PlainInput } from './PlainInput';
 // Input
 //
 
-export interface InputProps extends FieldProps {
+export interface InputProps extends Omit<FieldProps, 'className'> {
+
+    // Field
+
+    /**
+     * Class name to pass to the field.
+     */
+    fieldClassName?: string;
+
+    // Input
 
     /** 
      * Name used for the input element and returned in the change event. 
@@ -16,29 +26,43 @@ export interface InputProps extends FieldProps {
     name?: string;
 
     /** 
-     * String representation of the color (for uncontrolled). 
+     * Default value (for uncontrolled). 
      */
     defaultValue?: string;
 
     /** 
-     * String representation of the color (for controlled). 
+     * Value (for controlled). 
      */
     value?: string;
+
+    /**
+     * Placeholder to show inside the input. If a placeholder is set, the label
+     * will be forced to shrink state.
+     */
+    placeholder?: string;
 
     /** 
      * Change event handler (for controlled). 
      */
-    onChange?: React.ChangeEventHandler<HTMLInputElement>;
+    onChange?: ChangeEventHandler<HTMLInputElement>;
+
+    // Input Styling
 
     /**
-     * Class name to pass to the field.
+     * Classes to apply to the input.
      */
-    fieldClassName?: string;
+    className?: string;
 
 }
 
-export const Input = React.forwardRef((
-    props: InputProps & React.InputHTMLAttributes<HTMLInputElement>,
+/**
+ * This component behaves exactly the same way as an html `input` element. The
+ * `ref` and `className` of this component are forwarded to the internal `input`
+ * element. Beware that this `input` is wrapped in other components when setting
+ * the `className`.
+ */
+export const Input = forwardRef((
+    props: InputProps & InputHTMLAttributes<HTMLInputElement>,
     inputRef: Ref<HTMLInputElement>
 ) => {
 
@@ -50,22 +74,35 @@ export const Input = React.forwardRef((
 
         variant,
 
+        label,
         start,
         end,
 
+        shrink,
+        focus,
         disabled,
         error,
 
-        fullWidth,
-        fullHeight,
+        withFullWidth,
+        withFullHeight,
+
         fieldClassName,
 
         // Input
 
+        onChange,
+
         className,
+
+        // Rest goes to Input
+
         ...inputProps
 
     } = props;
+
+    // Internalize `value`
+
+    const [internalValue, handleChangeInternalValue] = useInternalizeInput('', props.defaultValue, props.value, onChange);
 
     // Render
 
@@ -74,14 +111,18 @@ export const Input = React.forwardRef((
 
             variant={variant}
 
+            label={label}
             start={start}
             end={end}
 
+            shrink={shrink || props.placeholder != null || internalValue.length > 0}
+            focus={focus}
             disabled={disabled}
             error={error}
 
-            fullWidth={fullWidth}
-            fullHeight={fullHeight}
+            withFullWidth={withFullWidth}
+            withFullHeight={withFullHeight}
+
             className={fieldClassName}
 
         >
@@ -93,7 +134,9 @@ export const Input = React.forwardRef((
                 disabled={disabled}
                 error={error}
 
-                className={classNames(className, { 'w-full': fullWidth, 'h-full': fullHeight })}
+                onChange={handleChangeInternalValue}
+
+                className={classNames(className, { 'w-full': withFullWidth, 'h-full': withFullHeight })}
 
                 {...inputProps}
 

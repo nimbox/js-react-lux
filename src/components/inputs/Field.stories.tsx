@@ -9,26 +9,20 @@ import { Field } from './Field';
 export default {
     title: 'Components/Inputs/Field',
     component: Field,
-    opions: {
-        storySort: {}
+    parameters: {
+        layout: 'centered'
     }
 } as ComponentMeta<typeof Field>;
 
-const Template: ComponentStory<typeof Field> = ({ variant, ...props }) => (
-    // <div className="grid grid-cols-2 gap-x-4 items-top">
-    // <div className="grid grid-cols-3 gap-x-2 justify-items-center items-start">
-    //     <Field variant="outlined" {...props} />
-    //     <Field variant="filled" {...props} />
-    //     <Field variant="inlined" {...props} />
-    // </div>
+const Template: ComponentStory<typeof Field> = ({ variant, ...args }) => (
     <div className="grid grid-cols-3 gap-x-2 justify-items-center items-baseline">
-        <Field variant="outlined" {...props} />
-        <Field variant="filled" {...props} />
-        <Field variant="inlined" {...props} />
+        <Field variant="outlined" {...args} />
+        <Field variant="filled" {...args} />
+        <Field variant="inlined" {...args} />
     </div>
-    // </div>
 );
 
+// Default
 
 export const Default = Template.bind({});
 Default.args = { label: 'XXXX', shrink: true, children: 'XXXXXXXXXXXX' };
@@ -60,6 +54,21 @@ LabelShrinkNoContentFocus.args = { ...LabelShrinkNoContent.args, focus: true };
 
 export const LabelShrinkContentFocus = Template.bind({});
 LabelShrinkContentFocus.args = { ...LabelShrinkContent.args, focus: true };
+
+// Focus Within
+
+export const NoLabelContentFocusWithin = Template.bind({});
+NoLabelContentFocusWithin.args = { ...NoLabelContent, children: <input className="max-w-full" /> };
+
+export const LabelNoContentFocusWithin = Template.bind({});
+LabelNoContentFocusWithin.args = { ...LabelNoContent.args, children: <input className="max-w-full" /> };
+
+export const LabelShrinkNoContentFocusWithin = Template.bind({});
+LabelShrinkNoContentFocusWithin.args = { ...LabelShrinkNoContent.args, children: <input className="max-w-full" /> };
+
+export const LabelShrinkContentFocusWithin = Template.bind({});
+LabelShrinkContentFocusWithin.args = { ...LabelShrinkContent.args, children: <input className="max-w-full" /> };
+
 
 // Disabled
 

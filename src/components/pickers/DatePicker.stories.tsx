@@ -13,10 +13,10 @@ export default {
     }
 };
 
-export const Template = ({ firstDayOfWeek, withShortcuts, placement, error, popperClassName }: DatePickerProps) => {
+export const Template = ({ firstDayOfWeek, withShortcuts, withPlacement, error, popperClassName }: DatePickerProps) => {
     return (
         <div className="w-96">
-            <DatePicker defaultValue="12-19-1967" firstDayOfWeek={firstDayOfWeek} withShortcuts={withShortcuts} error={error} placement={placement} popperClassName={popperClassName} placeholder="Select date" />
+            <DatePicker defaultValue="12-19-1967" firstDayOfWeek={firstDayOfWeek} withShortcuts={withShortcuts} error={error} withPlacement={withPlacement} popperClassName={popperClassName} placeholder="Select date" />
         </div>
     );
 };
@@ -36,7 +36,7 @@ export const Controlled = () => {
 
     return (
         <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
-            <DatePicker name="date" value={date} onChange={handleChange} placeholder="Enter date" />
+            <DatePicker value={date} onChange={handleChange} placeholder="Enter date" />
             <Button>Submit</Button>
         </form>
     );
@@ -50,7 +50,7 @@ export const Uncontrolled = () => {
 
     return (
         <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
-            <DatePicker ref={ref} name="date" defaultValue="19-12-1967" placeholder="Enter date" />
+            <DatePicker ref={ref} defaultValue="19-12-1967" placeholder="Enter date" />
             <Button>Submit</Button>
         </form>
     );
@@ -62,9 +62,9 @@ export const WithShortcuts = () => {
     const [date, setDate] = useState('19-12-1967');
 
     return (
-        <div className="w-48 text-xs">
+        <div className="w-48">
             <div>Select Date</div>
-            <DatePicker name="date" withShortcuts={true} value={date} onChange={(d) => setDate(d.target.value)} />
+            <DatePicker value={date} onChange={(d) => setDate(d.target.value)} withArrow withShortcuts/>
         </div>
     );
 

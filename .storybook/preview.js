@@ -8,12 +8,15 @@ import { ViewportProvider } from '../src/hooks/useViewport';
 import { TooltipProvider } from '../src/popper/TooltipProvider';
 
 
-// export const parameters = {
-//     options: {
-//       storySort: (a, b) =>
-//         a[1].kind === b[1].kind ? 0 : a[1].id.localeCompare(b[1].id, undefined, { numeric: true }),
-//     },
-//   };
+export const parameters = {
+    options: {
+        storySort: (a, b) => { 
+            if (a[1].name === 'Default') { return -1; }
+            if (b[1].name === 'Default') { return 1; }
+            return (a[1].kind === b[1].kind ? 0 : a[1].id.localeCompare(b[1].id, undefined, { numeric: true })); 
+        }
+    }
+};
 
 export const globalTypes = {
     locale: {

@@ -1,10 +1,12 @@
 import classNames from 'classnames';
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useInternalizeInput } from '../../hooks/useInternalizeInput';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon } from '../../icons/components';
 import { consumeEvent } from '../../utilities/consumeEvent';
 import { setRefInputValue } from '../../utilities/setRefInputValue';
+import { FieldProps } from '../inputs/Field';
 import { FieldPopper, FieldPopperProps } from '../inputs/FieldPopper';
 import { PlainInput } from '../inputs/PlainInput';
 import { HTMLPopperElement, PopperProps } from '../Popper';
@@ -14,11 +16,21 @@ import { HTMLPopperElement, PopperProps } from '../Popper';
 // DatePicker
 //
 
-export interface DatePickerProps extends
-    FieldPopperProps,
-    Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'> {
+export interface DatePickerProps extends Omit<FieldProps, 'className'>,
+    Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'>,
+    Pick<FieldPopperProps, 'withToggle'> {
 
-    // Input
+    // Field
+
+    /**
+     * Class name to pass to the field.
+     */
+    fieldClassName?: string;
+
+    // Popper
+
+
+    // DatePicker
 
     /** 
      * Name used for the input element and returned in the change event.
@@ -61,12 +73,15 @@ export interface DatePickerProps extends
 
     // Styling
 
-    fieldClassName?: string;
 
-    /** Wether to show the shortcuts menu. */
+    /** 
+     * Wether to show the shortcuts menu. 
+     */
     withShortcuts?: boolean
 
-    /** Classes to append to the popper element. */
+    /** 
+     * Classes to append to the popper element. 
+     */
     popperClassName?: string;
 
 }
@@ -93,12 +108,29 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
 
     const {
 
-        // Picker
 
-        name,
-        defaultValue,
-        value,
-        onChange,
+        // Field
+
+        variant,
+
+        label,
+        start,
+        end,
+
+        shrink,
+        focus,
+        disabled,
+        error,
+
+        withFullWidth,
+        withFullHeight,
+
+        fieldClassName,
+
+
+        // DatePicker
+
+        onChange: onChangeProp,
 
         withShortcuts = false,
         parseDate = internalParseDate,
@@ -110,8 +142,6 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
 
         withToggle,
 
-        fieldClassName,
-
         // Popper
 
         withPlacement,
@@ -120,7 +150,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
 
         popperClassName,
 
-        // Input
+        // Rest goes to Input
 
         ...inputProps
 
@@ -130,25 +160,32 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
 
     const { t } = useTranslation(['lux']);
 
+
+    // Internalize `value`
+
+    const [internalValue, handleChangeInternalValue] = useInternalizeInput('', props.defaultValue, props.value, onChangeProp);
+
+
     const inputRef = useRef<HTMLInputElement>(null);
     useImperativeHandle(ref, () => inputRef.current!);
 
-    // Maintain an internalValue to use the internal input as controlled,
-    // and only update internalValue only when the DatePicker is controlled.
-    const [controlled] = useState(value != null);
-    const [internalValue, setInternalValue] = useState<string>(defaultValue || '');
-    useEffect(() => { if (controlled) { setInternalValue(value || ''); } }, [controlled, value]);
+    // // Maintain an internalValue to use the internal input as controlled,
+    // // and only update internalValue only when the DatePicker is controlled.
+    // const [controlled] = useState(value != null);
+    // const [internalValue, setInternalValue] = useState<string>(defaultValue || '');
+    // useEffect(() => { if (controlled) { setInternalValue(value || ''); } }, [controlled, value]);
 
     // Calendar is the normalized first date having the week of the current date
     // starting at the firstDayOfWeek
     // (has day = 1, hour = 12, minute = 0, second = 0 and millis = 0)
-    const [calendar, setCalendar] = useState(startOfMonth(parseDate(defaultValue || '')));
+    const [calendar, setCalendar] = useState(startOfMonth(parseDate(internalValue || '')));
     useEffect(
         () => setCalendar(startOfMonth(parseDate(internalValue))),
         [parseDate, internalValue]
     );
 
     // Popper states
+
     const [show, setShow] = useState(false);
     const popperRef = useRef<HTMLPopperElement>(null);
     useOnOutsideClick(show, () => { if (show) { setShow(false); } }, inputRef.current, popperRef.current);
@@ -174,19 +211,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
         }
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (onChange) {
-            // bubble up change event regardless of 
-            // controlled or uncontrolled
-            onChange(e);
-        }
-        if (value == null) {
-            // set internal value if uncontrolled
-            setInternalValue(e.target.value);
-        }
-    };
-
-    // navigation
+    // Navigation
 
     const handleClickPrevMonth = () => {
         const c = new Date(calendar);
@@ -212,7 +237,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
         handleHide();
     };
 
-    // handle final values
+    // Handle final values
 
     const handleFinalValue = () => {
         const finalDate = parseDate(internalValue);
@@ -225,7 +250,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
         handleHide();
     };
 
-    // setup
+    // Setup
 
     const today = new Date();
     today.setHours(12, 0, 0, 0);
@@ -233,7 +258,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
     const v = parseDate(internalValue);
     const selected = v ? new Date(v[0], v[1], v[2], 12, 0, 0, 0) : null;
 
-    // calculate weeks
+    // Calculate weeks
 
     const weeks = useMemo(() => {
         const first = new Date(calendar.getTime());
@@ -249,7 +274,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
         return weeks;
     }, [calendar, firstDayOfWeek]);
 
-    // format
+    // Format
 
     function dayClasses(d: Date): string {
 
@@ -264,6 +289,9 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
     }
 
     // Render Popper
+
+    const months = t('months', { defaultValue: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], returnObjects: true }) as string[];
+    const days = t('shortDays', { defaultValue: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], returnObjects: true }) as string[];
 
     const renderDate = () => (
         <div onMouseDown={consumeEvent} className={classNames('flex flex-row', popperClassName)}>
@@ -318,46 +346,54 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
         </div>
     );
 
-    const months = t('months', { defaultValue: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], returnObjects: true }) as string[];
-    const days = t('shortDays', { defaultValue: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], returnObjects: true }) as string[];
-
     // Render
 
     return (
 
         <FieldPopper
 
-            // FieldPopper
+            // Field
 
-            withToggle={withToggle}
+            variant={variant}
 
-            end={<CalendarIcon onClick={handleFocus} className="cursor-pointer" />}
+            label={label}
+            start={start}
+            end={<>{end}<CalendarIcon onClick={handleFocus} className="cursor-pointer" /></>}
 
-            fieldClassName={fieldClassName}
+            shrink={shrink || props.placeholder != null || internalValue.length > 0}
+            focus={focus}
+            disabled={disabled}
+            error={error}
+
+            withFullWidth={withFullWidth}
+            withFullHeight={withFullHeight}
+
+            className={fieldClassName}
 
             // Popper
-
-            show={show}
-            onChangeShow={setShow}
 
             withPlacement={withPlacement}
             withArrow={withArrow}
             withSameWidth={withSameWidth}
 
-            renderPopper={renderDate}
+            // FieldPopper
+
+            show={show}
+            onChangeShow={setShow}
+
+            withToggle={withToggle}
 
             popperClassName={popperClassName}
+
+            renderPopper={renderDate}
 
         >
 
             <PlainInput type="text"
 
                 ref={inputRef}
-                name={name}
 
-                defaultValue={defaultValue}
-                value={value}
-                onChange={handleChange}
+                onChange={handleChangeInternalValue}
 
                 onFocus={handleFocus}
                 onBlur={handleBlur}

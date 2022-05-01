@@ -53,13 +53,14 @@ export const PlainTextArea = React.forwardRef((
             ref={inputRef}
 
             disabled={disabled}
-
+ 
             className={classnames(
                 'block w-full',
                 'bg-transparent',
                 'outline-none focus:outline-none',
                 isError ? 'placeholder-danger-500' : 'placeholder-control-placeholder',
                 'placeholder-opacity-40',
+                'resize-none',
                 className
             )}
 

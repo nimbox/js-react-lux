@@ -220,7 +220,7 @@ module.exports = ({
                 '&:hover': {
                     color: theme('colors.primary.600'),
                     borderColor: theme('colors.primary.600'),
-                }
+                }                
             },
 
             '&.lux-button-secondary': {
@@ -278,7 +278,7 @@ module.exports = ({
             // `lux-field`. When is not in `shrink` state, the label is
             // positioned against the `lux-field-content`.
 
-            '&.lux-field-shrink': {
+            '&:focus-within, &.lux-field-shrink': {
 
                 '.lux-field-label': {
                     color: theme('colors.control-border'),
@@ -334,7 +334,7 @@ module.exports = ({
 
                 },
 
-                '&.lux-field-shrink': {
+                '&:focus-within, &.lux-field-shrink': {
 
                     '.lux-field-label': {
 
@@ -404,7 +404,7 @@ module.exports = ({
 
                 },
 
-                '&.lux-field-shrink': {
+                '&:focus-within, &.lux-field-shrink': {
 
                     '.lux-field-label': {
                         left: `${(fieldHorizontalPadding / 2) / fieldLabelScale}em`,
@@ -415,7 +415,7 @@ module.exports = ({
 
                 },
 
-                '&.lux-field-shrink.lux-field-has-start': {
+                '&:focus-within.lux-field-has-start, &.lux-field-shrink.lux-field-has-start': {
 
                     '.lux-field-start': {
                         transform: 'none'
@@ -437,7 +437,7 @@ module.exports = ({
 
                 },
 
-                '&.lux-field-shrink': {
+                '&:focus-within, &.lux-field-shrink': {
 
                     '.lux-field-label': {
                         left: 0,
