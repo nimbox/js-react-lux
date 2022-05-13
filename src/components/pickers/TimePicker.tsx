@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import React, { ReactElement, Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useInternalizeInput } from '../../hooks/useInternalizeInput';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { AngleDownIcon, AngleUpIcon, CircleIcon, ClockIcon } from '../../icons/components';
@@ -31,9 +30,8 @@ export interface TimePickerProps extends Omit<InputPopperProps, 'show' | 'onChan
 
 // Constants
 
-const morning = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-const noon = [12, 13];
-const afternoon = [14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+const hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+const hoursOff = new Set([0, 1, 2, 3, 4, 5, 6, 7, 12, 13, 19, 20, 21, 22, 23]);
 
 const minutes = [15, 30, 45];
 
@@ -91,8 +89,7 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
     // Watch State
 
     const selected = useMemo(() => {
-        const v = parseTime(internalValue);
-        return v != null ? v : null;
+        return parseTime(internalValue);
     }, [parseTime, internalValue]);
 
     // Adornment
@@ -185,9 +182,20 @@ const Watch = (props: WatchProps): ReactElement => {
 
     // State
 
+    const selected = useMemo(() => time, [time]);
+
+    // Times is the first hour to display at the top of the clock. The timesRef
+    // is a reference to the watch to be able to scroll the face watch and show 
+    // the appropdiate time.
+
     const times = useRef({ watch: 8 });
     const timesRef = useRef<HTMLDivElement>(null);
-    useEffect(() => { scroll() });
+    useEffect(() => {
+        if (selected) {
+            times.current.watch = selected[0];
+        }
+        scroll();
+    }, [selected]);
 
     // Navigation Handlers
 
@@ -218,6 +226,30 @@ const Watch = (props: WatchProps): ReactElement => {
         }
     };
 
+    // Classes
+
+    const hourClasses = (hour: number): string => {
+        if (selected && hour === selected[0]) {
+            return 'bg-primary-500';
+        };
+        return hoursOff.has(hour) ? 'bg-gray-100' : '';
+    };
+
+    const minuteClasses = (hour: number, minute: number): string => {
+        if (selected) {
+            if (hour === selected[0]) {
+                if (minute < selected[1]) {
+                    return 'bg-primary-500 !text-transparent';
+                }
+                if (minute === selected[1]) {
+                    return 'bg-primary-500 text-inherit text-[1em]';
+                }
+                return 'bg-primary-100';
+            };
+        }
+        return hoursOff.has(hour) ? 'bg-gray-100' : '';
+    };
+
     // Render
 
     return (
@@ -245,58 +277,18 @@ const Watch = (props: WatchProps): ReactElement => {
                     </thead>
 
                     <tbody className="cursor-pointer">
-                        {morning.map(h =>
+                        {hours.map(h =>
                             <tr key={h} className="group">
-                                <th className="group-hover:bg-secondary-500 peer" onClick={e => onTimeChange([h, 0])}>{internalFormatHour(h)}</th>
+                                <th className={classNames('group-hover:bg-secondary-500 peer', hourClasses(h))} onClick={e => onTimeChange([h, 0])}>{internalFormatHour(h)}</th>
                                 {minutes.map(m =>
                                     <td key={m}
                                         onClick={e => onTimeChange([h, m])}
                                         className={classNames(
                                             "group-hover:text-transparent group-hover:bg-secondary-500",
-                                            "peer peer-hover:text-muted peer-hover:bg-secondary-200",
+                                            "peer peer-hover:!text-muted peer-hover:bg-secondary-200 peer-hover:!text-[0.75em]",
                                             "text-muted text-[0.75em]",
                                             "hover:!text-inherit hover:!text-[1em]",
-                                        )}
-                                    >
-                                        {m}
-                                    </td>
-                                )}
-                            </tr>
-                        )}
-                    </tbody>
-
-                    <tbody className="bg-gray-200 cursor-pointer">
-                        {noon.map(h =>
-                            <tr key={h} className="group bg-gray-100">
-                                <th className="group-hover:bg-secondary-500 peer" onClick={e => onTimeChange([h, 0])}>{internalFormatHour(h)}</th>
-                                {minutes.map(m =>
-                                    <td key={m}
-                                        onClick={e => onTimeChange([h, m])}
-                                        className={classNames(
-                                            "group-hover:text-transparent group-hover:bg-secondary-500",
-                                            "peer peer-hover:text-muted peer-hover:bg-secondary-200",
-                                            "text-muted text-[0.75em]",
-                                            "hover:!text-inherit hover:!text-[1em]",
-                                        )}
-                                    >{m}
-                                    </td>
-                                )}
-                            </tr>
-                        )}
-                    </tbody>
-
-                    <tbody className="cursor-pointer">
-                        {afternoon.map(h =>
-                            <tr key={h} className="group">
-                                <th className="group-hover:bg-secondary-500 peer" onClick={e => onTimeChange([h, 0])}>{internalFormatHour(h)}</th>
-                                {minutes.map(m =>
-                                    <td key={m}
-                                        onClick={e => onTimeChange([h, m])}
-                                        className={classNames(
-                                            "group-hover:text-transparent group-hover:bg-secondary-500",
-                                            "peer peer-hover:text-muted peer-hover:bg-secondary-200",
-                                            "text-muted text-[0.75em]",
-                                            "hover:!text-inherit hover:!text-[1em]",
+                                            minuteClasses(h, m)
                                         )}
                                     >
                                         {m}
@@ -309,7 +301,7 @@ const Watch = (props: WatchProps): ReactElement => {
                 </table>
             </div>
 
-        </div>
+        </div >
     );
 
 }
