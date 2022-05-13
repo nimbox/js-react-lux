@@ -1,37 +1,19 @@
-import React, { Ref, useImperativeHandle, useState } from 'react';
+import React, { ReactElement, Ref, useImperativeHandle, useMemo, useState } from 'react';
 import tinycolor from 'tinycolor2';
 import defaultSwatches from '../../data/flat-colors';
+import { useInternalizeInput } from '../../hooks/useInternalizeInput';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { RefreshIcon } from '../../icons/components';
 import { consumeEvent } from '../../utilities/consumeEvent';
 import { setRefInputValue } from '../../utilities/setRefInputValue';
-import { InputProps } from '../inputs/Input';
-import { InputPopper } from '../inputs/InputPopper';
-import { PopperProps } from '../Popper';
-import classnames from 'classnames';
+import { InputPopper, InputPopperProps } from '../inputs/InputPopper';
 
 
 //
 // SwatchPicker
 //
 
-export interface SwatchPickerProps extends
-    InputProps,
-    Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'> {
-
-    // Wrapper
-
-    /**
-     * Classes to append to the wrapper component.
-     */
-    fieldClassName?: string;
-
-    // Popper
-
-    /** 
-     * Classes to append to the popper component.
-     */
-    popperClassName?: string;
+export interface SwatchPickerProps extends Omit<InputPopperProps, 'show' | 'onChangeShow' | 'renderPopper'> {
 
     // SwatchPicker
 
@@ -40,6 +22,12 @@ export interface SwatchPickerProps extends
      * @default defaultSwatches
      */
     values?: string[];
+
+    /**
+     * class to apply to the swatch pallete.
+     * @default "w-64 lux-p-2em grid grid-cols-5 cursor-pointer"
+     */
+    palleteClassName?: string;
 
 }
 
@@ -56,26 +44,23 @@ export const SwatchPicker = React.forwardRef((
 
     const {
 
-        // Wrapper
+        // Field
 
-        variant = 'outlined',
-        fieldClassName: wrapperClassName,
+        end,
 
-        // Popper
+        // InputPopper
 
-        popperClassName = 'w-64 lux-p-2em grid grid-cols-5 cursor-pointer',
+        onChange,
 
         // SwatchPicker
 
-        defaultValue: propsDefaultValue,
-        value: propsValue,
-        onChange,
-
         values = defaultSwatches,
 
-        // input
+        palleteClassName = 'w-64 lux-p-2em grid grid-cols-5 cursor-pointer',
 
-        ...inputProps
+        // Rest goes to InputPopper
+
+        ...inputPopperProps
 
     } = props;
 
@@ -83,105 +68,135 @@ export const SwatchPicker = React.forwardRef((
 
     const [show, setShow] = useState(false);
 
+    const [internalValue, handleChangeInternalValue] = useInternalizeInput('', props.defaultValue, props.value, onChange);
     const internalInputRef = useObservableValueRef<HTMLInputElement>(null);
     useImperativeHandle(inputRef, () => internalInputRef.current!);
 
-    const isControlled = propsValue != null;
-    const [internalValue, setInternalValue] = useState(propsDefaultValue ?? '');
-    const value = isControlled ? propsValue : internalValue;
+    const handleFinalize = (value: string): string | null => {
+        return value;
+    };
 
-    // Colors
+    // Pallete State
 
-    const valueColor = tinycolor(value);
-    const color = valueColor.isValid() && valueColor.isDark() ? 'white' : 'black';
-    const backgroundColor = valueColor.isValid() ? value : 'white';
+    const { color, backgroundColor } = useMemo(() => {
+        const valueColor = tinycolor(internalValue);
+        const color = valueColor.isValid() && valueColor.isDark() ? 'white' : 'black';
+        const backgroundColor = valueColor.isValid() ? internalValue : 'white';
+        return ({ color, backgroundColor });        
+    }, [internalValue]);
 
     // Handlers
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!isControlled) {
-            setInternalValue(e.target.value);
-        }
-        onChange?.(e);
-    };
-
-    const handleClickSwatch = (e: React.MouseEvent, swatch: string) => {
-        consumeEvent(e);
+    const handleColorChange = (swatch: string) => {
         setRefInputValue(internalInputRef, swatch);
+        internalInputRef.current?.select();
         setShow(false);
     };
 
-    const handleRandomClickSwatch = (e: React.MouseEvent) => {
-        consumeEvent(e);
+    const handleRandomColorChange = () => {
         setRefInputValue(internalInputRef, values[Math.floor(Math.random() * values.length)]);
+        internalInputRef.current?.select();
     };
 
     // Adornment
 
-    const adornment = () => (
+    const adornment = (
         <RefreshIcon
             onMouseDown={consumeEvent}
-            onClick={handleRandomClickSwatch}
-            className={classnames(
-                'h-full w-full lux-p-1em  border-control-border cursor-pointer',
-                {
-                    '-m-px border rounded': variant === 'outlined',
-                    'h-full border-l border-t border-r rounded-t': variant === 'filled',
-                    'h-full border-l border-t border-r': variant === 'inlined',
-                    'h-full': variant === 'plain'
-                }
-            )}
-            style={{
-                ...(variant === 'outlined' && { with: 'calc(2em + 2px)', height: 'calc(100% + 2px)' }),
-                ...(variant === 'filled' && { width: '2em' }),
-                ...((variant === 'inlined' || variant === 'plain') && { width: '1.5em' }),
-                color, backgroundColor
-            }}
+            onClick={handleRandomColorChange}
+            className="h-[1.5em] w-[1.5em] p-[0.25em] border border-control-border rounded cursor-pointer"
+            style={{ color, backgroundColor }}
         />
     );
 
     // Popper
 
-    const popper = () => (
-        <div onMouseDown={consumeEvent} className={popperClassName}>
-            {values.map((s, i) =>
-                <div key={i} onClick={(e) => handleClickSwatch(e, s)} style={{ backgroundColor: s }}>&nbsp;</div>
-            )}
-        </div>
+    const renderPalette = () => (
+        <Palette
+
+            colors={values}
+            onColorChange={handleColorChange}
+
+            className={palleteClassName}
+
+        />
     );
 
-    // render
+    // Render
 
     return (
 
         <InputPopper
 
-            // Wrapper
+            // Field
 
-            variant={variant}
-            wrapperClassName={wrapperClassName}
+            end={<>{end}{adornment}</>}
 
-            end={adornment()}
+            // InputPopper
 
-            // Popper 
+            ref={internalInputRef}
 
             show={show}
             onChangeShow={setShow}
 
-            renderPopper={popper}
+            renderPopper={renderPalette}
 
-            // Input
+            onChange={handleChangeInternalValue}
+            onFinalize={handleFinalize}
 
-            ref={internalInputRef}
-
-            {...!isControlled ? { defaultValue: propsDefaultValue } : undefined}
-            {...isControlled ? { value: value } : undefined}
-            onChange={handleChange}
-
-            {...inputProps}
+            {...inputPopperProps}
 
         />
 
     );
 
 });
+
+
+//
+// Palette
+//
+
+interface PaletteProps {
+
+    // Value
+
+    /**
+     * Possible swatch colors.
+     */
+    colors: string[];
+
+    /**
+     * Handler to call when a swatch is selected.
+     */
+    onColorChange: (color: string) => void;
+
+    // Styling
+
+    /** 
+     * The class names to apply to the palette.
+     */
+    className?: string;
+
+}
+
+const Palette = (props: PaletteProps): ReactElement => {
+
+    const {
+
+        colors,
+        onColorChange,
+
+        className,
+
+    } = props;
+
+    return (
+        <div onMouseDown={consumeEvent} className={className}>
+            {colors.map((s, i) =>
+                <div key={i} onClick={(e) => onColorChange(s)} style={{ backgroundColor: s }}>&nbsp;</div>
+            )}
+        </div>
+    );
+
+};

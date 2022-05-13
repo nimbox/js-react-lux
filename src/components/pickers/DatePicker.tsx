@@ -1,63 +1,31 @@
 import classNames from 'classnames';
-import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import React, { forwardRef, InputHTMLAttributes, MouseEvent, ReactElement, Ref, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useInternalizeInput } from '../../hooks/useInternalizeInput';
-import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
+import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon } from '../../icons/components';
 import { consumeEvent } from '../../utilities/consumeEvent';
 import { setRefInputValue } from '../../utilities/setRefInputValue';
-import { FieldProps } from '../inputs/Field';
-import { FieldPopper, FieldPopperProps } from '../inputs/FieldPopper';
-import { PlainInput } from '../inputs/PlainInput';
-import { HTMLPopperElement, PopperProps } from '../Popper';
+import { InputPopper, InputPopperProps } from '../inputs/InputPopper';
 
 
 //
 // DatePicker
 //
 
-export interface DatePickerProps extends Omit<FieldProps, 'className'>,
-    Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'>,
-    Pick<FieldPopperProps, 'withToggle'> {
-
-    // Field
-
-    /**
-     * Class name to pass to the field.
-     */
-    fieldClassName?: string;
-
-    // Popper
-
+export interface DatePickerProps extends Omit<InputPopperProps, 'show' | 'onChangeShow' | 'renderPopper'> {
 
     // DatePicker
 
     /** 
-     * Name used for the input element and returned in the change event.
+     * The first day of the week to display in the calendar. 
      */
-    name?: string,
+    firstDayOfWeek?: number;
 
     /** 
-     * String representation of the date (for uncontrolled).
-     */
-    defaultValue?: string,
-
-    /** 
-     * String representation of the date (for controlled).
-     */
-    value?: string,
-
-    /** 
-     * Change event handler (for controlled). 
-     */
-    onChange?: React.ChangeEventHandler<HTMLInputElement>,
-
-    // Configuration
-
-    /** 
-     * Parse date function defaults to parsing dd-mm-yyyy into [yyyy, mm, dd]
-     * (with zero based month). 
-     */
+    * Parse date function defaults to parsing dd-mm-yyyy into [yyyy, mm, dd]
+    * (with zero based month). 
+    */
     parseDate?: (s: string) => [number, number, number] | null;
 
     /** 
@@ -66,27 +34,16 @@ export interface DatePickerProps extends Omit<FieldProps, 'className'>,
      */
     formatDate?: (date: [number, number, number]) => string;
 
-    /** 
-     * The first day of the week to display in the calendar. 
-     */
-    firstDayOfWeek?: 0 | 1;
-
     // Styling
 
-
-    /** 
+    /**
      * Wether to show the shortcuts menu. 
      */
     withShortcuts?: boolean
 
-    /** 
-     * Classes to append to the popper element. 
-     */
-    popperClassName?: string;
-
 }
 
-// constants
+// Constants
 
 const namedDays = [
     { label: 'tomorrow', date: function (t: Date) { t.setDate(t.getDate() + 1); return t; } },
@@ -102,116 +59,206 @@ const namedDays = [
 /**
  * DatePicker. Select a date with one click.
  */
-export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & React.InputHTMLAttributes<HTMLInputElement>>((props, ref) => {
+export const DatePicker = forwardRef((
+    props: DatePickerProps & InputHTMLAttributes<HTMLInputElement>,
+    inputRef: Ref<HTMLInputElement>
+) => {
 
-    // properties
+    // Properties
 
     const {
 
-
         // Field
 
-        variant,
-
-        label,
-        start,
         end,
 
-        shrink,
-        focus,
-        disabled,
-        error,
+        // InputPopper
 
-        withFullWidth,
-        withFullHeight,
-
-        fieldClassName,
-
+        onChange,
 
         // DatePicker
 
-        onChange: onChangeProp,
-
-        withShortcuts = false,
+        firstDayOfWeek = 0,
         parseDate = internalParseDate,
         formatDate = internalFormatDate,
 
-        firstDayOfWeek = 0,
+        withShortcuts = false,
 
-        // FieldPopper
+        // Rest goes to InputPopper
 
-        withToggle,
-
-        // Popper
-
-        withPlacement,
-        withArrow,
-        withSameWidth,
-
-        popperClassName,
-
-        // Rest goes to Input
-
-        ...inputProps
+        ...inputPopperProps
 
     } = props;
 
-    // configuration
+    // State
+
+    const [show, setShow] = useState(false);
+
+    const [internalValue, handleChangeInternalValue] = useInternalizeInput('', props.defaultValue, props.value, onChange);
+    const internalInputRef = useObservableValueRef<HTMLInputElement>(null);
+    useImperativeHandle(inputRef, () => internalInputRef.current!);
+
+    const handleChange = (date: [number, number, number] | null) => {
+        const value = date != null ? formatDate(date) : '';
+        setRefInputValue(internalInputRef, value);
+        internalInputRef.current?.select();
+        setShow(false);
+    };
+
+    const handleFinalize = (value: string): string | null => {
+        const finalDate = parseDate(internalValue);
+        return finalDate != null ? formatDate(finalDate) : null;
+    };
+
+    // Calendar State
+
+    // Selected is the current date shown in the input as long as it is parsable
+    // with `formatDate`. It is `null` otherwise.
+
+    const selected = useMemo(() => {
+        return parseDate(internalValue);
+    }, [parseDate, internalValue]);
+
+    // Adornment
+
+    const adornment = (
+        <CalendarIcon
+            onMouseDown={consumeEvent}
+            className="cursor-pointer"
+        />
+    );
+
+    // Calendar
+
+    const renderCalendar = () => (
+        <Calendar
+            date={selected}
+            onDateChange={handleChange}
+            firstDayOfWeek={firstDayOfWeek}
+            withShortcuts={withShortcuts}
+        />
+    );
+
+    // Render
+
+    return (
+
+        <InputPopper
+
+            // Field
+
+            end={<>{end}{adornment}</>}
+
+            // InputPopper 
+
+            ref={internalInputRef}
+
+            show={show}
+            onChangeShow={setShow}
+
+            renderPopper={renderCalendar}
+
+            onChange={handleChangeInternalValue}
+            onFinalize={handleFinalize}
+
+            {...inputPopperProps}
+
+        />
+
+    );
+
+});
+
+//
+// Calendar
+//
+
+interface CalendarProps extends Pick<DatePickerProps, 'firstDayOfWeek' | 'withShortcuts'> {
+
+    // Value
+
+    /** 
+     * The date to show as selected.
+     */
+    date?: [number, number, number] | null;
+
+    /**
+     * Handler to change the date.
+     */
+    onDateChange: (date: [number, number, number]) => void;
+
+    // Configuration
+
+    /** 
+     * The first day of the week to display in the calendar. 
+     */
+    firstDayOfWeek?: number;
+
+    /** 
+     * Parse date function defaults to parsing dd-mm-yyyy into [yyyy, mm, dd]
+     * (with zero based month). 
+     */
+    parseDate?: (s: string) => [number, number, number] | null;
+
+    // Styling
+
+    /** 
+     * The class names to apply to the calendar.
+     */
+    className?: string;
+
+}
+
+const Calendar = (props: CalendarProps): ReactElement => {
+
+    // Properties
+
+    const {
+
+        date,
+        onDateChange,
+
+        firstDayOfWeek = 0,
+
+        withShortcuts = false,
+
+        className
+
+    } = props;
+
+    // Translations
 
     const { t } = useTranslation(['lux']);
 
+    const months = t('months', { defaultValue: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], returnObjects: true }) as string[];
+    const days = t('shortDays', { defaultValue: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], returnObjects: true }) as string[];
 
-    // Internalize `value`
+    // State
 
-    const [internalValue, handleChangeInternalValue] = useInternalizeInput('', props.defaultValue, props.value, onChangeProp);
+    const today = useMemo(() => {
+        const d = new Date();
+        d.setHours(12, 0, 0, 0);
+        return d;
+    }, []);
 
-
-    const inputRef = useRef<HTMLInputElement>(null);
-    useImperativeHandle(ref, () => inputRef.current!);
-
-    // // Maintain an internalValue to use the internal input as controlled,
-    // // and only update internalValue only when the DatePicker is controlled.
-    // const [controlled] = useState(value != null);
-    // const [internalValue, setInternalValue] = useState<string>(defaultValue || '');
-    // useEffect(() => { if (controlled) { setInternalValue(value || ''); } }, [controlled, value]);
+    const selected = useMemo(() => {
+        return date != null ? new Date(date[0], date[1], date[2]) : null;
+    }, [date]);
 
     // Calendar is the normalized first date having the week of the current date
-    // starting at the firstDayOfWeek
-    // (has day = 1, hour = 12, minute = 0, second = 0 and millis = 0)
-    const [calendar, setCalendar] = useState(startOfMonth(parseDate(internalValue || '')));
-    useEffect(
-        () => setCalendar(startOfMonth(parseDate(internalValue))),
-        [parseDate, internalValue]
-    );
+    // starting at the firstDayOfWeek (has day = 1, hour = 12, minute = 0,
+    // second = 0 and millis = 0). Whenever the internalValue changes, the
+    // calendar is updated to show such date.
 
-    // Popper states
+    const [calendar, setCalendar] = useState<Date>(today);
+    useEffect(() => {
+        const d = date != null ? new Date(date[0], date[1], date[2]) : new Date(today);
+        d.setHours(12, 0, 0, 0);
+        d.setDate(1);
+        setCalendar(d);
+    }, [date, today]);
 
-    const [show, setShow] = useState(false);
-    const popperRef = useRef<HTMLPopperElement>(null);
-    useOnOutsideClick(show, () => { if (show) { setShow(false); } }, inputRef.current, popperRef.current);
-
-    // handlers
-
-    const handleShow = () => { if (!show) { setShow(true); } }
-    const handleHide = () => { if (show) { setShow(false); } }
-
-    const handleFocus = handleShow;
-    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-        handleFinalValue();
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-        switch (e.keyCode) {
-            case 9: // tab
-            case 13: // enter
-                handleFinalValueDate(parseDate(internalValue));
-                break;
-            default:
-                handleShow();
-        }
-    };
-
-    // Navigation
+    // Navigation Handlers
 
     const handleClickPrevMonth = () => {
         const c = new Date(calendar);
@@ -232,33 +279,11 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
         setCalendar(c);
     };
 
-    const handleClickDate = (e: React.MouseEvent<HTMLElement>, d: Date) => {
-        handleFinalValueDate([d.getFullYear(), d.getMonth(), d.getDate()]);
-        handleHide();
+    const handleClickDate = (d: Date) => {
+        onDateChange?.([d.getFullYear(), d.getMonth(), d.getDate()]);
     };
 
-    // Handle final values
-
-    const handleFinalValue = () => {
-        const finalDate = parseDate(internalValue);
-        handleFinalValueDate(finalDate);
-    };
-
-    const handleFinalValueDate = (finalDate: [number, number, number] | null) => {
-        const finalValue = finalDate != null ? formatDate(finalDate) : '';
-        setRefInputValue(inputRef, finalValue);
-        handleHide();
-    };
-
-    // Setup
-
-    const today = new Date();
-    today.setHours(12, 0, 0, 0);
-
-    const v = parseDate(internalValue);
-    const selected = v ? new Date(v[0], v[1], v[2], 12, 0, 0, 0) : null;
-
-    // Calculate weeks
+    // Weeks
 
     const weeks = useMemo(() => {
         const first = new Date(calendar.getTime());
@@ -274,27 +299,24 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
         return weeks;
     }, [calendar, firstDayOfWeek]);
 
-    // Format
+    // Classes
 
-    function dayClasses(d: Date): string {
+    const dayClasses = (d: Date): string => {
 
         let c = ['hover:text-white hover:bg-secondary-500'];
 
         if (d.getMonth() !== calendar.getMonth()) { c.push('text-muted bg-gray-200'); } // off
         if (d.getTime() === today.getTime()) { c.push('text-white bg-info-500'); } // today
-        if (selected && d.getTime() === selected.getTime()) { c.push('text-white bg-primary-500'); } //selected
+        if (selected && d.getTime() === selected.getTime()) { c.push('text-white bg-primary-500'); } //date
 
         return c.join(' ');
 
-    }
+    };
 
-    // Render Popper
+    // Render
 
-    const months = t('months', { defaultValue: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], returnObjects: true }) as string[];
-    const days = t('shortDays', { defaultValue: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], returnObjects: true }) as string[];
-
-    const renderDate = () => (
-        <div onMouseDown={consumeEvent} className={classNames('flex flex-row', popperClassName)}>
+    return (
+        <div onMouseDown={consumeEvent} className={classNames('flex flex-row', className)}>
 
             <div>
 
@@ -325,7 +347,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
                         {weeks.map(w =>
                             <tr key={w[0].getTime()}>
                                 {w.map(d =>
-                                    <td key={d.getTime()} onClick={(e) => handleClickDate(e, d)} className={dayClasses(d)}>
+                                    <td key={d.getTime()} onClick={() => handleClickDate(d)} className={dayClasses(d)}>
                                         {d.getDate()}
                                     </td>
                                 )}
@@ -339,79 +361,18 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
 
             {withShortcuts &&
                 <div className="flex flex-col justify-between items-stretch border-l border-control-border cursor-pointer">
-                    {namedDays.map((s, i) => <div key={i} onClick={(e) => handleClickDate(e, s.date(new Date(today)))} className="px-2 truncate hover:text-white hover:bg-secondary-500">{t(`namedDays.${s.label}`, { defaultValue: s.label })}</div>)}
+                    {namedDays.map((s, i) =>
+                        <div key={i} onClick={() => handleClickDate(s.date(new Date(today)))} className="px-2 truncate hover:text-white hover:bg-secondary-500">
+                            {t(`namedDays.${s.label}`, { defaultValue: s.label })}
+                        </div>
+                    )}
                 </div>
             }
 
         </div>
     );
 
-    // Render
-
-    return (
-
-        <FieldPopper
-
-            // Field
-
-            variant={variant}
-
-            label={label}
-            start={start}
-            end={<>{end}<CalendarIcon onClick={handleFocus} className="cursor-pointer" /></>}
-
-            shrink={shrink || props.placeholder != null || internalValue.length > 0}
-            focus={focus}
-            disabled={disabled}
-            error={error}
-
-            withFullWidth={withFullWidth}
-            withFullHeight={withFullHeight}
-
-            className={fieldClassName}
-
-            // Popper
-
-            withPlacement={withPlacement}
-            withArrow={withArrow}
-            withSameWidth={withSameWidth}
-
-            // FieldPopper
-
-            show={show}
-            onChangeShow={setShow}
-
-            withToggle={withToggle}
-
-            popperClassName={popperClassName}
-
-            renderPopper={renderDate}
-
-        >
-
-            <PlainInput type="text"
-
-                ref={inputRef}
-
-                onChange={handleChangeInternalValue}
-
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-
-                onKeyDown={handleKeyDown}
-
-                autoComplete="off"
-
-                {...inputProps}
-
-            />
-
-        </FieldPopper>
-
-    );
-
-});
-
+};
 
 //
 // Utilities
@@ -425,7 +386,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps & R
  */
 function startOfMonth(date: [number, number, number] | null): Date {
 
-    const start = date ? new Date(date[0], date[1], date[2]) : new Date();
+    const start = date != null ? new Date(date[0], date[1], date[2]) : new Date();
     start.setHours(12, 0, 0, 0);
     start.setDate(1);
 

@@ -1,47 +1,21 @@
 import classNames from 'classnames';
-import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { ReactElement, Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
+import { useInternalizeInput } from '../../hooks/useInternalizeInput';
+import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { AngleDownIcon, AngleUpIcon, CircleIcon, ClockIcon } from '../../icons/components';
 import { consumeEvent } from '../../utilities/consumeEvent';
 import { setRefInputValue } from '../../utilities/setRefInputValue';
-import { FieldPopper } from '../inputs/FieldPopper';
-import { InputProps } from '../inputs/Input';
-import { PlainInput } from '../inputs/PlainInput';
-import { HTMLPopperElement, PopperProps } from '../Popper';
+import { InputPopper, InputPopperProps } from '../inputs/InputPopper';
 
 
 //
 // TimePicker
 //
 
-interface TimePickerProps extends
-    InputProps,
-    Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'> {
+export interface TimePickerProps extends Omit<InputPopperProps, 'show' | 'onChangeShow' | 'renderPopper'> {
 
-    // Input
-
-    /** 
-     * Name used for the input element and returned in the change event. 
-     */
-    name?: string,
-
-    /** 
-     * String representation of the time (for uncontrolled). 
-     */
-    defaultValue?: string,
-
-    /** 
-     * String representation of the time (for controlled). 
-     */
-    value?: string,
-
-    /** 
-     * Change event handler (for controlled). 
-     */
-    onChange?: React.ChangeEventHandler<HTMLInputElement>,
-
-    // Configuration
+    // TimePicker
 
     /** 
      * Parse time function defaults to parsing dd:mm ampm into [hh, mm]. 
@@ -49,77 +23,165 @@ interface TimePickerProps extends
     parseTime?: (s: string) => [number, number] | null;
 
     /** 
-     * Format hour function defaults to formatting [hh] into hh (12 hour based). 
-     */
-    formatHour?: (hour: number) => string;
-
-    /** 
      * Format time function defaults to formatting [hh, mm] into hh:mm ampm (12 hour based). 
      */
     formatTime?: (time: [number, number]) => string;
-
-    // Styling
-
-    /** 
-     * Classes to append to the popper element. 
-     */
-    popperClassName?: string;
 
 }
 
 // Constants
 
 const morning = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-const noon = [12];
-const afternoon = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+const noon = [12, 13];
+const afternoon = [14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 
 const minutes = [15, 30, 45];
 
 /**
  * TimePicker. Select a time with one click.
  */
-export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & React.InputHTMLAttributes<HTMLInputElement>>((props, ref) => {
+export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & React.InputHTMLAttributes<HTMLInputElement>>((
+    props: TimePickerProps & React.InputHTMLAttributes<HTMLInputElement>,
+    inputRef: Ref<HTMLInputElement>
+) => {
 
-    // properties
+    // Properties
 
     const {
 
-        name,
-        defaultValue,
-        value,
+        // Field
+
+        end,
+
+        // InputPopper
+
         onChange,
 
+        // TimePicker
+
         parseTime = internalParseTime,
-        formatHour = internalFormatHour,
         formatTime = internalFormatTime,
 
-        // Popper
+        // Rest goes to InputPopper
 
-        withPlacement,
-        withArrow,
-        withSameWidth,
-
-        popperClassName,
-
-        // Input
-
-        ...inputProps
+        ...inputPopperProps
 
     } = props;
 
-    // configuration
+    // State
 
+    const [show, setShow] = useState(false);
 
-    const { t } = useTranslation(['lux']);
+    const [internalValue, handleChangeInternalValue] = useInternalizeInput('', props.defaultValue, props.value, onChange);
+    const internalInputRef = useObservableValueRef<HTMLInputElement>(null);
+    useImperativeHandle(inputRef, () => internalInputRef.current!);
 
-    const inputRef = useRef<HTMLInputElement>(null);
-    useImperativeHandle(ref, () => inputRef.current!);
+    const handleChange = (time: [number, number] | null) => {
+        const value = time != null ? formatTime(time) : '';
+        setRefInputValue(internalInputRef, value);
+        internalInputRef.current?.select();
+        setShow(false);
+    };
 
-    // Maintain an internalValue to use the internal input as controlled,
-    // and only update internalValue only when the DatePicker is controlled.
-    const [controlled] = useState(value != null);
-    const [internalValue, setInternalValue] = useState(defaultValue || '');
-    useEffect(() => { if (controlled) { setInternalValue(value || ''); } }, [controlled, value]);
+    const handleFinalize = (value: string): string | null => {
+        const time = parseTime(internalValue);
+        return time != null ? formatTime(time) : null;
+    };
+
+    // Watch State
+
+    const selected = useMemo(() => {
+        const v = parseTime(internalValue);
+        return v != null ? v : null;
+    }, [parseTime, internalValue]);
+
+    // Adornment
+
+    const adornment = (
+        <ClockIcon
+            onMouseDown={consumeEvent}
+            className="cursor-pointer"
+        />
+    );
+
+    // Watch
+
+    const renderWatch = () => (
+        <Watch
+            time={selected}
+            onTimeChange={handleChange}
+        />
+    );
+
+    // Render
+
+    return (
+
+        <InputPopper
+
+            // Field
+
+            end={<>{end}{adornment}</>}
+
+            // InputPopper 
+
+            ref={internalInputRef}
+
+            show={show}
+            onChangeShow={setShow}
+
+            renderPopper={renderWatch}
+
+            onChange={handleChangeInternalValue}
+            onFinalize={handleFinalize}
+
+            {...inputPopperProps}
+
+        />
+
+    );
+
+});
+
+//
+// Watch
+//
+
+interface WatchProps {
+
+    // Value
+
+    /**
+     * The time to show as selected.
+     */
+    time?: [number, number] | null;
+
+    /**
+     * Handler to change the time.
+     */
+    onTimeChange: (time: [number, number]) => void;
+
+    // Styling
+
+    /** 
+     * The class names to apply to the watch.
+     */
+    className?: string;
+
+}
+
+const Watch = (props: WatchProps): ReactElement => {
+
+    // Properties
+
+    const {
+
+        time,
+        onTimeChange,
+
+        className
+
+    } = props;
 
     // State
 
@@ -127,49 +189,7 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
     const timesRef = useRef<HTMLDivElement>(null);
     useEffect(() => { scroll() });
 
-    // Popper states
-
-    const [show, setShow] = useState(false);
-    const popperRef = useRef<HTMLPopperElement>(null);
-    useOnOutsideClick(show, () => { if (show) { setShow(false); } }, inputRef.current, popperRef.current);
-
-    // Handlers
-
-    const handleShow = () => {
-        if (!show) { setShow(true); }
-    };
-    const handleHide = () => {
-        if (show) { setShow(false); }
-    };
-
-    const handleFocus = handleShow;
-    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-        handleFinalValue();
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-
-        switch (e.key) {
-            case 'Tab': // tab
-            case 'Enter': // enter
-                handleFinalValueTime(parseTime(internalValue));
-                break;
-
-            default:
-                handleShow();
-        }
-
-    };
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        onChange?.(e);
-        if (value == null) {
-            // set internal value if uncontrolled
-            setInternalValue(e.target.value);
-        }
-    }
-
-    // navigation
+    // Navigation Handlers
 
     const handleClickPrevHour = () => {
         if (times.current.watch > 0) {
@@ -190,11 +210,6 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
         }
     };
 
-    const handleClickTime = (e: React.MouseEvent<HTMLElement>, time: [number, number]) => {
-        handleFinalValueTime(time);
-        handleHide();
-    };
-
     const scroll = () => {
         if (timesRef.current) {
             const t = timesRef.current;
@@ -203,67 +218,10 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
         }
     };
 
+    // Render
 
-    // handle final values
-
-    const handleFinalValue = () => {
-        const finalTime = parseTime(internalValue);
-        handleFinalValueTime(finalTime);
-    }
-
-    const handleFinalValueTime = (finalTime: [number, number] | null) => {
-        const finalValue = finalTime != null ? formatTime(finalTime) : '';
-        setRefInputValue(inputRef, finalValue);
-        handleHide();
-    }
-
-    // setup
-
-    const now = new Date();
-
-    now.getHours();
-
-    const v = parseTime(internalValue);
-    const selected = v ? v : [-1, -1];
-
-    // format
-
-    function hourClasses(time: number[]) {
-
-        if (time[0] === selected[0]) {
-            return 'text-white bg-primary-500 group hover:bg-secondary-300';
-        }
-
-        if (time[0] === now.getHours()) {
-            return 'text-white bg-info-500 group hover:bg-secondary-300';
-        }
-
-        return 'group hover:bg-secondary-300';
-
-    }
-
-    function hourMinuteClasses(time: number[]) {
-
-        if (time[0] === selected[0]) {
-            if (time[1] === selected[1]) {
-                return 'text-xs text-white group-hover:text-content hover:bg-secondary-500';
-            } else {
-                return 'text-xs text-primary-500 group-hover:text-content hover:bg-secondary-500';
-            }
-        }
-
-        if (time[0] === now.getHours()) {
-            return 'text-xs text-white group-hover:text-content hover:bg-secondary-500';
-        }
-
-        return 'text-xs text-muted group-hover:text-content hover:bg-secondary-500';
-
-    }
-
-    // Render Popper
-
-    const renderTime = () => (
-        <div onMouseDown={consumeEvent}>
+    return (
+        <div onMouseDown={consumeEvent} className={className}>
 
             <div className="px-2 py-1 flex flex-row items-center justify-between border-b border-control-border">
                 <div className="flex-grow text-center font-bold">
@@ -288,10 +246,20 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
 
                     <tbody className="cursor-pointer">
                         {morning.map(h =>
-                            <tr key={h} className={hourClasses([h, 0])}>
-                                <th className="text-base group-hover:text-content group-hover:bg-secondary-500" onClick={e => handleClickTime(e, [h, 0])}>{formatHour(h)}</th>
+                            <tr key={h} className="group">
+                                <th className="group-hover:bg-secondary-500 peer" onClick={e => onTimeChange([h, 0])}>{internalFormatHour(h)}</th>
                                 {minutes.map(m =>
-                                    <td key={m} onClick={e => handleClickTime(e, [h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
+                                    <td key={m}
+                                        onClick={e => onTimeChange([h, m])}
+                                        className={classNames(
+                                            "group-hover:text-transparent group-hover:bg-secondary-500",
+                                            "peer peer-hover:text-muted peer-hover:bg-secondary-200",
+                                            "text-muted text-[0.75em]",
+                                            "hover:!text-inherit hover:!text-[1em]",
+                                        )}
+                                    >
+                                        {m}
+                                    </td>
                                 )}
                             </tr>
                         )}
@@ -299,10 +267,19 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
 
                     <tbody className="bg-gray-200 cursor-pointer">
                         {noon.map(h =>
-                            <tr key={h} className={hourClasses([h, 0])}>
-                                <th className="text-base group-hover:text-content group-hover:bg-secondary-500" onClick={e => handleClickTime(e, [h, 0])}>{formatHour(h)}</th>
+                            <tr key={h} className="group bg-gray-100">
+                                <th className="group-hover:bg-secondary-500 peer" onClick={e => onTimeChange([h, 0])}>{internalFormatHour(h)}</th>
                                 {minutes.map(m =>
-                                    <td key={m} onClick={e => handleClickTime(e, [h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
+                                    <td key={m}
+                                        onClick={e => onTimeChange([h, m])}
+                                        className={classNames(
+                                            "group-hover:text-transparent group-hover:bg-secondary-500",
+                                            "peer peer-hover:text-muted peer-hover:bg-secondary-200",
+                                            "text-muted text-[0.75em]",
+                                            "hover:!text-inherit hover:!text-[1em]",
+                                        )}
+                                    >{m}
+                                    </td>
                                 )}
                             </tr>
                         )}
@@ -310,10 +287,20 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
 
                     <tbody className="cursor-pointer">
                         {afternoon.map(h =>
-                            <tr key={h} className={hourClasses([h, 0])}>
-                                <th className="text-base group-hover:text-content group-hover:bg-secondary-500" onClick={e => handleClickTime(e, [h, 0])}>{formatHour(h)}</th>
+                            <tr key={h} className="group">
+                                <th className="group-hover:bg-secondary-500 peer" onClick={e => onTimeChange([h, 0])}>{internalFormatHour(h)}</th>
                                 {minutes.map(m =>
-                                    <td key={m} onClick={e => handleClickTime(e, [h, m])} className={hourMinuteClasses([h, m])}>{m}</td>
+                                    <td key={m}
+                                        onClick={e => onTimeChange([h, m])}
+                                        className={classNames(
+                                            "group-hover:text-transparent group-hover:bg-secondary-500",
+                                            "peer peer-hover:text-muted peer-hover:bg-secondary-200",
+                                            "text-muted text-[0.75em]",
+                                            "hover:!text-inherit hover:!text-[1em]",
+                                        )}
+                                    >
+                                        {m}
+                                    </td>
                                 )}
                             </tr>
                         )}
@@ -325,57 +312,7 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
         </div>
     );
 
-
-    // Render
-
-    return (
-        <FieldPopper
-
-            withToggle={false}
-
-            show={show}
-            onChangeShow={setShow}
-
-            end={<ClockIcon onClick={handleFocus} className="cursor-pointer" />}
-
-             // Popper
-
-             withPlacement={withPlacement}
-             withArrow={withArrow}
-             withSameWidth={withSameWidth}
-
-             renderPopper={renderTime}
-
-            popperClassName={popperClassName}
-
-        >
-
-            <PlainInput type="text"
-
-                ref={inputRef}
-                name={name}
-
-                defaultValue={defaultValue}
-                value={value}
-                onChange={handleChange}
-
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-
-                onKeyDown={handleKeyDown}
-
-                autoComplete="off"
-
-                {...inputProps}
-
-            />
-
-        </FieldPopper>
-
-    );
-
-});
-
+}
 
 //
 // Default parse and format

@@ -1,18 +1,50 @@
-
-import React, { Ref } from 'react';
+import React, { Ref, useImperativeHandle, useRef } from 'react';
+import { useInternalizeInput } from '../../hooks/useInternalizeInput';
+import { setRefInputValue } from '../../utilities/setRefInputValue';
+import { PopperProps } from '../Popper';
+import { FieldProps } from './Field';
+import { FieldPopper } from './FieldPopper';
 import { PlainInput } from './PlainInput';
-import { WrapperPopper, WrapperPopperProps } from './WrapperPopper';
 
 
 //
 // InputPopper
 //
 
-export interface InputPopperProps extends WrapperPopperProps {
+export interface InputPopperProps extends
+    Omit<FieldProps, 'className'>,
+    Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'> {
 
-    // Wrapper
+    // Field
 
-    wrapperClassName?: string;
+    /**
+     * Classes to pass to the field.
+     */
+    fieldClassName?: string;
+
+    // Popper
+
+    /**
+     * Show the popper.
+     */
+    show: boolean;
+
+    /**
+     * Manage the show popper state.
+     */
+    onChangeShow: (s: boolean) => void;
+
+    //
+
+    /**
+     * Render the popper.
+     */
+    renderPopper: () => React.ReactElement;
+
+    /** 
+     * Classes to pass to the popper.
+     */
+    popperClassName?: string;
 
     // Input
 
@@ -31,16 +63,29 @@ export interface InputPopperProps extends WrapperPopperProps {
      */
     value?: string,
 
+    /**
+     * Placeholder to show inside the input if it is empty.
+     */
+    placeholder?: string,
+
     /** 
      * Change event handler (for uncontrolled and controlled).
      */
     onChange?: React.ChangeEventHandler<HTMLInputElement>,
 
+    /**
+     * Change event handler for final blur event. 
+     */
+    onFinalize?: (value: string) => string | null;
+
 }
 
 /**
- * InputPopper is a wrapper for the input element that provides a customizable
- * popper.
+ * This component behaves exactly the same way as an html `input` element. The
+ * `ref` and `className` of this component are forwarded to the internal `input`
+ * element.
+ * 
+ * Additionaly this component requires a 
  */
 export const InputPopper = React.forwardRef((
     props: InputPopperProps & React.InputHTMLAttributes<HTMLInputElement>,
@@ -51,75 +96,152 @@ export const InputPopper = React.forwardRef((
 
     const {
 
-        // Wrapper
+        // Field
 
         variant,
-        disabled,
-        error,
 
+        label,
         start,
         end,
 
-        wrapperClassName,
+        shrink,
+        focus,
+        disabled,
+        error,
+
+        withFullWidth,
+        withFullHeight,
+
+        fieldClassName,
 
         // Popper
+
+        show,
+        onChangeShow,
 
         withPlacement,
         withArrow,
         withSameWidth,
 
-        defaultShow,
-        show,
-        onChangeShow,
-
+        popperClassName,
         renderPopper,
 
         // Input
 
-        className,
+        onKeyDown,
+        onChange,
+        onFinalize,
+
+        // Rest goes to Input
 
         ...inputProps
 
+
     } = props;
+
+    // Internalize `value`
+
+    const [internalValue, handleChangeInternalValue] = useInternalizeInput('', props.defaultValue, props.value, onChange);
+    const handleFinalize = () => {
+        if (onFinalize) {
+            const finalValue = onFinalize(internalValue);
+            if (finalValue) {
+                setRefInputValue(internalInputRef, finalValue);
+            }
+        }
+    };
+
+    // Clone references
+
+    const internalInputRef = useRef<HTMLInputElement>(null);
+    useImperativeHandle(inputRef, () => internalInputRef.current!);
+
+    // Handlers
+
+    const handleShow = () => { if (!show) { onChangeShow(true); } };
+    const handleHide = () => { if (show) { onChangeShow(false); } };
+
+    const handleFinalizeHide = () => {
+        handleFinalize();
+        handleHide();
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        onKeyDown?.(e);
+        switch (e.key) {
+            case 'ArrowDown':
+                handleShow();
+                e.preventDefault();
+                break;
+            case 'ArrowUp':
+            case 'Escape':
+                handleHide();
+                e.preventDefault();
+                break;
+            case 'Tab':
+            case 'Enter':
+                handleFinalize();
+                handleHide();
+                break;
+        }
+    };
 
     // Render
 
     return (
-        <WrapperPopper
+
+        <FieldPopper
+
+            // Field
 
             variant={variant}
+
+            label={label}
+            start={start}
+            end={end}
+
+            shrink={shrink || props.placeholder != null || internalValue.length > 0}
+            focus={show}
             disabled={disabled}
             error={error}
 
-            start={start}
-            end={end}
+            onClick={handleShow}
+
+            withFullWidth={withFullWidth}
+            withFullHeight={withFullHeight}
+
+            className={fieldClassName}
+
+            // Popper
 
             withPlacement={withPlacement}
             withArrow={withArrow}
             withSameWidth={withSameWidth}
 
-            defaultShow={defaultShow}
+            // FieldPopper
+
             show={show}
-            onChangeShow={onChangeShow}
+            onFullBlur={handleFinalizeHide}
 
+            popperClassName={popperClassName}
             renderPopper={renderPopper}
-
-            className={wrapperClassName}
 
         >
 
-            <PlainInput
+            <PlainInput type="text"
 
-                ref={inputRef}
+                ref={internalInputRef}
 
-                disabled={disabled}
-                error={error}
+                onFocus={handleShow}
+                onKeyDown={handleKeyDown}
+                onChange={handleChangeInternalValue}
 
                 {...inputProps}
 
             />
 
-        </WrapperPopper>
+        </FieldPopper>
+
     );
 
 });

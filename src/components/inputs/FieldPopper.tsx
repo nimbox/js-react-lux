@@ -1,6 +1,5 @@
 import classNames from 'classnames';
-import React, { forwardRef, HTMLAttributes, Ref, useCallback, useImperativeHandle, useRef, useState } from 'react';
-import { useInternalize } from '../../hooks/useInternalize';
+import React, { FocusEvent, forwardRef, HTMLAttributes, ReactElement, Ref, useImperativeHandle, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { getActiveElement } from '../../utilities/getActiveElement';
 import { HTMLPopperElement, Popper, PopperProps } from '../Popper';
@@ -22,51 +21,54 @@ export interface FieldPopperProps extends FieldProps,
     popperRef?: Ref<HTMLPopperElement>;
 
     /**
-     * Class name to apply to the popper.
+     * Render the popper.
+     */
+    renderPopper: () => ReactElement;
+
+    /**
+     * Class names to apply to the popper.
      * @default bg-control-bg border border-control-border rounded drop-shadow
      */
     popperClassName?: string;
 
-    // FieldPopper
 
-    /**
-     * Default show value (for uncontrolled).
-     */
-    defaultShow?: boolean;
+    // FieldPopper
 
     /**
      * Show value (for controlled).
      */
-    show?: boolean;
+    show: boolean;
 
     /**
-     * Change show event handler (for controlled).
+     * Called when the focus is blured from the field or the popper. This is
+     * usually because of a click outside event or a programatic focus of
+     * another element in the page.
      */
-    onChangeShow: (show: boolean) => void;
-
-    /**
-     * Toggle visibility of the popper when a click is detected on the field.
-     * @default true
-     */
-    withToggle?: boolean;
+    onFullBlur?: () => void;
 
     /**
      * Called when tabbing inside the popper reaches the begining or the end.
      * This is done by adding two selectable, but invisisble, divs, one before
      * and one after all the elements of the popper.
      */
-    onPopperBlur?: () => void;
-
-    /**
-     * Render the popper.
-     */
-    renderPopper: () => React.ReactElement;
+    onKeyBlur?: () => void;
 
 }
 
 /**
- * FieldPopper. Container of all inputs that require a popper to display or
- * input further information.
+ * Container of all inputs that require a popper to display or input further
+ * information.
+ *
+ * The popper in this component is controlled via the `show` property and the
+ * `onHide`. The `onHide` is called whenever the field or the popper looses the
+ * focus. No attempt is made to detect clicks, since a click outside both
+ * elements triggers a focus on an element different than the field or the
+ * popper, thus effectively loosing focus.
+ *
+ * For the case in which the popper can have components with focus, the handler
+ * `onKeyBlur` is called when tabbing to elements before or after the focusable
+ * elements in the popper. The usual response to this event is to focus the
+ * field or the input inside the field.
  *
  * When using this component with inputs there are two possible situations: the
  * elements in the popper don't require focus (click only selection), or there
@@ -94,9 +96,6 @@ export const FieldPopper = forwardRef((
         disabled,
         error,
 
-        onFocus,
-        onBlur,
-
         children,
 
         // Popper 
@@ -107,37 +106,23 @@ export const FieldPopper = forwardRef((
         withArrow,
         withSameWidth,
 
+        onBlur,
+
+        renderPopper,
         popperClassName,
 
         // FieldPopper
 
-        defaultShow,
         show,
-        onChangeShow,
 
-        withToggle = true,
-
-        onPopperBlur,
-
-        renderPopper,
+        onFullBlur,
+        onKeyBlur,
 
         // Rest of field
 
         ...fieldProps
 
     } = props;
-
-    // Assertions
-
-    if (process.env.NODE_ENV !== 'production') {
-        if (show !== null && onChangeShow == null) {
-            console.error('You provided a `show` prop without an `onChangeShow` handler.');
-        }
-    }
-
-    // Internalize `show`
-
-    const [internalShow, handleChangeInternalShow] = useInternalize(false, defaultShow, show, onChangeShow);
 
     // Clone references
 
@@ -147,51 +132,18 @@ export const FieldPopper = forwardRef((
     const [internalPopperRef, setInternalPopperRef] = useState<HTMLPopperElement | null>(null);
     useImperativeHandle(popperRef, () => internalPopperRef!);
 
-    // Hide when clicking outside the field or the popper
+    // Hide when clicking outside the field or the popper. This might be a
+    // double occurrence with the handleFullBlur. But it is here as a safety
+    // net.
 
-    const handleHide = useCallback(() => handleChangeInternalShow(false), [handleChangeInternalShow]);
-    useOnOutsideClick(internalShow, handleHide, internalFieldRef, internalPopperRef);
-
-    // Field handlers
+    useOnOutsideClick(show, onFullBlur || defaultFullBlur, internalFieldRef, internalPopperRef);
 
     // Hide the popper if a blur events happens in the field or the popper and
     // the next active element is outside of both. This handles the case when
     // another element is focused programmatically and not because of a keypress
     // or mousedown. 
 
-    const isShowOnFocus = useRef(false);
-
-    const handleFieldFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
-        onFocus?.(e);
-        handleChangeInternalShow(true);
-        isShowOnFocus.current = true;
-    }, [onFocus, handleChangeInternalShow]);
-
-    const handleFieldBlur = useCallback((e: React.FocusEvent<HTMLDivElement>) => {
-        setTimeout(() => {
-            const activeElement = getActiveElement();
-            if (
-                !(activeElement == null) &&
-                (internalPopperRef != null && !internalPopperRef.contains(activeElement))
-            ) {
-                handleChangeInternalShow(false);
-            }
-        }, 0);
-        onBlur?.(e);
-    }, [internalPopperRef, handleChangeInternalShow, onBlur]);
-
-    const handleFieldClick = useCallback(() => {
-        if (!isShowOnFocus.current) {
-            if (withToggle) {
-                handleChangeInternalShow(!internalShow);
-            }
-        }
-        isShowOnFocus.current = false;
-    }, [withToggle, internalShow, handleChangeInternalShow]);
-
-    // Popper handlers
-
-    const handlePopperBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+    const handleFullBlur = (e: FocusEvent<HTMLDivElement>) => {
         setTimeout(() => {
             const activeElement = getActiveElement();
             if (
@@ -199,17 +151,22 @@ export const FieldPopper = forwardRef((
                 !(internalFieldRef != null && internalFieldRef?.contains(activeElement)) &&
                 !(internalPopperRef != null && internalPopperRef?.contains(activeElement))
             ) {
-                handleChangeInternalShow(false);
+                onFullBlur?.();
             }
         }, 0);
+    };
+
+    const handleFieldBlur = (e: FocusEvent<HTMLDivElement>) => {
+        onBlur?.(e);
+        handleFullBlur(e);
     };
 
     // Hide the popper it a focus event is received before or after any of the
     // focusable elements inside the popper.
 
-    const handlePopperLimitBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+    const handleKeyBlur = (e: FocusEvent<HTMLDivElement>) => {
         e.target.blur();
-        onPopperBlur?.();
+        onKeyBlur?.();
     };
 
     // Render
@@ -221,13 +178,10 @@ export const FieldPopper = forwardRef((
 
                 ref={setInternalFieldRef}
 
-                focus={internalShow}
                 disabled={disabled}
                 error={error}
 
-                onFocus={handleFieldFocus}
                 onBlur={handleFieldBlur}
-                onClick={handleFieldClick}
 
                 {...fieldProps}
 
@@ -237,7 +191,7 @@ export const FieldPopper = forwardRef((
 
             </Field>
 
-            {internalShow && !disabled &&
+            {show && !disabled &&
 
                 <Popper
 
@@ -248,15 +202,15 @@ export const FieldPopper = forwardRef((
                     withArrow={withArrow}
                     withSameWidth={withSameWidth}
 
-                    onBlur={handlePopperBlur}
+                    onBlur={handleFullBlur}
 
                     className={classNames('bg-control-bg border border-control-border rounded drop-shadow', popperClassName)}
 
                 >
 
-                    {onPopperBlur && <div tabIndex={0} onFocus={handlePopperLimitBlur} />}
+                    {onKeyBlur && <div tabIndex={0} onFocus={handleKeyBlur} />}
                     {renderPopper()}
-                    {onPopperBlur && <div tabIndex={0} onFocus={handlePopperLimitBlur} />}
+                    {onKeyBlur && <div tabIndex={0} onFocus={handleKeyBlur} />}
 
                 </Popper>
             }
@@ -265,3 +219,6 @@ export const FieldPopper = forwardRef((
     );
 
 });
+
+
+const defaultFullBlur = () => null;

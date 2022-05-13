@@ -1,150 +1,108 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { action } from '@storybook/addon-actions';
-import { useRef, useState } from 'react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { ChangeEvent, ChangeEventHandler, FormEvent, FormEventHandler, forwardRef, Ref, useCallback, useImperativeHandle, useRef, useState } from 'react';
+import { setRefInputValue } from '../../utilities/setRefInputValue';
 import { Button } from '../Button';
+import { Input } from '../inputs/Input';
 import { SwatchPicker, SwatchPickerProps } from './SwatchPicker';
 
 
 export default {
-    title: 'Component/Picker/SwatchPicker',
+    title: 'Components/Pickers/SwatchPicker',
     component: SwatchPicker,
     parameters: {
         layout: 'centered'
     }
-};
+} as ComponentMeta<typeof SwatchPicker>;
 
 
 //
-// Default
+// Templates
 //
 
-export const Default = ({ withPlacement, withArrow, withSameWidth, error, popperClassName }: SwatchPickerProps) => {
+const Template = forwardRef((
+    { setValue: finalValue, onChange, onSubmit, ...props }: SwatchPickerProps & {
+        defaultValue?: string,
+        value?: string,
+        setValue: string,
+        onChange: ChangeEventHandler<HTMLInputElement>,
+        onSubmit: FormEventHandler<HTMLFormElement>,
+    },
+    inputRef: Ref<HTMLInputElement>
+) => {
+
+    const internalInputRef = useRef<HTMLInputElement>(null);
+    useImperativeHandle(inputRef, () => internalInputRef.current!);
+
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const handleBlur = () => setTimeout(() => buttonRef.current?.focus(), 5000);
+    const handleSet = () => setRefInputValue(internalInputRef, finalValue);
+
     return (
-        <div className="w-96">
-            <SwatchPicker
-
-                defaultValue="#906090"
-                
-                error={error}
-
-                withPlacement={withPlacement}
-                withArrow={withArrow}
-                withSameWidth={withSameWidth}
-
-                popperClassName={popperClassName}
-
-                placeholder="Select color" />
-
-        </div>
+        <form onSubmit={onSubmit} className="w-96 flex flex-col items-start gap-y-2">
+            <div className="flex flex-row items-center gap-x-2">
+                <Input className="w-4" />
+                <SwatchPicker {...props} ref={internalInputRef} onChange={onChange} />
+                <Input className="w-4" />
+            </div>
+            <div className="flex flex-row items-center gap-x-2">
+                <Button ref={buttonRef} type="button" onClick={handleBlur}>Blur</Button>
+                <Button type="button" onClick={handleSet}>Set</Button>
+                <Button>Submit</Button>
+            </div>
+        </form>
     );
+
+});
+
+const ControlledTemplate = (props: SwatchPickerProps) => {
+
+    const [color, setColor] = useState('#906090');
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => { setColor(e.target.value); action('onChange')(e.target.value); }
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(color); }
+
+    return (
+        <Template
+            {...props}
+            name="color"
+            value={color}
+            setValue="#EA9317"
+            onChange={handleChange}
+            onSubmit={handleSubmit}
+        />
+    );
+
 };
-Default.args = {
-    error: false,
-    withPlacement: 'bottom-start',
-    withArrow: true,
-    withSameWidth: false,
-    popperClassName: 'w-64 lux-p-2em grid grid-cols-5 overflow-hidden cursor-pointer'
+
+const UncontrolledTemplate = (props: SwatchPickerProps) => {
+
+    const ref = useRef<HTMLInputElement>(null);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(ref.current!.value); }
+
+    return (
+        <Template
+            {...props}
+            ref={ref}
+            name="color"
+            defaultValue="#906090"
+            setValue="#EA9317"
+            onChange={handleChange}
+            onSubmit={handleSubmit}
+        />
+    );
+
 };
+
 
 //
 // Stories
 //
 
-export const Controlled = () => {
+export const Default: ComponentStory<typeof SwatchPicker> = UncontrolledTemplate.bind({});
+Default.args = {};
 
-    const [color, setColor] = useState('#906090');
+export const Controlled = ControlledTemplate.bind({});
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { setColor(e.target.value); action('onChange')(e.target.value); }
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(color); }
-
-    return (
-        <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
-            <SwatchPicker name="color" value={color} onChange={handleChange} placeholder="Select color" />
-            <Button>Submit</Button>
-        </form>
-    );
-
-};
-
-export const Uncontrolled = () => {
-
-    const ref = useRef<HTMLInputElement>(null);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(ref.current!.value); }
-
-    return (
-        <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
-            <SwatchPicker ref={ref} name="color" defaultValue="#906090" onChange={handleChange} placeholder="Select color" />
-            <Button>Submit</Button>
-        </form>
-    );
-
-};
-
-export const Direct = () => {
-
-    const ref = useRef<HTMLInputElement>(null);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
-    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
-
-    return (
-        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
-            <SwatchPicker ref={ref} name="color" defaultValue="#906090" onChange={handleChange} placeholder="Select color" />
-            <Button>Submit</Button>
-            <Button type="button" onClick={() => ref.current!.value = '#ffff00'}>Set</Button>
-        </form>
-    );
-
-};
-
-export const Focus = () => {
-
-    const ref = useRef<HTMLInputElement>(null);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(ref.current!.value); }
-
-    return (
-        <form onSubmit={handleSubmit} className="w-96 flex flex-row space-x-2">
-            <SwatchPicker ref={ref} name="color" defaultValue="#906090" onChange={handleChange} placeholder="Select color" />
-            <Button onClick={() => {
-
-                // const f = ref.current!.focus;
-                console.log('ref.current', ref.current!);
-                console.log('ref.current.focus', ref.current?.focus);
-                // console.log('f', );
-
-                ref.current?.focus();
-
-            }}>Focus</Button>
-        </form>
-    );
-
-};
-
-export const VariantsAndSizes = () => {
-    return (
-        <div className="grid grid-cols-4 items-baseline gap-4">
-
-            <SwatchPicker variant="outlined" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-xs" />
-            <SwatchPicker variant="filled" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-xs" />
-            <SwatchPicker variant="inlined" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-xs" />
-            <SwatchPicker variant="plain" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-xs" />
-
-            <SwatchPicker variant="outlined" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-base" />
-            <SwatchPicker variant="filled" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-base" />
-            <SwatchPicker variant="inlined" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-base" />
-            <SwatchPicker variant="plain" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-base" />
-
-            <SwatchPicker variant="outlined" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-lg" />
-            <SwatchPicker variant="filled" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-lg" />
-            <SwatchPicker variant="inlined" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-lg" />
-            <SwatchPicker variant="plain" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-lg" />
-
-            <SwatchPicker variant="outlined" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-2xl" />
-            <SwatchPicker variant="filled" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-2xl" />
-            <SwatchPicker variant="inlined" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-2xl" />
-            <SwatchPicker variant="plain" name="color" defaultValue="#906090" placeholder="Select color" fieldClassName="text-2xl" />
-
-        </div>
-    );
-};
+export const Uncontrolled = UncontrolledTemplate.bind({});
