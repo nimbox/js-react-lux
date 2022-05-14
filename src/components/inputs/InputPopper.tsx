@@ -49,11 +49,6 @@ export interface InputPopperProps extends
     // Input
 
     /** 
-     * Name used for the input element and returned in the change event. 
-     */
-    name?: string,
-
-    /** 
      * Default value for the uncontrolled version.
      */
     defaultValue?: string,
@@ -139,7 +134,7 @@ export const InputPopper = React.forwardRef((
 
     } = props;
 
-    // Internalize `value`
+    // State
 
     const [internalValue, handleChangeInternalValue] = useInternalizeInput('', props.defaultValue, props.value, onChange);
     const handleFinalize = () => {
@@ -150,8 +145,6 @@ export const InputPopper = React.forwardRef((
             }
         }
     };
-
-    // Clone references
 
     const internalInputRef = useRef<HTMLInputElement>(null);
     useImperativeHandle(inputRef, () => internalInputRef.current!);
@@ -223,17 +216,20 @@ export const InputPopper = React.forwardRef((
             show={show}
             onFullBlur={handleFinalizeHide}
 
-            popperClassName={popperClassName}
             renderPopper={renderPopper}
+            popperClassName={popperClassName}
 
         >
 
-            <PlainInput type="text"
+            <PlainInput
 
                 ref={internalInputRef}
 
+                type="text"
+
                 onFocus={handleShow}
                 onKeyDown={handleKeyDown}
+
                 onChange={handleChangeInternalValue}
 
                 {...inputProps}

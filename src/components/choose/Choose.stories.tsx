@@ -5,11 +5,12 @@ import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createSearchMatcher } from '../../utilities/createSearchMatcher';
 import { Button } from '../Button';
+import { Input } from '../inputs/Input';
 import { Choose, ChooseProps } from './Choose';
 
 
 export default {
-    title: 'Component/Choose/Choose',
+    title: 'Components/Choose/Choose',
     component: Choose,
     parameters: {
         layout: 'centered'
@@ -77,6 +78,7 @@ export const Default = () => {
 
     return (
         <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
+            <Input className="w-4" />
             <Choose
 
                 supplier={provider}
@@ -92,6 +94,7 @@ export const Default = () => {
                 renderChosen={({ option }) => <span>{option.name}</span>}
 
             />
+            <Input className="w-4" />
             <Button>Submit</Button>
         </form>
     );
@@ -109,6 +112,7 @@ const Template = React.forwardRef<
             ref={ref}
 
             withSearch={true}
+            withClear={true}
 
             chooser={chooser}
             supplier={provider}
@@ -139,11 +143,16 @@ export const Controlled = () => {
     const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(value); }
 
     return (
-        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
-            <Template
-                value={value}
-                onChange={handleChange}
-            />
+        <form onSubmit={handleSubmit} className="w-96 space-y-2">
+            <div className="flex flex-row items-baseline gap-2">
+                <Input className="w-4"/>
+                <Template
+                    withFullWidth
+                    value={value}
+                    onChange={handleChange}
+                />
+                <Input className="w-4"/>
+            </div>
             <Button>Submit</Button>
         </form>
     );
@@ -179,8 +188,12 @@ export const Direct = () => {
         <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
             <Template
                 ref={ref}
-                defaultValue="800080"
+                variant="filled"
+                label="Label"
+                defaultValue=""
                 onChange={handleChange}
+                withFullWidth
+                placeholder="Select"
             />
             <Button>Submit</Button>
             <Button type="button" onClick={() => ref.current!.value = 'ffff00'}>Set</Button>

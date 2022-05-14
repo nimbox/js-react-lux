@@ -1,6 +1,7 @@
 import classnames from 'classnames';
 import _isFunction from 'lodash/isFunction';
-import React, { Ref, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import React, { KeyboardEvent, Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useInternalizeInput } from '../../hooks/useInternalizeInput';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { UseOptionChooser } from '../../hooks/useOption';
 import { UseOptionsSupplier } from '../../hooks/useOptions';
@@ -8,13 +9,11 @@ import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
 import { AngleDownIcon, CircleCrossIcon, WarningIcon } from '../../icons/components';
 import { consumeEvent } from '../../utilities/consumeEvent';
 import { setRefInputValue } from '../../utilities/setRefInputValue';
+import { Delay } from '../Delay';
+import { FieldPopper, FieldPopperProps } from '../inputs/FieldPopper';
 import { Placeholder } from '../inputs/Placeholder';
 import { SearchInput } from '../inputs/SearchInput';
-import { WrapperProps } from '../inputs/Wrapper';
-import { WrapperPopper } from '../inputs/WrapperPopper';
-import { Delay } from '../Delay';
 import { Loading } from '../Loading';
-import { PopperProps } from '../Popper';
 import { ChooseOptionList, ChooseOptionListProps } from './ChooseOptionList';
 import { DEFAULT_RENDER_OPTION, EXTRACTOR } from './options';
 
@@ -24,11 +23,44 @@ import { DEFAULT_RENDER_OPTION, EXTRACTOR } from './options';
 //
 
 export interface ChooseProps<O, G = O[]> extends
-    WrapperProps,
-    Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'>,
+    Omit<FieldPopperProps, 'show' | 'onChangeShow' | 'renderPopper'>,
     Pick<ChooseOptionListProps<O, G>, 'extractor' | 'renderEmpty' | 'renderGroupLabel' | 'renderOption'> {
 
-    //
+    // Field
+
+    /**
+     * Class name to pass to the wrapper.
+     */
+    fieldClassName?: string;
+
+    // Popper
+
+    /**
+     * Class name to pass to the popper.
+     */
+    popperClassName?: string;
+
+    // Input
+
+    /** 
+     * Default value for the uncontrolled version.
+     */
+    defaultValue?: string,
+
+    /** 
+     * Value for the controlled version.
+     */
+    value?: string,
+
+    /**
+     * Placeholder to show inside the input if it is empty.
+     */
+    placeholder?: string,
+
+    // ChooseOptionList
+
+
+    // Choose
 
     /**
      * Add a search input. An exception is thrown at development time if this
@@ -79,17 +111,6 @@ export interface ChooseProps<O, G = O[]> extends
      */
     renderChosen?: ({ option }: { option: O }) => React.ReactNode;
 
-    // Styling
-
-    /**
-     * Class name to pass to the wrapper.
-     */
-    wrapperClassName?: string;
-
-    /**
-     * Class name to pass to the popper.
-     */
-    popperClassName?: string;
 
 }
 
@@ -102,19 +123,24 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
     const {
 
-        // Wrapper
+        // Field
 
         variant,
 
-        disabled,
-        error,
-
+        label,
         start,
         end,
 
-        tabIndex = 0,
+        shrink,
+        focus,
+        disabled,
+        error,
 
-        wrapperClassName,
+        withFullWidth,
+        withFullHeight,
+
+        tabIndex = 0,
+        fieldClassName,
 
         // Popper
 
@@ -146,9 +172,9 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
         // Input
 
-        defaultValue: propsDefaultValue,
-        value: propsValue,
         onChange,
+
+        // Rest goes to Input
 
         ...inputProps
 
@@ -164,27 +190,24 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
     // State
 
-    const wrapperRef = useRef<HTMLDivElement>(null);
+    const [fieldRef, setFieldRef] = useState<HTMLDivElement | null>(null);
+    // const fieldRef = useRef<HTMLDivElement>(null);
 
     const [show, setShow] = useState(false);
+    const handleShow = () => { if (!show) { setShow(true); } };
+    const handleHide = () => { if (show) { setShow(false); } };
+
+
     const [query, setQuery] = useState<string>('');
+    const queryRef = useRef<HTMLInputElement>(null);
 
-    const isControlled = propsValue != null;
-    const [chosenValue, setChosenValue] = useState<string | ReadonlyArray<string> | number | undefined>(isControlled ? propsValue : propsDefaultValue);
-    const [chosenOption, setChosenOption] = useState<O | undefined>(undefined);
-
-    // This is the real value.
-    const value = isControlled ? propsValue : chosenValue;
-
-    // Make sure the `chosenValue` is set to whatever the real `value` is.
-    if (value !== chosenValue) {
-        setChosenValue(value);
-    }
-
-    // References
+    const [internalValue, handleChangeInternalValue] = useInternalizeInput('', props.defaultValue, props.value, onChange);
 
     const internalInputRef = useObservableValueRef<HTMLInputElement>(null);
     useImperativeHandle(inputRef, () => internalInputRef.current!);
+
+    const chosenValue = internalValue;
+    const [chosenOption, setChosenOption] = useState<O | undefined>(undefined);
 
     // Options
 
@@ -193,7 +216,7 @@ export const Choose = React.forwardRef(<O, G = O[]>(
     const [loadingError, setLoadingError] = useState<any>(null);
 
     // Memoize the `supplier` response as a promise, when the `query` changes.
-    
+
     const getPromisedOptions = useMemo(async () => {
 
         const isSearchable = _isFunction(supplier);
@@ -227,12 +250,12 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
     }, [getPromisedOptions, chooser, extractor, identifier]);
 
-    // Wait for the `getPromisedOptions` to settle to display the optiopn list.
+    // Wait for the `getPromisedOptions` to settle 
+    // to display the optiopn list.
     useEffect(() => {
 
         let working = true;
         async function doEffect() {
-
             setLoading(l => l + 1);
             setLoadingError(undefined);
             try {
@@ -253,8 +276,8 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
     }, [getPromisedOptions]);
 
-    // Wait for the `getPromisedChosenOption` to settle to display the chosen
-    // option.
+    // Wait for the `getPromisedChosenOption` to settle 
+    // to display the chosen option.
     useEffect(() => {
 
         let working = true;
@@ -306,11 +329,8 @@ export const Choose = React.forwardRef(<O, G = O[]>(
         const value = identifier(option);
 
         // Set the internal value/chosenOption state and the input value.
-        if (!isControlled) {
-            setChosenValue(value);
-        }
-        setChosenOption(option);
         setRefInputValue(internalInputRef, value);
+        setChosenOption(option);
 
         // Reset the query.
         setQuery('');
@@ -321,7 +341,9 @@ export const Choose = React.forwardRef(<O, G = O[]>(
             setShow(false);
         }
 
-    }, [identifier, isControlled, internalInputRef, withHideOnChoose]);
+        fieldRef?.focus();
+
+    }, [identifier, internalInputRef, withHideOnChoose, fieldRef]);
 
     // Options
 
@@ -332,11 +354,8 @@ export const Choose = React.forwardRef(<O, G = O[]>(
     const handleClearQuery = () => {
 
         // Clear the chosen value and option.
-        if (!isControlled) {
-            setChosenValue('');
-        }
-        setChosenOption(undefined);
         setRefInputValue(internalInputRef, '');
+        setChosenOption(undefined);
 
         // Reset the query.
         setQuery('');
@@ -351,49 +370,61 @@ export const Choose = React.forwardRef(<O, G = O[]>(
     };
 
     const handleClearClick = (e: React.MouseEvent) => {
+
         e.stopPropagation(); // Prevent wrapper click.
         handleClearQuery();
+
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setChosenValue(e.target.value);
-        onChange?.(e);
+    // Handlers
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+
+        switch (e.key) {
+            case 'ArrowUp':
+            case 'ArrowDown':
+                handleShow();
+                break;
+        }
+
+        onNavigatorKeyDown(e);
+
     };
 
-    // Popper
-
-    const handlePopperBlur = () => {
-
-        // Reset the query.
+    const handleKeyBlur = () => {
         setQuery('');
+        handleHide();
+        fieldRef?.focus();
+    };
 
-        // Focus the wrapper to continue tabbing.
-        wrapperRef.current?.focus();
-
+    const handleFullBlur = () => {
+        setQuery('');
+        handleHide();
     };
 
     // Render Chosen Option
 
     const option = () => (
         <Placeholder error={error} placeholder={placeholder}>
-            {chosenOption ? renderChosen({ option: chosenOption }) : <>&nbsp;</>}
+            {chosenOption ? renderChosen({ option: chosenOption }) : undefined}
         </Placeholder>
     );
 
     // Render Popper
 
-    const popper = () => (
+    const renderOptions = () => (
         <div className="divide-y divide-control-border">
 
             {withSearch &&
                 <div className="lux-p-2em">
                     <SearchInput
-                        autoFocus
+                        ref={queryRef}
+                        withFullWidth
                         loading={loading > 0}
                         loadingError={loadingError}
                         value={query}
                         onChange={handleChangeQuery}
-                        onKeyDown={onNavigatorKeyDown}
+                        onKeyDown={handleKeyDown}
                     />
                 </div>
             }
@@ -419,41 +450,59 @@ export const Choose = React.forwardRef(<O, G = O[]>(
         </div>
     );
 
+    // Wait for the popper to render and on the next tick focus the search input
+    // if there is a reference to it. The `queryRef` will only be populated if
+    // the `withSearch` parameter is set.
+
+    useLayoutEffect(() => {
+        setTimeout(() => queryRef?.current?.focus(), 0);
+    }, [show]);
+
     // Render
 
+    console.log('XXX', 'render', JSON.stringify(internalValue),  props.placeholder, chosenOption );
+
     return (
-        <WrapperPopper
+        <FieldPopper
 
+            ref={setFieldRef}
             tabIndex={tabIndex}
-            ref={wrapperRef}
 
-            // Wrapper
+            // Field
 
             variant={variant}
 
-            error={error}
-            disabled={disabled}
-
+            label={label}
             start={start}
             end={
                 <>
                     {end}
                     {loading ? <Delay><Loading style={{ marginRight: '0.5em' }} /></Delay> : null}
-                    {loadingError ? <WarningIcon className="text-danger-500" style={{ marginRight: '0.5em' }} /> : null}
+                    {loadingError ? <WarningIcon className="text-danger-500" /> : null}
                     {withClear &&
                         <CircleCrossIcon
                             onClick={handleClearClick}
                             style={{ marginRight: '0.5em' }}
                         />
                     }
-                    <AngleDownIcon className="stroke-2" style={{ ...((variant !== 'plain') && { marginRight: '0.5em' }) }} />
+                    <AngleDownIcon />
                 </>
             }
 
-            onKeyDown={onNavigatorKeyDown}
-            onPopperBlur={handlePopperBlur}
+            shrink={shrink || props.placeholder != null || internalValue.length > 0}
+            focus={show}
+            disabled={disabled}
+            error={error}
 
-            className={classnames('cursor-pointer', wrapperClassName)}
+            onClick={handleShow}
+
+            withFullWidth={withFullWidth}
+            withFullHeight={withFullHeight}
+
+            onFocus={handleShow}
+            onKeyDown={handleKeyDown}
+
+            className={classnames('focus:outline-none cursor-pointer', fieldClassName)}
 
             // Popper
 
@@ -461,10 +510,13 @@ export const Choose = React.forwardRef(<O, G = O[]>(
             withArrow={withArrow}
             withSameWidth={withSameWidth}
 
-            show={show}
-            onChangeShow={setShow}
-            renderPopper={popper}
+            // FieldPopper
 
+            show={show}
+            onKeyBlur={handleKeyBlur}
+            onFullBlur={handleFullBlur}
+
+            renderPopper={renderOptions}
             popperClassName={popperClassName}
 
         >
@@ -474,21 +526,20 @@ export const Choose = React.forwardRef(<O, G = O[]>(
             <input
 
                 ref={internalInputRef}
-
-                type="text"
                 tabIndex={-1}
 
-                defaultValue={propsDefaultValue}
-                value={propsValue}
-                onChange={handleChange}
+                type="text"
+                disabled
 
-                className="absolute inset-0 w-full text-black text-center opacity-10 pointer-events-none"
+                onChange={handleChangeInternalValue}
+
+                className="absolute left-0 top-0 text-xs w-full text-black opacity-10 pointer-events-none"
 
                 {...inputProps}
 
             />
 
-        </WrapperPopper>
+        </FieldPopper>
     );
 
 });
