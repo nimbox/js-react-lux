@@ -1,4 +1,4 @@
-import React, { Ref, useImperativeHandle, useRef } from 'react';
+import React, { ChangeEventHandler, FocusEvent, forwardRef, InputHTMLAttributes, KeyboardEvent, ReactElement, Ref, useImperativeHandle, useRef } from 'react';
 import { useInternalizeInput } from '../../hooks/useInternalizeInput';
 import { setRefInputValue } from '../../utilities/setRefInputValue';
 import { PopperProps } from '../Popper';
@@ -32,14 +32,14 @@ export interface InputPopperProps extends
     /**
      * Manage the show popper state.
      */
-    onChangeShow: (s: boolean) => void;
+    onShowChange: (show: boolean) => void;
 
     //
 
     /**
      * Render the popper.
      */
-    renderPopper: () => React.ReactElement;
+    renderPopper: () => ReactElement;
 
     /** 
      * Classes to pass to the popper.
@@ -66,7 +66,7 @@ export interface InputPopperProps extends
     /** 
      * Change event handler (for uncontrolled and controlled).
      */
-    onChange?: React.ChangeEventHandler<HTMLInputElement>,
+    onChange?: ChangeEventHandler<HTMLInputElement>,
 
     /**
      * Change event handler for final blur event. 
@@ -82,8 +82,8 @@ export interface InputPopperProps extends
  * 
  * Additionaly this component requires a 
  */
-export const InputPopper = React.forwardRef((
-    props: InputPopperProps & React.InputHTMLAttributes<HTMLInputElement>,
+export const InputPopper = forwardRef((
+    props: InputPopperProps & InputHTMLAttributes<HTMLInputElement>,
     inputRef: Ref<HTMLInputElement>
 ) => {
 
@@ -112,7 +112,7 @@ export const InputPopper = React.forwardRef((
         // Popper
 
         show,
-        onChangeShow,
+        onShowChange: onShowChange,
 
         withPlacement,
         withArrow,
@@ -125,6 +125,7 @@ export const InputPopper = React.forwardRef((
 
         onKeyDown,
         onChange,
+    
         onFinalize,
 
         // Rest goes to Input
@@ -151,15 +152,15 @@ export const InputPopper = React.forwardRef((
 
     // Handlers
 
-    const handleShow = () => { if (!show) { onChangeShow(true); } };
-    const handleHide = () => { if (show) { onChangeShow(false); } };
+    const handleShow = () => { if (!show) { onShowChange(true); } };
+    const handleHide = () => { if (show) { onShowChange(false); } };
 
     const handleFinalizeHide = () => {
         handleFinalize();
         handleHide();
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         onKeyDown?.(e);
         switch (e.key) {
             case 'ArrowDown':
@@ -228,8 +229,8 @@ export const InputPopper = React.forwardRef((
                 type="text"
 
                 onFocus={handleShow}
-                onKeyDown={handleKeyDown}
 
+                onKeyDown={handleKeyDown}
                 onChange={handleChangeInternalValue}
 
                 {...inputProps}

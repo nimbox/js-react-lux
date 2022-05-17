@@ -12,7 +12,7 @@ import { InputPopper, InputPopperProps } from '../inputs/InputPopper';
 // TimePicker
 //
 
-export interface TimePickerProps extends Omit<InputPopperProps, 'show' | 'onChangeShow' | 'renderPopper'> {
+export interface TimePickerProps extends Omit<InputPopperProps, 'show' | 'onShowChange' | 'renderPopper'> {
 
     // TimePicker
 
@@ -125,7 +125,7 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
             ref={internalInputRef}
 
             show={show}
-            onChangeShow={setShow}
+            onShowChange={setShow}
 
             renderPopper={renderWatch}
 

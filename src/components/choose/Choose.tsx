@@ -23,7 +23,7 @@ import { DEFAULT_RENDER_OPTION, EXTRACTOR } from './options';
 //
 
 export interface ChooseProps<O, G = O[]> extends
-    Omit<FieldPopperProps, 'show' | 'onChangeShow' | 'renderPopper'>,
+    Omit<FieldPopperProps, 'show' | 'onShowChange' | 'renderPopper'>,
     Pick<ChooseOptionListProps<O, G>, 'extractor' | 'renderEmpty' | 'renderGroupLabel' | 'renderOption'> {
 
     // Field
@@ -114,6 +114,12 @@ export interface ChooseProps<O, G = O[]> extends
 
 }
 
+/**
+ *
+ * The `onBlur` event is fired on two circumstantes: (1) when a full
+ * blur occurs, and (2) when the field is blurred and the popper.
+ *
+ */
 export const Choose = React.forwardRef(<O, G = O[]>(
     props: ChooseProps<O, G> & React.InputHTMLAttributes<HTMLInputElement>,
     inputRef: Ref<HTMLInputElement>
@@ -135,6 +141,8 @@ export const Choose = React.forwardRef(<O, G = O[]>(
         focus,
         disabled,
         error,
+
+        onBlur,
 
         withFullWidth,
         withFullHeight,
@@ -190,8 +198,8 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
     // State
 
-    const [fieldRef, setFieldRef] = useState<HTMLDivElement | null>(null);
-    // const fieldRef = useRef<HTMLDivElement>(null);
+    // const [fieldRef, setFieldRef] = useState<HTMLDivElement | null>(null);
+    const fieldRef = useRef<HTMLDivElement>(null);
 
     const [show, setShow] = useState(false);
     const handleShow = () => { if (!show) { setShow(true); } };
@@ -228,6 +236,7 @@ export const Choose = React.forwardRef(<O, G = O[]>(
     // be invoked whenever it is necessary. The `chosenOption` only changes when
     // the `chosenValue` changes, but we need to fire this only when necessary
     // to reduce backend searches.
+
     const getPromisedChosenOption = useCallback(async (chosenValue: string) => {
 
         // Check that the `chosenValue` is not already one of
@@ -252,6 +261,7 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
     // Wait for the `getPromisedOptions` to settle 
     // to display the optiopn list.
+
     useEffect(() => {
 
         let working = true;
@@ -278,6 +288,7 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
     // Wait for the `getPromisedChosenOption` to settle 
     // to display the chosen option.
+
     useEffect(() => {
 
         let working = true;
@@ -337,11 +348,11 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
         // Hide de popper if necessary.
         if (withHideOnChoose) {
-            internalInputRef.current!.focus();
+            fieldRef.current!.focus();
             setShow(false);
         }
 
-        fieldRef?.focus();
+        fieldRef.current?.focus();
 
     }, [identifier, internalInputRef, withHideOnChoose, fieldRef]);
 
@@ -394,7 +405,7 @@ export const Choose = React.forwardRef(<O, G = O[]>(
     const handleKeyBlur = () => {
         setQuery('');
         handleHide();
-        fieldRef?.focus();
+        fieldRef.current?.focus();
     };
 
     const handleFullBlur = () => {
@@ -460,12 +471,10 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
     // Render
 
-    console.log('XXX', 'render', JSON.stringify(internalValue),  props.placeholder, chosenOption );
-
     return (
         <FieldPopper
 
-            ref={setFieldRef}
+            ref={fieldRef}
             tabIndex={tabIndex}
 
             // Field
@@ -494,13 +503,14 @@ export const Choose = React.forwardRef(<O, G = O[]>(
             disabled={disabled}
             error={error}
 
-            onClick={handleShow}
-
             withFullWidth={withFullWidth}
             withFullHeight={withFullHeight}
 
             onFocus={handleShow}
+            onBlur={onBlur}
+
             onKeyDown={handleKeyDown}
+            onClick={handleShow}
 
             className={classnames('focus:outline-none cursor-pointer', fieldClassName)}
 
@@ -529,7 +539,6 @@ export const Choose = React.forwardRef(<O, G = O[]>(
                 tabIndex={-1}
 
                 type="text"
-                disabled
 
                 onChange={handleChangeInternalValue}
 

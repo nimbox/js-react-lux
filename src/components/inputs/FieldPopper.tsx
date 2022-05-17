@@ -65,6 +65,18 @@ export interface FieldPopperProps extends FieldProps,
  * elements triggers a focus on an element different than the field or the
  * popper, thus effectively loosing focus.
  *
+ * The `onBlur` handler is fired whenever the focus is lost. Loosing the focus
+ * of the `FieldPopper` is tricky, because it means that the Field lost focus
+ * and the Popper also lost focus. This happens when:
+ * 
+ * - The user clicks outside the Field and the Popper.
+ * - The user tabs outside the Field and the Popper.
+ * - Some other element in the page is focused.
+ * 
+ * It does not happen when:
+ * 
+ * - The user clicks inside the popper (loosing the focus of the Field).
+ * 
  * For the case in which the popper can have components with focus, the handler
  * `onKeyBlur` is called when tabbing to elements before or after the focusable
  * elements in the popper. The usual response to this event is to focus the
@@ -144,22 +156,25 @@ export const FieldPopper = forwardRef((
     // or mousedown. 
 
     const handleFullBlur = (e: FocusEvent<HTMLDivElement>) => {
-        setTimeout(() => {
-            const activeElement = getActiveElement();
-            if (
-                !(activeElement == null) &&
-                !(internalFieldRef != null && internalFieldRef?.contains(activeElement)) &&
-                !(internalPopperRef != null && internalPopperRef?.contains(activeElement))
-            ) {
-                onFullBlur?.();
-            }
-        }, 0);
+
+        console.log('handleFullBlur', 'target', e.target, e.relatedTarget);
+        console.log('handleFullBlur', 'internal', internalFieldRef, internalPopperRef);
+
+        if ((e.relatedTarget != null) &&
+            !(internalFieldRef != null && internalFieldRef?.contains(e.relatedTarget)) &&
+            !(internalPopperRef != null && internalPopperRef?.contains(e.relatedTarget))
+        ) {
+            console.log('there was a real blur');
+            onBlur?.(e);
+            onFullBlur?.();
+        } else {
+            console.log('not inside');
+        }
+
     };
 
-    const handleFieldBlur = (e: FocusEvent<HTMLDivElement>) => {
-        onBlur?.(e);
-        handleFullBlur(e);
-    };
+    const handleFieldBlur = handleFullBlur;
+    const handlePopperBlur = handleFullBlur;
 
     // Hide the popper it a focus event is received before or after any of the
     // focusable elements inside the popper.
@@ -202,7 +217,7 @@ export const FieldPopper = forwardRef((
                     withArrow={withArrow}
                     withSameWidth={withSameWidth}
 
-                    onBlur={handleFullBlur}
+                    onBlur={handlePopperBlur}
 
                     className={classNames('bg-control-bg border border-control-border rounded drop-shadow', popperClassName)}
 

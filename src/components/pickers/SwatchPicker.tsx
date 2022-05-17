@@ -13,7 +13,7 @@ import { InputPopper, InputPopperProps } from '../inputs/InputPopper';
 // SwatchPicker
 //
 
-export interface SwatchPickerProps extends Omit<InputPopperProps, 'show' | 'onChangeShow' | 'renderPopper'> {
+export interface SwatchPickerProps extends Omit<InputPopperProps, 'show' | 'onShowChange' | 'renderPopper'> {
 
     // SwatchPicker
 
@@ -137,7 +137,7 @@ export const SwatchPicker = React.forwardRef((
             ref={internalInputRef}
 
             show={show}
-            onChangeShow={setShow}
+            onShowChange={setShow}
 
             renderPopper={renderPalette}
 

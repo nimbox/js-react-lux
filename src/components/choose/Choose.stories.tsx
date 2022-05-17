@@ -1,12 +1,13 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { action } from '@storybook/addon-actions';
 import { useEffect } from '@storybook/addons';
-import React, { useRef, useState } from 'react';
+import React, { forwardRef, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createSearchMatcher } from '../../utilities/createSearchMatcher';
 import { Button } from '../Button';
 import { Input } from '../inputs/Input';
 import { Choose, ChooseProps } from './Choose';
+import { ControlledInputTemplate, HookFormInputTemplate, UncontrolledInputTemplate } from '../../templates/InputTemplate';
 
 
 export default {
@@ -53,7 +54,7 @@ const chooser = async (value?: string | ReadonlyArray<string> | number | undefin
     return option;
 };
 
-const provider = async (query?: string) => {
+const supplier = async (query?: string) => {
     // await new Promise(resolve => setTimeout(() => resolve(undefined), 2000));
     if (query == null || query.trim() === '') {
         return colors;
@@ -81,7 +82,7 @@ export const Default = () => {
             <Input className="w-4" />
             <Choose
 
-                supplier={provider}
+                supplier={supplier}
                 extractor={extractor}
                 identifier={identifier}
 
@@ -101,7 +102,7 @@ export const Default = () => {
 
 };
 
-const Template = React.forwardRef<
+const Template = forwardRef<
     HTMLInputElement,
     Partial<ChooseProps<Option, Group>> & React.InputHTMLAttributes<HTMLInputElement>
 >((props, ref) => {
@@ -111,23 +112,15 @@ const Template = React.forwardRef<
 
             ref={ref}
 
-            withSearch={true}
-            withClear={true}
-
             chooser={chooser}
-            supplier={provider}
+            supplier={supplier}
             extractor={extractor}
             identifier={identifier}
-
-            withArrow={true}
-            withSameWidth={true}
 
             renderEmpty={() => 'No options'}
             renderGroupLabel={({ group }) => <span>{group.name}</span>}
             renderOption={({ option }) => <span className="lux-px-2em italic">{option.name}</span>}
             renderChosen={({ option }) => <span>{option.name}</span>}
-
-            placeholder="Select color"
 
             {...props}
 
@@ -136,85 +129,14 @@ const Template = React.forwardRef<
 
 });
 
-export const Controlled = () => {
 
-    const [value, setValue] = useState('800080');
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { setValue(e.target.value); action('onChange')(e.target.value); }
-    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(value); }
+export const Controlled = ControlledInputTemplate({ initial: '800080', forced: 'ffa500', component: Template }).bind({});
+export const Uncontrolled = UncontrolledInputTemplate({ initial: '800080', forced: 'ffa500', component: Template }).bind({});
+export const HookForm = HookFormInputTemplate({ initial: '800080', forced: 'ffa500', component: Template }).bind({});
+export const HookFormWithSearch = HookFormInputTemplate({ initial: '800080', forced: 'ffa500', component: Template }).bind({});
+HookFormWithSearch.args = { withSearch: true };
 
-    return (
-        <form onSubmit={handleSubmit} className="w-96 space-y-2">
-            <div className="flex flex-row items-baseline gap-2">
-                <Input className="w-4"/>
-                <Template
-                    withFullWidth
-                    value={value}
-                    onChange={handleChange}
-                />
-                <Input className="w-4"/>
-            </div>
-            <Button>Submit</Button>
-        </form>
-    );
 
-};
-
-export const Uncontrolled = () => {
-
-    const ref = useRef<HTMLInputElement>(null);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
-    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
-
-    return (
-        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
-            <Template
-                ref={ref}
-                defaultValue="800080"
-                onChange={handleChange}
-            />
-            <Button>Submit</Button>
-        </form>
-    );
-
-};
-
-export const Direct = () => {
-
-    const ref = useRef<HTMLInputElement>(null);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
-    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
-
-    return (
-        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
-            <Template
-                ref={ref}
-                variant="filled"
-                label="Label"
-                defaultValue=""
-                onChange={handleChange}
-                withFullWidth
-                placeholder="Select"
-            />
-            <Button>Submit</Button>
-            <Button type="button" onClick={() => ref.current!.value = 'ffff00'}>Set</Button>
-        </form>
-    );
-
-};
-
-export const ReactHookFormDefault = () => {
-
-    const { register, handleSubmit } = useForm({ defaultValues: { color: '0000ff' } });
-    const handleFormSubmit = (data: any) => { action('onSubmit')(data); }
-
-    return (
-        <form onSubmit={handleSubmit(handleFormSubmit)} className="w-96 flex flex-row items-center space-x-2">
-            <Template {...register('color')} />
-            <Button>Submit</Button>
-        </form>
-    );
-
-};
 
 export const ReactHookFormReset = () => {
 

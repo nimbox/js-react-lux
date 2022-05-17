@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { forwardRef, InputHTMLAttributes, MouseEvent, ReactElement, Ref, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import React, { forwardRef, InputHTMLAttributes, ReactElement, Ref, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useInternalizeInput } from '../../hooks/useInternalizeInput';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
@@ -13,7 +13,7 @@ import { InputPopper, InputPopperProps } from '../inputs/InputPopper';
 // DatePicker
 //
 
-export interface DatePickerProps extends Omit<InputPopperProps, 'show' | 'onChangeShow' | 'renderPopper'> {
+export interface DatePickerProps extends Omit<InputPopperProps, 'show' | 'onShowChange' | 'renderPopper'> {
 
     // DatePicker
 
@@ -154,7 +154,7 @@ export const DatePicker = forwardRef((
             ref={internalInputRef}
 
             show={show}
-            onChangeShow={setShow}
+            onShowChange={setShow}
 
             renderPopper={renderCalendar}
 
@@ -242,7 +242,7 @@ const Calendar = (props: CalendarProps): ReactElement => {
     }, []);
 
     const selected = useMemo(() => {
-        return date != null ? new Date(date[0], date[1], date[2]) : null;
+        return date != null ? new Date(date[0], date[1], date[2], 12, 0, 0, 0) : null;
     }, [date]);
 
     // Calendar is the normalized first date having the week of the current date
@@ -307,13 +307,15 @@ const Calendar = (props: CalendarProps): ReactElement => {
 
         if (d.getMonth() !== calendar.getMonth()) { c.push('text-muted bg-gray-200'); } // off
         if (d.getTime() === today.getTime()) { c.push('text-white bg-info-500'); } // today
-        if (selected && d.getTime() === selected.getTime()) { c.push('text-white bg-primary-500'); } //date
+        if (selected && d.getTime() === selected.getTime()) { c.push('text-white bg-primary-500'); } // selected
 
         return c.join(' ');
 
     };
 
     // Render
+
+    console.log('datepicker', selected);
 
     return (
         <div onMouseDown={consumeEvent} className={classNames('flex flex-row', className)}>
@@ -373,26 +375,6 @@ const Calendar = (props: CalendarProps): ReactElement => {
     );
 
 };
-
-//
-// Utilities
-//
-
-/**
- * Return a date representing the first date of the parsed value or the first 
- * date of the current month if the parsed value is invalid.
- * 
- * @param {String} s - The string to parse
- */
-function startOfMonth(date: [number, number, number] | null): Date {
-
-    const start = date != null ? new Date(date[0], date[1], date[2]) : new Date();
-    start.setHours(12, 0, 0, 0);
-    start.setDate(1);
-
-    return start;
-
-}
 
 //
 // Default parse and format
