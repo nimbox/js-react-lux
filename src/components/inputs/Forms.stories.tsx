@@ -3,8 +3,9 @@ import { Button } from '../Button';
 import { CheckBox } from './CheckBox';
 import { Control, ControlProps } from './Control';
 import { Input } from './Input';
+import { NativeSelect } from './NativeSelect';
+import { Option } from './Option';
 import { Radio } from './Radio';
-import { Select } from './NativeSelect';
 import { TextArea } from './TextArea';
 
 
@@ -55,10 +56,10 @@ export const Parameterized = ({ error, ...props }: ControlProps & { options: str
                 <div className="">
                     <Control >
                         <Control.Label >País</Control.Label>
-                        <Select>
-                            <Select.Option value="DO">República Dominicana</Select.Option>
-                            <Select.Option value="VE">Venezuela</Select.Option>
-                        </Select>
+                        <NativeSelect>
+                            <Option value="DO">República Dominicana</Option>
+                            <Option value="VE">Venezuela</Option>
+                        </NativeSelect>
                     </Control>
                 </div>
                 <div className="col-span-2">

@@ -1,9 +1,10 @@
 import { CheckBox } from './CheckBox';
 import { Control, ControlProps } from './Control';
-import { SearchInput } from './SearchInput';
 import { Input } from './Input';
+import { NativeSelect } from './NativeSelect';
+import { Option } from './Option';
 import { Radio } from './Radio';
-import { Select } from './NativeSelect';
+import { SearchInput } from './SearchInput';
 
 
 // Definition
@@ -54,19 +55,19 @@ export const Parameterized = ({ error = false, ...props }: ControlProps & { opti
                 <div>
                     <Control >
                         <Control.Label >LABEL</Control.Label>
-                        <Select>
-                            <Select.Option value="1">Option one</Select.Option>
-                            <Select.Option value="2">Option two</Select.Option>
-                        </Select>
+                        <NativeSelect>
+                            <Option value="1">Option one</Option>
+                            <Option value="2">Option two</Option>
+                        </NativeSelect>
                     </Control>
                 </div>
                 <div>
                     <Control >
                         <Control.Label >LABEL DISABLED</Control.Label>
-                        <Select disabled>
-                            <Select.Option value="1">Option one</Select.Option>
-                            <Select.Option value="2">Option two</Select.Option>
-                        </Select>
+                        <NativeSelect disabled>
+                            <Option value="1">Option one</Option>
+                            <Option value="2">Option two</Option>
+                        </NativeSelect>
                     </Control>
                 </div>
                 <div>

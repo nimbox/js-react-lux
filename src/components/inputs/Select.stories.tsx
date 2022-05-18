@@ -19,8 +19,8 @@ export default {
 //
 
 const Template = forwardRef((
-    props: SelectProps & InputHTMLAttributes<HTMLSelectElement>,
-    selectRef: Ref<HTMLSelectElement>
+    props: SelectProps & InputHTMLAttributes<HTMLInputElement>,
+    selectRef: Ref<HTMLInputElement>
 ) => {
     return (
         <Select ref={selectRef} {...props}>
