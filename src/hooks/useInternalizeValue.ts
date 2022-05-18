@@ -11,7 +11,7 @@ import { ChangeEvent, ChangeEventHandler, useCallback, useState } from 'react';
  * @param onChange 
  * @returns 
  */
-export const useInternalizeInput = <T extends HTMLInputElement | HTMLTextAreaElement>(
+export const useInternalizeValue = <T extends HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement > (
     initialValue: string,
     defaultValue: string | undefined,
     value: string | undefined,

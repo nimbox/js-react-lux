@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React, { ReactElement, Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { useInternalizeInput } from '../../hooks/useInternalizeInput';
+import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { AngleDownIcon, AngleUpIcon, CircleIcon, ClockIcon } from '../../icons/components';
 import { consumeEvent } from '../../utilities/consumeEvent';
@@ -70,7 +70,7 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
 
     const [show, setShow] = useState(false);
 
-    const [internalValue, handleChangeInternalValue] = useInternalizeInput('', props.defaultValue, props.value, onChange);
+    const [internalValue, handleChangeInternalValue] = useInternalizeValue('', props.defaultValue, props.value, onChange);
     const internalInputRef = useObservableValueRef<HTMLInputElement>(null);
     useImperativeHandle(inputRef, () => internalInputRef.current!);
 

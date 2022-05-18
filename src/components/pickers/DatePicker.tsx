@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { forwardRef, InputHTMLAttributes, ReactElement, Ref, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useInternalizeInput } from '../../hooks/useInternalizeInput';
+import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon } from '../../icons/components';
 import { consumeEvent } from '../../utilities/consumeEvent';
@@ -94,7 +94,7 @@ export const DatePicker = forwardRef((
 
     const [show, setShow] = useState(false);
 
-    const [internalValue, handleChangeInternalValue] = useInternalizeInput('', props.defaultValue, props.value, onChange);
+    const [internalValue, handleChangeInternalValue] = useInternalizeValue('', props.defaultValue, props.value, onChange);
     const internalInputRef = useObservableValueRef<HTMLInputElement>(null);
     useImperativeHandle(inputRef, () => internalInputRef.current!);
 

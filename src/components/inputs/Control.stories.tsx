@@ -3,7 +3,7 @@ import { Control, ControlProps } from './Control';
 import { SearchInput } from './SearchInput';
 import { Input } from './Input';
 import { Radio } from './Radio';
-import { Select } from './Select';
+import { Select } from './NativeSelect';
 
 
 // Definition

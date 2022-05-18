@@ -1,7 +1,7 @@
 import React, { ReactElement, Ref, useImperativeHandle, useMemo, useState } from 'react';
 import tinycolor from 'tinycolor2';
 import defaultSwatches from '../../data/flat-colors';
-import { useInternalizeInput } from '../../hooks/useInternalizeInput';
+import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { RefreshIcon } from '../../icons/components';
 import { consumeEvent } from '../../utilities/consumeEvent';
@@ -68,7 +68,7 @@ export const SwatchPicker = React.forwardRef((
 
     const [show, setShow] = useState(false);
 
-    const [internalValue, handleChangeInternalValue] = useInternalizeInput('', props.defaultValue, props.value, onChange);
+    const [internalValue, handleChangeInternalValue] = useInternalizeValue('', props.defaultValue, props.value, onChange);
     const internalInputRef = useObservableValueRef<HTMLInputElement>(null);
     useImperativeHandle(inputRef, () => internalInputRef.current!);
 

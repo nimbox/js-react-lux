@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React, { ChangeEventHandler, forwardRef, InputHTMLAttributes, Ref } from 'react';
-import { useInternalizeInput } from '../../hooks/useInternalizeInput';
+import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { Field, FieldProps } from './Field';
 import { PlainTextArea } from './PlainTextArea';
 
@@ -96,7 +96,7 @@ export const TextArea = forwardRef((
 
     // Internalize `value`
 
-    const [internalValue, handleChangeInternalValue] = useInternalizeInput('', props.defaultValue, props.value, onChange);
+    const [internalValue, handleChangeInternalValue] = useInternalizeValue('', props.defaultValue, props.value, onChange);
 
     // Render
 

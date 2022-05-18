@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import _isFunction from 'lodash/isFunction';
 import React, { KeyboardEvent, Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { useInternalizeInput } from '../../hooks/useInternalizeInput';
+import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { UseOptionChooser } from '../../hooks/useOption';
 import { UseOptionsSupplier } from '../../hooks/useOptions';
@@ -209,7 +209,7 @@ export const Choose = React.forwardRef(<O, G = O[]>(
     const [query, setQuery] = useState<string>('');
     const queryRef = useRef<HTMLInputElement>(null);
 
-    const [internalValue, handleChangeInternalValue] = useInternalizeInput('', props.defaultValue, props.value, onChange);
+    const [internalValue, handleChangeInternalValue] = useInternalizeValue('', props.defaultValue, props.value, onChange);
 
     const internalInputRef = useObservableValueRef<HTMLInputElement>(null);
     useImperativeHandle(inputRef, () => internalInputRef.current!);
@@ -503,14 +503,14 @@ export const Choose = React.forwardRef(<O, G = O[]>(
             disabled={disabled}
             error={error}
 
-            withFullWidth={withFullWidth}
-            withFullHeight={withFullHeight}
-
             onFocus={handleShow}
             onBlur={onBlur}
 
             onKeyDown={handleKeyDown}
             onClick={handleShow}
+
+            withFullWidth={withFullWidth}
+            withFullHeight={withFullHeight}
 
             className={classnames('focus:outline-none cursor-pointer', fieldClassName)}
 

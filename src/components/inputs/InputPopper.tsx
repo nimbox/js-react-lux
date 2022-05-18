@@ -1,5 +1,5 @@
 import React, { ChangeEventHandler, FocusEvent, forwardRef, InputHTMLAttributes, KeyboardEvent, ReactElement, Ref, useImperativeHandle, useRef } from 'react';
-import { useInternalizeInput } from '../../hooks/useInternalizeInput';
+import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { setRefInputValue } from '../../utilities/setRefInputValue';
 import { PopperProps } from '../Popper';
 import { FieldProps } from './Field';
@@ -137,7 +137,7 @@ export const InputPopper = forwardRef((
 
     // State
 
-    const [internalValue, handleChangeInternalValue] = useInternalizeInput('', props.defaultValue, props.value, onChange);
+    const [internalValue, handleChangeInternalValue] = useInternalizeValue('', props.defaultValue, props.value, onChange);
     const handleFinalize = () => {
         if (onFinalize) {
             const finalValue = onFinalize(internalValue);

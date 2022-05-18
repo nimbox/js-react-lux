@@ -51,7 +51,6 @@ export const PlainInput = React.forwardRef((
         <input
 
             ref={inputRef}
-
             disabled={disabled}
 
             className={classnames(

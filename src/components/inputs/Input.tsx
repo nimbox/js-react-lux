@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React, { ChangeEventHandler, forwardRef, InputHTMLAttributes, Ref } from 'react';
-import { useInternalizeInput } from '../../hooks/useInternalizeInput';
+import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { Field, FieldProps } from './Field';
 import { PlainInput } from './PlainInput';
 
@@ -19,11 +19,6 @@ export interface InputProps extends Omit<FieldProps, 'className'> {
     fieldClassName?: string;
 
     // Input
-
-    /** 
-     * Name used for the input element and returned in the change event. 
-     */
-    name?: string;
 
     /** 
      * Default value (for uncontrolled). 
@@ -102,7 +97,7 @@ export const Input = forwardRef((
 
     // Internalize `value`
 
-    const [internalValue, handleChangeInternalValue] = useInternalizeInput('', props.defaultValue, props.value, onChange);
+    const [internalValue, handleChangeInternalValue] = useInternalizeValue('', props.defaultValue, props.value, onChange);
 
     // Render
 
@@ -130,7 +125,6 @@ export const Input = forwardRef((
             <PlainInput
 
                 ref={inputRef}
-
                 disabled={disabled}
                 error={error}
 
