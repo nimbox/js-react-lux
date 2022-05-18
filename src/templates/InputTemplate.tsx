@@ -89,7 +89,6 @@ export const HookFormInputTemplate: <T>(props: InputTemplateProps<T>) => Story<T
         ({ ...args }) => {
 
             const { register, handleSubmit, setValue } = useForm({ defaultValues: { field: initial } });
-
             const { onChange, onBlur, ...restOfRegister } = register('field');
 
             const handleFormSubmit = (data: any) => { action('onSubmit')(data); }
@@ -98,7 +97,7 @@ export const HookFormInputTemplate: <T>(props: InputTemplateProps<T>) => Story<T
 
             const forceBlurButtonRef = useRef<HTMLButtonElement>(null);
             const handleForceBlur = () => setTimeout(() => forceBlurButtonRef.current?.focus(), 5000);
-            const handleSet = () => setValue('field', forced);
+            const handleForce = () => setValue('field', forced);
 
             return (
                 <form onSubmit={handleSubmit(handleFormSubmit)} className="w-96 space-y-2">
@@ -109,7 +108,7 @@ export const HookFormInputTemplate: <T>(props: InputTemplateProps<T>) => Story<T
                     </div>
                     <div className="flex flex-row items-center gap-x-2">
                         <Button ref={forceBlurButtonRef} type="button" semantic="secondary" onClick={handleForceBlur}>Blur</Button>
-                        <Button type="button" semantic="secondary" onClick={handleSet}>Force</Button>
+                        <Button type="button" semantic="secondary" onClick={handleForce}>Force</Button>
                         <Button>Submit</Button>
                     </div>
                 </form>
