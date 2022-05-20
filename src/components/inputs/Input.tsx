@@ -1,6 +1,7 @@
 import classNames from 'classnames';
-import React, { ChangeEventHandler, forwardRef, InputHTMLAttributes, Ref } from 'react';
+import React, { ChangeEventHandler, forwardRef, InputHTMLAttributes, Ref, useImperativeHandle } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
+import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { Field, FieldProps } from './Field';
 import { PlainInput } from './PlainInput';
 
@@ -98,6 +99,8 @@ export const Input = forwardRef((
     // Internalize `value`
 
     const [internalValue, handleChangeInternalValue] = useInternalizeValue('', props.defaultValue, props.value, onChange);
+    const internalInputRef = useObservableValueRef<HTMLInputElement>(null);
+    useImperativeHandle(inputRef, () => internalInputRef.current!);
 
     // Render
 
@@ -124,7 +127,7 @@ export const Input = forwardRef((
 
             <PlainInput
 
-                ref={inputRef}
+                ref={internalInputRef}
                 disabled={disabled}
                 error={error}
 
