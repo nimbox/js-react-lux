@@ -29,6 +29,9 @@ module.exports = ({
             display: 'inline-flex',
             alignItems: 'baseline',
 
+            minWidth: 0,
+            maxWidth: '100%',
+
             '.lux-crux-start': {
 
                 flex: 'none',
@@ -46,8 +49,13 @@ module.exports = ({
 
             '.lux-crux-content': {
 
+                flex: '1 1 0%',
+
                 display: 'inline-flex',
                 alignItems: 'baseline',
+
+                minWidth: 0,
+                maxWidth: '100%',
 
             },
 

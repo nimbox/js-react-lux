@@ -136,3 +136,28 @@ This structure is used for `Tag` while keeping the baseline.
     After
 </div>
 </Canvas>
+
+## Truncated text
+
+When the content is truncated.
+
+<Canvas isExpanded={true}>
+<div className="text-center">
+    <div className="inline-block w-48 bg-yellow-100">
+    Before
+    <div className="lux-crux bg-green-200 px-3 py-1 rounded-full">
+        <div className="lux-crux-start">
+            <FullSquareIcon className="bg-red-100"/>
+        </div>
+        <div className="lux-crux-content">
+            <div className="w-full truncate bg-blue-100">Tag name that is very long</div>
+        </div>
+        <div className="lux-crux-end">
+            <FullSquareIcon className="bg-red-100"/>
+        </div>
+    </div>
+    After
+    </div>
+</div>
+</Canvas>
+

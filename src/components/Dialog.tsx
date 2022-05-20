@@ -4,7 +4,7 @@ import { Modal } from './Modal';
 
 
 //
-// dialog
+// Dialog
 //
 
 export interface DialogProps {
