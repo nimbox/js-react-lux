@@ -48,11 +48,15 @@ export interface ToastProps {
 //
 
 export interface ToastItem {
+
     id: string;
+
     type: ToastItemType;
     component: React.ReactNode;
+
     autoDelete?: boolean;
     autoDeleteTimeout?: number;
+
 }
 
 //
@@ -146,12 +150,12 @@ export const Toast: FC<ToastProps> = ({ type, component, autoDelete = true, auto
             'pointer-events-auto'
         )}>
             <div>
-                <IconType className="flex-none w-6 h-6 stroke-2" />
+                <IconType className="flex-none w-6 h-6" />
             </div>
-            <div className="flex-grow min-w-0 break-all">
+            <div className="flex-grow min-w-0 break-words">
                 {component}
             </div>
-            <div onClick={onDelete} className="flex-none cursor-pointer"><CrossIcon className="w-6 h-6 stroke-2" /></div>
+            <div onClick={onDelete} className="flex-none cursor-pointer"><CrossIcon className="w-6 h-6" /></div>
         </div>
     );
 
