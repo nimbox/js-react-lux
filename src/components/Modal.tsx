@@ -1,20 +1,22 @@
 import React, { FC } from 'react';
 import { createPortal } from 'react-dom';
+import { useOnOutsideClick } from '../hooks/useOnOutsideClick';
 
 
 //
-// modal
+// Modal
 //
 
 export interface ModalProps {
-    visible: boolean;
-    onHide: () => void;
+
+    show: boolean;
+
 }
 
-export const Modal: FC<ModalProps> = ({ visible, onHide, children }) => {
+export const Modal: FC<ModalProps> = ({ show, children }) => {
 
-    return visible ? createPortal(
-        <div className="fixed inset-0 bg-gray-700 bg-opacity-80">
+    return show ? createPortal(
+        <div className="fixed inset-0 bg-gray-700 bg-opacity-80 z-40">
             {React.Children.only(children)}
         </div>,
         document.querySelector('#modal')!

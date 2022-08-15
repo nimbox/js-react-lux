@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import _isFunction from 'lodash/isFunction';
-import React, { KeyboardEvent, Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { forwardRef, KeyboardEvent, Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { UseOptionChooser } from '../../hooks/useOption';
@@ -111,7 +111,6 @@ export interface ChooseProps<O, G = O[]> extends
      */
     renderChosen?: ({ option }: { option: O }) => React.ReactNode;
 
-
 }
 
 /**
@@ -120,7 +119,7 @@ export interface ChooseProps<O, G = O[]> extends
  * blur occurs, and (2) when the field is blurred and the popper.
  *
  */
-export const Choose = React.forwardRef(<O, G = O[]>(
+export const Choose = forwardRef(<O, G = O[]>(
     props: ChooseProps<O, G> & React.InputHTMLAttributes<HTMLInputElement>,
     inputRef: Ref<HTMLInputElement>
 ) => {
@@ -198,13 +197,11 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
     // State
 
-    // const [fieldRef, setFieldRef] = useState<HTMLDivElement | null>(null);
     const fieldRef = useRef<HTMLDivElement>(null);
 
     const [show, setShow] = useState(false);
     const handleShow = () => { if (!show) { setShow(true); } };
     const handleHide = () => { if (show) { setShow(false); } };
-
 
     const [query, setQuery] = useState<string>('');
     const queryRef = useRef<HTMLInputElement>(null);
@@ -373,7 +370,7 @@ export const Choose = React.forwardRef(<O, G = O[]>(
 
     };
 
-    const handleChangeQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
         const value = e.target.value;
         setQuery(value);
@@ -397,20 +394,23 @@ export const Choose = React.forwardRef(<O, G = O[]>(
                 handleShow();
                 break;
         }
-
         onNavigatorKeyDown(e);
 
     };
 
     const handleKeyBlur = () => {
+
         setQuery('');
         handleHide();
         fieldRef.current?.focus();
+
     };
 
     const handleFullBlur = () => {
+
         setQuery('');
         handleHide();
+
     };
 
     // Render Chosen Option
@@ -434,8 +434,9 @@ export const Choose = React.forwardRef(<O, G = O[]>(
                         loading={loading > 0}
                         loadingError={loadingError}
                         value={query}
-                        onChange={handleChangeQuery}
+                        onChange={handleQueryChange}
                         onKeyDown={handleKeyDown}
+                        placeholder="Buscar..."
                     />
                 </div>
             }
@@ -486,20 +487,15 @@ export const Choose = React.forwardRef(<O, G = O[]>(
             end={
                 <>
                     {end}
-                    {loading ? <Delay><Loading style={{ marginRight: '0.5em' }} /></Delay> : null}
+                    {loading ? <Delay><Loading /></Delay> : null}
                     {loadingError ? <WarningIcon className="text-danger-500" /> : null}
-                    {withClear &&
-                        <CircleCrossIcon
-                            onClick={handleClearClick}
-                            style={{ marginRight: '0.5em' }}
-                        />
-                    }
+                    {withClear && <CircleCrossIcon onClick={handleClearClick} />}
                     <AngleDownIcon />
                 </>
             }
 
             shrink={shrink || props.placeholder != null || internalValue.length > 0}
-            focus={show}
+            focus={focus || show}
             disabled={disabled}
             error={error}
 

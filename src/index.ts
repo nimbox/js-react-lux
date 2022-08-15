@@ -25,6 +25,7 @@ export * from './components/inputs/Autocomplete';
 export * from './components/inputs/CheckBox';
 export * from './components/inputs/CheckButton';
 export * from './components/inputs/Control';
+export * from './components/inputs/FieldPopper';
 export * from './components/inputs/Input';
 export * from './components/inputs/NativeSelect';
 export * from './components/inputs/Radio';
@@ -50,6 +51,7 @@ export * from './hooks/useOptionsCount';
 export * from './hooks/useOptionsKeyNavigator';
 export * from './hooks/useViewport';
 
+export * from './utilities/consumeEvent';
 export * from './utilities/createSearchMatcher';
 
 export * from './layouts/helium/Helium';

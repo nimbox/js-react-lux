@@ -21,7 +21,7 @@ export const Simple = () => {
     return (
         <div>
             <Button onClick={() => setVisible(true)}>modal</Button>
-            <Modal visible={visible} onHide={() => setVisible(false)}>
+            <Modal show={visible}>
                 <div className="w-full h-full flex flex-row justify-center items-center">
                     <div className="w-64 h-32 bg-white">
                         <Button type="button" onClick={() => setVisible(false)}>Cancel</Button>
@@ -31,5 +31,4 @@ export const Simple = () => {
         </div>
     );
 
-}
-
+};

@@ -1,5 +1,6 @@
 import classnames from 'classnames';
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
+import { useOnOutsideClick } from '../hooks/useOnOutsideClick';
 import { Modal } from './Modal';
 
 
@@ -8,23 +9,37 @@ import { Modal } from './Modal';
 //
 
 export interface DialogProps {
-    visible: boolean;
+
+    show: boolean;
     onHide: () => void;
+
     className: string;
+
 }
 
 export interface DialogComponent extends FC<DialogProps> {
+
     Header: FC<{ noBorder?: boolean, className?: string }>,
+
     Body: FC<{ className?: string }>,
+
     Footer: FC<{ className?: string }>
+
 }
 
-export const Dialog: DialogComponent = ({ visible, onHide, className, children }) => {
+export const Dialog: DialogComponent = ({ show, onHide, className, children }) => {
+
+    // State
+
+    const [ref, setRef] = useState<HTMLDivElement | null>(null);
+    useOnOutsideClick(show, onHide, ref);
+
+    // Render
 
     return (
-        <Modal visible={visible} onHide={onHide}>
+        <Modal show={show} >
             <div className="w-full h-full flex flex-row justify-center items-center">
-                <div className={className}>
+                <div ref={setRef} className={className}>
                     {children}
                 </div>
             </div>

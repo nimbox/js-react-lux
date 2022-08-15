@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import React, { FocusEvent, forwardRef, HTMLAttributes, ReactElement, Ref, useImperativeHandle, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { getActiveElement } from '../../utilities/getActiveElement';
 import { HTMLPopperElement, Popper, PopperProps } from '../Popper';
 import { Field, FieldProps } from './Field';
 
@@ -30,7 +29,6 @@ export interface FieldPopperProps extends FieldProps,
      * @default bg-control-bg border border-control-border rounded drop-shadow
      */
     popperClassName?: string;
-
 
     // FieldPopper
 
@@ -157,18 +155,12 @@ export const FieldPopper = forwardRef((
 
     const handleFullBlur = (e: FocusEvent<HTMLDivElement>) => {
 
-        console.log('handleFullBlur', 'target', e.target, e.relatedTarget);
-        console.log('handleFullBlur', 'internal', internalFieldRef, internalPopperRef);
-
         if ((e.relatedTarget != null) &&
             !(internalFieldRef != null && internalFieldRef?.contains(e.relatedTarget)) &&
             !(internalPopperRef != null && internalPopperRef?.contains(e.relatedTarget))
         ) {
-            console.log('there was a real blur');
             onBlur?.(e);
             onFullBlur?.();
-        } else {
-            console.log('not inside');
         }
 
     };
