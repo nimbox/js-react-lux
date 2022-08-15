@@ -7,6 +7,7 @@ import { Button } from "./Button";
 export interface ContactProps {
     render: string;
     className?: string;
+    children?: React.ReactNode;
 }
 
 export const Contact: FC<ContactProps> = ({ render, className, children, ...props }) => {

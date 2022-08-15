@@ -6,11 +6,13 @@ export interface CheckBarProps {
     value: any[];
     onChange: (value: any) => void;
     className?: string;
+    children?: React.ReactNode;
 }
 
 export interface CheckBarOptionProps {
     value: any;
     className?: string;
+    children?: React.ReactNode;
 }
 
 type ContextProps = Pick<CheckBarProps, 'value' | 'onChange'>;

@@ -22,6 +22,11 @@ export interface PlaceholderProps {
      */
     placeholder?: string;
 
+    /**
+     * Children.
+     */
+    children?: React.ReactNode;
+
 }
 
 /**

@@ -11,11 +11,13 @@ export interface CustomMultiSelectProps {
     onChange: (value: any) => void;
     align: ComponentAlign;
     className?: string;
+    children?: React.ReactNode;
 }
 
 export interface CustomMultiSelectContentProps {
     value: any;
     className?: string;
+    children?: React.ReactNode;
 }
 
 type ContextProps = Pick<CustomMultiSelectProps, 'value' | 'onChange'>;

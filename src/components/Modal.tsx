@@ -11,6 +11,8 @@ export interface ModalProps {
 
     show: boolean;
 
+    children?: React.ReactNode;
+
 }
 
 export const Modal: FC<ModalProps> = ({ show, children }) => {

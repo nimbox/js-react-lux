@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import React, { createContext, FC, MouseEventHandler, useContext, useEffect, useState } from 'react';
 import { ShowTransition } from '../../components/transitions/ShowTransition';
 import { useViewport } from '../../hooks/useViewport';
-import { AngleLeftIcon, CrossIcon, HamburgerIcon,  } from '../../icons/components';
+import { AngleLeftIcon, CrossIcon, HamburgerIcon, } from '../../icons/components';
 
 
 //
@@ -40,8 +40,9 @@ export const useHelium = () => useContext(Context);
 // layout
 
 interface Props {
-    navigator?: boolean,
-    setNavigator?: (show: boolean) => void
+    navigator?: boolean;
+    setNavigator?: (show: boolean) => void;
+    children?: React.ReactNode;
 }
 
 /**
@@ -91,13 +92,13 @@ export const Helium: FC<Props> = ({ children }) => {
 // header
 
 
-export const Toggle: FC<{ onClick?: MouseEventHandler<HTMLDivElement> }> = ({ onClick, children }) => (
+export const Toggle: FC<{ onClick?: MouseEventHandler<HTMLDivElement>, children?: React.ReactNode }> = ({ onClick, children }) => (
     <div onClick={onClick} className={'h-16 w-16 text-center hover:text-white hover:bg-primary-500 flex-none flex flex-row items-center justify-center cursor-pointer'}>
         {children}
     </div>
 );
 
-export const Header: FC<{ className?: string }> = ({ className, children }) => {
+export const Header: FC<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => {
 
     const { isCompact, showNavigator } = useContext(Context);
 
@@ -152,12 +153,12 @@ export const ToggleMainSide: FC = () => {
 //  navigator
 
 interface NavigatorComponent<P> extends FC<P> {
-    Header: FC<{ className?: string }>,
-    Content: FC<{ className?: string }>
-    Footer: FC<{ className?: string }>
+    Header: FC<{ className?: string, children?: React.ReactNode }>,
+    Content: FC<{ className?: string, children?: React.ReactNode }>
+    Footer: FC<{ className?: string, children?: React.ReactNode }>
 }
 
-export const Navigator: NavigatorComponent<{ className?: string }> = ({ className, children }) => {
+export const Navigator: NavigatorComponent<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => {
 
     const { isCompact, showNavigator, setShowNavigator, setShowMainSide } = useContext(Context);
 
@@ -186,7 +187,7 @@ export const Navigator: NavigatorComponent<{ className?: string }> = ({ classNam
 
 }
 
-const NavigatorHeader: FC<{ className?: string }> = ({ className, children }) => {
+const NavigatorHeader: FC<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => {
 
     const { isCompact, showNavigator, setShowNavigator } = useContext(Context);
 
@@ -205,13 +206,13 @@ const NavigatorHeader: FC<{ className?: string }> = ({ className, children }) =>
 
 }
 
-const NavigatorContent: FC<{ className?: string }> = ({ className, children }) => (
+const NavigatorContent: FC<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => (
     <div className={classnames('flex-grow overflow-y-scroll', className)}>
         {children}
     </div>
 );
 
-const NavigatorFooter: FC<{ className?: string }> = ({ className, children }) => (
+const NavigatorFooter: FC<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => (
     <div className={classnames('flex-none border-t border-navigator-border', className)}>
         {children}
     </div>
@@ -224,11 +225,11 @@ Navigator.Footer = NavigatorFooter;
 // main
 
 interface MainComponent<P> extends FC<P> {
-    Content: FC<{ className?: string }>,
-    Side: FC<{ className?: string }>
+    Content: FC<{ className?: string, children?: React.ReactNode }>,
+    Side: FC<{ className?: string, children?: React.ReactNode }>
 }
 
-export const Main: MainComponent<{}> = ({ children }) => {
+export const Main: MainComponent<{ children?: React.ReactNode }> = ({ children }) => {
 
     const { showNavigator } = useContext(Context);
 
@@ -254,7 +255,7 @@ Main.Content = ({ className, children }) => (
     <div className={classnames('w-2/3 flex-grow', className)}>{children}</div>
 );
 
-const MainSide: FC<{ className?: string }> = ({ className, children }) => {
+const MainSide: FC<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => {
 
     const { isCompact, showMainSide, setShowMainSide } = useContext(Context);
 
@@ -301,11 +302,11 @@ Main.Side = MainSide;
 // panel
 
 interface PanelComponent<P> extends FC<P> {
-    Group: FC<{ className?: string }>;
-    Item: FC<{ active: boolean, className?: string }>;
+    Group: FC<{ className?: string, children?: React.ReactNode }>;
+    Item: FC<{ active: boolean, className?: string, children?: React.ReactNode }>;
 }
 
-export const Panel: PanelComponent<{ className?: string }> = ({ className, children }) => (
+export const Panel: PanelComponent<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => (
     <div className={classnames('flex flex-col text-gray-100', className)}>
         {children}
     </div>

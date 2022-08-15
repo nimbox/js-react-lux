@@ -5,7 +5,7 @@ import { FC, useEffect, useState } from 'react';
 // Delay
 //
 
-export const Delay: FC<{ delay?: number }> = ({ delay = 250, children }) => {
+export const Delay: FC<{ delay?: number, children?: React.ReactNode; }> = ({ delay = 250, children }) => {
 
     const [show, setShow] = useState(false);
     useEffect(() => {

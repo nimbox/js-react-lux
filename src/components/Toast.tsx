@@ -31,6 +31,7 @@ export interface ToastProviderProps {
     location?: ToastContainerLocation;
     autoDelete?: boolean;
     autoDeleteTimeout?: number;
+    children?: React.ReactNode;
 }
 
 
@@ -104,7 +105,7 @@ export const ToastProvider: FC<ToastProviderProps> = ({ location = 'top-right', 
 
 };
 
-export const ToastContainer: FC<{}> = ({ children }) => {
+export const ToastContainer: FC<{ children?: React.ReactNode }> = ({ children }) => {
     return (
         <div className="fixed w-64 p-2 pt-20 inset-y-0 right-0 space-y-2 pointer-events-none z-50">
             {children}

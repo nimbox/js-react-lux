@@ -8,12 +8,14 @@ export interface ControlProps {
 
     className?: string;
     style?: CSSProperties;
+    children?: React.ReactNode
 
 }
 
 export interface ControlLabelProps {
     badge?: string | React.ComponentType<any>;
     className?: string;
+    children?: React.ReactNode;
 }
 
 type ContextProps = Pick<ControlProps, 'error'>;
@@ -21,8 +23,8 @@ export const Context = createContext<ContextProps>({ error: false });
 
 export interface ControlComponent extends FC<ControlProps> {
     Label: FC<ControlLabelProps>;
-    Message: FC<{ className?: string }>;
-    Error: FC<{ className?: string }>;
+    Message: FC<{ className?: string, children?: React.ReactNode }>;
+    Error: FC<{ className?: string, children?: React.ReactNode }>;
 }
 
 export const Control: ControlComponent = (props) => {
@@ -80,7 +82,7 @@ Control.Message = (({ className, children }) => {
         </div>
     );
 
-}) as FC<{ className?: string }>;
+}) as FC<{ className?: string, children?: React.ReactNode }>;
 
 Control.Error = (({ className, children }) => {
 
@@ -95,7 +97,7 @@ Control.Error = (({ className, children }) => {
         </div>
     ) : null;
 
-}) as FC<{ className?: string }>;;
+}) as FC<{ className?: string, children?: React.ReactNode }>;;
 
 Control.Label.displayName = 'Control.Label';
 Control.Message.displayName = 'Control.Help';

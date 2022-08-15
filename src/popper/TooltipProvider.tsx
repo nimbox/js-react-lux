@@ -16,6 +16,11 @@ interface TooltipProviderProps {
      */
     destinationSelector?: string;
 
+    /**
+     * Chilren.
+     */
+    children?: React.ReactNode;
+
 }
 
 export const TooltipProvider: FC<TooltipProviderProps> = (props) => {
@@ -35,7 +40,7 @@ export const TooltipProvider: FC<TooltipProviderProps> = (props) => {
         if (target.hasAttribute('data-tooltip')) {
 
             const { tooltip, arrow } = createTooltip(target, props);
-            
+
             const container = document.querySelector(destinationSelector);
             container?.appendChild(tooltip);
 

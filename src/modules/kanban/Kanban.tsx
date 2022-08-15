@@ -21,7 +21,7 @@ export const KanbanContext = createContext<KanbanContextProps>({
 
 });
 
-export const KanbanProvider: FC<{}> = ({ children }) => {
+export const KanbanProvider: FC<{ children?: React.ReactNode }> = ({ children }) => {
 
     const [isDraggingColumn, setIsDraggingColumn] = useState(false);
     const [isDraggingCard, setIsDraggingCard] = useState(false);

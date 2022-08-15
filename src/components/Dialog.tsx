@@ -15,15 +15,17 @@ export interface DialogProps {
 
     className: string;
 
+    children?: React.ReactNode;
+
 }
 
 export interface DialogComponent extends FC<DialogProps> {
 
-    Header: FC<{ noBorder?: boolean, className?: string }>,
+    Header: FC<{ noBorder?: boolean, className?: string, children?: React.ReactNode }>,
 
-    Body: FC<{ className?: string }>,
+    Body: FC<{ className?: string, children?: React.ReactNode }>,
 
-    Footer: FC<{ className?: string }>
+    Footer: FC<{ className?: string, children?: React.ReactNode }>
 
 }
 

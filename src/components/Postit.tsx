@@ -3,7 +3,8 @@ import React, { FC } from 'react';
 
 
 interface PostitProps {
-    className?: string
+    className?: string;
+    children?: React.ReactNode
 }
 
 export const Postit: FC<PostitProps> = ({ className, children }) => {

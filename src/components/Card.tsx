@@ -6,10 +6,10 @@ import React, { FC } from 'react';
 // cards
 //
 
-interface CardComponent extends FC<{ className?: string }> {
-    Header: FC<{ noBorder?: boolean, className?: string }>,
-    Body: FC<{ className?: string }>,
-    Footer: FC<{ noBorder?: boolean, className?: string }>
+interface CardComponent extends FC<{ className?: string, children: React.ReactNode }> {
+    Header: FC<{ noBorder?: boolean, className?: string, children: React.ReactNode }>,
+    Body: FC<{ className?: string, children: React.ReactNode }>,
+    Footer: FC<{ noBorder?: boolean, className?: string, children: React.ReactNode }>
 }
 
 export const Card: CardComponent = ({ className, children }) => (

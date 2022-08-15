@@ -11,11 +11,13 @@ export interface CustomSelectProps {
     onChange: (value: any) => void;
     align: ComponentAlign;
     className?: string;
+    children?: React.ReactNode;
 }
 
 export interface CustomSelectOptionProps {
     value: any;
     className?: string;
+    children?: React.ReactNode;
 }
 
 type ContextProps = Pick<CustomSelectProps, 'value' | 'onChange'>;

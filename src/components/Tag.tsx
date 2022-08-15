@@ -31,6 +31,8 @@ export interface TagProps {
     containerClassName?: string;
     className?: string;
 
+    children?: React.ReactNode;
+
 }
 
 export const Tag: FC<TagProps> = (props) => {

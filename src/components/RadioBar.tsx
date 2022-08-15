@@ -6,11 +6,13 @@ export interface RadioBarProps {
     value: any;
     onChange: (value: any) => void;
     className?: string;
+    children?: React.ReactNode;
 }
 
 export interface RadioBarOptionProps {
     value: any;
     className?: string;
+    children?: React.ReactNode;
 }
 
 type ContextProps = Pick<RadioBarProps, 'value' | 'onChange'>;

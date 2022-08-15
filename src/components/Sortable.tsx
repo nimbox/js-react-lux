@@ -8,6 +8,7 @@ import { DragIcon } from '../icons/components';
 export interface SortableProps {
     onChange: (source: number, target: number) => void;
     className?: string;
+    children?: React.ReactNode;
 }
 
 interface SortableItemProps {
@@ -15,7 +16,7 @@ interface SortableItemProps {
     findItem: (value: React.Key) => { child: React.ReactChild | React.ReactFragment | React.ReactPortal, index: number };
     onChange: (value: React.Key, target: number) => void;
     onUpdate: (source: number, target: number) => void;
-
+    children?: React.ReactNode;
 }
 
 export const Sortable: FC<SortableProps> = (({ onChange, className, children }) => {

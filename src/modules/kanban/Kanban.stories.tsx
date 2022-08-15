@@ -202,7 +202,7 @@ const KanbanColumnDropDelete: FC<{ title: string, deleteColumn: DeleteStoryColum
 
 };
 
-const KanbanColumns: FC<{ moveColumn: MoveColumnCallback }> = ({ moveColumn, children }) => {
+const KanbanColumns: FC<{ moveColumn: MoveColumnCallback, children?: React.ReactNode }> = ({ moveColumn, children }) => {
 
     const [columnsRef, placeholderRef, { isOver, canDrop, item, placeholderIndex }] = useColumns<HTMLDivElement, HTMLDivElement>({ moveColumn });
 
@@ -233,7 +233,7 @@ const KanbanColumns: FC<{ moveColumn: MoveColumnCallback }> = ({ moveColumn, chi
 
 };
 
-const KanbanColumn: FC<{ id: string, addCard: (id: string) => void, moveCard: MoveCardCallback }> = ({ id, addCard, moveCard, children }) => {
+const KanbanColumn: FC<{ id: string, addCard: (id: string) => void, moveCard: MoveCardCallback, children?: React.ReactNode }> = ({ id, addCard, moveCard, children }) => {
 
     const [columnRef, { isDragging }] = useColumn<HTMLDivElement>(id);
 
@@ -262,7 +262,7 @@ const KanbanColumn: FC<{ id: string, addCard: (id: string) => void, moveCard: Mo
 
 };
 
-const KanbanCards: FC<{ columnId: string, moveCard: MoveCardCallback }> = ({ columnId, moveCard, children }) => {
+const KanbanCards: FC<{ columnId: string, moveCard: MoveCardCallback, children?: React.ReactNode }> = ({ columnId, moveCard, children }) => {
 
     const [cardsRef, placeholderRef, { isOver, canDrop, placeholderIndex, item }] = useCards<HTMLDivElement, HTMLDivElement>(columnId, { moveCard });
 
