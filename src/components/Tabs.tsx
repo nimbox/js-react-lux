@@ -14,7 +14,7 @@ interface ContextProps {
 const Context = createContext<ContextProps>({ value: null, setValue: () => null });
 
 interface TabsComponent extends FC<ContextProps & { className?: string, children?: React.ReactNode; }> {
-    Option: FC<{ value?: any, className?: string }>;
+    Option: FC<{ value?: any, className?: string, children?: React.ReactNode }>;
 }
 
 export const Tabs: TabsComponent = ({ value, setValue, className, children }) => (

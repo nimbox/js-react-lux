@@ -10,7 +10,7 @@ const SvgCircleMinusFill = (props: SVGProps<SVGSVGElement>) => (
     fill="currentColor"
     {...props}
   >
-    <path d="M16 0C7.16 0 0 7.16 0 16s7.16 16 16 16 16-7.16 16-16S24.84 0 16 0Zm6.5 18h-13c-1.1 0-2-.9-2-2s.9-2 2-2h13c1.1 0 2 .9 2 2s-.9 2-2 2Z" />
+    <path d="M16 0C7.163 0 0 7.163 0 16s7.163 16 16 16 16-7.163 16-16S24.837 0 16 0Zm6.5 18h-13a2 2 0 0 1 0-4h13a2 2 0 0 1 0 4Z" />
   </svg>
 );
 

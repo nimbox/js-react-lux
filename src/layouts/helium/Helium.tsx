@@ -108,7 +108,7 @@ export const Header: FC<{ className?: string, children?: React.ReactNode }> = ({
             showNavigator ? 'pl-0 md:pl-56' : 'pl-0',
             'flex flex-row justify-between items-stretch',
             'text-content bg-content-fg border-b border-content-border',
-            'transition duration-700 ease-in-out transition-spacing'
+            'transition-spacing duration-700 ease-in-out '
         )}>
             <ToggleNavigator />
             <div className={classnames('flex-1 h-full', className)}>
@@ -141,9 +141,9 @@ export const ToggleMainSide: FC = () => {
     return (
         <Toggle onClick={() => setShowMainSide(!showMainSide)}>
             <AngleLeftIcon className={classnames(
-                'w-8 h-8 stroke-current transform',
-                { 'rotate-180': showMainSide },
-                'transition duration-700 ease-in-out transition-transform'
+                'w-8 h-8 stroke-current',
+                'transform', { 'rotate-180': showMainSide },
+                'transition-transform duration-700 ease-in-out'
             )} />
         </Toggle>
     );
@@ -174,9 +174,9 @@ export const Navigator: NavigatorComponent<{ className?: string, children?: Reac
                 />
             }
             <div className={classnames(
-                'fixed z-20 inset-y-0 left-0 w-56 transform',
-                showNavigator ? 'translate-x-0' : '-translate-x-56',
-                'transition duration-700 ease-in-out transition-transform'
+                'fixed z-20 inset-y-0 left-0 w-56',
+                'transform', showNavigator ? 'translate-x-0' : '-translate-x-56',
+                'transition-transform duration-700 ease-in-out'
             )}>
                 <div className={classnames('h-full flex flex-col text-navigator bg-navigator-bg', className)}>
                     {children}
@@ -241,7 +241,7 @@ export const Main: MainComponent<{ children?: React.ReactNode }> = ({ children }
                 'pt-16',
                 'flex-grow flex flex-row items-stretch overflow-y-auto ',
                 'text-content bg-content-bg',
-                'transition duration-700 ease-in-out transition-spacing'
+                'transition-spacing duration-700 ease-in-out'
             )}
         >
             {children}

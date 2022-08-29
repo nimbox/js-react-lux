@@ -40,6 +40,7 @@ export { default as InformationIcon } from "./Information";
 export { default as LightBulbIcon } from "./LightBulb";
 export { default as LinkIcon } from "./Link";
 export { default as LockIcon } from "./Lock";
+export { default as LogoutIcon } from "./Logout";
 export { default as MapMarkerIcon } from "./MapMarker";
 export { default as MapSelectorIcon } from "./MapSelector";
 export { default as MegaphoneIcon } from "./Megaphone";
