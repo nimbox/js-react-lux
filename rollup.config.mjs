@@ -136,16 +136,11 @@ export default [{
 
     input: 'src/styles/elegant.js',
     output: [{
-        dir: 'dist/styles',
+        file: 'dist/styles/elegant.js',
         format: 'cjs',
         exports: 'named',
         sourcemap: true
     }],
-
-    // external: [
-    //     ...Object.keys(pack.dependencies || {}),
-    //     ...Object.keys(pack.peerDependencies || {})
-    // ],
 
     plugins: [
 
@@ -153,12 +148,12 @@ export default [{
         resolve(),
         commonjs(),
 
-        copy({
-            targets: [{
-                src: ['src/styles/**/*', '!src/styles/elegant.js'],
-                dest: 'dist/styles'
-            }]
-        }),
+        // copy({
+        //     targets: [{
+        //         src: ['src/styles/**/*', '!src/styles/elegant.js'],
+        //         dest: 'dist/styles'
+        //     }]
+        // }),
 
         filesize()
 
