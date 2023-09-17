@@ -16,12 +16,7 @@ export default [{
 
     input: 'src/index.ts',
     output: [{
-        file: pack.main,
-        format: 'cjs',
-        exports: 'named',
-        sourcemap: true
-    }, {
-        file: pack.module,
+        file: 'dist/index.mjs',
         format: 'esm',
         exports: 'named',
         sourcemap: true
@@ -63,11 +58,6 @@ export default [{
 
     input: 'src/icons/components/index.ts',
     output: [{
-        file: 'dist/icons/index.cjs',
-        format: 'cjs',
-        exports: 'named',
-        sourcemap: true
-    }, {
         file: 'dist/icons/index.mjs',
         format: 'esm',
         exports: 'named',
@@ -107,11 +97,6 @@ export default [{
 
     input: 'src/figures/index.ts',
     output: [{
-        file: 'dist/figures/index.cjs',
-        format: 'cjs',
-        exports: 'named',
-        sourcemap: true
-    }, {
         file: 'dist/figures/index.mjs',
         format: 'esm',
         exports: 'named',
