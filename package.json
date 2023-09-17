@@ -6,9 +6,9 @@
   "module": "dist/index.mjs",
   "types": "dist/typings/index.d.ts",
   "exports": {
-    ".": "./dist/index.cjs",
-    "./icons": "./dist/icons/index.cjs",
-    "./figures": "./dist/figures/index.cjs",
+    ".": "./dist/index.mjs",
+    "./icons": "./dist/icons/index.mjs",
+    "./figures": "./dist/figures/index.mjs",
     "./styles/elegant": "./dist/styles/elegant.js"
   },
   "typesVersions": {
