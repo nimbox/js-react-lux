@@ -1,6 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { Button } from '../Button';
 import { InputField } from './InputField';
+import React from 'react';
 
 
 // Definition

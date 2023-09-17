@@ -1,24 +1,26 @@
 module.exports = {
-    "stories": [
-        "../src/**/*.stories.mdx",
-        "../src/**/*.stories.@(js|jsx|ts|tsx)"
-    ],
-    "addons": [
-        "@storybook/addon-essentials",
-        "@storybook/addon-links",
-        "@storybook/preset-create-react-app"
-    ],
-    "framework": "@storybook/react",
-    "core": {
-        "builder": "webpack5"
-    }
-    // typescript: {
-    //     check: false,
-    //     checkOptions: {},
-    //     reactDocgen: 'react-docgen-typescript',
-    //     reactDocgenTypescriptOptions: {
-    //         shouldExtractLiteralValuesFromEnum: true,
-    //         propFilter: (prop) => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true)
-    //     }
-    // }
+  "stories": ["../src/**/*.stories.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
+  "addons": [
+    "@storybook/addon-links", 
+    "@storybook/addon-essentials", 
+    '@storybook/addon-interactions',
+    '@storybook/addon-docs',
+    {
+      name: '@storybook/addon-styling',
+      options: {
+        // Check out https://github.com/storybookjs/addon-styling/blob/main/docs/api.md
+        // For more details on this addon's options.
+        postCss: {
+          implementation: require.resolve('postcss'),
+        },
+      },
+    },
+  ],
+  "framework": {
+    name: "@storybook/react-vite",
+    options: {}
+  },
+  docs: {
+    autodocs: false
+  }
 };

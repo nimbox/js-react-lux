@@ -7,6 +7,7 @@ import { NativeSelect } from './NativeSelect';
 import { Option } from './Option';
 import { Radio } from './Radio';
 import { TextArea } from './TextArea';
+import React from 'react';
 
 
 // definition

@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgAscending = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +13,4 @@ const SvgAscending = (props: SVGProps<SVGSVGElement>) => (
     <path d="M28.499 12c-.314 0-.629-.098-.9-.3L24.5 9.375 21.4 11.7a1.5 1.5 0 0 1-1.8-2.4l4-3a1.5 1.5 0 0 1 1.8 0l4 3A1.501 1.501 0 0 1 28.5 12Z" />
   </svg>
 );
-
 export default SvgAscending;

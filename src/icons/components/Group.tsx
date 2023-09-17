@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgGroup = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +13,4 @@ const SvgGroup = (props: SVGProps<SVGSVGElement>) => (
     <path d="M11.5 18c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7Zm0-11c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4ZM29.5 27.479a1.5 1.5 0 0 1-1.5-1.5c0-3-2.277-5.441-5.076-5.441a1.5 1.5 0 0 1 0-3c1.389 0 2.518-1.13 2.518-2.519s-1.13-2.519-2.518-2.519a1.5 1.5 0 0 1 0-3 5.525 5.525 0 0 1 5.518 5.519 5.498 5.498 0 0 1-1.418 3.69c2.378 1.47 3.976 4.179 3.976 7.27a1.5 1.5 0 0 1-1.5 1.5Z" />
   </svg>
 );
-
 export default SvgGroup;

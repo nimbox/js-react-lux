@@ -2,6 +2,7 @@
 import { Story } from '@storybook/react';
 import { ShowTransition, ShowTransitionProps } from './ShowTransition';
 import classnames from 'classnames';
+import React from 'react';
 
 
 // definition

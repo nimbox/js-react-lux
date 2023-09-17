@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgMapSelector = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -15,5 +14,4 @@ const SvgMapSelector = (props: SVGProps<SVGSVGElement>) => (
     <path d="M16 31a1.5 1.5 0 0 1-1.5-1.5v-7a1.5 1.5 0 0 1 3 0v7A1.5 1.5 0 0 1 16 31Z" />
   </svg>
 );
-
 export default SvgMapSelector;

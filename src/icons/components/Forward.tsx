@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgForward = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +13,4 @@ const SvgForward = (props: SVGProps<SVGSVGElement>) => (
     <path d="M6.499 25.077a1.499 1.499 0 0 1-1.33-2.193C5.393 22.46 10.704 12.5 20.5 12.5a1.5 1.5 0 0 1 0 3c-7.963 0-12.625 8.686-12.672 8.774a1.5 1.5 0 0 1-1.329.803Z" />
   </svg>
 );
-
 export default SvgForward;

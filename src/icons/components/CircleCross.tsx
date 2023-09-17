@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgCircleCross = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -15,5 +14,4 @@ const SvgCircleCross = (props: SVGProps<SVGSVGElement>) => (
     <path d="M11 22.5a1.5 1.5 0 0 1-1.06-2.56l10-10a1.5 1.5 0 1 1 2.12 2.12l-10 10c-.292.293-.676.44-1.06.44Z" />
   </svg>
 );
-
 export default SvgCircleCross;

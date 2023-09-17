@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgDescending = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +13,4 @@ const SvgDescending = (props: SVGProps<SVGSVGElement>) => (
     <path d="M24.5 26c-.316 0-.634-.1-.9-.3l-4-3a1.501 1.501 0 0 1 1.8-2.4l3.1 2.325 3.1-2.325a1.501 1.501 0 0 1 1.8 2.4l-4 3c-.266.2-.584.3-.9.3Z" />
   </svg>
 );
-
 export default SvgDescending;

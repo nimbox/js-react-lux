@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import _isFunction from 'lodash/isFunction';
+import { isFunction as _isFunction } from 'lodash';
 import React, { forwardRef, KeyboardEvent, Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';

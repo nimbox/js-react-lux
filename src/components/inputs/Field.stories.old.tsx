@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { AngleDownIcon, CalendarIcon, ClockIcon, FullSquareIcon } from '../../icons/components';
 import { Field } from './Field';
 import { InputField, InputFieldProps } from './InputField';
+import React from 'react';
 
 // Definition
 

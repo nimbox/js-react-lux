@@ -2,6 +2,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { FullSquareIcon } from '../../icons/components';
 import { Field } from './Field';
+import React from 'react';
 
 
 // Definition

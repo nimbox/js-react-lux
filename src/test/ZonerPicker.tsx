@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
-import { UseOptionsSupplier } from '..';
 import { Choose } from '../components/choose/Choose';
 import { createSearchMatcher } from '../utilities/createSearchMatcher';
-import timezones from './timezones.json';
+import timezones from './timezones.json' assert { type: 'json' };
 
 
 interface Option {

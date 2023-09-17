@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgAnniversary = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -15,5 +14,4 @@ const SvgAnniversary = (props: SVGProps<SVGSVGElement>) => (
     <circle cx={23} cy={19} r={2} />
   </svg>
 );
-
 export default SvgAnniversary;

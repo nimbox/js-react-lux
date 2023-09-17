@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgTrash = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +13,4 @@ const SvgTrash = (props: SVGProps<SVGSVGElement>) => (
     <path d="M21 9.5A1.5 1.5 0 0 1 19.5 8V3.5c0-.271-.229-.5-.5-.5h-6c-.272 0-.5.229-.5.5V8a1.5 1.5 0 0 1-3 0V3.5C9.5 1.57 11.07 0 13 0h6c1.93 0 3.5 1.57 3.5 3.5V8A1.5 1.5 0 0 1 21 9.5Z" />
   </svg>
 );
-
 export default SvgTrash;

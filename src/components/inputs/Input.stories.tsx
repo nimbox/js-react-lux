@@ -1,5 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { ComponentMeta } from '@storybook/react';
+import { Meta } from '@storybook/react';
 import { ControlledInputTemplate, HookFormInputTemplate, UncontrolledInputTemplate } from '../../templates/InputTemplate';
 import { Input } from './Input';
 
@@ -10,7 +10,7 @@ export default {
     parameters: {
         layout: 'centered',
     }
-} as ComponentMeta<typeof Input>
+} as Meta<typeof Input>
 
 
 //

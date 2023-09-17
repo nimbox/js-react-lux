@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgOrganization = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +13,4 @@ const SvgOrganization = (props: SVGProps<SVGSVGElement>) => (
     <path d="M8.5 21.5h-1a1.5 1.5 0 0 1 0-3h1a1.5 1.5 0 0 1 0 3ZM8.5 15.5h-1a1.5 1.5 0 0 1 0-3h1a1.5 1.5 0 0 1 0 3ZM8.5 9.5h-1a1.5 1.5 0 0 1 0-3h1a1.5 1.5 0 0 1 0 3ZM16.5 21.5h-1a1.5 1.5 0 0 1 0-3h1a1.5 1.5 0 0 1 0 3ZM16.5 15.5h-1a1.5 1.5 0 0 1 0-3h1a1.5 1.5 0 0 1 0 3ZM16.5 9.5h-1a1.5 1.5 0 0 1 0-3h1a1.5 1.5 0 0 1 0 3ZM30.5 32H21a1.5 1.5 0 0 1 0-3h8V17.621l-2.56-2.56a1.5 1.5 0 1 1 2.12-2.122l3 3A1.5 1.5 0 0 1 32 17v13.5a1.5 1.5 0 0 1-1.5 1.5Z" />
   </svg>
 );
-
 export default SvgOrganization;

@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgWaffle = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -21,5 +20,4 @@ const SvgWaffle = (props: SVGProps<SVGSVGElement>) => (
     <circle cx={24} cy={24} r={2} />
   </svg>
 );
-
 export default SvgWaffle;

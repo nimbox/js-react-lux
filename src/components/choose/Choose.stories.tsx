@@ -137,7 +137,6 @@ export const HookFormWithSearch = HookFormInputTemplate({ initial: '800080', for
 HookFormWithSearch.args = { withSearch: true };
 
 
-
 export const ReactHookFormReset = () => {
 
     const { register, reset, handleSubmit } = useForm();

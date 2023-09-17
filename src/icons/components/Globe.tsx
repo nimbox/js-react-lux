@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgGlobe = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -15,5 +14,4 @@ const SvgGlobe = (props: SVGProps<SVGSVGElement>) => (
     <path d="M1.5 14.5h29v3h-29z" />
   </svg>
 );
-
 export default SvgGlobe;

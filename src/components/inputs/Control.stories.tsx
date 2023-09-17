@@ -5,6 +5,7 @@ import { NativeSelect } from './NativeSelect';
 import { Option } from './Option';
 import { Radio } from './Radio';
 import { SearchInput } from './SearchInput';
+import React from 'react';
 
 
 // Definition

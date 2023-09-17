@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgUnlink = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +13,4 @@ const SvgUnlink = (props: SVGProps<SVGSVGElement>) => (
     <path d="M24 25.5c-.384 0-.768-.146-1.06-.44l-16-16a1.5 1.5 0 1 1 2.12-2.12l16 16A1.5 1.5 0 0 1 24 25.5Z" />
   </svg>
 );
-
 export default SvgUnlink;

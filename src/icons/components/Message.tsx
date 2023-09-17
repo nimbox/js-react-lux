@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgMessage = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +13,4 @@ const SvgMessage = (props: SVGProps<SVGSVGElement>) => (
     <path d="M16 18c-.236 0-.473-.056-.689-.168l-14.5-7.5a1.5 1.5 0 1 1 1.378-2.664l13.81 7.144 13.812-7.144a1.5 1.5 0 1 1 1.378 2.664l-14.5 7.5a1.492 1.492 0 0 1-.69.168Z" />
   </svg>
 );
-
 export default SvgMessage;

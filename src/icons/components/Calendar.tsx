@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgCalendar = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +13,4 @@ const SvgCalendar = (props: SVGProps<SVGSVGElement>) => (
     <path d="M9 7a1.5 1.5 0 0 1-1.5-1.5v-4a1.5 1.5 0 0 1 3 0v4A1.5 1.5 0 0 1 9 7ZM23 7a1.5 1.5 0 0 1-1.5-1.5v-4a1.5 1.5 0 0 1 3 0v4A1.5 1.5 0 0 1 23 7ZM28.5 15h-25a1.5 1.5 0 0 1 0-3h25a1.5 1.5 0 0 1 0 3Z" />
   </svg>
 );
-
 export default SvgCalendar;

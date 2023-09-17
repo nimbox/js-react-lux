@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgMegaphone = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +13,4 @@ const SvgMegaphone = (props: SVGProps<SVGSVGElement>) => (
     <path d="M11.5 32c-1.44 0-2.716-.576-3.691-1.665-3.286-3.67-2.41-12.505-2.3-13.501a1.491 1.491 0 0 1 1.656-1.324 1.5 1.5 0 0 1 1.326 1.655c-.358 3.248-.253 9.153 1.554 11.17.412.46.861.665 1.455.665.687 0 1.578-.094 1.932-.54.686-.866.091-3.394-.433-5.626-.46-1.955-.935-3.978-.902-5.86.06-3.444 0-12.87 0-12.964a1.5 1.5 0 0 1 1.49-1.51h.01a1.5 1.5 0 0 1 1.5 1.49c0 .095.06 9.558 0 13.036-.027 1.508.405 3.345.823 5.121.746 3.174 1.45 6.172-.137 8.176C14.901 31.435 13.461 32 11.5 32Z" />
   </svg>
 );
-
 export default SvgMegaphone;

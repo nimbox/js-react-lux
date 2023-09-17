@@ -1,4 +1,4 @@
-import debounce from 'lodash/debounce';
+import { debounce as _debounce } from 'lodash';
 import React, { createContext, FC, useContext, useEffect, useState } from 'react';
 
 
@@ -11,7 +11,7 @@ const ViewportContext = createContext<{ width: number, height: number }>({ width
 export const ViewportProvider: FC<{ wait: number, children?: React.ReactNode }> = ({ wait = 250, children }) => {
 
     const [size, setSize] = useState({ width: window.innerWidth, height: window.innerHeight });
-    const handleResize = debounce(() => setSize({ width: window.innerWidth, height: window.innerHeight }), wait);
+    const handleResize = _debounce(() => setSize({ width: window.innerWidth, height: window.innerHeight }), wait);
 
     useEffect(() => {
         window.addEventListener('resize', handleResize);

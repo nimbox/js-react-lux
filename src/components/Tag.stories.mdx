@@ -56,16 +56,10 @@ givign the truncated text a height and line height of `1em`
 
 <Canvas>
 <div>
-    before <span className="inline-flex flex-row items-baseline py-0.5 max-w-full bg-red-200">
-        <Cross className="flex-none self-center bg-red-300" width="0.75em" height="0.75em"/>
-        <span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex</span> 
-    </span> after
+    before <span className="inline-flex flex-row items-baseline py-0.5 max-w-full bg-red-200"><Cross className="flex-none self-center bg-red-300" width="0.75em" height="0.75em"/><span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex</span></span> after
 </div>
 <div className="bg-gray-100">
-    before <span className="inline-flex flex-row items-baseline py-0.5 max-w-full bg-red-200">
-        <Cross className="flex-none self-center bg-red-300" width="0.75em" height="0.75em"/>
-        <span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex text text text text text text text text text text text text  text text text  text text text  text text text</span> 
-    </span> after
+    before <span className="inline-flex flex-row items-baseline py-0.5 max-w-full bg-red-200"><Cross className="flex-none self-center bg-red-300" width="0.75em" height="0.75em"/><span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex text text text text text text text text text text text text  text text text  text text text  text text text</span></span> after
 </div>
 </Canvas>
 
@@ -73,16 +67,10 @@ The rest is accomplished with horizontal padding and margin.
 
 <Canvas>
 <div>
-    before <span className="inline-flex flex-row items-baseline px-1 py-0.5 max-w-full bg-red-200 rounded rounded-full">
-        <Cross className="flex-none self-center bg-red-300 rounded rounded-full" width="0.75em" height="0.75em" style={{ marginRight: '0.25em' }}/>
-        <span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex</span> 
-    </span> after
+    before <span className="inline-flex flex-row items-baseline px-1 py-0.5 max-w-full bg-red-200 rounded rounded-full"><Cross className="flex-none self-center bg-red-300 rounded rounded-full" width="0.75em" height="0.75em" style={{ marginRight: '0.25em' }}/><span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex</span></span> after
 </div>
 <div className="bg-gray-100">
-    before <span className="inline-flex flex-row items-baseline px-1 py-0.5 max-w-full bg-red-200 rounded rounded-full">
-        <Cross className="flex-none self-center bg-red-300 rounded rounded-full" width="0.75em" height="0.75em" style={{ marginRight: '0.25em' }}/>
-        <span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex text text text text text text text text text text text text  text text text  text text text  text text text</span> 
-    </span> after
+    before <span className="inline-flex flex-row items-baseline px-1 py-0.5 max-w-full bg-red-200 rounded rounded-full"><Cross className="flex-none self-center bg-red-300 rounded rounded-full" width="0.75em" height="0.75em" style={{ marginRight: '0.25em' }}/><span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex text text text text text text text text text text text text  text text text  text text text  text text text</span></span> after
 </div>
 </Canvas>
 
@@ -163,13 +151,7 @@ them. This can be done with spaces or via an utility class `lux-tag-space`.
 
 <Canvas>
     <Story name="Spacing with Flex">
-        <span>before 
-            <span className="flex flex-row flex-wrap items-center gap-1">
-                <Tag>Plain</Tag> 
-                <Tag>Plain</Tag> 
-                <Tag>Plain</Tag> 
-            </span>
-        after</span>
+        <span>before <span className="flex flex-row flex-wrap items-center gap-1"><Tag>Plain</Tag><Tag>Plain</Tag><Tag>Plain</Tag></span> after</span>
     </Story>
 </Canvas>
 

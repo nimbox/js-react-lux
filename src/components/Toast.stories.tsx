@@ -1,5 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { ToastProvider, useToast } from "./Toast";
+import React from 'react';
 
 
 export default {

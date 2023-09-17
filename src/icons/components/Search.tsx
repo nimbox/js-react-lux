@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgSearch = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +13,4 @@ const SvgSearch = (props: SVGProps<SVGSVGElement>) => (
     <path d="M28.5 30c-.384 0-.768-.146-1.06-.44l-7-7a1.5 1.5 0 1 1 2.12-2.12l7 7A1.5 1.5 0 0 1 28.5 30Z" />
   </svg>
 );
-
 export default SvgSearch;

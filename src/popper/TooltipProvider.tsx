@@ -1,6 +1,7 @@
 import { FC, useCallback, useEffect } from 'react';
 import { createPopper } from '@popperjs/core';
 import classnames from 'classnames';
+import React from 'react';
 
 
 interface TooltipProviderProps {

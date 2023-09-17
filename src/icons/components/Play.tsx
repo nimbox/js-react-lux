@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgPlay = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +13,4 @@ const SvgPlay = (props: SVGProps<SVGSVGElement>) => (
     <path d="M20.628 16.49c.48-.27.48-.71 0-.98l-6.256-3.52c-.48-.27-.872-.04-.872.51v7c0 .55.392.78.872.51l6.256-3.52Z" />
   </svg>
 );
-
 export default SvgPlay;

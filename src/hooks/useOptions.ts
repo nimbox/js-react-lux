@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import _debounce from 'lodash/debounce';
-import _isFunction from 'lodash/isFunction';
+import { debounce as _debounce } from 'lodash';
+import { isFunction as _isFunction } from 'lodash';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 

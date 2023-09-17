@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgClock = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +13,4 @@ const SvgClock = (props: SVGProps<SVGSVGElement>) => (
     <path d="M19.999 21.5c-.273 0-.547-.073-.794-.228l-4-2.5A1.5 1.5 0 0 1 14.5 17.5V11a1.5 1.5 0 0 1 3 0v5.668l3.295 2.06a1.5 1.5 0 0 1-.796 2.772Z" />
   </svg>
 );
-
 export default SvgClock;

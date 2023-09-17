@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { action } from '@storybook/addon-actions';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import { CircleIcon, SquareIcon } from '../../icons/components';
 import { Button } from '../Button';
 import { TextArea } from './TextArea';

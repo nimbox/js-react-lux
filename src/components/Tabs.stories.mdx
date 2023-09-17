@@ -1,4 +1,4 @@
-import { Meta, Preview, Story } from '@storybook/addon-docs';
+import { Meta, Canvas, Story } from '@storybook/addon-docs';
 import { useState } from 'react';
 import { Tabs } from './Tabs';
 
@@ -9,7 +9,7 @@ import { Tabs } from './Tabs';
 
 Regular inputs
 
-<Preview>
+<Canvas>
     <Story name="Simple">
         {() => {
             const [ tab, setTab ] = useState('one');
@@ -27,4 +27,4 @@ Regular inputs
             );
         }}
     </Story>
-</Preview>
+</Canvas>

@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgMutuallyEsclusive = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +13,4 @@ const SvgMutuallyEsclusive = (props: SVGProps<SVGSVGElement>) => (
     <path d="M21.5 26.5C15.71 26.5 11 21.79 11 16S15.71 5.5 21.5 5.5 32 10.21 32 16s-4.71 10.5-10.5 10.5Zm0-18c-4.136 0-7.5 3.364-7.5 7.5s3.364 7.5 7.5 7.5S29 20.136 29 16s-3.364-7.5-7.5-7.5Z" />
   </svg>
 );
-
 export default SvgMutuallyEsclusive;

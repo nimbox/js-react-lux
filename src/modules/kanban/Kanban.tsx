@@ -1,4 +1,4 @@
-import { createContext, FC, useContext, useState } from 'react';
+import React, { createContext, FC, useContext, useState } from 'react';
 
 
 export interface KanbanContextProps {

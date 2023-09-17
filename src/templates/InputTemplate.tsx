@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { action } from '@storybook/addon-actions';
-import { Story } from '@storybook/react';
-import { ChangeEvent, FocusEvent, FormEvent, FunctionComponent, useRef, useState } from 'react';
+import { Story, StoryFn, StoryObj } from '@storybook/react';
+import React, { ChangeEvent, FocusEvent, FormEvent, FunctionComponent, ReactElement, ReactNode, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '../components/Button';
 import { Input } from '../components/inputs/Input';
@@ -19,9 +19,9 @@ export interface InputTemplateProps<T> {
 }
 
 
-export const ControlledInputTemplate: <T>(props: InputTemplateProps<T>) => Story<T> =
-    ({ initial, forced, component: Component, ...props }) =>
-        ({ ...args }) => {
+export const ControlledInputTemplate: <T>(props: InputTemplateProps<T>) => StoryFn<T> =
+    ({ initial, forced, component: Component }): any =>
+        (args: any) => {
 
             const ref = useRef<HTMLInputElement>(null);
 
@@ -34,27 +34,31 @@ export const ControlledInputTemplate: <T>(props: InputTemplateProps<T>) => Story
             const handleForceBlur = () => setTimeout(() => forceBlurButtonRef.current?.focus(), 5000);
             const handleSet = () => setRefInputValue(ref, forced);
 
-            return (
-                <form onSubmit={handleSubmit} className="w-96 space-y-2">
-                    <div className="flex flex-row items-baseline gap-2">
-                        <Input type="text" className="w-4" />
-                        <Component ref={ref} value={value} onChange={handleChange} onBlur={handleBlur} {...args} />
-                        <Input type="text" className="w-4" />
-                    </div>
-                    <div className="flex flex-row items-center gap-x-2">
-                        <Button ref={forceBlurButtonRef} type="button" semantic="secondary" onClick={handleForceBlur}>Blur</Button>
-                        <Button type="button" semantic="secondary" onClick={handleSet}>Force</Button>
-                        <Button>Submit</Button>
-                    </div>
-                </form>
-            );
+            return { 
+                render: () => (
+                    <form onSubmit={handleSubmit} className="w-96 space-y-2">
+                        <div className="flex flex-row items-baseline gap-2">
+                            <Input type="text" className="w-4" />
+                            <Component ref={ref} value={value} onChange={handleChange} onBlur={handleBlur} {...args} />
+                            <Input type="text" className="w-4" />
+                        </div>
+                        <div className="flex flex-row items-center gap-x-2">
+                            <Button ref={forceBlurButtonRef} type="button" semantic="secondary" onClick={handleForceBlur}>Blur</Button>
+                            <Button type="button" semantic="secondary" onClick={handleSet}>Force</Button>
+                            <Button>Submit</Button>
+                        </div>
+                    </form>
+                ),
+                component: Component,
+                args
+            };
 
         };
 
 
-export const UncontrolledInputTemplate: <T>(props: InputTemplateProps<T>) => Story<T> =
-    ({ initial, forced, component: Component, ...props }) =>
-        ({ ...args }) => {
+export const UncontrolledInputTemplate: <T>(props: InputTemplateProps<T>) => StoryFn<T> =
+    ({ initial, forced, component: Component }): any =>
+        (args: any) => {
 
             const ref = useRef<HTMLInputElement>(null);
 
@@ -84,9 +88,9 @@ export const UncontrolledInputTemplate: <T>(props: InputTemplateProps<T>) => Sto
         };
 
 
-export const HookFormInputTemplate: <T>(props: InputTemplateProps<T>) => Story<T> =
-    ({ initial, forced, component: Component, ...props }) =>
-        ({ ...args }) => {
+export const HookFormInputTemplate: <T>(props: InputTemplateProps<T>) => StoryFn<T> =
+    ({ initial, forced, component: Component, ...props }): any =>
+        (args: any) => {
 
             const { register, handleSubmit, setValue } = useForm({ defaultValues: { field: initial } });
             const { onChange, onBlur, ...restOfRegister } = register('field');

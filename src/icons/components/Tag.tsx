@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgTag = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +13,4 @@ const SvgTag = (props: SVGProps<SVGSVGElement>) => (
     <circle cx={12} cy={12} r={2.5} />
   </svg>
 );
-
 export default SvgTag;

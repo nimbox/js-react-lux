@@ -1,4 +1,4 @@
-import _isFunction from 'lodash/isFunction';
+import { isFunction as _isFunction } from 'lodash';
 import React, { Ref, useState } from 'react';
 import { useOptions, UseOptionsProps, UseOptionsSupplier } from '../../hooks/useOptions';
 import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';

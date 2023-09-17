@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgSortable = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -15,5 +14,4 @@ const SvgSortable = (props: SVGProps<SVGSVGElement>) => (
     <path d="M13.499 12c-.314 0-.629-.098-.9-.3L9.5 9.375 6.4 11.7a1.5 1.5 0 1 1-1.8-2.4l4-3a1.5 1.5 0 0 1 1.8 0l4 3A1.501 1.501 0 0 1 13.5 12Z" />
   </svg>
 );
-
 export default SvgSortable;

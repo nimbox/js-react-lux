@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { CrossIcon } from '../icons/components';
 
 

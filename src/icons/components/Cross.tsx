@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgCross = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +13,4 @@ const SvgCross = (props: SVGProps<SVGSVGElement>) => (
     <path d="M8.5 25a1.5 1.5 0 0 1-1.06-2.56l15-15a1.5 1.5 0 1 1 2.12 2.12l-15 15c-.292.294-.676.44-1.06.44Z" />
   </svg>
 );
-
 export default SvgCross;

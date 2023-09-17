@@ -1,5 +1,5 @@
 import { ComponentMeta } from '@storybook/react';
-import { forwardRef, InputHTMLAttributes, Ref } from 'react';
+import React, { forwardRef, InputHTMLAttributes, Ref } from 'react';
 import { ControlledInputTemplate, HookFormInputTemplate, UncontrolledInputTemplate } from '../../templates/InputTemplate';
 import { Select, SelectProps } from './Select';
 import { Option } from './Option';

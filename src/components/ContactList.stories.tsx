@@ -1,6 +1,7 @@
 import { Contact } from './Contact';
 import { ContactElement, ContactElementProps } from './ContactElement';
 import { Sortable } from './Sortable';
+import React from 'react';
 
 
 // definition

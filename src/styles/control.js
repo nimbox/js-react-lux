@@ -1,7 +1,3 @@
-const {
-    relative
-} = require('path');
-
 const fieldVerticalPadding = 1.5; // For top and bottom.
 const fieldHorizontalPadding = 1.5; // For left and right.
 const fieldLabelScale = 0.75;

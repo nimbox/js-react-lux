@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgAngleRight = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -13,5 +12,4 @@ const SvgAngleRight = (props: SVGProps<SVGSVGElement>) => (
     <path d="M13.5 26a1.502 1.502 0 0 1-1.093-2.528L19.44 16l-7.033-7.472a1.5 1.5 0 1 1 2.186-2.057l8 8.5a1.502 1.502 0 0 1 0 2.057l-8 8.5A1.499 1.499 0 0 1 13.5 26Z" />
   </svg>
 );
-
 export default SvgAngleRight;

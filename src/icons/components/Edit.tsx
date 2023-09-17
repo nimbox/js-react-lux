@@ -1,6 +1,5 @@
 import * as React from "react";
-import { SVGProps } from "react";
-
+import type { SVGProps } from "react";
 const SvgEdit = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +13,4 @@ const SvgEdit = (props: SVGProps<SVGSVGElement>) => (
     <path d="m25.016 14.056-2.121-2.121 3.181-3.183c.126-.126.145-.275.145-.354s-.019-.227-.144-.352l-2.122-2.122c-.126-.126-.275-.145-.354-.145s-.227.019-.352.144l-3.184 3.183-2.12-2.122 3.182-3.181c1.316-1.319 3.632-1.32 4.95 0l2.12 2.121c.66.658 1.024 1.538 1.024 2.475s-.365 1.816-1.025 2.475l-3.18 3.182Z" />
   </svg>
 );
-
 export default SvgEdit;
