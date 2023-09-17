@@ -4,15 +4,15 @@
   "private": false,
   "exports": {
     ".": {
-      "imports": "./dist/index.mjs",
+      "import": "./dist/index.mjs",
       "types": "./dist/typings/index.d.ts"
     },
     "./icons": {
-      "imports": "./dist/icons/index.mjs",
+      "import": "./dist/icons/index.mjs",
       "types": "./dist/icons/typings/index.d.ts"
     },
     "./figures": {
-      "imports": "./dist/figures/index.mjs",
+      "import": "./dist/figures/index.mjs",
       "types": "./dist/figures/typings/index.d.ts"
     },
     "./styles/elegant": "./dist/styles/elegant.js"
