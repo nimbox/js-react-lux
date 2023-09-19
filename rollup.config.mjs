@@ -7,7 +7,7 @@ import typescript from '@rollup/plugin-typescript';
 import postcss from 'rollup-plugin-postcss';
 import commonjs from '@rollup/plugin-commonjs';
 import { createRequire } from 'node:module';
-
+import yalcPush from './src/yalcPush.mjs';
 
 const requireFile = createRequire(import.meta.url);
 const pack = requireFile('./package.json');
@@ -51,6 +51,7 @@ export default [{
         }),
 
         filesize(),
+        yalcPush()
 
     ]
 
@@ -89,7 +90,8 @@ export default [{
             extensions: ['.css']
         }),
 
-        filesize()
+        filesize(),
+        yalcPush()
 
     ]
 
@@ -128,7 +130,8 @@ export default [{
             extensions: ['.css']
         }),
 
-        filesize()
+        filesize(),
+        yalcPush()
 
     ]
 
@@ -155,7 +158,8 @@ export default [{
         //     }]
         // }),
 
-        filesize()
+        filesize(),
+        yalcPush()
 
     ]
 

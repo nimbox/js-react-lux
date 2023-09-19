@@ -15,4 +15,4 @@ export const Delay: FC<{ delay?: number, children?: React.ReactNode; }> = ({ del
 
     return show ? <>{children}</> : null;
 
-}
+};

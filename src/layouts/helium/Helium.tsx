@@ -282,13 +282,14 @@ const MainSide: FC<{ className?: string, children?: React.ReactNode }> = ({ clas
                 >
                     <div className={className}>
                         {children}
+                        <div>side</div>
                     </div>
                 </ShowTransition>
             </>
             :
             <div className={classnames(
-                'w-1/3',
-                'bg-content-fg', 'border-l border-content-border'
+                'w-1/3', 'max-w-[400px]',
+                'bg-content-fg1', 'border-l border-content-border'
             )}>
                 <div className={className}>
                     {children}

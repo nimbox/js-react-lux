@@ -125,7 +125,7 @@ module.exports = {
                 ...require('./popper')({ theme }),
                 ...require('./age'),
             })
-        }),
+        })
 
     ]
 
