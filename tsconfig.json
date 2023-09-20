@@ -2,6 +2,7 @@
   "compilerOptions": {
     
     "target": "es5",
+    "useDefineForClassFields": true,
     "lib": [
       "dom",
       "dom.iterable",
@@ -30,6 +31,6 @@
     "declarationDir": "dist/typings",
 
   },
-  "include": [ "src" ],
+  "include": [ "src", "yalc.mjs" ],
   "exclude": ["node_modules", "attic" ]
 }

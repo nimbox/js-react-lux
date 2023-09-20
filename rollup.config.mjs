@@ -7,7 +7,6 @@ import typescript from '@rollup/plugin-typescript';
 import postcss from 'rollup-plugin-postcss';
 import commonjs from '@rollup/plugin-commonjs';
 import { createRequire } from 'node:module';
-import yalcPush from './src/yalcPush.mjs';
 
 const requireFile = createRequire(import.meta.url);
 const pack = requireFile('./package.json');
@@ -21,11 +20,6 @@ export default [{
         exports: 'named',
         sourcemap: true
     }],
-
-    // external: [
-    //     ...Object.keys(pack.dependencies || {}),
-    //     ...Object.keys(pack.peerDependencies || {})
-    // ],
 
     plugins: [
 
@@ -50,8 +44,7 @@ export default [{
             }]
         }),
 
-        filesize(),
-        yalcPush()
+        filesize()
 
     ]
 
@@ -64,11 +57,6 @@ export default [{
         exports: 'named',
         sourcemap: true
     }],
-
-    // external: [
-    //     ...Object.keys(pack.dependencies || {}),
-    //     ...Object.keys(pack.peerDependencies || {})
-    // ],
 
     plugins: [
 
@@ -91,7 +79,6 @@ export default [{
         }),
 
         filesize(),
-        yalcPush()
 
     ]
 
@@ -104,11 +91,6 @@ export default [{
         exports: 'named',
         sourcemap: true
     }],
-
-    // external: [
-    //     ...Object.keys(pack.dependencies || {}),
-    //     ...Object.keys(pack.peerDependencies || {})
-    // ],
 
     plugins: [
 
@@ -131,7 +113,6 @@ export default [{
         }),
 
         filesize(),
-        yalcPush()
 
     ]
 
@@ -158,8 +139,7 @@ export default [{
         //     }]
         // }),
 
-        filesize(),
-        yalcPush()
+        filesize()
 
     ]
 

@@ -1,7 +1,4 @@
-import {
-    execaCommand
-} from 'execa';
-import { run } from 'node:test';
+import { execaCommand } from 'execa';
 
 let running = false;
 const retries = 3;
@@ -32,7 +29,6 @@ function runAfterCloseBundle() {
                     }
 
                 }
-
 
             } catch (error) {
                 running = false;
