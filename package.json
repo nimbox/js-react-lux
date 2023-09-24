@@ -15,7 +15,8 @@
       "import": "./dist/figures/index.mjs",
       "types": "./dist/figures/typings/index.d.ts"
     },
-    "./styles/elegant": "./dist/styles/elegant.js"
+    "./styles/elegant": "./dist/styles/elegant.js",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist/**/*"
