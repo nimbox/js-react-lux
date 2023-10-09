@@ -875,7 +875,7 @@ html {
 }
 
 .lux-button:disabled {
-  opacity: 0.5;
+  opacity: 0.3;
   pointer-events: none;
   cursor: not-allowed;
 }
@@ -1092,6 +1092,10 @@ html {
   border-color: #c0c0c0;
 }
 
+.lux-field.lux-field-disabled {
+  cursor: not-allowed;
+}
+
 .lux-field.lux-field-error .lux-field-label {
   color: #f05022;
 }
@@ -1108,9 +1112,8 @@ html {
   border-color: #f05022;
 }
 
-.lux-field:disabled {
-  opacity: 0.5;
-  pointer-events: none;
+.lux-field input:disabled {
+  opacity: 0.3;
   cursor: not-allowed;
 }
 

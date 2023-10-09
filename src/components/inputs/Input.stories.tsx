@@ -23,9 +23,32 @@ export const Primary: Story = {
     }
 }
 
-export const Disabled: Story = {
+const InputTemplate: Story = {
+    render: (args) => {
+        return (
+            <div className="flex flex-row justify-between">
+                <div className="space-x-4">
+                    <Input variant="filled" {...args} />
+                    <Input variant="outlined" {...args} />
+                    <Input variant="inlined" {...args} />
+                    <Input variant="plain" {...args} />
+                </div>
+            </div>
+        );
+    }
+};
+
+export const All: Story = {
+    ...InputTemplate,
     args: {
-        ...Primary.args,
+        defaultValue: 'Enabled',
+    }
+};
+
+export const Disabled: Story = {
+    ...InputTemplate,
+    args: {
+        defaultValue: 'Disabled',
         disabled: true,
     }
 };

@@ -257,7 +257,7 @@ module.exports = ({
             // When disabled the button is not clickable
 
             '&:disabled': {
-                opacity: 0.5,
+                opacity: 0.3,
                 pointerEvents: 'none',
                 cursor: 'not-allowed'
             },
@@ -558,6 +558,8 @@ module.exports = ({
                     borderColor: theme('colors.control-border-disabled')
                 },
 
+                cursor: 'not-allowed'
+
             },
 
             '&.lux-field-error': {
@@ -582,11 +584,10 @@ module.exports = ({
 
             // When disabled the button is not clickable
 
-            '&:disabled': {
-                opacity: 0.5,
-                pointerEvents: 'none',
+            'input:disabled': {
+                opacity: 0.3,
                 cursor: 'not-allowed'
-            },
+            }
 
         }
 

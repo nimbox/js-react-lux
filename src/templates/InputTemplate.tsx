@@ -139,7 +139,7 @@ export const createControlledTemplate: createControlled = (Component, { initial,
             <form onSubmit={handleSubmit} className="w-96 space-y-2">
                 <div className="flex flex-row items-baseline gap-2">
                     <Input type="text" className="w-4" />
-                    <Input ref={ref} value={value} onChange={handleChange} onBlur={handleBlur} {...args} />
+                    <Component ref={ref} value={value} onChange={handleChange} onBlur={handleBlur} {...args} />
                     <Input type="text" className="w-4" />
                 </div>
                 <div className="flex flex-row items-center gap-x-2">
