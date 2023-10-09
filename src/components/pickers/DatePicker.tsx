@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon } from '../../icons/components';
-import { consumeEvent } from '../../utilities/consumeEvent';
-import { setRefInputValue } from '../../utilities/setRefInputValue';
+import { consumeEvent } from '../utilities/consumeEvent';
+import { setRefInputValue } from '../utilities/setRefInputValue';
 import { InputPopper, InputPopperProps } from '../inputs/InputPopper';
 
 

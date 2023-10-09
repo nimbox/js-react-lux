@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import React, { useImperativeHandle, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { usePopper } from 'react-popper';
-import { sameWidth } from '../utilities/sameWidth';
+import { sameWidth } from './utilities/sameWidth';
 
 
 //

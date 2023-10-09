@@ -4,8 +4,8 @@ import defaultSwatches from '../../data/flat-colors';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { RefreshIcon } from '../../icons/components';
-import { consumeEvent } from '../../utilities/consumeEvent';
-import { setRefInputValue } from '../../utilities/setRefInputValue';
+import { consumeEvent } from '../utilities/consumeEvent';
+import { setRefInputValue } from '../utilities/setRefInputValue';
 import { InputPopper, InputPopperProps } from '../inputs/InputPopper';
 
 

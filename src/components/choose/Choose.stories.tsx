@@ -3,7 +3,7 @@ import { action } from '@storybook/addon-actions';
 import { useEffect } from '@storybook/addons';
 import React, { forwardRef, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { createSearchMatcher } from '../../utilities/createSearchMatcher';
+import { createSearchMatcher } from '../utilities/createSearchMatcher';
 import { Button } from '../Button';
 import { Input } from '../inputs/Input';
 import { Choose, ChooseProps } from './Choose';

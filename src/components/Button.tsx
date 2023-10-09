@@ -1,7 +1,5 @@
 import classNames from 'classnames';
-import React, { FC, ReactElement, ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
-import { AngleRightIcon } from '../icons/components';
+import React, { FC, ReactElement } from 'react';
 import { ComponentColor } from './ComponentColor';
 
 

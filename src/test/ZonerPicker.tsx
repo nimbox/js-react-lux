@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Choose } from '../components/choose/Choose';
-import { createSearchMatcher } from '../utilities/createSearchMatcher';
+import { createSearchMatcher } from '../components/utilities/createSearchMatcher';
 import timezones from './timezones.json' assert { type: 'json' };
 
 

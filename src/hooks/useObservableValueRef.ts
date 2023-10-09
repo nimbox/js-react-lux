@@ -1,5 +1,5 @@
 import { RefObject, useMemo, useRef } from 'react';
-import { setRefInputValue } from '../utilities/setRefInputValue';
+import { setRefInputValue } from '../components/utilities/setRefInputValue';
 
 
 //

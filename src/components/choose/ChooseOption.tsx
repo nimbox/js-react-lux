@@ -2,7 +2,7 @@ import { isFunction as _isFunction } from 'lodash';
 import React, { Ref, useState } from 'react';
 import { useOptions, UseOptionsProps, UseOptionsSupplier } from '../../hooks/useOptions';
 import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
-import { consumeEvent } from '../../utilities/consumeEvent';
+import { consumeEvent } from '../utilities/consumeEvent';
 import { SearchInput } from '../inputs/SearchInput';
 import { ChooseOptionList, ChooseOptionListProps } from './ChooseOptionList';
 import { EXTRACTOR } from './options';

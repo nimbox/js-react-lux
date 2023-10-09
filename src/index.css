@@ -874,6 +874,12 @@ html {
   border-color: #9e1212;
 }
 
+.lux-button:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
 .lux-field {
   position: relative;
 }
@@ -1100,6 +1106,12 @@ html {
 
 .lux-field.lux-field-error .lux-field-border {
   border-color: #f05022;
+}
+
+.lux-field:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
 }
 
 .postit-container {
@@ -2203,6 +2215,10 @@ html {
 
 .min-w-0 {
   min-width: 0px;
+}
+
+.max-w-\[400px\] {
+  max-width: 400px;
 }
 
 .max-w-full {

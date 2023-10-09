@@ -2,7 +2,7 @@
 import React, { useImperativeHandle, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { Choose } from '../components/choose/Choose';
-import { createSearchMatcher } from '../utilities/createSearchMatcher';
+import { createSearchMatcher } from '../components/utilities/createSearchMatcher';
 
 
 export default {

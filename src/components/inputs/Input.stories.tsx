@@ -1,22 +1,46 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { Meta } from '@storybook/react';
-import { ControlledInputTemplate, HookFormInputTemplate, UncontrolledInputTemplate } from '../../templates/InputTemplate';
-import { Input } from './Input';
+import { Meta, StoryObj } from '@storybook/react';
+import React from 'react';
+import { createControlledTemplate, createHookFormTemplate, createUncontrolledTemplate } from '../../templates/InputTemplate';
+import { Input, InputProps } from './Input';
 
 
-export default {
+const meta: Meta<typeof Input> = {
     title: 'Components/Inputs/Input',
     component: Input,
     parameters: {
         layout: 'centered',
     }
-} as Meta<typeof Input>
+};
+export default meta;
+type Story = StoryObj<InputProps>;
 
 
-//
-// Stories
-//
+export const Primary: Story = {
+    args: {
+        variant: 'outlined',
+        label: 'Label',
+    }
+}
 
-export const Controlled = ControlledInputTemplate({ initial: 'Hello', forced: 'Bye', component: Input }).bind({});
-export const Uncontrolled = UncontrolledInputTemplate({ initial: 'Hello', forced: 'Bye', component: Input }).bind({});
-export const HookForm = HookFormInputTemplate({ initial: 'Hello', forced: 'Bye', component: Input }).bind({});
+export const Disabled: Story = {
+    args: {
+        ...Primary.args,
+        disabled: true,
+    }
+};
+
+const ControlledTemplate = createControlledTemplate(Input, { initial: 'Hello', forced: 'Bye' });
+export const Controlled: Story = {
+    render: (args) => <ControlledTemplate {...args} />
+};
+
+const UncontrolledTemplate = createUncontrolledTemplate(Input, { initial: 'Hello', forced: 'Bye' });
+export const Uncontrolled: Story = {
+    render: (args) => <UncontrolledTemplate {...args} />
+};
+
+const HookFormTemplate = createHookFormTemplate(Input, { initial: 'Hello', forced: 'Bye' });
+export const HookForm: Story = {
+    render: (args) => <HookFormTemplate {...args} />
+};

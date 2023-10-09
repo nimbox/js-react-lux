@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler, FocusEvent, forwardRef, InputHTMLAttributes, KeyboardEvent, ReactElement, Ref, useImperativeHandle, useRef } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
-import { setRefInputValue } from '../../utilities/setRefInputValue';
+import { setRefInputValue } from '../utilities/setRefInputValue';
 import { PopperProps } from '../Popper';
 import { FieldProps } from './Field';
 import { FieldPopper } from './FieldPopper';

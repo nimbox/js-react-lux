@@ -224,7 +224,7 @@ module.exports = ({
                 '&:hover': {
                     color: theme('colors.primary.600'),
                     borderColor: theme('colors.primary.600'),
-                }                
+                }
             },
 
             '&.lux-button-secondary': {
@@ -252,7 +252,15 @@ module.exports = ({
                     color: theme('colors.danger.600'),
                     borderColor: theme('colors.danger.600'),
                 }
-            }
+            },
+
+            // When disabled the button is not clickable
+
+            '&:disabled': {
+                opacity: 0.5,
+                pointerEvents: 'none',
+                cursor: 'not-allowed'
+            },
 
         },
 
@@ -570,7 +578,15 @@ module.exports = ({
                     borderColor: theme('colors.danger.500')
                 },
 
-            }
+            },
+
+            // When disabled the button is not clickable
+
+            '&:disabled': {
+                opacity: 0.5,
+                pointerEvents: 'none',
+                cursor: 'not-allowed'
+            },
 
         }
 

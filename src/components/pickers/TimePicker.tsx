@@ -3,8 +3,8 @@ import React, { ReactElement, Ref, useEffect, useImperativeHandle, useMemo, useR
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { AngleDownIcon, AngleUpIcon, CircleIcon, ClockIcon } from '../../icons/components';
-import { consumeEvent } from '../../utilities/consumeEvent';
-import { setRefInputValue } from '../../utilities/setRefInputValue';
+import { consumeEvent } from '../utilities/consumeEvent';
+import { setRefInputValue } from '../utilities/setRefInputValue';
 import { InputPopper, InputPopperProps } from '../inputs/InputPopper';
 
 

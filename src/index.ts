@@ -51,8 +51,8 @@ export * from './hooks/useOptionsCount';
 export * from './hooks/useOptionsKeyNavigator';
 export * from './hooks/useViewport';
 
-export * from './utilities/consumeEvent';
-export * from './utilities/createSearchMatcher';
+export * from './components/utilities/consumeEvent';
+export * from './components/utilities/createSearchMatcher';
 
 export * from './layouts/helium/Helium';
 
