@@ -27,7 +27,7 @@ module.exports = {
                 content: '""',
                 margin: 'auto',
                 display: 'block',
-                osition: 'absolute',
+                position: 'absolute',
                 width: 0,
                 height: 0,
                 borderStyle: 'solid',

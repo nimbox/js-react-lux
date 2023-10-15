@@ -32,32 +32,32 @@ import { ComponentColor } from './ComponentColor';
 
 
 
-const CLASSES: { [key: string]: { [key: string]: string } } = {
-    'filled': {
-        'primary': 'text-white bg-primary-500 border border-primary-500 hover:text-white hover:bg-primary-600 hover:border-primary-600 focus:ring-primary-500 rounded filter drop-shadow',
-        'secondary': 'text-secondary-800 bg-secondary-500 border border-secondary-500 hover:text-secondary-900 hover:bg-secondary-600 hover:border-secondary-600 focus:ring-secondary-500 rounded',
-        'danger': 'text-white bg-danger-500 border border-danger-500 hover:text-white hover:bg-danger-600 hover:border-danger-600 focus:ring-danger-500 rounded filter drop-shadow',
-        'muted': 'text-gray-500 bg-gray-300 border border-gray-300 hover:text-gray-600 hover:bg-gray-400 hover:border-gray-400 focus:ring-gray-300 rounded'
-    },
-    'text': {
-        'primary': 'text-primary-500 border border-transparent hover:text-primary-600 hover:bg-primary-100 hover:border-primary-100 focus:ring-primary-500 rounded',
-        'secondary': 'text-secondary-500 border border-transparent hover:text-secondary-600 hover:bg-secondary-100 hover:border-secondary-100 focus:ring-secondary-500 rounded',
-        'danger': 'text-danger-500 border border-transparent hover:text-danger-600 hover:bg-danger-100 hover:border-danger-100 focus:ring-danger-500 rounded',
-        'muted': 'text-gray-400 border border-transparent hover:text-gray-500 hover:bg-gray-100 hover:border-gray-100 focus:ring-gray-300 rounded'
-    },
-    'outlined': {
-        'primary': 'text-primary-500 border border-primary-300 hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 focus:ring-primary-500 rounded',
-        'secondary': 'text-secondary-500 border border-secondary-300 hover:text-secondary-600 hover:bg-secondary-100 hover:border-secondary-500 focus:ring-secondary-500 rounded',
-        'danger': 'text-danger-500 border border-danger-300 hover:text-danger-600 hover:bg-danger-100 hover:border-danger-500 focus:ring-danger-500 rounded',
-        'muted': 'text-gray-400 border border-gray-300 hover:text-gray-500 hover:bg-gray-100 hover:border-gray-500 focus:ring-gray-300 rounded'
-    },
-    'link': {
-        'primary': 'underline text-primary-500 hover:text-primary-600 focus:ring-primary-500 rounded',
-        'secondary': 'underline text-secondary-500 hover:text-secondary-600 focus:ring-secondary-500 rounded',
-        'danger': 'underline text-danger-500 hover:text-danger-600 focus:ring-danger-500 rounded',
-        'muted': 'underline text-gray-400 hover:text-gray-500 focus:ring-gray-300 rounded'
-    }
-};
+// const CLASSES: { [key: string]: { [key: string]: string } } = {
+//     'filled': {
+//         'primary': 'text-white bg-primary-500 border border-primary-500 hover:text-white hover:bg-primary-600 hover:border-primary-600 focus:ring-primary-500 rounded filter drop-shadow',
+//         'secondary': 'text-secondary-800 bg-secondary-500 border border-secondary-500 hover:text-secondary-900 hover:bg-secondary-600 hover:border-secondary-600 focus:ring-secondary-500 rounded',
+//         'danger': 'text-white bg-danger-500 border border-danger-500 hover:text-white hover:bg-danger-600 hover:border-danger-600 focus:ring-danger-500 rounded filter drop-shadow',
+//         'muted': 'text-gray-500 bg-gray-300 border border-gray-300 hover:text-gray-600 hover:bg-gray-400 hover:border-gray-400 focus:ring-gray-300 rounded'
+//     },
+//     'text': {
+//         'primary': 'text-primary-500 border border-transparent hover:text-primary-600 hover:bg-primary-100 hover:border-primary-100 focus:ring-primary-500 rounded',
+//         'secondary': 'text-secondary-500 border border-transparent hover:text-secondary-600 hover:bg-secondary-100 hover:border-secondary-100 focus:ring-secondary-500 rounded',
+//         'danger': 'text-danger-500 border border-transparent hover:text-danger-600 hover:bg-danger-100 hover:border-danger-100 focus:ring-danger-500 rounded',
+//         'muted': 'text-gray-400 border border-transparent hover:text-gray-500 hover:bg-gray-100 hover:border-gray-100 focus:ring-gray-300 rounded'
+//     },
+//     'outlined': {
+//         'primary': 'text-primary-500 border border-primary-300 hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 focus:ring-primary-500 rounded',
+//         'secondary': 'text-secondary-500 border border-secondary-300 hover:text-secondary-600 hover:bg-secondary-100 hover:border-secondary-500 focus:ring-secondary-500 rounded',
+//         'danger': 'text-danger-500 border border-danger-300 hover:text-danger-600 hover:bg-danger-100 hover:border-danger-500 focus:ring-danger-500 rounded',
+//         'muted': 'text-gray-400 border border-gray-300 hover:text-gray-500 hover:bg-gray-100 hover:border-gray-500 focus:ring-gray-300 rounded'
+//     },
+//     'link': {
+//         'primary': 'underline text-primary-500 hover:text-primary-600 focus:ring-primary-500 rounded',
+//         'secondary': 'underline text-secondary-500 hover:text-secondary-600 focus:ring-secondary-500 rounded',
+//         'danger': 'underline text-danger-500 hover:text-danger-600 focus:ring-danger-500 rounded',
+//         'muted': 'underline text-gray-400 hover:text-gray-500 focus:ring-gray-300 rounded'
+//     }
+// };
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
