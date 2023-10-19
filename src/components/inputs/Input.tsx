@@ -79,7 +79,7 @@ export const Input = forwardRef((
         disabled,
         error,
 
-        withFullWidth,
+        withFullWidth = true,
         withFullHeight,
 
         fieldClassName,
