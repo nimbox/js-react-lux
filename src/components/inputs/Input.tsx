@@ -54,8 +54,8 @@ export interface InputProps extends Omit<FieldProps, 'className'> {
 /**
  * This component behaves exactly the same way as an html `input` element. The
  * `ref` and `className` of this component are forwarded to the internal `input`
- * element. Beware that this `input` is wrapped in other components when setting
- * the `className`. To style the field use the `fieldClassName` property.
+ * element. Beware that this `input` is wrapped in a `Field` components when setting
+ * the `className`. To style the `Field` use the `fieldClassName` property.
  */
 export const Input = forwardRef((
     props: InputProps & InputHTMLAttributes<HTMLInputElement>,
