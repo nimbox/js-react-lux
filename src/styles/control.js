@@ -254,6 +254,11 @@ module.exports = ({
                 }
             },
 
+            '.lux-crux-content': {
+                justifyContent: 'center',
+                alignSelf: 'center'
+            },
+
             // When disabled the button is not clickable
 
             '&:disabled': {

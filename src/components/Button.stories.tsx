@@ -88,6 +88,27 @@ export const StartEndIcon: Story = {
     }
 };
 
+export const StartEndIconWidth: Story = {
+    ...ButtonTemplate,
+    args: {
+        ...Primary.args,
+        children: 'B',
+        start: <FullSquareIcon />,
+        end: <FullSquareIcon />,
+        className:'w-24'
+    }
+};
+
+export const StartEndIconHeight: Story = {
+    ...ButtonTemplate,
+    args: {
+        ...Primary.args,
+        start: <FullSquareIcon />,
+        end: <FullSquareIcon />,
+        className:'h-24'
+    }
+};
+
 export const StartIconNoText: Story = {
     ...ButtonTemplate,
     args: {
