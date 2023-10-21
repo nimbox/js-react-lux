@@ -59,7 +59,7 @@ Control.Label = (({ className, children }) => {
     return (
         <label className={classnames(
             'block truncate',
-            'uppercase tracking-tighter',
+            'text-xs uppercase tracking-tighter',
             context.error ? 'text-danger-500' : 'text-control-border',
             className
         )}>
