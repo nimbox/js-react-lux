@@ -2,9 +2,8 @@ import classNames from 'classnames';
 import React, { ElementType, ReactElement } from 'react';
 
 
-export interface AnchorProps<C extends ElementType = ElementType> extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 
-    component?: C;
+interface BaseAnchorProps {
 
     variant?: 'filled' | 'text' | 'outlined' | 'link';
     semantic?: 'primary' | 'secondary' | 'danger' | 'muted';
@@ -16,6 +15,12 @@ export interface AnchorProps<C extends ElementType = ElementType> extends React.
     className?: string;
 
 }
+
+export type AnchorProps<C extends ElementType = ElementType> = BaseAnchorProps &
+    React.AnchorHTMLAttributes<HTMLAnchorElement> &
+    React.ComponentPropsWithoutRef<C> & {
+        component?: C;
+    };
 
 export const Anchor = React.forwardRef<HTMLAnchorElement, AnchorProps>((props, ref) => {
 
