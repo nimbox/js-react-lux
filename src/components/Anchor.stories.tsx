@@ -17,7 +17,16 @@ export const Primary: Story = {
     },
     render: (args) => {
         return (
-                <p>Before <Anchor {...args}>{args.children}</Anchor> after</p>
+            <div className="space-x-4">
+                <Anchor variant="filled" {...args} />
+                <Anchor variant="outlined" {...args} />
+                <Anchor variant="text" {...args} />
+                <Anchor variant="link" {...args} />
+                <Anchor variant="filled" {...args} disabled />
+                <Anchor variant="outlined" {...args} disabled />
+                <Anchor variant="text" {...args} disabled />
+                <Anchor variant="link" {...args} disabled />
+            </div>
         );
     }
 };
