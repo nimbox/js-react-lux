@@ -13,19 +13,15 @@ type Story = StoryObj<typeof Button>;
 const ButtonTemplate: Story = {
     render: (args) => {
         return (
-            <div className="flex flex-row justify-between">
-                <div className="space-x-4">
-                    <Button variant="filled" {...args} />
-                    <Button variant="outlined" {...args} />
-                    <Button variant="text" {...args} />
-                    <Button variant="link" {...args} />
-                </div>
-                <div className="space-x-4">
-                    <Button variant="filled" {...args} disabled />
-                    <Button variant="outlined" {...args} disabled />
-                    <Button variant="text" {...args} disabled />
-                    <Button variant="link" {...args} disabled />
-                </div>
+            <div className="space-x-4">
+                <Button variant="filled" {...args} />
+                <Button variant="outlined" {...args} />
+                <Button variant="text" {...args} />
+                <Button variant="link" {...args} />
+                <Button variant="filled" {...args} disabled />
+                <Button variant="outlined" {...args} disabled />
+                <Button variant="text" {...args} disabled />
+                <Button variant="link" {...args} disabled />
             </div>
         );
     }
@@ -95,7 +91,7 @@ export const StartEndIconWidth: Story = {
         children: 'B',
         start: <FullSquareIcon />,
         end: <FullSquareIcon />,
-        className:'w-24'
+        className: 'w-24'
     }
 };
 
@@ -103,9 +99,10 @@ export const StartEndIconHeight: Story = {
     ...ButtonTemplate,
     args: {
         ...Primary.args,
+        centered: true,
         start: <FullSquareIcon />,
         end: <FullSquareIcon />,
-        className:'h-24'
+        className: 'h-24'
     }
 };
 

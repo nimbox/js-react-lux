@@ -9,6 +9,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
     variant?: 'filled' | 'text' | 'outlined' | 'link';
     semantic?: 'primary' | 'secondary' | 'danger' | 'muted';
+    centered?: boolean;
 
     start?: ReactElement;
     end?: ReactElement;
@@ -28,6 +29,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, r
 
         variant = 'filled',
         semantic = 'primary',
+        centered = false,
 
         start,
         end,
@@ -59,6 +61,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, r
                 'lux-button-secondary': semantic === 'secondary',
                 'lux-button-muted': semantic === 'muted',
                 'lux-button-danger': semantic === 'danger',
+
+                'lux-button-centered': centered
 
             }, className)}
 
