@@ -1,31 +1,36 @@
-import classnames from 'classnames';
-import React from 'react';
+import classNames from 'classnames';
+import React, { ElementType, ReactElement } from 'react';
 
 
-export type AnchorUnderline = 'none' | 'hover' | 'always';
-
-export interface AnchorProps<C extends React.ElementType> {
-
-    underline?: AnchorUnderline;
+export interface AnchorProps<C extends ElementType = ElementType> extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 
     component?: C;
+
+    variant?: 'filled' | 'text' | 'outlined' | 'link';
+    semantic?: 'primary' | 'secondary' | 'danger' | 'muted';
+    underline?: 'none' | 'hover' | 'always';
+
+    start?: ReactElement;
+    end?: ReactElement;
 
     className?: string;
 
 }
 
-export const Anchor = React.forwardRef((
-    props: any,
-    ref: any
-) => {
+export const Anchor = React.forwardRef<HTMLAnchorElement, AnchorProps>((props, ref) => {
 
     // Properties
 
     const {
 
-        underline = 'none',
+        component: Component = 'a',
 
-        component: C = 'a',
+        variant = 'link',
+        semantic = 'primary',
+        underline = 'hover',
+
+        start,
+        end,
 
         className,
         children,
@@ -37,17 +42,50 @@ export const Anchor = React.forwardRef((
     // Render
 
     return (
-        <C className={classnames(
-            'max-w-full',
-            {
-                'hover:underline text-primary-500 hover:text-primary-600 focus:ring-primary-500 rounded': underline === 'hover',
-                'underline text-primary-500 hover:text-primary-600 focus:ring-primary-500 rounded': underline === 'always'
-            },
-            className
-        )} {...anchorProps}
+        <Component
+
+            ref={ref}
+
+            className={classNames('lux-crux lux-button cursor-pointer', {
+
+                'lux-crux-empty': children == null,
+
+                'lux-button-filled': variant === 'filled',
+                'lux-button-outlined': variant === 'outlined',
+                'lux-button-text': variant === 'text',
+                'lux-button-link': variant === 'link',
+
+                'lux-button-primary': semantic === 'primary',
+                'lux-button-secondary': semantic === 'secondary',
+                'lux-button-muted': semantic === 'muted',
+                'lux-button-danger': semantic === 'danger',
+
+                'hover:underline': underline === 'hover',
+                'underline': underline === 'always'
+
+            }, className)}
+
+            {...anchorProps}
+
         >
-            {children}
-        </C>
+
+            {start &&
+                <div className="lux-crux-start">
+                    {start}
+                </div>
+            }
+
+            <div className="lux-crux-content">
+                {children || <>&#8203;</>}  {/* Use a zero width space to keep the baseline when no children is present. */}
+            </div>
+
+            {end &&
+                <div className="lux-crux-end">
+                    {end}
+                </div>
+            }
+
+        </Component>
     );
 
 });
