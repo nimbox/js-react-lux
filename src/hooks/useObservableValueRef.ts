@@ -38,7 +38,7 @@ export const useObservableValueRef = <T extends HTMLInputElement | HTMLSelectEle
 
         set current(current: T | null) {
             internal.current = (current != null) ? Object.defineProperty(current, 'value', {
-                set: function (value: any) {
+                set: (value: string | readonly string[] | number | undefined) => {
                     setRefInputValue(internal, value);
                     onSet?.(value);
                 }

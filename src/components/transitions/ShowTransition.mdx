@@ -1,0 +1,77 @@
+import { Meta, Controls, Stories, Primary } from '@storybook/blocks';
+import * as ShowTransitionStories from './ShowTransition.stories';
+
+
+<Meta name="Documentation" of={ShowTransitionStories} />
+
+# ShowTransitions
+
+When you interact with the ShowTransition component by changing the show prop
+value, a series of events and state transitions occur to manage the visibility
+and animation of the component's content. Here’s a breakdown of what happens
+internally within the component when you set show to true and then to false.
+
+## Setting show to `true`:
+
+1. Initial State Check: When the component's show prop changes to `true`, the
+   component checks its current state in a `useLayoutEffect` hook. If the
+   component is not already in the process of showing (i.e., not in `MOUNTING`
+   or `MOUNTED` state), it proceeds to initiate the show transition.
+2. Transition to `MOUNTING`: The state is set to `MOUNTING` using setState. This
+   triggers the component to re-render. At this point, the component applies the
+   `mountClassName` if show is true and the state is not yet defined, indicating
+   the start of the mounting animation.
+3. Mounting Animation Begins: The `mountClassName` can define the initial styles
+   for the animation (e.g., starting opacity, position, etc.). Because this
+   happens quickly, users typically see the animation start from the styles
+   defined by `mountClassName`.
+4. Animation End and Transition to `MOUNTED`: Once the CSS transition or
+   animation completes, an `onTransitionEnd` event is triggered. The component
+   handles this event by setting the state to `MOUNTED`, indicating the
+   animation has finished, and the content is fully visible. At this stage,
+   `showClassName` is applied, showing the content in its final, visible state.
+
+## Setting show to `false`:
+
+1. Check Current State: Upon changing show to `false`, the component again
+   checks its current state. If the component is in a state indicating it is
+   fully visible or in the process of showing (`MOUNTING` or `MOUNTED`), it
+   begins the hide transition.
+2. Transition to `UNMOUNTING`: The state is updated to `UNMOUNTING`, triggering
+   a re-render. The component then applies `unmountClassName` (or
+   `mountClassName` if unmountClassName is not explicitly provided), initiating
+   the hiding animation.
+3. Unmounting Animation Begins: The `unmountClassName` defines the styles for
+   the hide animation (e.g., fading out or sliding away). This is where the
+   component begins transitioning out of view according to the CSS definitions
+   provided.
+4. Completion and State Cleanup: Once the hide animation completes, the
+   `onTransitionEnd` event is triggered, and the component responds by setting
+   the state back to null. This effectively removes the component's content from
+   the DOM or stops applying any transition-related classes, completing the hide
+   transition.
+
+## Summary of the Flow
+
+* Show Transition: null -> `MOUNTING` (apply `mountClassName`) -> `MOUNTED`
+  (apply `showClassName`).
+* Hide Transition: `MOUNTED` -> `UNMOUNTING` (apply `unmountClassName` or
+  `mountClassName`) -> null.
+
+This lifecycle ensures that your content is smoothly shown and hidden based on
+the show prop, with the component intelligently managing CSS classes to apply
+your desired animations.
+
+<Primary />
+
+## Inputs
+
+The component accepts the following inputs (props):
+
+<Controls />
+
+## Additional variations
+
+Listed below are additional variations of the component.
+
+<Stories />

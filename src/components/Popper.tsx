@@ -26,7 +26,7 @@ export interface PopperProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export interface HTMLPopperElement extends HTMLDivElement {
     forceUpdate: (() => void) | null;
-};
+}
 
 export const Popper = React.forwardRef<HTMLPopperElement, PopperProps>((props, popperRef) => {
 

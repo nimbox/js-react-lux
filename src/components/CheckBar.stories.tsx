@@ -1,54 +1,57 @@
-/* eslint-disable import/no-anonymous-default-export */
-import { Story } from '@storybook/react';
-import React, { useState } from 'react';
-import { CheckBar, CheckBarProps } from './CheckBar';
+import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
+import { CheckBar } from './CheckBar';
 
 
-// definition
+// Definition
 
-export default {
-    title: 'Component/CheckBar',
-    component: CheckBar,
-    argTypes: {
-        value: { control: { type: 'array' } },
+const meta: Meta<typeof CheckBar> = {
+    component: CheckBar
+};
+
+export default meta;
+type Story = StoryObj<typeof CheckBar>;
+
+// Templates
+
+const CheckBarTemplate: Story = {
+    render: ({ className }) => {
+        const [value, onChange] = useState([1]);
+        return (
+            <CheckBar value={value} onChange={onChange} className={className}>
+                <CheckBar.Option value={1}>1</CheckBar.Option>
+                <CheckBar.Option value={2}>2</CheckBar.Option>
+                <CheckBar.Option value={3}>3</CheckBar.Option>
+                <CheckBar.Option value={6}>6</CheckBar.Option>
+                <CheckBar.Option value={12}>12 months</CheckBar.Option>
+            </CheckBar>
+        );
     }
 };
 
-//  parameterized
+//  Stories
 
-export const Parameterized = ({ value: initial, options, ...props }: CheckBarProps & { options: string[] }) => {
-    const [value, onChange] = useState(initial.map(i => +i));
-    return (
-        <CheckBar value={value} onChange={onChange}>
-            {options.map((o, i) => <CheckBar.Option value={i}>{o}</CheckBar.Option>)}
-        </CheckBar>
-    );
-};
-Parameterized.args = { scale: 'base', value: [1], options: ['1', '2', '3', '6', '12 months'] };
-
-// stories
-
-const Template: Story<CheckBarProps> = () => {
-    const [value, onChange] = useState([1]);
-    return (
-        <CheckBar value={value} onChange={onChange}>
-            <CheckBar.Option value={1}>1</CheckBar.Option>
-            <CheckBar.Option value={2}>2</CheckBar.Option>
-            <CheckBar.Option value={3}>3</CheckBar.Option>
-            <CheckBar.Option value={6}>6</CheckBar.Option>
-            <CheckBar.Option value={12}>12 months</CheckBar.Option>
-        </CheckBar>
-    );
+export const Base: Story = {
+    ...CheckBarTemplate,
+    args: { }
 };
 
-export const Extra_Small = Template.bind({});
-Extra_Small.args = {};
+export const ExtraSmall: Story = {
+    ...CheckBarTemplate,
+    args: { className: 'text-xs'}
+};
 
-export const Small = Template.bind({});
-Small.args = {};
+export const Small: Story = {
+    ...CheckBarTemplate,
+    args: { className: 'text-sm'}
+};
 
-export const Base = Template.bind({});
-Base.args = {};
+export const Large: Story = {
+    ...CheckBarTemplate,
+    args: { className: 'text-lg'}
+};
 
-export const Large = Template.bind({});
-Large.args = {};
+export const ExtraLarge: Story = {
+    ...CheckBarTemplate,
+    args: { className: 'text-xl'}
+};

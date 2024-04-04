@@ -1,22 +1,30 @@
-/* eslint-disable import/no-anonymous-default-export */
-import { ComponentMeta } from '@storybook/react';
-import { ControlledInputTemplate, HookFormInputTemplate, UncontrolledInputTemplate } from '../../templates/InputTemplate';
+import type { Meta, StoryObj } from '@storybook/react';
+import { ControlledTemplate, HookFormTemplate, UncontrolledTemplate } from '../../templates/InputTemplates';
 import { TimePicker } from './TimePicker';
 
 
-export default {
-    title: 'Components/Pickers/TimePicker',
+// Definition
+
+const meta: Meta<typeof TimePicker> = {
     component: TimePicker,
     parameters: {
         layout: 'centered'
     }
-} as ComponentMeta<typeof TimePicker>;
+};
 
+export default meta;
+type Story = StoryObj<typeof TimePicker>;
 
-// 
 // Stories
-//
 
-export const Controlled = ControlledInputTemplate({ initial: '8:30am', forced: '2:45pm', component: TimePicker }).bind({});
-export const Uncontrolled = UncontrolledInputTemplate({ initial: '8:30am', forced: '2:45pm', component: TimePicker }).bind({});
-export const HookForm = HookFormInputTemplate({ initial: '8:30am', forced: '2:45pm', component: TimePicker }).bind({});
+export const Controlled: Story = {
+    render: (args) => <ControlledTemplate component={TimePicker} componentProps={args} initial="8:30am" forced="2:45pm" />
+};
+
+export const Uncontrolled: Story = {
+    render: (args) => <UncontrolledTemplate component={TimePicker} componentProps={args} initial="8:30am" forced="2:45pm" />
+};
+
+export const HookForm: Story = {
+    render: (args) => <HookFormTemplate component={TimePicker} componentProps={args} initial="8:30am" forced="2:45pm" />
+};

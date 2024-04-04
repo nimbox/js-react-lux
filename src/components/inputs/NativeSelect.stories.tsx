@@ -9,9 +9,9 @@ export default {
     title: 'Components/Inputs/NativeSelect',
     component: NativeSelect,
     parameters: {
-        layout: 'centered',
+        layout: 'centered'
     }
-} as ComponentMeta<typeof NativeSelect>
+} as ComponentMeta<typeof NativeSelect>;
 
 
 

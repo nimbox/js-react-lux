@@ -1,12 +1,18 @@
-import React, { Children, forwardRef, InputHTMLAttributes, Ref, useMemo } from 'react';
+import { Children, forwardRef, InputHTMLAttributes, Ref, useMemo } from 'react';
 import { Choose, ChooseProps } from '../choose/Choose';
+import { OptionProps } from './Option';
+import React from 'react';
 
 
 //
 // Select
 //
 
-export interface SelectProps extends Omit<ChooseProps<any, any>, 'supplier' | 'identifier' | 'extractor'> {
+type SelectOption = { value: string, display: React.ReactNode };
+
+export interface SelectProps extends Omit<ChooseProps<SelectOption>, 'supplier' | 'identifier' | 'extractor'> {
+
+    children: React.ReactElement<OptionProps>[];
 
 }
 
@@ -27,29 +33,33 @@ export const Select = forwardRef((
 
     // State
 
-    const options = useMemo(() => {
+    const options: SelectOption[][] = useMemo(() => {
         return [
-            Children
-                .map(children, (child: any) => ({
-                    value: child?.props?.value,
-                    display: child?.props?.children
-                })) ?? []
-        ];
+            Children.map(children, (child) => {
+                if (React.isValidElement<OptionProps>(child)) {
+                    return {
+                        value: child?.props?.value,
+                        display: child.props?.children
+                    };
+                }
+                return null;
+            })
+        ] as SelectOption[][];
     }, [children]);
 
     // Render
 
     return (
 
-        <Choose<{ value: string, display: string }>
+        <Choose<SelectOption>
 
             ref={selectRef}
 
             supplier={options}
             identifier={(option) => option.value}
 
-            renderChosen={({ option }) => <>{option.display}</>}
-            renderOption={({ option }) => <>{option.display}</>}
+            renderChosen={(o) => o.option.display}
+            renderOption={(o) => o.option.display}
 
             {...chooseProps}
 

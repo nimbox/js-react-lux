@@ -1,16 +1,16 @@
-const path = require('path');
+import path from 'path';
 
-module.exports = {
+export default {
     icon: true,
     expandProps: true,
     svgProps: {
-        'fill': 'currentColor',
+        'fill': 'currentColor'
     },
     indexTemplate: (filePaths) => {
-        const exportEntries = filePaths.map((filePath) => {            
+        const exportEntries = filePaths.map((filePath) => {
             const basename = path.basename(filePath.path, '.tsx');
             const exportName = basename + 'Icon';
-            return `export { default as ${exportName} } from './${basename}'`
+            return `export { default as ${exportName} } from './${basename}'`;
         });
         return exportEntries.join('\n');
     }

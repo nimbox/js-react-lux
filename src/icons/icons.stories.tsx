@@ -1,6 +1,4 @@
-/* eslint-disable import/no-anonymous-default-export */
-import React, { FC } from 'react';
-import '../index.css';
+import React, { FC, SVGProps } from 'react';
 import * as icons from './components';
 
 
@@ -12,7 +10,7 @@ export default {
 };
 
 const Tile: FC<{ icon: string, className?: string }> = ({ icon, className }) => {
-    const Icon = (icons as any)[icon];
+    const Icon = (icons as Record<string, React.FC<SVGProps<SVGSVGElement>>>)[icon];
     return (
         <div className="text-center">
             <div className="h-32 flex flex-row justify-center items-center">

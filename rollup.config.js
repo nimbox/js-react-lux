@@ -1,22 +1,24 @@
-import filesize from 'rollup-plugin-filesize';
-import copy from 'rollup-plugin-copy';
+import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
-import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import resolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
+import copy from 'rollup-plugin-copy';
+import filesize from 'rollup-plugin-filesize';
+import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import postcss from 'rollup-plugin-postcss';
-import commonjs from '@rollup/plugin-commonjs';
-import { createRequire } from 'node:module';
 
-const requireFile = createRequire(import.meta.url);
-const pack = requireFile('./package.json');
 
 export default [{
 
     input: 'src/index.ts',
     output: [{
+        file: 'dist/index.cjs',
+        format: 'cjs',
+        exports: 'named',
+        sourcemap: true
+    }, {
         file: 'dist/index.mjs',
-        format: 'esm',
+        format: 'es',
         exports: 'named',
         sourcemap: true
     }],
@@ -52,8 +54,13 @@ export default [{
 
     input: 'src/icons/components/index.ts',
     output: [{
+        file: 'dist/icons/index.cjs',
+        format: 'cjs',
+        exports: 'named',
+        sourcemap: true
+    }, {
         file: 'dist/icons/index.mjs',
-        format: 'esm',
+        format: 'es',
         exports: 'named',
         sourcemap: true
     }],
@@ -86,8 +93,13 @@ export default [{
 
     input: 'src/figures/index.ts',
     output: [{
-        file: 'dist/figures/index.mjs',
-        format: 'esm',
+        file: 'dist/icons/index.cjs',
+        format: 'cjs',
+        exports: 'named',
+        sourcemap: true
+    }, {
+        file: 'dist/icons/index.mjs',
+        format: 'es',
         exports: 'named',
         sourcemap: true
     }],
@@ -120,8 +132,13 @@ export default [{
 
     input: 'src/styles/elegant.js',
     output: [{
-        file: 'dist/styles/elegant.js',
+        file: 'dist/styles/elegant.cjs',
         format: 'cjs',
+        exports: 'named',
+        sourcemap: true
+    }, {
+        file: 'dist/styles/elegant.mjs',
+        format: 'es',
         exports: 'named',
         sourcemap: true
     }],
@@ -131,13 +148,6 @@ export default [{
         peerDepsExternal(),
         resolve(),
         commonjs(),
-
-        // copy({
-        //     targets: [{
-        //         src: ['src/styles/**/*', '!src/styles/elegant.js'],
-        //         dest: 'dist/styles'
-        //     }]
-        // }),
 
         filesize()
 

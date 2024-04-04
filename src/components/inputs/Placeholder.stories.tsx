@@ -1,5 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
-import React from 'react';
 import { Input } from './Input';
 import { Placeholder } from './Placeholder';
 import { Wrapper } from './Wrapper';
@@ -11,7 +9,7 @@ export default {
     parameters: {
         layout: 'centered'
     }
-}
+};
 
 
 // 

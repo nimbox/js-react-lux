@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import classnames from 'classnames';
 import React, { FC, LegacyRef, ReactElement, useCallback, useEffect, useRef, useState } from 'react';
-import { useDrag, useDrop } from "react-dnd";
+import { useDrag, useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { DragIcon } from '../icons/components';
 
@@ -27,14 +28,15 @@ export const Sortable: FC<SortableProps> = (({ onChange, className, children }) 
 
     const findItem = useCallback(
         (value: React.Key) => {
-            const child = childrenArray.filter((c) => (c as ReactElement).key === value)[0]
+            const child = childrenArray.filter((c) => (c as ReactElement).key === value)[0];
             return {
                 child,
-                index: childrenArray.indexOf(child),
-            }
+                index: childrenArray.indexOf(child)
+            };
         },
-        [childrenArray],
-    )
+        [childrenArray]
+    );
+
     const moveItem = useCallback(
         (value: React.Key, target: number) => {
             const { index } = findItem(value);
@@ -43,7 +45,7 @@ export const Sortable: FC<SortableProps> = (({ onChange, className, children }) 
                 const prevItem = coppiedStateArray.splice(index, 1);
                 coppiedStateArray.splice(target, 0, prevItem[0]);
                 return coppiedStateArray;
-            })
+            });
         }, [findItem, setChildrenArray]);
 
     return (
@@ -100,7 +102,7 @@ const useDraggable =
                 type: type,
                 item: { value, originalIndex },
                 collect: (monitor) => ({
-                    isDragging: monitor.isDragging(),
+                    isDragging: monitor.isDragging()
                 }),
                 end: (item, monitor) => {
                     const { value: droppedId, originalIndex } = item;
@@ -111,10 +113,10 @@ const useDraggable =
                         const { index: target } = findItem(droppedId);
                         onUpdate(originalIndex, target);
                     }
-                },
+                }
             }),
-            [value, originalIndex, onChange],
-        )
+            [value, originalIndex, onChange]
+        );
 
         const [{ isOver }, drop]: any = useDrop(
             () => ({
@@ -122,7 +124,7 @@ const useDraggable =
                 collect(monitor: any) {
                     return {
                         isOver: monitor.isOver()
-                    }
+                    };
                 },
                 canDrop: () => false,
                 hover({ value: draggedValue }: {
@@ -133,9 +135,9 @@ const useDraggable =
                         const { index: target } = findItem(value);
                         onChange(draggedValue, target);
                     }
-                },
+                }
             }) as any,
-            [findItem, onChange],
+            [findItem, onChange]
         );
 
         drag(drop(ref));
@@ -143,7 +145,7 @@ const useDraggable =
 
         return [isDragging, isOver, ref, refPreview];
 
-    }
+    };
 
 
 

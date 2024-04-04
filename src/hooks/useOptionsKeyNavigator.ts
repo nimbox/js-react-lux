@@ -75,7 +75,7 @@ export const useOptionsKeyNavigator = <O, G>(options: G[] | undefined, props?: O
 
     const reset = () => {
         setSelected([0, -1]);
-    }
+    };
 
     const onKeyDown = useCallback((e: React.KeyboardEvent) => {
 
@@ -87,7 +87,7 @@ export const useOptionsKeyNavigator = <O, G>(options: G[] | undefined, props?: O
 
                 if (line !== -1) {
                     e.preventDefault();
-                    setSelected([0, -1])
+                    setSelected([0, -1]);
                 }
                 break;
 
@@ -127,7 +127,7 @@ export const useOptionsKeyNavigator = <O, G>(options: G[] | undefined, props?: O
                 if (onChoose && line !== -1) {
                     e.preventDefault();
                     const group = options![selected[0]];
-                    setSelected([0, -1])
+                    setSelected([0, -1]);
                     onChoose(extractor(group)[selected[1]]);
                 }
                 break;
@@ -141,7 +141,7 @@ export const useOptionsKeyNavigator = <O, G>(options: G[] | undefined, props?: O
     return {
         selected: (selected[1] === -1 ? null : selected) as [number, number] | null,
         reset,
-        onKeyDown,
+        onKeyDown
     };
 
 };

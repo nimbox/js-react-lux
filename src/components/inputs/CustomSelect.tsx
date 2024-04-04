@@ -6,18 +6,24 @@ import { ComponentAlign } from '../ComponentAlign';
 
 
 export interface CustomSelectProps {
-    value: any;
-    label: (t: any) => string | JSX.Element;
-    onChange: (value: any) => void;
+    
+    label: (t: string | number) => string | React.ReactNode;
+    
+    value: string | number;
+    onChange: (value: string | number) => void;
     align: ComponentAlign;
     className?: string;
+    
     children?: React.ReactNode;
 }
 
 export interface CustomSelectOptionProps {
-    value: any;
+
+    value: string | number;
     className?: string;
+
     children?: React.ReactNode;
+
 }
 
 type ContextProps = Pick<CustomSelectProps, 'value' | 'onChange'>;
@@ -43,7 +49,7 @@ export const CustomSelect: CustomSelectComponent = (({  value, label, onChange, 
                     'relative border border-control-border rounded',
                     'focus:border-primary-500 focus:ring focus:ring-primary-500',
                     'focus:ring-opacity-50 focus:outline-none',
-                    'pr-8 text-right truncate cursor-pointer',
+                    'pr-8 text-right truncate cursor-pointer'
                 )} onClick={(() => setIsVisible(!isVisible))}>
                     {label(value) || <span>&nbsp;</span>}
                     <div className="absolute top-1/2 right-1">

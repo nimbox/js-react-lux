@@ -1,22 +1,30 @@
-/* eslint-disable import/no-anonymous-default-export */
-import { ComponentMeta } from '@storybook/react';
-import { ControlledInputTemplate, HookFormInputTemplate, UncontrolledInputTemplate } from '../../templates/InputTemplate';
+import type { Meta, StoryObj } from '@storybook/react';
+import { ControlledTemplate, HookFormTemplate, UncontrolledTemplate } from '../../templates/InputTemplates';
 import { DatePicker } from './DatePicker';
 
 
-export default {
-    title: 'Components/Pickers/DatePicker',
+// Definition
+
+const meta: Meta<typeof DatePicker> = {
     component: DatePicker,
     parameters: {
         layout: 'centered'
     }
-} as ComponentMeta<typeof DatePicker>;
+};
 
+export default meta;
+type Story = StoryObj<typeof DatePicker>;
 
-// 
 // Stories
-//
 
-export const Controlled = ControlledInputTemplate({ initial: '19-12-1967', forced: '01-02-2022', component: DatePicker }).bind({});
-export const Uncontrolled = UncontrolledInputTemplate({ initial: '19-12-1967', forced: '02-02-2022', component: DatePicker }).bind({});
-export const HookForm = HookFormInputTemplate({ initial: '19-12-1967', forced: '02-02-2022', component: DatePicker }).bind({});
+export const Controlled: Story = {
+    render: (args) => <ControlledTemplate component={DatePicker} componentProps={args} initial="19-12-1967" forced="02-02-2022" />
+};
+
+export const Uncontrolled: Story = {
+    render: (args) => <UncontrolledTemplate component={DatePicker} componentProps={args} initial="19-12-1967" forced="02-02-2022" />
+};
+
+export const HookForm: Story = {
+    render: (args) => <HookFormTemplate component={DatePicker} componentProps={args} initial="19-12-1967" forced="02-02-2022" />
+};

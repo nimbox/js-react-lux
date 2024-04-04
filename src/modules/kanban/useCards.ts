@@ -40,7 +40,7 @@ export function useCards<C extends HTMLElement, P extends HTMLElement>(columnId:
                 cardsRef.current!.scrollTop !== scrollTop
             )) {
 
-                const index = getVerticalIndex(item.id, cardsRef.current!, offset, placeholderRef.current!)
+                const index = getVerticalIndex(item.id, cardsRef.current!, offset, placeholderRef.current!);
                 setPlaceholderIndex(index);
 
                 clientOffset.current = offset;
@@ -50,7 +50,7 @@ export function useCards<C extends HTMLElement, P extends HTMLElement>(columnId:
 
         },
 
-        drop: (item: KanbanCardItem, monitor) => {
+        drop: (item: KanbanCardItem) => {
             if (placeholderIndex != null) {
                 moveCard(item.id, columnId, placeholderIndex);
             }
@@ -58,7 +58,7 @@ export function useCards<C extends HTMLElement, P extends HTMLElement>(columnId:
 
         collect: (monitor) => ({
             item: monitor.getItem<KanbanCardItem>(),
-            isOver: monitor.isOver(),
+            isOver: monitor.isOver()
         })
 
     }), [columnId, moveCard, placeholderIndex]);

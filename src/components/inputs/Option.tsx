@@ -7,6 +7,11 @@ export interface OptionProps {
      */
     value?: string;
 
+    /**
+     * Option display text.
+     */
+    children: React.ReactNode;
+
 }
 
 export const Option = forwardRef((

@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useRef } from 'react';
 import { useDrag } from 'react-dnd';
-import { useKanbanContext } from './Kanban';
+import { useKanbanContext } from './useKanbanContext';
 import { CARD_TYPE, KanbanCardItem } from './types';
 
 
@@ -40,4 +40,4 @@ export function useCard<T extends HTMLElement>(id: string): [RefObject<T>, UseCa
 
     return ([cardRef, { isDragging: item?.id === id }]);
 
-};
+}

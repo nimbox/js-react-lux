@@ -1,30 +1,31 @@
-/* eslint-disable import/no-anonymous-default-export */
-import React from 'react';
-import { HarveyBall, HarveyBallProps } from './HarveyBall';
+import type { Meta, StoryObj } from '@storybook/react';
+import { HarveyBall } from './HarveyBall';
 
 
-// definition
+// Definition
 
-export default {
-    title: 'Figures/HarveyBall',
-    component: HarveyBall,
+const meta: Meta<typeof HarveyBall> = {
+    component: HarveyBall
 };
 
-//  parameterized
+export default meta;
+type Story = StoryObj<typeof HarveyBall>;
 
-export const Default = ({ ...props }: HarveyBallProps) => {
-    return (
+// Stories
+
+export const Primary: Story = {
+    render: (args) => (
         <div>
             Hola this is
-            <HarveyBall {...props}>
+            <HarveyBall {...args}>
                 <div className="w-full h-full flex flex-col justify-center items-center text-gray-700 text-sm">10</div>
             </HarveyBall>
-        </div>
-    );
-};
-Default.args = {
-    cover: 25,
-    color: 'red',
-    backgroundColor: 'orange',
-    className: 'inline-block text-5xl'
+        </div>),
+    args: {
+        cover: 25,
+        color: 'red',
+        backgroundColor: 'orange',
+        foreignClassName: 'w-full h-full',
+        className: 'inline-block text-5xl'
+    }
 };

@@ -1,4 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
 import classnames from 'classnames';
 import React, { FC } from 'react';
 import { PlusIcon } from '../../icons/components';
@@ -11,11 +10,25 @@ import { useCards } from './useCards';
 import { useColumn } from './useColumn';
 import { useColumnDrop } from './useColumnDrop';
 import { useColumns } from './useColumns';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import type { Meta, StoryObj } from '@storybook/react';
 
 
-//
+// Definition
 
-let renders: { [key: string]: number } = {
+const meta: Meta = {
+    parameters: {
+        layout: 'fullscreen'
+    },
+    decorators: [(Story) => <DndProvider backend={HTML5Backend}><Story /></DndProvider>]
+};
+
+export default meta;
+type Story = StoryObj;
+
+
+const renders: { [key: string]: number } = {
     card: 0,
     cards: 0,
     column: 0,
@@ -30,16 +43,16 @@ const countRender = (c: string) => {
 
 // definition
 
-export default {
-    title: 'Modules/Kanban',
-    component: KanbanProvider,
-    parameters: {
-        layout: 'fullscreen'
-    }
-};
+// export default {
+//     component: KanbanProvider,
+//     parameters: {
+//         layout: 'fullscreen'
+//     },
+//     decorators: [(Story) => <DndProvider backend={HTML5Backend}><Story /></DndProvider>]
+// };
 
-interface StoryCard { lines: number };
-interface StoryColumn { };
+interface StoryCard { lines: number }
+interface StoryColumn { }
 
 const defaultColumns: Column<StoryColumn, StoryCard>[] = [
     {
@@ -66,18 +79,19 @@ type DeleteStoryColumnCallback = (columnId: string) => void;
 
 //
 
-export const Simple = () => {
+export const Primary: Story = {
+    render: () => {
 
-    const [columns, actions] = useKanbanStore(defaultColumns, () => ({ lines: 2 }), () => ({}));
+        const [columns, actions] = useKanbanStore(defaultColumns, () => ({ lines: 2 }), () => ({}));
 
-    return (
-        <div className="w-full h-screen">
-            <KanbanProvider>
-                <KanbanBoard columns={columns} actions={actions} />
-            </KanbanProvider>
-        </div>
-    );
-
+        return (
+            <div className="w-full h-screen">
+                <KanbanProvider>
+                    <KanbanBoard columns={columns} actions={actions} />
+                </KanbanProvider>
+            </div>
+        );
+    }
 };
 
 //
@@ -106,7 +120,7 @@ const KanbanBoard: FC<{ columns: { id: string, cards: { id: string, lines: numbe
 
             <div className={classnames(
                 'w-full h-full px-10 py-10 flex flex-row items-start overflow-x-auto space-x-2',
-                (isDraggingColumn || isDraggingCard) ? (isDraggingColumn ? 'bg-blue-400' : 'bg-blue-400') : 'bg-blue-400',
+                (isDraggingColumn || isDraggingCard) ? (isDraggingColumn ? 'bg-blue-400' : 'bg-blue-400') : 'bg-blue-400'
             )}>
 
                 <KanbanColumns moveColumn={actions.moveColumn}>

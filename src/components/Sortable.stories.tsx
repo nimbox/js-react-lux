@@ -1,35 +1,49 @@
-/* eslint-disable import/no-anonymous-default-export */
-import React, { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 import { Sortable } from './Sortable';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 
-// definition
+// Definition
 
-export default {
-    title: 'Component/Sortable',
+const meta: Meta<typeof Sortable> = {
     component: Sortable
 };
 
+export default meta;
+type Story = StoryObj<typeof Sortable>;
 
-export const SortableList = () => {
+// Templates
 
-    const [lines, setLines] = useState(["uno", "dos", "tres", "cuatro"]);
+const SortableTemplate: Story = {
+    decorators: [(Story) => <DndProvider backend={HTML5Backend}><Story /></DndProvider>]
+};
 
-    const onChange = (source: number, target: number) => {
-        setLines(xx => {
-            const changed = [...xx];
-            const removed = changed.splice(source, 1);
-            changed.splice(target, 0, removed[0]);
-            return changed;
-        });
+// Stories
+
+export const Basic: Story = {
+    ...SortableTemplate,
+    render: () => {
+
+        const [lines, setLines] = useState(['uno', 'dos', 'tres', 'cuatro']);
+
+        const onChange = (source: number, target: number) => {
+            setLines(xx => {
+                const changed = [...xx];
+                const removed = changed.splice(source, 1);
+                changed.splice(target, 0, removed[0]);
+                return changed;
+            });
+        };
+
+        return (
+            <div className='inline-block'>
+                <Sortable onChange={onChange}>
+                    {lines.map(l => <div>{l}</div>)}
+                </Sortable>
+            </div>
+        );
+
     }
-
-    return (
-        <div className='inline-block'>
-            <Sortable onChange={onChange}>
-                {lines.map(l => <div>{l}</div>)}
-            </Sortable>
-        </div>
-    )
-
 };

@@ -39,7 +39,7 @@ export * from './components/pickers/DatePicker';
 export * from './components/pickers/SwatchPicker';
 export * from './components/pickers/TimePicker';
 
-export * from './popper/TooltipProvider'
+export * from './popper/TooltipProvider';
 
 export * from './components/CheckBar';
 export * from './components/RadioBar';
@@ -55,4 +55,3 @@ export * from './components/utilities/consumeEvent';
 export * from './components/utilities/createSearchMatcher';
 
 export * from './layouts/helium/Helium';
-

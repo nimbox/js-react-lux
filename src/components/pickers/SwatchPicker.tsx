@@ -187,14 +187,14 @@ const Palette = (props: PaletteProps): ReactElement => {
         colors,
         onColorChange,
 
-        className,
+        className
 
     } = props;
 
     return (
         <div onMouseDown={consumeEvent} className={className}>
             {colors.map((s, i) =>
-                <div key={i} onClick={(e) => onColorChange(s)} style={{ backgroundColor: s }}>&nbsp;</div>
+                <div key={i} onClick={() => onColorChange(s)} style={{ backgroundColor: s }}>&nbsp;</div>
             )}
         </div>
     );

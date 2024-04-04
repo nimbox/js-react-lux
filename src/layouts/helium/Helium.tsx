@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import React, { createContext, FC, MouseEventHandler, useContext, useEffect, useState } from 'react';
 import { ShowTransition } from '../../components/transitions/ShowTransition';
 import { useViewport } from '../../hooks/useViewport';
-import { AngleLeftIcon, CrossIcon, HamburgerIcon, } from '../../icons/components';
+import { AngleLeftIcon, CrossIcon, HamburgerIcon } from '../../icons/components';
 
 
 //
@@ -21,9 +21,9 @@ export interface ContextProps {
     showMainSide: boolean;
     setShowMainSide: (show: boolean) => void;
 
-};
+}
 
-const Context = createContext<ContextProps>({
+export const HeliumContext = createContext<ContextProps>({
 
     isCompact: false,
 
@@ -35,7 +35,6 @@ const Context = createContext<ContextProps>({
 
 });
 
-export const useHelium = () => useContext(Context);
 
 // layout
 
@@ -80,11 +79,11 @@ export const Helium: FC<Props> = ({ children }) => {
     }, [isCompact]);
 
     return (
-        <Context.Provider value={{ isCompact, showNavigator, setShowNavigator, showMainSide, setShowMainSide }}>
+        <HeliumContext.Provider value={{ isCompact, showNavigator, setShowNavigator, showMainSide, setShowMainSide }}>
             <div className="relative min-h-screen flex flex-col">
                 {children}
             </div>
-        </Context.Provider>
+        </HeliumContext.Provider>
     );
 
 };
@@ -100,7 +99,7 @@ export const Toggle: FC<{ onClick?: MouseEventHandler<HTMLDivElement>, children?
 
 export const Header: FC<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => {
 
-    const { isCompact, showNavigator } = useContext(Context);
+    const { isCompact, showNavigator } = useContext(HeliumContext);
 
     return (
         <header className={classnames(
@@ -124,7 +123,7 @@ export const Header: FC<{ className?: string, children?: React.ReactNode }> = ({
 
 export const ToggleNavigator: FC = () => {
 
-    const { showNavigator, setShowNavigator, setShowMainSide } = useContext(Context);
+    const { showNavigator, setShowNavigator, setShowMainSide } = useContext(HeliumContext);
 
     return (
         <Toggle onClick={() => { setShowNavigator!(!showNavigator); if (!showNavigator) { setShowMainSide(false); } }}>
@@ -136,7 +135,7 @@ export const ToggleNavigator: FC = () => {
 
 export const ToggleMainSide: FC = () => {
 
-    const { showMainSide, setShowMainSide } = useContext(Context);
+    const { showMainSide, setShowMainSide } = useContext(HeliumContext);
 
     return (
         <Toggle onClick={() => setShowMainSide(!showMainSide)}>
@@ -160,7 +159,7 @@ interface NavigatorComponent<P> extends FC<P> {
 
 export const Navigator: NavigatorComponent<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => {
 
-    const { isCompact, showNavigator, setShowNavigator, setShowMainSide } = useContext(Context);
+    const { isCompact, showNavigator, setShowNavigator, setShowMainSide } = useContext(HeliumContext);
 
     return (
         <>
@@ -185,11 +184,11 @@ export const Navigator: NavigatorComponent<{ className?: string, children?: Reac
         </>
     );
 
-}
+};
 
 const NavigatorHeader: FC<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => {
 
-    const { isCompact, showNavigator, setShowNavigator } = useContext(Context);
+    const { isCompact, showNavigator, setShowNavigator } = useContext(HeliumContext);
 
     return (
         <div className="flex-none h-16 flex flex-row justify-between items-stretch border-b border-navigator-border">
@@ -204,7 +203,7 @@ const NavigatorHeader: FC<{ className?: string, children?: React.ReactNode }> = 
         </div>
     );
 
-}
+};
 
 const NavigatorContent: FC<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => (
     <div className={classnames('flex-grow overflow-y-scroll', className)}>
@@ -231,7 +230,7 @@ interface MainComponent<P> extends FC<P> {
 
 export const Main: MainComponent<{ children?: React.ReactNode }> = ({ children }) => {
 
-    const { showNavigator } = useContext(Context);
+    const { showNavigator } = useContext(HeliumContext);
 
     return (
         <main
@@ -249,7 +248,7 @@ export const Main: MainComponent<{ children?: React.ReactNode }> = ({ children }
     );
 
 
-}
+};
 
 Main.Content = ({ className, children }) => (
     <div className={classnames('w-2/3 flex-grow', className)}>{children}</div>
@@ -257,7 +256,7 @@ Main.Content = ({ className, children }) => (
 
 const MainSide: FC<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => {
 
-    const { isCompact, showMainSide, setShowMainSide } = useContext(Context);
+    const { isCompact, showMainSide, setShowMainSide } = useContext(HeliumContext);
 
     return (
         isCompact ?

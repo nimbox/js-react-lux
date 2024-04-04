@@ -6,18 +6,25 @@ import { ComponentAlign } from '../ComponentAlign';
 
 
 export interface CustomMultiSelectProps {
-    label: (t: any) => string;
-    value: any[];
-    onChange: (value: any) => void;
+
+    label: (t: (string | number)[]) => string;
+
+    value: (string | number)[];
+    onChange: (value: (string | number)[]) => void;
     align: ComponentAlign;
     className?: string;
+
     children?: React.ReactNode;
+
 }
 
 export interface CustomMultiSelectContentProps {
-    value: any;
+
+    value: string | number;
     className?: string;
+
     children?: React.ReactNode;
+
 }
 
 type ContextProps = Pick<CustomMultiSelectProps, 'value' | 'onChange'>;
@@ -43,7 +50,7 @@ export const CustomMultiSelect: CustomMultiSelectComponent = (({ label, value, o
                     'relative border border-control-border rounded',
                     'focus:border-primary-500 focus:ring focus:ring-primary-500',
                     'focus:ring-opacity-50 focus:outline-none',
-                    'px-2 py-0 pr-8 truncate cursor-pointer',
+                    'px-2 py-0 pr-8 truncate cursor-pointer'
                 )} onClick={(() => setIsVisible(!isVisible))}>
                     {label(value) || <span>&nbsp;</span>}
                     <div className="absolute top-1/2 right-1 ">

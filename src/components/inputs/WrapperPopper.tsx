@@ -180,7 +180,7 @@ export const WrapperPopper = React.forwardRef((
 
     // Popper handlers
 
-    const handlePopperBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+    const handlePopperBlur = () => {
         setTimeout(() => {
             const activeElement = getActiveElement();
             if (

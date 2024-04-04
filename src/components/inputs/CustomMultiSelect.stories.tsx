@@ -1,37 +1,39 @@
-/* eslint-disable import/no-anonymous-default-export */
-import React, { useState } from 'react';
-import { CustomMultiSelect, CustomMultiSelectProps } from './CustomMultiSelect';
+import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
+import { CustomMultiSelect } from './CustomMultiSelect';
 
 
-// definition
+// Definition
 
-export default {
-    title: 'Component/Controls/CustomMultiSelect',
-    component: CustomMultiSelect,
-    argTypes: {
-        scale: { control: { type: 'select', options: ['xs', 'sm', 'base', 'lg'] } },
-        value: { control: { type: 'array' } },
-        align: { control: { type: 'radio', options: ['start', 'end', 'stretch'] } }
+const meta: Meta<typeof CustomMultiSelect> = {
+    component: CustomMultiSelect
+};
+
+export default meta;
+type Story = StoryObj<typeof CustomMultiSelect>;
+
+// Templates
+
+const CustomMultiSelectTemplate: Story = {
+    render: (args) => {
+        const [value, onChange] = useState(args.value);
+        const label = (value: (string | number)[]) => JSON.stringify(value);
+        return (
+            <CustomMultiSelect {...args} label={label} value={value} onChange={onChange}>
+                <CustomMultiSelect.Option value={'uno'}>uno</CustomMultiSelect.Option>
+                <CustomMultiSelect.Option value={'dos'}>dos</CustomMultiSelect.Option>
+                <CustomMultiSelect.Option value={'tres'}>tres</CustomMultiSelect.Option>
+                <CustomMultiSelect.Option value={'cuatro'}>cuatro</CustomMultiSelect.Option>
+            </CustomMultiSelect>
+        );
+    },
+    args: {
+        value: ['uno']
     }
 };
 
-//  parameterized
+// Stories
 
-export const Parameterized = ({  value: initial, options, align, ...props }: CustomMultiSelectProps & { options: string[] }) => {
-    const [value, onChange] = useState(initial.map(i => +i));
-    //label = _.take(value, 2).reduce((acc: string, val: number) => acc + ' ' + options[val], '') + (_.size(value) > 2 ? ` y ${_.size(value) - 2} más` : '');
-
-    const label = (value: any) => {
-        // if (value.length > 0 && options.length > 0 && options.length >= value.length) {
-        //     return _.reduce(_.take(value, 2), function (acc: string, val: number) { return acc + ' ' + options[val]; }, '') + (_.size(value) > 2 ? ` y ${_.size(value) - 2} más` : '')
-        // }
-        return 'Ninguna';
-    };
-
-    return (
-        <CustomMultiSelect value={value} onChange={onChange} className='' align={align} label={label}>
-            {options.map((o, i) => <CustomMultiSelect.Option value={i}>{o}</CustomMultiSelect.Option>)}
-        </CustomMultiSelect>
-    );
+export const Primary: Story = {
+    ...CustomMultiSelectTemplate
 };
-Parameterized.args = { scale: 'base', label: '', value: [0, 1], align: 'start', options: ['UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO'] };

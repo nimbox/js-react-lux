@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import classNames from 'classnames';
 import React, { createContext, FC, useContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -111,7 +113,7 @@ export const ToastContainer: FC<{ children?: React.ReactNode }> = ({ children })
             {children}
         </div>
     );
-}
+};
 
 export const ToastContent: FC<{ title?: string, description: string }> = ({ title, description }) => {
     return (
@@ -160,4 +162,4 @@ export const Toast: FC<ToastProps> = ({ type, component, autoDelete = true, auto
         </div>
     );
 
-}
+};

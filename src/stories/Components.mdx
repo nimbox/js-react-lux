@@ -1,36 +1,9 @@
 import { useState } from 'react';
-import { Meta, Story, Canvas } from '@storybook/addon-docs';
+import { Meta, Canvas } from '@storybook/addon-docs';
 import { CheckBar } from '../components/CheckBar';
 import { RadioBar } from '../components/RadioBar';
 import { Button } from '../components/Button';
 import { CrossIcon, FullCircleIcon, FullSquareIcon } from '../icons/components';
-
-
-export const CheckboxBarSample = ({ scale }) => {
-    const [value, onChange] = useState([1]);
-    return (
-        <CheckBar scale={scale} value={value} onChange={onChange}>
-            <CheckBar.Option value={1}>1</CheckBar.Option>
-            <CheckBar.Option value={2}>2</CheckBar.Option>
-            <CheckBar.Option value={3}>3</CheckBar.Option>
-            <CheckBar.Option value={6}>6</CheckBar.Option>
-            <CheckBar.Option value={12}>12 months</CheckBar.Option>
-        </CheckBar>
-    );
-};
-
-export const RadioBarSample = ({ scale }) => {
-    const [value, onChange] = useState([1]);
-    return (
-        <RadioBar scale={scale} value={value} onChange={onChange}>
-            <RadioBar.Option value={1}>1</RadioBar.Option>
-            <RadioBar.Option value={2}>2</RadioBar.Option>
-            <RadioBar.Option value={3}>3</RadioBar.Option>
-            <RadioBar.Option value={6}>6</RadioBar.Option>
-            <RadioBar.Option value={12}>12 months</RadioBar.Option>
-        </RadioBar>
-    );
-};
 
 
 <Meta title="Standards/Layouts/Sizes"/>
@@ -51,15 +24,13 @@ small.
 When applying the default scalings from tailwind we end up with these scales. We
 are only using `rems` as units so `px` are only for reference.
 
-<Canvas>
-    <div>
-        <div className="text-xs">The quick brown fox jumps over the lazy dog (xs 0.75rem 10.5px)</div>
-        <div className="text-sm">The quick brown fox jumps over the lazy dog (sm 0.875rem 12.5px)</div>
-        <div className="text-base">The quick brown fox jumps over the lazy dog (base 1rem 14px)</div>
-        <div className="text-lg">The quick brown fox jumps over the lazy dog (lg 1.125rem 15.75px)</div>
-        <div className="text-xl">The quick brown fox jumps over the lazy dog (xl 1.75rem 17.5px)</div>
-    </div>
-</Canvas>
+<div>
+    <div className="text-xs">The quick brown fox jumps over the lazy dog (xs 0.75rem 10.5px)</div>
+    <div className="text-sm">The quick brown fox jumps over the lazy dog (sm 0.875rem 12.5px)</div>
+    <div className="text-base">The quick brown fox jumps over the lazy dog (base 1rem 14px)</div>
+    <div className="text-lg">The quick brown fox jumps over the lazy dog (lg 1.125rem 15.75px)</div>
+    <div className="text-xl">The quick brown fox jumps over the lazy dog (xl 1.75rem 17.5px)</div>
+</div>
 
 ## Layouts
 
@@ -74,7 +45,6 @@ maintain the baseline of the field or button to use them inline.
 
 The structure is:
 
-<Canvas isExpanded={true}>
 <div className="text-center">
     Before
     <div className="inline-flex items-baseline bg-green-100">
@@ -90,7 +60,6 @@ The structure is:
     </div>
     After
 </div>
-</Canvas>
 
 With the above structure and markup we guarantee that:
 
@@ -103,7 +72,6 @@ With the above structure and markup we guarantee that:
 We have created the `crux` css classes to facilitate this layout since it is
 used in mutiple places.
 
-<Canvas isExpanded={true}>
 <div className="text-center">
     Before
     <div className="lux-crux bg-green-100">
@@ -119,14 +87,12 @@ used in mutiple places.
     </div>
     After
 </div>
-</Canvas>
 
 There is a particular case in which we need to use this layout without content.
 For example a button with no text and an icon. In this case the content must be
 a zero width space to keep the baseline, and the base div requires the
 additional class `lux-crux-empty` to make sure the margins are correct.
 
-<Canvas isExpanded={true}>
 <div className="text-center">
     Before
     <div className="lux-crux lux-crux-empty bg-green-100">
@@ -147,11 +113,9 @@ additional class `lux-crux-empty` to make sure the margins are correct.
     </div>
     After
 </div>
-</Canvas>
 
 This structure is also used for `Avatar` while keeping the baseline.
 
-<Canvas isExpanded={true}>
 <div className="text-center">
     Before
     <div className="lux-crux lux-crux-empty bg-green-100">
@@ -166,11 +130,9 @@ This structure is also used for `Avatar` while keeping the baseline.
     </div>
     After
 </div>
-</Canvas>
 
 This structure is also user for `Tag` while keeping the baseline.
 
-<Canvas isExpanded={true}>
 <div className="text-center">
     Before
     <div className="lux-crux bg-green-200 px-3 py-1 rounded-full">
@@ -194,4 +156,3 @@ This structure is also user for `Tag` while keeping the baseline.
     </div>
     After
 </div>
-</Canvas>

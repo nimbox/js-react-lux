@@ -1,7 +1,7 @@
-import React, { ChangeEventHandler, FocusEvent, forwardRef, InputHTMLAttributes, KeyboardEvent, ReactElement, Ref, useImperativeHandle, useRef } from 'react';
+import { ChangeEventHandler, forwardRef, InputHTMLAttributes, KeyboardEvent, ReactElement, Ref, useImperativeHandle, useRef } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
-import { setRefInputValue } from '../utilities/setRefInputValue';
 import { PopperProps } from '../Popper';
+import { setRefInputValue } from '../utilities/setRefInputValue';
 import { FieldProps } from './Field';
 import { FieldPopper } from './FieldPopper';
 import { PlainInput } from './PlainInput';
@@ -100,7 +100,7 @@ export const InputPopper = forwardRef((
         end,
 
         shrink,
-        focus,
+        focus, // eslint-disable-line @typescript-eslint/no-unused-vars
         disabled,
         error,
 

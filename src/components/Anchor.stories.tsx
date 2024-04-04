@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Anchor } from './Anchor';
-import React from 'react';
 import { FullSquareIcon } from '../icons/components';
+import { Anchor } from './Anchor';
 
 
 const meta: Meta<typeof Anchor> = {
@@ -13,7 +12,7 @@ type Story = StoryObj<typeof Anchor>;
 
 export const Primary: Story = {
     args: {
-        children: 'anchor',
+        children: 'anchor'
     },
     render: (args) => {
         return (
@@ -35,7 +34,7 @@ export const StartIcon: Story = {
     ...Primary,
     args: {
         ...Primary.args,
-        start: <FullSquareIcon />,
+        start: <FullSquareIcon />
     }
 };
 
@@ -43,7 +42,7 @@ export const EndIcon: Story = {
     ...Primary,
     args: {
         ...Primary.args,
-        end: <FullSquareIcon />,
+        end: <FullSquareIcon />
     }
 };
 
@@ -52,6 +51,6 @@ export const StartEndIcon: Story = {
     args: {
         ...Primary.args,
         start: <FullSquareIcon />,
-        end: <FullSquareIcon />,
+        end: <FullSquareIcon />
     }
 };

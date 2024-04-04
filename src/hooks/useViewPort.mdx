@@ -1,0 +1,26 @@
+import { Meta, Controls, Stories, Primary } from '@storybook/blocks';
+import * as UseViewportStories from './useViewport.stories';
+
+
+<Meta name="Documentation" of={UseViewportStories} />
+
+# Viewport
+
+Use a the viewport hook when requiring the scale of the current window.For this
+to work, your root element needs to be wrapped inside `ViewportProvider` that
+provides the context with the listener for the rescale event.
+
+```
+<ViewportProvider>
+    <ApplicationCompoment/>
+</ViewPortProvider>
+```
+
+This function is debounced with a 250ms wait, but that can be changed with the
+`wait` parameter in the`ViewportProvider`
+
+## Additional variations
+
+Listed below are additional variations of the component.
+
+<Stories />

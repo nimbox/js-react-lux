@@ -1,4 +1,4 @@
-import React, { FC, SVGProps } from 'react';
+import { FC, SVGProps } from 'react';
 
 
 export interface HarveyBallProps {
@@ -72,7 +72,7 @@ export const HarveyBall: FC<HarveyBallProps & SVGProps<SVGSVGElement>> = (props)
 
     const start = polarToCartesian(50, 50, 50, startAngle);
     const finish = polarToCartesian(50, 50, 50, finishAngle);
-    const largeArcFlag = finishAngle - startAngle <= 180 ? "0" : "1";
+    const largeArcFlag = finishAngle - startAngle <= 180 ? '0' : '1';
 
     // Render
 

@@ -2,17 +2,24 @@ import classnames from 'classnames';
 import React, { createContext, FC, useContext } from 'react';
 
 
+
 export interface CheckBarProps {
-    value: any[];
-    onChange: (value: any) => void;
+
+    value: (string | number)[];
+    onChange: (value: (string | number)[]) => void;
     className?: string;
+
     children?: React.ReactNode;
+
 }
 
 export interface CheckBarOptionProps {
-    value: any;
+
+    value: (string | number);
     className?: string;
+
     children?: React.ReactNode;
+
 }
 
 type ContextProps = Pick<CheckBarProps, 'value' | 'onChange'>;

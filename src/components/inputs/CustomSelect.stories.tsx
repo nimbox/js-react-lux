@@ -1,32 +1,36 @@
-/* eslint-disable import/no-anonymous-default-export */
-import React, { useState } from 'react';
-import { CustomSelect, CustomSelectProps } from './CustomSelect';
+
+import type { Meta, StoryObj } from '@storybook/react';
+import { CustomSelect } from './CustomSelect';
+import { useState } from 'react';
 
 
-// definition
+// Definition
 
-export default {
-    title: 'Component/Controls/CustomSelect',
-    component: CustomSelect,
-    argTypes: {
-        scale: { control: { type: 'select', options: ['sm', 'base', 'lg'] } },
-        value: { control: { type: 'array' } },
-        align: { control: { type: 'radio', options: ['start', 'end', 'stretch'] } }
+const meta: Meta<typeof CustomSelect> = {
+    component: CustomSelect
+};
+
+export default meta;
+type Story = StoryObj<typeof CustomSelect>;
+
+// Templates
+
+const options = ['VES(1.00)', 'USD(1.895.903,02)', 'DOP(32.338,76)'];
+
+const CustomSelectTemplate: Story = {
+    render: (args) => {
+        const [value, onChange] = useState(0);
+        const label = (value: string | number) => JSON.stringify(value);
+        return (
+            <CustomSelect {...args} value={value} label={label} onChange={onChange}>
+                {options.map((o, i) => <CustomSelect.Option value={i}>{o}</CustomSelect.Option>)}
+            </CustomSelect>
+        );
     }
 };
 
-//  parameterized
+// Story
 
-export const Parameterized = ({  value: initial, options, align, ...props }: CustomSelectProps & { options: string[] }) => {
-
-    const [value, onChange] = useState(+initial);
-    const label = (value: any) => (options[value]);
-
-    return (
-        <CustomSelect label={label} className='' align={align} value={value} onChange={onChange}>
-            {options.map((o, i) => <CustomSelect.Option value={i}>{o}</CustomSelect.Option>)}
-        </CustomSelect>
-    );
+export const Primary: Story = {
+    ...CustomSelectTemplate
 };
-Parameterized.args = { scale: 'base', value: 0, align: 'start', options: ['VES(1.00)', 'USD(1.895.903,02)', 'DOP(32.338,76)'] };
-

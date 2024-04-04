@@ -1,0 +1,49 @@
+import { Meta, Controls, Stories, Primary, Canvas } from '@storybook/blocks';
+import * as TagStories from './Tag.stories';
+
+
+<Meta name="Documentation" of={TagStories} />
+
+# Loading
+
+It is very cumbersome to create a tag that has text truncated with ellipsis 
+because getting the vertical align right is not very easy. It all starts from
+the CSS spec:
+
+> The baseline of an 'inline-block' is the baseline of its last line box in 
+> the normal flow, unless it has either no in-flow line boxes or if its 
+> 'overflow' property has a computed value other than 'visible', in which case 
+> the baseline is the bottom margin edge.
+
+Having an inline block with text truncate requires an overflow hidden will yield
+an out of vertical align element:
+
+<Canvas of={TagStories.DocumentationInlineBlock} />
+
+The way we are working with is to do a flex container having the truncated
+element inside and making the compounded element's baseline be the truncated
+text.
+
+<Canvas of={TagStories.DocumentationFlexBlock} />
+
+Adding the delete icon creates a new problem of alignment which we takled by
+givign the truncated text a height and line height of `1em`
+
+<Canvas of={TagStories.DocumentationFlexIconBlock} />
+
+The rest is accomplished with horizontal padding and margin, and rounding.
+
+<Canvas of={TagStories.DocumentationFlexIconPaddingBlock} />
+
+
+## Inputs
+
+The component accepts the following inputs (props):
+
+<Controls />
+
+## Additional variations
+
+Listed below are additional variations of the component.
+
+<Stories />

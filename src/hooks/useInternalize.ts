@@ -15,7 +15,7 @@ export const useInternalize = <T>(
     initialValue: T,
     defaultValue: T | undefined,
     value: T | undefined,
-    onChange: (v: T) => void | undefined,
+    onChange: (v: T) => void | undefined
 ): [T, (v: T) => void] => {
 
     const [internalValue, setInternalValue] = useState<T>(defaultValue != null ? defaultValue : initialValue);

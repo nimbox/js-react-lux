@@ -7,7 +7,7 @@
 export function createSearchMatcher(query?: string | null): (value?: string | null) => boolean {
 
     if (query == null || query.trim().length === 0) {
-        return (value?: string | null) => false;
+        return () => false;
     }
 
     // tokenize  query

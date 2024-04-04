@@ -23,7 +23,7 @@ export interface AsyncSearchInputProps extends SearchInputProps {
      * correctly.
      * @default `false`
      */
-    error?: any;
+    error?: boolean;
 
 }
 

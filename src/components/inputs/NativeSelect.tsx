@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React, { ChangeEventHandler, forwardRef, InputHTMLAttributes, Ref, useContext } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { AngleDownIcon } from '../../icons/components';
-import { Context } from './Control';
+import { ControlContext } from './Control';
 import { Field, FieldProps } from './Field';
 
 
@@ -97,7 +97,7 @@ export const NativeSelect = forwardRef((
 
     // State
 
-    const context = useContext(Context);
+    const context = useContext(ControlContext);
     const isError = error || context.error;
 
     // Render

@@ -1,54 +1,57 @@
-/* eslint-disable import/no-anonymous-default-export */
-import { Story } from '@storybook/react';
-import React, { useState } from 'react';
-import { RadioBar, RadioBarProps } from './RadioBar';
+import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
+import { RadioBar } from './RadioBar';
 
 
-// definition
+// Definition
 
-export default {
-    title: 'Component/RadioBar',
-    component: RadioBar,
-    argTypes: {
-        value: { control: { type: 'array' } },
+const meta: Meta<typeof RadioBar> = {
+    component: RadioBar
+};
+
+export default meta;
+type Story = StoryObj<typeof RadioBar>;
+
+// Templates
+
+const RadioBarTemplate: Story = {
+    render: ({ className }) => {
+        const [value, onChange] = useState([1]);
+        return (
+            <RadioBar value={value} onChange={onChange} className={className}>
+                <RadioBar.Option value={1}>1</RadioBar.Option>
+                <RadioBar.Option value={2}>2</RadioBar.Option>
+                <RadioBar.Option value={3}>3</RadioBar.Option>
+                <RadioBar.Option value={6}>6</RadioBar.Option>
+                <RadioBar.Option value={12}>12 months</RadioBar.Option>
+            </RadioBar>
+        );
     }
 };
 
-//  parameterized
+//  Stories
 
-export const Parameterized = ({ value: initial, options, ...props }: RadioBarProps & { options: string[] }) => {
-    const [value, onChange] = useState(+initial);
-    return (
-        <RadioBar value={value} onChange={onChange}>
-            {options.map((o, i) => <RadioBar.Option value={i}>{o}</RadioBar.Option>)}
-        </RadioBar>
-    );
-};
-Parameterized.args = { scale: 'base', value: 0, options: ['1', '2', '3', '6', '12 months'] };
-
-// stories
-
-const Template: Story<RadioBarProps> = () => {
-    const [value, onChange] = useState(1);
-    return (
-        <RadioBar value={value} onChange={onChange}>
-            <RadioBar.Option value={1}>1</RadioBar.Option>
-            <RadioBar.Option value={2}>2</RadioBar.Option>
-            <RadioBar.Option value={3}>3</RadioBar.Option>
-            <RadioBar.Option value={6}>6</RadioBar.Option>
-            <RadioBar.Option value={12}>12 months</RadioBar.Option>
-        </RadioBar>
-    );
+export const Base: Story = {
+    ...RadioBarTemplate,
+    args: { }
 };
 
-export const Extra_Small = Template.bind({});
-Extra_Small.args = {};
+export const ExtraSmall: Story = {
+    ...RadioBarTemplate,
+    args: { className: 'text-xs'}
+};
 
-export const Small = Template.bind({});
-Small.args = {};
+export const Small: Story = {
+    ...RadioBarTemplate,
+    args: { className: 'text-sm'}
+};
 
-export const Base = Template.bind({});
-Base.args = {};
+export const Large: Story = {
+    ...RadioBarTemplate,
+    args: { className: 'text-lg'}
+};
 
-export const Large = Template.bind({});
-Large.args = {};
+export const ExtraLarge: Story = {
+    ...RadioBarTemplate,
+    args: { className: 'text-xl'}
+};

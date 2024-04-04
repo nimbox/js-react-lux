@@ -13,7 +13,6 @@ adornments.
 
 The structure is:
 
-<Canvas isExpanded={true}>
 <div className="text-center">
     Before
     <div className="inline-flex items-baseline bg-green-100">
@@ -29,7 +28,6 @@ The structure is:
     </div>
     After
 </div>
-</Canvas>
 
 With the above structure and markup we guarantee that:
 
@@ -44,7 +42,6 @@ With the above structure and markup we guarantee that:
 We have created the `crux` css classes to facilitate this layout since it is
 used in mutiple places.
 
-<Canvas isExpanded={true}>
 <div className="text-center">
     Before
     <div className="lux-crux bg-green-100">
@@ -60,14 +57,12 @@ used in mutiple places.
     </div>
     After
 </div>
-</Canvas>
 
 There is a particular case in which we need to use this layout without content.
 For example a button with no text and an icon. In this case the content must be
 a zero width space to keep the baseline, and the base div requires the
 additional class `lux-crux-empty` to make sure the margins are correct.
 
-<Canvas isExpanded={true}>
 <div className="text-center">
     Before
     <div className="lux-crux lux-crux-empty bg-green-100">
@@ -88,11 +83,9 @@ additional class `lux-crux-empty` to make sure the margins are correct.
     </div>
     After
 </div>
-</Canvas>
 
 This structure is used for `Avatar` while keeping the baseline.
 
-<Canvas isExpanded={true}>
 <div className="text-center">
     Before
     <div className="lux-crux lux-crux-empty bg-green-100">
@@ -107,11 +100,9 @@ This structure is used for `Avatar` while keeping the baseline.
     </div>
     After
 </div>
-</Canvas>
 
 This structure is used for `Tag` while keeping the baseline.
 
-<Canvas isExpanded={true}>
 <div className="text-center">
     Before
     <div className="lux-crux bg-green-200 px-3 py-1 rounded-full">
@@ -135,13 +126,11 @@ This structure is used for `Tag` while keeping the baseline.
     </div>
     After
 </div>
-</Canvas>
 
 ## Truncated text
 
 When the content is truncated.
 
-<Canvas isExpanded={true}>
 <div className="text-center">
     <div className="inline-block w-48 bg-yellow-100">
     Before
@@ -159,5 +148,4 @@ When the content is truncated.
     After
     </div>
 </div>
-</Canvas>
 

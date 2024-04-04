@@ -33,10 +33,10 @@ export const getHorizontalIndex = (cardId: string, columns: HTMLElement, offset:
 
     return index;
 
-}
+};
 
 // utilities
 
 const isColumnId = (columnId: string, columns: HTMLElement, index: number) => {
     return index >= 0 && index < columns.children.length && columns.children[index].getAttribute('data-kanban-column-id') === columnId;
-}
+};

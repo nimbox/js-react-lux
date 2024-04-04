@@ -1,12 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 
-export default function useSearch(data: any[]) {
+export default function useSearch(data: string[]) {
 
-    const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState(data);
 
-    const handleChange = (event: any) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
     };
 
@@ -15,7 +15,8 @@ export default function useSearch(data: any[]) {
             value.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setSearchResults(results);
-    }, [searchTerm]);
+    }, [data, searchTerm]);
 
     return { searchTerm, handleChange, searchResults };
+
 }

@@ -1,22 +1,31 @@
-/* eslint-disable import/no-anonymous-default-export */
-import { ComponentMeta } from '@storybook/react';
-import { ControlledInputTemplate, HookFormInputTemplate, UncontrolledInputTemplate } from '../../templates/InputTemplate';
+import type { Meta, StoryObj } from '@storybook/react';
+import { ControlledTemplate, HookFormTemplate, UncontrolledTemplate } from '../../templates/InputTemplates';
+import { DatePicker } from './DatePicker';
 import { SwatchPicker } from './SwatchPicker';
 
 
-export default {
-    title: 'Components/Pickers/SwatchPicker',
-    component: SwatchPicker,
+// Definition
+
+const meta: Meta<typeof DatePicker> = {
+    component: DatePicker,
     parameters: {
         layout: 'centered'
     }
-} as ComponentMeta<typeof SwatchPicker>;
+};
 
+export default meta;
+type Story = StoryObj<typeof DatePicker>;
 
-// 
 // Stories
-//
 
-export const Controlled = ControlledInputTemplate({ initial: '#906090', forced: '#EA9317', component: SwatchPicker }).bind({});
-export const Uncontrolled = UncontrolledInputTemplate({ initial: '#906090', forced: '#EA9317', component: SwatchPicker }).bind({});
-export const HookForm = HookFormInputTemplate({ initial: '#906090', forced: '#EA9317', component: SwatchPicker }).bind({});
+export const Controlled: Story = {
+    render: (args) => <ControlledTemplate component={SwatchPicker} componentProps={args} initial="#906090" forced="#EA9317" />
+};
+
+export const Uncontrolled: Story = {
+    render: (args) => <UncontrolledTemplate component={SwatchPicker} componentProps={args} initial="#906090" forced="#EA9317" />
+};
+
+export const HookForm: Story = {
+    render: (args) => <HookFormTemplate component={SwatchPicker} componentProps={args} initial="#906090" forced="#EA9317" />
+};

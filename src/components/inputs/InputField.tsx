@@ -36,7 +36,7 @@ export const InputField = (props: InputFieldProps): ReactElement => {
 
     } = props;
 
-    const inputRef = useRef<HTMLInputElement>(null);;
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const [internalValue, setInternalValue] = useState<string | ReadonlyArray<string> | number | undefined>(value != null ? value : defaultValue);
 

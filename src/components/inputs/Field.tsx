@@ -183,7 +183,7 @@ export const Field = React.forwardRef((
 
             }, {
                 'w-full': withFullWidth,
-                'h-full': withFullHeight,
+                'h-full': withFullHeight
             }, className)}
 
             {...divProps}
@@ -198,7 +198,7 @@ export const Field = React.forwardRef((
 
             <div className={classNames('lux-crux-content lux-field-content', {
                 'w-full': withFullWidth,
-                'h-full': withFullHeight,
+                'h-full': withFullHeight
             })}>
                 {label &&
                     <label className={classNames('lux-field-label')}>

@@ -105,7 +105,7 @@ export const DatePicker = forwardRef((
         setShow(false);
     };
 
-    const handleFinalize = (value: string): string | null => {
+    const handleFinalize = (): string | null => {
         const finalDate = parseDate(internalValue);
         return finalDate != null ? formatDate(finalDate) : null;
     };
@@ -290,7 +290,7 @@ const Calendar = (props: CalendarProps): ReactElement => {
         first.setDate(1 - first.getDay() + firstDayOfWeek); // beginning of week containing beginning of month
         const weeks = [];
         for (let i = 0; i < 6; i++) {
-            let dates = [];
+            const dates = [];
             for (let j = 0; j < 7; j++, first.setDate(first.getDate() + 1)) {
                 dates.push(new Date(first.getTime()));
             }
@@ -303,7 +303,7 @@ const Calendar = (props: CalendarProps): ReactElement => {
 
     const dayClasses = (d: Date): string => {
 
-        let c = ['hover:text-white hover:bg-secondary-500'];
+        const c = ['hover:text-white hover:bg-secondary-500'];
 
         if (d.getMonth() !== calendar.getMonth()) { c.push('text-muted bg-gray-200'); } // off
         if (d.getTime() === today.getTime()) { c.push('text-white bg-info-500'); } // today
@@ -390,14 +390,14 @@ const Calendar = (props: CalendarProps): ReactElement => {
  */
 function internalParseDate(s: string): [number, number, number] | null {
 
-    var parse = /^\s*([0-3]?\d)(?:-(?:([0-1]?\d)?(?:-(\d{4})?)?)?)?\s*$/i.exec(s);
+    const parse = /^\s*([0-3]?\d)(?:-(?:([0-1]?\d)?(?:-(\d{4})?)?)?)?\s*$/i.exec(s);
     if (parse) {
 
-        var now = new Date();
-        var d = +parse[1];
-        var m = parse[2] ? +parse[2] - 1 : now.getMonth();
-        var y = parse[3] ? +parse[3] : now.getFullYear();
-        var valid = new Date(y, m, d, 12, 0, 0, 0);
+        const now = new Date();
+        const d = +parse[1];
+        const m = parse[2] ? +parse[2] - 1 : now.getMonth();
+        const y = parse[3] ? +parse[3] : now.getFullYear();
+        const valid = new Date(y, m, d, 12, 0, 0, 0);
 
         if (valid.getFullYear() === y && valid.getMonth() === m && valid.getDate() === d) {
             return [y, m, d];
@@ -419,7 +419,7 @@ function internalParseDate(s: string): [number, number, number] | null {
  */
 function internalFormatDate(ymd: [number, number, number]): string {
 
-    var m = ymd[1] + 1;
+    const m = ymd[1] + 1;
     return (ymd[2] < 10 ? '0' + ymd[2] : ymd[2]) + '-' + (m < 10 ? '0' + m : m) + '-' + ymd[0];
 
 }

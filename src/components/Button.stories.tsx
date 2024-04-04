@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import React from 'react';
 import { FullSquareIcon } from '../icons/components';
 import { Button } from './Button';
+
+
+// Definition
 
 const meta: Meta<typeof Button> = {
     component: Button
@@ -9,6 +11,8 @@ const meta: Meta<typeof Button> = {
 
 export default meta;
 type Story = StoryObj<typeof Button>;
+
+// Templates
 
 const ButtonTemplate: Story = {
     render: (args) => {
@@ -27,11 +31,13 @@ const ButtonTemplate: Story = {
     }
 };
 
+// Stories
+
 export const Primary: Story = {
     ...ButtonTemplate,
     args: {
         semantic: 'primary',
-        children: 'Button',
+        children: 'Button'
     }
 };
 
@@ -39,7 +45,7 @@ export const Secondary: Story = {
     ...ButtonTemplate,
     args: {
         ...Primary.args,
-        semantic: 'secondary',
+        semantic: 'secondary'
     }
 };
 
@@ -47,7 +53,7 @@ export const Danger: Story = {
     ...ButtonTemplate,
     args: {
         ...Primary.args,
-        semantic: 'danger',
+        semantic: 'danger'
     }
 };
 
@@ -55,7 +61,7 @@ export const Muted: Story = {
     ...ButtonTemplate,
     args: {
         ...Primary.args,
-        semantic: 'muted',
+        semantic: 'muted'
     }
 };
 
@@ -63,7 +69,7 @@ export const StartIcon: Story = {
     ...ButtonTemplate,
     args: {
         ...Primary.args,
-        start: <FullSquareIcon />,
+        start: <FullSquareIcon />
     }
 };
 
@@ -71,7 +77,7 @@ export const EndIcon: Story = {
     ...ButtonTemplate,
     args: {
         ...Primary.args,
-        end: <FullSquareIcon />,
+        end: <FullSquareIcon />
     }
 };
 
@@ -80,7 +86,7 @@ export const StartEndIcon: Story = {
     args: {
         ...Primary.args,
         start: <FullSquareIcon />,
-        end: <FullSquareIcon />,
+        end: <FullSquareIcon />
     }
 };
 
@@ -111,7 +117,7 @@ export const StartIconNoText: Story = {
     args: {
         ...Primary.args,
         children: null,
-        start: <FullSquareIcon />,
+        start: <FullSquareIcon />
     }
 };
 
@@ -120,7 +126,7 @@ export const EndIconNoText: Story = {
     args: {
         ...Primary.args,
         children: null,
-        end: <FullSquareIcon />,
+        end: <FullSquareIcon />
     }
 };
 
@@ -130,6 +136,6 @@ export const StartEndIconNoText: Story = {
         ...Primary.args,
         children: null,
         start: <FullSquareIcon />,
-        end: <FullSquareIcon />,
+        end: <FullSquareIcon />
     }
 };

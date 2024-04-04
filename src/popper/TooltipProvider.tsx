@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect } from 'react';
-import { createPopper } from '@popperjs/core';
+import { Placement, createPopper } from '@popperjs/core';
 import classnames from 'classnames';
 import React from 'react';
 
@@ -30,15 +30,15 @@ export const TooltipProvider: FC<TooltipProviderProps> = (props) => {
 
         destinationSelector = 'body',
 
-        children,
+        children
 
     } = props;
 
-    const listener = useCallback((e: any) => {
+    const listener = useCallback((e: MouseEvent) => {
 
-        const target = e.target;
+        const target = e.target as HTMLElement;
 
-        if (target.hasAttribute('data-tooltip')) {
+        if (target && target.hasAttribute('data-tooltip')) {
 
             const { tooltip, arrow } = createTooltip(target, props);
 
@@ -46,11 +46,11 @@ export const TooltipProvider: FC<TooltipProviderProps> = (props) => {
             container?.appendChild(tooltip);
 
             const popper = createPopper(target, tooltip, {
-                placement: target.getAttribute('data-tooltip-placement') || 'top',
+                placement: (target.getAttribute('data-tooltip-placement') as Placement) || 'top',
                 modifiers: [
                     { name: 'offset', options: { offset: [0, 8] } },
                     { name: 'arrow', options: { element: arrow } }
-                ],
+                ]
             });
 
             const handler = () => {
@@ -68,9 +68,7 @@ export const TooltipProvider: FC<TooltipProviderProps> = (props) => {
 
     useEffect(() => {
         window.addEventListener('mouseover', listener);
-        return () => {
-            window.removeEventListener('mouseover', listener);
-        };
+        return () => window.removeEventListener('mouseover', listener);
     }, [listener]);
 
     // Render

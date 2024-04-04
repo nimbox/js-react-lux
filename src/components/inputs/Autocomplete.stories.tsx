@@ -1,91 +1,33 @@
-/* eslint-disable import/no-anonymous-default-export */
 import { action } from '@storybook/addon-actions';
-import React, { useRef, useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+import React, { useRef } from 'react';
 import { CircleIcon, SquareIcon } from '../../icons/components';
-import { createSearchMatcher } from '../utilities/createSearchMatcher';
+import { ControlledTemplate, HookFormTemplate, UncontrolledTemplate } from '../../templates/InputTemplates';
 import { Button } from '../Button';
+import * as data from '../choose/data';
 import { Autocomplete, AutocompleteProps } from './Autocomplete';
 
+// Definition
 
-export default {
-    title: 'Component/Controls/Autocomplete',
+const meta: Meta<typeof Autocomplete> = {
     component: Autocomplete,
     parameters: {
         layout: 'centered'
     }
 };
 
-interface Option {
-    value: string;
-    name: string;
-}
+export default meta;
+type Story = StoryObj<typeof Autocomplete<data.Option, data.Group>>;
 
-interface Group {
-    name: string;
-    options: Option[];
-}
+const strinfigy = ({ option }: { option: data.Option }) => option.name;
 
-const colors: Group[] = [
-    {
-        name: 'Primary', options: [
-            { value: 'ffff00', name: 'Yellow' },
-            { value: '0000ff', name: 'Blue' },
-            { value: 'ff0000', name: 'Red' }
-        ]
-    },
-    {
-        name: 'Secondary', options: [
-            { value: '00ff00', name: 'Green' },
-            { value: '800080', name: 'Purple' },
-            { value: 'ffa500', name: 'Orange' }
-        ]
-    }
-];
 
-const extractor = (group: Group): Option[] => group.options;
+// Template
 
-const strinfigy = ({ option }: { option: Option }) => option.name;
-
-const provider = async (query?: string) => {
-    // await new Promise(resolve => setTimeout(() => resolve(undefined), 2000));
-    if (query == null || query.trim() === '') {
-        return [];
-    } else {
-        const matcher = createSearchMatcher(query.trim());
-        return [
-            { ...colors[0], options: colors[0].options.filter(o => matcher(o.name)) },
-            { ...colors[1], options: colors[1].options.filter(o => matcher(o.name)) }
-        ];
-    }
-};
-
-export const Default = () => {
-
-    return (
-        <Autocomplete
-
-            supplier={provider}
-            extractor={extractor}
-
-            defaultValue="Hello"
-
-            withArrow={true}
-            withSameWidth={true}
-
-            renderEmpty={() => 'No options'}
-            renderGroupLabel={({ group }) => <span>{group.name}</span>}
-            renderOption={({ option }) => <span className="lux-px-2em italic">{option.name}</span>}
-
-            renderChosen={strinfigy}
-
-        />
-    );
-
-};
-
+type TemplateProps = Partial<AutocompleteProps<data.Option, data.Group>>;
 const Template = React.forwardRef<
     HTMLInputElement,
-    Partial<AutocompleteProps<Option, Group>> & React.InputHTMLAttributes<HTMLInputElement>
+    TemplateProps & React.InputHTMLAttributes<HTMLInputElement>
 >((props, ref) => {
 
     return (
@@ -93,8 +35,8 @@ const Template = React.forwardRef<
 
             ref={ref}
 
-            supplier={provider}
-            extractor={extractor}
+            supplier={data.supplier}
+            extractor={data.extractor}
 
             withArrow={true}
             withSameWidth={true}
@@ -112,205 +54,118 @@ const Template = React.forwardRef<
 
 });
 
-//
+const AutocompleteTemplate: Story = {
+    render: (args) => {
+
+        const ref = useRef<HTMLInputElement>(null);
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); };
+        const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); };
+
+        return (
+            <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
+                <Template
+                    {...args}
+                    ref={ref}
+                    onChange={handleChange}
+                />
+                <Button className="flex-none">Submit</Button>
+            </form>
+        );
+
+    },
+    args: {
+        defaultValue: '800080'
+    }
+};
+
+
 // Stories
-//
 
-export const Controlled = () => {
+export const Primary: Story = {
+    render: () => {
 
-    const [value, setValue] = useState('800080');
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { setValue(e.target.value); action('onChange')(e.target.value); }
-    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(value); }
+        return (
+            <Autocomplete
 
-    return (
-        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
-            <Template
-                value={value}
-                onChange={handleChange}
+                supplier={data.supplier}
+                extractor={data.extractor}
+
+                defaultValue="Hello"
+
+                withArrow={true}
+                withSameWidth={true}
+
+                renderEmpty={() => 'No options'}
+                renderGroupLabel={({ group }) => <span>{group.name}</span>}
+                renderOption={({ option }) => <span className="lux-px-2em italic">{option.name}</span>}
+
+                renderChosen={strinfigy}
+
             />
-            <Button>Submit</Button>
-        </form>
-    );
+        );
 
+    }
 };
 
-export const Uncontrolled = () => {
+// Stories
 
-    const ref = useRef<HTMLInputElement>(null);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
-    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
-
-    return (
-        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
-            <Template
-                ref={ref}
-                defaultValue="800080"
-                onChange={handleChange}
-            />
-            <Button>Submit</Button>
-        </form>
-    );
-
+export const Controlled: Story = {
+    render: (args) => <ControlledTemplate component={Template} componentProps={args} initial="800080" forced="ffa500" />
 };
 
-export const Disabled = () => {
-
-    const ref = useRef<HTMLInputElement>(null);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
-    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
-
-    return (
-        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
-            <Template
-                ref={ref}
-                disabled={true}
-                defaultValue="800080"
-                onChange={handleChange}
-            />
-            <Button>Submit</Button>
-        </form>
-    );
-
+export const Uncontrolled: Story = {
+    render: (args) => <UncontrolledTemplate component={Template} componentProps={args} initial="800080" forced="ffa500" />
 };
 
-export const Error = () => {
-
-    const ref = useRef<HTMLInputElement>(null);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
-    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
-
-    return (
-        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
-            <Template
-                ref={ref}
-                error={true}
-                defaultValue="800080"
-                onChange={handleChange}
-            />
-            <Button>Submit</Button>
-        </form>
-    );
-
+export const HookForm: Story = {
+    render: (args) => <HookFormTemplate component={Template} componentProps={args} initial="800080" forced="ffa500" />
 };
 
-export const Placeholder = () => {
-
-    const ref = useRef<HTMLInputElement>(null);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
-    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
-
-    return (
-        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
-            <Template
-                ref={ref}
-                defaultValue=""
-                onChange={handleChange}
-                placeholder="Select color"
-            />
-            <Button>Submit</Button>
-        </form>
-    );
-
+export const Disabled: Story = {
+    ...AutocompleteTemplate,
+    args: {
+        disabled: true
+    }
 };
 
-export const PlaceholderDisabled = () => {
-
-    const ref = useRef<HTMLInputElement>(null);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
-    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
-
-    return (
-        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
-            <Template
-                ref={ref}
-                disabled={true}
-                defaultValue=""
-                onChange={handleChange}
-                placeholder="Select color"
-            />
-            <Button>Submit</Button>
-        </form>
-    );
-
+export const Error: Story = {
+    ...AutocompleteTemplate,
+    args: {
+        error: true
+    }
 };
 
-export const PlaceholderError = () => {
-
-    const ref = useRef<HTMLInputElement>(null);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
-    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
-
-    return (
-        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
-            <Template
-                ref={ref}
-                error={true}
-                defaultValue=""
-                onChange={handleChange}
-                placeholder="Select color"
-            />
-            <Button>Submit</Button>
-        </form>
-    );
-
+export const Placeholder: Story = {
+    ...AutocompleteTemplate,
+    args: {
+        defaultValue: '',
+        placeholder: 'Select color'
+    }
 };
 
-export const Adornment = () => {
-
-    const ref = useRef<HTMLInputElement>(null);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
-    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
-
-    return (
-        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
-            <Template
-                ref={ref}
-                defaultValue="800080"
-                onChange={handleChange}
-                start={<SquareIcon style={{ marginLeft: '0.5em' }} />}
-                end={<CircleIcon style={{ marginRight: '0.5em' }} />}
-                placeholder="Select color"
-            />
-            <Button>Submit</Button>
-        </form>
-    );
-
+export const PlaceholderDisabled: Story = {
+    ...AutocompleteTemplate,
+    args: {
+        disabled: true,
+        defaultValue: '',
+        placeholder: 'Select color'
+    }
 };
 
-export const Focus = () => {
-
-    const ref = useRef<HTMLInputElement>(null);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
-    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
-
-    return (
-        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
-            <Template
-                ref={ref}
-                defaultValue="800080"
-                onChange={handleChange}
-            />
-            <Button type="button" onClick={() => ref.current?.focus()}>Focus</Button>
-        </form>
-    );
-
+export const PlaceholderError: Story = {
+    ...AutocompleteTemplate,
+    args: {
+        error: true,
+        defaultValue: '',
+        placeholder: 'Select color'
+    }
 };
 
-export const SetValue = () => {
-
-    const ref = useRef<HTMLInputElement>(null);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); }
-    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
-
-    return (
-        <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
-            <Template
-                ref={ref}
-                defaultValue="800080"
-                onChange={handleChange}
-            />
-            <Button type="button" onClick={() => ref.current!.value = 'Yellow'}>Set</Button>
-        </form>
-    );
-
+export const Adornment: Story = {
+    ...AutocompleteTemplate,
+    args: {
+        start: <SquareIcon style={{ marginLeft: '0.5em' }} />,
+        end: <CircleIcon style={{ marginRight: '0.5em' }} />,
+        placeholder: 'Select color'
+    }
 };

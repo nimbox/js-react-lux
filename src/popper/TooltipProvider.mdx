@@ -1,0 +1,36 @@
+import { Meta, Controls, Stories, Primary } from '@storybook/blocks';
+import * as TooltipProviderStories from './TooltipProvider.stories';
+
+
+<Meta name="Documentation" of={TooltipProviderStories} />
+
+# TooltipProviders
+
+To get the tooltip provider working you need to wrap your application
+with the `TooltipProvider` component. This component will provide the
+context for the tooltip to work.
+
+```jsx
+<TooltipProvider destinationSelector="#modal" tooltipClassName="max-w-sm text-md">
+</TooltipProvider>
+```
+
+The `destinationSelector` prop is used to specify the selector of the
+element where the tooltip will be rendered. The `tooltipClassName` prop
+is used to specify the class name of the tooltip container.
+
+Simple tooltips are taken from `data` elements inside every element. Whenever
+there is a `mouseover` (not `mouseenter` since it doesn't bubble up) event on
+any element with a `data-tooltip` attribute, the tooltip will be shown. This is
+usefull for showing simple and short one liners.
+
+These tooltips are placed using the same `Popper` engine used for posititiong
+all other elements.
+
+<Primary />
+
+## Additional variations
+
+Listed below are additional variations of the component.
+
+<Stories />

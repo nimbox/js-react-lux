@@ -26,6 +26,7 @@ export interface TagProps {
     color?: string;
     backgroundColor?: string;
 
+    onClick?: (e: React.MouseEvent) => void;
     onDelete?: (e: React.MouseEvent) => void;
 
     containerClassName?: string;
@@ -80,7 +81,7 @@ export const Tag: FC<TagProps> = (props) => {
 
     return (
         <span
-            className={classnames("inline-flex flex-row items-baseline max-w-full rounded-full", containerClassName)}
+            className={classnames('inline-flex flex-row items-baseline max-w-full rounded-full', containerClassName)}
             style={{ lineHeight: '1', paddingLeft: '0.25em', paddingTop: '0.125em', paddingRight: '0.5em', paddingBottom: '0.125em', color, backgroundColor }}
         >
 

@@ -22,7 +22,7 @@ export interface SearchInputProps extends InputProps {
      * correctly.
      * @default `false`
      */
-    loadingError?: any;
+    loadingError?: boolean;
 
 }
 
@@ -35,8 +35,8 @@ export const SearchInput = React.forwardRef((
 
     const {
 
-        loading,
-        loadingError,
+        loading, // eslint-disable-line @typescript-eslint/no-unused-vars
+        loadingError, // eslint-disable-line @typescript-eslint/no-unused-vars
 
         start,
         end,

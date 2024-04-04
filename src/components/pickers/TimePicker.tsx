@@ -30,7 +30,7 @@ export interface TimePickerProps extends Omit<InputPopperProps, 'show' | 'onShow
 
 // Constants
 
-const hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+const hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 const hoursOff = new Set([0, 1, 2, 3, 4, 5, 6, 7, 12, 13, 19, 20, 21, 22, 23]);
 
 const minutes = [15, 30, 45];
@@ -81,7 +81,7 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
         setShow(false);
     };
 
-    const handleFinalize = (value: string): string | null => {
+    const handleFinalize = (): string | null => {
         const time = parseTime(internalValue);
         return time != null ? formatTime(time) : null;
     };
@@ -221,7 +221,7 @@ const Watch = (props: WatchProps): ReactElement => {
     const scroll = () => {
         if (timesRef.current) {
             const t = timesRef.current;
-            let h = t.scrollHeight / 24;
+            const h = t.scrollHeight / 24;
             t.scrollTop = times.current.watch * h;
         }
     };
@@ -231,7 +231,7 @@ const Watch = (props: WatchProps): ReactElement => {
     const hourClasses = (hour: number): string => {
         if (selected && hour === selected[0]) {
             return 'bg-primary-500';
-        };
+        }
         return hoursOff.has(hour) ? 'bg-gray-100' : '';
     };
 
@@ -245,7 +245,7 @@ const Watch = (props: WatchProps): ReactElement => {
                     return 'bg-primary-500 text-inherit text-[1em]';
                 }
                 return 'bg-primary-100';
-            };
+            }
         }
         return hoursOff.has(hour) ? 'bg-gray-100' : '';
     };
@@ -279,15 +279,15 @@ const Watch = (props: WatchProps): ReactElement => {
                     <tbody className="cursor-pointer">
                         {hours.map(h =>
                             <tr key={h} className="group">
-                                <th className={classNames('group-hover:bg-secondary-500 peer', hourClasses(h))} onClick={e => onTimeChange([h, 0])}>{internalFormatHour(h)}</th>
+                                <th className={classNames('group-hover:bg-secondary-500 peer', hourClasses(h))} onClick={() => onTimeChange([h, 0])}>{internalFormatHour(h)}</th>
                                 {minutes.map(m =>
                                     <td key={m}
-                                        onClick={e => onTimeChange([h, m])}
+                                        onClick={() => onTimeChange([h, m])}
                                         className={classNames(
-                                            "group-hover:text-transparent group-hover:bg-secondary-500",
-                                            "peer peer-hover:!text-muted peer-hover:bg-secondary-200 peer-hover:!text-[0.75em]",
-                                            "text-muted text-[0.75em]",
-                                            "hover:!text-inherit hover:!text-[1em]",
+                                            'group-hover:text-transparent group-hover:bg-secondary-500',
+                                            'peer peer-hover:!text-muted peer-hover:bg-secondary-200 peer-hover:!text-[0.75em]',
+                                            'text-muted text-[0.75em]',
+                                            'hover:!text-inherit hover:!text-[1em]',
                                             minuteClasses(h, m)
                                         )}
                                     >
@@ -304,7 +304,7 @@ const Watch = (props: WatchProps): ReactElement => {
         </div >
     );
 
-}
+};
 
 //
 // Default parse and format
@@ -318,15 +318,15 @@ const Watch = (props: WatchProps): ReactElement => {
  */
 function internalParseTime(s: string): [number, number] | null {
 
-    var parse = /^\s*?([0-1]?\d)(?::([0-5]?\d)?)?\s*(AM?|PM?)?\s*$/i.exec(s);
+    const parse = /^\s*?([0-1]?\d)(?::([0-5]?\d)?)?\s*(AM?|PM?)?\s*$/i.exec(s);
     if (parse) {
 
-        var h = +parse[1];
+        let h = +parse[1];
         if (h === 0 || h > 12) {
             return null;
         }
 
-        var m = parse[2] ? +parse[2] : 0;
+        const m = parse[2] ? +parse[2] : 0;
         if (parse[3]) {
             if (parse[3].match(/p/)) {
                 h = (h === 12 ? 12 : h + 12);
@@ -366,7 +366,8 @@ function internalFormatHour(h: number): string {
  */
 function internalFormatTime(hm: [number, number]): string {
 
-    var h = hm[0], m = hm[1];
+    let h = hm[0]; 
+    const m = hm[1];
     if (h < 12) {
         if (h === 0) {
             h = 12;

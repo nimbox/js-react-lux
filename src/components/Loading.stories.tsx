@@ -1,30 +1,67 @@
-import React from 'react';
-import { Loading, LoadingProps } from './Loading';
+import type { Meta, StoryObj } from '@storybook/react';
+import { Loading } from './Loading';
 
 
-// definition
+// Definition
 
-const definition = {
-    title: 'Component/Loading',
+const meta: Meta<typeof Loading> = {
     component: Loading,
     argTypes: {
-        className: { control: { type: 'select', options: ['text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl', 'text-4xl'] } },
+        className: {
+            control: 'select',
+            options: ['text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl', 'text-4xl']
+        }
     }
 };
-export default definition;
 
-// parameterized
+export default meta;
+type Story = StoryObj<typeof Loading>;
 
-export const Parameterized = (props: LoadingProps) => <Loading {...props} />;
-Parameterized.args = { className: 'text-4xl', colorClassName: 'text-secondary-500' };
+// Templates
 
-// stories
+const LoadingTemplate: Story = {
+    render: (args) => {
+        return (
+            <div className="space-x-4">
+                <Loading {...args} />
+            </div>
+        );
+    }
+};
 
-export const Base = (props: LoadingProps) => <Loading {...props} />;
-Base.args = { className: 'text-base' };
+// Stories
 
-export const Small = (props: LoadingProps) => <Loading {...props} />;
-Small.args = { className: 'text-sm' };
+export const Base: Story = {
+    ...LoadingTemplate,
+    args: {
+        className: 'text-base'
+    }
+};
 
-export const ExtraLarge4 = (props: LoadingProps) => <Loading {...props} />;
-ExtraLarge4.args = { className: 'text-4xl' };
+export const Small: Story = {
+    ...LoadingTemplate,
+    args: {
+        className: 'text-sm'
+    }
+};
+
+export const Large: Story = {
+    ...LoadingTemplate,
+    args: {
+        className: 'text-lg'
+    }
+};
+
+export const ExtraLarge: Story = {
+    ...LoadingTemplate,
+    args: {
+        className: 'text-xl'
+    }
+};
+
+export const ExtraLarge4: Story = {
+    ...LoadingTemplate,
+    args: {
+        className: 'text-4xl'
+    }
+};

@@ -1,49 +1,55 @@
-/* eslint-disable import/no-anonymous-default-export */
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+
 import { Button } from './Button';
 import { Close } from './Close';
 import { Dialog } from './Dialog';
 
 
-// definition
+// Definition
 
-export default {
-    title: 'Component/Dialog',
+const meta: Meta<typeof Dialog> = {
     component: Dialog
 };
 
-// stories
+export default meta;
+type Story = StoryObj<typeof Dialog>;
 
-export const Simple = () => {
+// Stories
 
-    const [visible, setVisible] = useState(false);
+export const Simple: Story = {
+    render: () => {
 
-    return (
-        <div>
-            <Button onClick={() => setVisible(true)}>modal</Button>
-            <Dialog show={visible} onHide={() => setVisible(false)} className="bg-gray-100 w-96 rounded">
+        const [visible, setVisible] = useState(false);
 
-                <Dialog.Header className="px-3 py-2 flex flex-row justify-between items-center">
-                    <h3 className="text-xl">sss</h3>
-                    <Close onClick={() => setVisible(false)} className="text-xl" />
-                </Dialog.Header>
+        return (
+            <div>
+                <Button onClick={() => setVisible(true)}>modal</Button>
+                <Dialog show={visible} onHide={() => setVisible(false)} className="bg-gray-100 w-96 rounded">
 
-                <Dialog.Body className="px-3 py-2 flex flex-col justify-between items-center">
-                    <div>Some content</div>
-                    <div>Some content</div>
-                    <div>Some content</div>
-                    <div>Some content</div>
-                    <div>Some content</div>
-                </Dialog.Body>
+                    <Dialog.Header className="px-3 py-2 flex flex-row justify-between items-center">
+                        <h3 className="text-xl">sss</h3>
+                        <Close onClick={() => setVisible(false)} className="text-xl" />
+                    </Dialog.Header>
 
-                <Dialog.Footer className="px-3 py-2 flex flex-row justify-end space-x-2 items-center">
-                    <Button semantic="secondary" onClick={() => setVisible(false)}>Cancel</Button>
-                    <Button onClick={() => setVisible(false)}>Ok</Button>
-                </Dialog.Footer>
+                    <Dialog.Body className="px-3 py-2 flex flex-col justify-between items-center">
+                        <div>Some content</div>
+                        <div>Some content</div>
+                        <div>Some content</div>
+                        <div>Some content</div>
+                        <div>Some content</div>
+                    </Dialog.Body>
 
-            </Dialog>
-        </div>
-    );
+                    <Dialog.Footer className="px-3 py-2 flex flex-row justify-end space-x-2 items-center">
+                        <Button semantic="secondary" onClick={() => setVisible(false)}>Cancel</Button>
+                        <Button onClick={() => setVisible(false)}>Ok</Button>
+                    </Dialog.Footer>
+
+                </Dialog>
+            </div>
+        );
+
+    }
 
 };
 

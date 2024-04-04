@@ -1,7 +1,7 @@
-import classnames from "classnames";
-import React, { FC } from "react";
-import { MessageIcon, PhoneIcon } from "../icons/components";
-import { Button } from "./Button";
+import classnames from 'classnames';
+import { FC } from 'react';
+import { MessageIcon, PhoneIcon } from '../icons/components';
+import { Anchor } from './Anchor';
 
 
 export interface ContactElementProps {
@@ -24,21 +24,15 @@ export const ContactElement: FC<ContactElementProps> = ({ type, locus, render, c
     }
 
     return (
-        <span {...props} className={classnames(
-            'flex flex-row max-w-full items-baseline py-0 truncate',
-            className)} >
-            <span className={classnames(
-                'self-center flex flex-row items-center justify-center')}>
-                <Icon className={classnames('stroke-current stroke-1')} />
-            </span>
-            <Button variant="link" className='truncate'>
+        <span {...props} className={classnames('inline-flex items-center max-w-full gap-1', className)} >
+            <Icon className="flex-none"/>
+            <Anchor variant="link" className="flex-1 truncate">
                 {render}
-            </Button>
-            <span className={classnames(
-                'flex flex-row rounded-full bg-primary-600 text-white px-1 py-0',
-            )}>
+            </Anchor>
+            <span className="flex-none rounded-full text-xs bg-primary-600 text-white px-1 py-0">
                 {locus}
             </span>
         </span>
-    )
+    );
+
 };

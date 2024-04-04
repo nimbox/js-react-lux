@@ -21,7 +21,7 @@ export interface PopupProps {
 
 }
 
-export const Popup: FC<PopupProps> = ({ visible = false, onChangeVisible = (visible: boolean) => null, placement = 'bottom', Component, children }) => {
+export const Popup: FC<PopupProps> = ({ visible = false, onChangeVisible = () => null, placement = 'bottom', Component, children }) => {
 
     const [reference, setReference] = useState(null);
     const [popper, setPopper] = useState<HTMLDivElement | null>(null);
@@ -33,7 +33,7 @@ export const Popup: FC<PopupProps> = ({ visible = false, onChangeVisible = (visi
         placement,
         modifiers: [
             { name: 'offset', options: { offset: [0, 4] } },
-            { name: 'arrow', options: { padding: 4, element: arrow } },
+            { name: 'arrow', options: { padding: 4, element: arrow } }
         ]
     });
 

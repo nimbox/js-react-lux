@@ -1,4 +1,4 @@
-import React, { createContext, FC, useContext, useState } from 'react';
+import React, { createContext, FC, useState } from 'react';
 
 
 export interface KanbanContextProps {
@@ -33,5 +33,3 @@ export const KanbanProvider: FC<{ children?: React.ReactNode }> = ({ children })
     );
 
 };
-
-export const useKanbanContext = () => useContext(KanbanContext);

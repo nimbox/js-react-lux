@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 
     '.lux-empty-hidden:empty': {
         display: 'none'

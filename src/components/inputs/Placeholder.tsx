@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import React, { FC, useContext } from 'react';
-import { Context } from './Control';
+import { ControlContext } from './Control';
 
 
 //
@@ -50,7 +50,7 @@ export const Placeholder: FC<PlaceholderProps> = (props) => {
 
     // State
 
-    const context = useContext(Context);
+    const context = useContext(ControlContext);
     const isError = error || context.error;
 
     // Render

@@ -20,7 +20,7 @@ export function useCardDrop<C extends HTMLElement>({ onDrop }: UseCardDropProps)
         ...(onDrop && { drop: (item: KanbanCardItem) => onDrop(item) }),
         collect: (monitor) => ({
             item: monitor.getItem<KanbanCardItem>(),
-            isOver: monitor.isOver(),
+            isOver: monitor.isOver()
         })
     }));
     drop(dropRef);

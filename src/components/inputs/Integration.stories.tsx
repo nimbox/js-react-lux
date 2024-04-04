@@ -1,13 +1,11 @@
-/* eslint-disable import/no-anonymous-default-export */
 import { Button } from '../Button';
 import { InputField } from './InputField';
-import React from 'react';
 
 
 // Definition
 
 export default {
-    title: 'Component/Controls/Integration',
+    title: 'Component/Controls/Integration'
 };
 
 export const Sizes = () => {

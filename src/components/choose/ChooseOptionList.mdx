@@ -1,0 +1,120 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/blocks';
+import * as ChooseOptionListStories from './ChooseOptionList.stories';
+
+
+<Meta name="Documentation" of={ChooseOptionListStories} />
+
+# ChooseOptionList
+
+Component to choose from a list of options. When an option is clicked the
+`onChoose` callback is called with the option. Treat this component as an
+unstyled `div`.
+
+This component does not handle asynchronous loading of options, but the
+`useSearchOptions` hook can be used to handle this.
+
+This component does not handle keyboard navigation, but the
+`useOptionsKeyNavigator` hook can be used to handle this.
+
+The options are be provided in groups, so in the usual case, an array with the
+array of options is required (note the double brackets at the begining and the
+end): 
+
+```js
+[[ 'Yellow', 'Blue', 'Red' ]]
+[[ 'Yellow', 'Blue', 'Red' ], [ 'Green', 'Purple', 'Orange' ]]
+```
+
+<Primary />
+
+## Inputs
+
+The component accepts the following inputs (props):
+
+<Controls />
+
+## Data Structure
+
+This component assumes that options come in groups.If you don't want groups, 
+you need to create one group with your options.Hence the basic data structure 
+would be:
+
+```js
+const colors = [['Yellow', 'Blue', 'Red']];
+```
+
+Notice the actual options are inside another array, representing the first
+group.Having two or more groups is very simple, just keep adding arrays:
+
+```js
+const colors = [['Yellow', 'Blue', 'Red'], ['Green', 'Purple', 'Orange']];
+```
+
+The structure can be enhanced by using objects for groups and options like this:
+
+```js
+const colors = [ 
+    { 
+        name: 'Primary', 
+        options: [
+            { value: 'ffff00', name: 'Yellow' },
+            { value: '0000ff', name: 'Blue' },
+            { value: 'ff0000', name: 'Red' }
+        ] 
+    },
+    { 
+        name: 'Secondary', 
+        options: [
+            { value: '00ff00', name: 'Green' },
+            { value: '800080', name: 'Purple' },
+            { value: 'ffa500', name: 'Orange' }
+        ]
+    }
+];
+```
+
+When using these more complete data structures you need to provide one
+extractor:
+
+* __`extractor(group)`__: Get the options for the given group.This function
+    returns the options associated to the provided group.In our case it would be
+  something like`(group) => group.options`.__By default__ this extractor is 
+  `(group) => group` which assumes that the options come in an array.
+
+## HTML Structure
+
+The `HTML` structure of `ChooseOptionList` is:
+
+When is empty (undefined or null or empty array):
+
+```html
+<div ref={container} className={className}>
+    {renderEmpty} <!-- rendered empty -->
+<div>
+```
+
+When there is at least one option:
+
+```html
+<div ref={container} className={className}>
+    <div>
+        <div> <!-- group -->
+            <div> <!-- rendered group label only if present -->
+                {renderGroupLabel}
+            <div>
+            <ul>
+                <li> <!-- rendered option -->
+                    {renderOption}
+                </li>
+            <ul>
+        </div>
+    </div>
+</div>
+```
+
+## Stories
+
+This component only displays the groups, options, and selected option. If there
+is `loading` or `loading error` nothing is rendered.
+
+<Stories />

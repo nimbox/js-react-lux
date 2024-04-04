@@ -1,52 +1,48 @@
-/* eslint-disable import/no-anonymous-default-export */
-import { ToastProvider, useToast } from "./Toast";
-import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+import { ToastProvider, useToast } from './Toast';
 
 
-export default {
-    title: 'Layout/Toast',
-    component: ToastProvider,
-    argTypes: {
-        autoDeleteTimeout: { control: { type: ' number' } }
-    }
+// Definition
+
+const meta: Meta = {
 };
 
+export default meta;
+type Story = StoryObj;
 
-export const Parameterized = () => {
-    return (
-        <ToastProvider>
-            <ParameterizedToast />
-        </ToastProvider>
-    );
-}
+// Stories
 
 let count = 0;
-const ParameterizedToast = () => {
 
-    const { addToast } = useToast();
+export const Basic: Story = {
+    render: () => {
+        
+        const { addToast } = useToast();
 
-    return (
-        <div className="w-full h-96 flex flex-row justify-center items-center">
-            <div>
-
-                <button type="button" onClick={() => addToast('success', <div className="font-bold">Hola</div>, 0)}>
-                    success
-                </button>
-
-                <button type="button" onClick={() => addToast('info', { description: "Hola " + String(count++) }, 10000)}>
-                    info
-                </button>
-
-                <button type="button" onClick={() => addToast('warning', { description: "Hola " + String(count++) })}>
-                    warning
-                </button>
-
-                <button type="button" onClick={() => addToast('danger', { title: 'Error', description: "Hola Hola Hola Hola Hola Hola Hola Hola Hola Hola Hola  Hola Hola Hola Hola Hola HolaHola " + String(count++) }, 0)}>
-                    danger
-                </button>
-
+        return (
+            <div className="w-full h-96 flex flex-row justify-center items-center">
+                <div>
+    
+                    <button type="button" onClick={() => addToast('success', <div className="font-bold">Hola</div>, 0)}>
+                        success
+                    </button>
+    
+                    <button type="button" onClick={() => addToast('info', { description: 'Hola ' + String(count++) }, 10000)}>
+                        info
+                    </button>
+    
+                    <button type="button" onClick={() => addToast('warning', { description: 'Hola ' + String(count++) })}>
+                        warning
+                    </button>
+    
+                    <button type="button" onClick={() => addToast('danger', { title: 'Error', description: 'Hola Hola Hola Hola Hola Hola Hola Hola Hola Hola Hola  Hola Hola Hola Hola Hola HolaHola ' + String(count++) }, 0)}>
+                        danger
+                    </button>
+    
+                </div>
             </div>
-        </div>
-    );
+        );
 
-}
+    },
+    decorators: [(Story) => <ToastProvider>{<Story />}</ToastProvider>]
+};

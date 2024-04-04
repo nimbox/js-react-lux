@@ -1,7 +1,7 @@
 const dark = 'black';
 const light = 'white';
 
-module.exports = {
+export default {
 
     //
     // In original order (backgroundColor carries the information)

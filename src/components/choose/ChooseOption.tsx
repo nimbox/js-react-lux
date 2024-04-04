@@ -61,7 +61,7 @@ export const ChooseOption = React.forwardRef(<O, G = O[]>(
         renderGroupLabel,
         renderOption,
 
-        className = 'divide-y divide-control-border',
+        className = 'divide-y divide-control-border'
 
     } = props;
 
@@ -80,7 +80,7 @@ export const ChooseOption = React.forwardRef(<O, G = O[]>(
     // Options
 
     const { options, loading, error, search } = useOptions(supplier, supplierProps);
-    const { selected, onKeyDown } = useOptionsKeyNavigator(options, { extractor, onChoose })
+    const { selected, onKeyDown } = useOptionsKeyNavigator(options, { extractor, onChoose });
 
     // Handlers
 

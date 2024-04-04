@@ -23,7 +23,7 @@ export function useKanbanStore<S, C>(defaultColumns: Column<S, C>[], createCard:
             ...columns.slice(columnIndex + 1)
         ]);
 
-    };
+    }
 
     function moveCard(cardId: string, columnId: string, cardIndex: number) {
 
@@ -59,11 +59,11 @@ export function useKanbanStore<S, C>(defaultColumns: Column<S, C>[], createCard:
                 ]
             },
             ...columnsWithoutCard.slice(columnIndex + 1)
-        ]
+        ];
 
         setColumns(columnsWithCard);
 
-    };
+    }
 
     function updateCard(cardId: string, fn: (c: Card<C>) => Partial<C>) {
 
@@ -112,7 +112,7 @@ export function useKanbanStore<S, C>(defaultColumns: Column<S, C>[], createCard:
             ...columns,
             { id: uniqueColumn(), cards: [], ...createColumn() }
         ]);
-    };
+    }
 
     function moveColumn(columnId: string, targetColumnIndex: number) {
 
@@ -130,7 +130,7 @@ export function useKanbanStore<S, C>(defaultColumns: Column<S, C>[], createCard:
 
         setColumns(columnsWithColumn);
 
-    };
+    }
 
     function deleteColumn(columnId: string) {
 
@@ -141,7 +141,7 @@ export function useKanbanStore<S, C>(defaultColumns: Column<S, C>[], createCard:
             ...columns.slice(columnIndex + 1)
         ]);
 
-    };
+    }
 
     //
 

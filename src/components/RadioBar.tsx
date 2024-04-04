@@ -1,16 +1,17 @@
 import classnames from 'classnames';
 import React, { createContext, FC, useContext } from 'react';
+import type { ReactNode } from 'react';
 
 
 export interface RadioBarProps {
-    value: any;
-    onChange: (value: any) => void;
+    value: string | number;
+    onChange: (value: string | number) => void;
     className?: string;
-    children?: React.ReactNode;
+    children?: ReactNode;
 }
 
 export interface RadioBarOptionProps {
-    value: any;
+    value: string | number;
     className?: string;
     children?: React.ReactNode;
 }
@@ -53,7 +54,7 @@ RadioBar.Option = (({ value, className, children }) => {
                 'cursor-pointer',
                 className)}
         >
-            aaaaaaaaaaaaaaaaaa
+            {children}
         </div>
     );
 

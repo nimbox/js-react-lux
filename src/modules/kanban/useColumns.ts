@@ -40,7 +40,7 @@ export function useColumns<C extends HTMLElement, P extends HTMLElement>({ moveC
                 columnsRef.current!.scrollLeft !== scrollLeft
             )) {
 
-                const index = getHorizontalIndex(item.id, columnsRef.current!, offset, placeholderRef.current!)
+                const index = getHorizontalIndex(item.id, columnsRef.current!, offset, placeholderRef.current!);
                 setPlaceholderIndex(index);
 
                 clientOffset.current = offset;
@@ -50,7 +50,7 @@ export function useColumns<C extends HTMLElement, P extends HTMLElement>({ moveC
 
         },
 
-        drop: (item: KanbanColumnItem, monitor) => {
+        drop: (item: KanbanColumnItem) => {
             if (placeholderIndex != null) {
                 moveColumn(item.id, placeholderIndex);
             }

@@ -1,7 +1,14 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
-const plugin = require('tailwindcss/plugin');
+import defaultTheme from 'tailwindcss/defaultTheme';
+import plugin from 'tailwindcss/plugin';
 
-module.exports = {
+import lux from './lux';
+import control from './control';
+import postit from './postit';
+import tooltip from './tooltip';
+import popper from './popper';
+import age from './age';
+
+export default {
 
     theme: {
 
@@ -118,12 +125,12 @@ module.exports = {
         plugin(function({ addBase, addComponents, theme, config }) {
             addBase({ 'html': { fontSize: '14px', lineHeight: '21px' } });
             addComponents({
-                ...require('./lux'),
-                ...require('./control')({ theme }),
-                ...require('./postit'),
-                ...require('./tooltip'),
-                ...require('./popper')({ theme }),
-                ...require('./age'),
+                ...lux,
+                ...control({ theme }),
+                ...postit,
+                ...tooltip,
+                ...popper({ theme }),
+                ...age
             })
         })
 

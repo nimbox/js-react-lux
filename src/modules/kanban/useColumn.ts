@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useRef } from 'react';
 import { useDrag } from 'react-dnd';
-import { useKanbanContext } from './Kanban';
+import { useKanbanContext } from './useKanbanContext';
 import { COLUMN_TYPE, KanbanColumnItem } from './types';
 
 
@@ -40,4 +40,4 @@ export function useColumn<T extends HTMLElement>(id: string): [RefObject<T>, Use
 
     return ([columnRef, { isDragging: item?.id === id }]);
 
-};
+}

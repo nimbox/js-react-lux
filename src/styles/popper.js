@@ -1,4 +1,4 @@
-module.exports = ({ theme }) => {
+export default ({ theme }) => {
 
     const colorsControlBorder = theme('colors.control-border') || '#888888';
 

@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import React, { Ref, useContext } from 'react';
-import { Context } from './Control';
+import { ControlContext } from './Control';
 
 
 //
@@ -41,7 +41,7 @@ export const PlainInput = React.forwardRef((
 
     // State
 
-    const context = useContext(Context);
+    const context = useContext(ControlContext);
     const isError = error || context.error;
 
     // Render

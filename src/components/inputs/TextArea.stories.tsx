@@ -1,7 +1,6 @@
-/* eslint-disable import/no-anonymous-default-export */
 import { action } from '@storybook/addon-actions';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import React, { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import { CircleIcon, SquareIcon } from '../../icons/components';
 import { Button } from '../Button';
 import { TextArea } from './TextArea';
@@ -13,15 +12,15 @@ export default {
     title: 'Components/Inputs/TextArea',
     component: TextArea,
     parameters: {
-        layout: 'centered',
+        layout: 'centered'
     }
-} as ComponentMeta<typeof TextArea>
+} as ComponentMeta<typeof TextArea>;
 
 
 const Template: ComponentStory<typeof TextArea> = ({ ...args }) => {
     const [value, setValue] = useState('Katniss');
-    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => { setValue(e.target.value); action('onChange')(e.target.value); }
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(value); }
+    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => { setValue(e.target.value); action('onChange')(e.target.value); };
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(value); };
     return (
         <form onSubmit={handleSubmit} className="w-96 flex flex-row gap-x-2 items-center">
             <TextArea type="text" value={value} onChange={handleChange} {...args} />
@@ -39,7 +38,7 @@ Default.args = {
     variant: 'outlined',
 
     label: 'Name',
-    placeholder: 'Enter name',
+    placeholder: 'Enter name'
 
 };
 
@@ -49,8 +48,8 @@ Default.args = {
 
 export const Controlled = () => {
     const [value, setValue] = useState('Katniss');
-    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => { setValue(e.target.value); action('onChange')(e.target.value); }
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(value); }
+    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => { setValue(e.target.value); action('onChange')(e.target.value); };
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(value); };
     return (
         <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
             <TextArea type="text" value={value} onChange={handleChange} placeholder="Enter name" />
@@ -61,7 +60,7 @@ export const Controlled = () => {
 
 export const Uncontrolled = () => {
     const ref = useRef<HTMLTextAreaElement>(null);
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(ref.current?.value); }
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(ref.current?.value); };
     return (
         <form onSubmit={handleSubmit} className="w-96 flex flex-row items-center space-x-2">
             <TextArea type="text" ref={ref} defaultValue="Katniss" placeholder="Enter name" />

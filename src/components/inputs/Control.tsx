@@ -8,18 +8,22 @@ export interface ControlProps {
 
     className?: string;
     style?: CSSProperties;
+
     children?: React.ReactNode
 
 }
 
 export interface ControlLabelProps {
-    badge?: string | React.ComponentType<any>;
+
+    badge?: string | React.ReactNode;
     className?: string;
+
     children?: React.ReactNode;
+
 }
 
 type ContextProps = Pick<ControlProps, 'error'>;
-export const Context = createContext<ContextProps>({ error: false });
+export const ControlContext = createContext<ContextProps>({ error: false });
 
 export interface ControlComponent extends FC<ControlProps> {
     Label: FC<ControlLabelProps>;
@@ -40,21 +44,21 @@ export const Control: ControlComponent = (props) => {
     } = props;
 
     return (
-        <Context.Provider value={{ error }}>
+        <ControlContext.Provider value={{ error }}>
             <div
                 className={className}
                 style={style}
             >
                 {children}
             </div>
-        </Context.Provider>
+        </ControlContext.Provider>
     );
 
-}
+};
 
 Control.Label = (({ className, children }) => {
 
-    const context = useContext(Context);
+    const context = useContext(ControlContext);
 
     return (
         <label className={classnames(
@@ -71,7 +75,7 @@ Control.Label = (({ className, children }) => {
 
 Control.Message = (({ className, children }) => {
 
-    const context = useContext(Context);
+    const context = useContext(ControlContext);
 
     return (
         <div className={classnames(
@@ -97,7 +101,7 @@ Control.Error = (({ className, children }) => {
         </div>
     ) : null;
 
-}) as FC<{ className?: string, children?: React.ReactNode }>;;
+}) as FC<{ className?: string, children?: React.ReactNode }>;
 
 Control.Label.displayName = 'Control.Label';
 Control.Message.displayName = 'Control.Help';

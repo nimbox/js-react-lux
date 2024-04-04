@@ -3,11 +3,14 @@ import React, { LegacyRef } from 'react';
 
 
 export interface CheckBoxProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
+    
     className?: string;
+    
     children?: never;
+
 }
 
-export const CheckBox = React.forwardRef<React.InputHTMLAttributes<HTMLInputElement>, CheckBoxProps>(({ className, children, ...props }, ref) => {
+export const CheckBox = React.forwardRef<React.InputHTMLAttributes<HTMLInputElement>, CheckBoxProps>(({ className, ...props }, ref) => {
 
     // const context = useContext(Context);
 

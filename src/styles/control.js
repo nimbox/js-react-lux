@@ -3,9 +3,7 @@ const fieldHorizontalPadding = 1.5; // For left and right.
 const fieldLabelScale = 0.75;
 const fieldLabelHorizontalPadding = 0.25; // For left and right.
 
-module.exports = ({
-    theme
-}) => {
+export default ({ theme }) => {
 
     const controls = {
 

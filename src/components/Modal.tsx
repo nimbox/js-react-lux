@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { createPortal } from 'react-dom';
-import { useOnOutsideClick } from '../hooks/useOnOutsideClick';
 
 
 //

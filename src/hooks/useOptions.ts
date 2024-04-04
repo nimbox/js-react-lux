@@ -40,7 +40,7 @@ export interface UseOptionsReturn<O, G> {
     /**
      * The error if there was an problem loading the options.
      */
-    error: any;
+    error: unknown;
 
     //
 
@@ -92,14 +92,14 @@ export const useOptions = <O, G>(supplier: UseOptionsSupplier<G>, props?: UseOpt
     // Properties
 
     const {
-        debounce = 0,
+        debounce = 0
     } = props || {};
 
     // State
 
     const [options, setOptions] = useState<G[] | undefined>(undefined);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<any>(null);
+    const [error, setError] = useState<unknown>(null);
 
     const execution = useRef<{ cancel: (() => void) } | null>(null);
 

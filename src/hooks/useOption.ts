@@ -33,7 +33,7 @@ export interface UseOptionReturn<O> {
     /**
      * The error if there was an problem loading the option.
      */
-    error: any;
+    error: unknown;
 
     // Methods
 
@@ -55,7 +55,7 @@ export const useOption = <O>(chooser: UseOptionChooser<O> | undefined, props?: U
 
     const [option, setOption] = useState<O | undefined>(undefined);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<any>(null);
+    const [error, setError] = useState<unknown>(null);
 
     const execution = useRef<{ cancel: (() => void) } | null>(null);
 
@@ -124,7 +124,7 @@ export const useOption = <O>(chooser: UseOptionChooser<O> | undefined, props?: U
         error,
 
         get,
-        cancel,
+        cancel
 
     };
 

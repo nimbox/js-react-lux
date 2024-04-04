@@ -1,17 +1,17 @@
 import { ComponentMeta } from '@storybook/react';
-import React, { forwardRef, InputHTMLAttributes, Ref } from 'react';
+import { forwardRef, InputHTMLAttributes, Ref } from 'react';
 import { ControlledInputTemplate, HookFormInputTemplate, UncontrolledInputTemplate } from '../../templates/InputTemplate';
-import { Select, SelectProps } from './Select';
 import { Option } from './Option';
+import { Select, SelectProps } from './Select';
 
 
 export default {
     title: 'Components/Inputs/Select',
     component: Select,
     parameters: {
-        layout: 'centered',
+        layout: 'centered'
     }
-} as ComponentMeta<typeof Select>
+} as ComponentMeta<typeof Select>;
 
 
 //

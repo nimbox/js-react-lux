@@ -1,4 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
 import { Button } from '../Button';
 import { CheckBox } from './CheckBox';
 import { Control, ControlProps } from './Control';
@@ -7,7 +6,6 @@ import { NativeSelect } from './NativeSelect';
 import { Option } from './Option';
 import { Radio } from './Radio';
 import { TextArea } from './TextArea';
-import React from 'react';
 
 
 // definition
@@ -23,7 +21,7 @@ export default {
 
 //  parameterized
 
-export const Parameterized = ({ error, ...props }: ControlProps & { options: string[] }) => {
+export const Parameterized = ({ error }: ControlProps & { options: string[] }) => {
 
     return (
         <div className="mt-8 max-w-full">
@@ -65,12 +63,12 @@ export const Parameterized = ({ error, ...props }: ControlProps & { options: str
                 </div>
                 <div className="col-span-2">
                     <Control >
-                        <CheckBox/>Acepto los términos
+                        <CheckBox />Acepto los términos
                     </Control>
                 </div>
                 <div className="col-span-2">
                     <Control >
-                        <Radio/>Quiero recibir promociones y novedades
+                        <Radio />Quiero recibir promociones y novedades
                     </Control>
                 </div>
                 <div className="inline">

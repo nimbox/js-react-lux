@@ -30,7 +30,7 @@ export interface ChooseOptionListProps<O, G = O[]> {
      * correctly. (Does nothing for now).
      * @default `false`
      */
-    loadingError?: any;
+    loadingError?: boolean;
 
     /**
      * The index for the element that needs to be shown as selected. This is
@@ -134,7 +134,7 @@ export const ChooseOptionList = React.forwardRef(<O, G = O[]>(
     const [optionsRefAvailable, setOptionsRefAvailable] = useState(false);
     useEffect(() => {
         optionsRef.current = options != null ?
-            options.map(group => extractor(group).map(option => null)) : [];
+            options.map(group => extractor(group).map(() => null)) : [];
         setOptionsRefAvailable(true);
     }, [options, extractor]);
 
@@ -220,3 +220,4 @@ export const ChooseOptionList = React.forwardRef(<O, G = O[]>(
     );
 
 });
+

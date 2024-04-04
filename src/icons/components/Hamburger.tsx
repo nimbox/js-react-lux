@@ -9,7 +9,7 @@ const SvgHamburger = (props: SVGProps<SVGSVGElement>) => (
     fill="currentColor"
     {...props}
   >
-    <path d="M28.5 17.5h-25a1.5 1.5 0 0 1 0-3h25a1.5 1.5 0 0 1 0 3ZM28.5 28h-25a1.5 1.5 0 0 1 0-3h25a1.5 1.5 0 0 1 0 3ZM28.5 7h-25a1.5 1.5 0 0 1 0-3h25a1.5 1.5 0 0 1 0 3Z" />
+    <path d="M28.5 17.5h-25a1.5 1.5 0 0 1 0-3h25a1.5 1.5 0 0 1 0 3M28.5 28h-25a1.5 1.5 0 0 1 0-3h25a1.5 1.5 0 0 1 0 3M28.5 7h-25a1.5 1.5 0 0 1 0-3h25a1.5 1.5 0 0 1 0 3" />
   </svg>
 );
 export default SvgHamburger;

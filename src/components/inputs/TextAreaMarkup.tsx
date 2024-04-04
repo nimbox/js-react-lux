@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React, { useContext, useState } from 'react';
 import { usePopper } from 'react-popper';
-import { Context } from './Control';
+import { ControlContext } from './Control';
 
 
 //
@@ -13,9 +13,9 @@ export interface TextAreaMarkupProps extends React.DetailedHTMLProps<React.Texta
     error?: boolean;
 }
 
-export const TextAreaMarkup = React.forwardRef<HTMLTextAreaElement, TextAreaMarkupProps>(({ error, className, ...props }, ref) => {
+export const TextAreaMarkup = React.forwardRef<HTMLTextAreaElement, TextAreaMarkupProps>(({ error, className, ...props }) => {
 
-    const context = useContext(Context);
+    const context = useContext(ControlContext);
 
     const [referenceElement, setReferenceElement] = useState<HTMLTextAreaElement | null>(null);
     const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
@@ -24,7 +24,7 @@ export const TextAreaMarkup = React.forwardRef<HTMLTextAreaElement, TextAreaMark
         placement: 'top-start',
         modifiers: [
             { name: 'arrow', options: { element: arrowElement } }
-        ],
+        ]
     });
 
     return (

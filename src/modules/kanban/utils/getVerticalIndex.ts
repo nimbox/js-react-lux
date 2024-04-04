@@ -34,10 +34,10 @@ export const getVerticalIndex = (cardId: string, cards: HTMLElement, offset: XYC
 
     return index;
 
-}
+};
 
 // utilities
 
 const isCardId = (cardId: string, cards: HTMLElement, index: number) => {
     return index >= 0 && index < cards.children.length && cards.children[index].getAttribute('data-kanban-card-id') === cardId;
-}
+};

@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import { isString } from 'lodash';
 import React, { Ref, useContext, useLayoutEffect, useRef, useState } from 'react';
-import { Context } from './Control';
+import { ControlContext } from './Control';
 
 
 //
@@ -75,6 +75,7 @@ export const Wrapper = React.forwardRef((
 
         className = 'block w-full',
         style,
+
         children,
 
         ...divProps
@@ -91,17 +92,17 @@ export const Wrapper = React.forwardRef((
 
     const handleFocus = (e: React.FocusEvent<HTMLDivElement>) => {
         setFocus(true);
-        onFocus?.(e)
-    }
+        onFocus?.(e);
+    };
 
     const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
         onBlur?.(e);
         setFocus(false);
-    }
+    };
 
     // manage error
 
-    const context = useContext(Context);
+    const context = useContext(ControlContext);
     const isError = error || context.error;
 
     // ornament references
@@ -173,7 +174,7 @@ export const Wrapper = React.forwardRef((
 
                 'outline-none focus:outline-none',
 
-                className,
+                className
 
             )}
 
@@ -183,7 +184,8 @@ export const Wrapper = React.forwardRef((
                 }),
                 ...(padding[1] > 0 && {
                     paddingRight: `calc(${padding[1]}px + 0.35em)`
-                })
+                }),
+                ...style
             }}
 
             {...divProps}

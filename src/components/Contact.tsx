@@ -1,7 +1,7 @@
-import classnames from "classnames";
+import classnames from 'classnames';
 import React, { FC } from 'react';
-import { NimboxIcon } from "../icons/components";
-import { Button } from "./Button";
+import { NimboxIcon } from '../icons/components';
+import { Button } from './Button';
 
 
 export interface ContactProps {
@@ -28,5 +28,6 @@ export const Contact: FC<ContactProps> = ({ render, className, children, ...prop
                 {children}
             </div>
         </div>
-    )
+    );
+
 };

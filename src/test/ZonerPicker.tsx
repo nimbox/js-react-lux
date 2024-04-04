@@ -36,9 +36,9 @@ export interface ZonePickerProps {
 
 }
 
-export const ZonePicker = React.forwardRef<HTMLInputElement, ZonePickerProps>((props, ref) => {
+export const ZonePicker = React.forwardRef<HTMLInputElement, ZonePickerProps>((props) => {
 
-    const { defaultValue, value, onChange, placeholder } = props;
+    const { value, onChange, placeholder } = props;
 
     const chooser = useCallback(async (value: string) => {
 
@@ -72,8 +72,8 @@ export const ZonePicker = React.forwardRef<HTMLInputElement, ZonePickerProps>((p
 
             withSearch
 
-            chooser={chooser as any}
-            supplier={supplier as any}
+            chooser={chooser}
+            supplier={supplier}
 
             value={value}
             onChange={onChange}

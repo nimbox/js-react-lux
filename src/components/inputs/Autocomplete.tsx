@@ -121,7 +121,7 @@ export const Autocomplete = React.forwardRef(<O, G = O[]>(
     const { options, loading, error: loadingError, search } =
         useOptions(supplier, supplierProps);
     const { selected, onKeyDown: onNavigatorKeyDown } =
-        useOptionsKeyNavigator(options, { extractor, onChoose: handleChoose })
+        useOptionsKeyNavigator(options, { extractor, onChoose: handleChoose });
     const count = useOptionsCount(options, extractor);
 
     // Show
@@ -161,7 +161,7 @@ export const Autocomplete = React.forwardRef(<O, G = O[]>(
         search();
         setShow(false);
         onChoose?.(option);
-    };
+    }
 
     // Popper
 

@@ -175,7 +175,7 @@ export const Choose = forwardRef(<O, G = O[]>(
         renderChosen = DEFAULT_RENDER_OPTION,
 
         placeholder,
-        className,
+        // className,
 
         // Input
 
@@ -218,14 +218,14 @@ export const Choose = forwardRef(<O, G = O[]>(
 
     const [options, setOptions] = useState<G[]>([]);
     const [loading, setLoading] = useState(0);
-    const [loadingError, setLoadingError] = useState<any>(null);
+    const [loadingError, setLoadingError] = useState<unknown>(null);
 
     // Memoize the `supplier` response as a promise, when the `query` changes.
 
     const getPromisedOptions = useMemo(async () => {
 
         const isSearchable = _isFunction(supplier);
-        return Promise.resolve(isSearchable ? supplier(query) : supplier)
+        return Promise.resolve(isSearchable ? supplier(query) : supplier);
 
     }, [query, supplier]);
 
@@ -328,7 +328,7 @@ export const Choose = forwardRef(<O, G = O[]>(
         doEffect();
         return () => { working = false; };
 
-    }, [chosenValue, chosenOption, getPromisedChosenOption, chooser, supplier, identifier, extractor])
+    }, [chosenValue, chosenOption, getPromisedChosenOption, chooser, supplier, identifier, extractor]);
 
     // Handle Choose
 
@@ -355,7 +355,7 @@ export const Choose = forwardRef(<O, G = O[]>(
 
     // Options
 
-    const { selected, onKeyDown: onNavigatorKeyDown } = useOptionsKeyNavigator(options, { extractor, onChoose: handleChoose })
+    const { selected, onKeyDown: onNavigatorKeyDown } = useOptionsKeyNavigator(options, { extractor, onChoose: handleChoose });
 
     // Action Handlers
 

@@ -20,7 +20,7 @@ export function useColumnDrop<C extends HTMLElement>({ onDrop }: UseColumnDropPr
         ...(onDrop && { drop: (item: KanbanColumnItem) => onDrop(item) }),
         collect: (monitor) => ({
             item: monitor.getItem<KanbanColumnItem>(),
-            isOver: monitor.isOver(),
+            isOver: monitor.isOver()
         })
     }));
     drop(dropRef);
