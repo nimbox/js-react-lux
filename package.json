@@ -1,7 +1,7 @@
 {
   "name": "@nimbox/js-react-lux",
   "private": true,
-  "version": "0.4.47",
+  "version": "0.4.48",
   "type": "module",
   "exports": {
     ".": {
