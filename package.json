@@ -38,8 +38,8 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "pristine": "git diff-index --quiet HEAD -- || (echo 'Uncommitted changes detected' && exit 1)",
-    "preversion": "npm ci && npm run build && npm run lint && npm run pristine",
+    "porcelain": "git status --porcelain -- || (echo 'Uncommitted changes detected' && exit 1)",
+    "preversion": "npm ci && npm run build && npm run lint && npm run porcelain",
     "postversion": "git push origin main --follow-tags"
   },
   "publishConfig": {
