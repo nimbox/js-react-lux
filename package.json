@@ -37,7 +37,9 @@
     "lint": "eslint src/ --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --ignore-pattern src/sandbox --ignore-pattern src/icons/components",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "preversion": "npm install && npm run build",
+    "postversion": "git push origin main --follow-tags && npm publish"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
