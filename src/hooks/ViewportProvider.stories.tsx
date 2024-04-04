@@ -1,15 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ViewportProvider, useViewport } from './useViewport';
+import { ViewportProvider } from './ViewportProvider';
+import { useViewport } from './useViewport';
 
 
 // Definition
 
-const meta: Meta = {
+const meta: Meta<typeof ViewportProvider> = {
+    component: ViewportProvider
 };
 
 export default meta;
-type Story = StoryObj;
-
+type Story = StoryObj<typeof ViewportProvider>;
 
 // Templates
 
