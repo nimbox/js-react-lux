@@ -55,10 +55,7 @@ export const Disabled: Story = {
 };
 
 export const Controlled: Story = {
-    render: (args) => <ControlledTemplate component={Input} componentProps={args} initial="Hello" forced="Bye" />,
-    args: {
-        variant: 'inlined'
-    }
+    render: (args) => <ControlledTemplate component={Input} componentProps={args} initial="Hello" forced="Bye" />
 };
 
 export const Uncontrolled: Story = {

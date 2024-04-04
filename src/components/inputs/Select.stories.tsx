@@ -1,18 +1,21 @@
-import { ComponentMeta } from '@storybook/react';
 import { forwardRef, InputHTMLAttributes, Ref } from 'react';
-import { ControlledInputTemplate, HookFormInputTemplate, UncontrolledInputTemplate } from '../../templates/InputTemplate';
+import { ControlledTemplate, HookFormTemplate, UncontrolledTemplate } from '../../templates/InputTemplates';
 import { Option } from './Option';
 import { Select, SelectProps } from './Select';
+import { Meta, StoryObj } from '@storybook/react';
 
 
-export default {
-    title: 'Components/Inputs/Select',
+// Definition
+
+const meta: Meta<typeof Select> = {
     component: Select,
     parameters: {
         layout: 'centered'
     }
-} as ComponentMeta<typeof Select>;
+};
 
+export default meta;
+type Story = StoryObj<typeof Select>;
 
 //
 // Stories
@@ -31,6 +34,25 @@ const Template = forwardRef((
     );
 });
 
-export const Controlled = ControlledInputTemplate({ initial: 'two', forced: 'three', component: Template }).bind({});
-export const Uncontrolled = UncontrolledInputTemplate({ initial: 'two', forced: 'three', component: Template }).bind({});
-export const HookForm = HookFormInputTemplate({ initial: 'two', forced: 'three', component: Template }).bind({});
+
+// Stories
+
+export const Primary: Story = {
+    render: (args) => <Template {...args} />,
+    args: {
+        variant: 'filled',
+        label: 'Label'
+    }
+};
+
+export const Controlled: Story = {
+    render: (args) => <ControlledTemplate component={Template} componentProps={args} initial="two" forced="three" />
+};
+
+export const Uncontrolled: Story = {
+    render: (args) => <UncontrolledTemplate component={Template} componentProps={args} initial="two" forced="three" />
+};
+
+export const HookForm: Story = {
+    render: (args) => <HookFormTemplate component={Template} componentProps={args} initial="two" forced="three" />
+};
