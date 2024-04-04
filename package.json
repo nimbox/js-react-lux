@@ -38,8 +38,12 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "preversion": "npm install && npm run build",
-    "postversion": "git push origin main --follow-tags && npm publish"
+    "pristine": "git diff-index --quiet HEAD -- || (echo 'Uncommitted changes detected' && exit 1)",
+    "preversion": "npm ci && npm run build && npm run lint && npm run pristine",
+    "postversion": "git push origin main --follow-tags"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@nimbox"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
