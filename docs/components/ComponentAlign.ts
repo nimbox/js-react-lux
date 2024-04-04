@@ -1,1 +1,0 @@
-export type ComponentAlign = 'start' | 'end' | 'stretch';
