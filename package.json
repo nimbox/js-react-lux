@@ -6,22 +6,22 @@
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
-      "import": "./dist/index.js",
+      "import": "./dist/index.mjs",
       "types": "./dist/typings/index.d.ts"
     },
     "./icons": {
       "require": "./dist/icons/index.cjs",
-      "import": "./dist/icons/index.js",
+      "import": "./dist/icons/index.mjs",
       "types": "./dist/icons/typings/index.d.ts"
     },
     "./figures": {
       "require": "./dist/figures/index.cjs",
-      "import": "./dist/figures/index.js",
+      "import": "./dist/figures/index.mjs",
       "types": "./dist/figures/typings/index.d.ts"
     },
     "./styles/elegant": {
       "require": "./dist/styles/elegant.cjs",
-      "import": "./dist/styles/elegant.js"
+      "import": "./dist/styles/elegant.mjs"
     },
     "./package.json": "./package.json"
   },
@@ -63,19 +63,19 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^1.3.0",
+    "@chromatic-com/storybook": "^1.3.1",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
-    "@storybook/addon-essentials": "^8.0.5",
-    "@storybook/addon-interactions": "^8.0.5",
-    "@storybook/addon-links": "^8.0.5",
-    "@storybook/addon-onboarding": "^8.0.5",
-    "@storybook/blocks": "^8.0.5",
-    "@storybook/react": "^8.0.5",
-    "@storybook/react-vite": "^8.0.5",
-    "@storybook/test": "^8.0.5",
+    "@storybook/addon-essentials": "^8.0.6",
+    "@storybook/addon-interactions": "^8.0.6",
+    "@storybook/addon-links": "^8.0.6",
+    "@storybook/addon-onboarding": "^8.0.6",
+    "@storybook/blocks": "^8.0.6",
+    "@storybook/react": "^8.0.6",
+    "@storybook/react-vite": "^8.0.6",
+    "@storybook/test": "^8.0.6",
     "@svgr/cli": "^8.1.0",
     "@types/react": "^18.2.74",
     "@types/react-dom": "^18.2.24",
@@ -94,7 +94,7 @@
     "rollup-plugin-filesize": "^10.0.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
-    "storybook": "^8.0.5",
+    "storybook": "^8.0.6",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.4",
     "vite": "^5.2.8"
