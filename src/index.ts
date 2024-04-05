@@ -49,6 +49,8 @@ export * from './hooks/useOption';
 export * from './hooks/useOptions';
 export * from './hooks/useOptionsCount';
 export * from './hooks/useOptionsKeyNavigator';
+
+export * from './hooks/ViewportProvider';
 export * from './hooks/useViewport';
 
 export * from './components/utilities/consumeEvent';
