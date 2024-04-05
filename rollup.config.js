@@ -85,7 +85,7 @@ export default [{
             extensions: ['.css']
         }),
 
-        filesize(),
+        filesize()
 
     ]
 
@@ -93,12 +93,12 @@ export default [{
 
     input: 'src/figures/index.ts',
     output: [{
-        file: 'dist/icons/index.cjs',
+        file: 'dist/figures/index.cjs',
         format: 'cjs',
         exports: 'named',
         sourcemap: true
     }, {
-        file: 'dist/icons/index.mjs',
+        file: 'dist/figures/index.mjs',
         format: 'es',
         exports: 'named',
         sourcemap: true
