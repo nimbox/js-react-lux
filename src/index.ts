@@ -55,3 +55,4 @@ export * from './components/utilities/consumeEvent';
 export * from './components/utilities/createSearchMatcher';
 
 export * from './layouts/helium/Helium';
+export * from './layouts/helium/useHelium';
