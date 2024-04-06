@@ -6,36 +6,41 @@ import '../src/index.css';
 
 
 export const globalTypes = {
-  locale: {
-    name: 'Locale',
-    description: 'Locale to use for i18next translations',
-    defaultValue: 'en',
-    toolbar: {
-      icon: 'flag',
-      items: ['en', 'es'],
-      showName: false,
+
+    locale: {
+        name: 'Locale',
+        description: 'Locale to use for i18next translations',
+        defaultValue: 'en',
+        toolbar: {
+            icon: 'flag',
+            items: ['en', 'es'],
+            showName: false,
+        }
     }
-  }
+
 };
 
 const preview: Preview = {
-  parameters: {
-    controls: {
-      matchers: {
-        color: /(background|color)$/i,
-        date: /Date$/i
-      }
-    }
-  },
-  decorators: [
-    (Story, context) => {
-      useEffect(() => { i18n.changeLanguage(context.globals.locale); }, [context]);
-      return (
-        <I18nextProvider i18n={i18n} locale="en">
-          <Story />
-        </I18nextProvider>
-      );
-    }]
+
+    parameters: {
+        controls: {
+            matchers: {
+                color: /(background|color)$/i,
+                date: /Date$/i
+            }
+        }
+    },
+
+    decorators: [
+        (Story, context) => {
+            useEffect(() => { i18n.changeLanguage(context.globals.locale); }, [context]);
+            return (
+                <I18nextProvider i18n={i18n}>
+                    <Story />
+                </I18nextProvider>
+            );
+        }]
+
 };
 
 export default preview;
