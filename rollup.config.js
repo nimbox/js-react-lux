@@ -25,7 +25,7 @@ export default [{
 
     plugins: [
 
-        peerDepsExternal(),
+        peerDepsExternal({ includeDependencies: true }),
         resolve(),
         commonjs(),
 
@@ -67,7 +67,7 @@ export default [{
 
     plugins: [
 
-        peerDepsExternal(),
+        peerDepsExternal({ includeDependencies: true }),
         resolve(),
         commonjs(),
 
@@ -106,7 +106,7 @@ export default [{
 
     plugins: [
 
-        peerDepsExternal(),
+        peerDepsExternal({ includeDependencies: true }),
         resolve(),
         commonjs(),
 
@@ -145,7 +145,7 @@ export default [{
 
     plugins: [
 
-        peerDepsExternal(),
+        peerDepsExternal({ includeDependencies: true }),
         resolve(),
         commonjs(),
 
