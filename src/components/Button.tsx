@@ -1,6 +1,5 @@
 import classNames from 'classnames';
-import React, { FC, ReactElement } from 'react';
-import { ComponentColor } from './ComponentColor';
+import React, { ReactElement } from 'react';
 
 
 // Button
@@ -9,6 +8,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
     variant?: 'filled' | 'text' | 'outlined' | 'link';
     semantic?: 'primary' | 'secondary' | 'danger' | 'muted';
+    rounded?: boolean;
     centered?: boolean;
 
     start?: ReactElement;
@@ -29,6 +29,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, r
 
         variant = 'filled',
         semantic = 'primary',
+        rounded = false,
         centered = false,
 
         start,
@@ -64,7 +65,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, r
 
                 'lux-button-centered': centered
 
-            }, className)}
+            }, 'rounded-full', className)}
+
+            style={{ borderRadius: rounded ? '9999px' : undefined }}
 
             {...buttonProps}
 
@@ -90,29 +93,3 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, r
     );
 
 });
-
-
-
-
-// RoundButton
-
-export interface RoundButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    semantic?: ComponentColor;
-}
-
-export const RoundButton: FC<RoundButtonProps> = ({ semantic: color = 'primary', className, children, ...props }) => {
-
-    return (
-        <button {...props} className={classNames(
-            'flex flex-row justify-center items-center',
-            'text-white font-bold',
-            { 'bg-primary-500 hover:bg-primary-600': color === 'primary' },
-            { 'bg-info-500 hover:bg-info-600': color === 'info' },
-            { 'bg-danger-500 hover:bg-danger-600': color === 'danger' },
-            'border border-control-border',
-            'rounded-full focus:outline-none', className)}>
-            {children}
-        </button>
-    );
-
-};
