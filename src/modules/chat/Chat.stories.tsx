@@ -1,13 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ChatTextMessage } from './ChatMessage';
-import { ChatGroup } from './ChatGroup';
-import { ChatMessageInput } from './ChatMessageInput';
-import { ChatMessageList } from './ChatMessageList';
-import { Input } from '../../components/inputs/Input';
 import { Button } from '../../components/Button';
-import SvgFullSquare from '../../icons/components/FullSquare';
-import { FullCircleIcon, SendIcon } from '../../icons/components';
 import { Avatar } from '../../components/displays/Avatar';
+import { Input } from '../../components/inputs/Input';
+import { SendIcon } from '../../icons/components';
+import { ChatGroup } from './ChatGroup';
+import { ChatTextMessage } from './ChatMessage';
+import { ChatMessageList } from './ChatMessageList';
 
 
 // Definition
@@ -58,7 +56,7 @@ export const SentSent: Story = {
     args: {
         ...ChatMessageTemplate.args,
         direction: 'sent',
-        status: 'sent',
+        status: 'sent'
     }
 };
 
@@ -67,7 +65,7 @@ export const SentDelivered: Story = {
     args: {
         ...ChatMessageTemplate.args,
         direction: 'sent',
-        status: 'delivered',
+        status: 'delivered'
     }
 };
 
@@ -76,7 +74,7 @@ export const SentRead: Story = {
     args: {
         ...ChatMessageTemplate.args,
         direction: 'sent',
-        status: 'read',
+        status: 'read'
     }
 };
 
@@ -85,7 +83,7 @@ export const SentFailed: Story = {
     args: {
         ...ChatMessageTemplate.args,
         direction: 'sent',
-        status: 'failed',
+        status: 'failed'
     }
 };
 
@@ -109,29 +107,29 @@ export const Multiple: Story = {
     }
 };
 
-const shortText = "Lorem impsum dolor est";
-const longText = "Lorem ipsum odor amet, consectetuer adipiscing elit. Leo nulla fames tortor; luctus nunc pellentesque commodo. Dapibus nam fusce taciti netus platea montes convallis hac. Cursus in pellentesque nec, efficitur mi blandit neque. Eros accumsan amet sollicitudin libero efficitur pharetra elementum. Nisl dictumst ornare metus ante rhoncus ultricies fermentum. Ultrices ullamcorper torquent nibh, condimentum imperdiet nisi semper sollicitudin."; 
+const shortText = 'Lorem impsum dolor est';
+const longText = 'Lorem ipsum odor amet, consectetuer adipiscing elit. Leo nulla fames tortor; luctus nunc pellentesque commodo. Dapibus nam fusce taciti netus platea montes convallis hac. Cursus in pellentesque nec, efficitur mi blandit neque. Eros accumsan amet sollicitudin libero efficitur pharetra elementum. Nisl dictumst ornare metus ante rhoncus ultricies fermentum. Ultrices ullamcorper torquent nibh, condimentum imperdiet nisi semper sollicitudin.';
 
-const User = () => <Avatar color="#ecf0f1" backgroundColor="#e74c3c" src="https://nimbox.com/wp-content/uploads/2021/02/person-04.jpg">KE</Avatar>
+const User = () => <Avatar color="#ecf0f1" backgroundColor="#e74c3c" src="https://nimbox.com/wp-content/uploads/2021/02/person-04.jpg">KE</Avatar>;
 
 export const KitchenSink: Story = {
     render: (args) => {
         return (
             <div className="h-96">
                 <ChatMessageList className="pb-4">
-                    <ChatGroup user={<User/>}  direction='received'>
-                        <ChatTextMessage {...args} body={shortText}/>
-                        <ChatTextMessage {...args} body={shortText}/>
-                        <ChatTextMessage {...args} body={longText}/>
+                    <ChatGroup user={<User />} direction='received'>
+                        <ChatTextMessage {...args} body={shortText} />
+                        <ChatTextMessage {...args} body={shortText} />
+                        <ChatTextMessage {...args} body={longText} />
                     </ChatGroup>
-                    <ChatGroup user={<User/>} direction='sent'>
-                        <ChatTextMessage {...args} body={shortText}/>
-                        <ChatTextMessage {...args} body={longText}/>
+                    <ChatGroup user={<User />} direction='sent'>
+                        <ChatTextMessage {...args} body={shortText} />
+                        <ChatTextMessage {...args} body={longText} />
                     </ChatGroup>
                 </ChatMessageList>
                 <div className="flex flex-row items-center gap-2 bg-orange-50 p-4">
-                    <Input defaultValue="Enabled" variant="filled"/>
-                    <Button semantic="primary" rounded={true}><SendIcon/></Button>
+                    <Input defaultValue="Enabled" variant="filled" />
+                    <Button semantic="primary" rounded={true}><SendIcon /></Button>
                 </div>
             </div>
         );

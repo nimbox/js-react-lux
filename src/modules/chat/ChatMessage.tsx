@@ -36,7 +36,7 @@ export const ChatTextMessage: FC<ChatTextMessageProps> = (props) => {
             </div>
             <div className={classNames('hidden group-last:block absolute bottom-[2px]', {
                 'right-[-6px] w-0 h-0 transform -translate-y-1/2 border-y-[6px] border-y-transparent border-l-[6px] border-l-gray-200': direction === 'sent',
-                'left-[-6px] w-0 h-0 transform -translate-y-1/2 border-y-[6px] border-y-transparent border-r-[6px] border-r-gray-200': direction === 'received',
+                'left-[-6px] w-0 h-0 transform -translate-y-1/2 border-y-[6px] border-y-transparent border-r-[6px] border-r-gray-200': direction === 'received'
             })} />
         </div>
     );
@@ -63,4 +63,4 @@ const ChatStatus: FC<Pick<ChatMessageProps, 'status'>> = ({ status }) => {
 
     return null;
 
-}
+};
