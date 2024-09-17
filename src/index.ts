@@ -15,6 +15,7 @@ export * from './components/Tag';
 export * from './components/Toast';
 
 export * from './modules/kanban';
+export * from './modules/chat';
 
 export * from './components/choose/Choose';
 export * from './components/choose/ChooseOption';
