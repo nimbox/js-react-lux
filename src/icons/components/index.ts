@@ -51,6 +51,7 @@ export { default as MinusIcon } from "./Minus";
 export { default as MutuallyEsclusiveIcon } from "./MutuallyEsclusive";
 export { default as NimboxIcon } from "./Nimbox";
 export { default as OrganizationIcon } from "./Organization";
+export { default as PauseIcon } from "./Pause";
 export { default as PersonIcon } from "./Person";
 export { default as PhoneIcon } from "./Phone";
 export { default as PlayIcon } from "./Play";
