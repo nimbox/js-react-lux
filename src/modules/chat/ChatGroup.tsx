@@ -6,7 +6,7 @@ import { ChatDirectionContext } from './ChatDirectionContext';
 export interface ChatGroupProps {
 
     user: React.ReactNode;
-    direction?: 'received' | 'sent';
+    direction?: 'in' | 'out';
 
     className?: string;
     children?: React.ReactNode;
@@ -15,20 +15,20 @@ export interface ChatGroupProps {
 
 export const ChatGroup: FC<ChatGroupProps> = (props) => {
 
-    const { user, direction = 'received', className, children } = props;
+    const { user, direction = 'in', className, children } = props;
 
     return (
         <ChatDirectionContext.Provider value={direction}>
             <div className={classNames('w-100 flex flex-row items-end', className)}>
                 <div className={classNames('flex-grow flex flex-col gap-1', {
-                    'order-1 items-end': direction === 'sent',
-                    'order-2 items-start': direction === 'received'
+                    'order-1 items-end': direction === 'out',
+                    'order-2 items-start': direction === 'in'
                 })}>
                     {children}
                 </div>
                 <div className={classNames('px-2',{
-                    'order-2': direction === 'sent',
-                    'order-1': direction === 'received'
+                    'order-2': direction === 'out',
+                    'order-1': direction === 'in'
                 })}>
                     <span>{user}</span>
                 </div>

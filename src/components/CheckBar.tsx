@@ -34,7 +34,8 @@ export const CheckBar: CheckBarComponent = ({ value, onChange, className, childr
         <div
             className={classnames(
                 'inline-block truncate border border-control-border rounded',
-                className)}
+                className
+            )}
         >
             {children}
         </div>

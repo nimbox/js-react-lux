@@ -538,7 +538,7 @@ export const Choose = forwardRef(<O, G = O[]>(
 
                 onChange={handleChangeInternalValue}
 
-                className="absolute left-0 top-0 text-xs w-full text-black opacity-10 pointer-events-none"
+                className="absolute left-0 top-0 text-xs w-full text-black opacity-0 pointer-events-none"
 
                 {...inputProps}
 

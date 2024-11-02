@@ -13,6 +13,8 @@ export { default as CircleCrossFillIcon } from "./CircleCrossFill";
 export { default as CircleCrossIcon } from "./CircleCross";
 export { default as CircleMinusFillIcon } from "./CircleMinusFill";
 export { default as CircleMinusIcon } from "./CircleMinus";
+export { default as CirclePauseIcon } from "./CirclePause";
+export { default as CirclePlayIcon } from "./CirclePlay";
 export { default as CirclePlusFillCopyIcon } from "./CirclePlusFillCopy";
 export { default as CirclePlusFillIcon } from "./CirclePlusFill";
 export { default as CirclePlusIcon } from "./CirclePlus";

@@ -7,6 +7,8 @@ import postit from './postit';
 import tooltip from './tooltip';
 import popper from './popper';
 import age from './age';
+import chat from './chat';
+
 
 export default {
 
@@ -130,7 +132,8 @@ export default {
                 ...postit,
                 ...tooltip,
                 ...popper({ theme }),
-                ...age
+                ...age,
+                ...chat({ theme })
             })
         })
 
