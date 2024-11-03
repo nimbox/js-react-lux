@@ -426,7 +426,7 @@ export default ({ theme }) => {
                     borderBottomWidth: 1,
                     borderStyle: 'solid',
                     borderColor: theme('colors.control-border'),
-                    borderRadius: theme('borderRadius.DEFAULT'),
+                    borderRadius: theme('borderRadius.DEFAULT')
 
                 },
 
@@ -436,8 +436,8 @@ export default ({ theme }) => {
                         left: `${(fieldHorizontalPadding / 2) / fieldLabelScale}em`,
                         top: `${fieldVerticalPadding * 6 / 10}em`,
                         fontSize: `${fieldLabelScale}em`,
-                        lineHeight: 0,
-                    },
+                        lineHeight: 0
+                    }
 
                 },
 
@@ -459,7 +459,7 @@ export default ({ theme }) => {
 
                     borderBottomWidth: 1,
                     borderStyle: 'solid',
-                    borderColor: theme('colors.control-border'),
+                    borderColor: theme('colors.control-border')
 
                 },
 
@@ -472,10 +472,35 @@ export default ({ theme }) => {
                         lineHeight: 0
                     }
 
-                },
-
+                }
 
             },
+
+            '&.lux-field-editable': {
+
+                padding: `${fieldVerticalPadding * 0 / 10}em 0 ${fieldVerticalPadding * 0 / 10}em 0`,
+
+                '.lux-field-border': {
+
+                    borderBottomWidth: 1,
+                    borderStyle: 'solid',
+                    borderColor: theme('colors.control-border')
+
+                },
+
+                '&:focus-within, &.lux-field-shrink': {
+
+                    '.lux-field-label': {
+                        left: 0,
+                        top: 0,
+                        fontSize: `${fieldLabelScale}em`,
+                        lineHeight: 0
+                    }
+
+                }
+
+            },
+
 
             '&:hover': {
 
@@ -493,22 +518,28 @@ export default ({ theme }) => {
 
                 '&.lux-field-outlined': {
                     '.lux-field-border': {
-                        borderWidth: 1,
+                        borderWidth: 1
                     }
                 },
 
                 '&.lux-field-filled': {
                     backgroundColor: theme('colors.control-fill-hover'),
                     '.lux-field-border': {
-                        borderBottomWidth: 1,
+                        borderBottomWidth: 1
                     }
                 },
 
                 '&.lux-field-inlined': {
                     '.lux-field-border': {
-                        borderBottomWidth: 1,
+                        borderBottomWidth: 1
                     }
                 },
+
+                '&.lux-field-editable': {
+                    '.lux-field-border': {
+                        borderBottomWidth: 1
+                    }
+                }
 
             },
 
@@ -532,19 +563,25 @@ export default ({ theme }) => {
 
                 '&.lux-field-outlined': {
                     '.lux-field-border': {
-                        borderWidth: 2,
+                        borderWidth: 2
                     }
                 },
 
                 '&.lux-field-filled': {
                     '.lux-field-border': {
-                        borderBottomWidth: 2,
+                        borderBottomWidth: 2
                     }
                 },
 
                 '&.lux-field-inlined': {
                     '.lux-field-border': {
-                        borderBottomWidth: 2,
+                        borderBottomWidth: 2
+                    }
+                },
+
+                '&.lux-field-editable': {
+                    '.lux-field-border': {
+                        borderBottomWidth: 2
                     }
                 }
 
@@ -565,7 +602,7 @@ export default ({ theme }) => {
                 },
 
                 '&.lux-field-filled': {
-                    backgroundColor: theme('colors.control-fill-disabled'),
+                    backgroundColor: theme('colors.control-fill-disabled')
                 },
 
                 '.lux-field-border': {
@@ -592,7 +629,7 @@ export default ({ theme }) => {
 
                 '.lux-field-border': {
                     borderColor: theme('colors.danger.500')
-                },
+                }
 
             },
 
