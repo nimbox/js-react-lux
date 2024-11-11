@@ -315,8 +315,6 @@ const Calendar = (props: CalendarProps): ReactElement => {
 
     // Render
 
-    console.log('datepicker', selected);
-
     return (
         <div onMouseDown={consumeEvent} className={classNames('flex flex-row', className)}>
 
