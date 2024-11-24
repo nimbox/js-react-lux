@@ -107,7 +107,8 @@ export const Header: FC<{ className?: string, children?: React.ReactNode }> = ({
             showNavigator ? 'pl-0 md:pl-56' : 'pl-0',
             'flex flex-row justify-between items-stretch',
             'text-content bg-content-fg border-b border-content-border',
-            'transition-spacing duration-700 ease-in-out '
+            'transition-spacing duration-700 ease-in-out',
+            'print:hidden'
         )}>
             <ToggleNavigator />
             <div className={classnames('flex-1 h-full', className)}>
