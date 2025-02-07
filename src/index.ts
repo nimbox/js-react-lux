@@ -2,6 +2,7 @@ export * from './components/Anchor';
 export * from './components/displays/Avatar';
 export * from './components/Badge';
 export * from './components/Button';
+export * from './components/ActionButton';
 export * from './components/Card';
 export * from './components/Delay';
 export * from './components/Dialog';
