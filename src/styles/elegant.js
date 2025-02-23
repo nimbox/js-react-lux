@@ -39,14 +39,15 @@ export default {
                 'control-fill': '#f0f0f0',
                 'control-placeholder': '#a0a0a0',
 
-                // 'control-border-hover': 'pink',
                 'control-border-hover': '#000000',
                 'control-fill-hover': '#e8e8e8',
 
                 'control-border-disabled': '#c0c0c0',
                 'control-fill-disabled': '#f8f8f8',
 
-                'calendar-grid': 'pink',
+                'calendar-weekend': '#fafafa',
+                'calendar-border': '#e0e0e0',
+                'calendar-grid': '#f0f0f0',
 
                 // 'control-bg': '#fef3fb',
                 // 'control-border': '#F012BE',

@@ -22,7 +22,7 @@ const data: StoryEvent[] = [
 const multiDayData: StoryEvent[] = [
     { start: new Date('2025-02-23T09:00:00'), end: new Date('2025-02-23T10:00:00'), title: 'Event 1' },
     { start: new Date('2025-02-23T14:00:00'), end: new Date('2025-02-25T14:00:00'), title: 'Multi-day Event' },
-    { start: new Date('2025-02-25T16:00:00'), end: new Date('2025-02-25T17:00:00'), title: 'Event 3' }
+    { start: new Date('2025-02-25T16:00:00'), end: new Date('2025-02-26T08:00:00'), title: 'Event 3' }
 ];
 
 
@@ -46,7 +46,7 @@ const events: WeekCalendarEventExtractors<StoryEvent> = {
     start: (event) => event.start,
     end: (event) => event.end,
 
-    cell: ({ startsBefore, endsAfter, event, getPosition }) => (
+    cell: ({ startsBefore, endsAfter, event, isLargest, getPosition }) => (
         <div className="p-0.5" style={getPosition()}>
             <div
                 className={classNames(
@@ -58,6 +58,7 @@ const events: WeekCalendarEventExtractors<StoryEvent> = {
                 )}
             >
                 {event.title}
+                {isLargest && 'Largest'}
             </div>
         </div>
     )

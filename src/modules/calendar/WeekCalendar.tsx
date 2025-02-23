@@ -25,16 +25,16 @@ export const WeekCalendar = <TData,>(props: WeekCalendarExtendedProps<TData>) =>
 
                 <div className="flex-1 flex flex-row relative"> {/* Header Days */}
 
-                    <div className="flex-0 w-4 border-r border-calendar-grid" /> {/* Header Lines */}
+                    <div className="flex-0 w-4 border-r border-calendar-border" /> {/* Header Lines */}
 
                     {calendar.getDayHeaders().map(({ date, isWeekend }) => {
                         return (
                             <div
                                 key={date.toISOString()}
                                 className={classNames(
-                                    'flex-1 relative p-2 text-center text-xl border-t border-r border-b border-calendar-grid',
+                                    'flex-1 relative p-2 text-center text-xl border-t border-r border-b border-calendar-border',
                                     {
-                                        'bg-slate-200': isWeekend
+                                        'bg-calendar-weekend': isWeekend
                                     }
                                 )}
                             >
@@ -72,7 +72,7 @@ export const WeekCalendar = <TData,>(props: WeekCalendarExtendedProps<TData>) =>
 
                 <div className="flex-1 flex flex-row relative"> {/* Content Days */}
 
-                    <div className="flex-0 w-4 border-r border-calendar-grid z-10"> {/* Content Lines */}
+                    <div className="flex-0 w-4 border-r border-calendar-border z-10"> {/* Content Lines */}
                         {calendar.getHourHeaders().map(((hour) => (
                             <div
                                 key={hour.hour.toString()}
@@ -86,9 +86,9 @@ export const WeekCalendar = <TData,>(props: WeekCalendarExtendedProps<TData>) =>
                         <div
                             key={date.toISOString()}
                             className={classNames(
-                                'flex-1 relative border-r border-b border-calendar-grid',
+                                'flex-1 relative border-r border-b border-calendar-border',
                                 {
-                                    'bg-slate-100': isWeekend
+                                    'bg-calendar-weekend': isWeekend
                                 }
                             )}
                         >

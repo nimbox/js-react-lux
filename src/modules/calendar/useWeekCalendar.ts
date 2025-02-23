@@ -3,6 +3,7 @@ import isBetween from 'dayjs/plugin/isBetween';
 import { CSSProperties, useCallback, useMemo } from 'react';
 import { useElementHeight } from '../../hooks/useElementHeight';
 
+
 dayjs.extend(isBetween);
 
 export interface WeekCalendarEventExtractors<TData> {
@@ -34,7 +35,9 @@ export interface WeekDayHeader {
 export interface WeekDayEvent<TData> {
 
     date: Date;
+
     isWeekend: boolean;
+    isLargest: boolean;
 
     startsBefore: boolean;
     endsAfter: boolean;
@@ -73,8 +76,17 @@ export interface WeekCalendarInstance<TData> {
 
 interface InternalEvent<TData> {
 
-    date: Date;
+    date: Dayjs;
+
+    start: Dayjs;
+    end: Dayjs;
+
+    segmentStart: number;
+    segmentEnd: number;
+    segmentDuration: number;
+
     isWeekend: boolean;
+    isLargest: boolean;
 
     startsBefore: boolean;
     endsAfter: boolean;
@@ -154,20 +166,53 @@ export const useWeekCalendar = <TData>(props: WeekCalendarProps<TData>): WeekCal
 
             data.forEach(event => {
 
-                const eventStart = dayjs(events.start(event));
-                const eventEnd = dayjs(events.end(event));
+                const start = dayjs(events.start(event));
+                const end = dayjs(events.end(event));
+
+                let current: InternalEvent<TData> | null | undefined;
+                let largestSegmentDuration = Number.MIN_SAFE_INTEGER;
 
                 dayNextDay.forEach(([day, nextDay]) => {
-                    if (day.isBetween(eventStart, eventEnd, 'day', '[]')) {
-                        eventsByDay.get(day.valueOf())!.push({
-                            date: day.toDate(),
+                    if (day.isBetween(start, end, 'day', '[]')) {
+
+                        const segmentStart = start.isBefore(day) ? 0 : start.hour() + start.minute() / 60;
+                        const segmentEnd = end.isAfter(nextDay) ? 24 : end.hour() + end.minute() / 60;
+                        const segmentDuration = segmentEnd - segmentStart;
+
+                        const segment: InternalEvent<TData> = {
+
+                            date: day,
+
+                            start,
+                            end,
+
+                            segmentStart,
+                            segmentEnd,
+                            segmentDuration,
+
                             isWeekend: day.day() === 0 || day.day() === 6,
-                            startsBefore: eventStart.isBefore(day),
-                            endsAfter: eventEnd.isAfter(nextDay),
+                            isLargest: false,
+
+                            startsBefore: start.isBefore(day),
+                            endsAfter: end.isAfter(nextDay),
+
                             event
-                        });
+
+                        };
+
+                        eventsByDay.get(day.valueOf())!.push(segment);
+
+                        if (segment.segmentDuration > largestSegmentDuration) {
+                            current = segment;
+                            largestSegmentDuration = segment.segmentDuration;
+                        }
+
                     }
                 });
+
+                if (current != null) {
+                    current.isLargest = true;
+                }
 
             });
 
@@ -176,8 +221,6 @@ export const useWeekCalendar = <TData>(props: WeekCalendarProps<TData>): WeekCal
         return eventsByDay;
 
     }, [dayNextDay, data, events]);
-
-    console.log(eventsMap);
 
     // Get the headers
 
@@ -212,23 +255,19 @@ export const useWeekCalendar = <TData>(props: WeekCalendarProps<TData>): WeekCal
     }, [eventsMap]);
 
     const getDays = useCallback(() => {
-        return dayNextDay.map(([day, nextDay]) => ({
+        return dayNextDay.map(([day]) => ({
             date: day.toDate(),
             isWeekend: day.day() === 0 || day.day() === 6,
-            events: getEventsForDay(day).map(({ date, isWeekend, startsBefore, endsAfter, event }) => {
-
-                const eventStart = dayjs(events.start(event));
-                const eventEnd = dayjs(events.end(event));
-
-                const startHour = eventStart.isBefore(day) ? 0 : eventStart.hour() + eventStart.minute() / 60;
-                const endHour = eventEnd.isAfter(nextDay) ? 24 : eventEnd.hour() + eventEnd.minute() / 60;
+            events: getEventsForDay(day).map(({ date, segmentStart, segmentEnd, isWeekend, isLargest, startsBefore, endsAfter, event }) => {
 
                 const paddedHeight = height - verticalPadding[0] - verticalPadding[1];
 
                 return {
 
-                    date,
+                    date: date.toDate(),
+
                     isWeekend,
+                    isLargest,
 
                     startsBefore,
                     endsAfter,
@@ -238,16 +277,16 @@ export const useWeekCalendar = <TData>(props: WeekCalendarProps<TData>): WeekCal
                     getPosition: () => ({
                         position: 'absolute',
                         left: 0,
-                        top: verticalPadding[0] + (startHour * paddedHeight / 24),
+                        top: verticalPadding[0] + (segmentStart * paddedHeight / 24),
                         right: 0,
-                        height: ((endHour - startHour) * paddedHeight / 24)
+                        height: ((segmentEnd - segmentStart) * paddedHeight / 24)
                     })
 
                 };
 
             })
         }));
-    }, [dayNextDay, getEventsForDay, events, height, verticalPadding]);
+    }, [dayNextDay, getEventsForDay, height, verticalPadding]);
 
     return {
         ref,
