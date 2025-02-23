@@ -1,0 +1,60 @@
+# Week Calendar
+
+The week calendar is a component that displays a calendar for a week. It is a
+headless component that assumes the following html structure. You are free to 
+customize the look and feel as needed, and you can use the useWeekCalendar hook
+to get the data you need to build your own component.
+
+The html structure is as follows:
+
+```html
+<div id="calendar">
+
+    <div id="header">
+        
+        <div id="header-hours"></div> <!-- keep the same horizontal space as content-hours -->
+
+        <div id="header-days">
+
+            <div id="header-lines"/> <!-- keep the same horizontal space as content-lines -->
+
+            <div id="header-day-0" class="relative">
+            </div>
+
+            <div id="header-day-1" class="relative">
+            </div>
+
+            <!-- ... -->
+
+        </div>
+
+    </div>
+
+    <div id="content">
+
+        <div id="content-hours" class="relative">
+            <div id="hour-0" class="absolute"/>
+        </div>
+
+        <div id="content-days" class="relative">
+
+            <div id="content-lines">
+                <div id="line-0" class="absolute"/> <!-- relative to content-days -->
+            </div>
+
+            <div id="content-day-0" class="relative">
+                <div id="event-0-0" class="absolute"/> <!-- relative to content-day-0 -->
+            </div>
+
+            <div id="content-day-1" class="relative">
+                <div id="event-1-0" class="absolute"/> <!-- relative to content-day-1 -->
+            </div>
+
+            <!-- ... -->
+
+        </div>
+
+    </div>
+
+</div>
+```

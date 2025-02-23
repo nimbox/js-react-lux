@@ -58,6 +58,7 @@
     "uuid": "^9.0.1"
   },
   "peerDependencies": {
+    "dayjs": "^1",
     "lodash": "^4",
     "react": "^18",
     "react-dom": "^18"

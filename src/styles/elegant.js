@@ -46,6 +46,8 @@ export default {
                 'control-border-disabled': '#c0c0c0',
                 'control-fill-disabled': '#f8f8f8',
 
+                'calendar-grid': 'pink',
+
                 // 'control-bg': '#fef3fb',
                 // 'control-border': '#F012BE',
                 // 'control-placeholder': '#0074D9',
