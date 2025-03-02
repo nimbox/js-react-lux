@@ -1,6 +1,7 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { CSSProperties, useCallback, useMemo } from 'react';
 import { useElementHeight } from '../../hooks/useElementHeight';
+import { WeekDayHeader } from './types';
 
 
 export interface MonthDayCalendarEventExtractors<TData> {
@@ -18,13 +19,6 @@ export interface MonthDayCalendarProps<TData> {
 
     data?: TData[];
     events: MonthDayCalendarEventExtractors<TData>;
-
-}
-
-export interface WeekDayHeader {
-
-    date: Date;
-    isWeekend: boolean;
 
 }
 

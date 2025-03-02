@@ -5,12 +5,16 @@ import classNames from 'classnames';
 
 
 export interface MonthDayCalendarExtendedProps<TData> extends MonthDayCalendarProps<TData> {
+
+    onDayClick?: (date: Date) => void;
+
     className?: string;
+
 }
 
 export const MonthDayCalendar = <TData,>(props: MonthDayCalendarExtendedProps<TData>) => {
 
-    const { className, ...rest } = props;
+    const { onDayClick, className, ...rest } = props;
     const calendar = useMonthDayCalendar(rest);
 
     return (
@@ -38,12 +42,14 @@ export const MonthDayCalendar = <TData,>(props: MonthDayCalendarExtendedProps<TD
                             <div
                                 key={date.toISOString()}
                                 className={classNames(
-                                    'flex-1 relative first:border-l border-r border-b border-calendar-border p-1 hover:text-white hover:bg-secondary-500 cursor-pointer',
+                                    'flex-1 relative first:border-l border-r border-b border-calendar-border p-1',
                                     {
                                         'bg-calendar-weekend': isWeekend,
-                                        'text-white bg-info-500': isToday
+                                        'text-white bg-info-500': isToday,
+                                        'hover:text-white hover:bg-secondary-500 cursor-pointer': onDayClick
                                     }
                                 )}
+                                onClick={() => onDayClick?.(date)}
                             >
                                 <div className="absolute top-0 left-0 text-sm p-1 z-20">
                                     {dayjs(date).format('D')}
@@ -63,4 +69,4 @@ export const MonthDayCalendar = <TData,>(props: MonthDayCalendarExtendedProps<TD
         </div>
     );
 
-}; 
+};

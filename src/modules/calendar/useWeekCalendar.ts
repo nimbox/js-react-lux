@@ -2,6 +2,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { CSSProperties, useCallback, useMemo } from 'react';
 import { useElementHeight } from '../../hooks/useElementHeight';
+import { WeekDayHeader } from './types';
 
 
 dayjs.extend(isBetween);
@@ -24,13 +25,6 @@ export interface WeekCalendarProps<TData> {
 
     verticalPadding?: [number, number];
     hours?: number[];
-
-}
-
-export interface WeekDayHeader {
-
-    date: Date;
-    isWeekend: boolean;
 
 }
 

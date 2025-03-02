@@ -1,3 +1,4 @@
+import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { MonthDayCalendar } from './MonthDayCalendar';
 import { MonthDayCalendarEventExtractors } from './useMonthDayCalendar';
@@ -51,3 +52,11 @@ const MonthDayCalendarTemplate: Story = {
 export const Basic: Story = {
     ...MonthDayCalendarTemplate
 }; 
+
+export const WithDayClick: Story = {
+    ...MonthDayCalendarTemplate,
+    args: {
+        ...MonthDayCalendarTemplate.args,
+        onDayClick: (date) => action('day clicked')(date)
+    }
+};
