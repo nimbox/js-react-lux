@@ -38,10 +38,10 @@ export const MonthDayCalendar = <TData,>(props: MonthDayCalendarExtendedProps<TD
                             <div
                                 key={date.toISOString()}
                                 className={classNames(
-                                    'flex-1 relative first:border-l border-r border-b border-calendar-border p-1',
+                                    'flex-1 relative first:border-l border-r border-b border-calendar-border p-1 hover:text-white hover:bg-secondary-500 cursor-pointer',
                                     {
                                         'bg-calendar-weekend': isWeekend,
-                                        'bg-primary-500': isToday
+                                        'text-white bg-info-500': isToday
                                     }
                                 )}
                             >
