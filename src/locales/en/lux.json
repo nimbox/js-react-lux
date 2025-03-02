@@ -25,16 +25,17 @@
         "Sat"
     ],
     "namedDays": {
-        "tomorrow": "tomorrow",
-        "day-after-tomorrow": "day after tomorrow",
-        "this-friday": "this friday",
-        "next-monday": "next monday",
-        "next-friday": "next friday",
-        "in-two-weeks": "in two weeks",
-        "next-month": "next month",
-        "in-two-months": "in two months"
+        "tomorrow": "Tomorrow",
+        "day-after-tomorrow": "Day after tomorrow",
+        "this-friday": "This friday",
+        "next-monday": "Next monday",
+        "next-friday": "Next friday",
+        "in-two-weeks": "In two weeks",
+        "next-month": "Next month",
+        "in-two-months": "In two months"
     },
     "hour": "Hour",
     "minutes": "Minutes",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "shortcuts": "Shortcuts"
 }

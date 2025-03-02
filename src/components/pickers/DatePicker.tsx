@@ -1,12 +1,13 @@
 import classNames from 'classnames';
-import React, { forwardRef, InputHTMLAttributes, ReactElement, Ref, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, InputHTMLAttributes, ReactElement, Ref, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon } from '../../icons/components';
+import { usePersistentState } from '../../persistent/usePersistentState';
+import { InputPopper, InputPopperProps } from '../inputs/InputPopper';
 import { consumeEvent } from '../utilities/consumeEvent';
 import { setRefInputValue } from '../utilities/setRefInputValue';
-import { InputPopper, InputPopperProps } from '../inputs/InputPopper';
 
 
 //
@@ -37,7 +38,7 @@ export interface DatePickerProps extends Omit<InputPopperProps, 'show' | 'onShow
     // Styling
 
     /**
-     * Wether to show the shortcuts menu. 
+     * Whether to show the shortcuts menu.
      */
     withShortcuts?: boolean
 
@@ -53,7 +54,7 @@ const namedDays = [
     { label: 'next-friday', date: function (t: Date) { t.setDate(t.getDate() + 8 + 4 - t.getDay()); return t; } },
     { label: 'in-two-weeks', date: function (t: Date) { t.setDate(t.getDate() + 15 - t.getDay()); return t; } },
     { label: 'next-month', date: function (t: Date) { t.setDate(1); t.setMonth(t.getMonth() + 1); if (t.getDay() === 6) { t.setDate(t.getDate() + 2); } if (t.getDay() === 0) { t.setDate(t.getDate() + 1); } return t; } },
-    { label: 'in-two-months', date: function (t: Date) { t.setDate(1); t.setMonth(t.getMonth() + 2); if (t.getDay() === 6) { t.setDate(t.getDate() + 2); } if (t.getDay() === 0) { t.setDate(t.getDate() + 1); } return t; } }
+    // { label: 'in-two-months', date: function (t: Date) { t.setDate(1); t.setMonth(t.getMonth() + 2); if (t.getDay() === 6) { t.setDate(t.getDate() + 2); } if (t.getDay() === 0) { t.setDate(t.getDate() + 1); } return t; } }
 ];
 
 /**
@@ -82,7 +83,7 @@ export const DatePicker = forwardRef((
         parseDate = internalParseDate,
         formatDate = internalFormatDate,
 
-        withShortcuts = false,
+        withShortcuts = true,
 
         // Rest goes to InputPopper
 
@@ -187,19 +188,6 @@ interface CalendarProps extends Pick<DatePickerProps, 'firstDayOfWeek' | 'withSh
      */
     onDateChange: (date: [number, number, number]) => void;
 
-    // Configuration
-
-    /** 
-     * The first day of the week to display in the calendar. 
-     */
-    firstDayOfWeek?: number;
-
-    /** 
-     * Parse date function defaults to parsing dd-mm-yyyy into [yyyy, mm, dd]
-     * (with zero based month). 
-     */
-    parseDate?: (s: string) => [number, number, number] | null;
-
     // Styling
 
     /** 
@@ -234,6 +222,8 @@ const Calendar = (props: CalendarProps): ReactElement => {
     const days = t('shortDays', { defaultValue: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], returnObjects: true }) as string[];
 
     // State
+
+    const [showShortcuts, setShowShortcuts] = usePersistentState('date-picker-show-shortcuts', withShortcuts);
 
     const today = useMemo(() => {
         const d = new Date();
@@ -283,6 +273,14 @@ const Calendar = (props: CalendarProps): ReactElement => {
         onDateChange?.([d.getFullYear(), d.getMonth(), d.getDate()]);
     };
 
+    const handleShowShortcuts = () => {
+        setShowShortcuts(true);
+    };
+
+    const handleHideShortcuts = () => {
+        setShowShortcuts(false);
+    };
+
     // Weeks
 
     const weeks = useMemo(() => {
@@ -303,9 +301,10 @@ const Calendar = (props: CalendarProps): ReactElement => {
 
     const dayClasses = (d: Date): string => {
 
-        const c = ['hover:text-white hover:bg-secondary-500'];
+        const c = ['p-1 text-center hover:text-white hover:bg-secondary-500 cursor-pointer'];
 
-        if (d.getMonth() !== calendar.getMonth()) { c.push('text-muted bg-gray-200'); } // off
+        if (d.getMonth() !== calendar.getMonth()) { c.push('text-muted'); } // off
+        if (d.getDay() === 0 || d.getDay() === 6) { c.push('bg-gray-100'); } // weekend
         if (d.getTime() === today.getTime()) { c.push('text-white bg-info-500'); } // today
         if (selected && d.getTime() === selected.getTime()) { c.push('text-white bg-primary-500'); } // selected
 
@@ -316,56 +315,81 @@ const Calendar = (props: CalendarProps): ReactElement => {
     // Render
 
     return (
-        <div onMouseDown={consumeEvent} className={classNames('flex flex-row', className)}>
+        <div onMouseDown={consumeEvent} className='relative'>
 
-            <div>
+            <div className={classNames('flex flex-row rounded overflow-hidden', className)}>
 
-                <div className="px-2 py-1 flex flex-row items-center justify-between border-b border-control-border">
-                    <div className="flex-grow text-center font-bold">
-                        {months![calendar.getMonth()]} {calendar.getFullYear()}
+                <div className="w-72">
+
+                    <div className="h-16 border-b border-control-border">
+
+                        <div className="px-2 py-2 flex flex-row items-center justify-between ">
+                            <div className="flex-grow text-center font-bold">
+                                {months![calendar.getMonth()]} {calendar.getFullYear()}
+                            </div>
+                            <div className="flex-none space-x-2">
+                                <button type="button" className="focus:outline-none" onClick={handleClickPrevMonth}><AngleLeftIcon /></button>
+                                <button type="button" className="focus:outline-none" onClick={handleClickToday}><CircleIcon /></button>
+                                <button type="button" className="focus:outline-none" onClick={handleClickNextMonth}><AngleRightIcon /></button>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-7">
+                            {weeks[0].map((d, i) =>
+                                <div key={i} className="text-center">
+                                    {days[d.getDay()]}
+                                </div>
+                            )}
+                        </div>
+
                     </div>
-                    <div className="flex-none space-x-2">
-                        <button type="button" className="focus:outline-none" onClick={handleClickPrevMonth}><AngleLeftIcon /></button>
-                        <button type="button" className="focus:outline-none" onClick={handleClickToday}><CircleIcon /></button>
-                        <button type="button" className="focus:outline-none" onClick={handleClickNextMonth}><AngleRightIcon /></button>
+
+                    <div className="grid grid-cols-7">
+                        {weeks.map(week =>
+                            week.map(d =>
+                                <div
+                                    key={d.getTime()}
+                                    onClick={() => handleClickDate(d)}
+                                    className={dayClasses(d)}
+                                >
+                                    {d.getDate()}
+                                </div>
+                            )
+                        )}
                     </div>
+
                 </div>
 
-                <table className="table-fixed text-center" style={{ width: '21em' }}>
+                {withShortcuts && showShortcuts &&
+                    <div className="w-48 border-l border-control-border flex flex-col">
 
-                    <thead>
-                        <tr>
-                            {weeks[0].map((d, i) =>
-                                <th key={i} className="" style={{ padding: '0 0.5em', width: '3em' }}>
-                                    {days[d.getDay()]}
-                                </th>)
-                            }
-                        </tr>
-                    </thead>
+                        <div className="h-16 border-b border-control-border flex items-end justify-center">
+                            {t('shortcuts', { defaultValue: 'Shortcuts' })}
+                        </div>
 
-                    <tbody className="cursor-pointer">
-                        {weeks.map(w =>
-                            <tr key={w[0].getTime()}>
-                                {w.map(d =>
-                                    <td key={d.getTime()} onClick={() => handleClickDate(d)} className={dayClasses(d)}>
-                                        {d.getDate()}
-                                    </td>
-                                )}
-                            </tr>
-                        )}
-                    </tbody>
+                        <div className="flex-1 flex flex-col">
+                            {namedDays.map((s, i) =>
+                                <div
+                                    key={i}
+                                    onClick={() => handleClickDate(s.date(new Date(today)))}
+                                    className="flex-1 flex items-center justify-start px-2 truncate hover:text-white hover:bg-secondary-500 cursor-pointer"
+                                >
+                                    {t(`namedDays.${s.label}`, { defaultValue: s.label })}
+                                </div>
+                            )}
+                        </div>
 
-                </table>
+                    </div>
+                }
 
             </div>
 
             {withShortcuts &&
-                <div className="flex flex-col justify-between items-stretch border-l border-control-border cursor-pointer">
-                    {namedDays.map((s, i) =>
-                        <div key={i} onClick={() => handleClickDate(s.date(new Date(today)))} className="px-2 truncate hover:text-white hover:bg-secondary-500">
-                            {t(`namedDays.${s.label}`, { defaultValue: s.label })}
-                        </div>
-                    )}
+                <div className="absolute w-4 h-8 top-4 -right-4 bg-black text-white rounded-r flex items-center justify-center">
+                    {showShortcuts
+                        ? <button type="button" onClick={handleHideShortcuts}><AngleLeftIcon /></button>
+                        : <button type="button" onClick={handleShowShortcuts}><AngleRightIcon /></button>
+                    }
                 </div>
             }
 

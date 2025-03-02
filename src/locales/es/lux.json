@@ -25,16 +25,17 @@
         "Sab"
     ],
     "namedDays": {
-        "tomorrow": "mañana",
-        "day-after-tomorrow": "pasado mañana",
-        "this-friday": "este viernes",
-        "next-monday": "el lunes que viene",
-        "next-friday": "el viernes que viene",
-        "in-two-weeks": "en dos semanas",
-        "next-month": "el mes que viene",
-        "in-two-months": "en dos meses"
+        "tomorrow": "Mañana",
+        "day-after-tomorrow": "Pasado mañana",
+        "this-friday": "Este viernes",
+        "next-monday": "El lunes que viene",
+        "next-friday": "El viernes que viene",
+        "in-two-weeks": "En dos semanas",
+        "next-month": "El mes que viene",
+        "in-two-months": "En dos meses"
     },
     "hour": "Hora",
     "minutes": "Minutos",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "shortcuts": "Atajos"
 }
