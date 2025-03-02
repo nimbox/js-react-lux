@@ -28,14 +28,15 @@ export interface WeekCalendarProps<TData> {
 }
 
 export interface WeekDayHeader {
+
     date: Date;
     isWeekend: boolean;
+
 }
 
 export interface WeekDayEvent<TData> {
 
     date: Date;
-
     isWeekend: boolean;
     isLargest: boolean;
 
@@ -58,9 +59,12 @@ export interface WeekDay<TData> {
 }
 
 export interface WeekHourHeader {
-    hour: number;
+    
     date: Date;
+    hour: number;
+    
     getPosition: () => CSSProperties;
+
 }
 
 export interface WeekCalendarInstance<TData> {
@@ -77,6 +81,8 @@ export interface WeekCalendarInstance<TData> {
 interface InternalEvent<TData> {
 
     date: Dayjs;
+    isWeekend: boolean;
+    isLargest: boolean;
 
     start: Dayjs;
     end: Dayjs;
@@ -84,9 +90,6 @@ interface InternalEvent<TData> {
     segmentStart: number;
     segmentEnd: number;
     segmentDuration: number;
-
-    isWeekend: boolean;
-    isLargest: boolean;
 
     startsBefore: boolean;
     endsAfter: boolean;
@@ -111,12 +114,11 @@ export const useWeekCalendar = <TData>(props: WeekCalendarProps<TData>): WeekCal
     } = props;
 
     const start = useMemo(() => dayjs(date).startOf('week'), [date]);
-
     const { ref, height } = useElementHeight<HTMLDivElement>();
 
     // Calculate the base days for the week
 
-    const dayNextDay: [Dayjs, Dayjs][] = useMemo(() => {
+    const dayNextDayList: [Dayjs, Dayjs][] = useMemo(() => {
         const dayNextDay: [Dayjs, Dayjs][] = [];
         let day = start;
         let nextDay = day.add(1, 'day');
@@ -131,11 +133,11 @@ export const useWeekCalendar = <TData>(props: WeekCalendarProps<TData>): WeekCal
     // Calculate the days and hours
 
     const days = useMemo(() => {
-        return dayNextDay.map(([day]) => ({
+        return dayNextDayList.map(([day]) => ({
             date: day.toDate(),
             isWeekend: day.day() === 0 || day.day() === 6
         }));
-    }, [dayNextDay]);
+    }, [dayNextDayList]);
 
     const hours = useMemo(() => {
         const hoursToUse = customHours || Array.from({ length: 25 }, (_, i) => i);
@@ -145,7 +147,7 @@ export const useWeekCalendar = <TData>(props: WeekCalendarProps<TData>): WeekCal
         }));
     }, [start, customHours]);
 
-    // Then use these days to process events
+    // Map the events to the days
 
     const eventsMap = useMemo(() => {
 
@@ -157,7 +159,7 @@ export const useWeekCalendar = <TData>(props: WeekCalendarProps<TData>): WeekCal
             // the base. The key of the the map is the valueOf the
             // date, which is also returned by the dayjs function.
 
-            dayNextDay.forEach(([day]) => {
+            dayNextDayList.forEach(([day]) => {
                 eventsByDay.set(day.valueOf(), []);
             });
 
@@ -172,7 +174,7 @@ export const useWeekCalendar = <TData>(props: WeekCalendarProps<TData>): WeekCal
                 let current: InternalEvent<TData> | null | undefined;
                 let largestSegmentDuration = Number.MIN_SAFE_INTEGER;
 
-                dayNextDay.forEach(([day, nextDay]) => {
+                dayNextDayList.forEach(([day, nextDay]) => {
                     if (day.isBetween(start, end, 'day', '[]')) {
 
                         const segmentStart = start.isBefore(day) ? 0 : start.hour() + start.minute() / 60;
@@ -220,7 +222,7 @@ export const useWeekCalendar = <TData>(props: WeekCalendarProps<TData>): WeekCal
 
         return eventsByDay;
 
-    }, [dayNextDay, data, events]);
+    }, [dayNextDayList, data, events]);
 
     // Get the headers
 
@@ -255,7 +257,7 @@ export const useWeekCalendar = <TData>(props: WeekCalendarProps<TData>): WeekCal
     }, [eventsMap]);
 
     const getDays = useCallback(() => {
-        return dayNextDay.map(([day]) => ({
+        return dayNextDayList.map(([day]) => ({
             date: day.toDate(),
             isWeekend: day.day() === 0 || day.day() === 6,
             events: getEventsForDay(day).map(({ date, segmentStart, segmentEnd, isWeekend, isLargest, startsBefore, endsAfter, event }) => {
@@ -265,7 +267,6 @@ export const useWeekCalendar = <TData>(props: WeekCalendarProps<TData>): WeekCal
                 return {
 
                     date: date.toDate(),
-
                     isWeekend,
                     isLargest,
 
@@ -286,7 +287,7 @@ export const useWeekCalendar = <TData>(props: WeekCalendarProps<TData>): WeekCal
 
             })
         }));
-    }, [dayNextDay, getEventsForDay, height, verticalPadding]);
+    }, [dayNextDayList, getEventsForDay, height, verticalPadding]);
 
     return {
         ref,
