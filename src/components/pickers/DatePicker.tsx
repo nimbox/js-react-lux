@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { forwardRef, InputHTMLAttributes, ReactElement, Ref, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, InputHTMLAttributes, ReactElement, Ref, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
@@ -53,7 +53,7 @@ const namedDays = [
     { label: 'next-monday', date: function (t: Date) { t.setDate(t.getDate() + 8 - t.getDay()); return t; } },
     { label: 'next-friday', date: function (t: Date) { t.setDate(t.getDate() + 8 + 4 - t.getDay()); return t; } },
     { label: 'in-two-weeks', date: function (t: Date) { t.setDate(t.getDate() + 15 - t.getDay()); return t; } },
-    { label: 'next-month', date: function (t: Date) { t.setDate(1); t.setMonth(t.getMonth() + 1); if (t.getDay() === 6) { t.setDate(t.getDate() + 2); } if (t.getDay() === 0) { t.setDate(t.getDate() + 1); } return t; } },
+    { label: 'next-month', date: function (t: Date) { t.setDate(1); t.setMonth(t.getMonth() + 1); if (t.getDay() === 6) { t.setDate(t.getDate() + 2); } if (t.getDay() === 0) { t.setDate(t.getDate() + 1); } return t; } }
     // { label: 'in-two-months', date: function (t: Date) { t.setDate(1); t.setMonth(t.getMonth() + 2); if (t.getDay() === 6) { t.setDate(t.getDate() + 2); } if (t.getDay() === 0) { t.setDate(t.getDate() + 1); } return t; } }
 ];
 
@@ -221,15 +221,22 @@ const Calendar = (props: CalendarProps): ReactElement => {
     const months = t('months', { defaultValue: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], returnObjects: true }) as string[];
     const days = t('shortDays', { defaultValue: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], returnObjects: true }) as string[];
 
-    // State
 
-    const [showShortcuts, setShowShortcuts] = usePersistentState('date-picker-show-shortcuts', withShortcuts);
+    // State
 
     const today = useMemo(() => {
         const d = new Date();
         d.setHours(12, 0, 0, 0);
         return d;
     }, []);
+
+    const [currentMonth, setCurrentMonth] = useState(() => {
+        return date
+            ? { year: date[0], month: date[1] }
+            : { year: today.getFullYear(), month: today.getMonth() };
+    });
+
+    const [showShortcuts, setShowShortcuts] = usePersistentState('date-picker-show-shortcuts', withShortcuts);
 
     const selected = useMemo(() => {
         return date != null ? new Date(date[0], date[1], date[2], 12, 0, 0, 0) : null;
@@ -240,33 +247,35 @@ const Calendar = (props: CalendarProps): ReactElement => {
     // second = 0 and millis = 0). Whenever the internalValue changes, the
     // calendar is updated to show such date.
 
-    const [calendar, setCalendar] = useState<Date>(today);
-    useEffect(() => {
-        const d = date != null ? new Date(date[0], date[1], date[2]) : new Date(today);
-        d.setHours(12, 0, 0, 0);
-        d.setDate(1);
-        setCalendar(d);
-    }, [date, today]);
+    const calendar = useMemo(() => {
+        const d = new Date(currentMonth.year, currentMonth.month, 1, 12, 0, 0, 0);
+        return d;
+    }, [currentMonth]);
 
     // Navigation Handlers
 
     const handleClickPrevMonth = () => {
-        const c = new Date(calendar);
-        c.setMonth(c.getMonth() - 1);
-        setCalendar(c);
+        setCurrentMonth(prev => {
+            const month = prev.month - 1;
+            if (month < 0) {
+                return { year: prev.year - 1, month: 11 };
+            }
+            return { ...prev, month };
+        });
     };
 
     const handleClickToday = () => {
-        const c = new Date();
-        c.setDate(1);
-        c.setHours(12, 0, 0, 0);
-        setCalendar(c);
+        setCurrentMonth({ year: today.getFullYear(), month: today.getMonth() });
     };
 
     const handleClickNextMonth = () => {
-        const c = new Date(calendar);
-        c.setMonth(c.getMonth() + 1);
-        setCalendar(c);
+        setCurrentMonth(prev => {
+            const month = prev.month + 1;
+            if (month > 11) {
+                return { year: prev.year + 1, month: 0 };
+            }
+            return { ...prev, month };
+        });
     };
 
     const handleClickDate = (d: Date) => {
