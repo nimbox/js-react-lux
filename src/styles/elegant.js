@@ -49,6 +49,10 @@ export default {
                 'calendar-border': '#e0e0e0',
                 'calendar-grid': '#f0f0f0',
 
+                'chat-message-in': 'white',
+                'chat-message-out': '#d9fdd3',
+                'chat-message-list-bg': '#eee9e1',
+
                 // 'control-bg': '#fef3fb',
                 // 'control-border': '#F012BE',
                 // 'control-placeholder': '#0074D9',

@@ -1,15 +1,18 @@
 import classNames from 'classnames';
-import { FC, ReactNode, useMemo } from 'react';
+import { FC, ReactNode, useContext, useEffect, useMemo } from 'react';
 import { useFormatter } from '../../contexts/FormatterContext';
 import { CheckIcon, ClockIcon, CrossIcon } from '../../icons/components';
 import { useChatDirection } from './ChatDirectionContext';
+import { ChatMessageListContext } from './ChatMessageList';
 
 
 export interface ChatMessageContainerProps {
 
     direction?: 'in' | 'out';
     timestamp: Date;
-    status?: 'pending' | 'sent' | 'delivered' | 'read' | 'expired' | 'failed';
+
+    status?: 'pending' | 'sent' | 'delivered' | 'read' | 'failed';
+    failedCause?: string;
 
     className?: string;
 
@@ -26,8 +29,8 @@ export const ChatMessageContainer: FC<ChatMessageContainerProps & { children: Re
             {children}
 
             <div className={classNames('hidden group-last:block absolute bottom-[2px]', {
-                'right-[-6px] w-0 h-0 transform -translate-y-1/2 border-y-[6px] border-y-transparent border-l-[6px] border-l-gray-200': direction === 'out',
-                'left-[-6px] w-0 h-0 transform -translate-y-1/2 border-y-[6px] border-y-transparent border-r-[6px] border-r-secondary-500': direction === 'in'
+                'right-[-6px] w-0 h-0 transform -translate-y-1/2 border-y-[6px] border-y-transparent border-l-[6px] border-l-chat-message-out': direction === 'out',
+                'left-[-6px] w-0 h-0 transform -translate-y-1/2 border-y-[6px] border-y-transparent border-r-[6px] border-r-chat-message-in': direction === 'in'
             })} />
 
         </div>
@@ -35,25 +38,29 @@ export const ChatMessageContainer: FC<ChatMessageContainerProps & { children: Re
 
 };
 
-export interface ChatMessageProps extends ChatMessageContainerProps { }
+export interface ChatMessageProps extends ChatMessageContainerProps {
+    name?: string | null;
+}
 
 export const ChatMessage: FC<ChatMessageProps & { children: ReactNode }> = (props) => {
 
     const contextDirection = useChatDirection();
-    const { direction = contextDirection, children, className } = props;
+    const { direction = contextDirection, name, children, className } = props;
 
     return (
         <div className={classNames(
             'relative max-w-md rounded-xl group', {
-            'bg-gray-200 text-gray-800 ': direction === 'out',
-            'bg-secondary-500 text-white': direction === 'in'
+            'bg-chat-message-out text-gray-800 ': direction === 'out',
+            'bg-chat-message-in text-gray-800': direction === 'in'
         }, className)}>
+
+            {name && <div className="font-bold">{name}</div>}
 
             {children}
 
             <div className={classNames('hidden group-last:block absolute bottom-[2px]', {
-                'right-[-6px] w-0 h-0 transform -translate-y-1/2 border-y-[6px] border-y-transparent border-l-[6px] border-l-gray-200': direction === 'out',
-                'left-[-6px] w-0 h-0 transform -translate-y-1/2 border-y-[6px] border-y-transparent border-r-[6px] border-r-secondary-500': direction === 'in'
+                'right-[-6px] w-0 h-0 transform -translate-y-1/2 border-y-[6px] border-y-transparent border-l-[6px] border-l-chat-message-out': direction === 'out',
+                'left-[-6px] w-0 h-0 transform -translate-y-1/2 border-y-[6px] border-y-transparent border-r-[6px] border-r-chat-message-in': direction === 'in'
             })} />
 
         </div>
@@ -71,7 +78,7 @@ export interface ChatMessageTimestampStatusProps {
 const ChatMessageTimestampStatus: FC<ChatMessageTimestampStatusProps> = (props) => {
 
     const contextDirection = useChatDirection();
-    const { direction = contextDirection, timestamp, status, className = direction === 'in' ? 'text-gray-200' : 'text-gray-800' } = props;
+    const { direction = contextDirection, timestamp, status, className = direction === 'in' ? 'text-gray-500' : 'text-gray-500' } = props;
 
     const formatter = useFormatter();
 
@@ -99,9 +106,7 @@ const ChatMessageOverlayTimestampStatus: FC<ChatMessageTimestampStatusProps> = (
 //
 
 export interface ChatTextMessageProps extends ChatMessageProps {
-
     body: string;
-
 }
 
 export const ChatTextMessage: FC<ChatTextMessageProps> = (props) => {
@@ -123,20 +128,20 @@ export const ChatTextMessage: FC<ChatTextMessageProps> = (props) => {
 //
 
 export interface ChatImageMessageProps extends ChatMessageProps {
-
     src: string;
     caption?: string;
-
 }
 
 export const ChatImageMessage: FC<ChatImageMessageProps> = (props) => {
 
     const { className, ...rest } = props;
 
+    const { scrollToBottom } = useContext(ChatMessageListContext);
+
     return (
         <ChatMessage {...rest} className={classNames('p-1', className)}>
             <div className="relative">
-                <img src={props.src} className="rounded-xl" />
+                <img src={props.src} onLoad={scrollToBottom} onError={scrollToBottom} className="rounded-xl" />
                 {!props.caption &&
                     <ChatMessageOverlayTimestampStatus direction={props.direction} timestamp={props.timestamp} status={props.status} />
                 }
@@ -161,14 +166,16 @@ export const ChatImageAboveMessage: FC<ChatImageMessageProps> = (props) => {
     const contextDirection = useChatDirection();
     const { direction = contextDirection, className, ...rest } = props;
 
+    const { scrollToBottom } = useContext(ChatMessageListContext);
+
     return (
         <ChatMessageContainer {...rest} className="space-y-2">
-            <img src={props.src} alt="" className="max-w-32 rounded-xl" />
+            <img src={props.src} onLoad={scrollToBottom} onError={scrollToBottom} alt="" className="max-w-32 rounded-xl" />
             <ChatMessageTimestampStatus direction={props.direction} timestamp={props.timestamp} status={props.status} className={classNames(
                 'p-2 rounded-xl',
                 {
-                    'bg-gray-200 text-gray-800 ': direction === 'out',
-                    'bg-secondary-500 text-white': direction === 'in'
+                    'bg-chat-message-out text-gray-800 ': direction === 'out',
+                    'bg-chat-message-in text-gray-800': direction === 'in'
                 }, className)} />
         </ChatMessageContainer>
     );
