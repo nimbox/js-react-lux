@@ -63,7 +63,7 @@ export const ChatMessageList: FC<ChatMessageListProps> = ({ className, children 
             <div
                 ref={listRef}
                 className={classNames(
-                    'w-100 h-full py-2 flex flex-col overflow-y-auto',
+                    'w-100 h-full py-2 space-y-2 flex flex-col overflow-y-auto',
                     className
                 )}
             >

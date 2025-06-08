@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import { FC, ReactNode, useContext, useEffect, useMemo } from 'react';
+import { FC, ReactNode, useContext, useMemo } from 'react';
 import { useFormatter } from '../../contexts/FormatterContext';
-import { CheckIcon, ClockIcon, CrossIcon } from '../../icons/components';
+import { CheckIcon, ClockIcon, CrossIcon, FileIcon } from '../../icons/components';
 import { useChatDirection } from './ChatDirectionContext';
 import { ChatMessageListContext } from './ChatMessageList';
 
@@ -178,6 +178,34 @@ export const ChatImageAboveMessage: FC<ChatImageMessageProps> = (props) => {
                     'bg-chat-message-in text-gray-800': direction === 'in'
                 }, className)} />
         </ChatMessageContainer>
+    );
+
+};
+
+export interface ChatDocumentMessageProps extends ChatMessageProps {
+    src: string;
+    size: number;
+    filename: string;
+    caption?: string;
+}
+
+export const ChatDocumentMessage: FC<ChatDocumentMessageProps> = (props) => {
+
+    const { className, ...rest } = props;
+
+    return (
+        <ChatMessage {...rest} className={classNames('p-2', className)}>
+            <a href={props.src} target="_blank" rel="noopener noreferrer">
+                <div className="relative flex flex-row items-center gap-2 bg-gray-100 rounded-xl p-2">
+                    <FileIcon className="w-8 h-8" />
+                    <div>
+                        <div>{props.filename}</div>
+                        <div className="text-xs text-gray-500">{Math.round(props.size / 1000)} KB</div>
+                    </div>
+                </div>
+            </a>
+            <ChatMessageTimestampStatus direction={props.direction} timestamp={props.timestamp} status={props.status} />
+        </ChatMessage>
     );
 
 };
