@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { FC, ReactNode, useContext, useMemo } from 'react';
 import { useFormatter } from '../../contexts/FormatterContext';
-import { CheckIcon, ClockIcon, CrossIcon, FileIcon } from '../../icons/components';
+import { CheckIcon, ClockIcon, CrossIcon, DoubleCheckIcon, FileIcon } from '../../icons/components';
 import { useChatDirection } from './ChatDirectionContext';
 import { ChatMessageListContext } from './ChatMessageList';
 
@@ -40,21 +40,27 @@ export const ChatMessageContainer: FC<ChatMessageContainerProps & { children: Re
 
 export interface ChatMessageProps extends ChatMessageContainerProps {
     name?: string | null;
+    remoteId?: string | null;
 }
 
 export const ChatMessage: FC<ChatMessageProps & { children: ReactNode }> = (props) => {
 
     const contextDirection = useChatDirection();
-    const { direction = contextDirection, name, children, className } = props;
+    const { direction = contextDirection, name, remoteId, children, className } = props;
 
     return (
         <div className={classNames(
-            'relative max-w-md rounded-xl group', {
+            'relative max-w-md rounded-xl drop-shadow group', {
             'bg-chat-message-out text-gray-800 ': direction === 'out',
             'bg-chat-message-in text-gray-800': direction === 'in'
         }, className)}>
 
-            {name && <div className="font-bold">{name}</div>}
+            {(name || remoteId) &&
+                <div className="flex flex-row justify-between items-center gap-2">
+                    <div className="font-bold">{name || ''}</div>
+                    {remoteId && <div className="text-xs text-gray-500">{remoteId}</div>}
+                </div>
+            }
 
             {children}
 
@@ -72,20 +78,21 @@ export interface ChatMessageTimestampStatusProps {
     direction: ChatMessageProps['direction'];
     timestamp: Date;
     status: ChatMessageProps['status'];
+    failedCause?: ChatMessageProps['failedCause'];
     className?: string;
 }
 
 const ChatMessageTimestampStatus: FC<ChatMessageTimestampStatusProps> = (props) => {
 
     const contextDirection = useChatDirection();
-    const { direction = contextDirection, timestamp, status, className = direction === 'in' ? 'text-gray-500' : 'text-gray-500' } = props;
+    const { direction = contextDirection, timestamp, status, failedCause, className = direction === 'in' ? 'text-gray-500' : 'text-gray-500' } = props;
 
     const formatter = useFormatter();
 
     return (
         <div className={classNames('flex flex-row justify-end items-center gap-1', className)}>
             <span className="text-xs">{formatter.formatTime(timestamp)}</span>
-            <ChatStatus status={status} />
+            <ChatStatus status={status} failedCause={failedCause} />
         </div>
     );
 
@@ -106,18 +113,24 @@ const ChatMessageOverlayTimestampStatus: FC<ChatMessageTimestampStatusProps> = (
 //
 
 export interface ChatTextMessageProps extends ChatMessageProps {
+
+    header?: string;
     body: string;
+    footer?: string;
+
 }
 
 export const ChatTextMessage: FC<ChatTextMessageProps> = (props) => {
 
-    const { className, ...rest } = props;
+    const { header, body, footer, className, ...rest } = props;
     const isEmoji = useMemo(() => props.body.length <= 3 && /\p{Extended_Pictographic}/u.test(props.body), [props.body]);
 
     return (
         <ChatMessage {...rest} className={classNames('p-2', className)}>
-            <div className={classNames({ 'text-center text-4xl': isEmoji })}>{props.body}</div>
-            <ChatMessageTimestampStatus direction={props.direction} timestamp={props.timestamp} status={props.status} />
+            {header && <div className="font-bold mb-2">{header}</div>}
+            <div className={classNames({ 'text-center text-4xl': isEmoji })}>{body}</div>
+            {footer && <div className="text-xs text-gray-500">{footer}</div>}
+            <ChatMessageTimestampStatus direction={props.direction} timestamp={props.timestamp} status={props.status} failedCause={props.failedCause} />
         </ChatMessage>
     );
 
@@ -149,7 +162,7 @@ export const ChatImageMessage: FC<ChatImageMessageProps> = (props) => {
             {props.caption &&
                 <>
                     <div>{props.caption}</div>
-                    <ChatMessageTimestampStatus direction={props.direction} timestamp={props.timestamp} status={props.status} />
+                    <ChatMessageTimestampStatus direction={props.direction} timestamp={props.timestamp} status={props.status} failedCause={props.failedCause} />
                 </>
             }
         </ChatMessage>
@@ -171,7 +184,7 @@ export const ChatImageAboveMessage: FC<ChatImageMessageProps> = (props) => {
     return (
         <ChatMessageContainer {...rest} className="space-y-2">
             <img src={props.src} onLoad={scrollToBottom} onError={scrollToBottom} alt="" className="max-w-32 rounded-xl" />
-            <ChatMessageTimestampStatus direction={props.direction} timestamp={props.timestamp} status={props.status} className={classNames(
+            <ChatMessageTimestampStatus direction={props.direction} timestamp={props.timestamp} status={props.status} failedCause={props.failedCause} className={classNames(
                 'p-2 rounded-xl',
                 {
                     'bg-chat-message-out text-gray-800 ': direction === 'out',
@@ -204,7 +217,7 @@ export const ChatDocumentMessage: FC<ChatDocumentMessageProps> = (props) => {
                     </div>
                 </div>
             </a>
-            <ChatMessageTimestampStatus direction={props.direction} timestamp={props.timestamp} status={props.status} />
+            <ChatMessageTimestampStatus direction={props.direction} timestamp={props.timestamp} status={props.status} failedCause={props.failedCause} />
         </ChatMessage>
     );
 
@@ -228,7 +241,7 @@ export const ChatAudioMessage: FC<ChatAudioMessageProps> = (props) => {
             <audio src={props.src} controls className="mb-2" />
             {/* <AudioPlayer src={props.src} /> */}
             {props.caption && <div>{props.caption}</div>}
-            <ChatMessageTimestampStatus direction={props.direction} timestamp={props.timestamp} status={props.status} />
+            <ChatMessageTimestampStatus direction={props.direction} timestamp={props.timestamp} status={props.status} failedCause={props.failedCause} />
         </ChatMessage>
     );
 
@@ -258,7 +271,7 @@ export const ChatVideoMessage: FC<ChatVideoMessageProps> = (props) => {
             {props.caption &&
                 <>
                     <div>{props.caption}</div>
-                    <ChatMessageTimestampStatus direction={props.direction} timestamp={props.timestamp} status={props.status} />
+                    <ChatMessageTimestampStatus direction={props.direction} timestamp={props.timestamp} status={props.status} failedCause={props.failedCause} />
                 </>
             }
         </ChatMessage>
@@ -270,27 +283,31 @@ export const ChatVideoMessage: FC<ChatVideoMessageProps> = (props) => {
 // Status
 //
 
-const ChatStatus: FC<Pick<ChatMessageProps, 'status'>> = ({ status }) => {
-
+const ChatStatus: FC<Pick<ChatMessageProps, 'status' | 'failedCause'>> = ({ status, failedCause }) => {
 
     if (status === 'pending') {
-        return <span className="text-muted"><ClockIcon className="inline" /></span>;
+        return <span className="text-muted"><ClockIcon /></span>;
     }
 
     if (status === 'sent') {
-        return <span className="text-muted"><CheckIcon className="inline" /></span>;
+        return <span className="text-muted"><CheckIcon /></span>;
     }
 
     if (status === 'delivered') {
-        return <span className="text-muted"><CheckIcon className="inline" /><CheckIcon className="inline -ml-3" /></span>;
+        return <span className="text-muted"><DoubleCheckIcon /></span>;
     }
 
     if (status === 'read') {
-        return <span className="text-blue-500"><CheckIcon className="inline" /><CheckIcon className="inline -ml-3" /></span>;
+        return <span className="text-blue-500"><DoubleCheckIcon /></span>;
     }
 
     if (status === 'failed') {
-        return <span className="text-danger-500"><CrossIcon className="inline" /></span>;
+        switch (failedCause) {
+            case 'expired':
+                return <span className="text-danger-500"><ClockIcon /></span>;
+            default:
+                return <span title={failedCause} className="text-danger-500"><CrossIcon /></span>;
+        }
     }
 
     return null;

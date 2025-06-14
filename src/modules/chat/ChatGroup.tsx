@@ -30,7 +30,7 @@ export const ChatGroup: FC<ChatGroupProps> = (props) => {
                     'order-2': direction === 'out',
                     'order-1': direction === 'in'
                 })}>
-                    <span>{user}</span>
+                    <span className="drop-shadow">{user}</span>
                 </div>
             </div>
         </ChatDirectionContext.Provider>

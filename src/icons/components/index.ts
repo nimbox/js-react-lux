@@ -26,6 +26,7 @@ export { default as CommentIcon } from "./Comment";
 export { default as CrossIcon } from "./Cross";
 export { default as DangerIcon } from "./Danger";
 export { default as DescendingIcon } from "./Descending";
+export { default as DoubleCheckIcon } from "./DoubleCheck";
 export { default as DragIcon } from "./Drag";
 export { default as EditIcon } from "./Edit";
 export { default as FileCopyIcon } from "./FileCopy";
