@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { FC, ReactNode, useContext, useMemo } from 'react';
+import { FC, ReactNode, useContext } from 'react';
 import { useFormatter } from '../../contexts/FormatterContext';
 import { CheckIcon, ClockIcon, CrossIcon, DoubleCheckIcon, FileIcon } from '../../icons/components';
 import { useChatDirection } from './ChatDirectionContext';
@@ -115,7 +115,7 @@ const ChatMessageOverlayTimestampStatus: FC<ChatMessageTimestampStatusProps> = (
 export interface ChatTextMessageProps extends ChatMessageProps {
 
     header?: string;
-    body: string;
+    body: React.ReactNode;
     footer?: string;
 
 }
@@ -123,7 +123,7 @@ export interface ChatTextMessageProps extends ChatMessageProps {
 export const ChatTextMessage: FC<ChatTextMessageProps> = (props) => {
 
     const { header, body, footer, className, ...rest } = props;
-    const isEmoji = useMemo(() => props.body.length <= 3 && /\p{Extended_Pictographic}/u.test(props.body), [props.body]);
+    const isEmoji = false; // useMemo(() => props.body.length <= 3 && /\p{Extended_Pictographic}/u.test(props.body), [props.body]);
 
     return (
         <ChatMessage {...rest} className={classNames('p-2', className)}>
