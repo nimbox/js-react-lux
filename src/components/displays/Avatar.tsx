@@ -84,9 +84,9 @@ export const Avatar: FC<AvatarProps> = (props) => {
                     className="flex justify-center items-center rounded-full overflow-hidden"
                     style={{ width: '1.5em', height: '1.5em', color: c, backgroundColor: bg }}
                 >
-                    {src != null ?
-                        <img src={src} srcSet={srcSet} alt={alt} {...rest} /> :
-                        <span style={{ fontSize: '0.75em', lineHeight: 0 }} {...rest}>{children}</span>
+                    {(src != null)
+                        ? <img src={src} srcSet={srcSet} alt={alt} {...rest} />
+                        : <span style={{ fontSize: '0.75em', lineHeight: 0 }} {...rest}>{children}</span>
                     }
                 </span>
             </span>
