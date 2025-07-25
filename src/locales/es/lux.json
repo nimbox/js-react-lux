@@ -37,5 +37,8 @@
     "hour": "Hora",
     "minutes": "Minutos",
     "loading": "Cargando...",
-    "shortcuts": "Atajos"
+    "shortcuts": "Atajos",
+    "chat": {
+        "clickToRemove": "Click para quitar"
+    }
 }

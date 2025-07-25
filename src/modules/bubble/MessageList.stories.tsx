@@ -225,7 +225,11 @@ const messages: MessageData[] = [
 ];
 
 // Utility: sort by timestamp
-const sortedMessages = [...messages].sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+
+const sortedMessages = [...messages]
+    .map(m => [m.timestamp ? new Date(m.timestamp).getTime() : 0, m] as const)
+    .sort(([a], [b]) => a - b)
+    .map(([, m]) => m);
 
 // Utility: group consecutive messages by author+direction
 function groupMessages(messages: MessageData[]) {
@@ -239,7 +243,7 @@ function groupMessages(messages: MessageData[]) {
     for (const m of messages) {
         if (
             !currentGroup ||
-            currentGroup.author.id !== m.author.id ||
+            currentGroup.author?.id !== m.author?.id ||
             currentGroup.direction !== m.direction
         ) {
             // Start new group

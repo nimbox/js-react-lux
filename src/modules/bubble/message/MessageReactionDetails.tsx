@@ -4,6 +4,7 @@ import { Loading } from '../../../components/Loading';
 import { WarningIcon } from '../../../icons/components';
 import { useReactionDetails } from '../hooks/useReactionDetails';
 import { MessageContext } from './Message';
+import { useTranslation } from 'react-i18next';
 
 
 export interface MessageReactionDetailsProps {
@@ -15,6 +16,7 @@ export function MessageReactionDetails(props: MessageReactionDetailsProps) {
 
     const { onRemoveReaction, className = 'w-72 p-3' } = props;
     const { message } = useContext(MessageContext)!;
+    const { t } = useTranslation(['lux']);
 
     const { details, loading, error } = useReactionDetails(message.id);
 
@@ -63,7 +65,7 @@ export function MessageReactionDetails(props: MessageReactionDetailsProps) {
                                         {detail.author.name}
                                     </div>
                                     <div className="text-xs text-gray-500">
-                                        Click to remove
+                                        {t('chat.clickToRemove', { defaultValue: 'Click to remove' })}
                                     </div>
                                 </button> :
 
@@ -72,7 +74,6 @@ export function MessageReactionDetails(props: MessageReactionDetailsProps) {
                                 </div>
 
                             }
-
                         </div>
                         <div className="flex-none text-2xl">{detail.emoji}</div>
                     </div>

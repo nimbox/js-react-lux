@@ -37,5 +37,8 @@
     "hour": "Hour",
     "minutes": "Minutes",
     "loading": "Loading...",
-    "shortcuts": "Shortcuts"
+    "shortcuts": "Shortcuts",
+    "chat": {
+        "clickToRemove": "Click to remove"
+    }
 }
