@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { ChatProviderContext } from '../ChatProvider';
-import { ReactionDetailData } from '../types/ReactionDetailData';
+import { ReactionDetailsData } from '../types/ReactionDetailsData';
 
 
 export function useReactionDetails(messageId: string) {
@@ -9,7 +9,7 @@ export function useReactionDetails(messageId: string) {
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [details, setDetails] = useState<ReactionDetailData[] | null>(null);
+    const [details, setDetails] = useState<ReactionDetailsData[] | null>(null);
 
     useEffect(() => {
 
@@ -26,7 +26,7 @@ export function useReactionDetails(messageId: string) {
             setError(null);
 
             try {
-                const data = await service.fetchReactionDetails(messageId);
+                const data = await service.getReactions(messageId);
                 setDetails(data);
             } catch (err: unknown) {
                 const errorMessage = err instanceof Error ? err.message : 'Unknown error';

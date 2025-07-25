@@ -1,11 +1,14 @@
+import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
-import { MessageGroup } from './MessageGroup';
-import { Message } from './Message';
-import { MessageData } from './types/MessageData';
 import backgroundImage from './assets/chat-background.png';
-import { ReactionDetailData } from './types/ReactionDetailData';
 import { ChatProvider } from './ChatProvider';
 import { authors } from './data/authors';
+import { reactionDetails } from './data/reactionDetails';
+import { Message } from './message/Message';
+import { MessageGroup } from './message/MessageGroup';
+import { MessageList } from './MessageList';
+import { MessageData } from './types/MessageData';
+
 
 // Definition
 
@@ -182,19 +185,42 @@ const messages: MessageData[] = [
                 count: 1
             }
         ]
-    }
-];
-
-const reactionDetails: ReactionDetailData[] = [
-    {
-        emoji: '👍',
-        timestamp: '2024-01-15T10:00:10Z',
-        author: authors['1']
     },
     {
-        emoji: '😊',
-        timestamp: '2024-01-15T10:00:12Z',
-        author: authors['2']
+        id: '9',
+        author: authors['2'],
+        direction: 'outbound',
+        type: 'sticker',
+        body: '',
+        status: 'read',
+        timestamp: '2024-01-15T17:08:00Z',
+        attachments: [
+            {
+                type: 'sticker',
+                name: 'Crying Sticker',
+                mime: 'image/png',
+                size: 45678,
+                url: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f622.svg'
+            }
+        ]
+    },
+    {
+        id: '10',
+        author: authors['1'],
+        direction: 'inbound',
+        type: 'sticker',
+        body: '',
+        status: 'delivered',
+        timestamp: '2024-01-15T17:09:00Z',
+        attachments: [
+            {
+                type: 'sticker',
+                name: 'Smiling Sticker',
+                mime: 'image/png',
+                size: 34567,
+                url: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f60a.svg'
+            }
+        ]
     }
 ];
 
@@ -210,22 +236,22 @@ function groupMessages(messages: MessageData[]) {
         messages: MessageData[];
     }> = [];
     let currentGroup: typeof groups[0] | null = null;
-    for (const msg of messages) {
+    for (const m of messages) {
         if (
             !currentGroup ||
-            currentGroup.author.id !== msg.author.id ||
-            currentGroup.direction !== msg.direction
+            currentGroup.author.id !== m.author.id ||
+            currentGroup.direction !== m.direction
         ) {
             // Start new group
             currentGroup = {
-                id: msg.id,
-                direction: msg.direction,
-                author: msg.author,
-                messages: [msg]
+                id: m.id,
+                direction: m.direction,
+                author: m.author,
+                messages: [m]
             };
             groups.push(currentGroup);
         } else {
-            currentGroup.messages.push(msg);
+            currentGroup.messages.push(m);
         }
     }
     return groups;
@@ -236,25 +262,42 @@ const grouped = groupMessages(sortedMessages);
 // Stories
 
 export const Default: Story = {
+    parameters: {
+        layout: 'fullscreen',
+        viewport: {
+            defaultViewport: 'responsive'
+        }
+    },
     render: () => (
         <ChatProvider
-            fetchReactionDetails={async () => {
+            getReactions={async () => {
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 return reactionDetails;
             }}
+            addReaction={async (messageId, emoji) => {
+                action('addReaction')({ messageId, emoji });
+            }}
+            removeReaction={async (messageId, emoji) => {
+                action('removeReaction')({ messageId, emoji });
+            }}
         >
-            <div className="relative min-w-96 h-full bg-chat-message-list-bg">
+            <div className="relative min-w-96 h-screen bg-chat-message-list-bg">
                 <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${backgroundImage})` }} />
-                <div className="flex flex-col gap-1">
-                    {grouped.map(group => (
-                        <MessageGroup key={group.id} group={{ id: group.id, direction: group.direction, author: group.author }}>
-                            <MessageGroup.Messages>
-                                {group.messages.map(msg => (
-                                    <Message key={msg.id} message={msg} />
-                                ))}
-                            </MessageGroup.Messages>
-                        </MessageGroup>
-                    ))}
+                <div className="relative h-full flex flex-col z-10">
+                    <MessageList className="flex-grow overflow-y-auto">
+                        {grouped.map(group => (
+                            <MessageGroup key={group.id} group={{ id: group.id, direction: group.direction, author: group.author! }}>
+                                <MessageGroup.Messages>
+                                    {group.messages.map(msg => (
+                                        <Message key={msg.id} message={msg} />
+                                    ))}
+                                </MessageGroup.Messages>
+                            </MessageGroup>
+                        ))}
+                    </MessageList>
+                    <div className="flex-none">
+                        BOTTOM
+                    </div>
                 </div>
             </div>
         </ChatProvider>

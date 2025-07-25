@@ -1,18 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ChatProvider } from '../ChatProvider';
 import { authors } from '../data/authors';
-import { reactions } from '../data/reactions';
-import { MessageContext } from '../Message';
-import { MessageGroupContext } from '../MessageGroup';
+import { reactionDetails } from '../data/reactionDetails';
+import { MessageGroupContext } from './MessageGroup';
 import { MessageData } from '../types/MessageData';
 import { MessageGroupData } from '../types/MessageGroupData';
+import { MessageContext } from './Message';
 import { MessageReactionDetails } from './MessageReactionDetails';
 
 
 // Definition
 
 const meta: Meta<typeof MessageReactionDetails> = {
-    component: MessageReactionDetails
+    component: MessageReactionDetails,
+    tags: ['autodocs']
 };
 
 export default meta;
@@ -49,8 +50,8 @@ function Content() {
 export const Default: Story = {
     render: () => (
         <ChatProvider
-            fetchReactionDetails={async () => {
-                return reactions;
+            getReactions={async () => {
+                return reactionDetails;
             }}
         >
             <Content />
@@ -61,8 +62,8 @@ export const Default: Story = {
 export const Delayed: Story = {
     render: () => (
         <ChatProvider
-            fetchReactionDetails={async () => {
-                return new Promise((resolve) => setTimeout(() => resolve(reactions), 2000));
+            getReactions={async () => {
+                return new Promise((resolve) => setTimeout(() => resolve(reactionDetails), 2000));
             }}
         >
             <Content />
@@ -73,7 +74,7 @@ export const Delayed: Story = {
 export const Loading: Story = {
     render: () => (
         <ChatProvider
-            fetchReactionDetails={async () => {
+            getReactions={async () => {
                 return new Promise(() => { });
             }}
         >
@@ -85,7 +86,7 @@ export const Loading: Story = {
 export const Empty: Story = {
     render: () => (
         <ChatProvider
-            fetchReactionDetails={async () => []}
+            getReactions={async () => []}
         >
             <Content />
         </ChatProvider >
@@ -95,7 +96,7 @@ export const Empty: Story = {
 export const Error: Story = {
     render: () => (
         <ChatProvider
-            fetchReactionDetails={async () => {
+            getReactions={async () => {
                 return Promise.reject('Failed to fetch reaction details');
             }}
         >

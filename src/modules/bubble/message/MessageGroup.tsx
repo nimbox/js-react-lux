@@ -1,8 +1,8 @@
 import classnames from 'classnames';
 import { createContext, ReactElement } from 'react';
 import { MessageProps } from './Message';
-import { MessageGroupData } from './types/MessageGroupData';
-import { Avatar } from '../../components/displays/Avatar';
+import { MessageGroupData } from '../types/MessageGroupData';
+import { Avatar } from '../../../components/displays/Avatar';
 import React from 'react';
 
 

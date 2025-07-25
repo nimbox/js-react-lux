@@ -1,13 +1,16 @@
+import { Placement } from '@popperjs/core';
 import classNames from 'classnames';
 import { useCallback, useContext, useState } from 'react';
 import { Popup } from '../../../components/Popup';
-import { MessageContext } from '../Message';
-import { MessageGroupContext } from '../MessageGroup';
+import { MessageContext } from './Message';
+import { MessageGroupContext } from './MessageGroup';
 import { MessageReactionDetails } from './MessageReactionDetails';
+import { ChatProviderContext } from '../ChatProvider';
 
 
 export function MessageReactions() {
 
+    const { removeReaction } = useContext(ChatProviderContext)!;
     const gprops = useContext(MessageGroupContext)!;
     const mprops = useContext(MessageContext)!;
 
@@ -27,13 +30,25 @@ export function MessageReactions() {
     const reactions = [...mprops.message.reactions].sort((a, b) => b.count - a.count);
     const count = reactions.reduce((sum, r) => sum + r.count, 0);
 
+    // Handlers
+
+    const handleRemoveReaction = (messageId: string, emoji: string) => {
+        removeReaction(messageId, emoji);
+        setVisible(false);
+    };
+
     // Render
 
     return (
-        <Popup visible={visible} placement="top" onChangeVisible={setVisible} Component={MessageReactionDetails} >
+        <Popup
+            visible={visible}
+            placement={PLACEMENT[gprops.direction] || 'top'}
+            onChangeVisible={setVisible}
+            Component={() => <MessageReactionDetails onRemoveReaction={handleRemoveReaction} />}
+        >
             <button
                 onClick={handleClick}
-                className={classNames('flex -mt-2', {
+                className={classNames('flex -mt-2 z-10', {
                     'justify-self-end mr-3': gprops.direction === 'outbound',
                     'justify-self-start ml-3': gprops.direction === 'inbound'
                 })}
@@ -53,3 +68,8 @@ export function MessageReactions() {
     );
 
 }
+
+const PLACEMENT: Record<'inbound' | 'outbound', Placement> = {
+    'inbound': 'top-start',
+    'outbound': 'top-end'
+};

@@ -1,12 +1,12 @@
 import classNames from 'classnames';
-import { createContext, useCallback, useContext, useState } from 'react';
+import { createContext, useContext } from 'react';
+import { MessageData } from '../types/MessageData';
 import { MessageGroupContext } from './MessageGroup';
-import { MessageData } from './types/MessageData';
-import { useReactionDetails } from './hooks/useReactionDetails';
-import { Popup } from '../../components/Popup';
+import { MessageMenu } from './MessageMenu';
+import { MessageReactions } from './MessageReactions';
+import { MessageAttachments } from './MessageAttachments';
+import { MessageReact } from './MessageReact';
 
-import { MessageReactionDetails } from './message/MessageReactionDetails';
-import { MessageReactions } from './message/MessageReaction';
 
 export interface MessageProps {
 
@@ -25,29 +25,51 @@ export function Message(props: MessageProps) {
 
     return (
         <MessageContext.Provider value={props}>
-            <div className={'relative max-w-[75%] rounded-xl drop-shadow group'}>
 
-                <div className={classNames('rounded-lg p-3', {
-                    'bg-chat-message-out text-gray-800 ': direction === 'outbound',
-                    'bg-chat-message-in text-gray-800': direction === 'inbound'
+            <div className={classNames('flex flex-row items-center gap-2 group', {
+                'justify-start': direction === 'inbound',
+                'justify-end': direction === 'outbound'
+            })}>
+
+                <div className={classNames('relative max-w-[75%] grow-0 flex flex-col z-0 group', {
+                    'order-1 items-start': direction === 'inbound',
+                    'order-2 items-end': direction === 'outbound'
                 })}>
 
-                    {isFirst && <Message.Author />}
+                    <Message.Floating />
 
-                    <Message.Header />
-                    <Message.Attachments />
-                    <Message.Body />
+                    <div className={'rounded-xl drop-shadow'}>
 
-                    <Message.Footer />
-                    <Message.Properties />
+                        <div className={classNames('rounded-lg p-3', {
+                            'bg-chat-message-out text-gray-800 ': direction === 'outbound',
+                            'bg-chat-message-in text-gray-800': direction === 'inbound'
+                        })}>
 
-                    {isFirst && <Message.Arrow position={'top'} />}
+                            {isFirst && <Message.Author />}
+
+                            <Message.Header />
+                            <Message.Attachments />
+                            <Message.Body />
+
+                            <Message.Footer />
+                            <Message.Properties />
+
+                            {isFirst && <Message.Arrow position={'top'} />}
+
+                        </div>
+
+                    </div>
+
+                    <Message.Reactions />
+
+                    <Message.Menu />
 
                 </div>
 
-                <Message.Reactions />
+                <Message.React />
 
             </div>
+
         </MessageContext.Provider>
     );
 
@@ -57,7 +79,7 @@ export function MessageAuthor() {
 
     const groupProps = useContext(MessageGroupContext);
 
-    if (!groupProps) {
+    if (!groupProps || !groupProps.author) {
         return null;
     }
 
@@ -78,7 +100,7 @@ export function MessageHeader() {
 
     const messageProps = useContext(MessageContext);
 
-    if (!messageProps) {
+    if (!messageProps || !messageProps.message.header || messageProps.message.header.length === 0) {
         return null;
     }
 
@@ -94,7 +116,7 @@ export function MessageBody() {
 
     const messageProps = useContext(MessageContext);
 
-    if (!messageProps) {
+    if (!messageProps || !messageProps.message.body || messageProps.message.body.length === 0) {
         return null;
     }
 
@@ -110,7 +132,7 @@ export function MessageFooter() {
 
     const messageProps = useContext(MessageContext);
 
-    if (!messageProps) {
+    if (!messageProps || !messageProps.message.footer || messageProps.message.footer.length === 0) {
         return null;
     }
 
@@ -159,39 +181,34 @@ export function MessageArrow({ position }: { position: 'top' | 'bottom' }) {
     );
 }
 
-export function MessageAttachments() {
+export function MessageFloating() {
 
     const messageProps = useContext(MessageContext);
-    if (!messageProps || !messageProps.message.attachments || messageProps.message.attachments.length === 0) {
+    if (!messageProps) {
         return null;
     }
+
+    const { message } = messageProps;
+
+    // Check if this is a sticker/emoji message that should float above
+    const isStickerMessage = message.type === 'sticker' || message.type === 'emoji';
+    const hasStickerAttachment = message.attachments?.some(att => att.type === 'sticker' || att.type === 'emoji');
+
+    if (!isStickerMessage && !hasStickerAttachment) {
+        return null;
+    }
+
     return (
-        <div className="flex flex-col gap-2 my-2">
-            {messageProps.message.attachments.map((att, i) => {
-                if (att.type === 'image') {
+        <div className="p-2">
+            {message.attachments?.map((attachment, index) => {
+                if (attachment.type === 'sticker' || attachment.type === 'emoji') {
                     return (
                         <img
-                            key={i}
-                            src={att.url}
-                            alt={att.name || 'attachment'}
-                            className="max-w-xs rounded shadow"
+                            key={index}
+                            src={attachment.url}
+                            alt={attachment.name || 'sticker'}
+                            className="w-24 h-24 object-contain select-none"
                         />
-                    );
-                }
-                if (att.type === 'audio') {
-                    return (
-                        <audio key={i} controls className="w-full max-w-xs">
-                            <source src={att.url} />
-                            Your browser does not support the audio element.
-                        </audio>
-                    );
-                }
-                if (att.type === 'video') {
-                    return (
-                        <video key={i} controls className="w-full max-w-xs rounded shadow">
-                            <source src={att.url} />
-                            Your browser does not support the video tag.
-                        </video>
                     );
                 }
                 return null;
@@ -209,6 +226,9 @@ Message.Footer = MessageFooter;
 Message.Properties = MessageProperties;
 
 Message.Arrow = MessageArrow;
+Message.Floating = MessageFloating;
 
 Message.Reactions = MessageReactions;
 Message.Attachments = MessageAttachments;
+Message.Menu = MessageMenu;
+Message.React = MessageReact;

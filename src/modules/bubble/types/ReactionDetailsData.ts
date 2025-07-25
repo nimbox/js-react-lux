@@ -1,9 +1,11 @@
 import { MessageAuthor } from './MessageAuthor';
 
 
-export interface ReactionDetailData {
+export interface ReactionDetailsData {
 
     emoji: string;
+
+    self: boolean;
     author: MessageAuthor;
     timestamp: string;
 

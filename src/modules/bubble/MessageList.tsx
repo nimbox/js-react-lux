@@ -1,21 +1,28 @@
 import classNames from 'classnames';
-import { createContext, FC, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
+import { createContext, ReactElement, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
+import { MessageGroupProps } from './message/MessageGroup';
 
 
-export interface ChatMessageListContextValue {
+// Context
+
+export interface MessageListContextValue {
     scrollToBottom: () => void;
 }
 
-export const ChatMessageListContext = createContext<ChatMessageListContextValue>({
+export const ChatMessageListContext = createContext<MessageListContextValue>({
     scrollToBottom: () => null
 });
 
-export interface ChatMessageListProps {
+// MessageList
+
+type MessageListChildren = ReactElement<MessageGroupProps> | ReactElement<MessageGroupProps>;
+
+export interface MessageListProps {
     className?: string;
-    children?: React.ReactNode;
+    children?: MessageListChildren | MessageListChildren[];
 }
 
-export const ChatMessageList: FC<ChatMessageListProps> = ({ className, children }) => {
+export function MessageList({ className, children }: MessageListProps) {
 
     const listRef = useRef<HTMLDivElement>(null);
     const debouncedRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -55,8 +62,6 @@ export const ChatMessageList: FC<ChatMessageListProps> = ({ className, children 
         };
     }, []);
 
-    // Render
-
     return (
         <ChatMessageListContext.Provider value={providerValue}>
             <div
@@ -72,4 +77,4 @@ export const ChatMessageList: FC<ChatMessageListProps> = ({ className, children 
         </ChatMessageListContext.Provider>
     );
 
-};
+}
