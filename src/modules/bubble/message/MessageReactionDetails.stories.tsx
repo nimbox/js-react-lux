@@ -74,11 +74,21 @@ export const Loading: Story = {
     render: () => (
         <ChatProvider
             fetchReactionDetails={async () => {
-                return new Promise(() => {});
+                return new Promise(() => { });
             }}
         >
             <Content />
         </ChatProvider>
+    )
+};
+
+export const Empty: Story = {
+    render: () => (
+        <ChatProvider
+            fetchReactionDetails={async () => []}
+        >
+            <Content />
+        </ChatProvider >
     )
 };
 
@@ -93,4 +103,3 @@ export const Error: Story = {
         </ChatProvider>
     )
 };
-

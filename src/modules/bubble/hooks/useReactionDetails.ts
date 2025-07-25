@@ -1,5 +1,4 @@
-import { useContext, useState } from 'react';
-import { useCallback } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ChatProviderContext } from '../ChatProvider';
 import { ReactionDetailData } from '../types/ReactionDetailData';
 
@@ -7,27 +6,42 @@ import { ReactionDetailData } from '../types/ReactionDetailData';
 export function useReactionDetails(messageId: string) {
 
     const service = useContext(ChatProviderContext);
-    const [details, setDetails] = useState<ReactionDetailData[] | null>(null);
-    const [loading, setLoading] = useState(false);
+
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [details, setDetails] = useState<ReactionDetailData[] | null>(null);
 
-    const fetchDetails = useCallback(async () => {
+    useEffect(() => {
 
-        setLoading(true);
-        setError(null);
-
-        try {
-            const data = await service.fetchReactionDetails(messageId);
-            setDetails(data);
-        } catch (err: unknown) {
-            const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-            setError(errorMessage);
-        } finally {
+        if (!messageId) {
             setLoading(false);
+            setError('No message ID provided');
+            setDetails(null);
+            return;
         }
+
+        const fetchDetails = async () => {
+
+            setLoading(true);
+            setError(null);
+
+            try {
+                const data = await service.fetchReactionDetails(messageId);
+                setDetails(data);
+            } catch (err: unknown) {
+                const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+                setError(errorMessage);
+                setDetails(null);
+            } finally {
+                setLoading(false);
+            }
+
+        };
+
+        fetchDetails();
 
     }, [service, messageId]);
 
-    return { details, loading, error, fetchDetails };
+    return { loading, error, details };
 
 }

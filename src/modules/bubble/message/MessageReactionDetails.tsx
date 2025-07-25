@@ -1,6 +1,9 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { useReactionDetails } from '../hooks/useReactionDetails';
 import { MessageContext } from '../Message';
+import { Loading } from '../../../components/Loading';
+import classNames from 'classnames';
+import { WarningIcon } from '../../../icons/components';
 
 
 export interface MessageReactionDetailsProps {
@@ -12,21 +15,32 @@ export function MessageReactionDetails(props: MessageReactionDetailsProps) {
     const { className = 'w-72 p-3' } = props;
     const mprops = useContext(MessageContext);
 
-    const { details, loading, error, fetchDetails } = useReactionDetails(mprops?.message.id || '');
-    useEffect(() => { fetchDetails(); }, [fetchDetails]);
+    const { details, loading, error } = useReactionDetails(mprops?.message.id || '');
 
     // Render
 
     if (loading) {
-        return <div className={className}>Loading...</div>;
+        return (
+            <div className={classNames(className, 'flex flex-row justify-end items-center')}>
+                <Loading />
+            </div>
+        );
     }
 
     if (error) {
-        return <div className={className}>Error: {error}</div>;
+        return (
+            <div className={classNames(className, 'flex flex-row justify-end items-center')}>
+                <WarningIcon className="text-danger-500" />
+            </div>
+        );
     }
 
-    if (!details) {
-        return <div className={className}>Loading...</div>;
+    if (!details || details.length === 0) {
+        return (
+            <div className={classNames(className, 'flex flex-row justify-end items-center')}>
+                <WarningIcon className="text-danger-500" />
+            </div>
+        );
     }
 
     return (
