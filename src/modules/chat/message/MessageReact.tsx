@@ -36,7 +36,7 @@ export function MessageReact() {
             <button
                 ref={setButtonRef}
                 onClick={() => setShow(!show)}
-                className={classNames('p-2 flex-none bg-white/90 drop-shadow rounded-full', {
+                className={classNames('p-2 flex-none bg-white/90 shadow rounded-full', {
                     'order-2': direction === 'inbound',
                     'order-1': direction === 'outbound'
                 }, {
