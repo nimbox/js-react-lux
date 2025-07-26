@@ -16,6 +16,7 @@ import { MessageImage } from './slots/MessageImage';
 import { MessageMenu } from './slots/MessageMenu';
 import { MessageProperties } from './slots/MessageProperties';
 import { MessageReactions } from './slots/MessageReactions';
+import { MessageReply } from './slots/MessageReply';
 import { MessageVideo } from './slots/MessageVideo';
 
 
@@ -69,6 +70,7 @@ Message.Footer = MessageFooter;
 Message.Properties = MessageProperties;
 
 Message.Reactions = MessageReactions;
+Message.Reply = MessageReply;
 Message.Menu = MessageMenu;
 
 Message.React = MessageReact;

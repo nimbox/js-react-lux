@@ -7,6 +7,7 @@ export function ImageMessageContainer() {
         <Message.Container>
             <Message.Bubble>
                 <Message.Author />
+                <Message.Reply />
                 <Message.Header />
                 <Message.Image />
                 <Message.Body />

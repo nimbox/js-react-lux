@@ -7,6 +7,7 @@ export function VideoMessageContainer() {
         <Message.Container>
             <Message.Bubble>
                 <Message.Author />
+                <Message.Reply />
                 <Message.Header />
                 <Message.Video />
                 <Message.Body />

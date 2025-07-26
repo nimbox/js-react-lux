@@ -16,6 +16,7 @@ export function TextMessageContainer() {
             {isSingleEmoji && <Message.FloatingBody className="p-2 text-5xl" />}
             <Message.Bubble>
                 <Message.Author />
+                <Message.Reply />
                 <Message.Header />
                 {!isSingleEmoji && <Message.Body />}
                 <Message.Footer />

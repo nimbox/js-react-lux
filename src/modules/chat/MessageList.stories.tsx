@@ -13,6 +13,9 @@ import { ImageMessageContainer } from './message/renderers/ImageMessage';
 import { StickerMessageContainer } from './message/renderers/StickerMessage';
 import { AudioMessageContainer } from './message/renderers/AudioMessage';
 import { VideoMessageContainer } from './message/renderers/VideoMessage';
+import { ImageReplyRenderer } from './reply/renderers/ImageReply';
+import { TextReplyRenderer } from './reply/renderers/TextReply';
+import { MessageInput } from './MessageInput';
 
 
 // Definition
@@ -300,6 +303,73 @@ const messages: MessageData[] = [
         status: 'sent',
         timestamp: '2024-01-15T17:15:00Z',
         reactions: []
+    },
+    // Message with reply
+    {
+        id: '17',
+        author: authors['1'],
+        direction: 'inbound',
+        type: 'text',
+        header: 'Reply to previous message',
+        body: 'This is a reply to the previous message!',
+        footer: '',
+        status: 'sent',
+        timestamp: '2024-01-15T17:16:00Z',
+        reactions: [],
+        replyTo: {
+            id: '16',
+            author: authors['2'],
+            direction: 'outbound',
+            type: 'text',
+            body: '🔥💪🏆',
+            footer: '',
+            status: 'sent',
+            timestamp: '2024-01-15T17:15:00Z',
+            reactions: []
+        }
+    },
+    // Message with reply to image
+    {
+        id: '18',
+        author: authors['2'],
+        direction: 'outbound',
+        type: 'text',
+        header: 'Reply to image',
+        body: 'Great image! Thanks for sharing.',
+        footer: '',
+        status: 'sent',
+        timestamp: '2024-01-15T17:17:00Z',
+        reactions: [],
+        replyTo: {
+            id: '1',
+            author: authors['1'],
+            direction: 'inbound',
+            type: 'image',
+            header: 'Project Update',
+            body: 'Hey there! How are you doing today? Let\'s make this a very long message. To see if it really wraps and truncates after the 2 line clamp. Still need to add more text to see if it really wraps and truncates after the 2 line clamp.',
+            footer: '',
+            status: 'sent',
+            timestamp: '2024-01-15T10:00:00Z',
+            reactions: [
+                {
+                    emoji: '👍',
+                    count: 1
+                },
+                {
+                    emoji: '😊',
+                    count: 1
+                }
+            ],
+            attachments: [
+                {
+                    type: 'image',
+                    name: 'Sample Image',
+                    mime: 'image/jpeg',
+                    size: 123456,
+                    url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80'
+                }
+            ]
+        }
     }
 ];
 
@@ -360,6 +430,10 @@ export const Default: Story = {
                 audio: () => <AudioMessageContainer />,
                 video: () => <VideoMessageContainer />
             }}
+            renderReply={{
+                text: () => <TextReplyRenderer />,
+                image: () => <ImageReplyRenderer />
+            }}
             getReactions={async () => {
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 return reactionDetails;
@@ -385,9 +459,12 @@ export const Default: Story = {
                             </MessageGroup>
                         ))}
                     </MessageList>
-                    <div className="flex-none">
-                        BOTTOM
-                    </div>
+                    <MessageInput 
+                        onSubmit={(message) => {
+                            action('submitMessage')({ message });
+                            console.log('New message:', message);
+                        }}
+                    />
                 </div>
             </div>
         </ChatProvider>

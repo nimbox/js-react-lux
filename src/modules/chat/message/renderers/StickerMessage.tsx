@@ -8,6 +8,7 @@ export function StickerMessageContainer() {
             <Message.FloatingAttachments />
             <Message.Bubble>
                 <Message.Author />
+                <Message.Reply />
                 <Message.Header />
                 <Message.Body />
                 <Message.Footer />

@@ -3,6 +3,8 @@ import { MessageContextProps } from './message/MessageContext';
 import { TextMessageContainer } from './message/renderers/TextMessage';
 import { ReactionDetailsData } from './types/ReactionDetailsData';
 
+import { TextReplyRenderer } from './reply/renderers/TextReply';
+
 
 // Chat Context
 
@@ -10,6 +12,9 @@ export interface ChatContextProps {
 
     renderMessage: Record<string, (message: MessageContextProps) => React.ReactElement<MessageContextProps>>;
     renderDefaultMessage: (message: MessageContextProps) => React.ReactElement<MessageContextProps>;
+
+    renderReply: Record<string, () => React.ReactElement>;
+    renderDefaultReply: () => React.ReactElement;
 
     getReactions: (messageId: string) => Promise<ReactionDetailsData[]>;
     addReaction: (messageId: string, emoji: string) => Promise<void>;
@@ -21,6 +26,9 @@ export const defaultProps: ChatContextProps = {
 
     renderMessage: {},
     renderDefaultMessage: defaultRenderMessage,
+
+    renderReply: {},
+    renderDefaultReply: defaultRenderReply,
 
     getReactions: defaultGetReactions,
     addReaction: defaultAddReaction,
@@ -45,6 +53,10 @@ export function useChat() {
 
 function defaultRenderMessage(message: MessageContextProps) {
     return React.createElement(TextMessageContainer, message);
+}
+
+function defaultRenderReply() {
+    return React.createElement(TextReplyRenderer);
 }
 
 function defaultGetReactions(): Promise<ReactionDetailsData[]> {

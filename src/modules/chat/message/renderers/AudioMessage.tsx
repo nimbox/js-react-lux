@@ -7,6 +7,7 @@ export function AudioMessageContainer() {
         <Message.Container>
             <Message.Bubble>
                 <Message.Author />
+                <Message.Reply />
                 <Message.Header />
                 <Message.Audio />
                 <Message.Body />
