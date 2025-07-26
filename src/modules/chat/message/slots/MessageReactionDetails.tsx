@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import { useContext } from 'react';
-import { Loading } from '../../../components/Loading';
-import { WarningIcon } from '../../../icons/components';
-import { useReactionDetails } from '../hooks/useReactionDetails';
-import { MessageContext } from './Message';
 import { useTranslation } from 'react-i18next';
+import { Loading } from '../../../../components/Loading';
+import { WarningIcon } from '../../../../icons/components';
+import { useReactionDetails } from '../../hooks/useReactionDetails';
+import { MessageContext } from '../MessageContext';
 
 
 export interface MessageReactionDetailsProps {

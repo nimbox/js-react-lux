@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ChatProvider } from '../ChatProvider';
-import { authors } from '../data/authors';
-import { reactionDetails } from '../data/reactionDetails';
-import { MessageGroupContext } from './MessageGroup';
-import { MessageData } from '../types/MessageData';
-import { MessageGroupData } from '../types/MessageGroupData';
-import { MessageContext } from './Message';
+import { ChatProvider } from '../../ChatProvider';
+import { authors } from '../../data/authors';
+import { reactionDetails } from '../../data/reactionDetails';
+import { MessageData } from '../../types/MessageData';
+import { MessageGroupData } from '../../types/MessageGroupData';
+import { MessageContext } from '../MessageContext';
 import { MessageReactionDetails } from './MessageReactionDetails';
+import { MessageGroupContext } from '../MessageGroupContext';
 
 
 // Definition
@@ -37,7 +37,7 @@ const message: MessageData = {
 
 function Content() {
     return (
-        <MessageGroupContext.Provider value={group}>
+        <MessageGroupContext.Provider value={{ group }}>
             <MessageContext.Provider value={{ message }}>
                 <div className="inline-block border border-control-border rounded">
                     <MessageReactionDetails />

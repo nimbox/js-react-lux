@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
-import { ChatProviderContext } from '../ChatProvider';
+import { useEffect, useState } from 'react';
+import { useChat } from '../ChatContext';
 import { ReactionDetailsData } from '../types/ReactionDetailsData';
 
 
 export function useReactionDetails(messageId: string) {
 
-    const service = useContext(ChatProviderContext);
+    const { getReactions } = useChat();
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -26,7 +26,7 @@ export function useReactionDetails(messageId: string) {
             setError(null);
 
             try {
-                const data = await service.getReactions(messageId);
+                const data = await getReactions(messageId);
                 setDetails(data);
             } catch (err: unknown) {
                 const errorMessage = err instanceof Error ? err.message : 'Unknown error';
@@ -40,7 +40,7 @@ export function useReactionDetails(messageId: string) {
 
         fetchDetails();
 
-    }, [service, messageId]);
+    }, [getReactions, messageId]);
 
     return { loading, error, details };
 

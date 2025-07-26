@@ -1,9 +1,9 @@
 import classNames from 'classnames';
 import { useState } from 'react';
-import { Button } from '../../../components/Button';
-import { Popper } from '../../../components/Popper';
-import { useOnOutsideClick } from '../../../hooks/useOnOutsideClick';
-import { AngleDownIcon, ForwardIcon, ReplyIcon } from '../../../icons/components';
+import { Button } from '../../../../components/Button';
+import { Popper } from '../../../../components/Popper';
+import { useOnOutsideClick } from '../../../../hooks/useOnOutsideClick';
+import { AngleDownIcon, ForwardIcon, ReplyIcon } from '../../../../icons/components';
 
 
 export function MessageMenu() {

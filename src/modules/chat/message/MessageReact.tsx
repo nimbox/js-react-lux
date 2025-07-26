@@ -1,19 +1,19 @@
 import classNames from 'classnames';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { EmojiPicker } from '../../../components/pickers/EmojiPicker';
 import { Popper } from '../../../components/Popper';
 import { useOnOutsideClick } from '../../../hooks/useOnOutsideClick';
 import { SmileyIcon } from '../../../icons/components';
-import { ChatProviderContext } from '../ChatProvider';
-import { MessageGroupContext } from './MessageGroup';
-import { MessageContext } from './Message';
+import { useChat } from '../ChatContext';
+import { useMessage } from './MessageContext';
+import { useMessageGroup } from './MessageGroupContext';
 
 
 export function MessageReact() {
 
-    const { addReaction } = useContext(ChatProviderContext)!;
-    const { direction } = useContext(MessageGroupContext)!;
-    const { message: { id } } = useContext(MessageContext)!;
+    const { addReaction } = useChat();
+    const { group: { direction } } = useMessageGroup();
+    const { message: { id } } = useMessage();
 
     const [show, setShow] = useState(false);
 
@@ -21,6 +21,8 @@ export function MessageReact() {
     const [popperRef, setPopperRef] = useState<HTMLDivElement | null>(null);
 
     useOnOutsideClick(show, () => setShow(false), buttonRef, popperRef);
+
+    // Handlers
 
     const handleSelect = (emoji: string) => {
         addReaction(id, emoji);

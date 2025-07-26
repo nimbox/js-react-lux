@@ -8,6 +8,11 @@ import { Message } from './message/Message';
 import { MessageGroup } from './message/MessageGroup';
 import { MessageList } from './MessageList';
 import { MessageData } from './types/MessageData';
+import { TextMessageContainer } from './message/renderers/TextMessage';
+import { ImageMessageContainer } from './message/renderers/ImageMessage';
+import { StickerMessageContainer } from './message/renderers/StickerMessage';
+import { AudioMessageContainer } from './message/renderers/AudioMessage';
+import { VideoMessageContainer } from './message/renderers/VideoMessage';
 
 
 // Definition
@@ -25,7 +30,7 @@ const messages: MessageData[] = [
         id: '1',
         author: authors['1'],
         direction: 'inbound',
-        type: 'text',
+        type: 'image',
         header: 'Project Update',
         body: 'Hey there! How are you doing today?',
         footer: '',
@@ -55,7 +60,7 @@ const messages: MessageData[] = [
         id: '2',
         author: authors['1'],
         direction: 'inbound',
-        type: 'text',
+        type: 'audio',
         header: 'Follow-up',
         body: 'I was wondering if you had a chance to look at the project proposal I sent yesterday. x ads asd asd asd asd asd asd asd asd asda sd asd asd asd asd asda sd asd asda sda sd asd asd asd asda sd asd asda ads asd asd',
         footer: '',
@@ -81,7 +86,7 @@ const messages: MessageData[] = [
         id: '3',
         author: authors['1'],
         direction: 'inbound',
-        type: 'text',
+        type: 'video',
         header: 'Action Required',
         body: 'Let me know what you think when you get a chance!',
         footer: '',
@@ -221,6 +226,80 @@ const messages: MessageData[] = [
                 url: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f60a.svg'
             }
         ]
+    },
+    // Single emoji messages
+    {
+        id: '11',
+        author: authors['1'],
+        direction: 'inbound',
+        type: 'text',
+        header: '',
+        body: '😊',
+        footer: '',
+        status: 'sent',
+        timestamp: '2024-01-15T17:10:00Z',
+        reactions: []
+    },
+    {
+        id: '12',
+        author: authors['2'],
+        direction: 'outbound',
+        type: 'text',
+        header: '',
+        body: '👍',
+        footer: '',
+        status: 'sent',
+        timestamp: '2024-01-15T17:11:00Z',
+        reactions: []
+    },
+    // Two emoji messages
+    {
+        id: '13',
+        author: authors['1'],
+        direction: 'inbound',
+        type: 'text',
+        header: '',
+        body: '🎉🎊',
+        footer: '',
+        status: 'sent',
+        timestamp: '2024-01-15T17:12:00Z',
+        reactions: []
+    },
+    {
+        id: '14',
+        author: authors['2'],
+        direction: 'outbound',
+        type: 'text',
+        header: '',
+        body: '❤️💕',
+        footer: '',
+        status: 'sent',
+        timestamp: '2024-01-15T17:13:00Z',
+        reactions: []
+    },
+    // Three emoji messages
+    {
+        id: '15',
+        author: authors['1'],
+        direction: 'inbound',
+        type: 'text',
+        header: '',
+        body: '🚀🎯💯',
+        footer: '',
+        status: 'sent',
+        timestamp: '2024-01-15T17:14:00Z',
+        reactions: []
+    },
+    {
+        id: '16',
+        author: authors['2'],
+        direction: 'outbound',
+        type: 'text',
+        body: '🔥💪🏆',
+        footer: '',
+        status: 'sent',
+        timestamp: '2024-01-15T17:15:00Z',
+        reactions: []
     }
 ];
 
@@ -274,6 +353,13 @@ export const Default: Story = {
     },
     render: () => (
         <ChatProvider
+            renderMessage={{
+                text: () => <TextMessageContainer />,
+                sticker: () => <StickerMessageContainer />,
+                image: () => <ImageMessageContainer />,
+                audio: () => <AudioMessageContainer />,
+                video: () => <VideoMessageContainer />
+            }}
             getReactions={async () => {
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 return reactionDetails;

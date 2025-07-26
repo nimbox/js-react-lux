@@ -1,23 +1,20 @@
 import classnames from 'classnames';
-import { createContext, ReactElement } from 'react';
-import { MessageProps } from './Message';
-import { MessageGroupData } from '../types/MessageGroupData';
+import React, { ReactElement } from 'react';
 import { Avatar } from '../../../components/displays/Avatar';
-import React from 'react';
+import { MessageContextProps } from './MessageContext';
+import { MessageGroupContext, MessageGroupContextProps } from './MessageGroupContext';
 
 
 // MessageGroup
 
-export interface MessageGroupProps {
-    group: MessageGroupData;
+export interface MessageGroupProps extends MessageGroupContextProps {
     children: ReactElement<MessageGroupMessagesProps>;
 }
 
-export const MessageGroupContext = createContext<MessageGroupData | null>(null);
-
 export function MessageGroup({ group, children }: MessageGroupProps) {
+
     return (
-        <MessageGroupContext.Provider value={group}>
+        <MessageGroupContext.Provider value={{ group }}>
             <div className={classnames('px-10 flex flex-row', {
                 // 'justify-end': group.direction === 'outbound',
                 // 'justify-start': group.direction === 'inbound'
@@ -42,12 +39,13 @@ export function MessageGroup({ group, children }: MessageGroupProps) {
             </div>
         </MessageGroupContext.Provider>
     );
+
 }
 
 // MessageGroup.Messages
 
 export interface MessageGroupMessagesProps {
-    children: ReactElement<MessageProps> | ReactElement<MessageProps>[];
+    children: ReactElement<MessageContextProps> | ReactElement<MessageContextProps>[];
     className?: string;
 }
 

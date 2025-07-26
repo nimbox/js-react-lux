@@ -19,7 +19,7 @@ export interface MessageData {
     attachments?: MessageAttachment[];
     reactions?: ReactionData[];
 
-    replyTo?: MessageData;
+    replyTo?: Omit<MessageData, 'replyTo'>;
 
     status?: 'pending' | 'sent' | 'delivered' | 'read' | 'failed' | string;
     timestamp?: string;
