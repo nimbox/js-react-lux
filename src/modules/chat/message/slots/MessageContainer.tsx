@@ -12,7 +12,7 @@ export function MessageContainer({ children }: MessageContainerProps) {
     const { group: { direction } } = useMessageGroup();
 
     return (
-        <div className={classNames('relative max-w-[75%] flex flex-col z-0 group', {
+        <div className={classNames('relative flex flex-col z-0 group', {
             'order-1 items-start': direction === 'inbound',
             'order-2 items-end': direction === 'outbound'
         })}>

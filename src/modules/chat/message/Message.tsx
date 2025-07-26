@@ -1,8 +1,9 @@
 import classNames from 'classnames';
-import { useContext } from 'react';
-import { ChatContext } from '../ChatContext';
+import { useChat } from '../ChatContext';
 import { MessageContext, MessageContextProps } from './MessageContext';
+import { useMessageGroup } from './MessageGroupContext';
 import { MessageReact } from './MessageReact';
+import { MessageAudio } from './slots/MessageAudio';
 import { MessageAuthor } from './slots/MessageAuthor';
 import { MessageBody } from './slots/MessageBody';
 import { MessageBubble } from './slots/MessageBubble';
@@ -11,30 +12,30 @@ import { MessageFloatingAttachments } from './slots/MessageFloatingAttachments';
 import { MessageFloatingBody } from './slots/MessageFloatingBody';
 import { MessageFooter } from './slots/MessageFooter';
 import { MessageHeader } from './slots/MessageHeader';
+import { MessageImage } from './slots/MessageImage';
 import { MessageMenu } from './slots/MessageMenu';
 import { MessageProperties } from './slots/MessageProperties';
 import { MessageReactions } from './slots/MessageReactions';
-import { useMessageGroup } from './MessageGroupContext';
-import { MessageAudio } from './slots/MessageAudio';
 import { MessageVideo } from './slots/MessageVideo';
-import { MessageImage } from './slots/MessageImage';
 
 
 // Message
 
 export function Message(props: MessageContextProps) {
 
-    const { renderMessage, renderDefaultMessage } = useContext(ChatContext);
+    const { renderMessage, renderDefaultMessage } = useChat();
     const { group: { direction } } = useMessageGroup();
 
-    // Try to get a specific renderer for this message type, fallback to default
+    // Try to get a specific renderer for this message type,
+    // fallback to default renderer.
+
     const messageType = props.message.type || 'text';
     const specificRenderer = renderMessage[messageType];
     const renderer = specificRenderer || renderDefaultMessage;
 
     return (
         <MessageContext.Provider value={props}>
-            <div className={classNames('flex flex-row items-center gap-2 group', {
+            <div className={classNames('max-w-[75%] flex flex-row items-center gap-2 group', {
                 'justify-start': direction === 'inbound',
                 'justify-end': direction === 'outbound'
             })}>
