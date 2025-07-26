@@ -4,12 +4,14 @@ import { Button } from '../../../../components/Button';
 import { Popper } from '../../../../components/Popper';
 import { useOnOutsideClick } from '../../../../hooks/useOnOutsideClick';
 import { AngleDownIcon, ForwardIcon, ReplyIcon } from '../../../../icons/components';
+import { useMessage } from '../MessageContext';
 
 
 export function MessageMenu() {
 
-    const [show, setShow] = useState(false);
+    const { message: { direction } } = useMessage();
 
+    const [show, setShow] = useState(false);
     const [buttonRef, setButtonRef] = useState<HTMLButtonElement | null>(null);
     const [popperRef, setPopperRef] = useState<HTMLDivElement | null>(null);
 
@@ -38,6 +40,7 @@ export function MessageMenu() {
                 <Popper
                     ref={setPopperRef}
                     reference={buttonRef!}
+                    withPlacement={PLACEMENTS[direction]}
                     className="bg-control-bg border border-control-border rounded drop-shadow p-2"
                 >
 
@@ -52,7 +55,7 @@ export function MessageMenu() {
 
                     <Button
                         variant="text"
-                        start={<ForwardIcon className="w-5 h-5"/>}
+                        start={<ForwardIcon className="w-5 h-5" />}
                         onClick={close(() => console.log())}
                         className="w-full whitespace-nowrap"
                     >
@@ -66,3 +69,8 @@ export function MessageMenu() {
     );
 
 }
+
+const PLACEMENTS = {
+    'inbound': 'bottom-start',
+    'outbound': 'bottom-end'
+} as const;
