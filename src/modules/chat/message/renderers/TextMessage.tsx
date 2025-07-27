@@ -9,7 +9,9 @@ export function TextMessageContainer() {
 
     const safeBody = body?.trim() || '';
     const emojiMatches = safeBody.match(emojiRegex());
-    const isSingleEmoji = emojiMatches && emojiMatches.length === 1;
+    const isSingleEmoji = emojiMatches &&
+        emojiMatches.length === 1 &&
+        safeBody === emojiMatches[0];
 
     return (
         <Message.Container>
