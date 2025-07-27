@@ -45,10 +45,10 @@ export function MessageInput({ className, onSubmit, startButtons, endButtons }: 
 
     return (
         <form onSubmit={handleSubmit} className={classNames('mx-8 mb-4', className)}>
-            <div className="flex flex-col bg-white rounded-3xl overflow-hidden">
+            <div className="flex flex-col bg-white/90 rounded-3xl overflow-hidden">
 
                 {replyTo && (
-                    <div className="px-4 py-2 flex items-center justify-between gap-2 bg-gray-50 border-b border-gray-200">
+                    <div className="px-4 py-2 flex items-center justify-between gap-2 border-b border-gray-200">
                         <div className="flex-1">
                             <Reply message={replyTo} />
                         </div>
