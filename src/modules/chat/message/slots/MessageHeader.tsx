@@ -10,7 +10,7 @@ export function MessageHeader() {
     }
 
     return (
-        <div className="text-sm font-bold text-gray-500">
+        <div className="font-bold text-gray-500">
             {header}
         </div>
     );

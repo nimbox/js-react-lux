@@ -10,7 +10,7 @@ export function MessageBody() {
     }
 
     return (
-        <div className="text-sm text-gray-500">
+        <div className="text-gray-500">
             {body}
         </div>
     );
