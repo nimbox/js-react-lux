@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { ChatContext, ChatContextProps, defaultProps } from './ChatContext';
+import { MessageData } from './types/MessageData';
 
 
 // Chat
@@ -11,10 +13,27 @@ export function ChatProvider(props: Partial<ChatProviderProps>) {
 
     const { children, ...rest } = props;
 
+    // Reply state management
+
+    const [replyTo, setReplyTo] = useState<Omit<MessageData, 'replyTo'> | null>(null);
+
+    const handleSetReplyTo = (message: Omit<MessageData, 'replyTo'>) => {
+        setReplyTo(message);
+    };
+
+    const handleClearReplyTo = () => {
+        setReplyTo(null);
+    };
+
+    // Render
+
     return (
         <ChatContext.Provider value={{
             ...defaultProps,
-            ...rest
+            ...rest,
+            replyTo,
+            setReplyTo: handleSetReplyTo,
+            clearReplyTo: handleClearReplyTo
         }}>
             {children}
         </ChatContext.Provider >

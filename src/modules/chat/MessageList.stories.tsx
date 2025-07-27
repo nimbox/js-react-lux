@@ -16,6 +16,7 @@ import { VideoMessageContainer } from './message/renderers/VideoMessage';
 import { ImageReplyRenderer } from './reply/renderers/ImageReply';
 import { TextReplyRenderer } from './reply/renderers/TextReply';
 import { MessageInput } from './MessageInput';
+import { useChat } from './ChatContext';
 
 
 // Definition
@@ -412,6 +413,20 @@ function groupMessages(messages: MessageData[]) {
 
 const grouped = groupMessages(sortedMessages);
 
+// MessageInputWrapper component to use hooks
+function MessageInputWrapper() {
+    const { replyTo } = useChat();
+    
+    return (
+        <MessageInput 
+            onSubmit={(message) => {
+                action('submitMessage')({ message, replyTo });
+                console.log('New message:', message, 'Reply to:', replyTo);
+            }}
+        />
+    );
+}
+
 // Stories
 
 export const Default: Story = {
@@ -459,12 +474,7 @@ export const Default: Story = {
                             </MessageGroup>
                         ))}
                     </MessageList>
-                    <MessageInput 
-                        onSubmit={(message) => {
-                            action('submitMessage')({ message });
-                            console.log('New message:', message);
-                        }}
-                    />
+                    <MessageInputWrapper />
                 </div>
             </div>
         </ChatProvider>

@@ -5,11 +5,13 @@ import { Popper } from '../../../../components/Popper';
 import { useOnOutsideClick } from '../../../../hooks/useOnOutsideClick';
 import { AngleDownIcon, ForwardIcon, ReplyIcon } from '../../../../icons/components';
 import { useMessage } from '../MessageContext';
+import { useChat } from '../../ChatContext';
 
 
 export function MessageMenu() {
 
-    const { message: { direction } } = useMessage();
+    const { message } = useMessage();
+    const { setReplyTo } = useChat();
 
     const [show, setShow] = useState(false);
     const [buttonRef, setButtonRef] = useState<HTMLButtonElement | null>(null);
@@ -21,6 +23,14 @@ export function MessageMenu() {
         fn?.();
         setShow(false);
     };
+
+    const handleReply = () => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { replyTo, ...messageWithoutReply } = message;
+        setReplyTo(messageWithoutReply);
+    };
+
+    // Render
 
     return (
         <>
@@ -40,14 +50,14 @@ export function MessageMenu() {
                 <Popper
                     ref={setPopperRef}
                     reference={buttonRef!}
-                    withPlacement={PLACEMENTS[direction]}
+                    withPlacement={PLACEMENTS[message.direction]}
                     className="bg-control-bg border border-control-border rounded drop-shadow p-2"
                 >
 
                     <Button
                         variant="text"
-                        start={<ReplyIcon className="w-5 h-5" />}
-                        onClick={close(() => console.log())}
+                        start={<ReplyIcon className="w-8 h-8" />}
+                        onClick={close(handleReply)}
                         className="w-full whitespace-nowrap"
                     >
                         Reply
@@ -55,7 +65,7 @@ export function MessageMenu() {
 
                     <Button
                         variant="text"
-                        start={<ForwardIcon className="w-5 h-5" />}
+                        start={<ForwardIcon className="w-8 h-8" />}
                         onClick={close(() => console.log())}
                         className="w-full whitespace-nowrap"
                     >

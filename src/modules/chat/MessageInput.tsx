@@ -1,8 +1,11 @@
 import classNames from 'classnames';
 import { ReactNode, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/inputs/Input';
-import { SendIcon } from '../../icons/components';
+import { CrossIcon, SendIcon } from '../../icons/components';
+import { useChat } from './ChatContext';
+import { Reply } from './reply/Reply';
 
 
 export interface MessageInputProps {
@@ -17,7 +20,13 @@ export interface MessageInputProps {
 
 export function MessageInput({ className, onSubmit, startButtons, endButtons }: MessageInputProps) {
 
+    const { replyTo, clearReplyTo: clearReply } = useChat();
+    const { t } = useTranslation();
+    // State
+
     const [body, setBody] = useState('');
+
+    // Handlers
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setBody(e.target.value);
@@ -28,15 +37,48 @@ export function MessageInput({ className, onSubmit, startButtons, endButtons }: 
         if (body.trim()) {
             onSubmit?.(body.trim());
             setBody('');
+            clearReply(); // Clear reply after sending
         }
     };
 
+    // Render
+
     return (
-        <form onSubmit={handleSubmit} className={classNames('flex flex-row items-center gap-2 bg-white mx-4 mb-4 p-4 rounded-full', className)}>
-            {startButtons}
-            <Input variant="plain" placeholder="Type a message..." value={body} onChange={handleChange} className="ml-4" />
-            {endButtons}
-            <Button type='submit' semantic="primary" rounded={true}><SendIcon /></Button>
+        <form onSubmit={handleSubmit} className={classNames('mx-8 mb-4', className)}>
+            <div className="flex flex-col bg-white rounded-3xl overflow-hidden">
+
+                {replyTo && (
+                    <div className="px-4 py-2 flex items-center justify-between gap-2 bg-gray-50 border-b border-gray-200">
+                        <div className="flex-1">
+                            <Reply message={replyTo} />
+                        </div>
+                        <div className="flex-shrink-0">
+                            <Button type="button" semantic="muted" rounded={true} onClick={clearReply}>
+                                <CrossIcon />
+                            </Button>
+                        </div>
+                    </div>
+                )}
+
+                <div className="p-4 flex flex-row items-center gap-2">
+
+                    {startButtons}
+
+                    <Input
+                        variant="plain"
+                        placeholder={t('chat.messageInput.placeholder', { defaultValue: 'Type a message...' })}
+                        value={body}
+                        onChange={handleChange}
+                        className="text-lg"
+                        fieldClassName="px-2"
+                    />
+
+                    {endButtons}
+                    <Button type='submit' semantic="primary" rounded={true}><SendIcon /></Button>
+
+                </div>
+
+            </div>
         </form>
     );
 

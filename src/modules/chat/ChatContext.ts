@@ -1,6 +1,7 @@
 import React, { createContext, useContext } from 'react';
 import { MessageContextProps } from './message/MessageContext';
 import { TextMessageContainer } from './message/renderers/TextMessage';
+import { MessageData } from './types/MessageData';
 import { ReactionDetailsData } from './types/ReactionDetailsData';
 
 import { TextReplyRenderer } from './reply/renderers/TextReply';
@@ -19,6 +20,12 @@ export interface ChatContextProps {
     getReactions: (messageId: string) => Promise<ReactionDetailsData[]>;
     addReaction: (messageId: string, emoji: string) => Promise<void>;
     removeReaction: (messageId: string, emoji: string) => Promise<void>;
+
+    // Reply functionality
+
+    replyTo: Omit<MessageData, 'replyTo'> | null;
+    setReplyTo: (message: Omit<MessageData, 'replyTo'>) => void;
+    clearReplyTo: () => void;
 
 }
 
