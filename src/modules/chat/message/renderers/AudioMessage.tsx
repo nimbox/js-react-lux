@@ -1,7 +1,7 @@
 import { Message } from '../Message';
 
 
-export function AudioMessageContainer() {
+export function AudioMessageRenderer() {
 
     return (
         <Message.Container>

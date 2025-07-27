@@ -1,6 +1,7 @@
 export interface MessageAttachment {
 
     type: 'image' | 'audio' | 'video' | string;
+
     name: string;
     mime: string;
     size: number;

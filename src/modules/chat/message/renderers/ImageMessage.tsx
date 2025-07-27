@@ -1,7 +1,7 @@
 import { Message } from '../Message';
 
 
-export function ImageMessageContainer() {
+export function ImageMessageRenderer() {
 
     return (
         <Message.Container>

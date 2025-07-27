@@ -1,7 +1,7 @@
 import { Message } from '../Message';
 
 
-export function VideoMessageContainer() {
+export function VideoMessageRenderer() {
 
     return (
         <Message.Container>

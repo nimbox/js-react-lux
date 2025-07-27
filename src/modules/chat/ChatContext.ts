@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react';
 import { MessageContextProps } from './message/MessageContext';
-import { TextMessageContainer } from './message/renderers/TextMessage';
+import { TextMessageRenderer } from './message/renderers/TextMessage';
 import { MessageData } from './types/MessageData';
 import { ReactionDetailsData } from './types/ReactionDetailsData';
 
@@ -75,7 +75,7 @@ export function useChat() {
 // Defaults
 
 function defaultRenderMessage(message: MessageContextProps) {
-    return React.createElement(TextMessageContainer, message);
+    return React.createElement(TextMessageRenderer, message);
 }
 
 function defaultRenderReply() {

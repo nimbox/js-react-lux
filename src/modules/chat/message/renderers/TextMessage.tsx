@@ -3,7 +3,7 @@ import emojiRegex from 'emoji-regex';
 import { useMessage } from '../MessageContext';
 
 
-export function TextMessageContainer() {
+export function TextMessageRenderer() {
 
     const { message: { body } } = useMessage();
 

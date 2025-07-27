@@ -9,7 +9,6 @@ export interface MessageAuthor {
     initials?: string;
     color?: string;
 
-
     avatarUrl?: string;
 
 }

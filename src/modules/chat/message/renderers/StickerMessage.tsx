@@ -1,7 +1,7 @@
 import { Message } from '../Message';
 
 
-export function StickerMessageContainer() {
+export function StickerMessageRenderer() {
 
     return (
         <Message.Container>

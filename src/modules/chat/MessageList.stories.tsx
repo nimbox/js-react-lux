@@ -8,11 +8,11 @@ import { messages } from './data/messages';
 import { reactionDetails } from './data/reactionDetails';
 import { Message } from './message/Message';
 import { MessageGroup } from './message/MessageGroup';
-import { AudioMessageContainer } from './message/renderers/AudioMessage';
-import { ImageMessageContainer } from './message/renderers/ImageMessage';
-import { StickerMessageContainer } from './message/renderers/StickerMessage';
-import { TextMessageContainer } from './message/renderers/TextMessage';
-import { VideoMessageContainer } from './message/renderers/VideoMessage';
+import { AudioMessageRenderer } from './message/renderers/AudioMessage';
+import { ImageMessageRenderer } from './message/renderers/ImageMessage';
+import { StickerMessageRenderer } from './message/renderers/StickerMessage';
+import { TextMessageRenderer } from './message/renderers/TextMessage';
+import { VideoMessageRenderer } from './message/renderers/VideoMessage';
 import { MessageInput } from './MessageInput';
 import { MessageList } from './MessageList';
 import { MessageSeparator } from './MessageSeparator';
@@ -66,11 +66,11 @@ export const Default: Story = {
     render: () => (
         <ChatProvider
             renderMessage={{
-                text: () => <TextMessageContainer />,
-                sticker: () => <StickerMessageContainer />,
-                image: () => <ImageMessageContainer />,
-                audio: () => <AudioMessageContainer />,
-                video: () => <VideoMessageContainer />
+                text: () => <TextMessageRenderer />,
+                sticker: () => <StickerMessageRenderer />,
+                image: () => <ImageMessageRenderer />,
+                audio: () => <AudioMessageRenderer />,
+                video: () => <VideoMessageRenderer />
             }}
             renderReply={{
                 text: () => <TextReplyRenderer />,
@@ -93,10 +93,10 @@ export const Default: Story = {
 
                     <MessageList className="flex-grow overflow-y-auto">
                         {grouped.map((dateGroup) => (
-                            <React.Fragment key={dateGroup.dateValue.getTime()}>
+                            <React.Fragment key={dateGroup.date.getTime()}>
 
                                 <MessageSeparator>
-                                    <MessageSeparator.Pill>{dayjs(dateGroup.dateValue).calendar()}</MessageSeparator.Pill>
+                                    <MessageSeparator.Pill>{dayjs(dateGroup.date).calendar()}</MessageSeparator.Pill>
                                 </MessageSeparator>
 
                                 {dateGroup.groups.map(messageGroup => (
