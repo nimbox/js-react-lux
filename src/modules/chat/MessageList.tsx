@@ -62,6 +62,8 @@ export function MessageList({ className, children }: MessageListProps) {
         };
     }, []);
 
+    // Render
+
     return (
         <ChatMessageListContext.Provider value={providerValue}>
             <div
