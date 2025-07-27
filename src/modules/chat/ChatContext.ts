@@ -31,15 +31,31 @@ export interface ChatContextProps {
 
 export const defaultProps: ChatContextProps = {
 
+    // Message rendering
+
     renderMessage: {},
     renderDefaultMessage: defaultRenderMessage,
+
+    // Reply rendering
 
     renderReply: {},
     renderDefaultReply: defaultRenderReply,
 
+    // Reaction functionality
+
     getReactions: defaultGetReactions,
     addReaction: defaultAddReaction,
-    removeReaction: defaultRemoveReaction
+    removeReaction: defaultRemoveReaction,
+
+    // Reply functionality
+
+    replyTo: null,
+    setReplyTo: function (): void {
+        throw new Error('Function not implemented.');
+    },
+    clearReplyTo: function (): void {
+        throw new Error('Function not implemented.');
+    }
 
 };
 

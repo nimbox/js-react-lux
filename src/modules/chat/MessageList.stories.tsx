@@ -1,22 +1,28 @@
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
+import React from 'react';
 import backgroundImage from './assets/chat-background.png';
+import { useChat } from './ChatContext';
 import { ChatProvider } from './ChatProvider';
-import { reactionDetails } from './data/reactionDetails';
 import { messages } from './data/messages';
+import { reactionDetails } from './data/reactionDetails';
 import { Message } from './message/Message';
 import { MessageGroup } from './message/MessageGroup';
-import { MessageList } from './MessageList';
-import { MessageData } from './types/MessageData';
-import { TextMessageContainer } from './message/renderers/TextMessage';
+import { AudioMessageContainer } from './message/renderers/AudioMessage';
 import { ImageMessageContainer } from './message/renderers/ImageMessage';
 import { StickerMessageContainer } from './message/renderers/StickerMessage';
-import { AudioMessageContainer } from './message/renderers/AudioMessage';
+import { TextMessageContainer } from './message/renderers/TextMessage';
 import { VideoMessageContainer } from './message/renderers/VideoMessage';
+import { MessageInput } from './MessageInput';
+import { MessageList } from './MessageList';
+import { MessageSeparator } from './MessageSeparator';
 import { ImageReplyRenderer } from './reply/renderers/ImageReply';
 import { TextReplyRenderer } from './reply/renderers/TextReply';
-import { MessageInput } from './MessageInput';
-import { useChat } from './ChatContext';
+import { groupMessagesByDateAuthor } from './utils/messageProcessing';
+import dayjs from 'dayjs';
+import calendar from 'dayjs/plugin/calendar';
+
+dayjs.extend(calendar);
 
 
 // Definition
@@ -29,53 +35,16 @@ export default meta;
 type Story = StoryObj<typeof MessageGroup>;
 
 
+// Setup
 
-// Utility: sort by timestamp
+const grouped = groupMessagesByDateAuthor(messages);
 
-const sortedMessages = [...messages]
-    .map(m => [m.timestamp ? new Date(m.timestamp).getTime() : 0, m] as const)
-    .sort(([a], [b]) => a - b)
-    .map(([, m]) => m);
-
-// Utility: group consecutive messages by author+direction
-function groupMessages(messages: MessageData[]) {
-    const groups: Array<{
-        id: string;
-        direction: 'inbound' | 'outbound';
-        author: MessageData['author'];
-        messages: MessageData[];
-    }> = [];
-    let currentGroup: typeof groups[0] | null = null;
-    for (const m of messages) {
-        if (
-            !currentGroup ||
-            currentGroup.author?.id !== m.author?.id ||
-            currentGroup.direction !== m.direction
-        ) {
-            // Start new group
-            currentGroup = {
-                id: m.id,
-                direction: m.direction,
-                author: m.author,
-                messages: [m]
-            };
-            groups.push(currentGroup);
-        } else {
-            currentGroup.messages.push(m);
-        }
-    }
-    return groups;
-}
-
-const grouped = groupMessages(sortedMessages);
-
-// MessageInputWrapper component to use hooks
 function MessageInputWrapper() {
 
     const { replyTo } = useChat();
-    
+
     return (
-        <MessageInput 
+        <MessageInput
             onSubmit={(message) => {
                 action('submitMessage')({ message, replyTo });
                 console.log('New message:', message, 'Reply to:', replyTo);
@@ -123,18 +92,24 @@ export const Default: Story = {
                 <div className="relative h-full flex flex-col z-10">
 
                     <MessageList className="flex-grow overflow-y-auto">
-                        {grouped.map(group => (
+                        {grouped.map((dateGroup) => (
+                            <React.Fragment key={dateGroup.dateValue.getTime()}>
 
-                            <MessageGroup key={group.id} group={{ id: group.id, direction: group.direction, author: group.author! }}>
-                                
-                                <MessageGroup.Messages>
-                                    {group.messages.map(msg => (
-                                        <Message key={msg.id} message={msg} />
-                                    ))}
-                                </MessageGroup.Messages>
+                                <MessageSeparator>
+                                    <MessageSeparator.Pill>{dayjs(dateGroup.dateValue).calendar()}</MessageSeparator.Pill>
+                                </MessageSeparator>
 
-                            </MessageGroup>
+                                {dateGroup.groups.map(messageGroup => (
+                                    <MessageGroup key={messageGroup.id} group={{ id: messageGroup.id, direction: messageGroup.direction, author: messageGroup.author! }}>
+                                        <MessageGroup.Messages>
+                                            {messageGroup.messages.map(msg => (
+                                                <Message key={msg.id} message={msg} />
+                                            ))}
+                                        </MessageGroup.Messages>
+                                    </MessageGroup>
+                                ))}
 
+                            </React.Fragment>
                         ))}
                     </MessageList>
 
