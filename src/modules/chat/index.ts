@@ -20,3 +20,9 @@ export * from './utils/messageProcessing';
 
 export * from './message/renderers';
 export * from './reply/renderers';
+
+
+// Export hooks
+
+export { useMessage } from './message/MessageContext';
+export { useMessageGroup } from './message/MessageGroupContext';
