@@ -53,7 +53,7 @@ export const messages: MessageData[] = [
                 name: 'Landing Page Mockup',
                 mime: 'image/jpeg',
                 size: 234567,
-                url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80'
+                url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&h=400&q=80'
             }
         ]
     },

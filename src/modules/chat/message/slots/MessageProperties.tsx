@@ -1,8 +1,10 @@
+import { useChat } from '../../ChatContext';
 import { useMessage } from '../MessageContext';
 
 
 export function MessageProperties() {
 
+    const { timeFormatter, statusFormatter } = useChat();
     const { message: { timestamp, status } } = useMessage();
 
     if (!timestamp && !status) {
@@ -10,9 +12,9 @@ export function MessageProperties() {
     }
 
     return (
-        <div className="flex flex-row gap-1 justify-end align-center text-xs text-gray-500">
-            { timestamp && <span>{timestamp}</span> }
-            { status && <span>{status}</span> }
+        <div className="flex flex-row gap-1 justify-end items-center text-xs text-gray-500">
+            {timestamp && <span>{timeFormatter(timestamp)}</span>}
+            {status && <span>{statusFormatter(status)}</span>}
         </div>
     );
 

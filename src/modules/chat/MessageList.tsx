@@ -1,17 +1,7 @@
 import classNames from 'classnames';
-import { createContext, ReactElement, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
+import { ReactElement, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import { MessageGroupProps } from './message/MessageGroup';
-
-
-// Context
-
-export interface MessageListContextValue {
-    scrollToBottom: () => void;
-}
-
-export const ChatMessageListContext = createContext<MessageListContextValue>({
-    scrollToBottom: () => null
-});
+import { ChatMessageListContext } from './MessageListContext';
 
 // MessageList
 
