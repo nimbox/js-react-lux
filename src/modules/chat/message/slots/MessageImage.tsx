@@ -22,8 +22,8 @@ export function MessageImage() {
                 ? <img
                     src={url}
                     alt={attachments[0].filename || 'image'}
-                    className="max-w-64 max-h-64 rounded shadow"
                     onLoad={scrollToBottom}
+                    className="max-w-64 max-h-64 rounded shadow"
                 />
                 : <Loading />
             }
