@@ -27,6 +27,11 @@ export interface ChatContextProps {
     setReplyTo: (message: Omit<MessageData, 'replyTo'>) => void;
     clearReplyTo: () => void;
 
+    // Formatters
+
+    timeFormatter: (timestamp: string | Date | undefined | null) => string;
+    statusFormatter: (status: string) => React.ReactNode;
+
 }
 
 export const defaultProps: ChatContextProps = {
@@ -55,7 +60,12 @@ export const defaultProps: ChatContextProps = {
     },
     clearReplyTo: function (): void {
         throw new Error('Function not implemented.');
-    }
+    },
+
+    // Formatters
+
+    timeFormatter: defaultTimeFormatter,
+    statusFormatter: defaultStatusFormatter
 
 };
 
@@ -104,4 +114,15 @@ function defaultRemoveReaction(): Promise<void> {
             'No removeReaction found – wrap your app in <ChatProvider>'
         )
     );
+}
+
+function defaultTimeFormatter(timestamp: string | Date | undefined | null) {
+    return timestamp ? new Date(timestamp).toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit'
+    }) : '';
+}
+
+function defaultStatusFormatter(status: string) {
+    return status;
 }
