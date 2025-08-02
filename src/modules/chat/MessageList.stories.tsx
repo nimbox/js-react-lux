@@ -1,12 +1,19 @@
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
+import classNames from 'classnames';
+import dayjs from 'dayjs';
+import calendar from 'dayjs/plugin/calendar';
 import React from 'react';
+import { AngleDownMenuTrigger } from '../../components/menu/ChevronMenuTrigger';
+import { Menu } from '../../components/menu/Menu';
+import { ForwardIcon, ReplyIcon } from '../../icons/components';
 import backgroundImage from './assets/chat-background.png';
 import { useChat } from './ChatContext';
 import { ChatProvider } from './ChatProvider';
 import { messages } from './data/messages';
 import { reactionDetails } from './data/reactionDetails';
 import { Message } from './message/Message';
+import { useMessage } from './message/MessageContext';
 import { MessageGroup } from './message/MessageGroup';
 import { AudioMessageRenderer } from './message/renderers/AudioMessage';
 import { ImageMessageRenderer } from './message/renderers/ImageMessage';
@@ -19,8 +26,6 @@ import { MessageSeparator } from './MessageSeparator';
 import { ImageReplyRenderer } from './reply/renderers/ImageReply';
 import { TextReplyRenderer } from './reply/renderers/TextReply';
 import { groupMessagesByDateAuthor } from './utils/messageProcessing';
-import dayjs from 'dayjs';
-import calendar from 'dayjs/plugin/calendar';
 
 dayjs.extend(calendar);
 
@@ -53,6 +58,28 @@ function MessageInputWrapper() {
     );
 
 }
+
+const MessageMenu = ({ className }: { className?: string }) => {
+
+    const { message } = useMessage();
+
+    return (
+        <Menu trigger={<AngleDownMenuTrigger className={classNames('hidden group-hover:block', className)} />} withPlacement="bottom-end">
+            <Menu.Item
+                icon={<ReplyIcon />}
+                label="Reply"
+                onClick={() => action('reply')({ message })}
+            />
+            <Menu.Item
+                icon={<ForwardIcon />}
+                label="Forward"
+                onClick={() => action('forward')({ message })}
+            />
+        </Menu>
+    );
+
+};
+
 
 // Stories
 
@@ -103,7 +130,7 @@ export const Default: Story = {
                                     <MessageGroup key={messageGroup.id} group={{ id: messageGroup.id, direction: messageGroup.direction, author: messageGroup.author! }}>
                                         <MessageGroup.Messages>
                                             {messageGroup.messages.map(msg => (
-                                                <Message key={msg.id} message={msg} />
+                                                <Message key={msg.id} menu={<MessageMenu />} message={msg} />
                                             ))}
                                         </MessageGroup.Messages>
                                     </MessageGroup>

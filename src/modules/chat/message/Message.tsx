@@ -13,7 +13,6 @@ import { MessageFloatingBody } from './slots/MessageFloatingBody';
 import { MessageFooter } from './slots/MessageFooter';
 import { MessageHeader } from './slots/MessageHeader';
 import { MessageImage } from './slots/MessageImage';
-import { MessageMenu } from './slots/MessageMenu';
 import { MessageProperties } from './slots/MessageProperties';
 import { MessageReactions } from './slots/MessageReactions';
 import { MessageReply } from './slots/MessageReply';
@@ -71,6 +70,5 @@ Message.Properties = MessageProperties;
 
 Message.Reactions = MessageReactions;
 Message.Reply = MessageReply;
-Message.Menu = MessageMenu;
 
 Message.React = MessageReact;

@@ -6,6 +6,7 @@ import { MessageData } from '../types/MessageData';
 
 export interface MessageContextProps {
 
+    menu?: React.ReactElement;
     message: MessageData;
 
     isFirst?: boolean;

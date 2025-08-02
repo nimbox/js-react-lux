@@ -1,5 +1,7 @@
 import classNames from 'classnames';
+import React from 'react';
 import { Message } from '../Message';
+import { useMessage } from '../MessageContext';
 import { useMessageGroup } from '../MessageGroupContext';
 
 
@@ -10,6 +12,7 @@ export interface MessageContainerProps {
 export function MessageContainer({ children }: MessageContainerProps) {
 
     const { group: { direction } } = useMessageGroup();
+    const { menu } = useMessage();
 
     return (
         <div className={classNames('relative flex flex-col z-0 group', {
@@ -18,7 +21,9 @@ export function MessageContainer({ children }: MessageContainerProps) {
         })}>
             {children}
             <Message.Reactions />
-            <Message.Menu />
+            {menu && React.cloneElement(menu, {
+                className: 'absolute top-3 right-2'
+            })}
         </div>
     );
 
