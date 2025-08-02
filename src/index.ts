@@ -1,3 +1,5 @@
+// Components
+
 export * from './components/Anchor';
 export * from './components/displays/Avatar';
 export * from './components/Badge';
@@ -15,13 +17,25 @@ export * from './components/Tabs';
 export * from './components/Tag';
 export * from './components/Toast';
 
+// Modules
+
 export * from './modules/calendar';
 export * from './modules/chat';
 export * from './modules/kanban';
 
+// Menu
+
+export * from './components/menu/Menu';
+export * from './components/menu/MenuContext';
+export * from './components/menu/ChevronMenuTrigger';
+
+// Choose
+
 export * from './components/choose/Choose';
 export * from './components/choose/ChooseOption';
 export * from './components/choose/ChooseOptionList';
+
+// Inputs
 
 export * from './components/inputs/AsyncSearchInput';
 export * from './components/inputs/Autocomplete';

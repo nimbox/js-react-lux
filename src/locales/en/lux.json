@@ -39,6 +39,14 @@
     "loading": "Loading...",
     "shortcuts": "Shortcuts",
     "chat": {
-        "clickToRemove": "Click to remove"
+        "clickToRemove": "Click to remove",
+        "messageInput": {
+            "placeholder": "Type a message..."
+        },
+        "conversation": {
+            "message": {
+                "empty": "Nothing yet..."
+            }
+        }
     }
 }

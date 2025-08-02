@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { ReactNode, useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/inputs/Input';
@@ -10,8 +10,8 @@ import { Reply } from './reply/Reply';
 
 export interface MessageInputProps {
 
-    startButtons?: ReactNode;
-    endButtons?: ReactNode;
+    startButtons?: ReactElement[];
+    endButtons?: ReactElement[];
 
     onSubmit?: (message: string) => void;
     className?: string;
@@ -62,7 +62,9 @@ export function MessageInput({ className, onSubmit, startButtons, endButtons }: 
 
                 <div className="p-4 flex flex-row items-center gap-2">
 
-                    {startButtons}
+                    {startButtons && startButtons.map((button, index) => 
+                        React.cloneElement(button, { key: `start-button-${index}` })
+                    )}
 
                     <Input
                         variant="plain"
@@ -73,7 +75,9 @@ export function MessageInput({ className, onSubmit, startButtons, endButtons }: 
                         fieldClassName="px-2"
                     />
 
-                    {endButtons}
+                    {endButtons && endButtons.map((button, index) => 
+                        React.cloneElement(button, { key: `end-button-${index}` })
+                    )}
                     <Button type='submit' semantic="primary" rounded={true}><SendIcon /></Button>
 
                 </div>

@@ -1,10 +1,9 @@
 import React, { createContext, useContext } from 'react';
 import { MessageContextProps } from './message/MessageContext';
-import { TextMessageRenderer } from './message/renderers/TextMessage';
+import { DefaultMessageRenderer } from './message/renderers';
+import { DefaultReplyRenderer } from './reply/renderers';
 import { MessageData } from './types/MessageData';
 import { ReactionDetailsData } from './types/ReactionDetailsData';
-
-import { TextReplyRenderer } from './reply/renderers/TextReply';
 
 
 // Chat Context
@@ -30,6 +29,8 @@ export interface ChatContextProps {
     // Formatters
 
     timeFormatter: (timestamp: string | Date | undefined | null) => string;
+    calendarFormatter: (timestamp: string | Date | undefined | null) => string;
+
     statusFormatter: (status: string) => React.ReactNode;
 
 }
@@ -65,6 +66,8 @@ export const defaultProps: ChatContextProps = {
     // Formatters
 
     timeFormatter: defaultTimeFormatter,
+    calendarFormatter: defaultCalendarFormatter,
+
     statusFormatter: defaultStatusFormatter
 
 };
@@ -85,11 +88,11 @@ export function useChat() {
 // Defaults
 
 function defaultRenderMessage(message: MessageContextProps) {
-    return React.createElement(TextMessageRenderer, message);
+    return React.createElement(DefaultMessageRenderer, message);
 }
 
 function defaultRenderReply() {
-    return React.createElement(TextReplyRenderer);
+    return React.createElement(DefaultReplyRenderer);
 }
 
 function defaultGetReactions(): Promise<ReactionDetailsData[]> {
@@ -117,11 +120,50 @@ function defaultRemoveReaction(): Promise<void> {
 }
 
 function defaultTimeFormatter(timestamp: string | Date | undefined | null) {
-    return timestamp ? new Date(timestamp).toLocaleTimeString('en-US', {
+
+    if (!timestamp) { return ''; }
+
+    const date = new Date(timestamp);
+    return formatTime(date);
+
+}
+
+function defaultCalendarFormatter(timestamp: string | Date | undefined | null) {
+
+    if (!timestamp) { return ''; }
+
+    const date = new Date(timestamp);
+    if (isToday(date)) {
+        return formatTime(date);
+    } else {
+        return formatCalendar(date);
+    }
+
+}
+
+function isToday(date: Date) {
+
+    const today = new Date();
+    return date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear();
+
+}
+function formatTime(date: Date) {
+    return date.toLocaleTimeString('en-US', {
         hour: 'numeric',
         minute: '2-digit'
-    }) : '';
+    });
 }
+
+function formatCalendar(date: Date) {
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'numeric',
+        day: '2-digit'
+    });
+}
+
 
 function defaultStatusFormatter(status: string) {
     return status;

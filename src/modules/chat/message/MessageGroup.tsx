@@ -24,8 +24,8 @@ export function MessageGroup({ group, children }: MessageGroupProps) {
                     'order-1': group.direction === 'inbound',
                     'order-2': group.direction === 'outbound'
                 })}>
-                    <Avatar src={group.author.avatarUrl} color={group.author.color || 'red'}>
-                        {group.author.initials}
+                    <Avatar src={group.author?.avatarUrl} color={group.author?.color || 'red'}>
+                        {group.author?.initials}
                     </Avatar>
                 </div>
 

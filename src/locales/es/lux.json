@@ -39,6 +39,14 @@
     "loading": "Cargando...",
     "shortcuts": "Atajos",
     "chat": {
-        "clickToRemove": "Click para quitar"
+        "clickToRemove": "Click para quitar",
+        "messageInput": {
+            "placeholder": "Escribe un mensaje..."
+        },
+        "conversation": {
+            "message": {
+                "empty": "Nada todavía..."
+            }
+        }
     }
 }
