@@ -9,6 +9,11 @@ export interface ConversationData {
 
     unread?: number;
 
+    pinned?: boolean;
+    favorited?: boolean;
+    muted?: boolean;
+    archived?: boolean;
+
     timestamp?: string;
 
 }
