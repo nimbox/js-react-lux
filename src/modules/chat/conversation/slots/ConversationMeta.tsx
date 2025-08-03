@@ -29,7 +29,7 @@ export function ConversationMeta({ className }: ConversationMetaProps) {
             }
 
             {conversation.unread != null && conversation.unread > 0 &&
-                <span className="rounded-full bg-red-600 text-white px-2 py-1 text-xs">
+                <span className=" px-2 text-xs text-white bg-red-600 rounded-full">
                     {conversation.unread}
                 </span>
             }

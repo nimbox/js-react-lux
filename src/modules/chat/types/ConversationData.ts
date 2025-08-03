@@ -1,4 +1,5 @@
 import { AvatarData } from './AvatarData';
+import { MessageData } from './MessageData';
 
 
 export interface ConversationData {
@@ -7,12 +8,14 @@ export interface ConversationData {
     name: string;
     avatar?: AvatarData;
 
-    unread?: number;
+    lastMessage?: MessageData;
 
     pinned?: boolean;
     favorited?: boolean;
     muted?: boolean;
     archived?: boolean;
+
+    unread?: number;
 
     timestamp?: string;
 
