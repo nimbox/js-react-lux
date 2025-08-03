@@ -31,7 +31,6 @@ export { default as DirectoryIcon } from "./Directory";
 export { default as DoubleCheckIcon } from "./DoubleCheck";
 export { default as DragIcon } from "./Drag";
 export { default as EditIcon } from "./Edit";
-export { default as FileCopyIcon } from "./FileCopy";
 export { default as FileIcon } from "./File";
 export { default as ForwardIcon } from "./Forward";
 export { default as FullCircleIcon } from "./FullCircle";
