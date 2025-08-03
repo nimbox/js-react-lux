@@ -94,6 +94,7 @@
     "postcss": "^8.4.38",
     "react-hook-form": "^7.51.2",
     "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-dts": "^6.2.1",
     "rollup-plugin-filesize": "^10.0.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
