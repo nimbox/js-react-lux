@@ -1,6 +1,6 @@
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
-import { EditIcon, FileCopyIcon, ForwardIcon, GearIcon, LogoutIcon, TrashIcon } from '../../icons/components';
+import { DirectoryIcon, EditIcon, ForwardIcon, GearIcon, LogoutIcon, TrashIcon } from '../../icons/components';
 import { AngleDownMenuTrigger } from './ChevronMenuTrigger';
 import { Menu } from './Menu';
 
@@ -31,7 +31,7 @@ export const Default: Story = {
                 onClick={action('edit-clicked')}
             />
             <Menu.Item
-                icon={<FileCopyIcon />}
+                icon={<DirectoryIcon />}
                 label="Copy"
                 onClick={action('copy-clicked')}
             />
