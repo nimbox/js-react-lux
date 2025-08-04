@@ -14,6 +14,7 @@ export interface MessageData {
 
     header?: string;
     body?: string;
+    caption?: string;
     footer?: string;
 
     attachments?: MessageAttachment[];
