@@ -1,0 +1,81 @@
+import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json';
+import resolve from '@rollup/plugin-node-resolve';
+import typescript from '@rollup/plugin-typescript';
+import copy from 'rollup-plugin-copy';
+import dts from 'rollup-plugin-dts';
+import filesize from 'rollup-plugin-filesize';
+import peerDepsExternal from 'rollup-plugin-peer-deps-external';
+import postcss from 'rollup-plugin-postcss';
+
+
+const sharedPlugins = [
+    peerDepsExternal({ includeDependencies: true }),
+    resolve(),
+    commonjs(),
+    json(),
+    postcss({ extensions: ['.css'] }),
+    filesize()
+];
+
+export default [
+    // Main entry
+    {
+        input: {
+            index: 'src/index.ts',
+            'icons/index': 'src/icons/components/index.ts',
+            'figures/index': 'src/figures/index.ts',
+            'styles/elegant': 'src/styles/elegant.js',
+            'modules/chat': 'src/modules/chat/index.ts'
+        },
+        output: [
+            {
+                dir: 'dist',
+                format: 'cjs',
+                entryFileNames: '[name].cjs',
+                chunkFileNames: '[name]-[hash].cjs',
+                exports: 'named',
+                preserveModules: true,
+                sourcemap: true
+            },
+            {
+                dir: 'dist',
+                format: 'esm',
+                entryFileNames: '[name].mjs',
+                chunkFileNames: '[name]-[hash].mjs',
+                exports: 'named',
+                preserveModules: true,
+                sourcemap: true
+            }
+        ],
+        plugins: [
+            ...sharedPlugins,
+            typescript({
+                exclude: ['**/test', '**/stories', '**/*.stories.tsx', 'src/i18n.tsx']
+            }),
+            copy({
+                targets: [{ src: 'src/locales/*', dest: 'dist/locales' }]
+            })
+        ],
+        external: ['react', 'react-dom']
+    },
+
+    // Generate Type Definitions
+    {
+        input: {
+            index: 'src/index.ts',
+            'icons/index': 'src/icons/components/index.ts',
+            'figures/index': 'src/figures/index.ts',
+            'styles/elegant': 'src/styles/elegant.js',
+            'modules/chat': 'src/modules/chat/index.ts'
+        },
+        output: {
+            dir: 'dist',
+            format: 'esm',
+            entryFileNames: '[name].d.ts',
+            preserveModules: true
+        },
+        plugins: [dts()],
+        external: ['react', 'react-dom']
+    }
+];
