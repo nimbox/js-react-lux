@@ -4,28 +4,28 @@ import classNames from 'classnames';
 import dayjs from 'dayjs';
 import calendar from 'dayjs/plugin/calendar';
 import React from 'react';
-import { AngleDownMenuTrigger } from '../../components/menu/ChevronMenuTrigger';
-import { Menu } from '../../components/menu/Menu';
-import { ForwardIcon, ReplyIcon } from '../../icons/components';
-import backgroundImage from './assets/chat-background.png';
-import { useChat } from './ChatContext';
-import { ChatProvider } from './ChatProvider';
-import { messages } from './data/messages';
-import { reactionDetails } from './data/reactionDetails';
-import { Message } from './message/Message';
-import { useMessage } from './message/MessageContext';
-import { MessageGroup } from './message/MessageGroup';
-import { AudioMessageRenderer } from './message/renderers/AudioMessage';
-import { ImageMessageRenderer } from './message/renderers/ImageMessage';
-import { StickerMessageRenderer } from './message/renderers/StickerMessage';
-import { TextMessageRenderer } from './message/renderers/TextMessage';
-import { VideoMessageRenderer } from './message/renderers/VideoMessage';
-import { MessageInput } from './MessageInput';
+import { AngleDownMenuTrigger } from '../../../components/menu/ChevronMenuTrigger';
+import { Menu } from '../../../components/menu/Menu';
+import { ForwardIcon, ReplyIcon } from '../../../icons/components';
+import chatBackground from '../assets/chat-background.png';
+import { useChat } from '../ChatContext';
+import { ChatProvider } from '../ChatProvider';
+import { messages } from '../data/messages';
+import { reactionDetails } from '../data/reactionDetails';
+import { Message } from './Message';
+import { useMessage } from './MessageContext';
+import { MessageGroup } from './MessageGroup';
+import { AudioMessageRenderer } from './renderers/AudioMessage';
+import { ImageMessageRenderer } from './renderers/ImageMessage';
+import { StickerMessageRenderer } from './renderers/StickerMessage';
+import { TextMessageRenderer } from './renderers/TextMessage';
+import { VideoMessageRenderer } from './renderers/VideoMessage';
+import { MessageComposer } from '../composer/MessageComposer';
 import { MessageList } from './MessageList';
 import { MessageSeparator } from './MessageSeparator';
-import { ImageReplyRenderer } from './reply/renderers/ImageReply';
-import { TextReplyRenderer } from './reply/renderers/TextReply';
-import { groupMessagesByDateAuthor } from './utils/messageProcessing';
+import { ImageReplyRenderer } from '../reply/renderers/ImageReply';
+import { TextReplyRenderer } from '../reply/renderers/TextReply';
+import { groupMessagesByDateAuthor } from '../utils/messageProcessing';
 
 dayjs.extend(calendar);
 
@@ -49,7 +49,7 @@ function MessageInputWrapper() {
     const { replyTo } = useChat();
 
     return (
-        <MessageInput
+        <MessageComposer
             onSubmit={(message) => {
                 action('submitMessage')({ message, replyTo });
                 console.log('New message:', message, 'Reply to:', replyTo);
@@ -115,7 +115,7 @@ export const Default: Story = {
             }}
         >
             <div className="relative min-w-96 h-screen bg-chat-message-list-bg">
-                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${backgroundImage})` }} />
+                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${chatBackground})` }} />
                 <div className="relative h-full flex flex-col z-10">
 
                     <MessageList className="flex-grow overflow-y-auto">

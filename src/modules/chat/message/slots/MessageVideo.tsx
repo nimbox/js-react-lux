@@ -1,5 +1,5 @@
 import { Loading } from '../../../..';
-import { useMessageList } from '../../MessageListContext';
+import { useMessageList } from '../MessageListContext';
 import { useMessage } from '../MessageContext';
 
 

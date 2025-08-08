@@ -40,8 +40,30 @@
     "shortcuts": "Atajos",
     "chat": {
         "clickToRemove": "Click para quitar",
-        "messageInput": {
-            "placeholder": "Escribe un mensaje..."
+        "composer": {
+            "placeholder": "Escribe un mensaje...",
+            "image": {
+                "attach": "Anexar imagen",
+                "uploadError": "Error al subir imagen",
+                "retry": "Intentar de nuevo"
+            },
+            "document": {
+                "attach": "Anexar documento",
+                "uploadError": "Error al subir documento",
+                "retry": "Intentar de nuevo",
+                "noPreview": "No hay vista previa disponible"
+            },
+            "template": {
+                "attach": "Anexar plantilla",
+                "templates": "Plantillas",
+                "variables": "Variables",
+                "blocks": {
+                    "header": "Cabecera",
+                    "body": "Cuerpo",
+                    "footer": "Final"
+                },
+                "empty": "No hay variables de substitución"
+            }
         },
         "conversation": {
             "message": {

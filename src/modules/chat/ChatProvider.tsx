@@ -11,11 +11,11 @@ export interface ChatProviderProps extends ChatContextProps {
 
 export function ChatProvider(props: Partial<ChatProviderProps>) {
 
-    const { children, ...rest } = props;
+    const { replyTo: replyToProp, children, ...rest } = props;
 
     // Reply state management
 
-    const [replyTo, setReplyTo] = useState<Omit<MessageData, 'replyTo'> | null>(null);
+    const [replyTo, setReplyTo] = useState<Omit<MessageData, 'replyTo'> | null>(replyToProp ?? null);
 
     const handleSetReplyTo = (message: Omit<MessageData, 'replyTo'>) => {
         setReplyTo(message);

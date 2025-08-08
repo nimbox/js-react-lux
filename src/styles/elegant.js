@@ -35,7 +35,7 @@ export default {
                 'content-border': '#eaedf3',
 
                 'control-bg': '#ffffff',
-                'control-border': '#888888',
+                'control-border': '#909090',
                 'control-fill': '#f0f0f0',
                 'control-placeholder': '#a0a0a0',
 

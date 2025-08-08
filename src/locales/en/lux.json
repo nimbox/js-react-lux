@@ -40,8 +40,30 @@
     "shortcuts": "Shortcuts",
     "chat": {
         "clickToRemove": "Click to remove",
-        "messageInput": {
-            "placeholder": "Type a message..."
+        "composer": {
+            "placeholder": "Type a message...",
+            "image": {
+                "attach": "Attach image",
+                "uploadError": "Failed to upload image",
+                "retry": "Try again"
+            },
+            "document": {
+                "attach": "Attach document",
+                "uploadError": "Failed to upload document",
+                "retry": "Try again",
+                "noPreview": "No preview available"
+            },
+            "template": {
+                "attach": "Attach template",
+                "templates": "Templates",
+                "variables": "Variables",
+                "blocks": {
+                    "header": "Header",
+                    "body": "Body",
+                    "footer": "Footer"
+                },
+                "empty": "No substitution variables"
+            }
         },
         "conversation": {
             "message": {

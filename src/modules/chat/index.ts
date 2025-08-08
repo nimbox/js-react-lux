@@ -8,20 +8,33 @@ export * from './types/MessageData';
 export * from './types/MessageGroupData';
 export * from './types/ReactionData';
 export * from './types/ReactionDetailsData';
+export * from './types/TemplateContextData';
+export * from './types/TemplateData';
 
 // Export components
 
+export * from './ChatContext';
 export * from './ChatProvider';
 
 export * from './conversation/Conversation';
 export * from './conversation/ConversationContext';
 
 export * from './message/Message';
+export * from './message/MessageContext';
 export * from './message/MessageGroup';
-export * from './MessageList';
+export * from './message/MessageGroupContext';
+export * from './message/MessageList';
+export * from './message/MessageListContext';
+export * from './message/MessageSeparator';
 
-export * from './MessageInput';
-export * from './MessageSeparator';
+export * from './composer/DockedMessageComposer';
+export * from './composer/MessageComposer';
+export * from './composer/MessageComposerContext';
+export * from './composer/panels/ComposerDocumentPanel';
+export * from './composer/panels/ComposerImagePanel';
+export * from './composer/panels/ComposerTemplatePanel';
+
+// Export utils
 
 export * from './utils/messageProcessing';
 
@@ -29,11 +42,3 @@ export * from './utils/messageProcessing';
 
 export * from './message/renderers';
 export * from './reply/renderers';
-
-// Export hooks
-
-export { useChat } from './ChatContext';
-export { useMessage } from './message/MessageContext';
-export { useMessageGroup } from './message/MessageGroupContext';
-export { useMessageList } from './MessageListContext';
-
