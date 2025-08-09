@@ -1,32 +1,37 @@
-import React, { Children, ReactElement, ReactNode, useCallback, useState } from 'react';
+import React, { Children, ReactElement, ReactNode, useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../../components/Button';
 import { Input } from '../../../components/inputs/Input';
 import { CrossIcon, SendIcon } from '../../../icons/components';
 import { useChat } from '../ChatContext';
 import { Reply } from '../reply/Reply';
-import { MessageComposerContext, MessageComposerContextProps, MessageComposerDraft } from './MessageComposerContext';
+import { MessageComposerContext } from './MessageComposerContext';
 
 
-export interface MessageComposerProps<D extends MessageComposerDraft> {
+export interface MessageComposerSubmitData {
+    body: string;
+    replyToMessageId?: string;
+}
+
+export interface MessageComposerProps {
 
     start?: ReactElement;
     end?: ReactElement;
 
-    onCollapse?: () => void;
-    onSubmit?: (draft: D) => void;
+    onSubmit: (data: MessageComposerSubmitData) => Promise<void>;
 
     className?: string;
     children?: ReactNode;
 
 }
 
-export function MessageComposer<D extends MessageComposerDraft>(props: MessageComposerProps<D>) {
+export function MessageComposer(props: MessageComposerProps) {
 
     // Properties
 
-    const { clearReplyTo } = useChat();
+    const { replyTo, clearReplyTo } = useChat();
     const { className, onSubmit, start, end, children } = props;
+    const expanded = Children.toArray(children).some(Boolean);
 
     // State
 
@@ -34,44 +39,60 @@ export function MessageComposer<D extends MessageComposerDraft>(props: MessageCo
 
     // Draft
 
-    const [draft, setDraft] = useState<D>({ body: '' } as unknown as D);
-    const [busy, setBusy] = useState(false);
+    const [body, setBody] = useState('');
 
-    const updateDraft = useCallback(
-        (patch: Partial<D> | ((prev: D) => Partial<D>)) => {
-            setDraft(prev =>
-                typeof patch === 'function'
-                    ? (patch as (p: D) => D)(prev)
-                    : { ...prev, ...patch }
-            );
-        }, [setDraft]) as MessageComposerContextProps<MessageComposerDraft>['updateDraft'];
-
-    // Widen the signature so it fits the base context type
-
-    const clearDraft = useCallback(() => {
-        setDraft({ body: '' } as unknown as D);
+    const submits = useRef(new Map<string, () => Promise<void>>());
+    const registerSubmit = useCallback((panel: string, fn: () => Promise<void>) => {
+        submits.current.set(panel, fn);
+        return () => {
+            if (submits.current.get(panel) === fn) {
+                submits.current.delete(panel);
+            }
+        };
     }, []);
+
+    const [submitting, setSubmitting] = useState<boolean>(false);
+
 
     // Handlers
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        updateDraft(prev => ({ ...prev, body: e.target.value }));
+        setBody(e.target.value ?? '');
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
+
         e.preventDefault();
-        console.log('handleSubmit', draft);
-        onSubmit?.(draft);
-        clearReplyTo();
-        clearDraft();
+
+        try {
+
+            setSubmitting(true);
+
+            if (submits.current.size > 0) {
+                const fns = Array.from(submits.current.values());
+                await Promise.allSettled(fns.map(fn => fn()));
+            } else {
+                await onSubmit({
+                    body,
+                    ...(replyTo && { replyToMessageId: replyTo.id })
+                });
+                setBody('');
+            }
+
+            clearReplyTo();
+
+        } finally {
+            setSubmitting(false);
+        }
     };
 
-    const expanded = Children.toArray(children).some(Boolean);
 
     // Render
 
+    const context = { registerSubmit };
+
     return (
-        <MessageComposerContext.Provider value={{ draft, updateDraft, clearDraft, setBusy }}>
+        <MessageComposerContext.Provider value={context}>
             <div className={className}>
                 <form onSubmit={handleSubmit} className="h-full">
                     <div className="h-full flex flex-col bg-white rounded-3xl overflow-hidden">
@@ -84,24 +105,27 @@ export function MessageComposer<D extends MessageComposerDraft>(props: MessageCo
 
                         <div className="flex-shrink-0 flex flex-col">
 
-                            <MessageInputReply />
+                            <ReplyToMessage />
 
-                            <div className="p-4 flex flex-row items-center gap-2">
+                            <div className="p-4 flex flex-row justify-end items-center gap-2">
+                                {!expanded && (
+                                    <>
+                                        {start}
+                                        <Input
+                                            variant="plain"
+                                            placeholder={t('chat.composer.placeholder', { defaultValue: 'Type a message...' })}
+                                            value={body}
+                                            onChange={handleChange}
+                                            className="text-lg"
+                                            fieldClassName="px-2"
+                                        />
+                                        {end}
+                                    </>
+                                )}
 
-                                {!expanded && start}
-
-                                <Input
-                                    variant="plain"
-                                    placeholder={t('chat.composer.placeholder', { defaultValue: 'Type a message...' })}
-                                    value={draft.body}
-                                    onChange={handleChange}
-                                    className="text-lg"
-                                    fieldClassName="px-2"
-                                />
-
-                                {!expanded && end}
-
-                                <Button type='submit' semantic="primary" rounded={true} disabled={busy}><SendIcon /></Button>
+                                <Button type='submit' semantic="primary" rounded={true} disabled={submitting} className="flex-none">
+                                    <SendIcon />
+                                </Button>
 
                             </div>
 
@@ -115,7 +139,7 @@ export function MessageComposer<D extends MessageComposerDraft>(props: MessageCo
 
 }
 
-function MessageInputReply() {
+function ReplyToMessage() {
 
     // Properties
 

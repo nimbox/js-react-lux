@@ -30,8 +30,7 @@ export * from './message/MessageSeparator';
 export * from './composer/DockedMessageComposer';
 export * from './composer/MessageComposer';
 export * from './composer/MessageComposerContext';
-export * from './composer/panels/ComposerDocumentPanel';
-export * from './composer/panels/ComposerImagePanel';
+export * from './composer/panels/ComposerMediaPanel';
 export * from './composer/panels/ComposerTemplatePanel';
 
 // Export utils
@@ -42,3 +41,4 @@ export * from './utils/messageProcessing';
 
 export * from './message/renderers';
 export * from './reply/renderers';
+

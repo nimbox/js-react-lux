@@ -23,7 +23,7 @@ export function ComposerPanel(props: ComposerPanelProps) {
     // Render
 
     return (
-        <div className="h-full p-4 flex flex-col gap-4">
+        <div className="h-full flex flex-col gap-4">
             {children}
         </div>
     );
@@ -46,7 +46,7 @@ function ComposerPanelHeader(props: ComposerPanelHeaderProps) {
     // Render
 
     return (
-        <div className="flex-shrink-0 flex flex-row justify-between items-center gap-4">
+        <div className="flex-none p-4 flex flex-row justify-between items-center gap-4">
             <div className="text-lg font-medium truncate">{title}</div>
             <Button type='button' semantic="muted" rounded={true} onClick={onClose}>
                 <CrossIcon />
@@ -72,7 +72,7 @@ function ComposerPanelBody(props: ComposerPanelBodyProps) {
     // Render
 
     return (
-        <div className={classNames('flex-1 min-h-0', className)}>
+        <div className={classNames('min-h-0 flex-1', className)}>
             {children}
         </div>
     );

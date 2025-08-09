@@ -4,16 +4,15 @@ import { useState } from 'react';
 import { Button } from '../../../components/Button';
 import { Menu } from '../../../components/menu/Menu';
 import { FileIcon, ImageIcon, MessageIcon, PlusIcon, SmileyIcon, TemplateIcon } from '../../../icons/components';
-import backgroundImage from '../assets/chat-background.png';
+import chatBackground from '../assets/chat-background.png';
 import { ChatProvider } from '../ChatProvider';
 import { MessageData } from '../types/MessageData';
 import { TemplateData } from '../types/TemplateData';
+import { renderTemplate } from '../utils/renderTemplate';
 import { DockedMessageComposer } from './DockedMessageComposer';
-import { MessageComposer } from './MessageComposer';
-import { MessageComposerDraft } from './MessageComposerContext';
-import { ComposerDocumentPanelDraft, ComposerDocumentPanel } from './panels/ComposerDocumentPanel';
-import { ComposerImagePanelDraft, ComposerImagePanel } from './panels/ComposerImagePanel';
-import { ComposerTemplatePanel, ComposerTemplatePanelDraft } from './panels/ComposerTemplatePanel';
+import { MessageComposer, MessageComposerSubmitData } from './MessageComposer';
+import { ComposerMediaPanel } from './panels/ComposerMediaPanel';
+import { ComposerTemplatePanel } from './panels/ComposerTemplatePanel';
 
 
 // Definition
@@ -27,13 +26,13 @@ const meta: Meta<typeof DockedMessageComposer> = {
     decorators: [
         (Story) => (
             <div className="relative min-w-96 h-screen bg-chat-message-list-bg">
-                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${backgroundImage})` }} />
+                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${chatBackground})` }} />
                 <Story />
             </div>
         )
     ],
     args: {
-        onSubmit: (draft: MessageComposerDraft) => action('onSubmit')(draft),
+        onSubmit: async (data) => action('onSubmit')(data),
         className: 'px-8 py-4'
     }
 };
@@ -41,10 +40,6 @@ const meta: Meta<typeof DockedMessageComposer> = {
 export default meta;
 type Story = StoryObj<typeof MessageComposer>;
 
-
-// Draft types
-
-type ComposerDraft = MessageComposerDraft & (ComposerImagePanelDraft | ComposerDocumentPanelDraft | ComposerTemplatePanelDraft);
 
 // Definitions
 
@@ -115,6 +110,15 @@ export const WithSimpleChildren: Story = {
             {
                 name: 'Order confirmation',
                 description: 'Sent after purchase',
+                header: {
+                    type: 'text',
+                    content: {
+                        text: 'Order {{priority}}',
+                        context: {
+                            priority: { required: true }
+                        }
+                    }
+                },
                 body: {
                     type: 'text',
                     content: {
@@ -144,7 +148,7 @@ export const WithSimpleChildren: Story = {
 
         const ComposerMenu = () => {
             return (
-                <Menu trigger={<Button type='submit' semantic="primary" rounded={true}><PlusIcon /></Button>} withPlacement="top-start">
+                <Menu trigger={<Button type='button' semantic="primary" rounded={true}><PlusIcon /></Button>} withPlacement="top-start">
                     <Menu.Item
                         icon={<ImageIcon />}
                         label="Imagen"
@@ -164,58 +168,54 @@ export const WithSimpleChildren: Story = {
             );
         };
 
-        const handleSubmit = (draft: ComposerDraft) => {
+        const handleSubmit = async (draft: MessageComposerSubmitData) => {
             console.log('message', draft);
         };
 
         return (
-            <DockedMessageComposer<ComposerDraft>
+            <DockedMessageComposer
                 {...props}
-                onSubmit={handleSubmit}
                 start={<ComposerMenu key="menu" />}
-                onCollapse={() => setPanel(null)}
+                onSubmit={handleSubmit}
             >
 
                 {panel === 'image' && (
-                    <ComposerImagePanel
+                    <ComposerMediaPanel
+                        title="Upload images"
+                        type="image"
+                        files={[]}
+                        autoOpen={true}
                         onClose={() => setPanel(null)}
-                        uploadImage={async () => {
+                        onSubmit={async (data) => {
+                            console.log('DATA', data);
                             await new Promise(resolve => setTimeout(resolve, 5000));
-                            return 'image-1';
                         }}
                     />
                 )}
 
                 {panel === 'document' && (
-                    <ComposerDocumentPanel
+                    <ComposerMediaPanel
+                        title="Upload documents"
+                        type="document"
+                        files={[]}
                         onClose={() => setPanel(null)}
-                        uploadDocument={async () => {
+                        onSubmit={async (data) => {
+                            console.log('DATA', data);
                             await new Promise(resolve => setTimeout(resolve, 5000));
-                            return 'doc-1';
                         }}
                     />
                 )}
 
                 {panel === 'template' && (
                     <ComposerTemplatePanel
-                        onClose={() => setPanel(null)}
                         templates={sampleTemplates}
-                        chatBackground={backgroundImage}
-                        renderTemplate={(tpl, ctx) => {
-                            // Simple template rendering - replace variables with context values
-                            let bodyText = tpl.body?.content.text ?? '';
-
-                            // Replace variables in body
-                            Object.entries(ctx.body).forEach(([key, value]) => {
-                                bodyText = bodyText.replace(new RegExp(`{{${key}}}`, 'g'), value);
-                            });
-
-                            return {
-                                header: tpl.name,
-                                body: bodyText,
-                                footer: '— Company name'
-                            };
+                        render={renderTemplate}
+                        onClose={() => setPanel(null)}
+                        onSubmit={async (data) => {
+                            console.log('DATA', data);
+                            await new Promise(resolve => setTimeout(resolve, 5000));
                         }}
+                        chatBackground={chatBackground}
                     />
                 )}
 

@@ -2,27 +2,29 @@ import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Input } from '../../../../components/inputs/Input';
+import { useChat } from '../../ChatContext';
 import { Message } from '../../message/Message';
 import { MessageGroup } from '../../message/MessageGroup';
 import { MessageData } from '../../types/MessageData';
 import { TemplateContextBlock, TemplateContextBlockType, TemplateContextData } from '../../types/TemplateContextData';
 import { TemplateData } from '../../types/TemplateData';
-import { MessageComposerDraft, useMessageComposer } from '../MessageComposerContext';
+import { useMessageComposer } from '../MessageComposerContext';
 import { ComposerPanel } from './ComposerPanel';
 
 
-export interface ComposerTemplatePanelDraft {
-    type: 'template';
-    template: TemplateData;
+export interface TemplatePanelSubmitData {
+    name: string;
     context: TemplateContextData;
+    replyToMessageId?: string;
 }
 
 export interface ComposerTemplatePanelProps {
 
     templates: TemplateData[];
-    renderTemplate: (template: TemplateData, context: TemplateContextData) => MessageData;
+    render: (template: TemplateData, context: TemplateContextData) => MessageData;
 
     onClose: () => void;
+    onSubmit: (data: TemplatePanelSubmitData) => Promise<void>;
 
     chatBackground?: string;
 
@@ -32,83 +34,95 @@ export function ComposerTemplatePanel(props: ComposerTemplatePanelProps) {
 
     // Props
 
-    const { templates, renderTemplate, chatBackground: chatBackground, onClose } = props;
-    const { updateDraft } = useMessageComposer<MessageComposerDraft & ComposerTemplatePanelDraft>();
+    const { templates, render, chatBackground: chatBackground, onClose, onSubmit } = props;
+    const { replyTo } = useChat();
+    const { registerSubmit } = useMessageComposer();
+
     const { t } = useTranslation();
 
     // State
 
     const [selectedIndex, setSelectedIndex] = useState<number | null>(templates.length ? 0 : null);
-    const template = selectedIndex !== null ? templates[selectedIndex] : null;
     const [context, setContext] = useState<TemplateContextData>({ header: {}, body: {}, footer: {} });
+    const template = useMemo(() => selectedIndex !== null ? templates[selectedIndex] : null, [templates, selectedIndex]);
 
-    // Whenever a new template is selected, 
-    // initialise context for its variables
+    // const initializeContext = useCallback(() => {
+    //     const data: TemplateContextData = { header: {}, body: {}, footer: {} };
+    //     TemplateContextBlock.forEach(b => {
+    //         const block = template[b as keyof TemplateData] as TemplateData['header'] | undefined;
+    //         if (block?.type === 'text') {
+    //             for (const k of Object.keys(block.content.context ?? {})) {
+    //                 data[b][k] = '';
+    //             }
+    //         }
+    //     });
+    //     setContext(data);
+    // }, [template]);
+
+    // Initialize the context whenever the template changes.
 
     useEffect(() => {
-
-        if (!template) {
-            return;
-        }
-
         const data: TemplateContextData = { header: {}, body: {}, footer: {} };
-        TemplateContextBlock.forEach(b => {
-            const block = template[b as keyof TemplateData] as TemplateData['header'] | undefined;
-            if (block?.type === 'text') {
-                for (const k of Object.keys(block.content.context ?? {})) {
-                    data[b][k] = '';
+        if (template) {
+            TemplateContextBlock.forEach(b => {
+                const block = template[b as keyof TemplateData] as TemplateData['header'] | undefined;
+                if (block?.type === 'text') {
+                    for (const k of Object.keys(block.content.context ?? {})) {
+                        data[b][k] = '';
+                    }
                 }
-            }
-        });
+            });
+        }
         setContext(data);
-
     }, [template]);
 
-    // Update draft whenever template or context changes
+    // Register
 
-    useEffect(() => {
-
-        if (!template) {
-            return;
+    const handleSubmit = useCallback(async () => {
+        if (template != null) {
+            onSubmit({
+                name: template.name,
+                context,
+                ...(replyTo && { replyToMessageId: replyTo.id })
+            });
         }
-
-        updateDraft(prev => ({ ...prev, type: 'template', template: template, context: context }));
-
-    }, [template, context, updateDraft]);
+    }, [template, context, replyTo, onSubmit]);
+    useEffect(() => registerSubmit('template', handleSubmit), [registerSubmit, handleSubmit]);
 
     // Render
 
     return (
         <ComposerPanel onClose={onClose}>
 
-            <ComposerPanel.Header
-                title={t('chat.composer.template.attach')}
-                onClose={onClose}
-            />
+            <ComposerPanel.Header title={t('chat.composer.template.attach')} onClose={onClose} />
 
-            <ComposerPanel.Body className="min-w-0 flex flex-row items-stretch border border-control-border rounded-lg overflow-hidden">
+            <ComposerPanel.Body className="p-4">
 
-                <TemplateList
-                    templates={templates}
-                    selectedIndex={selectedIndex}
-                    onSelect={setSelectedIndex}
-                    className="w-1/4 flex-shrink-0"
-                />
+                <div className="h-full flex flex-row items-stretch border border-control-border rounded-lg overflow-hidden">
 
-                <TemplateContext
-                    template={template}
-                    contextValues={context}
-                    setContextValues={setContext}
-                    className="w-1/4 flex-shrink-0"
-                />
+                    <TemplateList
+                        templates={templates}
+                        selected={selectedIndex}
+                        onSelect={setSelectedIndex}
+                        className="w-1/4 flex-shrink-0"
+                    />
 
-                <TemplatePreview
-                    template={template}
-                    context={context}
-                    renderTemplate={renderTemplate}
-                    backgroundImage={chatBackground}
-                    className="w-1/2 flex-shrink-0"
-                />
+                    <TemplateContext
+                        template={template}
+                        context={context}
+                        setContext={setContext}
+                        className="w-1/4 flex-shrink-0"
+                    />
+
+                    <TemplatePreview
+                        template={template}
+                        context={context}
+                        render={render}
+                        chatBackground={chatBackground}
+                        className="w-1/2 flex-shrink-0"
+                    />
+
+                </div>
 
             </ComposerPanel.Body>
 
@@ -122,14 +136,14 @@ export function ComposerTemplatePanel(props: ComposerTemplatePanelProps) {
 interface TemplateListProps {
 
     templates: TemplateData[];
-    selectedIndex: number | null;
+    selected: number | null;
     onSelect: (idx: number) => void;
 
     className?: string;
 
 }
 
-function TemplateList({ templates, selectedIndex, onSelect, className }: TemplateListProps) {
+function TemplateList({ templates, selected: selectedIndex, onSelect, className }: TemplateListProps) {
 
     const { t } = useTranslation();
 
@@ -144,21 +158,22 @@ function TemplateList({ templates, selectedIndex, onSelect, className }: Templat
             </div>
 
             <div className="max-h-full flex-1 overflow-y-auto">
-                {templates.map((tpl, idx) => (
+                {templates.map((t, i) => (
                     <button
-                        key={tpl.name + idx}
-                        onClick={() => onSelect(idx)}
+                        key={t.name + i}
+                        type="button"
+                        onClick={() => onSelect(i)}
                         className={classNames(
                             'w-full h-14 text-left px-4 py-2 hover:bg-primary-50 focus:outline-none',
                             {
-                                'text-primary-500 bg-primary-100': idx === selectedIndex
+                                'text-primary-500 bg-primary-100': i === selectedIndex
                             }
                         )}
                     >
 
-                        <div className="font-medium truncate">{tpl.name}</div>
-                        {tpl.description && (
-                            <div className="text-xs text-gray-500 truncate">{tpl.description || '...'}</div>
+                        <div className="font-medium truncate">{t.name}</div>
+                        {t.description && (
+                            <div className="text-xs text-gray-500 truncate">{t.description || '...'}</div>
                         )}
 
                     </button>
@@ -175,12 +190,12 @@ function TemplateList({ templates, selectedIndex, onSelect, className }: Templat
 
 interface TemplateContextProps {
     template: TemplateData | null;
-    contextValues: TemplateContextData;
-    setContextValues: React.Dispatch<React.SetStateAction<TemplateContextData>>;
+    context: TemplateContextData;
+    setContext: React.Dispatch<React.SetStateAction<TemplateContextData>>;
     className?: string;
 }
 
-function TemplateContext({ template, contextValues, setContextValues, className }: TemplateContextProps) {
+function TemplateContext({ template, context: contextValues, setContext: setContextValues, className }: TemplateContextProps) {
 
     const { t } = useTranslation();
 
@@ -261,17 +276,17 @@ function TemplateContext({ template, contextValues, setContextValues, className 
 interface TemplatePreviewProps {
     template: TemplateData | null;
     context: TemplateContextData;
-    renderTemplate: (template: TemplateData, context: TemplateContextData) => MessageData;
-    backgroundImage?: string;
+    render: (template: TemplateData, context: TemplateContextData) => MessageData;
+    chatBackground?: string;
     className?: string;
 }
 
-function TemplatePreview({ template, context: context, renderTemplate, backgroundImage, className }: TemplatePreviewProps) {
+function TemplatePreview({ template, context: context, render, chatBackground, className }: TemplatePreviewProps) {
 
     const preview = useMemo(() => {
         if (!template) return null;
-        return renderTemplate(template, context);
-    }, [template, context, renderTemplate]);
+        return render(template, context);
+    }, [template, context, render]);
 
     // Render
 
@@ -281,8 +296,8 @@ function TemplatePreview({ template, context: context, renderTemplate, backgroun
             className)}
         >
 
-            {backgroundImage && (
-                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${backgroundImage})` }} />
+            {chatBackground && (
+                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${chatBackground})` }} />
             )}
 
             {preview && (

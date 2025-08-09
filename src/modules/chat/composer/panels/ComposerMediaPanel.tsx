@@ -1,166 +1,324 @@
-import { useCallback, useEffect, useState } from 'react';
-import { ComposerPanel } from './ComposerPanel';
-import { mediaSize } from '../../utils/mediaSize';
 import classNames from 'classnames';
-import { FileIcon } from '../../../../icons/components';
+import { ChangeEvent, MouseEventHandler, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Input } from '../../../../components/inputs/Input';
+import { CrossIcon, FileIcon, PlusIcon } from '../../../../icons/components';
+import { useChat } from '../../ChatContext';
+import { mediaSize } from '../../utils/mediaSize';
+import { useMessageComposer } from '../MessageComposerContext';
+import { ComposerPanel } from './ComposerPanel';
 import { useTranslation } from 'react-i18next';
-import { Loading } from '../../../../components/Loading';
-import { Button } from '../../../../components/Button';
-import { MessageComposerDraft, useMessageComposer } from '../MessageComposerContext';
 
 
-export interface ComposerMediaPanelDraft {
+interface Attachment {
+    key: string;
+    file: File;
+    caption: string;
+}
 
-    type: 'image' | 'document';
-    attachments: { id: string, file: File }[];
-
+export interface MediaPanelSubmitData {
+    attachments: Pick<Attachment, 'file' | 'caption'>[];
+    replyToMessageId?: string;
 }
 
 export interface ComposerMediaPanelProps {
 
-    title: string;
-    files: File[];
+    type: 'image' | 'document';
 
-    uploadMedia: (file: File) => Promise<string>;
+    files?: File[];
+    autoOpen?: boolean;
+
     onClose: () => void;
+    onSubmit: (data: MediaPanelSubmitData) => Promise<void>;
 
 }
 
 export function ComposerMediaPanel(props: ComposerMediaPanelProps) {
 
-    const { title, files, uploadMedia, onClose } = props;
-    const file = files != null && files.length > 0 ? files[0] : null;
+    // Props
+    
+    const { type, files = [], autoOpen, onClose, onSubmit } = props;
+    const { replyTo } = useChat();
+    const { registerSubmit } = useMessageComposer();
 
     const { t } = useTranslation();
 
-    const { updateDraft, setBusy } = useMessageComposer<MessageComposerDraft & ComposerMediaPanelDraft>();
+    // State
 
-    // Internal State
+    const [attachments, setAttachments] = useState<Attachment[]>(files.map(buildAttachment));
+    const [selectedAttachment, setSelectedAttachment] = useState<number | null>(null);
+    const attachment = selectedAttachment != null && attachments[selectedAttachment] != null
+        ? attachments[selectedAttachment]
+        : null;
+    const attachmentType = getPreviewType(attachment?.file);
 
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    // Auto Open Handlers
 
-    const [uploading, setUploading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const openedRef = useRef<boolean>(false);
+
+    useEffect(() => {
+        if (autoOpen) {
+
+            // Guard against React 18 StrictMode double-effect 
+            // and ensure same-file reselection works.
+
+            const input = fileInputRef.current;
+            if (!input || openedRef.current) {
+                return;
+            }
+            openedRef.current = true;
+
+            // Fire the click event with an empty value so that
+            // we can reselect the same file twice.
+
+            input.value = '';
+            input.click();
+
+        }
+    }, [autoOpen]);
+
 
     // Handlers
 
-    const handleUpload = useCallback(async (file: File) => {
-
-        if (!file) {
-            onClose();
-            return;
-        }
-
-        const url = URL.createObjectURL(file);
-        setPreviewUrl(url);
-
-        setUploading(true);
-        setError(null);
-        setBusy(true);
-        try {
-            const id = await uploadMedia(file);
-            updateDraft(prev => ({ ...prev, type: 'document', attachments: [{ id, file }] }));
-        } catch (_err) {
-            setError(t('chat.composer.document.uploadError'));
-        } finally {
-            setBusy(false);
-            setUploading(false);
-        }
-
+    const handleSelectAttachment = useCallback((i: number) => {
+        setSelectedAttachment(i);
     }, []);
 
+    const handleAddAttachment = useCallback(() => {
+        const input = fileInputRef.current;
+        if (!input) return;
+        input.value = '';
+        input.click();
+    }, []);
 
-    const handleRetry = () => {
-        if (file != null) {
-            setError(null);
-            handleUpload(file);
-        }
-    };
+    const handleRemoveAttachment = useCallback((i: number) => {
+        setAttachments((prev) => {
+            const next = [...prev.slice(0, i), ...prev.slice(i + 1)];
+            setSelectedAttachment((current) => {
+                if (current == null) return current;
+                if (current === i) {
+                    if (next.length === 0) return null;
+                    if (i >= next.length) return next.length - 1;
+                    return i;
+                }
+                if (current > i) return current - 1;
+                return current;
+            });
+            return next;
+        });
+    }, []);
 
-    useEffect(() => {
-        if (file != null) {
-            handleUpload(file);
-        }
-    }, [file, handleUpload]);
+    //
+
+    const handleCaptionChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        const nextCaption = e.target.value ?? '';
+        if (selectedAttachment == null) return;
+        setAttachments((prev) => {
+            if (!prev || selectedAttachment < 0 || selectedAttachment >= prev.length) return prev;
+            const next = prev.slice();
+            next[selectedAttachment] = { ...next[selectedAttachment], caption: nextCaption };
+            return next;
+        });
+    }, [selectedAttachment]);
+
+    const handleMediaSelect: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
+        const list = e.target.files;
+        if (!list || list.length === 0) return;
+        const selected = Array.from(list);
+        setAttachments((prev) => {
+            const next = [...prev, ...selected.map(buildAttachment)];
+            setSelectedAttachment(prev.length);
+            return next;
+        });
+        e.currentTarget.value = '';
+    }, []);
+
+    // Register
+
+    const handleSubmit = useCallback(async () => {
+        console.log('submitting media');
+        onSubmit({
+            attachments: attachments.map(({ file, caption }) => ({ file, caption })),
+            ...(replyTo && { replyToMessageId: replyTo.id })
+        });
+    }, [attachments, replyTo, onSubmit]);
+    useEffect(() => registerSubmit('media', handleSubmit), [registerSubmit, handleSubmit]);
 
     // Render
 
-    const previewType = file ? getPreviewType(file) : null;
 
     return (
         <ComposerPanel onClose={onClose}>
 
-            <ComposerPanel.Header title={title} onClose={onClose} />
+            <ComposerPanel.Header title={t('chat.composer.media.attach')} onClose={onClose} />
 
-            {file && (
-                <div className="text-center text-gray-600 mb-4">
-                    <div>
-                        <span className="font-medium mr-2">{file.name}</span>
-                        <span>({mediaSize(file.size)})</span>
-                    </div>
-                    {file.type &&
-                        <div className="truncate text-sm">
-                            {file.type}
+            <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept={type === 'image' ? 'image/*' : '*/*'}
+                className="hidden"
+                onClick={(e) => { (e.currentTarget as HTMLInputElement).value = ''; }}
+                onChange={handleMediaSelect}
+            />
+
+            <ComposerPanel.Body className="relative flex flex-col items-center">
+
+                <div className="flex-1 w-full min-h-0 p-4 flex flex-col items-center gap-4">
+
+                    {attachment && (
+                        attachmentType
+                            ? <MediaPreview file={attachment.file} className="flex-1 min-w-0 min-h-0 object-contain rounded-xl shadow" />
+                            : <div className="flex-1 min-w-0 min-h-0 flex justify-center items-center">
+                                <MediaNoPreview file={attachment.file} />
+                            </div>
+                    )}
+
+                    {attachment && (
+                        <div className="flex-none w-2/3">
+                            <Input
+                                variant="filled"
+                                value={attachment.caption}
+                                onChange={handleCaptionChange}
+                                placeholder="Add a caption"
+                            />
                         </div>
-                    }
+                    )}
+
                 </div>
-            )}
 
-            <ComposerPanel.Body className="relative flex items-center justify-center">
+                <div className="w-full p-4 flex-none border-t ">
+                    <div className="flex flex-row justify-center gap-2">
 
-                {/* Preview */}
-
-                {previewUrl && previewType === 'image' && (
-                    <img
-                        src={previewUrl}
-                        alt={file?.name ?? 'preview'}
-                        className={classNames(
-                            'max-w-full max-h-full object-contain rounded-lg shadow',
-                            { 'brightness-50': uploading })}
-                    />
-                )}
-
-                {previewUrl && previewType === 'pdf' && (
-                    <embed
-                        src={previewUrl}
-                        type="application/pdf"
-                        className={classNames(
-                            'w-full h-full rounded-lg shadow',
-                            { 'brightness-50': uploading })}
-                    />
-                )}
-
-                {previewUrl && !previewType && (
-                    <div className="px-12 py-24 flex flex-row items-center gap-4 text-gray-700 bg-gray-400 rounded-lg">
-                        <FileIcon className="w-12 h-12" />
-                        <div>
-                            {t('chat.composer.noPreview')}
+                        <div className="grow-0 flex flex-row justify-center gap-2 overflow-x-auto">
+                            {attachments.map((m, i) =>
+                                <MediaTile
+                                    key={m.key}
+                                    onClick={() => handleSelectAttachment(i)}
+                                    className={classNames('relative group', { 'border-4 border-primary-500': i === selectedAttachment })}
+                                >
+                                    <MediaTileDelete onClick={(e) => { e.stopPropagation(); handleRemoveAttachment(i); }} />
+                                    <MediaPreview file={m.file} className="w-full h-full object-cover" />
+                                </MediaTile>
+                            )}
                         </div>
+
+                        <MediaTile
+                            onClick={handleAddAttachment}
+                        >
+                            <PlusIcon className="text-xl" />
+                        </MediaTile>
+
                     </div>
-                )}
-
-
-                {uploading && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <Loading className="text-6xl" colorClassName="text-white" />
-                    </div>
-                )}
-
-
-                {error && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/60 rounded-lg">
-                        <div className="text-white text-sm text-center px-4">{error}</div>
-                        <Button semantic="primary" onClick={handleRetry}>
-                            {t('chat.composer.retry')}
-                        </Button>
-                    </div>
-                )}
+                </div>
 
             </ComposerPanel.Body>
 
         </ComposerPanel>
     );
 
+}
+
+// Internal Components
+
+function MediaPreview({ file, className }: {
+    file: File,
+    className?: string
+}) {
+
+    const url = useMemo(() => URL.createObjectURL(file), [file]);
+    const previewType = getPreviewType(file);
+
+    if (previewType === 'image') {
+        return (
+            <img
+                src={url}
+                alt={file?.name ?? 'preview'}
+                className={className}
+            />
+        );
+    }
+
+    if (previewType === 'pdf') {
+        return (
+            <embed
+                src={`${url}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
+                type="application/pdf"
+                className={className}
+            />
+        );
+    }
+
+    return (
+        <FileIcon className="text-4xl text-muted" />
+    );
+
+}
+
+function MediaNoPreview({ file, className }: {
+    file: File,
+    className?: string
+}) {
+
+    return (
+        <div className={className}>
+            <div className="px-16 py-8 flex flex-col justify-center items-center gap-2 text-muted bg-gray-100 rounded-xl shadow">
+                <MediaPreview file={file} />
+                <div>No preview available</div>
+                <div>{file.name} - {mediaSize(file.size)}</div>
+            </div>
+        </div>
+    );
+
+}
+
+
+function MediaTile({ onClick, className, children }: {
+    onClick: MouseEventHandler<HTMLDivElement>,
+    className?: string,
+    children: ReactNode
+}) {
+
+    return (
+        <div
+            onClick={onClick}
+            className={classNames(
+                'flex-none w-16 h-16 border border-control-border rounded overflow-hidden',
+                'flex justify-center items-center',
+                'cursor-pointer',
+                className
+            )}
+        >
+            {children}
+        </div>
+    );
+
+}
+
+
+function MediaTileDelete({ onClick }: {
+    onClick: MouseEventHandler<HTMLButtonElement>
+}) {
+
+    return (
+        <>
+            <span className="hidden group-hover:block absolute inset-0 bg-gradient-to-bl from-black/50 to-50% to-transparent " />
+            <button
+                type="button"
+                onClick={onClick}
+                className="absolute right-0 top-0 hidden group-hover:flex w-6 h-6 items-center justify-center text-white"
+            >
+                <CrossIcon className="text-xl" />
+            </button>
+        </>
+
+    );
+}
+
+// Utils
+
+function buildAttachment(file: File) {
+    return { key: crypto.randomUUID(), file, caption: '' };
 }
 
 function getPreviewType(file: File | null | undefined) {

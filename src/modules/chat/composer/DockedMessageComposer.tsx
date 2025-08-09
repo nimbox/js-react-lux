@@ -1,10 +1,9 @@
 import classNames from 'classnames';
 import { Children } from 'react';
 import { MessageComposer, MessageComposerProps } from './MessageComposer';
-import { MessageComposerDraft } from './MessageComposerContext';
 
 
-export function DockedMessageComposer<D extends MessageComposerDraft>(props: MessageComposerProps<D>) {
+export function DockedMessageComposer(props: MessageComposerProps) {
 
     // Properties
 

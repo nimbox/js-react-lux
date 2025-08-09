@@ -1,36 +1,24 @@
-import { Context, createContext, useContext } from 'react';
+import { createContext, useContext } from 'react';
 
 
 // MessageComposerContext
 
-export interface MessageComposerDraft {
+export interface MessageComposerContextProps {
 
-    body: string;
-    replyToMessageId?: string;
-
-}
-
-export interface MessageComposerContextProps<D extends MessageComposerDraft = MessageComposerDraft> {
-
-    draft: D;
-
-    updateDraft: (patch: Partial<D> | ((prev: D) => Partial<D>)) => void;
-    clearDraft: () => void;
-
-    setBusy: (busy: boolean) => void;
+    registerSubmit: (panel: string, onSubmit: () => Promise<void>) => void;
 
 }
 
-export const MessageComposerContext = createContext<MessageComposerContextProps<MessageComposerDraft> | null>(null);
+export const MessageComposerContext = createContext<MessageComposerContextProps | null>(null);
 
-export function useMessageComposer<D extends MessageComposerDraft = MessageComposerDraft>() {
+export function useMessageComposer() {
 
-    const context = useContext(MessageComposerContext as unknown as Context<MessageComposerContextProps<D> | null>);
+    const context = useContext(MessageComposerContext);
 
     if (!context) {
         throw new Error('useMessageComposer must be used within a MessageComposer');
     }
 
-    return context as MessageComposerContextProps<D>;
+    return context
 
 }
