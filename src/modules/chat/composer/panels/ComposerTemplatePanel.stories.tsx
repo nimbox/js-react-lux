@@ -6,7 +6,6 @@ import { renderTemplate } from '../../utils/renderTemplate';
 import { DockedMessageComposer } from '../DockedMessageComposer';
 import { ComposerTemplatePanel } from './ComposerTemplatePanel';
 
-
 // Definition
 
 const meta: Meta<typeof ComposerTemplatePanel> = {
@@ -19,7 +18,9 @@ const meta: Meta<typeof ComposerTemplatePanel> = {
         (Story) => (
             <div className="relative min-w-96 h-[640px] bg-chat-message-list-bg">
                 <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${chatBackground})` }} />
-                <DockedMessageComposer className="p-8">
+                <DockedMessageComposer className="p-8" onSubmit={function (): Promise<void> {
+                    throw new Error('Function not implemented.');
+                } }>
                     <Story />
                 </DockedMessageComposer>
             </div>
@@ -112,7 +113,7 @@ export const Default: Story = {
             }
         ],
         chatBackground,
-        renderTemplate,
+        render: renderTemplate,
         onClose: action('onClose')
     }
 };
@@ -132,7 +133,7 @@ export const ManyTemplates: Story = {
     args: {
         templates: [t1, t1, t1, t1, t1, t1, t1, t1, t1, t1, t1, t1],
         chatBackground,
-        renderTemplate,
+        render: renderTemplate,
         onClose: action('onClose')
     }
 };
@@ -151,7 +152,7 @@ export const IncompleteTemplates: Story = {
     args: {
         templates: [t1, t2, t1, t2, t1, t2, t1, t2, t1, t2, t1, t2],
         chatBackground,
-        renderTemplate,
+        render: renderTemplate,
         onClose: action('onClose')
     }
 };
