@@ -1,7 +1,6 @@
 import classNames from 'classnames';
-import { useContext } from 'react';
+import { useMessage } from '../MessageContext';
 import { useMessageGroup } from '../MessageGroupContext';
-import { MessageContext, useMessage } from '../MessageContext';
 
 
 export interface MessageBubbleProps {

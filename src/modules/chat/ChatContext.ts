@@ -10,6 +10,8 @@ import { ReactionDetailsData } from './types/ReactionDetailsData';
 
 export interface ChatContextProps {
 
+    renderText: (text: string) => React.ReactNode;
+
     renderMessage: Record<string, (message: MessageContextProps) => React.ReactElement<MessageContextProps>>;
     renderDefaultMessage: (message: MessageContextProps) => React.ReactElement<MessageContextProps>;
 
@@ -36,6 +38,10 @@ export interface ChatContextProps {
 }
 
 export const defaultProps: ChatContextProps = {
+
+    // Text rendering
+
+    renderText: (text) => text,
 
     // Message rendering
 

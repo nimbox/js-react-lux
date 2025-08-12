@@ -5,7 +5,7 @@ export interface ReplyMediaProps {
 export function ReplyMedia({ children }: ReplyMediaProps) {
 
     return (
-        <div className="flex-shrink-0">
+        <div className="flex-none">
             {children}
         </div>
     );

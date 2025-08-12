@@ -1,6 +1,6 @@
-import { Loading } from '../../../..';
-import { useMessageList } from '../MessageListContext';
+import { Loading } from '../../../../components/Loading';
 import { useMessage } from '../MessageContext';
+import { useMessageList } from '../MessageListContext';
 
 
 export function MessageImage() {

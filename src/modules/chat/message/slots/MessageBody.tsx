@@ -1,8 +1,10 @@
+import { useChat } from '../../ChatContext';
 import { useMessage } from '../MessageContext';
 
 
 export function MessageBody() {
 
+    const { renderText } = useChat();
     const { message: { body } } = useMessage();
 
     if (!body || body.length === 0) {
@@ -11,7 +13,7 @@ export function MessageBody() {
 
     return (
         <div className="text-gray-500">
-            {body}
+            {renderText(body)}
         </div>
     );
 

@@ -1,12 +1,12 @@
 import classNames from 'classnames';
-import React from 'react';
+import { cloneElement, ReactNode } from 'react';
 import { Message } from '../Message';
 import { useMessage } from '../MessageContext';
 import { useMessageGroup } from '../MessageGroupContext';
 
 
 export interface MessageContainerProps {
-    children: React.ReactNode;
+    children: ReactNode;
 }
 
 export function MessageContainer({ children }: MessageContainerProps) {
@@ -21,7 +21,7 @@ export function MessageContainer({ children }: MessageContainerProps) {
         })}>
             {children}
             <Message.Reactions />
-            {menu && React.cloneElement(menu, {
+            {menu && cloneElement(menu, {
                 className: 'absolute top-3 right-2'
             })}
         </div>
