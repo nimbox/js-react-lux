@@ -187,7 +187,7 @@ export function ComposerMediaPanel(props: ComposerMediaPanelProps) {
 
                 </div>
 
-                <div className="w-full p-4 flex-none border-t ">
+                <div className="w-full p-4 flex-none border-t">
                     <div className="flex flex-row justify-center gap-2">
 
                         <div className="grow-0 flex flex-row justify-center gap-2 overflow-x-auto">

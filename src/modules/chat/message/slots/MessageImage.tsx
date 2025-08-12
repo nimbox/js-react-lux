@@ -1,11 +1,13 @@
 import { Loading } from '../../../../components/Loading';
+import { useChat } from '../../ChatContext';
 import { useMessage } from '../MessageContext';
 import { useMessageList } from '../MessageListContext';
 
 
 export function MessageImage() {
 
-    const { message: { type, attachments } } = useMessage();
+    const { setPreview } = useChat();
+    const { message, message: { type, attachments } } = useMessage();
     const { scrollToBottom } = useMessageList();
 
     if (type !== 'image' || !attachments || attachments.length === 0) {
@@ -13,6 +15,10 @@ export function MessageImage() {
     }
 
     const url = attachments[0].thumbnailUrl;
+
+    const handlePreview = () => {
+        setPreview?.(message);
+    };
 
     // Render
 
@@ -23,7 +29,8 @@ export function MessageImage() {
                     src={url}
                     alt={attachments[0].filename || 'image'}
                     onLoad={scrollToBottom}
-                    className="max-w-64 max-h-64 rounded shadow"
+                    onClick={handlePreview}
+                    className="max-w-64 max-h-64 rounded shadow cursor-zoom-in"
                 />
                 : <Loading />
             }

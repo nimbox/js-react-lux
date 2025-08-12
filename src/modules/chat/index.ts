@@ -33,6 +33,8 @@ export * from './composer/MessageComposerContext';
 export * from './composer/panels/ComposerMediaPanel';
 export * from './composer/panels/ComposerTemplatePanel';
 
+export * from './lightbox/MessageLightBox';
+
 // Export utils
 
 export * from './utils/messageProcessing';

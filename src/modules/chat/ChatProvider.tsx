@@ -15,7 +15,16 @@ export function ChatProvider(props: Partial<ChatProviderProps>) {
 
     // Reply state management
 
+    const [preview, setPreview] = useState<MessageData | null>(null);
     const [replyTo, setReplyTo] = useState<Omit<MessageData, 'replyTo'> | null>(replyToProp ?? null);
+
+    const handleSetPreview = (message: MessageData) => {
+        setPreview(message);
+    };
+
+    const handleClearPreview = () => {
+        setPreview(null);
+    };
 
     const handleSetReplyTo = (message: Omit<MessageData, 'replyTo'>) => {
         setReplyTo(message);
@@ -29,11 +38,18 @@ export function ChatProvider(props: Partial<ChatProviderProps>) {
 
     return (
         <ChatContext.Provider value={{
+
             ...defaultProps,
             ...rest,
+
+            preview,
+            setPreview: handleSetPreview,
+            clearPreview: handleClearPreview,
+
             replyTo,
             setReplyTo: handleSetReplyTo,
             clearReplyTo: handleClearReplyTo
+
         }}>
             {children}
         </ChatContext.Provider >

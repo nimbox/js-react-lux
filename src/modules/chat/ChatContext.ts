@@ -10,6 +10,8 @@ import { ReactionDetailsData } from './types/ReactionDetailsData';
 
 export interface ChatContextProps {
 
+    // Renderers
+
     renderText: (text: string) => React.ReactNode;
 
     renderMessage: Record<string, (message: MessageContextProps) => React.ReactElement<MessageContextProps>>;
@@ -27,6 +29,12 @@ export interface ChatContextProps {
     replyTo: Omit<MessageData, 'replyTo'> | null;
     setReplyTo: (message: Omit<MessageData, 'replyTo'>) => void;
     clearReplyTo: () => void;
+
+    // Preview
+
+    preview: MessageData | null;
+    setPreview?: (message: MessageData) => void;
+    clearPreview?: () => void;
 
     // Formatters
 
@@ -66,6 +74,16 @@ export const defaultProps: ChatContextProps = {
         throw new Error('Function not implemented.');
     },
     clearReplyTo: function (): void {
+        throw new Error('Function not implemented.');
+    },
+
+    // Preview
+
+    preview: null,
+    setPreview: function (): void {
+        throw new Error('Function not implemented.');
+    },
+    clearPreview: function (): void {
         throw new Error('Function not implemented.');
     },
 
