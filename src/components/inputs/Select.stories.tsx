@@ -2,7 +2,7 @@ import { forwardRef, InputHTMLAttributes, Ref } from 'react';
 import { ControlledTemplate, HookFormTemplate, UncontrolledTemplate } from '../../templates/InputTemplates';
 import { Option } from './Option';
 import { Select, SelectProps } from './Select';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 
 
 // Definition

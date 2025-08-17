@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CheckBox } from './CheckBox';
 import classnames from 'classnames';
 import { CheckButton } from './CheckButton';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 
 
 // Definition

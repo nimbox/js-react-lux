@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Tag } from './Tag';
-import { fn } from '@storybook/test';
+import { fn } from 'storybook/test';
 import { Wrapper } from './inputs/Wrapper';
 import { Input } from './inputs/Input';
 import Cross from '../icons/components/Cross';

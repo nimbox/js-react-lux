@@ -13,7 +13,7 @@ import { useColumnDrop } from './useColumnDrop';
 import { useColumns } from './useColumns';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 
 // Definition

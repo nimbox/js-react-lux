@@ -1,5 +1,5 @@
-import { action } from '@storybook/addon-actions';
-import { Meta, StoryObj } from '@storybook/react';
+import { action } from 'storybook/actions';
+import { Meta, StoryObj } from '@storybook/react-vite';
 import chatBackground from '../../assets/chat-background.png';
 import { TemplateData } from '../../types/TemplateData';
 import { renderTemplate } from '../../utils/renderTemplate';

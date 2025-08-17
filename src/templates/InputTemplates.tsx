@@ -1,4 +1,4 @@
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 import React, { ChangeEvent, FocusEvent, FormEvent, useRef, useState } from 'react';
 import { Button } from '../components/Button';
 import { Input } from '../components/inputs/Input';

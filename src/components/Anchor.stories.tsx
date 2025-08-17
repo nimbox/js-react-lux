@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FullSquareIcon } from '../icons/components';
 import { Anchor } from './Anchor';
 

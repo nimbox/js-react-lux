@@ -1,5 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 import React, { ChangeEvent, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Wrapper } from '..';

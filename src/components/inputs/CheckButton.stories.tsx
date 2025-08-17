@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import classnames from 'classnames';
 import { CheckButton } from './CheckButton';
 import { ReactNode } from 'react';
