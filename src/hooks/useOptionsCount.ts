@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { OptionsExtractor } from '../components/choose/options';
+import { type OptionsExtractor } from '../components/choose/options';
 
 //
 // useOptionsCount

@@ -5,9 +5,9 @@ import { Input } from '../../../../components/inputs/Input';
 import { useChat } from '../../ChatContext';
 import { Message } from '../../message/Message';
 import { MessageGroup } from '../../message/MessageGroup';
-import { MessageData } from '../../types/MessageData';
-import { TemplateContextBlock, TemplateContextBlockType, TemplateContextData } from '../../types/TemplateContextData';
-import { TemplateData } from '../../types/TemplateData';
+import { type MessageData } from '../../types/MessageData';
+import { TemplateContextBlock, type TemplateContextBlockType, type TemplateContextData } from '../../types/TemplateContextData';
+import { type TemplateData } from '../../types/TemplateData';
 import { useMessageComposer } from '../MessageComposerContext';
 import { ComposerPanel } from './ComposerPanel';
 

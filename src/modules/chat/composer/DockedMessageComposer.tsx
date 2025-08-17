@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { Children } from 'react';
-import { MessageComposer, MessageComposerProps } from './MessageComposer';
+import { MessageComposer, type MessageComposerProps } from './MessageComposer';
 
 
 export function DockedMessageComposer(props: MessageComposerProps) {

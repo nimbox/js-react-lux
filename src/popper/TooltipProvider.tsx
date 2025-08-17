@@ -1,7 +1,6 @@
-import { FC, useCallback, useEffect } from 'react';
-import { Placement, createPopper } from '@popperjs/core';
+import { type Placement, createPopper } from '@popperjs/core';
 import classnames from 'classnames';
-import React from 'react';
+import { type FC, useCallback, useEffect } from 'react';
 
 
 interface TooltipProviderProps {

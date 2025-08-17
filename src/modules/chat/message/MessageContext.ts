@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { MessageData } from '../types/MessageData';
+import { type MessageData } from '../types/MessageData';
 
 
 // MesssageContext

@@ -1,9 +1,9 @@
+import React, { type ChangeEvent, type FocusEvent, type FormEvent, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { action } from 'storybook/actions';
-import React, { ChangeEvent, FocusEvent, FormEvent, useRef, useState } from 'react';
 import { Button } from '../components/Button';
 import { Input } from '../components/inputs/Input';
 import { setRefInputValue } from '../components/utilities/setRefInputValue';
-import { useForm } from 'react-hook-form';
 
 
 export interface ControlledTemplateProps<P> {
@@ -79,7 +79,7 @@ export const HookFormTemplate = <P extends object>({ component: Component, compo
     const { register, handleSubmit, setValue } = useForm({ defaultValues: { field: initial } });
     const { onChange, onBlur, ...restOfRegister } = register('field');
 
-    const handleFormSubmit = (data) => { action('onSubmit')(data); };
+    const handleFormSubmit = (data: unknown) => { action('onSubmit')(data); };
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => { action('onChange')(e.target.value); onChange(e); };
     const handleBlur = (e: FocusEvent<HTMLInputElement>) => { action('onBlur')(e.target.value); onBlur(e); };
 

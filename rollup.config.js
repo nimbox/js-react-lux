@@ -1,156 +1,60 @@
 import commonjs from '@rollup/plugin-commonjs';
-import json from '@rollup/plugin-json';
-import resolve from '@rollup/plugin-node-resolve';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import copy from 'rollup-plugin-copy';
 import filesize from 'rollup-plugin-filesize';
-import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import postcss from 'rollup-plugin-postcss';
+import pkg from './package.json' with { type: 'json' };
 
+
+const entries = {
+
+    'index': 'src/index.ts',
+    'styles/elegant': 'src/styles/elegant.js',
+
+    'icons': 'src/icons/components/index.ts',
+    'figures': 'src/figures/index.ts',
+
+    'modules/calendar': 'src/modules/calendar/index.ts',
+    'modules/chat': 'src/modules/chat/index.ts',
+    'modules/kanban': 'src/modules/kanban/index.ts'
+
+};
+
+const extensions = ['.js', '.ts', '.tsx', '.jsx', '.json'];
+const externalIds = [...Object.keys(pkg.dependencies), ...Object.keys(pkg.peerDependencies)];
+const external = (id) => externalIds.some(dep => id === dep || id.startsWith(dep + '/'));
 
 export default [{
 
-    input: 'src/index.ts',
-    output: [{
-        file: 'dist/index.cjs',
-        format: 'cjs',
-        exports: 'named',
-        sourcemap: true
-    }, {
-        file: 'dist/index.mjs',
-        format: 'es',
-        exports: 'named',
-        sourcemap: true
-    }],
+    input: entries,
+    external,
 
     plugins: [
-
-        peerDepsExternal({ includeDependencies: true }),
-        resolve(),
+        nodeResolve({ extensions }),
         commonjs(),
-
-        json(),
-
-        typescript({
-            exclude: ['src/icons', 'src/figures', 'src/styles', '**/test', '**/stories', '**/*.stories.tsx', 'src/i18n.tsx']
-        }),
-
-        postcss({
-            extensions: ['.css']
-        }),
-
-        copy({
-            targets: [{
-                src: 'src/locales/*',
-                dest: 'dist/locales'
-            }]
-        }),
-
+        typescript({ tsconfig: 'tsconfig.build.json' }),
+        // postcss({ extensions: ['.css'] }),
+        copy({ targets: [{ src: 'src/locales/*', dest: 'dist/locales' }] }),
         filesize()
+    ],
 
-    ]
-
-}, {
-
-    input: 'src/icons/components/index.ts',
-    output: [{
-        file: 'dist/icons/index.cjs',
-        format: 'cjs',
-        exports: 'named',
-        sourcemap: true
-    }, {
-        file: 'dist/icons/index.mjs',
-        format: 'es',
-        exports: 'named',
-        sourcemap: true
-    }],
-
-    plugins: [
-
-        peerDepsExternal({ includeDependencies: true }),
-        resolve(),
-        commonjs(),
-
-        json(),
-
-        typescript({
-            compilerOptions: {
-                declarationDir: 'dist/icons/typings'
-            },
-            include: ['src/icons/components/**/*'],
-            exclude: ['stories/**/*', '**/*.stories.tsx', 'src/i18n.tsx']
-        }),
-
-        postcss({
-            extensions: ['.css']
-        }),
-
-        filesize()
-
-    ]
-
-}, {
-
-    input: 'src/figures/index.ts',
-    output: [{
-        file: 'dist/figures/index.cjs',
-        format: 'cjs',
-        exports: 'named',
-        sourcemap: true
-    }, {
-        file: 'dist/figures/index.mjs',
-        format: 'es',
-        exports: 'named',
-        sourcemap: true
-    }],
-
-    plugins: [
-
-        peerDepsExternal({ includeDependencies: true }),
-        resolve(),
-        commonjs(),
-
-        json(),
-
-        typescript({
-            compilerOptions: {
-                declarationDir: 'dist/figures/typings'
-            },
-            include: ['src/figures/**/*'],
-            exclude: ['stories/**/*', '**/*.stories.tsx', 'src/i18n.tsx']
-        }),
-
-        postcss({
-            extensions: ['.css']
-        }),
-
-        filesize(),
-
-    ]
-
-}, {
-
-    input: 'src/styles/elegant.js',
-    output: [{
-        file: 'dist/styles/elegant.cjs',
-        format: 'cjs',
-        exports: 'named',
-        sourcemap: true
-    }, {
-        file: 'dist/styles/elegant.mjs',
-        format: 'es',
-        exports: 'named',
-        sourcemap: true
-    }],
-
-    plugins: [
-
-        peerDepsExternal({ includeDependencies: true }),
-        resolve(),
-        commonjs(),
-
-        filesize()
-
+    output: [
+        {
+            dir: 'dist/cjs',
+            format: 'cjs',
+            sourcemap: true,
+            entryFileNames: '[name].js',
+            chunkFileNames: 'chunks/[hash].js',
+            exports: 'auto'
+        },
+        {
+            dir: 'dist/esm',
+            format: 'esm',
+            sourcemap: true,
+            entryFileNames: '[name].js',
+            chunkFileNames: 'chunks/[hash].js'
+        }
     ]
 
 }];

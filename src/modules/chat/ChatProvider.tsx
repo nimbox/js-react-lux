@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { ChatContext, ChatContextProps, defaultProps } from './ChatContext';
-import { MessageData } from './types/MessageData';
+import { ChatContext, defaultProps, type ChatContextProps } from './ChatContext';
+import { type MessageData } from './types/MessageData';
 
 
-// Chat
+// Chat 
 
 export interface ChatProviderProps extends ChatContextProps {
     children: React.ReactNode;

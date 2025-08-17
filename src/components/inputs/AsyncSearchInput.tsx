@@ -1,8 +1,8 @@
-import React, { Ref } from 'react';
+import React, { type Ref } from 'react';
 import { WarningIcon } from '../../icons/components';
 import { Delay } from '../Delay';
 import { Loading } from '../Loading';
-import { SearchInput, SearchInputProps } from './SearchInput';
+import { SearchInput, type SearchInputProps } from './SearchInput';
 
 
 //

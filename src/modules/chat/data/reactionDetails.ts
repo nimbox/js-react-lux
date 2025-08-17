@@ -1,4 +1,4 @@
-import { ReactionDetailsData } from '../types/ReactionDetailsData';
+import { type ReactionDetailsData } from '../types/ReactionDetailsData';
 import { authors } from './authors';
 
 

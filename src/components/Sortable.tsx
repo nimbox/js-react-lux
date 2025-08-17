@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classnames from 'classnames';
-import React, { FC, LegacyRef, ReactElement, useCallback, useEffect, useRef, useState } from 'react';
+import React, { type FC, type LegacyRef, type ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { DragIcon } from '../icons/components';

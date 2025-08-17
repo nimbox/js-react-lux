@@ -1,20 +1,20 @@
 import classnames from 'classnames';
-import { isFunction as _isFunction } from 'lodash';
-import React, { forwardRef, KeyboardEvent, Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { default as _isFunction } from 'lodash/isFunction';
+import React, { forwardRef, type KeyboardEvent, type Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
-import { UseOptionChooser } from '../../hooks/useOption';
-import { UseOptionsSupplier } from '../../hooks/useOptions';
+import { type UseOptionChooser } from '../../hooks/useOption';
+import { type UseOptionsSupplier } from '../../hooks/useOptions';
 import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
 import { AngleDownIcon, CircleCrossIcon, WarningIcon } from '../../icons/components';
-import { consumeEvent } from '../utilities/consumeEvent';
-import { setRefInputValue } from '../utilities/setRefInputValue';
 import { Delay } from '../Delay';
-import { FieldPopper, FieldPopperProps } from '../inputs/FieldPopper';
+import { FieldPopper, type FieldPopperProps } from '../inputs/FieldPopper';
 import { Placeholder } from '../inputs/Placeholder';
 import { SearchInput } from '../inputs/SearchInput';
 import { Loading } from '../Loading';
-import { ChooseOptionList, ChooseOptionListProps } from './ChooseOptionList';
+import { consumeEvent } from '../utilities/consumeEvent';
+import { setRefInputValue } from '../utilities/setRefInputValue';
+import { ChooseOptionList, type ChooseOptionListProps } from './ChooseOptionList';
 import { DEFAULT_RENDER_OPTION, EXTRACTOR } from './options';
 
 
@@ -189,11 +189,11 @@ export const Choose = forwardRef(<O, G = O[]>(
 
     // Assertions
 
-    if (process.env.NODE_ENV !== 'production') {
-        if (withSearch && !_isFunction(supplier)) {
-            console.error('Provided withSearch parameter without providing an option supplier function.  Try setting options to `(query) => [[ ... ]]`.');
-        }
-    }
+    // if (process.env.NODE_ENV !== 'production') {
+    //     if (withSearch && !_isFunction(supplier)) {
+    //         console.error('Provided withSearch parameter without providing an option supplier function.  Try setting options to `(query) => [[ ... ]]`.');
+    //     }
+    // }
 
     // State
 
@@ -432,7 +432,7 @@ export const Choose = forwardRef(<O, G = O[]>(
                         ref={queryRef}
                         withFullWidth
                         loading={loading > 0}
-                        loadingError={loadingError}
+                        loadingError={!!loadingError}
                         value={query}
                         onChange={handleQueryChange}
                         onKeyDown={handleKeyDown}

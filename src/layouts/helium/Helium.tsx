@@ -1,42 +1,14 @@
 import classnames from 'classnames';
-import React, { createContext, FC, MouseEventHandler, useContext, useEffect, useState } from 'react';
+import React, { type FC, type MouseEventHandler, useContext, useEffect, useState } from 'react';
 import { ShowTransition } from '../../components/transitions/ShowTransition';
 import { useViewport } from '../../hooks/useViewport';
 import { AngleLeftIcon, CrossIcon, HamburgerIcon } from '../../icons/components';
+import { HeliumContext } from './HeliumContext';
 
 
 //
 // helium
 //
-
-// context
-
-export interface ContextProps {
-
-    isCompact: boolean;
-
-    showNavigator: boolean;
-    setShowNavigator: (show: boolean) => void;
-
-    showMainSide: boolean;
-    setShowMainSide: (show: boolean) => void;
-
-}
-
-export const HeliumContext = createContext<ContextProps>({
-
-    isCompact: false,
-
-    showNavigator: true,
-    setShowNavigator: () => null,
-
-    showMainSide: true,
-    setShowMainSide: () => null
-
-});
-
-
-// layout
 
 interface Props {
     navigator?: boolean;

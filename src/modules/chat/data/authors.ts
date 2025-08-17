@@ -1,4 +1,4 @@
-import { MessageAuthor } from '../types/MessageAuthor';
+import { type MessageAuthor } from '../types/MessageAuthor';
 
 
 export const authors: Record<string, MessageAuthor> = {

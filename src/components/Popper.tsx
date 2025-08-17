@@ -1,4 +1,4 @@
-import { Placement } from '@popperjs/core';
+import { type Placement } from '@popperjs/core';
 import classnames from 'classnames';
 import React, { useImperativeHandle, useState } from 'react';
 import ReactDOM from 'react-dom';

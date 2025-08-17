@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { Ref, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { type Ref, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useOptionsCount } from '../../hooks/useOptionsCount';
 import { DEFAULT_ON_CHOOSE, DEFAULT_RENDER_GROUP_LABEL, DEFAULT_RENDER_OPTION, EXTRACTOR } from './options';
 
@@ -149,7 +149,7 @@ export const ChooseOptionList = React.forwardRef(<O, G = O[]>(
 
     // Handlers
 
-    const handleClick = (e: React.MouseEvent<HTMLLIElement>, g: number, i: number) => {
+    const handleClick = (_e: React.MouseEvent<HTMLLIElement>, g: number, i: number) => {
         onChoose(extractor(options![g])[i]);
     };
 

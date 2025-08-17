@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { debounce as _debounce } from 'lodash';
-import { isFunction as _isFunction } from 'lodash';
+import { debounce as _debounce, isFunction as _isFunction } from 'lodash';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 
@@ -15,7 +13,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
  */
 export type UseOptionsSupplier<G> = (G[] | Promise<G[]>) | ((query?: string) => G[] | Promise<G[]>);
 
-export interface UseOptionsProps<O, G> {
+export interface UseOptionsProps {
 
     /**
      * Milliseconds to debounce the search. Default is `0`.
@@ -25,7 +23,7 @@ export interface UseOptionsProps<O, G> {
 }
 
 
-export interface UseOptionsReturn<O, G> {
+export interface UseOptionsReturn<O, G = O[]> {
 
     /**
      * The options returned by the supplier.
@@ -87,7 +85,7 @@ export interface UseOptionsReturn<O, G> {
  * @param props 
  * @returns 
  */
-export const useOptions = <O, G>(supplier: UseOptionsSupplier<G>, props?: UseOptionsProps<O, G>): UseOptionsReturn<O, G> => {
+export const useOptions = <O, G>(supplier: UseOptionsSupplier<G>, props?: UseOptionsProps): UseOptionsReturn<O, G> => {
 
     // Properties
 

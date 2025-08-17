@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { useChat } from '../ChatContext';
-import { MessageContext, MessageContextProps } from './MessageContext';
+import { MessageContext, type MessageContextProps } from './MessageContext';
 import { useMessageGroup } from './MessageGroupContext';
 import { MessageReact } from './MessageReact';
 import { MessageAudio } from './slots/MessageAudio';

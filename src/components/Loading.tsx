@@ -1,6 +1,6 @@
 
 import classnames from 'classnames';
-import React, { CSSProperties, FC } from 'react';
+import { type CSSProperties, type FC } from 'react';
 
 
 export interface LoadingProps {

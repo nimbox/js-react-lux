@@ -1,4 +1,4 @@
-import { MessageData } from '../types/MessageData';
+import { type MessageData } from '../types/MessageData';
 
 
 export interface DisplayMessageGroup {

@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React, { useContext, useState } from 'react';
 import { usePopper } from 'react-popper';
-import { ControlContext } from './Control';
+import { ControlContext } from './ControlContext';
 
 
 //

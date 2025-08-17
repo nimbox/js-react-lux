@@ -1,6 +1,5 @@
 import classnames from 'classnames';
-import React from 'react';
-import { FC, useLayoutEffect, useState } from 'react';
+import React, { type FC, useLayoutEffect, useState } from 'react';
 
 
 export interface ShowTransitionProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -40,9 +39,11 @@ export interface ShowTransitionProps extends React.HTMLAttributes<HTMLDivElement
 
 }
 
-enum ShowTransitionState {
-    MOUNTING = 'MOUNTING', MOUNTED = 'MOUNTED', UNMOUNTING = 'UNMOUNTING'
-}
+const ShowTransitionState = {
+    MOUNTING: 'MOUNTING',
+    MOUNTED: 'MOUNTED',
+    UNMOUNTING: 'UNMOUNTING'
+} as const;
 
 export const ShowTransition: FC<ShowTransitionProps> = (props) => {
 
@@ -65,7 +66,7 @@ export const ShowTransition: FC<ShowTransitionProps> = (props) => {
 
     // configuration
 
-    const [state, setState] = useState<ShowTransitionState | null>(null);
+    const [state, setState] = useState<keyof typeof ShowTransitionState | null>(null);
 
     useLayoutEffect(() => {
         const t = setTimeout(() => {
@@ -82,7 +83,7 @@ export const ShowTransition: FC<ShowTransitionProps> = (props) => {
         return () => clearTimeout(t);
     }, [show, state]);
 
-    const handleTransitionEnd = (transitionState: ShowTransitionState) => {
+    const handleTransitionEnd = (transitionState: keyof typeof ShowTransitionState) => {
         switch (transitionState) {
             case ShowTransitionState.MOUNTING:
                 setState(ShowTransitionState.MOUNTED);

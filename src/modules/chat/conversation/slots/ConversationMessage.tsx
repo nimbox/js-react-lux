@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { MessageData } from '../../types/MessageData';
+import { type MessageData } from '../../types/MessageData';
 import { useConversation } from '../ConversationContext';
 
 

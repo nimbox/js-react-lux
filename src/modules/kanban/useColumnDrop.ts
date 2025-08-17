@@ -1,6 +1,6 @@
-import { RefObject, useRef } from 'react';
+import { type RefObject, useRef } from 'react';
 import { useDrop } from 'react-dnd';
-import { COLUMN_TYPE, KanbanColumnItem } from './types';
+import { COLUMN_TYPE, type KanbanColumnItem } from './types';
 
 
 export interface UseColumnDropProps {

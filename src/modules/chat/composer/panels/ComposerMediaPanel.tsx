@@ -1,12 +1,12 @@
 import classNames from 'classnames';
-import { ChangeEvent, MouseEventHandler, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { type ChangeEvent, type MouseEventHandler, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Input } from '../../../../components/inputs/Input';
 import { CrossIcon, FileIcon, PlusIcon } from '../../../../icons/components';
 import { useChat } from '../../ChatContext';
 import { mediaSize } from '../../utils/mediaSize';
 import { useMessageComposer } from '../MessageComposerContext';
 import { ComposerPanel } from './ComposerPanel';
-import { useTranslation } from 'react-i18next';
 
 
 interface Attachment {

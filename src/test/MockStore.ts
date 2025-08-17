@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 export class MockStore<T> {
 
     items: T[];
@@ -12,7 +11,7 @@ export class MockStore<T> {
         this.searcher = searcher;
     }
 
-    async create(item: T, timeout: number = 0, error = false) {
+    async create(item: T, timeout: number = 0) {
         await new Promise(resolve => setTimeout(resolve, timeout));
         this.items.push(item);
         return item;
@@ -22,7 +21,7 @@ export class MockStore<T> {
         return this.items.find(this.getter(q));
     }
 
-    async search(q: string, timeout: number = 0, error = false) {
+    async search(q: string, timeout: number = 0) {
         await new Promise(resolve => setTimeout(resolve, timeout));
         return this.items.filter(this.searcher(q));
     }

@@ -1,19 +1,19 @@
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import classnames from 'classnames';
-import React, { FC } from 'react';
+import React, { type FC } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { PlusIcon } from '../../icons/components';
-import { Card, Column, uniqueCard, uniqueColumn, useKanbanStore } from '../../test/useKanbanStore';
+import { type Card, type Column, uniqueCard, uniqueColumn, useKanbanStore } from '../../test/useKanbanStore';
 import { KanbanProvider } from './Kanban';
-import { useKanbanContext } from './useKanbanContext';
-import { MoveCardCallback, MoveColumnCallback } from './types';
+import { useKanbanContext } from './KanbanContext';
+import { type MoveCardCallback, type MoveColumnCallback } from './types';
 import { useCard } from './useCard';
 import { useCardDrop } from './useCardDrop';
 import { useCards } from './useCards';
 import { useColumn } from './useColumn';
 import { useColumnDrop } from './useColumnDrop';
 import { useColumns } from './useColumns';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 
 
 // Definition
@@ -53,6 +53,7 @@ const countRender = (c: string) => {
 // };
 
 interface StoryCard { lines: number }
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface StoryColumn { }
 
 const defaultColumns: Column<StoryColumn, StoryCard>[] = [

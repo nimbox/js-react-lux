@@ -1,7 +1,7 @@
-import React, { Ref, useImperativeHandle, useRef } from 'react';
+import React, { type Ref, useImperativeHandle, useRef } from 'react';
 import { CircleCrossIcon, SearchIcon } from '../../icons/components';
 import { setRefInputValue } from '../utilities/setRefInputValue';
-import { Input, InputProps } from './Input';
+import { Input, type InputProps } from './Input';
 
 
 //

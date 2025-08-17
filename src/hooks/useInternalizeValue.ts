@@ -1,4 +1,4 @@
-import { ChangeEvent, ChangeEventHandler, useCallback, useState } from 'react';
+import { type ChangeEvent, type ChangeEventHandler, useCallback, useState } from 'react';
 
 
 /**

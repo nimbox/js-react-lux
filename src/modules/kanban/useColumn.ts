@@ -1,7 +1,7 @@
-import { RefObject, useEffect, useRef } from 'react';
+import { type RefObject, useEffect, useRef } from 'react';
 import { useDrag } from 'react-dnd';
-import { useKanbanContext } from './useKanbanContext';
-import { COLUMN_TYPE, KanbanColumnItem } from './types';
+import { useKanbanContext } from './KanbanContext';
+import { COLUMN_TYPE, type KanbanColumnItem } from './types';
 
 
 export interface UseColumnProps {

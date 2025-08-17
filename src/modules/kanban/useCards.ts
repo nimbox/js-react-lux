@@ -1,6 +1,6 @@
-import { RefObject, useRef, useState } from 'react';
-import { useDrop, XYCoord } from 'react-dnd';
-import { CARD_TYPE, KanbanCardItem, MoveCardCallback } from './types';
+import { type RefObject, useRef, useState } from 'react';
+import { useDrop, type XYCoord } from 'react-dnd';
+import { CARD_TYPE, type KanbanCardItem, type MoveCardCallback } from './types';
 import { getVerticalIndex } from './utils/getVerticalIndex';
 
 

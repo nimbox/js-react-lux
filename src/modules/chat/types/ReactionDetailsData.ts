@@ -1,4 +1,4 @@
-import { MessageAuthor } from './MessageAuthor';
+import { type MessageAuthor } from './MessageAuthor';
 
 
 export interface ReactionDetailsData {

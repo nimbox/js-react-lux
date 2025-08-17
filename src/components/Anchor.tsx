@@ -1,5 +1,6 @@
 import classNames from 'classnames';
-import React, { ElementType, ReactElement } from 'react';
+import type { ElementType, ReactElement } from 'react';
+import React from 'react';
 
 
 

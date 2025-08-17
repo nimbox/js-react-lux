@@ -1,4 +1,4 @@
-import React, { Children, ReactElement, ReactNode, useCallback, useRef, useState } from 'react';
+import React, { Children, type ReactElement, type ReactNode, useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../../components/Button';
 import { Input } from '../../../components/inputs/Input';

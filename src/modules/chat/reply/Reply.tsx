@@ -1,8 +1,8 @@
 import { useChat } from '../ChatContext';
-import { ReplyContext, ReplyContextProps } from './ReplyContext';
-import { ReplyContainer } from './slots/ReplyContainer';
+import { ReplyContext, type ReplyContextProps } from './ReplyContext';
 import { ReplyAuthor } from './slots/ReplyAuthor';
 import { ReplyBody } from './slots/ReplyBody';
+import { ReplyContainer } from './slots/ReplyContainer';
 import { ReplyContent } from './slots/ReplyContent';
 import { ReplyImage } from './slots/ReplyImage';
 import { ReplyMedia } from './slots/ReplyMedia';

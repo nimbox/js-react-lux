@@ -1,16 +1,16 @@
-import React, { Ref, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { type Ref, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { useOptions, type UseOptionsProps, type UseOptionsSupplier } from '../../hooks/useOptions';
 import { useOptionsCount } from '../../hooks/useOptionsCount';
-import { useOptions, UseOptionsProps, UseOptionsSupplier } from '../../hooks/useOptions';
 import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
 import { WarningIcon } from '../../icons/components';
-import { consumeEvent } from '../utilities/consumeEvent';
-import { setRefInputValue } from '../utilities/setRefInputValue';
-import { ChooseOptionList, ChooseOptionListProps } from '../choose/ChooseOptionList';
+import { ChooseOptionList, type ChooseOptionListProps } from '../choose/ChooseOptionList';
 import { EXTRACTOR } from '../choose/options';
 import { Delay } from '../Delay';
 import { Loading } from '../Loading';
-import { PopperProps } from '../Popper';
-import { InputProps } from './Input';
+import { type PopperProps } from '../Popper';
+import { consumeEvent } from '../utilities/consumeEvent';
+import { setRefInputValue } from '../utilities/setRefInputValue';
+import { type InputProps } from './Input';
 import { PlainInput } from './PlainInput';
 import { WrapperPopper } from './WrapperPopper';
 
@@ -34,7 +34,7 @@ export interface AutocompleteProps<O, G = O[]> extends
     /**
      * Options to pass to the `useSearchOptions`.
      */
-    supplierProps?: UseOptionsProps<O, G>;
+    supplierProps?: UseOptionsProps;
 
     // Autocomplete
 
@@ -170,7 +170,7 @@ export const Autocomplete = React.forwardRef(<O, G = O[]>(
 
             options={options}
             loading={loading}
-            loadingError={loadingError}
+            loadingError={!!loadingError}
             selected={selected}
 
             extractor={extractor}

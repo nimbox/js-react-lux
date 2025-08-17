@@ -1,4 +1,4 @@
-import { Placement } from '@popperjs/core';
+import type { Placement } from '@popperjs/core';
 import classNames from 'classnames';
 import { useCallback, useState } from 'react';
 import { Popup } from '../../../../components/Popup';

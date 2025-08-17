@@ -1,5 +1,5 @@
-import { Placement } from '@popperjs/core';
-import React, { FC, useState } from 'react';
+import { type Placement } from '@popperjs/core';
+import React, { type FC, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { usePopper } from 'react-popper';
 import { useOnOutsideClick } from '../hooks/useOnOutsideClick';

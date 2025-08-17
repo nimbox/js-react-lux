@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import React, { ChangeEventHandler, forwardRef, InputHTMLAttributes, Ref } from 'react';
+import { type ChangeEventHandler, forwardRef, type InputHTMLAttributes, type Ref } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
-import { Field, FieldProps } from './Field';
+import { Field, type FieldProps } from './Field';
 import { PlainTextArea } from './PlainTextArea';
 
 

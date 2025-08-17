@@ -1,6 +1,6 @@
-import { MessageAttachment } from './MessageAttachment';
-import { MessageAuthor } from './MessageAuthor';
-import { ReactionData } from './ReactionData';
+import { type MessageAttachment } from './MessageAttachment';
+import { type MessageAuthor } from './MessageAuthor';
+import { type ReactionData } from './ReactionData';
 
 
 export interface MessageData {

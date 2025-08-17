@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { FC, SVGProps, useMemo, useState } from 'react';
+import React, { type FC, type SVGProps, useMemo, useState } from 'react';
 import tinycolor from 'tinycolor2';
 
 

@@ -1,7 +1,7 @@
-import dayjs from 'dayjs';
-import { useWeekCalendar, WeekCalendarProps } from './useWeekCalendar';
-import { Fragment } from 'react/jsx-runtime';
 import classNames from 'classnames';
+import dayjs from 'dayjs';
+import { Fragment } from 'react/jsx-runtime';
+import { useWeekCalendar, type WeekCalendarProps } from './useWeekCalendar';
 
 
 export interface WeekCalendarExtendedProps<TData> extends WeekCalendarProps<TData> {

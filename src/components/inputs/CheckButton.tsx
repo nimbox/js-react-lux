@@ -1,7 +1,6 @@
 import classnames from 'classnames';
-import React, { FC } from 'react';
-import { CheckIcon as SvgCheckIcon } from '../../icons/components';
-import { CrossIcon as SvgCrossIcon } from '../../icons/components';
+import { type FC } from 'react';
+import { CheckIcon as SvgCheckIcon, CrossIcon as SvgCrossIcon } from '../../icons/components';
 
 
 // const check = 'data:image/svg+xml;base64,' + window.btoa('<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="25,9 13.3,23 7,15.3 "/></svg>');

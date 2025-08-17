@@ -1,5 +1,5 @@
+import { type MessageData } from '../types/MessageData';
 import { authors } from './authors';
-import { MessageData } from '../types/MessageData';
 
 export const messages: MessageData[] = [
     // Day 1 - Monday, January 15th

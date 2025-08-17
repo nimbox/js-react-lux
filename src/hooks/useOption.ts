@@ -12,7 +12,8 @@ import { useCallback, useRef, useState } from 'react';
  */
 export type UseOptionChooser<O> = (value?: string | ReadonlyArray<string> | number | undefined) => O | undefined | Promise<O | undefined>;
 
-export interface UseOptionProps<O> {
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface UseOptionProps {
 
 }
 
@@ -49,7 +50,7 @@ export interface UseOptionReturn<O> {
 
 }
 
-export const useOption = <O>(chooser: UseOptionChooser<O> | undefined, props?: UseOptionProps<O>): UseOptionReturn<O> => {
+export const useOption = <O>(chooser: UseOptionChooser<O> | undefined, _props: UseOptionProps): UseOptionReturn<O> => {
 
     // State
 

@@ -1,8 +1,8 @@
-import { ChangeEventHandler, forwardRef, InputHTMLAttributes, KeyboardEvent, ReactElement, Ref, useImperativeHandle, useRef } from 'react';
+import { type ChangeEventHandler, forwardRef, type InputHTMLAttributes, type KeyboardEvent, type ReactElement, type Ref, useImperativeHandle, useRef } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
-import { PopperProps } from '../Popper';
+import { type PopperProps } from '../Popper';
 import { setRefInputValue } from '../utilities/setRefInputValue';
-import { FieldProps } from './Field';
+import { type FieldProps } from './Field';
 import { FieldPopper } from './FieldPopper';
 import { PlainInput } from './PlainInput';
 

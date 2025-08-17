@@ -1,4 +1,4 @@
-import React, { forwardRef, InputHTMLAttributes, Ref } from 'react';
+import React, { forwardRef, type InputHTMLAttributes, type Ref } from 'react';
 
 export interface OptionProps {
 

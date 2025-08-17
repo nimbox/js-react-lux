@@ -1,0 +1,27 @@
+// tsconfig.types.json
+{
+  "extends": "./tsconfig.app.json",
+  "include": ["src"],
+  "exclude": [
+    "**/*.stories.*",
+    "**/*.test.*",
+    "storybook",
+    "vitest.config.*",
+    "vite.config.*",
+    "src/i18n.tsx"
+  ],
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationDir": "dist/types",
+
+    // optional but recommended for published libs:
+    "types": ["react", "react-dom"],      // avoid pulling every @types/*
+    "stripInternal": true,                // drop /** @internal */ from d.ts
+    "rootDir": "src",
+
+    // avoid .ts extensions leaking into .d.ts when the base enables them:
+    "allowImportingTsExtensions": false
+  }
+}

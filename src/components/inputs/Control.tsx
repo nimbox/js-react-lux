@@ -1,5 +1,6 @@
 import classnames from 'classnames';
-import React, { createContext, CSSProperties, FC, useContext } from 'react';
+import React, { type CSSProperties, type FC, useContext } from 'react';
+import { ControlContext } from './ControlContext';
 
 
 export interface ControlProps {
@@ -21,9 +22,6 @@ export interface ControlLabelProps {
     children?: React.ReactNode;
 
 }
-
-type ContextProps = Pick<ControlProps, 'error'>;
-export const ControlContext = createContext<ContextProps>({ error: false });
 
 export interface ControlComponent extends FC<ControlProps> {
     Label: FC<ControlLabelProps>;

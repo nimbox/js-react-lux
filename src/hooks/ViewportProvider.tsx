@@ -1,5 +1,7 @@
 import { debounce as _debounce } from 'lodash';
-import { FC, createContext, useEffect, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
+import { ViewportContext } from './ViewportProviderContext';
+
 
 //
 // ViewportProvider
@@ -12,8 +14,6 @@ export interface ViewportProviderProps {
     children?: React.ReactNode;
 
 }
-
-export const ViewportContext = createContext<{ width: number, height: number }>({ width: 0, height: 0 });
 
 export const ViewportProvider: FC<ViewportProviderProps> = ({ wait = 250, children }) => {
 

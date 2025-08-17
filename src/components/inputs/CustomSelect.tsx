@@ -1,19 +1,19 @@
 import classnames from 'classnames';
-import React, { createContext, FC, LegacyRef, useContext, useState } from 'react';
+import React, { createContext, type FC, type LegacyRef, useContext, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon } from '../../icons/components';
-import { ComponentAlign } from '../ComponentAlign';
+import { type ComponentAlign } from '../ComponentAlign';
 
 
 export interface CustomSelectProps {
-    
+
     label: (t: string | number) => string | React.ReactNode;
-    
+
     value: string | number;
     onChange: (value: string | number) => void;
     align: ComponentAlign;
     className?: string;
-    
+
     children?: React.ReactNode;
 }
 
@@ -27,13 +27,13 @@ export interface CustomSelectOptionProps {
 }
 
 type ContextProps = Pick<CustomSelectProps, 'value' | 'onChange'>;
-const Context = createContext<ContextProps>({ value: [], onChange: () => [] });
+const Context = createContext<ContextProps>({ value: '', onChange: () => null });
 
 export interface CustomSelectComponent extends FC<CustomSelectProps> {
     Option: FC<CustomSelectOptionProps>;
 }
 
-export const CustomSelect: CustomSelectComponent = (({  value, label, onChange, align, className, children }) => {
+export const CustomSelect: CustomSelectComponent = (({ value, label, onChange, align, className, children }) => {
 
     const [isVisible, setIsVisible] = useState(false);
 

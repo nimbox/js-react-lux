@@ -1,8 +1,8 @@
 import classNames from 'classnames';
-import React, { FocusEvent, forwardRef, HTMLAttributes, ReactElement, Ref, useImperativeHandle, useState } from 'react';
+import { type FocusEvent, forwardRef, type HTMLAttributes, type ReactElement, type Ref, useImperativeHandle, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { HTMLPopperElement, Popper, PopperProps } from '../Popper';
-import { Field, FieldProps } from './Field';
+import { type HTMLPopperElement, Popper, type PopperProps } from '../Popper';
+import { Field, type FieldProps } from './Field';
 
 
 //

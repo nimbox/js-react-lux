@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { FC, useEffect, useRef, useState } from 'react';
+import { type FC, useEffect, useRef, useState } from 'react';
 import { WarningIcon } from '../../icons/components';
 import { Loading } from '../Loading';
 import { PlainInput } from './PlainInput';
@@ -60,7 +60,7 @@ export const EditableText: FC<EditableTextProps> = (props) => {
         try {
             await Promise.resolve(onChange(inputValue, value));
             setDisplayValue(inputValue);
-        } catch (err) {
+        } catch {
             setDisplayValue(value);
             setInputValue(value);
             setError(true);

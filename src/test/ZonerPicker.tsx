@@ -40,14 +40,15 @@ export const ZonePicker = React.forwardRef<HTMLInputElement, ZonePickerProps>((p
 
     const { value, onChange, placeholder } = props;
 
-    const chooser = useCallback(async (value: string) => {
+    const chooser = useCallback(async (value?: string | ReadonlyArray<string> | number | undefined) => {
 
+        if (typeof value !== 'string') return undefined;
         await new Promise(resolve => setTimeout(resolve, 0));
         return timezones.find(z => z.value === value);
 
     }, []);
 
-    const supplier = useCallback(async (query: string): Promise<Array<{ name: string, options: Option[] }>> => {
+    const supplier = useCallback(async (query?: string): Promise<Array<{ name: string, options: Option[] }>> => {
 
         await new Promise(resolve => setTimeout(resolve, 0));
 

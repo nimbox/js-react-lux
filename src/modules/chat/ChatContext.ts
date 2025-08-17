@@ -1,9 +1,7 @@
 import React, { createContext, useContext } from 'react';
-import { MessageContextProps } from './message/MessageContext';
-import { DefaultMessageRenderer } from './message/renderers';
-import { DefaultReplyRenderer } from './reply/renderers';
-import { MessageData } from './types/MessageData';
-import { ReactionDetailsData } from './types/ReactionDetailsData';
+import type { MessageContextProps } from './message/MessageContext';
+import type { MessageData } from './types/MessageData';
+import type { ReactionDetailsData } from './types/ReactionDetailsData';
 
 
 // Chat Context
@@ -54,12 +52,14 @@ export const defaultProps: ChatContextProps = {
     // Message rendering
 
     renderMessage: {},
-    renderDefaultMessage: defaultRenderMessage,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    renderDefaultMessage: () => (() => null) as any,
 
     // Reply rendering
 
     renderReply: {},
-    renderDefaultReply: defaultRenderReply,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    renderDefaultReply: () => (() => null) as any,
 
     // Reaction functionality
 
@@ -111,13 +111,15 @@ export function useChat() {
 
 // Defaults
 
-function defaultRenderMessage(message: MessageContextProps) {
-    return React.createElement(DefaultMessageRenderer, message);
-}
+// function defaultRenderMessage(message: MessageContextProps) {
+//     throw new Error('No renderMessage found – wrap your app in <ChatProvider>');
+//     // return React.createElement(DefaultMessageRenderer, message);
+// }
 
-function defaultRenderReply() {
-    return React.createElement(DefaultReplyRenderer);
-}
+// function defaultRenderReply() {
+//     throw new Error('No renderReply found – wrap your app in <ChatProvider>');
+//     // return React.createElement(DefaultReplyRenderer);
+// }
 
 function defaultGetReactions(): Promise<ReactionDetailsData[]> {
     return Promise.reject(

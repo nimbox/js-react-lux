@@ -1,13 +1,13 @@
 import classNames from 'classnames';
 import React from 'react';
-import { ConversationContext, ConversationContextProps } from './ConversationContext';
-import { DefaultConversationRenderer } from './renderers/DefaultConversation';
+import { ConversationContext, type ConversationContextProps } from './ConversationContext';
 import { ConversationAvatar } from './slots/ConversationAvatar';
 import { ConversationContainer } from './slots/ConversationContainer';
 import { ConversationMessage } from './slots/ConversationMessage';
 import { ConversationMeta } from './slots/ConversationMeta';
 import { ConversationName } from './slots/ConversationName';
 import { ConversationProperties } from './slots/ConversationProperties';
+import { DefaultConversationRenderer } from './renderers/DefaultConversation';
 
 
 // Conversation

@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { ConversationData } from '../types/ConversationData';
+import type { ConversationData } from '../types/ConversationData';
 
 
 // ConversationContext

@@ -1,6 +1,6 @@
-import React, { Children, forwardRef, InputHTMLAttributes, Ref, useMemo } from 'react';
-import { Choose, ChooseProps } from '../choose/Choose';
-import { OptionProps } from './Option';
+import React, { Children, forwardRef, type InputHTMLAttributes, type Ref, useMemo } from 'react';
+import { Choose, type ChooseProps } from '../choose/Choose';
+import { type OptionProps } from './Option';
 
 
 //

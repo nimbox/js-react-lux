@@ -1,8 +1,8 @@
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs, { type Dayjs } from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
-import { CSSProperties, useCallback, useMemo } from 'react';
+import { type CSSProperties, useCallback, useMemo } from 'react';
 import { useElementHeight } from '../../hooks/useElementHeight';
-import { WeekDayHeader } from './types';
+import { type WeekDayHeader } from './types';
 
 
 dayjs.extend(isBetween);
@@ -237,7 +237,7 @@ export const useWeekCalendar = <TData>(props: WeekCalendarProps<TData>): WeekCal
             hour,
             date,
             getPosition: () => ({
-                position: 'absolute',
+                position: 'absolute' as const,
                 top: `${translatedTop + (hour * translatedHeight / 24)}px`
             })
         }));
@@ -270,7 +270,7 @@ export const useWeekCalendar = <TData>(props: WeekCalendarProps<TData>): WeekCal
                     event,
 
                     getPosition: () => ({
-                        position: 'absolute',
+                        position: 'absolute' as const,
                         left: 0,
                         top: verticalPadding[0] + (segmentStart * paddedHeight / 24),
                         right: 0,

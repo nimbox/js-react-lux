@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import React, { ReactElement, useRef, useState } from 'react';
-import { Field, FieldProps } from './Field';
+import React, { type ReactElement, useRef, useState } from 'react';
+import { Field, type FieldProps } from './Field';
 
 
 export interface InputFieldProps extends Omit<FieldProps, 'className'> {

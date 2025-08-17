@@ -1,8 +1,8 @@
-import React, { Ref, useCallback, useImperativeHandle, useRef, useState } from 'react';
+import React, { type Ref, useCallback, useImperativeHandle, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
+import { type HTMLPopperElement, Popper, type PopperProps } from '../Popper';
 import { getActiveElement } from '../utilities/getActiveElement';
-import { HTMLPopperElement, Popper, PopperProps } from '../Popper';
-import { Wrapper, WrapperProps } from './Wrapper';
+import { Wrapper, type WrapperProps } from './Wrapper';
 
 
 //
@@ -101,11 +101,11 @@ export const WrapperPopper = React.forwardRef((
 
     // Assertions
 
-    if (process.env.NODE_ENV !== 'production') {
-        if (propsShow !== null && propsOnChangeShow == null) {
-            console.error('You provided a `show` prop without an `onChangeShow` handler.');
-        }
-    }
+    // if (process.env.NODE_ENV !== 'production') {
+    //     if (propsShow !== null && propsOnChangeShow == null) {
+    //         console.error('You provided a `show` prop without an `onChangeShow` handler.');
+    //     }
+    // }
 
     // State
 

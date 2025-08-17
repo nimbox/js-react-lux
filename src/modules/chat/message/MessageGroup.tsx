@@ -1,8 +1,8 @@
 import classnames from 'classnames';
-import React, { ReactElement } from 'react';
+import React, { type ReactElement } from 'react';
 import { Avatar } from '../../../components/displays/Avatar';
-import { MessageContextProps } from './MessageContext';
-import { MessageGroupContext, MessageGroupContextProps } from './MessageGroupContext';
+import { type MessageContextProps } from './MessageContext';
+import { MessageGroupContext, type MessageGroupContextProps } from './MessageGroupContext';
 
 
 // MessageGroup

@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import { ReactElement, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
-import { MessageGroupProps } from './MessageGroup';
+import { type ReactElement, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
+import { type MessageGroupProps } from './MessageGroup';
 import { ChatMessageListContext } from './MessageListContext';
 
 

@@ -1,6 +1,6 @@
-import { RefObject, useRef } from 'react';
+import { type RefObject, useRef } from 'react';
 import { useDrop } from 'react-dnd';
-import { CARD_TYPE, KanbanCardItem } from './types';
+import { CARD_TYPE, type KanbanCardItem } from './types';
 
 
 export interface UseCardDropProps {

@@ -1,7 +1,7 @@
-import dayjs, { Dayjs } from 'dayjs';
-import { CSSProperties, useCallback, useMemo } from 'react';
+import dayjs, { type Dayjs } from 'dayjs';
+import { type CSSProperties, useCallback, useMemo } from 'react';
 import { useElementHeight } from '../../hooks/useElementHeight';
-import { WeekDayHeader } from './types';
+import { type WeekDayHeader } from './types';
 
 
 export interface MonthDayCalendarEventExtractors<TData> {
@@ -168,7 +168,7 @@ export const useMonthDayCalendar = <TData>(props: MonthDayCalendarProps<TData>):
                     event,
 
                     getPosition: () => ({
-                        position: 'absolute',
+                        position: 'absolute' as const,
                         left: 0,
                         top: 0,
                         right: 0,

@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { MinusIcon, PlusIcon } from '../../icons/components';
 import { Button } from '../Button';
 import { Tabs } from '../Tabs';
-import { EmojiGroup, emojiGroups } from './emojis';
 import { commonEmojis } from './common-emojis';
+import { type EmojiGroup, emojiGroups } from './emojis';
 
 
 // 

@@ -1,7 +1,8 @@
 import React from 'react';
+import type { HTMLProps } from 'react';
 
 
-export interface BadgeProps extends React.HTMLProps<HTMLSpanElement> {
+export interface BadgeProps extends HTMLProps<HTMLSpanElement> {
     semantic: string;
     backgroundColor?: string;
 }

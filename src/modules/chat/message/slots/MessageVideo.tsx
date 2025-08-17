@@ -1,6 +1,6 @@
-import { Loading } from '../../../..';
 import { useMessageList } from '../MessageListContext';
 import { useMessage } from '../MessageContext';
+import { Loading } from '../../../../components/Loading';
 
 
 export function MessageVideo() {

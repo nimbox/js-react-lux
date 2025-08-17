@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { MessageGroupData } from '../types/MessageGroupData';
+import { type MessageGroupData } from '../types/MessageGroupData';
 
 
 // MessageGroupContext

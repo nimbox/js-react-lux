@@ -1,4 +1,4 @@
-import { XYCoord } from 'react-dnd';
+import { type XYCoord } from 'react-dnd';
 
 
 export const getVerticalIndex = (cardId: string, cards: HTMLElement, offset: XYCoord, placeholder?: HTMLElement) => {

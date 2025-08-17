@@ -1,4 +1,4 @@
-import { Modifier, Obj } from '@popperjs/core';
+import { type Modifier, type Obj } from '@popperjs/core';
 
 //
 // https://popper.js.org/docs/v2/modifiers/community-modifiers/

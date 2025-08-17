@@ -1,5 +1,5 @@
-import { AvatarData } from './AvatarData';
-import { MessageData } from './MessageData';
+import { type AvatarData } from './AvatarData';
+import { type MessageData } from './MessageData';
 
 
 export interface ConversationData {

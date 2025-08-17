@@ -1,6 +1,6 @@
-import { MessageData } from '../types/MessageData';
-import { TemplateContextBlock, TemplateContextBlockType, TemplateContextData } from '../types/TemplateContextData';
-import { TemplateData } from '../types/TemplateData';
+import { type MessageData } from '../types/MessageData';
+import { TemplateContextBlock, type TemplateContextBlockType, type TemplateContextData } from '../types/TemplateContextData';
+import { type TemplateData } from '../types/TemplateData';
 
 
 export function renderTemplate(template: TemplateData, context: TemplateContextData): MessageData {

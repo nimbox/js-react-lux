@@ -1,10 +1,9 @@
-import { isFunction as _isFunction } from 'lodash';
-import React, { Ref, useState } from 'react';
-import { useOptions, UseOptionsProps, UseOptionsSupplier } from '../../hooks/useOptions';
+import React, { type Ref, useState } from 'react';
+import { useOptions, type UseOptionsProps, type UseOptionsSupplier } from '../../hooks/useOptions';
 import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
-import { consumeEvent } from '../utilities/consumeEvent';
 import { SearchInput } from '../inputs/SearchInput';
-import { ChooseOptionList, ChooseOptionListProps } from './ChooseOptionList';
+import { consumeEvent } from '../utilities/consumeEvent';
+import { ChooseOptionList, type ChooseOptionListProps } from './ChooseOptionList';
 import { EXTRACTOR } from './options';
 
 
@@ -30,7 +29,7 @@ export interface ChooseOptionProps<O, G = O[]> extends
     /**
      * Properties to pass to `useOptions to get the options.
      */
-    supplierProps?: UseOptionsProps<O, G>;
+    supplierProps?: UseOptionsProps;
 
     /**
      * Class name of the container div.
@@ -67,11 +66,11 @@ export const ChooseOption = React.forwardRef(<O, G = O[]>(
 
     // Assertions
 
-    if (process.env.NODE_ENV !== 'production') {
-        if (withSearch && !_isFunction(supplier)) {
-            console.error('Provided withSearch parameter without providing an option supplier function.  Try setting options to `(query) => [[ ... ]]`.');
-        }
-    }
+    // if (process.env.NODE_ENV !== 'production') {
+    //     if (withSearch && !_isFunction(supplier)) {
+    //         console.error('Provided withSearch parameter without providing an option supplier function.  Try setting options to `(query) => [[ ... ]]`.');
+    //     }
+    // }
 
     // State
 
@@ -100,7 +99,7 @@ export const ChooseOption = React.forwardRef(<O, G = O[]>(
                     <SearchInput
                         autoFocus
                         loading={loading}
-                        loadingError={error}
+                        loadingError={!!error}
                         value={searchValue}
                         onChange={handleChangeSearchValue}
                         onKeyDown={onKeyDown}

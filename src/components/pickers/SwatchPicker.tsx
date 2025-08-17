@@ -1,12 +1,12 @@
-import React, { ReactElement, Ref, useImperativeHandle, useMemo, useState } from 'react';
+import React, { type ReactElement, type Ref, useImperativeHandle, useMemo, useState } from 'react';
 import tinycolor from 'tinycolor2';
 import defaultSwatches from '../../data/flat-colors';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { RefreshIcon } from '../../icons/components';
+import { InputPopper, type InputPopperProps } from '../inputs/InputPopper';
 import { consumeEvent } from '../utilities/consumeEvent';
 import { setRefInputValue } from '../utilities/setRefInputValue';
-import { InputPopper, InputPopperProps } from '../inputs/InputPopper';
 
 
 //

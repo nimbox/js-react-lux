@@ -1,4 +1,4 @@
-import { XYCoord } from 'react-dnd';
+import { type XYCoord } from 'react-dnd';
 
 export const getHorizontalIndex = (cardId: string, columns: HTMLElement, offset: XYCoord, placeholder?: HTMLElement) => {
 

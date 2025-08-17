@@ -3,6 +3,7 @@ import path from 'path';
 export default {
     icon: true,
     expandProps: true,
+    jsxRuntime: 'automatic',
     svgProps: {
         'fill': 'currentColor'
     },

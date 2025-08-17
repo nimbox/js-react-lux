@@ -1,8 +1,8 @@
 import classnames from 'classnames';
-import React, { createContext, FC, LegacyRef, useContext, useState } from 'react';
+import React, { createContext, type FC, type LegacyRef, useContext, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { AngleDownIcon } from '../../icons/components';
-import { ComponentAlign } from '../ComponentAlign';
+import { type ComponentAlign } from '../ComponentAlign';
 
 
 export interface CustomMultiSelectProps {

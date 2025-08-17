@@ -1,6 +1,6 @@
 import classnames from 'classnames';
-import React, { createContext, FC, useContext } from 'react';
 import type { ReactNode } from 'react';
+import React, { createContext, type FC, useContext } from 'react';
 
 
 export interface RadioBarProps {
@@ -17,7 +17,7 @@ export interface RadioBarOptionProps {
 }
 
 type ContextProps = Pick<RadioBarProps, 'value' | 'onChange'>;
-const Context = createContext<ContextProps>({ value: [], onChange: () => null });
+const Context = createContext<ContextProps>({ value: '', onChange: () => null });
 
 export interface RadioBarComponent extends FC<RadioBarProps> {
     Option: FC<RadioBarOptionProps>;

@@ -5,7 +5,6 @@ const config: StorybookConfig = {
   staticDirs: [{ from: "../src/locales", to: '/locales' }],
 
   addons: [
-    "@storybook/addon-onboarding",
     "@storybook/addon-links",
     "@chromatic-com/storybook",
     "@storybook/addon-docs"

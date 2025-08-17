@@ -1,11 +1,11 @@
 import classNames from 'classnames';
-import { forwardRef, InputHTMLAttributes, ReactElement, Ref, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, type InputHTMLAttributes, type ReactElement, type Ref, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon } from '../../icons/components';
 import { usePersistentState } from '../../persistent/usePersistentState';
-import { InputPopper, InputPopperProps } from '../inputs/InputPopper';
+import { InputPopper, type InputPopperProps } from '../inputs/InputPopper';
 import { consumeEvent } from '../utilities/consumeEvent';
 import { setRefInputValue } from '../utilities/setRefInputValue';
 

@@ -1,4 +1,3 @@
-import * as React from "react";
 import type { SVGProps } from "react";
 const SvgHorizontalDots = (props: SVGProps<SVGSVGElement>) => (
   <svg

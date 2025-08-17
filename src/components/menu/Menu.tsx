@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import React, { ReactElement, ReactNode, useState } from 'react';
+import React, { type ReactElement, type ReactNode, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { Popper, PopperPlacement } from '../Popper';
+import { Popper, type PopperPlacement } from '../Popper';
 import { MenuContext, useMenu } from './MenuContext';
 
 

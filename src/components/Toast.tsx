@@ -1,9 +1,8 @@
-/* eslint-disable react-refresh/only-export-components */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import classNames from 'classnames';
-import React, { createContext, FC, useContext, useEffect, useState } from 'react';
+import React, { type FC, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { CrossIcon, DangerIcon, InformationIcon, SuccessIcon, WarningIcon } from '../icons/components';
+import { ToastContext } from './ToastContext';
 
 
 //
@@ -36,7 +35,6 @@ export interface ToastProviderProps {
     children?: React.ReactNode;
 }
 
-
 export interface ToastProps {
 
     type: ToastItemType;
@@ -47,8 +45,6 @@ export interface ToastProps {
     onDelete: () => void;
 
 }
-
-//
 
 export interface ToastItem {
 
@@ -64,20 +60,7 @@ export interface ToastItem {
 
 //
 
-interface ToastProviderContext {
-    addToast: (type: ToastItemType, item: ToastItemContent | React.ReactNode, dismiss?: number) => void;
-}
-
-const Context = createContext<ToastProviderContext>({ addToast: (type: ToastItemType, toast: ToastItemContent | React.ReactNode, dismiss?: number) => null });
-
-export const useToast = () => {
-    const context = useContext(Context);
-    return { addToast: context.addToast };
-};
-
-//
-
-export const ToastProvider: FC<ToastProviderProps> = ({ location = 'top-right', autoDelete = true, autoDeleteTimeout = 3000, children }) => {
+export const ToastProvider: FC<ToastProviderProps> = ({ autoDeleteTimeout = 3000, children }) => {
 
     const [toasts, setToasts] = useState<ToastItem[]>([]);
 
@@ -95,14 +78,14 @@ export const ToastProvider: FC<ToastProviderProps> = ({ location = 'top-right', 
     };
 
     return (
-        <Context.Provider value={{ addToast }}>
+        <ToastContext.Provider value={{ addToast }}>
             {children}
             <ToastContainer>
                 {toasts.map(t =>
                     <Toast key={t.id} {...t} onDelete={() => deleteToast(t.id)} />
                 )}
             </ToastContainer>
-        </Context.Provider>
+        </ToastContext.Provider>
     );
 
 };

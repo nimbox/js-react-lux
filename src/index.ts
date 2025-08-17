@@ -1,13 +1,13 @@
 // Components
 
+export * from './components/ActionButton';
 export * from './components/Anchor';
-export * from './components/displays/Avatar';
 export * from './components/Badge';
 export * from './components/Button';
-export * from './components/ActionButton';
 export * from './components/Card';
 export * from './components/Delay';
 export * from './components/Dialog';
+export * from './components/displays/Avatar';
 export * from './components/Loading';
 export * from './components/Modal';
 export * from './components/Popper';
@@ -16,18 +16,13 @@ export * from './components/Postit';
 export * from './components/Tabs';
 export * from './components/Tag';
 export * from './components/Toast';
-
-// Modules
-
-export * from './modules/calendar';
-export * from './modules/chat';
-export * from './modules/kanban';
+export * from './components/ToastContext';
 
 // Menu
 
+export * from './components/menu/ChevronMenuTrigger';
 export * from './components/menu/Menu';
 export * from './components/menu/MenuContext';
-export * from './components/menu/ChevronMenuTrigger';
 
 // Choose
 
@@ -69,11 +64,12 @@ export * from './hooks/useOptions';
 export * from './hooks/useOptionsCount';
 export * from './hooks/useOptionsKeyNavigator';
 
-export * from './hooks/ViewportProvider';
 export * from './hooks/useViewport';
+export * from './hooks/ViewportProvider';
 
 export * from './components/utilities/consumeEvent';
 export * from './components/utilities/createSearchMatcher';
 
 export * from './layouts/helium/Helium';
-export * from './layouts/helium/useHelium';
+export * from './layouts/helium/HeliumContext';
+

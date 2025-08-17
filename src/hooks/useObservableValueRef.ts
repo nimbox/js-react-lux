@@ -1,4 +1,4 @@
-import { RefObject, useMemo, useRef } from 'react';
+import { type RefObject, useMemo, useRef } from 'react';
 import { setRefInputValue } from '../components/utilities/setRefInputValue';
 
 

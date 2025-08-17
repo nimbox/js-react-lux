@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
-import { EditableText } from './EditableText';
-import { action } from 'storybook/actions';
 import { useState } from 'react';
+import { action } from 'storybook/actions';
+import { EditableText } from './EditableText';
 
 
 const meta: Meta<typeof EditableText> = {
@@ -17,7 +17,7 @@ const meta: Meta<typeof EditableText> = {
             try {
                 await args.onChange(newText, value);
                 setValue(newText);
-            } catch (error) {
+            } catch {
                 setValue(args.value);
             }
         };

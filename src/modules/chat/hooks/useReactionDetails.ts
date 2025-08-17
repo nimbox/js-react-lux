@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useChat } from '../ChatContext';
-import { ReactionDetailsData } from '../types/ReactionDetailsData';
+import { type ReactionDetailsData } from '../types/ReactionDetailsData';
 
 
 export function useReactionDetails(messageId: string) {

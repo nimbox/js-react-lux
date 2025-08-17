@@ -1,21 +1,21 @@
 import classnames from 'classnames';
-import React, { LegacyRef } from 'react';
+import { forwardRef, type DetailedHTMLProps, type InputHTMLAttributes } from 'react';
 
 
-export interface CheckBoxProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
-    
+export interface CheckBoxProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
+
     className?: string;
-    
+
     children?: never;
 
 }
 
-export const CheckBox = React.forwardRef<React.InputHTMLAttributes<HTMLInputElement>, CheckBoxProps>(({ className, ...props }, ref) => {
+export const CheckBox = forwardRef<HTMLInputElement, CheckBoxProps>(({ className, ...props }, ref) => {
 
     // const context = useContext(Context);
 
     return (
-        <input ref={ref as LegacyRef<HTMLInputElement> | undefined} type="checkbox" {...props}
+        <input ref={ref} type="checkbox" {...props}
             className={classnames(
                 'text-primary-500',
                 'border border-control-border checked:border-control-border',

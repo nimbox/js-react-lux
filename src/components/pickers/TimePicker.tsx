@@ -1,11 +1,11 @@
 import classNames from 'classnames';
-import React, { ReactElement, Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import React, { type ReactElement, type Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { AngleDownIcon, AngleUpIcon, CircleIcon, ClockIcon } from '../../icons/components';
+import { InputPopper, type InputPopperProps } from '../inputs/InputPopper';
 import { consumeEvent } from '../utilities/consumeEvent';
 import { setRefInputValue } from '../utilities/setRefInputValue';
-import { InputPopper, InputPopperProps } from '../inputs/InputPopper';
 
 
 //

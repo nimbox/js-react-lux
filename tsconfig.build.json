@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.app.json",
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "**/*.stories.*",
+    "**/*.test.*",
+    "storybook",
+    "vitest.config.*",
+    "vite.config.*",
+    "src/i18n.tsx"
+  ]
+}

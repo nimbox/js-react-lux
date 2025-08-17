@@ -1,6 +1,6 @@
-import { RefObject, useRef, useState } from 'react';
-import { useDrop, XYCoord } from 'react-dnd';
-import { COLUMN_TYPE, KanbanColumnItem, MoveColumnCallback } from './types';
+import { type RefObject, useRef, useState } from 'react';
+import { useDrop, type XYCoord } from 'react-dnd';
+import { COLUMN_TYPE, type KanbanColumnItem, type MoveColumnCallback } from './types';
 import { getHorizontalIndex } from './utils/getHorizontalIndex';
 
 

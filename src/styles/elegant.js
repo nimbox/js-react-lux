@@ -1,13 +1,13 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 import plugin from 'tailwindcss/plugin';
 
-import lux from './lux';
-import control from './control';
-import postit from './postit';
-import tooltip from './tooltip';
-import popper from './popper';
 import age from './age';
 import chat from './chat';
+import control from './control';
+import lux from './lux';
+import popper from './popper';
+import postit from './postit';
+import tooltip from './tooltip';
 
 
 export default {

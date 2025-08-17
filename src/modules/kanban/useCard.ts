@@ -1,7 +1,7 @@
-import { RefObject, useEffect, useRef } from 'react';
+import { type RefObject, useEffect, useRef } from 'react';
 import { useDrag } from 'react-dnd';
-import { useKanbanContext } from './useKanbanContext';
-import { CARD_TYPE, KanbanCardItem } from './types';
+import { useKanbanContext } from './KanbanContext';
+import { CARD_TYPE, type KanbanCardItem } from './types';
 
 
 export interface UseCardProps {

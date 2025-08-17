@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { FC, useState } from 'react';
+import React, { type FC, useState } from 'react';
 import { useOnOutsideClick } from '../hooks/useOnOutsideClick';
 import { Modal } from './Modal';
 

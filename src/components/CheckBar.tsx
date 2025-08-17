@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { createContext, FC, useContext } from 'react';
+import React, { createContext, type FC, useContext } from 'react';
 
 
 
