@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ToastProvider, useToast } from './Toast';
+import { ToastProvider } from './Toast';
+import { useToast } from './ToastContext';
 
 
 // Definition
