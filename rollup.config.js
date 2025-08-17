@@ -3,7 +3,6 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import copy from 'rollup-plugin-copy';
 import filesize from 'rollup-plugin-filesize';
-import postcss from 'rollup-plugin-postcss';
 import pkg from './package.json' with { type: 'json' };
 
 
@@ -34,7 +33,6 @@ export default [{
         nodeResolve({ extensions }),
         commonjs(),
         typescript({ tsconfig: 'tsconfig.build.json' }),
-        // postcss({ extensions: ['.css'] }),
         copy({ targets: [{ src: 'src/locales/*', dest: 'dist/locales' }] }),
         filesize()
     ],

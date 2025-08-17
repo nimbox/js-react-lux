@@ -11,6 +11,7 @@
     "src/i18n.tsx"
   ],
   "compilerOptions": {
+
     "noEmit": false,
     "declaration": true,
     "emitDeclarationOnly": true,
@@ -21,7 +22,5 @@
     "stripInternal": true,                // drop /** @internal */ from d.ts
     "rootDir": "src",
 
-    // avoid .ts extensions leaking into .d.ts when the base enables them:
-    "allowImportingTsExtensions": false
   }
 }
