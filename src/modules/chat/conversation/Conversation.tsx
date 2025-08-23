@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useState } from 'react';
 import { ConversationContext, type ConversationContextProps } from './ConversationContext';
 import { ConversationAvatar } from './slots/ConversationAvatar';
 import { ConversationContainer } from './slots/ConversationContainer';
@@ -19,14 +19,19 @@ export interface ConversationProps extends ConversationContextProps {
 
 }
 
-export function Conversation({ className, renderConversation, ...props }: ConversationProps) {
+export function Conversation({ className, renderConversation, ...props }: Omit<ConversationProps, 'isHovered'>) {
 
+    const [isHovered, setIsHovered] = useState(false);
     const renderer = renderConversation || DefaultConversationRenderer;
 
     return (
-        <ConversationContext.Provider value={props}>
-            <div className={classNames('group flex flex-col gap-4', className)}>
-                {renderer(props)}
+        <ConversationContext.Provider value={{ ...props, isHovered }} >
+            <div
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className={classNames('group flex flex-col gap-4', className)}
+            >
+                {renderer({ ...props, isHovered: isHovered })}
             </div>
         </ConversationContext.Provider>
     );

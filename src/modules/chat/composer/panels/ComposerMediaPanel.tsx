@@ -136,7 +136,6 @@ export function ComposerMediaPanel(props: ComposerMediaPanelProps) {
     // Register
 
     const handleSubmit = useCallback(async () => {
-        console.log('submitting media');
         onSubmit({
             attachments: attachments.map(({ file, caption }) => ({ file, caption })),
             ...(replyTo && { replyToMessageId: replyTo.id })

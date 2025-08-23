@@ -1,31 +1,30 @@
-import { action } from 'storybook/actions';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import classNames from 'classnames';
 import dayjs from 'dayjs';
 import calendar from 'dayjs/plugin/calendar';
 import React from 'react';
+import { action } from 'storybook/actions';
 import { AngleDownMenuTrigger } from '../../../components/menu/ChevronMenuTrigger';
 import { Menu } from '../../../components/menu/Menu';
 import { ForwardIcon, ReplyIcon } from '../../../icons/components';
 import chatBackground from '../assets/chat-background.png';
 import { useChat } from '../ChatContext';
 import { ChatProvider } from '../ChatProvider';
+import { MessageComposer } from '../composer/MessageComposer';
 import { messages } from '../data/messages';
 import { reactionDetails } from '../data/reactionDetails';
+import { ImageReplyRenderer } from '../reply/renderers/ImageReply';
+import { TextReplyRenderer } from '../reply/renderers/TextReply';
+import { groupMessagesByDateAuthor } from '../utils/messageProcessing';
 import { Message } from './Message';
 import { useMessage } from './MessageContext';
 import { MessageGroup } from './MessageGroup';
+import { MessageList } from './MessageList';
+import { MessageSeparator } from './MessageSeparator';
 import { AudioMessageRenderer } from './renderers/AudioMessage';
 import { ImageMessageRenderer } from './renderers/ImageMessage';
 import { StickerMessageRenderer } from './renderers/StickerMessage';
 import { TextMessageRenderer } from './renderers/TextMessage';
 import { VideoMessageRenderer } from './renderers/VideoMessage';
-import { MessageComposer } from '../composer/MessageComposer';
-import { MessageList } from './MessageList';
-import { MessageSeparator } from './MessageSeparator';
-import { ImageReplyRenderer } from '../reply/renderers/ImageReply';
-import { TextReplyRenderer } from '../reply/renderers/TextReply';
-import { groupMessagesByDateAuthor } from '../utils/messageProcessing';
 
 dayjs.extend(calendar);
 
@@ -59,12 +58,12 @@ function MessageInputWrapper() {
 
 }
 
-const MessageMenu = ({ className }: { className?: string }) => {
+const MessageMenu = () => {
 
     const { message } = useMessage();
 
     return (
-        <Menu trigger={<AngleDownMenuTrigger className={classNames('hidden group-hover:block', className)} />} withPlacement="bottom-end">
+        <Menu trigger={<AngleDownMenuTrigger />} withPlacement="bottom-end">
             <Menu.Item
                 icon={<ReplyIcon />}
                 label="Reply"
@@ -126,10 +125,10 @@ export const Default: Story = {
                                     <MessageSeparator.Pill>{dayjs(dateGroup.date).calendar()}</MessageSeparator.Pill>
                                 </MessageSeparator>
 
-                                {dateGroup.groups.map(messageGroup => (
-                                    <MessageGroup key={messageGroup.id} group={{ id: messageGroup.id, direction: messageGroup.direction, author: messageGroup.author! }}>
+                                {dateGroup.groups.map(group => (
+                                    <MessageGroup key={group.id} group={{ id: group.id, direction: group.direction, author: group.author! }}>
                                         <MessageGroup.Messages>
-                                            {messageGroup.messages.map(msg => (
+                                            {group.messages.map(msg => (
                                                 <Message key={msg.id} menu={<MessageMenu />} message={msg} />
                                             ))}
                                         </MessageGroup.Messages>

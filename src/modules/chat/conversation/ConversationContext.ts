@@ -9,6 +9,7 @@ export interface ConversationContextProps {
     menu?: React.ReactElement;
     conversation: ConversationData;
 
+    isHovered: boolean;
     selected?: boolean;
 
 }

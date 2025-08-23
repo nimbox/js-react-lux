@@ -1,8 +1,8 @@
+import { arrow, autoUpdate, flip, FloatingArrow, FloatingPortal, offset, shift, useClick, useDismiss, useFloating, useInteractions, type Placement } from '@floating-ui/react';
 import classNames from 'classnames';
-import React, { type ReactElement, type ReactNode, useState } from 'react';
-import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { Popper, type PopperPlacement } from '../Popper';
+import { useRef, useState, type ReactElement, type ReactNode } from 'react';
 import { MenuContext, useMenu } from './MenuContext';
+import React from 'react';
 
 
 // Menu
@@ -12,11 +12,11 @@ export interface MenuProps {
     trigger: ReactElement;
 
     withArrow?: boolean;
-    withPlacement?: PopperPlacement;
-
-    className?: string;
+    withPlacement?: Placement;
 
     children: ReactNode;
+
+    onOpenChange?: (open: boolean) => void;
 
 }
 
@@ -25,50 +25,71 @@ export function Menu(props: MenuProps) {
     const {
         trigger,
         withPlacement, withArrow,
-        className,
-        children
+        children,
+        onOpenChange
     } = props;
 
-    const [show, setShow] = useState(false);
-    const [triggerRef, setTriggerRef] = useState<HTMLElement | null>(null);
-    const [popperRef, setPopperRef] = useState<HTMLDivElement | null>(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const handleOpenChange = (open: boolean) => {
+        setIsOpen(open);
+        onOpenChange?.(open);
+    };
 
-    useOnOutsideClick(show, () => setShow(false), triggerRef, popperRef);
+    const arrowRef = useRef<SVGSVGElement>(null);
+    const { refs, floatingStyles, context } = useFloating({
+        open: isOpen,
+        onOpenChange: handleOpenChange,
+        strategy: 'fixed',
+        placement: withPlacement,
+        middleware: [
+            offset(4 + (withArrow ? 7 + 2 : 0)),
+            shift({ padding: 8 }),
+            flip(),
+            withArrow ? arrow({ element: arrowRef, padding: 8 }) : null
+        ],
+        whileElementsMounted: autoUpdate
+    });
+
+    const click = useClick(context, { toggle: true, event: 'mousedown' });
+    const dismiss = useDismiss(context, {
+        outsidePress: true,
+        outsidePressEvent: 'pointerdown',
+        escapeKey: true
+    });
+
+    const { getReferenceProps, getFloatingProps } = useInteractions([
+        click, dismiss
+    ]);
 
     // Render
 
     return (
         <>
 
-            {React.cloneElement(trigger, {
-                ref: setTriggerRef,
-                onClick: (e: React.MouseEvent) => {
-                    if (trigger.props.onClick) {
-                        trigger.props.onClick(e);
-                    }
-                    setShow(!show);
-                }
-            })}
+            {React.cloneElement(trigger, { ref: refs.setReference, ...getReferenceProps() })}
 
-            {show && (
-                <Popper
+            {isOpen &&
+                <FloatingPortal id="modal" >
+                    <div ref={refs.setFloating} {...getFloatingProps()} style={floatingStyles} >
+                        <div className="py-1 bg-control-bg border border-control-border rounded shadow min-w-48">
 
-                    ref={setPopperRef}
-                    reference={triggerRef!}
+                            <MenuContext.Provider value={{ closeMenu: () => setIsOpen(false) }}>
+                                {children}
+                            </MenuContext.Provider>
 
-                    withPlacement={withPlacement}
-                    withArrow={withArrow}
+                            {withArrow && (
+                                <FloatingArrow
+                                    ref={arrowRef}
+                                    context={context}
+                                    strokeWidth={1}
+                                    className="fill-control-bg [&>path:first-of-type]:stroke-control-border"
+                                />
+                            )}
 
-                    className={classNames(
-                        'py-1 bg-control-bg border border-control-border rounded shadow min-w-48',
-                        className
-                    )}
-                >
-                    <MenuContext.Provider value={{ closeMenu: () => setShow(false) }}>
-                        {children}
-                    </MenuContext.Provider>
-                </Popper>
-            )}
+                        </div>
+                    </div>
+                </FloatingPortal>
+            }
 
         </>
 

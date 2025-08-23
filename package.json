@@ -69,6 +69,7 @@
     "registry": "https://npm.pkg.github.com/@nimbox"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.27.15",
     "@popperjs/core": "^2.11.8",
     "classnames": "^2.5.1",
     "emoji-regex": "^10.4.0",

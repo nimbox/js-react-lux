@@ -6,11 +6,12 @@ import { type MessageData } from '../types/MessageData';
 
 export interface MessageContextProps {
 
-    menu?: React.ReactElement;
+    menu?: React.ReactElement<{ onOpenChange: (open: boolean) => void }>;
     message: MessageData;
 
     isFirst?: boolean;
     isLast?: boolean;
+    isHovered: boolean;
 
 }
 

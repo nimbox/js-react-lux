@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
 
 
-export const useOnOutsideClick = (show: boolean, onOutsideClick: () => void, ...elements: (HTMLElement | undefined | null)[]) => {
+export const useOnOutsideClick = (show: boolean, onOutsideClick: () => void, ...elements: (Element | undefined | null | any)[]) => {
 
     useEffect(() => {
 
         if (show) {
 
             const handleMouseDown = (event: MouseEvent) => {
-                const inside = elements.find(element => element && element.contains(event.target as Node));
+                const inside = elements.find(element => element instanceof Element && element.contains(event.target as Node));
                 if (!inside) {
                     onOutsideClick();
                 }
@@ -19,6 +19,6 @@ export const useOnOutsideClick = (show: boolean, onOutsideClick: () => void, ...
 
         }
 
-    }, [show, onOutsideClick, ...elements]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [show, onOutsideClick, ...elements]); 
 
 };

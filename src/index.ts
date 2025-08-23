@@ -5,6 +5,7 @@ export * from './components/Anchor';
 export * from './components/Badge';
 export * from './components/Button';
 export * from './components/Card';
+export * from './components/Close';
 export * from './components/Delay';
 export * from './components/Dialog';
 export * from './components/displays/Avatar';

@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 import { AngleDownIcon } from '../../icons/components';
 
 
-export const AngleDownMenuTrigger = forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>((props, ref) => {
+export const AngleDownMenuTrigger = forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<Omit<HTMLButtonElement, 'ref'>>>((props, ref) => {
 
     const { className, ...rest } = props;
 

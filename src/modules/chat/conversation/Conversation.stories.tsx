@@ -27,7 +27,7 @@ const ConversationMenu = () => {
     const { conversation } = useConversation();
 
     return (
-        <Menu trigger={<AngleDownMenuTrigger className="hidden group-hover:block" />} withPlacement="bottom-end">
+        <Menu trigger={<AngleDownMenuTrigger />} withPlacement="bottom-end">
             <Menu.Item
                 icon={<EditIcon />}
                 label="Edit"
