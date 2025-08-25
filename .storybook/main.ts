@@ -1,6 +1,8 @@
 import type { StorybookConfig } from "@storybook/react-vite";
 
+
 const config: StorybookConfig = {
+
   stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
   staticDirs: [{ from: "../src/locales", to: '/locales' }],
 
@@ -14,5 +16,6 @@ const config: StorybookConfig = {
     name: "@storybook/react-vite",
     options: {},
   }
+
 };
 export default config;

@@ -5,7 +5,7 @@ import { Postit } from './Postit';
 // Definition
 
 const meta: Meta<typeof Postit> = {
-    component: Postit
+    component: Postit,
 };
 
 export default meta;
@@ -20,7 +20,7 @@ const PostitTemplate: Story = {
         );
     },
     args: {
-        className: 'w-1/4'
+        className: 'p-4 w-full'
     }
 };
 
@@ -33,7 +33,7 @@ export const Basic: Story = {
 export const Empty: Story = {
     render: () => {
         return (
-            <Postit className="w-1/5 py-0"></Postit>
+            <Postit />
         );
     }
 };
@@ -42,19 +42,11 @@ export const MultipleWidths: Story = {
     render: () => {
         return (
             <div className="grid grid-cols-1 gap-2">
-                <Postit className="postit w-1/4">The content</Postit>
-                <Postit className="postit w-2/4">The content</Postit>
-                <Postit className="postit w-3/4">The content</Postit>
-                <Postit className="postit w-4/4">The content</Postit>
+                <Postit className="p-4 w-1/4">The content</Postit>
+                <Postit className="p-4 w-2/4">The content</Postit>
+                <Postit className="p-4 w-3/4">The content</Postit>
+                <Postit className="p-4 w-4/4">The content</Postit>
             </div>
-        );
-    }
-};
-
-export const ToSmall: Story = {
-    render: () => {
-        return (
-            <Postit className="min-w-0 min-h-0 w-8 h-8"></Postit>
         );
     }
 };

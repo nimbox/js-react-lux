@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { WeekCalendar } from './WeekCalendar';
-import { WeekCalendarEventExtractors } from './useWeekCalendar';
 import classNames from 'classnames';
+import { WeekCalendar } from './WeekCalendar';
+import { type WeekCalendarEventExtractors } from './useWeekCalendar';
 
 
 interface StoryEvent {

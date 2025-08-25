@@ -103,7 +103,7 @@ export const Tag: FC<TagProps> = (props) => {
             />
 
             <span
-                className={classnames('block flex-shrink min-w-0 max-w-full', className)}
+                className={classnames('block shrink min-w-0 max-w-full', className)}
                 style={{ height: '1.2em', lineHeight: '1.2em' }}
                 {...spanProps}
             >

@@ -19,7 +19,7 @@ export function ConversationAvatar({ className }: ConversationAvatarProps) {
     };
 
     return (
-        <div className={classNames('flex-shrink-0', className)}>
+        <div className={classNames('shrink-0', className)}>
             <Avatar
 
                 color={avatarData.color}

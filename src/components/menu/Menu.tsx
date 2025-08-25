@@ -136,7 +136,7 @@ function MenuItem(props: MenuItemProps) {
                 onClick={disabled ? undefined : handleClick}
             >
                 {icon && (
-                    <div className="flex-shrink-0 w-4 h-4">
+                    <div className="shrink-0 w-4 h-4">
                         {icon}
                     </div>
                 )}

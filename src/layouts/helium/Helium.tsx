@@ -179,7 +179,7 @@ const NavigatorHeader: FC<{ className?: string, children?: React.ReactNode }> = 
 };
 
 const NavigatorContent: FC<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => (
-    <div className={classnames('flex-grow overflow-y-scroll', className)}>
+    <div className={classnames('grow overflow-y-scroll', className)}>
         {children}
     </div>
 );
@@ -211,7 +211,7 @@ export const Main: MainComponent<{ children?: React.ReactNode }> = ({ children }
                 'h-full',
                 showNavigator ? 'pl-0 md:pl-56' : 'pl-0',
                 'pt-16',
-                'flex-grow flex flex-row items-stretch overflow-y-auto ',
+                'grow flex flex-row items-stretch overflow-y-auto ',
                 'text-content bg-content-bg',
                 'transition-spacing duration-700 ease-in-out'
             )}
@@ -224,7 +224,7 @@ export const Main: MainComponent<{ children?: React.ReactNode }> = ({ children }
 };
 
 Main.Content = ({ className, children }) => (
-    <div className={classnames('w-2/3 flex-grow', className)}>{children}</div>
+    <div className={classnames('w-2/3 grow', className)}>{children}</div>
 );
 
 const MainSide: FC<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => {

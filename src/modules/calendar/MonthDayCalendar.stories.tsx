@@ -1,7 +1,7 @@
 import { action } from 'storybook/actions';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MonthDayCalendar } from './MonthDayCalendar';
-import { MonthDayCalendarEventExtractors } from './useMonthDayCalendar';
+import { type MonthDayCalendarEventExtractors } from './useMonthDayCalendar';
 
 
 interface StoryEvent {
@@ -51,7 +51,7 @@ const MonthDayCalendarTemplate: Story = {
 
 export const Basic: Story = {
     ...MonthDayCalendarTemplate
-}; 
+};
 
 export const WithDayClick: Story = {
     ...MonthDayCalendarTemplate,

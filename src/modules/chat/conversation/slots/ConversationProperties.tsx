@@ -15,7 +15,7 @@ export function ConversationProperties({ className }: ConversationPropertiesProp
     const { conversation } = useConversation();
 
     return (
-        <div className={classNames('flex-shrink-0 text-sm text-gray-500', className)}>
+        <div className={classNames('shrink-0 text-sm text-gray-500', className)}>
             {calendarFormatter(conversation.timestamp)}
         </div>
     );

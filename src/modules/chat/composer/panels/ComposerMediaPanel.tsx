@@ -301,7 +301,7 @@ function MediaTileDelete({ onClick }: {
 
     return (
         <>
-            <span className="hidden group-hover:block absolute inset-0 bg-gradient-to-bl from-black/50 to-50% to-transparent " />
+            <span className="hidden group-hover:block absolute inset-0 bg-linear-to-bl from-black/50 to-50% to-transparent " />
             <button
                 type="button"
                 onClick={onClick}

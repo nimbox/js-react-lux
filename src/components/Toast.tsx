@@ -138,7 +138,7 @@ export const Toast: FC<ToastProps> = ({ type, component, autoDelete = true, auto
             <div>
                 <IconType className="flex-none w-6 h-6" />
             </div>
-            <div className="flex-grow min-w-0 break-words">
+            <div className="grow min-w-0 break-words">
                 {component}
             </div>
             <div onClick={onDelete} className="flex-none cursor-pointer"><CrossIcon className="w-6 h-6" /></div>

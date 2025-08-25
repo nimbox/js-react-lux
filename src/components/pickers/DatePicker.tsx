@@ -333,7 +333,7 @@ const Calendar = (props: CalendarProps): ReactElement => {
                     <div className="h-16 border-b border-control-border">
 
                         <div className="px-2 py-2 flex flex-row items-center justify-between ">
-                            <div className="flex-grow text-center font-bold">
+                            <div className="grow text-center font-bold">
                                 {months![calendar.getMonth()]} {calendar.getFullYear()}
                             </div>
                             <div className="flex-none space-x-2">

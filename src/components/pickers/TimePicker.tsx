@@ -239,7 +239,7 @@ const Watch = (props: WatchProps): ReactElement => {
         if (selected) {
             if (hour === selected[0]) {
                 if (minute < selected[1]) {
-                    return 'bg-primary-500 !text-transparent';
+                    return 'bg-primary-500 text-transparent!';
                 }
                 if (minute === selected[1]) {
                     return 'bg-primary-500 text-inherit text-[1em]';
@@ -256,7 +256,7 @@ const Watch = (props: WatchProps): ReactElement => {
         <div onMouseDown={consumeEvent} className={className}>
 
             <div className="px-2 py-1 flex flex-row items-center justify-between border-b border-control-border">
-                <div className="flex-grow text-center font-bold">
+                <div className="grow text-center font-bold">
                     {/* {t('hour', { defaultValue: 'Hour' })} */}
                 </div>
                 <div className="flex-none space-x-2">
@@ -285,9 +285,9 @@ const Watch = (props: WatchProps): ReactElement => {
                                         onClick={() => onTimeChange([h, m])}
                                         className={classNames(
                                             'group-hover:text-transparent group-hover:bg-secondary-500',
-                                            'peer peer-hover:!text-muted peer-hover:bg-secondary-200 peer-hover:!text-[0.75em]',
+                                            'peer peer-hover:!text-muted peer-hover:bg-secondary-200 peer-hover:text-[0.75em]!',
                                             'text-muted text-[0.75em]',
-                                            'hover:!text-inherit hover:!text-[1em]',
+                                            'hover:text-inherit! hover:text-[1em]!',
                                             minuteClasses(h, m)
                                         )}
                                     >

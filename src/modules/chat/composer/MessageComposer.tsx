@@ -103,7 +103,7 @@ export function MessageComposer(props: MessageComposerProps) {
                             </div>
                         }
 
-                        <div className="flex-shrink-0 flex flex-col">
+                        <div className="shrink-0 flex flex-col">
 
                             <ReplyToMessage />
 
@@ -156,7 +156,7 @@ function ReplyToMessage() {
             <div className="flex-1">
                 <Reply message={replyTo} />
             </div>
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
                 <Button type="button" semantic="muted" rounded={true} onClick={clearReplyTo}>
                     <CrossIcon />
                 </Button>

@@ -57,7 +57,7 @@ export function MessageReactionDetails(props: MessageReactionDetailsProps) {
             <div className="flex flex-col gap-2">
                 {details.map((detail, index) => (
                     <div key={index} className="flex flex-row items-center gap-2">
-                        <div className="flex-grow">
+                        <div className="grow">
                             {detail.self ?
 
                                 <button onClick={() => handleRemoveReaction(detail.emoji)} className="text-left">

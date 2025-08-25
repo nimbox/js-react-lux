@@ -49,7 +49,7 @@ function MessageInputWrapper() {
 
     return (
         <MessageComposer
-            onSubmit={(message) => {
+            onSubmit={async (message) => {
                 action('submitMessage')({ message, replyTo });
                 console.log('New message:', message, 'Reply to:', replyTo);
             }}
@@ -115,9 +115,9 @@ export const Default: Story = {
         >
             <div className="relative min-w-96 h-screen bg-chat-message-list-bg">
                 <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${chatBackground})` }} />
-                <div className="relative h-full flex flex-col z-10">
+                <div className="relative w-full h-full flex flex-col z-10">
 
-                    <MessageList className="flex-grow overflow-y-auto">
+                    <MessageList className="grow overflow-y-auto">
                         {grouped.map((dateGroup) => (
                             <React.Fragment key={dateGroup.date.getTime()}>
 

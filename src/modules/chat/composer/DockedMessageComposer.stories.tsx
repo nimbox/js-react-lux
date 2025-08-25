@@ -1,16 +1,16 @@
-import { action } from 'storybook/actions';
 import type { Meta, StoryFn, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
+import { action } from 'storybook/actions';
 import { Button } from '../../../components/Button';
 import { Menu } from '../../../components/menu/Menu';
 import { FileIcon, ImageIcon, MessageIcon, PlusIcon, SmileyIcon, TemplateIcon } from '../../../icons/components';
 import chatBackground from '../assets/chat-background.png';
 import { ChatProvider } from '../ChatProvider';
-import { MessageData } from '../types/MessageData';
-import { TemplateData } from '../types/TemplateData';
+import { type MessageData } from '../types/MessageData';
+import { type TemplateData } from '../types/TemplateData';
 import { renderTemplate } from '../utils/renderTemplate';
 import { DockedMessageComposer } from './DockedMessageComposer';
-import { MessageComposer, MessageComposerSubmitData } from './MessageComposer';
+import { MessageComposer, type MessageComposerSubmitData } from './MessageComposer';
 import { ComposerMediaPanel } from './panels/ComposerMediaPanel';
 import { ComposerTemplatePanel } from './panels/ComposerTemplatePanel';
 

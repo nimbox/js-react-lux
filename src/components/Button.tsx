@@ -66,7 +66,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, r
 
                 'lux-button-centered': centered
 
-            }, 'rounded-full', className)}
+            }, className)}
 
             style={{ borderRadius: rounded ? '9999px' : undefined }}
 

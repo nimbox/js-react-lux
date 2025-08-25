@@ -60,11 +60,11 @@ export function MessageList({ className, children }: MessageListProps) {
             <div
                 ref={listRef}
                 className={classNames(
-                    'w-100 h-full py-2 space-y-2 flex flex-col overflow-y-auto',
+                    'w-full h-full py-2 space-y-2 flex flex-col overflow-y-auto',
                     className
                 )}
             >
-                <div className="flex-grow"></div> {/* Pushes content to the bottom */}
+                <div className="grow"></div> {/* Pushes content to the bottom */}
                 {children}
             </div>
         </ChatMessageListContext.Provider>

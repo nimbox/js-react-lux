@@ -2,11 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ChatProvider } from '../../ChatProvider';
 import { authors } from '../../data/authors';
 import { reactionDetails } from '../../data/reactionDetails';
-import { MessageData } from '../../types/MessageData';
-import { MessageGroupData } from '../../types/MessageGroupData';
+import { type MessageData } from '../../types/MessageData';
+import { type MessageGroupData } from '../../types/MessageGroupData';
 import { MessageContext } from '../MessageContext';
-import { MessageReactionDetails } from './MessageReactionDetails';
 import { MessageGroupContext } from '../MessageGroupContext';
+import { MessageReactionDetails } from './MessageReactionDetails';
 
 
 // Definition

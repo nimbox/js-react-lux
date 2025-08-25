@@ -1,45 +1,48 @@
-import { action } from 'storybook/actions';
-import { ComponentMeta, ComponentStory } from '@storybook/react-vite';
-import { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+import type { ChangeEvent, FormEvent } from 'react';
+import { useRef, useState } from 'react';
 import { CircleIcon, SquareIcon } from '../../icons/components';
 import { Button } from '../Button';
 import { TextArea } from './TextArea';
-
+import { action } from 'storybook/actions';
 
 // Definition
 
-export default {
-    title: 'Components/Inputs/TextArea',
+const meta: Meta<typeof TextArea> = {
     component: TextArea,
     parameters: {
         layout: 'centered'
     }
-} as ComponentMeta<typeof TextArea>;
-
-
-const Template: ComponentStory<typeof TextArea> = ({ ...args }) => {
-    const [value, setValue] = useState('Katniss');
-    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => { setValue(e.target.value); action('onChange')(e.target.value); };
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(value); };
-    return (
-        <form onSubmit={handleSubmit} className="w-96 flex flex-row gap-x-2 items-center">
-            <TextArea type="text" value={value} onChange={handleChange} {...args} />
-            <Button type="submit">Submit</Button>
-        </form>
-    );
 };
 
+export default meta;
+type Story = StoryObj<typeof TextArea>;
+
+// Template
+
+const TextAreaTemplate: Story = {
+    render: (args) => {
+        const [value, setValue] = useState('Katniss');
+        const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => { setValue(e.target.value); action('onChange')(e.target.value); };
+        const handleSubmit = (e: FormEvent<HTMLFormElement>) => { e.preventDefault(); action('onSubmit')(value); };
+        return (
+            <form onSubmit={handleSubmit} className="w-96 flex flex-row gap-x-2 items-center">
+                <TextArea type="text" value={value} onChange={handleChange} {...args} />
+                <Button type="submit">Submit</Button>
+            </form>
+        );
+    }
+};
 
 // Default
 
-export const Default = Template.bind({});
-Default.args = {
-
-    variant: 'outlined',
-
-    label: 'Name',
-    placeholder: 'Enter name'
-
+export const Default: Story = {
+    ...TextAreaTemplate,
+    args: {
+        variant: 'outlined',
+        label: 'Name',
+        placeholder: 'Enter name'
+    }
 };
 
 //

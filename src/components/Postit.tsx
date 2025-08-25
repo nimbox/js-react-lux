@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { type FC } from 'react';
+import React from 'react';
 
 
 interface PostitProps {
@@ -7,7 +7,7 @@ interface PostitProps {
     children?: React.ReactNode
 }
 
-export const Postit: FC<PostitProps> = ({ className, children }) => {
+export function Postit({ className, children }: PostitProps) {
 
     return (
         <div className="postit-container">

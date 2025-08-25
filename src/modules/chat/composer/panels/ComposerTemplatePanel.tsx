@@ -104,14 +104,14 @@ export function ComposerTemplatePanel(props: ComposerTemplatePanelProps) {
                         templates={templates}
                         selected={selectedIndex}
                         onSelect={setSelectedIndex}
-                        className="w-1/4 flex-shrink-0"
+                        className="w-1/4 shrink-0"
                     />
 
                     <TemplateContext
                         template={template}
                         context={context}
                         setContext={setContext}
-                        className="w-1/4 flex-shrink-0"
+                        className="w-1/4 shrink-0"
                     />
 
                     <TemplatePreview
@@ -119,7 +119,7 @@ export function ComposerTemplatePanel(props: ComposerTemplatePanelProps) {
                         context={context}
                         render={render}
                         chatBackground={chatBackground}
-                        className="w-1/2 flex-shrink-0"
+                        className="w-1/2 shrink-0"
                     />
 
                 </div>

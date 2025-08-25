@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react-vite';
+import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { action } from 'storybook/actions';
 import { EditableText } from './EditableText';

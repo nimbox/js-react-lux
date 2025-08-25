@@ -1,8 +1,8 @@
-import { forwardRef, InputHTMLAttributes, Ref } from 'react';
+import { type Meta, type StoryObj } from '@storybook/react-vite';
+import { forwardRef, type InputHTMLAttributes, type Ref } from 'react';
 import { ControlledTemplate, HookFormTemplate, UncontrolledTemplate } from '../../templates/InputTemplates';
 import { Option } from './Option';
-import { Select, SelectProps } from './Select';
-import { Meta, StoryObj } from '@storybook/react-vite';
+import { Select, type SelectProps } from './Select';
 
 
 // Definition

@@ -1,0 +1,38 @@
+.postit-container {
+    position: relative;
+    z-index: 1;
+}
+
+.postit {
+
+    display: inline-block;
+    position: relative;
+
+    min-width: 64px;
+    min-height: 48px;
+
+    border: 1px solid #e8e8e8;
+    border-bottom-right-radius: 64px 5px;
+
+    background: #ffff88;
+
+}
+
+.postit:after {
+
+    content: "";
+
+    position: absolute;
+    right: 0px;
+    bottom: 14px;
+
+    width: 48px;
+    height: 25px;
+
+    background: rgba(0, 0, 0, 0.2);
+    box-shadow: 2px 15px 5px rgba(0, 0, 0, 0.4);
+    transform: matrix(-1, -0.1, 0, 1, 0, 0);
+
+    z-index: -1;
+
+}

@@ -1,4 +1,7 @@
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useRef } from 'react';
 import { NativeSelect } from './NativeSelect';
+import { Option } from './Option';
 
 
 // Definition
@@ -16,18 +19,21 @@ type Story = StoryObj<typeof NativeSelect>;
 // Templates
 
 const NativeSelectTemplate: Story = {
-    render: (args) => (
-        <NativeSelect ref={selectRef} {...args}>
-            <Option value="one">Uno</Option>
-            <Option value="two">Dos</Option>
-            <Option value="three">Tres</Option>
-        </NativeSelect>
-    )
+    render: (args) => {
+        const selectRef = useRef<HTMLSelectElement>(null);
+        return (
+            <NativeSelect ref={selectRef} {...args}>
+                <Option value="one">Uno</Option>
+                <Option value="two">Dos</Option>
+                <Option value="three">Tres</Option>
+            </NativeSelect>
+        );
+    }
 };
 
 // Stories
 
-export const Primary: Story =  {
+export const Default: Story =  {
     ...NativeSelectTemplate
 };
 

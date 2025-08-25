@@ -1,0 +1,58 @@
+.lux-empty-hidden:empty {
+  display: none;
+}
+
+.lux-tag-space {
+  line-height: 1.75;
+}
+
+.lux-tag-space > *:not(:last-child) {
+  margin-right: 0.25em;
+}
+
+.lux-space-y-2em > * + * {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.lux-p-0\.5em {
+  padding: 0.125em;
+}
+
+.lux-px-0\.5em {
+  padding-left: 0.125em;
+  padding-right: 0.125em;
+}
+
+.lux-py-0\.5em {
+  padding-top: 0.125em;
+  padding-bottom: 0.125em;
+}
+
+.lux-p-1em {
+  padding: 0.25em;
+}
+
+.lux-px-1em {
+  padding-left: 0.25em;
+  padding-right: 0.25em;
+}
+
+.lux-py-1em {
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+}
+
+.lux-p-2em {
+  padding: 0.5em;
+}
+
+.lux-px-2em {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+.lux-py-2em {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}

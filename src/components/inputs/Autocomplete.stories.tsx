@@ -1,11 +1,11 @@
-import { action } from 'storybook/actions';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useRef } from 'react';
+import { action } from 'storybook/actions';
 import { CircleIcon, SquareIcon } from '../../icons/components';
 import { ControlledTemplate, HookFormTemplate, UncontrolledTemplate } from '../../templates/InputTemplates';
 import { Button } from '../Button';
 import * as data from '../choose/data';
-import { Autocomplete, AutocompleteProps } from './Autocomplete';
+import { Autocomplete, type AutocompleteProps } from './Autocomplete';
 
 // Definition
 

@@ -1,6 +1,6 @@
 import { Button } from '../Button';
 import { CheckBox } from './CheckBox';
-import { Control, ControlProps } from './Control';
+import { Control, type ControlProps } from './Control';
 import { Input } from './Input';
 import { NativeSelect } from './NativeSelect';
 import { Option } from './Option';
