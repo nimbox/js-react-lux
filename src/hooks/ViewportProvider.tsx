@@ -1,4 +1,4 @@
-import { debounce as _debounce } from 'lodash';
+import { debounce } from 'lodash-es';
 import { type FC, useEffect, useState } from 'react';
 import { ViewportContext } from './ViewportProviderContext';
 
@@ -18,7 +18,7 @@ export interface ViewportProviderProps {
 export const ViewportProvider: FC<ViewportProviderProps> = ({ wait = 250, children }) => {
 
     const [size, setSize] = useState({ width: window.innerWidth, height: window.innerHeight });
-    const handleResize = _debounce(() => setSize({ width: window.innerWidth, height: window.innerHeight }), wait);
+    const handleResize = debounce(() => setSize({ width: window.innerWidth, height: window.innerHeight }), wait);
 
     useEffect(() => {
         window.addEventListener('resize', handleResize);

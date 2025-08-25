@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { default as _isFunction } from 'lodash/isFunction';
+import { isFunction } from 'lodash-es';
 import React, { forwardRef, type KeyboardEvent, type Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
@@ -190,7 +190,7 @@ export const Choose = forwardRef(<O, G = O[]>(
     // Assertions
 
     // if (process.env.NODE_ENV !== 'production') {
-    //     if (withSearch && !_isFunction(supplier)) {
+    //     if (withSearch && !isFunction(supplier)) {
     //         console.error('Provided withSearch parameter without providing an option supplier function.  Try setting options to `(query) => [[ ... ]]`.');
     //     }
     // }
@@ -224,7 +224,7 @@ export const Choose = forwardRef(<O, G = O[]>(
 
     const getPromisedOptions = useMemo(async () => {
 
-        const isSearchable = _isFunction(supplier);
+        const isSearchable = isFunction(supplier);
         return Promise.resolve(isSearchable ? supplier(query) : supplier);
 
     }, [query, supplier]);

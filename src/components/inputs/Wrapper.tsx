@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { isString } from 'lodash';
+import { isString } from 'lodash-es';
 import React, { type Ref, useContext, useLayoutEffect, useRef, useState } from 'react';
 import { ControlContext } from './ControlContext';
 

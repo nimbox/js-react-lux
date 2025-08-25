@@ -1,9 +1,9 @@
-import _uniqueId from 'lodash/uniqueId';
+import { uniqueId } from 'lodash-es';
 import { useState } from 'react';
 
 
-export const uniqueCard = () => _uniqueId('card-');
-export const uniqueColumn = () => _uniqueId('column-');
+export const uniqueCard = () => uniqueId('card-');
+export const uniqueColumn = () => uniqueId('column-');
 
 export type Card<C> = C & { id: string };
 export type Column<S, C> = S & { id: string, cards: Card<C>[] };

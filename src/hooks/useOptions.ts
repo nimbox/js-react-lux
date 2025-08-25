@@ -1,4 +1,4 @@
-import { debounce as _debounce, isFunction as _isFunction } from 'lodash';
+import { debounce as _debounce, isFunction } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 
@@ -108,7 +108,7 @@ export const useOptions = <O, G>(supplier: UseOptionsSupplier<G>, props?: UseOpt
         let working = true;
         (async () => {
             try {
-                const isSearchable = _isFunction(supplier);
+                const isSearchable = isFunction(supplier);
                 const promisedOptions = await Promise.resolve(isSearchable ? supplier(query) : supplier);
                 if (working) {
                     setOptions(promisedOptions);
