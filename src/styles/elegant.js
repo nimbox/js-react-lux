@@ -5,7 +5,6 @@ import age from './age';
 import chat from './chat';
 import control from './control';
 import lux from './lux';
-import popper from './popper';
 import postit from './postit';
 import tooltip from './tooltip';
 
@@ -141,7 +140,6 @@ export default {
                 ...control({ theme }),
                 ...postit,
                 ...tooltip,
-                ...popper({ theme }),
                 ...age,
                 ...chat({ theme })
             })
