@@ -11,9 +11,7 @@
       "default": "./dist/esm/index.js"
     },
     "./styles/elegant": {
-      "import": "./dist/esm/styles/elegant.js",
-      "require": "./dist/cjs/styles/elegant.js",
-      "default": "./dist/esm/styles/elegant.js"
+      "default": "./dist/styles/elegant.css"
     },
     "./icons": {
       "types": "./dist/types/icons/components/index.d.ts",
