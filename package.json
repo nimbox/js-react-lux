@@ -10,7 +10,7 @@
       "require": "./dist/cjs/index.js",
       "default": "./dist/esm/index.js"
     },
-    "./styles/elegant": {
+    "./styles/elegant.css": {
       "default": "./dist/styles/elegant.css"
     },
     "./icons": {
