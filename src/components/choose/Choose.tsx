@@ -22,7 +22,7 @@ import { DEFAULT_RENDER_OPTION, EXTRACTOR } from './options';
 // Choose
 //
 
-export interface ChooseProps<O = any, G = O[]> extends
+export interface ChooseProps<O = string, G = O[]> extends
     Omit<FieldPopperProps, 'show' | 'onShowChange' | 'renderPopper'>,
     Pick<ChooseOptionListProps<O, G>, 'extractor' | 'renderEmpty' | 'renderGroupLabel' | 'renderOption'> {
 

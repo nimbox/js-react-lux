@@ -1,4 +1,4 @@
-import { type Meta, type StoryObj } from '@storybook/react';
+import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { action } from 'storybook/actions';
 import chatBackground from '../../assets/chat-background.png';
 import { type TemplateData } from '../../types/TemplateData';

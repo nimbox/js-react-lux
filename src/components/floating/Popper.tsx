@@ -71,7 +71,7 @@ export const Popper = forwardRef<HTMLPopperElement, PopperProps>((props, popperR
     // Bind external reference element
 
     useEffect(() => {
-        refs.setReference(reference as any);
+        refs.setReference(reference);
     }, [reference, refs]);
 
     useImperativeHandle(popperRef, () => {

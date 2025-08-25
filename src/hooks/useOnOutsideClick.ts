@@ -19,6 +19,6 @@ export const useOnOutsideClick = (show: boolean, onOutsideClick: () => void, ...
 
         }
 
-    }, [show, onOutsideClick, ...elements]); 
+    }, [show, onOutsideClick, elements]);
 
 };

@@ -9,7 +9,6 @@ import pkg from './package.json' with { type: 'json' };
 const entries = {
 
     'index': 'src/index.ts',
-    'styles/elegant': 'src/styles/elegant.js',
 
     'icons': 'src/icons/components/index.ts',
     'figures': 'src/figures/index.ts',
@@ -33,7 +32,10 @@ export default [{
         nodeResolve({ extensions }),
         commonjs(),
         typescript({ tsconfig: 'tsconfig.build.json' }),
-        copy({ targets: [{ src: 'src/locales/*', dest: 'dist/locales' }] }),
+        copy({ targets: [
+            { src: 'src/styles/**/*.css', dest: 'dist/styles' },
+            { src: 'src/locales/*', dest: 'dist/locales' }
+        ] }),
         filesize()
     ],
 

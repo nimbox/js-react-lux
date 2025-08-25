@@ -13,15 +13,12 @@ export function MessageReactions() {
     const { group: { direction } } = useMessageGroup();
     const { message: { reactions } } = useMessage();
 
-    // Return if no reactions
-
-    if (!reactions || reactions.length === 0) {
-        return null;
-    }
-
     // Sort reactions by count
 
     const { sorted, total } = useMemo(() => {
+        if (!reactions) {
+            return { sorted: [], total: 0 };
+        }
         const sorted = [...reactions].sort((a, b) => b.count - a.count)
         const total = reactions.reduce((s, r) => s + r.count, 0)
         return { sorted, total }

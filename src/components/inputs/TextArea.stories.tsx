@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useRef, useState } from 'react';
 import { CircleIcon, SquareIcon } from '../../icons/components';
