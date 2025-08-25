@@ -3,7 +3,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 
 export function useElementHeight<T extends HTMLElement>(initialHeight: number = 0) {
 
-    const ref = useRef<T>(null);
+    const ref = useRef<T | null>(null);
     const [height, setHeight] = useState(initialHeight);
 
     const updateHeight = useCallback(() => {

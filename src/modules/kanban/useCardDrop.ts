@@ -12,9 +12,9 @@ export interface UseCardDropCollectedProps {
     isOver: boolean;
 }
 
-export function useCardDrop<C extends HTMLElement>({ onDrop }: UseCardDropProps): [RefObject<C>, UseCardDropCollectedProps] {
+export function useCardDrop<C extends HTMLElement>({ onDrop }: UseCardDropProps): [RefObject<C | null>, UseCardDropCollectedProps] {
 
-    const dropRef = useRef<C>(null);
+    const dropRef = useRef<C | null>(null);
     const [{ item, isOver }, drop] = useDrop(() => ({
         accept: CARD_TYPE,
         ...(onDrop && { drop: (item: KanbanCardItem) => onDrop(item) }),

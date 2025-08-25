@@ -1,15 +1,15 @@
-import { arrow, autoUpdate, flip, FloatingArrow, FloatingPortal, offset, shift, useClick, useDismiss, useFloating, useInteractions, type Placement } from '@floating-ui/react';
+import { arrow, autoUpdate, flip, FloatingPortal, offset, shift, useClick, useDismiss, useFloating, useInteractions, type Placement } from '@floating-ui/react';
 import classNames from 'classnames';
-import { useRef, useState, type ReactElement, type ReactNode } from 'react';
+import React, { useRef, useState, type ReactElement, type ReactNode } from 'react';
+import { ControlArrow } from '../floating/ControlArrow';
 import { MenuContext, useMenu } from './MenuContext';
-import React from 'react';
 
 
 // Menu
 
 export interface MenuProps {
 
-    trigger: ReactElement;
+    trigger: ReactElement<any>;
 
     withArrow?: boolean;
     withPlacement?: Placement;
@@ -39,7 +39,7 @@ export function Menu(props: MenuProps) {
     const { refs, floatingStyles, context } = useFloating({
         open: isOpen,
         onOpenChange: handleOpenChange,
-        strategy: 'fixed',
+        // strategy: 'fixed',
         placement: withPlacement,
         middleware: [
             offset(4 + (withArrow ? 7 + 2 : 0)),
@@ -77,14 +77,7 @@ export function Menu(props: MenuProps) {
                                 {children}
                             </MenuContext.Provider>
 
-                            {withArrow && (
-                                <FloatingArrow
-                                    ref={arrowRef}
-                                    context={context}
-                                    strokeWidth={1}
-                                    className="fill-control-bg [&>path:first-of-type]:stroke-control-border"
-                                />
-                            )}
+                            {withArrow && <ControlArrow ref={arrowRef} context={context} />}
 
                         </div>
                     </div>

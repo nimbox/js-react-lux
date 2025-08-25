@@ -63,7 +63,7 @@ export interface WeekHourHeader {
 
 export interface WeekCalendarInstance<TData> {
 
-    ref: React.RefObject<HTMLDivElement>;
+    ref: React.RefObject<HTMLDivElement | null>;
     height: number;
 
     getDayHeaders: () => WeekDayHeader[];

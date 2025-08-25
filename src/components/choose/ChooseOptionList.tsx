@@ -130,7 +130,7 @@ export const ChooseOptionList = React.forwardRef(<O, G = O[]>(
     // Create option references to scroll into view when the chosen
     // option changes.
 
-    const optionsRef = useRef<(HTMLLIElement | null)[][]>();
+    const optionsRef = useRef<(HTMLLIElement | null)[][]>(null);
     const [optionsRefAvailable, setOptionsRefAvailable] = useState(false);
     useEffect(() => {
         optionsRef.current = options != null ?

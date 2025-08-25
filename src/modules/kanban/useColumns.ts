@@ -15,10 +15,10 @@ export interface UseColumnsCollectedProps {
     item: KanbanColumnItem;
 }
 
-export function useColumns<C extends HTMLElement, P extends HTMLElement>({ moveColumn = () => null }: UseColumnsProps = {}): [RefObject<C>, RefObject<P>, UseColumnsCollectedProps] {
+export function useColumns<C extends HTMLElement, P extends HTMLElement>({ moveColumn = () => null }: UseColumnsProps = {}): [RefObject<C | null>, RefObject<P | null>, UseColumnsCollectedProps] {
 
-    const columnsRef = useRef<C>(null);
-    const placeholderRef = useRef<P>(null);
+    const columnsRef = useRef<C | null>(null);
+    const placeholderRef = useRef<P | null>(null);
 
     const clientOffset = useRef<XYCoord | null>(null);
     const columnScrollLeft = useRef<number>(0);

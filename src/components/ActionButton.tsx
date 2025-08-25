@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useOnOutsideClick } from '../hooks/useOnOutsideClick';
 import { VerticalDotsIcon } from '../icons/components';
 import { Button } from './Button';
-import { Popper } from './Popper';
+import { Popper } from './floating/Popper';
 
 
 export interface ActionButtonProps {

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { useState } from 'react';
 import { EmojiPicker } from '../../../components/pickers/EmojiPicker';
-import { Popper } from '../../../components/Popper';
+import { Popper } from '../../../components/floating/Popper';
 import { useOnOutsideClick } from '../../../hooks/useOnOutsideClick';
 import { SmileyIcon } from '../../../icons/components';
 import { useChat } from '../ChatContext';

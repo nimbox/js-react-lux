@@ -26,11 +26,11 @@ export interface UseObservableValueRefProps {
  * @param props
  * @returns 
  */
-export const useObservableValueRef = <T extends HTMLInputElement | HTMLSelectElement>(initialValue: T | null, { onSet }: (UseObservableValueRefProps | undefined) = {}): RefObject<T> => {
+export const useObservableValueRef = <T extends HTMLInputElement | HTMLSelectElement>(initialValue: T | null, { onSet }: (UseObservableValueRefProps | undefined) = {}): RefObject<T | null> => {
 
     const internal = useRef<T | null>(initialValue);
 
-    return useMemo((): RefObject<T> => ({
+    return useMemo((): RefObject<T | null> => ({
 
         get current() {
             return internal.current;

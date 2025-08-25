@@ -1,6 +1,6 @@
 import React, { type Ref, useCallback, useImperativeHandle, useRef, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { type HTMLPopperElement, Popper, type PopperProps } from '../Popper';
+import { type HTMLPopperElement, Popper, type PopperProps } from '../floating/Popper';
 import { getActiveElement } from '../utilities/getActiveElement';
 import { Wrapper, type WrapperProps } from './Wrapper';
 

@@ -15,7 +15,7 @@ export interface UseCardsCollectedProps {
     item: KanbanCardItem;
 }
 
-export function useCards<C extends HTMLElement, P extends HTMLElement>(columnId: string, { moveCard = () => null }: UseCardsProps = {}): [RefObject<C>, RefObject<P>, UseCardsCollectedProps] {
+export function useCards<C extends HTMLElement, P extends HTMLElement>(columnId: string, { moveCard = () => null }: UseCardsProps = {}): [RefObject<C | null>, RefObject<P | null>, UseCardsCollectedProps] {
 
     const cardsRef = useRef<C>(null);
     const placeholderRef = useRef<P>(null);

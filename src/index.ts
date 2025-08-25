@@ -9,10 +9,10 @@ export * from './components/Close';
 export * from './components/Delay';
 export * from './components/Dialog';
 export * from './components/displays/Avatar';
+export * from './components/floating/Popper';
+export * from './components/floating/Popup';
 export * from './components/Loading';
 export * from './components/Modal';
-export * from './components/Popper';
-export * from './components/Popup';
 export * from './components/Postit';
 export * from './components/Tabs';
 export * from './components/Tag';
@@ -54,7 +54,7 @@ export * from './components/pickers/DatePicker';
 export * from './components/pickers/SwatchPicker';
 export * from './components/pickers/TimePicker';
 
-export * from './popper/TooltipProvider';
+export * from './components/floating/TooltipProvider';
 
 export * from './components/CheckBar';
 export * from './components/RadioBar';

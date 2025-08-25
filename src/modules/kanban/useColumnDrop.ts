@@ -12,9 +12,9 @@ export interface UseColumnDropCollectedProps {
     isOver: boolean;
 }
 
-export function useColumnDrop<C extends HTMLElement>({ onDrop }: UseColumnDropProps): [RefObject<C>, UseColumnDropCollectedProps] {
+export function useColumnDrop<C extends HTMLElement>({ onDrop }: UseColumnDropProps): [RefObject<C | null>, UseColumnDropCollectedProps] {
 
-    const dropRef = useRef<C>(null);
+    const dropRef = useRef<C | null>(null);
     const [{ item, isOver }, drop] = useDrop(() => ({
         accept: COLUMN_TYPE,
         ...(onDrop && { drop: (item: KanbanColumnItem) => onDrop(item) }),

@@ -46,7 +46,7 @@ export interface MonthDay<TData> {
 
 export interface MonthDayCalendarInstance<TData> {
 
-    ref: React.RefObject<HTMLDivElement>;
+    ref: React.RefObject<HTMLDivElement | null>;
     height: number;
 
     getDayHeaders: () => WeekDayHeader[];

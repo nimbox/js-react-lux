@@ -1,13 +1,13 @@
-import { action } from 'storybook/actions';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { forwardRef, useEffect, useRef, useState } from 'react';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { type FieldValues, type SubmitHandler, useForm } from 'react-hook-form';
+import { action } from 'storybook/actions';
+import { CircleIcon, SquareIcon } from '../../icons/components';
 import { ControlledTemplate, HookFormTemplate, UncontrolledTemplate } from '../../templates/InputTemplates';
 import { Button } from '../Button';
 import { Input } from '../inputs/Input';
-import { Choose, ChooseProps } from './Choose';
+import { Choose, type ChooseProps } from './Choose';
 import * as data from './data';
-import { CircleIcon, SquareIcon } from '../../icons/components';
 
 
 // Definition

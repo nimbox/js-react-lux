@@ -7,7 +7,7 @@ import { ChooseOptionList, type ChooseOptionListProps } from '../choose/ChooseOp
 import { EXTRACTOR } from '../choose/options';
 import { Delay } from '../Delay';
 import { Loading } from '../Loading';
-import { type PopperProps } from '../Popper';
+import { type PopperProps } from '../floating/Popper';
 import { consumeEvent } from '../utilities/consumeEvent';
 import { setRefInputValue } from '../utilities/setRefInputValue';
 import { type InputProps } from './Input';

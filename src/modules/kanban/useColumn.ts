@@ -8,11 +8,11 @@ export interface UseColumnProps {
     isDragging: boolean;
 }
 
-export function useColumn<T extends HTMLElement>(id: string): [RefObject<T>, UseColumnProps] {
+export function useColumn<T extends HTMLElement>(id: string): [RefObject<T | null>, UseColumnProps] {
 
     const context = useKanbanContext();
 
-    const columnRef = useRef<T>(null);
+    const columnRef = useRef<T | null>(null);
     const [{ item }, drag] = useDrag(() => ({
 
         type: COLUMN_TYPE,

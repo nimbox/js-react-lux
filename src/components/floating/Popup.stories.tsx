@@ -1,7 +1,7 @@
-import { action } from 'storybook/actions';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FC, useState } from 'react';
-import { Button } from './Button';
+import { action } from 'storybook/actions';
+import { Button } from '../Button';
 import { Popup } from './Popup';
 
 
@@ -24,11 +24,11 @@ const SimplePopup: FC = () => (
 );
 
 const PopupTemplate: Story = {
-    render: ({ visible, placement }) => {
+    render: ({ visible, withPlacement: placement }) => {
         return (
             <div className="grid grid-cols-3 gap-8">
                 <div></div>
-                <Popup visible={visible} onChangeVisible={action('setVisible')} placement={placement} Component={SimplePopup} >
+                <Popup visible={visible} onChangeVisible={action('setVisible')} withPlacement={placement} Component={SimplePopup} >
                     <div className="w-64 h-32 bg-green-200 flex justify-center items-center">element</div>
                 </Popup>
                 <div></div>
@@ -37,7 +37,7 @@ const PopupTemplate: Story = {
     },
     args: {
         visible: true,
-        placement: 'bottom'
+        withPlacement: 'bottom'
     }
 };
 
@@ -55,13 +55,13 @@ export const InSpan: Story = {
                     This <Popup visible={true} Component={SimplePopup}><span className="bg-green-200">element</span></Popup> in span mode.
                 </div>
                 <div>
-                    This <Popup visible={true} Component={SimplePopup} placement="left"><span className="bg-green-200">element</span></Popup> in span mode.
+                    This <Popup visible={true} Component={SimplePopup} withPlacement="left"><span className="bg-green-200">element</span></Popup> in span mode.
                 </div>
                 <div>
-                    This <Popup visible={true} Component={SimplePopup} placement="right"><span className="bg-green-200">element</span></Popup> in span mode.
+                    This <Popup visible={true} Component={SimplePopup} withPlacement="right"><span className="bg-green-200">element</span></Popup> in span mode.
                 </div>
                 <div>
-                    This <Popup visible={true} Component={SimplePopup} placement="top"><span className="bg-green-200">element</span></Popup> in span mode.
+                    This <Popup visible={true} Component={SimplePopup} withPlacement="top"><span className="bg-green-200">element</span></Popup> in span mode.
                 </div>
             </div>
         );
@@ -75,13 +75,13 @@ export const InDiv: Story = {
                 <Popup visible={true} Component={SimplePopup}>
                     <div className="bg-green-200">element</div>
                 </Popup>
-                <Popup visible={true} Component={SimplePopup} placement="left">
+                <Popup visible={true} Component={SimplePopup} withPlacement="left">
                     <div className="bg-green-200">element</div>
                 </Popup>
-                <Popup visible={true} Component={SimplePopup} placement="right">
+                <Popup visible={true} Component={SimplePopup} withPlacement="right">
                     <div className="bg-green-200">element</div>
                 </Popup>
-                <Popup visible={true} Component={SimplePopup} placement="bottom">
+                <Popup visible={true} Component={SimplePopup} withPlacement="bottom">
                     <div className="bg-green-200">element</div>
                 </Popup>
             </div>

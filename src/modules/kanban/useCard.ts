@@ -8,11 +8,11 @@ export interface UseCardProps {
     isDragging: boolean;
 }
 
-export function useCard<T extends HTMLElement>(id: string): [RefObject<T>, UseCardProps] {
+export function useCard<T extends HTMLElement>(id: string): [RefObject<T | null>, UseCardProps] {
 
     const context = useKanbanContext();
 
-    const cardRef = useRef<T>(null);
+    const cardRef = useRef<T | null>(null);
     const [{ item }, drag] = useDrag(() => ({
 
         type: CARD_TYPE,

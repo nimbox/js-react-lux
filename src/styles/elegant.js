@@ -53,6 +53,9 @@ export default {
                 'chat-message-out': '#d9fdd3',
                 'chat-message-list-bg': '#eee9e1',
 
+                'tooltip': 'pink',
+                'tooltip-bg': 'red',
+
                 // 'control-bg': '#fef3fb',
                 // 'control-border': '#F012BE',
                 // 'control-placeholder': '#0074D9',
