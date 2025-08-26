@@ -20,8 +20,6 @@ export function MessageContainer({ children }: MessageContainerProps) {
         setMenuIsOpen(open);
     };
 
-    console.log('MessageContainer', { menuIsOpen });
-
     return (
         <div className={classNames('relative flex flex-col z-0 group', {
             'order-1 items-start': direction === 'inbound',
