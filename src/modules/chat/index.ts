@@ -16,8 +16,12 @@ export * from './types/TemplateData';
 export * from './ChatContext';
 export * from './ChatProvider';
 
+export * from './conversation/buildConversationRows';
 export * from './conversation/Conversation';
 export * from './conversation/ConversationContext';
+export * from './conversation/ConversationList';
+export * from './types/ConversationBuildRowsOptions';
+export * from './types/ConversationRow';
 
 export * from './message/Message';
 export * from './message/MessageContext';
@@ -41,6 +45,7 @@ export * from './utils/messageProcessing';
 
 // Export renderers
 
+export * from './conversation/renderers';
 export * from './message/renderers';
 export * from './reply/renderers';
 

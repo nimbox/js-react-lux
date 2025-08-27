@@ -1,37 +1,36 @@
-import classNames from 'classnames';
 import React, { useState } from 'react';
-import { ConversationContext, type ConversationContextProps } from './ConversationContext';
+import type { ConversationData } from '../types/ConversationData';
+import { ConversationContext } from './ConversationContext';
 import { ConversationAvatar } from './slots/ConversationAvatar';
 import { ConversationContainer } from './slots/ConversationContainer';
 import { ConversationMessage } from './slots/ConversationMessage';
 import { ConversationMeta } from './slots/ConversationMeta';
 import { ConversationName } from './slots/ConversationName';
 import { ConversationProperties } from './slots/ConversationProperties';
-import { DefaultConversationRenderer } from './renderers/DefaultConversation';
 
 
 // Conversation
 
-export interface ConversationProps extends ConversationContextProps {
+export interface ConversationProps {
+
+    menu?: React.ReactElement;
+    conversation: ConversationData;
+
+    selected?: boolean;
 
     className?: string;
-    renderConversation?: (conversation: ConversationContextProps) => React.ReactElement;
+    children?: React.ReactElement | null;
 
 }
 
-export function Conversation({ className, renderConversation, ...props }: Omit<ConversationProps, 'isHovered'>) {
+export function Conversation({ className, children, ...props }: Omit<ConversationProps, 'isHovered'>) {
 
-    const [isHovered, setIsHovered] = useState(false);
-    const renderer = renderConversation || DefaultConversationRenderer;
+    const [isOver, setIsOver] = useState(false);
 
     return (
-        <ConversationContext.Provider value={{ ...props, isHovered }} >
-            <div
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-                className={classNames('group flex flex-col gap-4', className)}
-            >
-                {renderer({ ...props, isHovered: isHovered })}
+        <ConversationContext.Provider value={{ ...props, isOver }} >
+            <div onMouseEnter={() => setIsOver(true)} onMouseLeave={() => setIsOver(false)} className={className}>
+                {children}
             </div>
         </ConversationContext.Provider>
     );

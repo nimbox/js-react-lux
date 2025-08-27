@@ -14,10 +14,13 @@ export function ConversationContainer({ children, className }: ConversationConta
     const { selected } = useConversation();
 
     return (
-        <div className={classNames('p-3 flex flex-row items-center gap-2 rounded-lg',
-            'hover:bg-primary-200', {
-            'bg-primary-100': selected
-        }, className)}>
+        <div className={
+            classNames(
+                'p-3 flex flex-row items-center gap-2 rounded-lg group',
+                'hover:bg-secondary-100', {
+                'bg-primary-100': selected
+            }, className)
+        }>
             {children}
         </div>
     );

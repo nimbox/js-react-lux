@@ -11,7 +11,7 @@ export interface ConversationMetaProps {
 
 export function ConversationMeta({ className }: ConversationMetaProps) {
 
-    const { conversation, menu, isHovered } = useConversation();
+    const { conversation, menu, isOver } = useConversation();
 
     return (
         <div className={classNames('flex flex-row items-center gap-2', className)}>
@@ -34,7 +34,7 @@ export function ConversationMeta({ className }: ConversationMetaProps) {
                 </span>
             }
 
-            {isHovered && menu}
+            {isOver && menu}
 
         </div >
     );

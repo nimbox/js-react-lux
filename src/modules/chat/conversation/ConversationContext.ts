@@ -1,16 +1,12 @@
 import { createContext, useContext } from 'react';
-import type { ConversationData } from '../types/ConversationData';
+import type { ConversationProps } from './Conversation';
 
 
 // ConversationContext
 
-export interface ConversationContextProps {
+export interface ConversationContextProps extends Omit<ConversationProps, 'className' | 'children'> {
 
-    menu?: React.ReactElement;
-    conversation: ConversationData;
-
-    isHovered: boolean;
-    selected?: boolean;
+    isOver: boolean;
 
 }
 

@@ -1,1 +1,1 @@
-export { DefaultConversationRenderer } from './DefaultConversation'; 
+export { DefaultConversation } from './DefaultConversation';
