@@ -78,7 +78,7 @@ export const Popper = forwardRef<HTMLPopperElement, PopperProps>((props, popperR
         const el = refs.floating.current as HTMLPopperElement;
         if (el) el.forceUpdate = update ?? null;
         return el;
-    }, [update, refs.floating]);
+    }, [update, refs.floating.current]);
 
     // Render
 
