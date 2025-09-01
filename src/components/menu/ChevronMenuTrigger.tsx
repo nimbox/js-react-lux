@@ -8,7 +8,7 @@ export const AngleDownMenuTrigger = forwardRef<HTMLButtonElement, React.ButtonHT
     const { className, ...rest } = props;
 
     return (
-        <button ref={ref} {...rest} className={classNames('bg-white/90 rounded shadow', className)}>
+        <button ref={ref} {...rest} className={classNames('bg-white/90 rounded shadow cursor-pointer', className)}>
             <AngleDownIcon className="w-5 h-5 text-gray-500" />
         </button>
     );
