@@ -1,10 +1,10 @@
 import { createContext, useContext } from 'react';
-import type { ConversationProps } from './Conversation';
+import type { ConversationProviderProps } from './ConversationProvider';
 
 
 // ConversationContext
 
-export interface ConversationContextProps extends Omit<ConversationProps, 'className' | 'children'> {
+export interface ConversationContextProps extends Omit<ConversationProviderProps, 'className' | 'children'> {
 
     isOver: boolean;
 

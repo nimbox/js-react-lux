@@ -34,6 +34,7 @@ export function renderTemplate(template: TemplateData, context: TemplateContextD
 
         id: 'preview-message',
         direction: 'outbound',
+        author: {} as any,
 
         type: 'template',
         ...rendered,

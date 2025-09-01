@@ -4,7 +4,7 @@ import { Button } from '../../../components/Button';
 import { Input } from '../../../components/inputs/Input';
 import { CrossIcon, SendIcon } from '../../../icons/components';
 import { useChat } from '../ChatContext';
-import { Reply } from '../reply/Reply';
+import { ReplyProvider } from '../reply/ReplyProvider';
 import { MessageComposerContext } from './MessageComposerContext';
 
 
@@ -154,7 +154,7 @@ function ReplyToMessage() {
     return (
         <div className="px-4 py-2 flex items-center justify-between gap-2 border-b border-gray-200">
             <div className="flex-1">
-                <Reply message={replyTo} />
+                <ReplyProvider message={replyTo} />
             </div>
             <div className="shrink-0">
                 <Button type="button" semantic="muted" rounded={true} onClick={clearReplyTo}>

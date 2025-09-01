@@ -7,7 +7,7 @@ import { conversations } from '../data/conversations';
 import { useConversation } from './ConversationContext';
 import { ConversationList } from './ConversationList';
 import { buildConversationRows } from './buildConversationRows';
-import { DefaultConversation } from './renderers/DefaultConversation';
+import { DefaultConversation } from './instances/Conversation';
 
 
 // Definition

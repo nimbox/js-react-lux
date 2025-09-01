@@ -17,18 +17,18 @@ export * from './ChatContext';
 export * from './ChatProvider';
 
 export * from './conversation/buildConversationRows';
-export * from './conversation/Conversation';
 export * from './conversation/ConversationContext';
 export * from './conversation/ConversationList';
+export * from './conversation/ConversationProvider';
 export * from './types/ConversationBuildRowsOptions';
 export * from './types/ConversationRow';
 
-export * from './message/Message';
+export * from './message/buildMessageRows';
 export * from './message/MessageContext';
 export * from './message/MessageGroup';
-export * from './message/MessageGroupContext';
 export * from './message/MessageList';
 export * from './message/MessageListContext';
+export * from './message/MessageProvider';
 export * from './message/MessageSeparator';
 
 export * from './composer/DockedMessageComposer';
@@ -45,7 +45,7 @@ export * from './utils/messageProcessing';
 
 // Export renderers
 
-export * from './conversation/renderers';
-export * from './message/renderers';
-export * from './reply/renderers';
+export * from './conversation/instances';
+export * from './message/instances';
+export * from './reply/instances';
 

@@ -7,7 +7,7 @@ export interface MessageData {
 
     id: string;
 
-    author?: MessageAuthor;
+    author: MessageAuthor;
     direction: 'inbound' | 'outbound';
 
     type: string;
@@ -23,6 +23,6 @@ export interface MessageData {
     replyTo?: Omit<MessageData, 'replyTo'>;
 
     status?: 'pending' | 'sent' | 'delivered' | 'read' | 'failed' | string;
-    timestamp?: string;
+    timestamp: number | string | Date;
 
 }

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Input } from '../../../../components/inputs/Input';
 import { useChat } from '../../ChatContext';
-import { Message } from '../../message/Message';
+import { MessageProvider } from '../../message/MessageProvider';
 import { MessageGroup } from '../../message/MessageGroup';
 import { type MessageData } from '../../types/MessageData';
 import { TemplateContextBlock, type TemplateContextBlockType, type TemplateContextData } from '../../types/TemplateContextData';
@@ -305,9 +305,7 @@ function TemplatePreview({ template, context: context, render, chatBackground, c
                         direction: 'outbound',
                         author: { id: 'preview', type: 'agent', remoteId: '', name: 'You', initials: 'Y', color: 'green' }
                     }}>
-                        <MessageGroup.Messages>
-                            <Message message={preview} />
-                        </MessageGroup.Messages>
+                        <MessageProvider message={preview} />
                     </MessageGroup>
                 </div>
             )}

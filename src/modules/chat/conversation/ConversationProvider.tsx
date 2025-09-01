@@ -9,12 +9,12 @@ import { ConversationName } from './slots/ConversationName';
 import { ConversationProperties } from './slots/ConversationProperties';
 
 
-// Conversation
+// ConversationProvider
 
-export interface ConversationProps {
+export interface ConversationProviderProps {
 
-    menu?: React.ReactElement;
     conversation: ConversationData;
+    menu?: React.ReactElement;
 
     selected?: boolean;
 
@@ -23,13 +23,17 @@ export interface ConversationProps {
 
 }
 
-export function Conversation({ className, children, ...props }: Omit<ConversationProps, 'isHovered'>) {
+export function ConversationProvider({ className, children, ...props }: Omit<ConversationProviderProps, 'isHovered'>) {
 
     const [isOver, setIsOver] = useState(false);
 
     return (
         <ConversationContext.Provider value={{ ...props, isOver }} >
-            <div onMouseEnter={() => setIsOver(true)} onMouseLeave={() => setIsOver(false)} className={className}>
+            <div
+                onMouseEnter={() => setIsOver(true)}
+                onMouseLeave={() => setIsOver(false)}
+                className={className}
+            >
                 {children}
             </div>
         </ConversationContext.Provider>
@@ -39,12 +43,12 @@ export function Conversation({ className, children, ...props }: Omit<Conversatio
 
 // Slots
 
-Conversation.Avatar = ConversationAvatar;
+ConversationProvider.Avatar = ConversationAvatar;
 
-Conversation.Container = ConversationContainer;
+ConversationProvider.Container = ConversationContainer;
 
-Conversation.Name = ConversationName;
-Conversation.Properties = ConversationProperties;
+ConversationProvider.Name = ConversationName;
+ConversationProvider.Properties = ConversationProperties;
 
-Conversation.Message = ConversationMessage;
-Conversation.Meta = ConversationMeta;
+ConversationProvider.Message = ConversationMessage;
+ConversationProvider.Meta = ConversationMeta;

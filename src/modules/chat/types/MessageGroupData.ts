@@ -5,7 +5,7 @@ export interface MessageGroupData {
 
     id: string;
 
-    author: MessageAuthor;
     direction: 'inbound' | 'outbound';
+    author: MessageAuthor;
 
 }

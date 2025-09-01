@@ -18,14 +18,17 @@ export function buildConversationRows(
 
 }
 
+/**
+ * Sorts conversations by timestamp in descending order.
+ */
 function sortConversations(
     conversations: ConversationData[]
 ) {
 
     const destructured = conversations
-        .map(c => [c.timestamp ? new Date(c.timestamp).getTime() : 0 as const, c] as [number, ConversationData])
+        .map(c => [c.timestamp ? new Date(c.timestamp).getTime() : 0, c] as const)
         .sort(([a], [b]) => b - a)
-        .map(([_, c]) => c);    
+        .map(([_, c]) => c);
 
     return destructured;
 

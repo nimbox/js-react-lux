@@ -1,5 +1,4 @@
 import React, { createContext, useContext } from 'react';
-import type { MessageContextProps } from './message/MessageContext';
 import type { MessageData } from './types/MessageData';
 import type { ReactionDetailsData } from './types/ReactionDetailsData';
 
@@ -12,15 +11,11 @@ export interface ChatContextProps {
 
     renderText: (text: string) => React.ReactNode;
 
-    renderMessage: Record<string, (message: MessageContextProps) => React.ReactElement<MessageContextProps>>;
-    renderDefaultMessage: (message: MessageContextProps) => React.ReactElement<MessageContextProps>;
+    // renderMessage: Record<string, (message: MessageContextProps) => React.ReactElement<MessageContextProps>>;
+    // renderDefaultMessage: (message: MessageContextProps) => React.ReactElement<MessageContextProps>;
 
-    renderReply: Record<string, () => React.ReactElement>;
-    renderDefaultReply: () => React.ReactElement;
-
-    getReactions: (messageId: string) => Promise<ReactionDetailsData[]>;
-    addReaction: (messageId: string, emoji: string) => Promise<void>;
-    removeReaction: (messageId: string, emoji: string) => Promise<void>;
+    // renderReply: Record<string, () => React.ReactElement>;
+    // renderDefaultReply: () => React.ReactElement;
 
     // Reply functionality
 
@@ -36,8 +31,10 @@ export interface ChatContextProps {
 
     // Formatters
 
-    timeFormatter: (timestamp: string | Date | undefined | null) => string;
-    calendarFormatter: (timestamp: string | Date | undefined | null) => string;
+    formatDuration: (duration: number) => string;
+
+    timeFormatter: (timestamp: number | string | Date | undefined | null) => string;
+    calendarFormatter: (timestamp: number | string | Date | undefined | null) => string;
 
     statusFormatter: (status: string) => React.ReactNode;
 
@@ -51,9 +48,9 @@ export const defaultProps: ChatContextProps = {
 
     // Message rendering
 
-    renderMessage: {},
+    // renderMessage: {},
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    renderDefaultMessage: () => (() => null) as any,
+    // renderDefaultMessage: () => (() => null) as any,
 
     // Reply rendering
 
@@ -88,6 +85,8 @@ export const defaultProps: ChatContextProps = {
     },
 
     // Formatters
+
+    formatDuration: defaultFormatDuration,
 
     timeFormatter: defaultTimeFormatter,
     calendarFormatter: defaultCalendarFormatter,
@@ -145,7 +144,21 @@ function defaultRemoveReaction(): Promise<void> {
     );
 }
 
-function defaultTimeFormatter(timestamp: string | Date | undefined | null) {
+function defaultFormatDuration(duration: number) {
+
+    const hours = Math.floor(duration / 3600);
+    const minutes = Math.floor((duration % 3600) / 60);
+    const seconds = duration % 60;
+
+    if (hours > 0) {
+        return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    } else {
+        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+}
+
+function defaultTimeFormatter(timestamp: number | string | Date | undefined | null) {
 
     if (!timestamp) { return ''; }
 
@@ -154,7 +167,7 @@ function defaultTimeFormatter(timestamp: string | Date | undefined | null) {
 
 }
 
-function defaultCalendarFormatter(timestamp: string | Date | undefined | null) {
+function defaultCalendarFormatter(timestamp: number | string | Date | undefined | null) {
 
     if (!timestamp) { return ''; }
 

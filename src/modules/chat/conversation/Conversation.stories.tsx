@@ -3,14 +3,14 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AngleDownMenuTrigger } from '../../../components/menu/ChevronMenuTrigger';
 import { Menu } from '../../../components/menu/Menu';
 import { EditIcon } from '../../../icons/components';
-import { Conversation } from './Conversation';
+import { ConversationProvider } from './ConversationProvider';
 import { useConversation } from './ConversationContext';
 
 
 // Definition
 
-const meta: Meta<typeof Conversation> = {
-    component: Conversation,
+const meta: Meta<typeof ConversationProvider> = {
+    component: ConversationProvider,
     parameters: {
         layout: 'padded'
     },
