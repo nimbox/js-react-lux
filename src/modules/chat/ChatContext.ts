@@ -1,6 +1,5 @@
 import React, { createContext, useContext } from 'react';
 import type { MessageData } from './types/MessageData';
-import type { ReactionDetailsData } from './types/ReactionDetailsData';
 
 
 // Chat Context
@@ -11,11 +10,6 @@ export interface ChatContextProps {
 
     renderText: (text: string) => React.ReactNode;
 
-    // renderMessage: Record<string, (message: MessageContextProps) => React.ReactElement<MessageContextProps>>;
-    // renderDefaultMessage: (message: MessageContextProps) => React.ReactElement<MessageContextProps>;
-
-    // renderReply: Record<string, () => React.ReactElement>;
-    // renderDefaultReply: () => React.ReactElement;
 
     // Reply functionality
 
@@ -33,10 +27,10 @@ export interface ChatContextProps {
 
     formatDuration: (duration: number) => string;
 
-    timeFormatter: (timestamp: number | string | Date | undefined | null) => string;
-    calendarFormatter: (timestamp: number | string | Date | undefined | null) => string;
+    formatTime: (timestamp: number | string | Date | undefined | null) => string;
+    formatCalendar: (timestamp: number | string | Date | undefined | null) => string;
 
-    statusFormatter: (status: string) => React.ReactNode;
+    formatStatus: (status: string) => React.ReactNode;
 
 }
 
@@ -46,23 +40,7 @@ export const defaultProps: ChatContextProps = {
 
     renderText: (text) => text,
 
-    // Message rendering
 
-    // renderMessage: {},
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    // renderDefaultMessage: () => (() => null) as any,
-
-    // Reply rendering
-
-    renderReply: {},
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    renderDefaultReply: () => (() => null) as any,
-
-    // Reaction functionality
-
-    getReactions: defaultGetReactions,
-    addReaction: defaultAddReaction,
-    removeReaction: defaultRemoveReaction,
 
     // Reply functionality
 
@@ -86,12 +64,10 @@ export const defaultProps: ChatContextProps = {
 
     // Formatters
 
+    formatTime: defaultFormatTime,
     formatDuration: defaultFormatDuration,
-
-    timeFormatter: defaultTimeFormatter,
-    calendarFormatter: defaultCalendarFormatter,
-
-    statusFormatter: defaultStatusFormatter
+    formatCalendar: defaultFormatCalendar,
+    formatStatus: defaultFormatStatus
 
 };
 
@@ -110,38 +86,13 @@ export function useChat() {
 
 // Defaults
 
-// function defaultRenderMessage(message: MessageContextProps) {
-//     throw new Error('No renderMessage found – wrap your app in <ChatProvider>');
-//     // return React.createElement(DefaultMessageRenderer, message);
-// }
+function defaultFormatTime(timestamp: number | string | Date | undefined | null) {
 
-// function defaultRenderReply() {
-//     throw new Error('No renderReply found – wrap your app in <ChatProvider>');
-//     // return React.createElement(DefaultReplyRenderer);
-// }
+    if (!timestamp) { return ''; }
 
-function defaultGetReactions(): Promise<ReactionDetailsData[]> {
-    return Promise.reject(
-        new Error(
-            'No fetchReactionDetails found – wrap your app in <ChatProvider>'
-        )
-    );
-}
+    const date = new Date(timestamp);
+    return formatTime(date);
 
-function defaultAddReaction(): Promise<void> {
-    return Promise.reject(
-        new Error(
-            'No addReaction found – wrap your app in <ChatProvider>'
-        )
-    );
-}
-
-function defaultRemoveReaction(): Promise<void> {
-    return Promise.reject(
-        new Error(
-            'No removeReaction found – wrap your app in <ChatProvider>'
-        )
-    );
 }
 
 function defaultFormatDuration(duration: number) {
@@ -158,16 +109,7 @@ function defaultFormatDuration(duration: number) {
 
 }
 
-function defaultTimeFormatter(timestamp: number | string | Date | undefined | null) {
-
-    if (!timestamp) { return ''; }
-
-    const date = new Date(timestamp);
-    return formatTime(date);
-
-}
-
-function defaultCalendarFormatter(timestamp: number | string | Date | undefined | null) {
+function defaultFormatCalendar(timestamp: number | string | Date | undefined | null) {
 
     if (!timestamp) { return ''; }
 
@@ -188,6 +130,7 @@ function isToday(date: Date) {
         date.getFullYear() === today.getFullYear();
 
 }
+
 function formatTime(date: Date) {
     return date.toLocaleTimeString('en-US', {
         hour: 'numeric',
@@ -203,7 +146,6 @@ function formatCalendar(date: Date) {
     });
 }
 
-
-function defaultStatusFormatter(status: string) {
+function defaultFormatStatus(status: string) {
     return status;
 }

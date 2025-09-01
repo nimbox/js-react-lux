@@ -4,7 +4,8 @@ import { Button } from '../../../components/Button';
 import { Input } from '../../../components/inputs/Input';
 import { CrossIcon, SendIcon } from '../../../icons/components';
 import { useChat } from '../ChatContext';
-import { ReplyProvider } from '../reply/ReplyProvider';
+import { type ReplyProviderProps } from '../reply/ReplyProvider';
+import type { MessageData } from '../types/MessageData';
 import { MessageComposerContext } from './MessageComposerContext';
 
 
@@ -18,6 +19,8 @@ export interface MessageComposerProps {
     start?: ReactElement;
     end?: ReactElement;
 
+    renderReply?: (message: Omit<MessageData, 'replyTo'>) => ReactElement<ReplyProviderProps>;
+
     onSubmit: (data: MessageComposerSubmitData) => Promise<void>;
 
     className?: string;
@@ -30,7 +33,7 @@ export function MessageComposer(props: MessageComposerProps) {
     // Properties
 
     const { replyTo, clearReplyTo } = useChat();
-    const { className, onSubmit, start, end, children } = props;
+    const { className, onSubmit, start, end, renderReply, children } = props;
     const expanded = Children.toArray(children).some(Boolean);
 
     // State
@@ -105,7 +108,7 @@ export function MessageComposer(props: MessageComposerProps) {
 
                         <div className="shrink-0 flex flex-col">
 
-                            <ReplyToMessage />
+                            <ReplyToMessage renderReply={renderReply} />
 
                             <div className="p-4 flex flex-row justify-end items-center gap-2">
                                 {!expanded && (
@@ -139,7 +142,7 @@ export function MessageComposer(props: MessageComposerProps) {
 
 }
 
-function ReplyToMessage() {
+function ReplyToMessage({ renderReply }: { renderReply?: (message: Omit<MessageData, 'replyTo'>) => ReactElement<ReplyProviderProps> }) {
 
     // Properties
 
@@ -153,9 +156,12 @@ function ReplyToMessage() {
 
     return (
         <div className="px-4 py-2 flex items-center justify-between gap-2 border-b border-gray-200">
-            <div className="flex-1">
-                <ReplyProvider message={replyTo} />
-            </div>
+            {renderReply && replyTo && (
+                <div className="flex-1">
+                    {renderReply(replyTo)}
+
+                </div>
+            )}
             <div className="shrink-0">
                 <Button type="button" semantic="muted" rounded={true} onClick={clearReplyTo}>
                     <CrossIcon />

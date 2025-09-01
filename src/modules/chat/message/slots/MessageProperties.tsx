@@ -4,7 +4,7 @@ import { useMessage } from '../MessageContext';
 
 export function MessageProperties() {
 
-    const { timeFormatter, statusFormatter } = useChat();
+    const { formatTime, formatStatus } = useChat();
     const { message: { timestamp, status } } = useMessage();
 
     if (!timestamp && !status) {
@@ -13,8 +13,8 @@ export function MessageProperties() {
 
     return (
         <div className="flex flex-row gap-1 justify-end items-center text-xs text-gray-500">
-            {timestamp && <span>{timeFormatter(timestamp)}</span>}
-            {status && <span>{statusFormatter(status)}</span>}
+            {timestamp && <span>{formatTime(timestamp)}</span>}
+            {status && <span>{formatStatus(status)}</span>}
         </div>
     );
 

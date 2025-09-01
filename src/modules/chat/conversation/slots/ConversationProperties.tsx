@@ -11,12 +11,12 @@ export interface ConversationPropertiesProps {
 
 export function ConversationProperties({ className }: ConversationPropertiesProps) {
 
-    const { calendarFormatter } = useChat();
+    const { formatCalendar } = useChat();
     const { conversation } = useConversation();
 
     return (
         <div className={classNames('shrink-0 text-sm text-gray-500', className)}>
-            {calendarFormatter(conversation.timestamp)}
+            {formatCalendar(conversation.timestamp)}
         </div>
     );
 
