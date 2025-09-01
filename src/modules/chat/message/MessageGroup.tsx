@@ -1,77 +1,42 @@
 import classnames from 'classnames';
-import React, { type ReactElement } from 'react';
+import { type ReactNode } from 'react';
 import { Avatar } from '../../../components/displays/Avatar';
-import { type MessageContextProps } from './MessageContext';
-import { MessageGroupContext, type MessageGroupContextProps } from './MessageGroupContext';
+import type { MessageGroupData } from '../types/MessageGroupData';
 
 
 // MessageGroup
 
-export interface MessageGroupProps extends MessageGroupContextProps {
-    children: ReactElement<MessageGroupMessagesProps>;
+export interface MessageGroupProps {
+
+    group: MessageGroupData;
+
+    className?: string;
+    children?: ReactNode;
+
 }
 
-export function MessageGroup({ group, children }: MessageGroupProps) {
+export function MessageGroup({ group, className, children }: MessageGroupProps) {
 
     return (
-        <MessageGroupContext.Provider value={{ group }}>
-            <div className={classnames('px-10 flex flex-row', {
-                // 'justify-end': group.direction === 'outbound',
-                // 'justify-start': group.direction === 'inbound'
+        <div className={classnames('px-10 flex flex-row', className)}>
+
+            <div className={classnames('flex-none p-1 text-[20px] leading-[24px]', {
+                'order-1': group.direction === 'inbound',
+                'order-2': group.direction === 'outbound'
             })}>
-
-                <div className={classnames('p-1 flex-none text-[20px] leading-[24px]', {
-                    'order-1': group.direction === 'inbound',
-                    'order-2': group.direction === 'outbound'
-                })}>
-                    <Avatar src={group.author?.avatarUrl} color={group.author?.color || 'red'}>
-                        {group.author?.initials}
-                    </Avatar>
-                </div>
-
-                <div className={classnames('flex-1 flex flex-col gap-1 min-w-0', {
-                    'order-2 items-start': group.direction === 'inbound',
-                    'order-1 items-end': group.direction === 'outbound'
-                })}>
-                    {children}
-                </div>
-
+                <Avatar src={group.author?.avatarUrl} color={group.author?.color || 'red'}>
+                    {group.author?.initials}
+                </Avatar>
             </div>
-        </MessageGroupContext.Provider>
+
+            <div className={classnames('grow min-w-0 flex flex-col gap-1', {
+                'order-2 items-start': group.direction === 'inbound',
+                'order-1 items-end': group.direction === 'outbound'
+            })}>
+                {children}
+            </div>
+
+        </div>
     );
 
 }
-
-// MessageGroup.Messages
-
-export interface MessageGroupMessagesProps {
-    children: ReactElement<MessageContextProps> | ReactElement<MessageContextProps>[];
-    className?: string;
-}
-
-
-function MessageGroupMessages({ children }: MessageGroupMessagesProps) {
-
-    // If children is an array, process each child.
-
-    if (Array.isArray(children)) {
-        return children.map((child, index) => {
-            return React.cloneElement(child, {
-                isFirst: index === 0,
-                isLast: index === children.length - 1
-            });
-        });
-    }
-
-    // If it's a single child, it's both first and last.
-
-    return React.cloneElement(children, {
-        isFirst: true,
-        isLast: true
-    });
-
-}
-
-// Slots
-
-MessageGroup.Messages = MessageGroupMessages;

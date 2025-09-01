@@ -1,16 +1,13 @@
 import classNames from 'classnames';
-import { type ReactElement, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
-import { type MessageGroupProps } from './MessageGroup';
+import { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import { ChatMessageListContext } from './MessageListContext';
 
 
 // MessageList
 
-type MessageListChildren = ReactElement<MessageGroupProps> | ReactElement<MessageGroupProps>;
-
 export interface MessageListProps {
     className?: string;
-    children?: MessageListChildren | MessageListChildren[];
+    children?: any;
 }
 
 export function MessageList({ className, children }: MessageListProps) {
@@ -60,7 +57,7 @@ export function MessageList({ className, children }: MessageListProps) {
             <div
                 ref={listRef}
                 className={classNames(
-                    'w-full h-full py-2 space-y-2 flex flex-col overflow-y-auto',
+                    'w-full h-full py-2 flex flex-col gap-y-2 overflow-y-auto',
                     className
                 )}
             >

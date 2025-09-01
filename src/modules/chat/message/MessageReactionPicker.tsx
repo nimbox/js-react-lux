@@ -1,31 +1,26 @@
 import classNames from 'classnames';
 import { useState } from 'react';
-import { EmojiPicker } from '../../../components/pickers/EmojiPicker';
 import { Popper } from '../../../components/floating/Popper';
+import { EmojiPicker } from '../../../components/pickers/EmojiPicker';
 import { useOnOutsideClick } from '../../../hooks/useOnOutsideClick';
 import { SmileyIcon } from '../../../icons/components';
-import { useChat } from '../ChatContext';
 import { useMessage } from './MessageContext';
-import { useMessageGroup } from './MessageGroupContext';
 
 
-export function MessageReact() {
+export function MessageReactionPicker() {
 
-    const { addReaction } = useChat();
-    const { group: { direction } } = useMessageGroup();
-    const { message: { id } } = useMessage();
+    const { onAddReaction } = useMessage();
 
     const [show, setShow] = useState(false);
+    const [referenceRef, setReferenceRef] = useState<HTMLButtonElement | null>(null);
+    const [floatingRef, setFloatingRef] = useState<HTMLDivElement | null>(null);
 
-    const [buttonRef, setButtonRef] = useState<HTMLButtonElement | null>(null);
-    const [popperRef, setPopperRef] = useState<HTMLDivElement | null>(null);
-
-    useOnOutsideClick(show, () => setShow(false), buttonRef, popperRef);
+    useOnOutsideClick(show, () => setShow(false), referenceRef, floatingRef);
 
     // Handlers
 
     const handleSelect = (emoji: string) => {
-        addReaction(id, emoji);
+        onAddReaction?.(emoji);
         setShow(false);
     };
 
@@ -33,13 +28,11 @@ export function MessageReact() {
 
     return (
         <>
+
             <button
-                ref={setButtonRef}
+                ref={setReferenceRef}
                 onClick={() => setShow(!show)}
-                className={classNames('p-2 flex-none bg-white/90 shadow rounded-full', {
-                    'order-2': direction === 'inbound',
-                    'order-1': direction === 'outbound'
-                }, {
+                className={classNames('p-2 bg-white/90 shadow rounded-full cursor-pointer', {
                     'invisible group-hover:visible': !show,
                     'visible': show
                 })}
@@ -49,8 +42,8 @@ export function MessageReact() {
 
             {show && (
                 <Popper
-                    ref={setPopperRef}
-                    reference={buttonRef!}
+                    ref={setFloatingRef}
+                    reference={referenceRef!}
                     withPlacement="top"
                 >
                     <EmojiPicker onSelect={handleSelect} />

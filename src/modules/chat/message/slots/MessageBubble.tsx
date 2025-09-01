@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import { useMessage } from '../MessageContext';
-import { useMessageGroup } from '../MessageGroupContext';
 
 
 export interface MessageBubbleProps {
@@ -9,7 +8,7 @@ export interface MessageBubbleProps {
 
 export function MessageBubble({ children }: MessageBubbleProps) {
 
-    const { group: { direction } } = useMessageGroup();
+    const { message: { direction } } = useMessage();
     const { isFirst } = useMessage();
 
     return (
@@ -27,7 +26,7 @@ export function MessageBubble({ children }: MessageBubbleProps) {
 
 export function MessageArrow({ position }: { position: 'top' | 'bottom' }) {
 
-    const { group: { direction } } = useMessageGroup();
+    const { message: { direction } } = useMessage();
 
     return (
         <div className={classNames('absolute bottom-[2px]', {

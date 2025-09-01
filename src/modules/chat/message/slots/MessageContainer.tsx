@@ -1,9 +1,9 @@
 import classNames from 'classnames';
 import type { ReactNode } from 'react';
-import { useMessageGroup } from '../MessageGroupContext';
-import { MessageReactions } from './MessageReactions';
 import React, { useState } from 'react';
 import { useMessage } from '../MessageContext';
+import { MessageReactionPicker } from '../MessageReactionPicker';
+import { MessageReactions } from './MessageReactions';
 
 
 export interface MessageContainerProps {
@@ -12,8 +12,8 @@ export interface MessageContainerProps {
 
 export function MessageContainer({ children }: MessageContainerProps) {
 
-    const { group: { direction } } = useMessageGroup();
-    const { menu, isHovered } = useMessage();
+    const { message: { direction } } = useMessage();
+    const { menu, isOver } = useMessage();
 
     const [menuIsOpen, setMenuIsOpen] = useState(false);
     const handleMenuOpenChange = (open: boolean) => {
@@ -21,25 +21,39 @@ export function MessageContainer({ children }: MessageContainerProps) {
     };
 
     return (
-        <div className={classNames('relative flex flex-col z-0 group', {
-            'order-1 items-start': direction === 'inbound',
-            'order-2 items-end': direction === 'outbound'
+        <div className={classNames('relative flex flex-row items-center gap-2', {
+            'justify-start': direction === 'inbound',
+            'justify-end': direction === 'outbound'
         })}>
 
-            {children}
+            <div className={classNames('relative grow flex flex-col', {
+                'order-1 items-start': direction === 'inbound',
+                'order-2 items-end': direction === 'outbound'
+            })}>
 
-            <MessageReactions />
+                {children}
 
-            {(isHovered || menuIsOpen) &&
-                <div className="absolute top-3 right-2">
-                    {menu
-                        ? React.cloneElement(menu, { onOpenChange: handleMenuOpenChange })
-                        : null
-                    }
-                </div>
-            }
+                {(isOver || menuIsOpen) &&
+                    <div className="absolute top-3 right-2">
+                        {menu
+                            ? React.cloneElement(menu, { onOpenChange: handleMenuOpenChange })
+                            : null
+                        }
+                    </div>
+                }
 
-        </div >
+                <MessageReactions />
+
+            </div>
+
+            <div className={classNames('flex-none', {
+                'order-2': direction === 'inbound',
+                'order-1': direction === 'outbound'
+            })}>
+                <MessageReactionPicker />
+            </div>
+
+        </div>
 
     );
 

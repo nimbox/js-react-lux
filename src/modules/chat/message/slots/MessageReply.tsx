@@ -1,19 +1,18 @@
-import { Reply } from '../../reply/Reply';
 import { useMessage } from '../MessageContext';
 
 
 export function MessageReply() {
 
-    const { message: { replyTo: message } } = useMessage();
+    const { message: { replyTo }, renderReply } = useMessage();
 
-    if (!message) {
+    if (!replyTo || !renderReply) {
         return null;
     }
 
     // Render
 
     return (
-        <Reply message={message} />
+        renderReply(replyTo)
     );
 
 }

@@ -1,11 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ChatProvider } from '../../ChatProvider';
 import { authors } from '../../data/authors';
 import { reactionDetails } from '../../data/reactionDetails';
 import { type MessageData } from '../../types/MessageData';
-import { type MessageGroupData } from '../../types/MessageGroupData';
-import { MessageContext } from '../MessageContext';
-import { MessageGroupContext } from '../MessageGroupContext';
+import { MessageProvider } from '../MessageProvider';
 import { MessageReactionDetails } from './MessageReactionDetails';
 
 
@@ -13,94 +10,95 @@ import { MessageReactionDetails } from './MessageReactionDetails';
 
 const meta: Meta<typeof MessageReactionDetails> = {
     component: MessageReactionDetails,
+    parameters: {
+        layout: 'centered'
+    },
     tags: ['autodocs']
 };
 
 export default meta;
 type Story = StoryObj<typeof MessageReactionDetails>;
 
-const group: MessageGroupData = {
-    id: '1',
-    direction: 'inbound',
-    author: authors['1']
-};
-
 const message: MessageData = {
     id: '1',
     author: authors['1'],
     direction: 'inbound',
     type: 'text',
-    body: 'Hello, world!'
+    body: 'Hello, world!',
+    timestamp: 0
 };
 
 // Stories
 
 function Content() {
     return (
-        <MessageGroupContext.Provider value={{ group }}>
-            <MessageContext.Provider value={{ message }}>
-                <div className="inline-block border border-control-border rounded">
-                    <MessageReactionDetails />
-                </div>
-            </MessageContext.Provider>
-        </MessageGroupContext.Provider>
+        <div className="inline-block border border-control-border rounded">
+            <MessageReactionDetails />
+        </div>
     );
 }
 
 export const Default: Story = {
     render: () => (
-        <ChatProvider
-            getReactions={async () => {
-                return reactionDetails;
-            }}
-        >
-            <Content />
-        </ChatProvider>
-    )
+        <Content />
+    ),
+    decorators: [
+        (Story) => (
+            <MessageProvider message={message} getReactions={async () => reactionDetails}>
+                <Story />
+            </MessageProvider>
+        )
+    ]
 };
 
 export const Delayed: Story = {
     render: () => (
-        <ChatProvider
-            getReactions={async () => {
-                return new Promise((resolve) => setTimeout(() => resolve(reactionDetails), 2000));
-            }}
-        >
-            <Content />
-        </ChatProvider>
-    )
+        <Content />
+    ),
+    decorators: [
+        (Story) => (
+            <MessageProvider message={message} getReactions={async () => new Promise((resolve) => setTimeout(() => resolve(reactionDetails), 2000))}>
+                <Story />
+            </MessageProvider>
+        )
+    ]
 };
 
 export const Loading: Story = {
     render: () => (
-        <ChatProvider
-            getReactions={async () => {
-                return new Promise(() => { });
-            }}
-        >
-            <Content />
-        </ChatProvider>
-    )
+        <Content />
+    ),
+    decorators: [
+        (Story) => (
+            <MessageProvider message={message} getReactions={async () => new Promise(() => { })}>
+                <Story />
+            </MessageProvider>
+        )
+    ]
 };
 
 export const Empty: Story = {
     render: () => (
-        <ChatProvider
-            getReactions={async () => []}
-        >
-            <Content />
-        </ChatProvider >
-    )
+        <Content />
+    ),
+    decorators: [
+        (Story) => (
+            <MessageProvider message={message} getReactions={async () => []}>
+                <Story />
+            </MessageProvider>
+        )
+    ]
 };
 
 export const Error: Story = {
     render: () => (
-        <ChatProvider
-            getReactions={async () => {
-                return Promise.reject('Failed to fetch reaction details');
-            }}
-        >
-            <Content />
-        </ChatProvider>
-    )
+        <Content />
+    ),
+    decorators: [
+        (Story) => (
+            <MessageProvider message={message} getReactions={async () => Promise.reject('Failed to fetch reaction details')}>
+                <Story />
+            </MessageProvider>
+        )
+    ]
 };

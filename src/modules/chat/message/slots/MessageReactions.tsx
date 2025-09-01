@@ -1,17 +1,13 @@
 import { arrow, autoUpdate, flip, FloatingArrow, FloatingPortal, offset, shift, useClick, useDismiss, useFloating, useInteractions, type Placement } from '@floating-ui/react';
 import classNames from 'classnames';
 import { useMemo, useRef, useState } from 'react';
-import { useChat } from '../../ChatContext';
 import { useMessage } from '../MessageContext';
-import { useMessageGroup } from '../MessageGroupContext';
 import { MessageReactionDetails } from './MessageReactionDetails';
 
 
 export function MessageReactions() {
 
-    const { removeReaction } = useChat();
-    const { group: { direction } } = useMessageGroup();
-    const { message: { reactions } } = useMessage();
+    const { message: { direction, reactions } } = useMessage();
 
     // Sort reactions by count
 
@@ -49,10 +45,10 @@ export function MessageReactions() {
 
     // Handlers
 
-    const handleRemoveReaction = (messageId: string, emoji: string) => {
-        removeReaction(messageId, emoji);
-        setOpen(false);
-    };
+    // const handleRemoveReaction = (emoji: string) => {
+    //     onRemoveReaction?.(emoji);
+    //     setOpen(false);
+    // };
 
     // Render
 
@@ -67,7 +63,7 @@ export function MessageReactions() {
                 ref={refs.setReference}
                 {...getReferenceProps()}
                 className={classNames(
-                    'flex -mt-2 z-10',
+                    'flex -mt-2 z-10 cursor-pointer',
                     direction === 'outbound' ? 'justify-self-end mr-3' : 'justify-self-start ml-3'
                 )}
             >
@@ -82,16 +78,13 @@ export function MessageReactions() {
             {open && (
                 <FloatingPortal id="modal">
                     <div ref={refs.setFloating} {...getFloatingProps({ className: 'text-base rounded border border-control-border bg-white' })} style={floatingStyles} >
-
-                        <MessageReactionDetails onRemoveReaction={handleRemoveReaction} />
-
+                        <MessageReactionDetails />
                         <FloatingArrow
                             ref={arrowRef}
                             context={context}
                             strokeWidth={1}
                             className="fill-control-bg [&>path:first-of-type]:stroke-control-border"
                         />
-
                     </div>
                 </FloatingPortal>
             )}

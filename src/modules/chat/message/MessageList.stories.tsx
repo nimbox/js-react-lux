@@ -1,30 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import dayjs from 'dayjs';
 import calendar from 'dayjs/plugin/calendar';
-import React from 'react';
 import { action } from 'storybook/actions';
 import { AngleDownMenuTrigger } from '../../../components/menu/ChevronMenuTrigger';
 import { Menu } from '../../../components/menu/Menu';
 import { ForwardIcon, ReplyIcon } from '../../../icons/components';
 import chatBackground from '../assets/chat-background.png';
 import { useChat } from '../ChatContext';
-import { ChatProvider } from '../ChatProvider';
 import { MessageComposer } from '../composer/MessageComposer';
 import { messages } from '../data/messages';
 import { reactionDetails } from '../data/reactionDetails';
-import { ImageReplyRenderer } from '../reply/renderers/ImageReply';
-import { TextReplyRenderer } from '../reply/renderers/TextReply';
-import { groupMessagesByDateAuthor } from '../utils/messageProcessing';
-import { Message } from './Message';
+import { buildMessageRows } from './buildMessageRows';
+import { AudioMessage } from './instances/AudioMessage';
+import { DefaultMessage } from './instances/DefaultMessage';
+import { ImageMessage } from './instances/ImageMessage';
+import { StickerMessage } from './instances/StickerMessage';
+import { TextMessage } from './instances/TextMessage';
+import { VideoMessage } from './instances/VideoMessage';
 import { useMessage } from './MessageContext';
 import { MessageGroup } from './MessageGroup';
 import { MessageList } from './MessageList';
+import type { MessageProviderProps } from './MessageProvider';
 import { MessageSeparator } from './MessageSeparator';
-import { AudioMessageRenderer } from './renderers/AudioMessage';
-import { ImageMessageRenderer } from './renderers/ImageMessage';
-import { StickerMessageRenderer } from './renderers/StickerMessage';
-import { TextMessageRenderer } from './renderers/TextMessage';
-import { VideoMessageRenderer } from './renderers/VideoMessage';
 
 dayjs.extend(calendar);
 
@@ -41,7 +38,7 @@ type Story = StoryObj<typeof MessageGroup>;
 
 // Setup
 
-const grouped = groupMessagesByDateAuthor(messages);
+const rows = buildMessageRows(messages);
 
 function MessageInputWrapper() {
 
@@ -79,6 +76,18 @@ const MessageMenu = () => {
 
 };
 
+const MESSAGE_RENDERERS: Record<string, React.ComponentType<MessageProviderProps>> = {
+    text: TextMessage,
+    sticker: StickerMessage,
+    image: ImageMessage,
+    audio: AudioMessage,
+    video: VideoMessage,
+} as const;
+
+function Message(props: MessageProviderProps) {
+    const Renderer = MESSAGE_RENDERERS[props.message.type] || DefaultMessage;
+    return <Renderer {...props} />;
+}
 
 // Stories
 
@@ -90,59 +99,57 @@ export const Default: Story = {
         }
     },
     render: () => (
-        <ChatProvider
-            renderMessage={{
-                text: () => <TextMessageRenderer />,
-                sticker: () => <StickerMessageRenderer />,
-                image: () => <ImageMessageRenderer />,
-                audio: () => <AudioMessageRenderer />,
-                video: () => <VideoMessageRenderer />
-            }}
-            renderReply={{
-                text: () => <TextReplyRenderer />,
-                image: () => <ImageReplyRenderer />
-            }}
-            getReactions={async () => {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                return reactionDetails;
-            }}
-            addReaction={async (messageId, emoji) => {
-                action('addReaction')({ messageId, emoji });
-            }}
-            removeReaction={async (messageId, emoji) => {
-                action('removeReaction')({ messageId, emoji });
-            }}
+        <div
+
         >
             <div className="relative min-w-96 h-screen bg-chat-message-list-bg">
                 <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${chatBackground})` }} />
                 <div className="relative w-full h-full flex flex-col z-10">
-
                     <MessageList className="grow overflow-y-auto">
-                        {grouped.map((dateGroup) => (
-                            <React.Fragment key={dateGroup.date.getTime()}>
+                        {rows.map((row) => {
+                            switch (row.type) {
+                                case 'separator':
+                                    return (
+                                        <MessageSeparator>
+                                            <MessageSeparator.Pill>{dayjs(row.date).calendar()}</MessageSeparator.Pill>
+                                        </MessageSeparator>
+                                    );
+                                case 'group':
+                                    return (
+                                        <MessageGroup key={row.id} group={row.group}>
+                                            {row.group.messages.map(r => {
+                                                return (
+                                                    <Message
 
-                                <MessageSeparator>
-                                    <MessageSeparator.Pill>{dayjs(dateGroup.date).calendar()}</MessageSeparator.Pill>
-                                </MessageSeparator>
+                                                        key={r.message.id}
 
-                                {dateGroup.groups.map(group => (
-                                    <MessageGroup key={group.id} group={{ id: group.id, direction: group.direction, author: group.author! }}>
-                                        <MessageGroup.Messages>
-                                            {group.messages.map(msg => (
-                                                <Message key={msg.id} menu={<MessageMenu />} message={msg} />
-                                            ))}
-                                        </MessageGroup.Messages>
-                                    </MessageGroup>
-                                ))}
+                                                        menu={<MessageMenu />}
+                                                        message={r.message}
 
-                            </React.Fragment>
-                        ))}
+                                                        isFirst={r.meta.isFirst}
+                                                        isLast={r.meta.isLast}
+
+                                                        onAddReaction={async (emoji) => {
+                                                            action('addReaction')({ messageId: r.message.id, emoji });
+                                                        }}
+                                                        onRemoveReaction={async (emoji) => {
+                                                            action('removeReaction')({ messageId: r.message.id, emoji });
+                                                        }}
+                                                        getReactions={async () => {
+                                                            await new Promise(resolve => setTimeout(resolve, 1000));
+                                                            return reactionDetails;
+                                                        }}
+
+                                                    />);
+                                            })}
+                                        </MessageGroup>
+                                    );
+                            }
+                        })}
                     </MessageList>
-
                     <MessageInputWrapper />
-
                 </div>
             </div>
-        </ChatProvider>
+        </div>
     )
 };

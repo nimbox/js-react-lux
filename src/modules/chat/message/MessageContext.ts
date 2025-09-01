@@ -1,17 +1,14 @@
 import { createContext, useContext } from 'react';
-import { type MessageData } from '../types/MessageData';
+import type { MessageProviderProps } from './MessageProvider';
 
 
 // MesssageContext
 
-export interface MessageContextProps {
-
-    menu?: React.ReactElement<{ onOpenChange: (open: boolean) => void }>;
-    message: MessageData;
+export interface MessageContextProps extends Omit<MessageProviderProps, 'className' | 'children'> {
 
     isFirst?: boolean;
     isLast?: boolean;
-    isHovered: boolean;
+    isOver: boolean;
 
 }
 

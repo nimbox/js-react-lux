@@ -1,10 +1,9 @@
 import { useMessage } from '../MessageContext';
-import { useMessageGroup } from '../MessageGroupContext';
 
 
 export function MessageAuthor() {
 
-    const { group: { author } } = useMessageGroup();
+    const { message: { author } } = useMessage();
     const { isFirst } = useMessage();
 
     if (!author || !isFirst) {
