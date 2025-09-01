@@ -1,14 +1,10 @@
 import { createContext, useContext } from 'react';
-import { type MessageData } from '../types/MessageData';
+import type { ReplyProps } from './ReplyProvider';
 
 
 // ReplyContext
 
-export interface ReplyContextProps {
-    message: Omit<MessageData, 'replyTo'>;
-}
-
-export const ReplyContext = createContext<ReplyContextProps | null>(null);
+export const ReplyContext = createContext<ReplyProps | null>(null);
 
 export function useReply() {
 
