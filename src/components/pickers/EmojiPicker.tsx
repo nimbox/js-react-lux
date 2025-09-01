@@ -69,7 +69,7 @@ function CompactForm({ onSelect, onToggle: onToggleExpand, className }: {
 
     return (
         <div className={classNames(
-            'px-3 py-2 flex items-center gap-1 bg-control-bg border border-control-border rounded-full shadow',
+            'px-2 py-1 flex items-center gap-1 bg-control-bg border border-control-border rounded-full shadow',
             className
         )}>
             {commonEmojis.map((item, index) => (
@@ -107,7 +107,7 @@ function FullForm(props: EmojiPickerProps & { onToggle: () => void }) {
 
     return (
         <div className={classNames(
-            'min-w-md p-0 bg-control-bg rounded shadow border border-control-border',
+            'w-96 p-0 bg-control-bg rounded shadow border border-control-border',
             className
         )}>
 
@@ -129,16 +129,14 @@ function FullForm(props: EmojiPickerProps & { onToggle: () => void }) {
             >
                 {emojiGroups.map((group) => (
                     <Tabs.Option key={group.name} value={group.name}>
-                        <span data-tooltip={group.name} className="text-3xl">{getCategoryIcon(group)}</span>
+                        <span data-tooltip={group.name} className="text-2xl">{getCategoryIcon(group)}</span>
                     </Tabs.Option>
                 ))}
             </Tabs>
 
             {/* Emoji Grid */}
 
-            <div
-                className="h-64 p-2 grid grid-cols-8  overflow-y-auto"
-            >
+            <div className="h-64 p-2 grid grid-cols-8  overflow-y-auto">
                 {currentEmojis.map((emoji, index) => (
                     <EmojiItem
                         key={`${selectedCategory}-${index}`}
@@ -157,7 +155,7 @@ function EmojiItem({ emoji, onClick }: { emoji: string, onClick: () => void }) {
         <button
             type="button"
             onClick={onClick}
-            className="p-1 rounded-full hover:bg-gray-100 transition-colors duration-150 text-3xl"
+            className="w-10 h-10 text-2xl rounded-full hover:bg-secondary-100 transition-colors duration-150 cursor-pointer"
         >
             {emoji}
         </button>
