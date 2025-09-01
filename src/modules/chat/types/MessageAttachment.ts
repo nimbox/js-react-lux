@@ -1,11 +1,15 @@
 export interface MessageAttachment {
 
-    type: 'image' | 'audio' | 'video' | string;
+    type: string;
 
     name: string;
     mime: string;
     size: number;
     filename?: string;
+
+    width?: number;
+    height?: number;
+    duration?: number;
 
     url: string;
     thumbnailUrl?: string;
