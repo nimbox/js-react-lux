@@ -1,4 +1,4 @@
-import React, { Children, type ReactElement, type ReactNode, useCallback, useRef, useState } from 'react';
+import React, { Children, type Dispatch, type ReactNode, type SetStateAction, useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../../components/Button';
 import { Input } from '../../../components/inputs/Input';
@@ -9,18 +9,20 @@ import { MessageComposerContext } from './MessageComposerContext';
 
 
 export interface MessageComposerSubmitData {
-    body: string;
-    replyToMessageId?: string;
+    value: string;
 }
 
 export interface MessageComposerProps {
 
-    start?: ReactElement;
-    end?: ReactElement;
+    value: string;
+    onChange: Dispatch<SetStateAction<string>>;
+
+    start?: ReactNode;
+    end?: ReactNode;
 
     replyTo?: MessageData;
-    clearReplyTo?: () => void;
-    renderReply?: (props: ReplyProps) => ReactNode;
+    renderReplyTo?: (props: ReplyProps) => ReactNode;
+    onClearReplyTo?: () => void;
 
     onSubmit: (data: MessageComposerSubmitData) => Promise<void>;
 
@@ -31,18 +33,14 @@ export interface MessageComposerProps {
 
 export function MessageComposer(props: MessageComposerProps) {
 
-    // Properties
-
-    const { className, onSubmit, start, end, renderReply, children, replyTo, clearReplyTo } = props;
-    const expanded = Children.toArray(children).some(Boolean);
-
     // State
 
+    const { value, onChange, start, end, replyTo, renderReplyTo, onClearReplyTo, onSubmit, className, children } = props;
     const { t } = useTranslation();
 
-    // Draft
+    const expanded = Children.toArray(children).some(Boolean);
 
-    const [body, setBody] = useState('');
+    // Shared Submit Handlers
 
     const submits = useRef(new Map<string, () => Promise<void>>());
     const registerSubmit = useCallback((panel: string, fn: () => Promise<void>) => {
@@ -56,34 +54,22 @@ export function MessageComposer(props: MessageComposerProps) {
 
     const [submitting, setSubmitting] = useState<boolean>(false);
 
-
     // Handlers
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setBody(e.target.value ?? '');
+    const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        onChange(e.target.value ?? '');
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
-
         e.preventDefault();
-
         try {
-
             setSubmitting(true);
-
             if (submits.current.size > 0) {
                 const fns = Array.from(submits.current.values());
                 await Promise.allSettled(fns.map(fn => fn()));
             } else {
-                await onSubmit({
-                    body,
-                    ...(replyTo && { replyToMessageId: replyTo.id })
-                });
-                setBody('');
+                await onSubmit({ value });
             }
-
-            clearReplyTo?.();
-
         } finally {
             setSubmitting(false);
         }
@@ -92,10 +78,8 @@ export function MessageComposer(props: MessageComposerProps) {
 
     // Render
 
-    const context = { registerSubmit };
-
     return (
-        <MessageComposerContext.Provider value={context}>
+        <MessageComposerContext.Provider value={{ registerSubmit }}>
             <div className={className}>
                 <form onSubmit={handleSubmit} className="h-full">
                     <div className="h-full flex flex-col bg-white rounded-3xl overflow-hidden">
@@ -110,8 +94,8 @@ export function MessageComposer(props: MessageComposerProps) {
 
                             <ReplyToMessage
                                 replyTo={replyTo}
-                                clearReplyTo={clearReplyTo}
-                                renderReply={renderReply}
+                                onClearReplyTo={onClearReplyTo}
+                                renderReplyTo={renderReplyTo}
                             />
 
                             <div className="p-4 flex flex-row justify-end items-center gap-2">
@@ -121,8 +105,8 @@ export function MessageComposer(props: MessageComposerProps) {
                                         <Input
                                             variant="plain"
                                             placeholder={t('chat.composer.placeholder', { defaultValue: 'Type a message...' })}
-                                            value={body}
-                                            onChange={handleChange}
+                                            value={value}
+                                            onChange={handleValueChange}
                                             className="text-lg"
                                             fieldClassName="px-2"
                                         />
@@ -149,33 +133,32 @@ export function MessageComposer(props: MessageComposerProps) {
 interface ReplyToMessageProps {
 
     replyTo?: MessageData;
-    clearReplyTo?: () => void;
-
-    renderReply?: (props: ReplyProps) => ReactNode;
+    renderReplyTo?: (props: ReplyProps) => ReactNode;
+    onClearReplyTo?: () => void;
 
 }
 
 function ReplyToMessage(props: ReplyToMessageProps) {
 
-    // Properties
+    // State
 
-    const { replyTo, clearReplyTo, renderReply: RenderReply } = props;
+    const { replyTo, renderReplyTo: RenderReplyTo, onClearReplyTo } = props;
 
     // Render
 
-    if (!replyTo) {
+    if (!replyTo || !RenderReplyTo) {
         return null;
     }
 
     return (
         <div className="px-4 py-2 flex items-center justify-between gap-2 border-b border-gray-200">
-            {RenderReply && (
+            {RenderReplyTo && (
                 <div className="flex-1">
-                    <RenderReply message={replyTo} />
+                    <RenderReplyTo message={replyTo} />
                 </div>
             )}
-            <div className="shrink-0">
-                <Button type="button" semantic="muted" rounded={true} onClick={clearReplyTo}>
+            <div className="flex-none">
+                <Button type="button" semantic="muted" rounded={true} onClick={onClearReplyTo}>
                     <CrossIcon />
                 </Button>
             </div>

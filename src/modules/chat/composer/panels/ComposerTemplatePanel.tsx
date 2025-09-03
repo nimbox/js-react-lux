@@ -18,8 +18,8 @@ export interface ComposerTemplatePanelProps {
 
     templates: TemplateData[];
 
-    name?: string;
-    onNameChange: Dispatch<SetStateAction<string | undefined>>;
+    name?: string | null;
+    onNameChange: Dispatch<SetStateAction<string | null | undefined>>;
 
     context: TemplateContextData;
     onContextChange: Dispatch<SetStateAction<TemplateContextData>>;
