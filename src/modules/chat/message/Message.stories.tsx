@@ -300,7 +300,11 @@ export const ImageMessageStory: StoryObj<typeof ImageMessage> = {
                 }
             ]
         },
-        menu: <MessageMenu />
+        menu: <MessageMenu />,
+        extra: {
+            onClick: (message) => action('onClick')(message),
+            className: 'cursor-zoom-in'
+        }
     }
 };
 
@@ -329,7 +333,11 @@ export const ImageMessageWithReply: StoryObj<typeof ImageMessage> = {
                 }
             ]
         },
-        menu: <MessageMenu />
+        menu: <MessageMenu />,
+        extra: {
+            onClick: (message) => action('onClick')(message),
+            className: 'cursor-zoom-in'
+        }
     }
 };
 

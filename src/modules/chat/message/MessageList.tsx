@@ -61,7 +61,7 @@ export function MessageList({ className, children }: MessageListProps) {
                     className
                 )}
             >
-                <div className="grow"></div> {/* Pushes content to the bottom */}
+                
                 {children}
             </div>
         </ChatMessageListContext.Provider>

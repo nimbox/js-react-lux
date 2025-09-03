@@ -12,7 +12,7 @@ import { ReplyMedia } from './slots/ReplyMedia';
 
 export interface ReplyProps {
 
-    message: Omit<MessageData, 'replyTo'>;
+    message: MessageData;
 
 }
 

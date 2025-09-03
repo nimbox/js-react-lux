@@ -1,16 +1,19 @@
 import { MessageProvider, type MessageProviderProps } from '../MessageProvider';
+import type { MessageImageProps } from '../slots/MessageImage';
 
 
-export function ImageMessage(props: MessageProviderProps) {
+export function ImageMessage(props: MessageProviderProps & { extra?: MessageImageProps }) {
+
+    const { extra, ...providerProps } = props;
 
     return (
-        <MessageProvider {...props}>
+        <MessageProvider {...providerProps}>
             <MessageProvider.Container>
                 <MessageProvider.Bubble>
                     <MessageProvider.Author />
                     <MessageProvider.Reply />
                     <MessageProvider.Header />
-                    <MessageProvider.Image />
+                    <MessageProvider.Image {...extra} />
                     <MessageProvider.Body />
                     <MessageProvider.Footer />
                     <MessageProvider.Properties />

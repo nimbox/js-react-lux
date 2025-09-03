@@ -8,10 +8,10 @@ import chatBackground from '../assets/chat-background.png';
 import { ChatProvider } from '../ChatProvider';
 import { type MessageData } from '../types/MessageData';
 import { type TemplateData } from '../types/TemplateData';
-import { renderTemplate } from '../utils/renderTemplate';
+import { transformTemplate } from '../utils/transformTemplate';
 import { DockedMessageComposer } from './DockedMessageComposer';
 import { MessageComposer, type MessageComposerSubmitData } from './MessageComposer';
-import { ComposerMediaPanel } from './panels/ComposerMediaPanel';
+import { ComposerAttachmentPanel } from './panels/ComposerAttachmentPanel';
 import { ComposerTemplatePanel } from './panels/ComposerTemplatePanel';
 
 
@@ -45,7 +45,7 @@ type Story = StoryObj<typeof MessageComposer>;
 
 // Sample data
 
-const sampleReplyMessage: Omit<MessageData, 'replyTo'> = {
+const sampleReplyMessage: MessageData = {
     id: 'reply-1',
     author: {
         id: '1',
@@ -180,7 +180,7 @@ export const WithSimpleChildren: Story = {
             >
 
                 {panel === 'image' && (
-                    <ComposerMediaPanel
+                    <ComposerAttachmentPanel
                         title="Upload images"
                         type="image"
                         files={[]}
@@ -194,7 +194,7 @@ export const WithSimpleChildren: Story = {
                 )}
 
                 {panel === 'document' && (
-                    <ComposerMediaPanel
+                    <ComposerAttachmentPanel
                         title="Upload documents"
                         type="document"
                         files={[]}
@@ -209,13 +209,13 @@ export const WithSimpleChildren: Story = {
                 {panel === 'template' && (
                     <ComposerTemplatePanel
                         templates={sampleTemplates}
-                        render={renderTemplate}
+                        render={transformTemplate}
                         onClose={() => setPanel(null)}
                         onSubmit={async (data) => {
                             console.log('DATA', data);
                             await new Promise(resolve => setTimeout(resolve, 5000));
                         }}
-                        chatBackground={chatBackground}
+                        background={chatBackground}
                     />
                 )}
 

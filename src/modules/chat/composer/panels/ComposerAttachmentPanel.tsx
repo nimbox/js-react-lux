@@ -1,53 +1,52 @@
 import classNames from 'classnames';
-import { type ChangeEvent, type MouseEventHandler, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { type ChangeEvent, type ChangeEventHandler, type Dispatch, type MouseEventHandler, type ReactNode, type SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Input } from '../../../../components/inputs/Input';
 import { CrossIcon, FileIcon, PlusIcon } from '../../../../icons/components';
-import { useChat } from '../../ChatContext';
+import { useStableKey } from '../../hooks/useStableKey';
 import { mediaSize } from '../../utils/mediaSize';
 import { useMessageComposer } from '../MessageComposerContext';
 import { ComposerPanel } from './ComposerPanel';
 
 
-interface Attachment {
-    key: string;
+export interface Attachment {
     file: File;
-    caption: string;
+    caption?: string;
 }
 
-export interface MediaPanelSubmitData {
-    attachments: Pick<Attachment, 'file' | 'caption'>[];
-    replyToMessageId?: string;
+export interface AttachmentPanelSubmitData {
+    attachments: Attachment[];
 }
 
-export interface ComposerMediaPanelProps {
+export interface ComposerAttachmentPanelProps {
 
     type: 'image' | 'document';
 
-    files?: File[];
+    attachments?: Attachment[];
+    onAttachmentsChange: Dispatch<SetStateAction<Attachment[]>>;
+
     autoOpen?: boolean;
 
     onClose: () => void;
-    onSubmit: (data: MediaPanelSubmitData) => Promise<void>;
+    onSubmit: (data: AttachmentPanelSubmitData) => Promise<void>;
 
 }
 
-export function ComposerMediaPanel(props: ComposerMediaPanelProps) {
+export function ComposerAttachmentPanel(props: ComposerAttachmentPanelProps) {
 
     // Props
-    
-    const { type, files = [], autoOpen, onClose, onSubmit } = props;
-    const { replyTo } = useChat();
-    const { registerSubmit } = useMessageComposer();
 
+    const { type, attachments = [], onAttachmentsChange, autoOpen, onClose, onSubmit } = props;
+    const { getKey } = useStableKey<File>();
+
+    const { registerSubmit } = useMessageComposer();
     const { t } = useTranslation();
 
     // State
 
-    const [attachments, setAttachments] = useState<Attachment[]>(files.map(buildAttachment));
-    const [selectedAttachment, setSelectedAttachment] = useState<number | null>(null);
-    const attachment = selectedAttachment != null && attachments[selectedAttachment] != null
-        ? attachments[selectedAttachment]
+    const [selected, setSelected] = useState<number | null>(null);
+    const attachment = selected != null && attachments[selected] != null
+        ? attachments[selected]
         : null;
     const attachmentType = getPreviewType(attachment?.file);
 
@@ -81,7 +80,7 @@ export function ComposerMediaPanel(props: ComposerMediaPanelProps) {
     // Handlers
 
     const handleSelectAttachment = useCallback((i: number) => {
-        setSelectedAttachment(i);
+        setSelected(i);
     }, []);
 
     const handleAddAttachment = useCallback(() => {
@@ -92,59 +91,54 @@ export function ComposerMediaPanel(props: ComposerMediaPanelProps) {
     }, []);
 
     const handleRemoveAttachment = useCallback((i: number) => {
-        setAttachments((prev) => {
-            const next = [...prev.slice(0, i), ...prev.slice(i + 1)];
-            setSelectedAttachment((current) => {
-                if (current == null) return current;
-                if (current === i) {
-                    if (next.length === 0) return null;
-                    if (i >= next.length) return next.length - 1;
-                    return i;
-                }
-                if (current > i) return current - 1;
-                return current;
-            });
-            return next;
+        onAttachmentsChange(prev => prev.filter((_, j) => j !== i));
+        setSelected((current) => {
+            if (current == null) return current;
+            if (current === i) {
+                if (attachments.length - 1 === 0) return null;
+                if (i >= attachments.length - 1) return attachments.length - 2;
+                return i;
+            }
+            if (current > i) return current - 1;
+            return current;
         });
-    }, []);
+    }, [attachments, onAttachmentsChange]);
 
     //
 
     const handleCaptionChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        const nextCaption = e.target.value ?? '';
-        if (selectedAttachment == null) return;
-        setAttachments((prev) => {
-            if (!prev || selectedAttachment < 0 || selectedAttachment >= prev.length) return prev;
-            const next = prev.slice();
-            next[selectedAttachment] = { ...next[selectedAttachment], caption: nextCaption };
+        const caption = e.target.value ?? '';
+        if (selected == null) return;
+        onAttachmentsChange(prev => {
+            const next = prev.map((v, i) => i === selected ? { ...v, caption } : v);
             return next;
         });
-    }, [selectedAttachment]);
+    }, [selected, onAttachmentsChange]);
 
-    const handleMediaSelect: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
+    const handleMediaSelect: ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
         const list = e.target.files;
         if (!list || list.length === 0) return;
         const selected = Array.from(list);
-        setAttachments((prev) => {
-            const next = [...prev, ...selected.map(buildAttachment)];
-            setSelectedAttachment(prev.length);
+        onAttachmentsChange(prev => {
+            const next = [...prev, ...selected.map(file => ({ file, caption: '' }))];
+            setSelected(prev.length);
             return next;
         });
         e.currentTarget.value = '';
-    }, []);
+    }, [attachments, onAttachmentsChange]);
 
     // Register
 
     const handleSubmit = useCallback(async () => {
-        onSubmit({
-            attachments: attachments.map(({ file, caption }) => ({ file, caption })),
-            ...(replyTo && { replyToMessageId: replyTo.id })
-        });
-    }, [attachments, replyTo, onSubmit]);
+        try {
+            await onSubmit({ attachments: attachments });
+        } catch {
+            console.error('Error submitting media panel');
+        }
+    }, [attachments, onSubmit]);
     useEffect(() => registerSubmit('media', handleSubmit), [registerSubmit, handleSubmit]);
 
     // Render
-
 
     return (
         <ComposerPanel onClose={onClose}>
@@ -190,21 +184,19 @@ export function ComposerMediaPanel(props: ComposerMediaPanelProps) {
                     <div className="flex flex-row justify-center gap-2">
 
                         <div className="grow-0 flex flex-row justify-center gap-2 overflow-x-auto">
-                            {attachments.map((m, i) =>
+                            {attachments.map((v, i) =>
                                 <MediaTile
-                                    key={m.key}
+                                    key={getKey(v.file)}
                                     onClick={() => handleSelectAttachment(i)}
-                                    className={classNames('relative group', { 'border-4 border-primary-500': i === selectedAttachment })}
+                                    className={classNames('relative group', { 'border-4 border-primary-500': i === selected })}
                                 >
                                     <MediaTileDelete onClick={(e) => { e.stopPropagation(); handleRemoveAttachment(i); }} />
-                                    <MediaPreview file={m.file} className="w-full h-full object-cover" />
+                                    <MediaPreview file={v.file} className="w-full h-full object-cover" />
                                 </MediaTile>
                             )}
                         </div>
 
-                        <MediaTile
-                            onClick={handleAddAttachment}
-                        >
+                        <MediaTile onClick={handleAddAttachment}>
                             <PlusIcon className="text-xl" />
                         </MediaTile>
 
@@ -271,7 +263,6 @@ function MediaNoPreview({ file, className }: {
 
 }
 
-
 function MediaTile({ onClick, className, children }: {
     onClick: MouseEventHandler<HTMLDivElement>,
     className?: string,
@@ -294,18 +285,17 @@ function MediaTile({ onClick, className, children }: {
 
 }
 
-
 function MediaTileDelete({ onClick }: {
     onClick: MouseEventHandler<HTMLButtonElement>
 }) {
 
     return (
         <>
-            <span className="hidden group-hover:block absolute inset-0 bg-linear-to-bl from-black/50 to-50% to-transparent " />
+            <span className="hidden group-hover:block absolute inset-0 bg-linear-to-bl from-black/50 to-50% to-transparent" />
             <button
                 type="button"
                 onClick={onClick}
-                className="absolute right-0 top-0 hidden group-hover:flex w-6 h-6 items-center justify-center text-white"
+                className="absolute right-0 top-0 hidden group-hover:flex w-6 h-6 items-center justify-center text-white cursor-pointer"
             >
                 <CrossIcon className="text-xl" />
             </button>
@@ -315,10 +305,6 @@ function MediaTileDelete({ onClick }: {
 }
 
 // Utils
-
-function buildAttachment(file: File) {
-    return { key: crypto.randomUUID(), file, caption: '' };
-}
 
 function getPreviewType(file: File | null | undefined) {
 

@@ -1,13 +1,18 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { Button } from '../../../components/Button';
 import { CrossIcon } from '../../../icons/components';
-import { useChat } from '../ChatContext';
+import type { MessageData } from '../types/MessageData';
 
 
-export function MessageLightBox() {
+interface MessageLightBoxProps {
+    message: MessageData;
+    onClose: () => void;
+}
 
-    const { preview, clearPreview } = useChat();
-    const { attachments } = preview || {};
+export function MessageLightBox(props: MessageLightBoxProps) {
+
+    const { message, onClose } = props;
+    const { attachments } = message || {};
     const url = attachments?.[0]?.url;
 
     return (
@@ -15,7 +20,7 @@ export function MessageLightBox() {
 
             <div className="w-full flex-none p-4 flex flex-row justify-between items-center gap-4">
                 <div className="text-lg font-medium truncate">Preview</div>
-                <Button type='button' semantic="muted" rounded={true} onClick={clearPreview}>
+                <Button type='button' semantic="muted" rounded={true} onClick={onClose}>
                     <CrossIcon />
                 </Button>
             </div>

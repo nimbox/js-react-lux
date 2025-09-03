@@ -3,7 +3,7 @@ import { TemplateContextBlock, type TemplateContextBlockType, type TemplateConte
 import { type TemplateData } from '../types/TemplateData';
 
 
-export function renderTemplate(template: TemplateData, context: TemplateContextData): MessageData {
+export function transformTemplate(template: TemplateData, context: TemplateContextData): MessageData {
 
     const blocks = (TemplateContextBlock).map((block) => {
 

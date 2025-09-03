@@ -1,5 +1,4 @@
 import React, { createContext, useContext } from 'react';
-import type { MessageData } from './types/MessageData';
 
 
 // Chat Context
@@ -9,19 +8,6 @@ export interface ChatContextProps {
     // Renderers
 
     renderText: (text: string) => React.ReactNode;
-
-
-    // Reply functionality
-
-    replyTo: Omit<MessageData, 'replyTo'> | null;
-    setReplyTo: (message: Omit<MessageData, 'replyTo'>) => void;
-    clearReplyTo: () => void;
-
-    // Preview
-
-    preview: MessageData | null;
-    setPreview?: (message: MessageData) => void;
-    clearPreview?: () => void;
 
     // Formatters
 
@@ -39,28 +25,6 @@ export const defaultProps: ChatContextProps = {
     // Text rendering
 
     renderText: (text) => text,
-
-
-
-    // Reply functionality
-
-    replyTo: null,
-    setReplyTo: function (): void {
-        throw new Error('Function not implemented.');
-    },
-    clearReplyTo: function (): void {
-        throw new Error('Function not implemented.');
-    },
-
-    // Preview
-
-    preview: null,
-    setPreview: function (): void {
-        throw new Error('Function not implemented.');
-    },
-    clearPreview: function (): void {
-        throw new Error('Function not implemented.');
-    },
 
     // Formatters
 
@@ -88,14 +52,16 @@ export function useChat() {
 
 function defaultFormatTime(timestamp: number | string | Date | undefined | null) {
 
-    if (!timestamp) { return ''; }
+    if (!timestamp) {
+        return '';
+    }
 
     const date = new Date(timestamp);
     return formatTime(date);
 
 }
 
-function defaultFormatDuration(duration: number) {
+function defaultFormatDuration(duration: number = 0) {
 
     const hours = Math.floor(duration / 3600);
     const minutes = Math.floor((duration % 3600) / 60);
@@ -111,7 +77,9 @@ function defaultFormatDuration(duration: number) {
 
 function defaultFormatCalendar(timestamp: number | string | Date | undefined | null) {
 
-    if (!timestamp) { return ''; }
+    if (!timestamp) {
+        return '';
+    }
 
     const date = new Date(timestamp);
     if (isToday(date)) {

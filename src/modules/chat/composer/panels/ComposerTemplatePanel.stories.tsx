@@ -1,10 +1,14 @@
 import { type Meta, type StoryObj } from '@storybook/react-vite';
+import { useState } from 'react';
 import { action } from 'storybook/actions';
-import chatBackground from '../../assets/chat-background.png';
+import background from '../../assets/chat-background.png';
+import { TextMessage } from '../../message/instances/TextMessage';
+import type { TemplateContextData } from '../../types/TemplateContextData';
 import { type TemplateData } from '../../types/TemplateData';
-import { renderTemplate } from '../../utils/renderTemplate';
+import { transformTemplate } from '../../utils/transformTemplate';
 import { DockedMessageComposer } from '../DockedMessageComposer';
-import { ComposerTemplatePanel } from './ComposerTemplatePanel';
+import { ComposerTemplatePanel, type ComposerTemplatePanelProps } from './ComposerTemplatePanel';
+
 
 // Definition
 
@@ -17,10 +21,10 @@ const meta: Meta<typeof ComposerTemplatePanel> = {
     decorators: [
         (Story) => (
             <div className="relative min-w-96 h-[640px] bg-chat-message-list-bg">
-                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${chatBackground})` }} />
+                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${background})` }} />
                 <DockedMessageComposer className="p-8" onSubmit={function (): Promise<void> {
                     throw new Error('Function not implemented.');
-                } }>
+                }}>
                     <Story />
                 </DockedMessageComposer>
             </div>
@@ -31,10 +35,41 @@ const meta: Meta<typeof ComposerTemplatePanel> = {
 export default meta;
 type Story = StoryObj<typeof ComposerTemplatePanel>;
 
+// Template
+
+function Template(props: Pick<ComposerTemplatePanelProps, 'templates'>) {
+
+    const { templates } = props;
+    const [name, setName] = useState<string | undefined>(undefined);
+    const [context, setContext] = useState<TemplateContextData>({ header: {}, body: {}, footer: {} });
+
+    return (
+        <ComposerTemplatePanel
+
+            templates={templates}
+
+            name={name}
+            onNameChange={setName}
+
+            context={context}
+            onContextChange={setContext}
+
+            onClose={action('onClose')}
+            onSubmit={async (data) => action('onSubmit')(data)}
+
+            transform={transformTemplate}
+            render={TextMessage}
+            background={background}
+
+        />
+    );
+
+}
 
 // Stories
 
 export const Default: Story = {
+    render: (props) => <Template {...props} />,
     args: {
         templates: [
             {
@@ -111,10 +146,7 @@ export const Default: Story = {
                     }
                 }
             }
-        ],
-        chatBackground,
-        render: renderTemplate,
-        onClose: action('onClose')
+        ]
     }
 };
 
@@ -132,8 +164,8 @@ const t1: TemplateData = {
 export const ManyTemplates: Story = {
     args: {
         templates: [t1, t1, t1, t1, t1, t1, t1, t1, t1, t1, t1, t1],
-        chatBackground,
-        render: renderTemplate,
+        background: background,
+        transform: transformTemplate,
         onClose: action('onClose')
     }
 };
@@ -151,8 +183,8 @@ const t2: TemplateData = {
 export const IncompleteTemplates: Story = {
     args: {
         templates: [t1, t2, t1, t2, t1, t2, t1, t2, t1, t2, t1, t2],
-        chatBackground,
-        render: renderTemplate,
+        background: background,
+        transform: transformTemplate,
         onClose: action('onClose')
     }
 };

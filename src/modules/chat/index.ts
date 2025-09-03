@@ -31,10 +31,13 @@ export * from './message/MessageListContext';
 export * from './message/MessageProvider';
 export * from './message/MessageSeparator';
 
+export * from './reply/ReplyContext';
+export * from './reply/ReplyProvider';
+
 export * from './composer/DockedMessageComposer';
 export * from './composer/MessageComposer';
 export * from './composer/MessageComposerContext';
-export * from './composer/panels/ComposerMediaPanel';
+export * from './composer/panels/ComposerAttachmentPanel';
 export * from './composer/panels/ComposerTemplatePanel';
 
 export * from './lightbox/MessageLightBox';

@@ -33,7 +33,7 @@ export interface MessageProviderProps {
     getReactions?: () => Promise<ReactionDetailsData[]>;
 
     renderText?: (text: string) => React.ReactNode;
-    renderReply?: (message: Omit<MessageData, 'replyTo'>) => React.ReactElement<ReplyProviderProps>;
+    renderReply?: (message: MessageData) => React.ReactElement<ReplyProviderProps>;
 
     replyTo?: MessageData;
     isFirst?: boolean;

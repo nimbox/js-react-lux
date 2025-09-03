@@ -22,6 +22,7 @@ import { MessageGroup } from './MessageGroup';
 import { MessageList } from './MessageList';
 import type { MessageProviderProps } from './MessageProvider';
 import { MessageSeparator } from './MessageSeparator';
+import { DockedMessageComposer } from '../composer/DockedMessageComposer';
 
 dayjs.extend(calendar);
 
@@ -45,11 +46,11 @@ function MessageInputWrapper() {
     const { replyTo } = useChat();
 
     return (
-        <MessageComposer
+        <DockedMessageComposer
             onSubmit={async (message) => {
                 action('submitMessage')({ message, replyTo });
-                console.log('New message:', message, 'Reply to:', replyTo);
             }}
+            className="px-8 py-4 z-20"
         />
     );
 
@@ -82,6 +83,7 @@ const MESSAGE_RENDERERS: Record<string, React.ComponentType<MessageProviderProps
     image: ImageMessage,
     audio: AudioMessage,
     video: VideoMessage,
+    document: TextMessage,
 } as const;
 
 function Message(props: MessageProviderProps) {
@@ -105,7 +107,7 @@ export const Default: Story = {
             <div className="relative min-w-96 h-screen bg-chat-message-list-bg">
                 <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${chatBackground})` }} />
                 <div className="relative w-full h-full flex flex-col z-10">
-                    <MessageList className="grow overflow-y-auto">
+                    <MessageList className="grow overflow-y-auto pb-24">
                         {rows.map((row) => {
                             switch (row.type) {
                                 case 'separator':

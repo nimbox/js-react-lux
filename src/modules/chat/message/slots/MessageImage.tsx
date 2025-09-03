@@ -1,23 +1,27 @@
+import classNames from 'classnames';
 import { Loading } from '../../../../components/Loading';
-import { useChat } from '../../ChatContext';
+import type { MessageData } from '../../types/MessageData';
 import { useMessage } from '../MessageContext';
-import { useMessageList } from '../MessageListContext';
 
 
-export function MessageImage() {
+export interface MessageImageProps {
+    onClick?: (message: MessageData) => void;
+    className?: string;
+}
 
-    const { setPreview } = useChat();
-    const { message, message: { type, attachments } } = useMessage();
-    const { scrollToBottom } = useMessageList();
+export function MessageImage(props: MessageImageProps) {
 
-    if (type !== 'image' || !attachments || attachments.length === 0) {
+    const { onClick, className } = props;
+    const { message, message: { attachments } } = useMessage();
+
+    if (!attachments || attachments.length === 0) {
         return null;
     }
 
     const url = attachments[0].thumbnailUrl;
 
-    const handlePreview = () => {
-        setPreview?.(message);
+    const handleOnClick = () => {
+        onClick?.(message);
     };
 
     // Render
@@ -28,9 +32,8 @@ export function MessageImage() {
                 ? <img
                     src={url}
                     alt={attachments[0].filename || 'image'}
-                    onLoad={scrollToBottom}
-                    onClick={handlePreview}
-                    className="max-w-64 max-h-64 rounded shadow cursor-zoom-in"
+                    onClick={handleOnClick}
+                    className={classNames('max-w-64 max-h-64 rounded shadow', className)}
                 />
                 : <Loading />
             }

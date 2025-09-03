@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../../../components/Button';
 import { Input } from '../../../components/inputs/Input';
 import { CrossIcon, SendIcon } from '../../../icons/components';
-import { useChat } from '../ChatContext';
-import { type ReplyProviderProps } from '../reply/ReplyProvider';
+import { type ReplyProps } from '../reply/ReplyProvider';
 import type { MessageData } from '../types/MessageData';
 import { MessageComposerContext } from './MessageComposerContext';
 
@@ -19,7 +18,9 @@ export interface MessageComposerProps {
     start?: ReactElement;
     end?: ReactElement;
 
-    renderReply?: (message: Omit<MessageData, 'replyTo'>) => ReactElement<ReplyProviderProps>;
+    replyTo?: MessageData;
+    clearReplyTo?: () => void;
+    renderReply?: (props: ReplyProps) => ReactNode;
 
     onSubmit: (data: MessageComposerSubmitData) => Promise<void>;
 
@@ -32,8 +33,7 @@ export function MessageComposer(props: MessageComposerProps) {
 
     // Properties
 
-    const { replyTo, clearReplyTo } = useChat();
-    const { className, onSubmit, start, end, renderReply, children } = props;
+    const { className, onSubmit, start, end, renderReply, children, replyTo, clearReplyTo } = props;
     const expanded = Children.toArray(children).some(Boolean);
 
     // State
@@ -82,7 +82,7 @@ export function MessageComposer(props: MessageComposerProps) {
                 setBody('');
             }
 
-            clearReplyTo();
+            clearReplyTo?.();
 
         } finally {
             setSubmitting(false);
@@ -108,7 +108,11 @@ export function MessageComposer(props: MessageComposerProps) {
 
                         <div className="shrink-0 flex flex-col">
 
-                            <ReplyToMessage renderReply={renderReply} />
+                            <ReplyToMessage
+                                replyTo={replyTo}
+                                clearReplyTo={clearReplyTo}
+                                renderReply={renderReply}
+                            />
 
                             <div className="p-4 flex flex-row justify-end items-center gap-2">
                                 {!expanded && (
@@ -142,11 +146,20 @@ export function MessageComposer(props: MessageComposerProps) {
 
 }
 
-function ReplyToMessage({ renderReply }: { renderReply?: (message: Omit<MessageData, 'replyTo'>) => ReactElement<ReplyProviderProps> }) {
+interface ReplyToMessageProps {
+
+    replyTo?: MessageData;
+    clearReplyTo?: () => void;
+
+    renderReply?: (props: ReplyProps) => ReactNode;
+
+}
+
+function ReplyToMessage(props: ReplyToMessageProps) {
 
     // Properties
 
-    const { replyTo, clearReplyTo } = useChat();
+    const { replyTo, clearReplyTo, renderReply: RenderReply } = props;
 
     // Render
 
@@ -156,10 +169,9 @@ function ReplyToMessage({ renderReply }: { renderReply?: (message: Omit<MessageD
 
     return (
         <div className="px-4 py-2 flex items-center justify-between gap-2 border-b border-gray-200">
-            {renderReply && replyTo && (
+            {RenderReply && (
                 <div className="flex-1">
-                    {renderReply(replyTo)}
-
+                    <RenderReply message={replyTo} />
                 </div>
             )}
             <div className="shrink-0">
