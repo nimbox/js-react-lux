@@ -27,7 +27,6 @@ export * from './message/buildMessageRows';
 export * from './message/MessageContext';
 export * from './message/MessageGroup';
 export * from './message/MessageList';
-export * from './message/MessageListContext';
 export * from './message/MessageProvider';
 export * from './message/MessageSeparator';
 

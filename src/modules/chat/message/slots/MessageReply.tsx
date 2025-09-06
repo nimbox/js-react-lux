@@ -3,16 +3,14 @@ import { useMessage } from '../MessageContext';
 
 export function MessageReply() {
 
-    const { message: { replyTo }, renderReply } = useMessage();
+    const { message: { replyTo }, renderReplyTo: RenderReplyTo } = useMessage();
 
-    if (!replyTo || !renderReply) {
+    if (!replyTo || !RenderReplyTo) {
         return null;
     }
 
-    // Render
-
     return (
-        renderReply(replyTo)
+        <RenderReplyTo message={replyTo} />
     );
 
 }

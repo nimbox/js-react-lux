@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { useState, type ReactNode } from 'react';
-import type { ReplyProviderProps } from '../reply/ReplyProvider';
+import type { ReplyProps } from '../reply/ReplyProvider';
 import type { MessageData } from '../types/MessageData';
 import type { ReactionDetailsData } from '../types/ReactionDetailsData';
 import { MessageContext } from './MessageContext';
@@ -21,23 +21,25 @@ import { MessageReply } from './slots/MessageReply';
 import { MessageVideo } from './slots/MessageVideo';
 
 
-// Message
+// MessageProvider
 
-export interface MessageProviderProps {
 
-    message: MessageData;
+export interface MessageProps {
+
     menu?: React.ReactElement<{ onOpenChange: (open: boolean) => void }>;
+    message: MessageData;
 
     onAddReaction?: (emoji: string) => Promise<void>;
     onRemoveReaction?: (emoji: string) => Promise<void>;
     getReactions?: () => Promise<ReactionDetailsData[]>;
 
-    renderText?: (text: string) => React.ReactNode;
-    renderReply?: (message: MessageData) => React.ReactElement<ReplyProviderProps>;
+    renderReplyTo?: (props: ReplyProps) => React.ReactNode;
 
-    replyTo?: MessageData;
     isFirst?: boolean;
     isLast?: boolean;
+
+}
+export interface MessageProviderProps extends MessageProps {
 
     className?: string;
     children?: ReactNode;

@@ -12,7 +12,7 @@ export interface MessageContainerProps {
 
 export function MessageContainer({ children }: MessageContainerProps) {
 
-    const { message: { direction } } = useMessage();
+    const { message: { direction }, onAddReaction } = useMessage();
     const { menu, isOver } = useMessage();
 
     const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -27,8 +27,12 @@ export function MessageContainer({ children }: MessageContainerProps) {
         })}>
 
             <div className={classNames('relative grow flex flex-col', {
-                'order-1 items-start': direction === 'inbound',
-                'order-2 items-end': direction === 'outbound'
+                'items-start': direction === 'inbound',
+                'items-end': direction === 'outbound'
+
+            },{
+                'order-1': onAddReaction && direction === 'inbound',
+                'order-2': onAddReaction && direction === 'outbound'
             })}>
 
                 {children}
@@ -46,12 +50,14 @@ export function MessageContainer({ children }: MessageContainerProps) {
 
             </div>
 
-            <div className={classNames('flex-none', {
-                'order-2': direction === 'inbound',
-                'order-1': direction === 'outbound'
-            })}>
-                <MessageReactionPicker />
-            </div>
+            {onAddReaction && (
+                <div className={classNames('flex-none', {
+                    'order-2': direction === 'inbound',
+                    'order-1': direction === 'outbound'
+                })}>
+                    <MessageReactionPicker />
+                </div>
+            )}
 
         </div>
 

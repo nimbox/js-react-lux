@@ -5,16 +5,16 @@ import { action } from 'storybook/actions';
 import { AngleDownMenuTrigger } from '../../../components/menu/ChevronMenuTrigger';
 import { Menu } from '../../../components/menu/Menu';
 import { ForwardIcon, ReplyIcon } from '../../../icons/components';
-import { TextMessage } from './instances/TextMessage';
-import { ImageMessage } from './instances/ImageMessage';
-import { AudioMessage } from './instances/AudioMessage';
-import { VideoMessage } from './instances/VideoMessage';
-import { MessageProvider } from './MessageProvider';
 import chatBackground from '../assets/chat-background.png';
 import { TextReply } from '../reply/instances/TextReply';
-import type { MessageData } from '../types/MessageData';
+import { AudioMessage } from './instances/AudioMessage';
+import { ImageMessage } from './instances/ImageMessage';
+import { TextMessage } from './instances/TextMessage';
+import { VideoMessage } from './instances/VideoMessage';
+import { MessageProvider } from './MessageProvider';
 
 dayjs.extend(calendar);
+
 
 // Definition
 
@@ -33,7 +33,7 @@ const meta: Meta<typeof MessageProvider> = {
 
     args: {
         menu: <MessageMenu />,
-        renderReply: (message: MessageData) => <TextReply message={message} children={<div>Reply</div>} />,
+        renderReplyTo: TextReply,
         onAddReaction: async (reaction: string) => action('addReaction')(reaction),
         isFirst: true
     },
@@ -44,7 +44,7 @@ const meta: Meta<typeof MessageProvider> = {
                 disable: true
             }
         },
-        renderReply: {
+        renderReplyTo: {
             table: {
                 disable: true
             }

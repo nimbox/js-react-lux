@@ -21,8 +21,8 @@ export interface ComposerTemplatePanelProps {
     name?: string | null;
     onNameChange: Dispatch<SetStateAction<string | null | undefined>>;
 
-    context: TemplateContextData;
-    onContextChange: Dispatch<SetStateAction<TemplateContextData>>;
+    context?: TemplateContextData | null;
+    onContextChange: Dispatch<SetStateAction<TemplateContextData | null | undefined>>;
 
     onClose: () => void;
     onSubmit: (data: TemplatePanelSubmitData) => Promise<void>;
@@ -172,8 +172,8 @@ interface TemplateContextProps {
 
     template?: TemplateData;
 
-    context: TemplateContextData;
-    onContextChange: (context: TemplateContextData) => void;
+    context?: TemplateContextData | null;
+    onContextChange: Dispatch<SetStateAction<TemplateContextData | null | undefined>>;
 
     className?: string;
 
@@ -183,6 +183,8 @@ function TemplateContext(props: TemplateContextProps) {
 
     const { template, context, onContextChange, className } = props;
     const { t } = useTranslation();
+    const safeContext = context ?? { header: {}, body: {}, footer: {} };
+
 
     // Context
 
@@ -198,7 +200,7 @@ function TemplateContext(props: TemplateContextProps) {
     // Handlers
 
     const handleContextChange = useCallback((b: TemplateContextBlockType, k: string, v: string) => {
-        onContextChange({ ...context, [b]: { ...context[b], [k]: v } });
+        onContextChange({ ...safeContext, [b]: { ...safeContext[b], [k]: v } });
     }, [context, onContextChange]);
 
     // Render
@@ -234,7 +236,7 @@ function TemplateContext(props: TemplateContextProps) {
                                         <label className="text-gray-600" htmlFor={`${b}-${v}`}>{v}</label>
                                         <Input
                                             id={`${b}-${v}`}
-                                            value={context[b][v] ?? ''}
+                                            value={safeContext[b][v] ?? ''}
                                             onChange={e => handleContextChange(b, v, e.target.value)}
                                             className="text-sm"
                                         />
@@ -264,7 +266,7 @@ function TemplateContext(props: TemplateContextProps) {
 interface TemplatePreviewProps {
 
     template?: TemplateData;
-    context?: TemplateContextData;
+    context?: TemplateContextData | null;
 
     transform: (template: TemplateData, context: TemplateContextData) => MessageData;
     render: ({ message }: { message: MessageData }) => ReactNode;

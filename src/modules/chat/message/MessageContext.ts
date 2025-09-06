@@ -1,15 +1,11 @@
 import { createContext, useContext } from 'react';
-import type { MessageProviderProps } from './MessageProvider';
+import type { MessageProps } from './MessageProvider';
 
 
 // MesssageContext
 
-export interface MessageContextProps extends Omit<MessageProviderProps, 'className' | 'children'> {
-
-    isFirst?: boolean;
-    isLast?: boolean;
+export interface MessageContextProps extends MessageProps {
     isOver: boolean;
-
 }
 
 export const MessageContext = createContext<MessageContextProps | null>(null);

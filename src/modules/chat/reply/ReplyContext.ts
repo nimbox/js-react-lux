@@ -4,7 +4,9 @@ import type { ReplyProps } from './ReplyProvider';
 
 // ReplyContext
 
-export const ReplyContext = createContext<ReplyProps | null>(null);
+export type ReplyContextProps = ReplyProps;
+
+export const ReplyContext = createContext<ReplyContextProps | null>(null);
 
 export function useReply() {
 

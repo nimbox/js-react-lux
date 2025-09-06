@@ -14,10 +14,9 @@ export interface MessageComposerSubmitData {
 
 export interface MessageComposerProps {
 
+    start?: ReactNode;
     value: string;
     onChange: Dispatch<SetStateAction<string>>;
-
-    start?: ReactNode;
     end?: ReactNode;
 
     replyTo?: MessageData;
@@ -35,7 +34,7 @@ export function MessageComposer(props: MessageComposerProps) {
 
     // State
 
-    const { value, onChange, start, end, replyTo, renderReplyTo, onClearReplyTo, onSubmit, className, children } = props;
+    const { start, value, onChange, end, replyTo, renderReplyTo, onClearReplyTo, onSubmit, className, children } = props;
     const { t } = useTranslation();
 
     const expanded = Children.toArray(children).some(Boolean);
@@ -52,7 +51,7 @@ export function MessageComposer(props: MessageComposerProps) {
         };
     }, []);
 
-    const [submitting, setSubmitting] = useState<boolean>(false);
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     // Handlers
 
@@ -63,7 +62,7 @@ export function MessageComposer(props: MessageComposerProps) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            setSubmitting(true);
+            setIsSubmitting(true);
             if (submits.current.size > 0) {
                 const fns = Array.from(submits.current.values());
                 await Promise.allSettled(fns.map(fn => fn()));
@@ -71,7 +70,7 @@ export function MessageComposer(props: MessageComposerProps) {
                 await onSubmit({ value });
             }
         } finally {
-            setSubmitting(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -114,7 +113,7 @@ export function MessageComposer(props: MessageComposerProps) {
                                     </>
                                 )}
 
-                                <Button type='submit' semantic="primary" rounded={true} disabled={submitting} className="flex-none">
+                                <Button type='submit' semantic="primary" rounded={true} disabled={isSubmitting} className="flex-none">
                                     <SendIcon />
                                 </Button>
 

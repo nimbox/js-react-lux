@@ -1,11 +1,9 @@
-import { useMessageList } from '../MessageListContext';
-import { useMessage } from '../MessageContext';
 import { Loading } from '../../../../components/Loading';
+import { useMessage } from '../MessageContext';
 
 
 export function MessageVideo() {
 
-    const { scrollToBottom } = useMessageList();
     const { message: { type, attachments } } = useMessage();
 
     if (type !== 'video' || !attachments || attachments.length === 0) {
@@ -20,7 +18,6 @@ export function MessageVideo() {
                 ? (
                     <video
                         controls
-                        onLoad={scrollToBottom}
                         className="max-w-64 max-h-64 rounded shadow"
                     >
                         <source src={attachments[0].url} />

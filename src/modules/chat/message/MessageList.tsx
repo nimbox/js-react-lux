@@ -1,6 +1,5 @@
 import classNames from 'classnames';
-import { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
-import { ChatMessageListContext } from './MessageListContext';
+import { useLayoutEffect, useRef } from 'react';
 
 
 // MessageList
@@ -13,58 +12,28 @@ export interface MessageListProps {
 export function MessageList({ className, children }: MessageListProps) {
 
     const listRef = useRef<HTMLDivElement>(null);
-    const debouncedRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-    // Scroll to bottom functions
-
-    const scrollToBottom = useCallback(() => {
-        if (listRef.current) {
-            listRef.current.scrollTop = Number.MAX_SAFE_INTEGER;
-        }
-    }, []);
-
-    const debouncedScrollToBottom = useCallback(() => {
-        if (debouncedRef.current) {
-            clearTimeout(debouncedRef.current);
-        }
-        debouncedRef.current = setTimeout(scrollToBottom, 0);
-    }, [scrollToBottom]);
-
-    // Context
-
-    const providerValue = useMemo(() => ({
-        scrollToBottom: debouncedScrollToBottom
-    }), [debouncedScrollToBottom]);
 
     // Effects
 
     useLayoutEffect(() => {
-        scrollToBottom();
-    }, [children, scrollToBottom]);
-
-    useLayoutEffect(() => {
-        return () => {
-            if (debouncedRef.current) {
-                clearTimeout(debouncedRef.current);
-            }
-        };
+        if (listRef.current) {
+            listRef.current.scrollTop = listRef.current.scrollHeight - listRef.current.clientHeight;
+        }
     }, []);
 
     // Render
 
     return (
-        <ChatMessageListContext.Provider value={providerValue}>
-            <div
-                ref={listRef}
-                className={classNames(
-                    'w-full h-full py-2 flex flex-col gap-y-2 overflow-y-auto',
-                    className
-                )}
-            >
-                
+        <div
+            ref={listRef}
+            className={classNames('w-full h-full overflow-y-auto', className)}
+            style={{ overflowAnchor: 'none' }}
+        >
+            <div className="w-full min-h-full py-2 flex flex-col justify-end gap-y-2">
                 {children}
+                <div style={{ height: 1, overflowAnchor: 'auto' }} />
             </div>
-        </ChatMessageListContext.Provider>
+        </div>
     );
 
 }
