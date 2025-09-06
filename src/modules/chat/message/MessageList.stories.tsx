@@ -7,7 +7,6 @@ import { Menu } from '../../../components/menu/Menu';
 import { ForwardIcon, ReplyIcon } from '../../../icons/components';
 import chatBackground from '../assets/chat-background.png';
 import { messages } from '../data/messages';
-import { reactionDetails } from '../data/reactionDetails';
 import { AudioReply, DefaultReply, ImageReply, TextReply, VideoReply } from '../reply/instances';
 import type { ReplyProps } from '../reply/ReplyProvider';
 import { buildMessageRows } from './buildMessageRows';

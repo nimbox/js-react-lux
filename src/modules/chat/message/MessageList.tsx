@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useLayoutEffect, useRef } from 'react';
+import { useCallback, useLayoutEffect, useRef } from 'react';
 
 
 // MessageList
@@ -12,13 +12,35 @@ export interface MessageListProps {
 export function MessageList({ className, children }: MessageListProps) {
 
     const listRef = useRef<HTMLDivElement>(null);
+    const debouncedRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    // Scroll to bottom functions
+
+    const scrollToBottom = useCallback(() => {
+        if (listRef.current) {
+            listRef.current.scrollTop = Number.MAX_SAFE_INTEGER;
+        }
+    }, []);
+
+    // const debouncedScrollToBottom = useCallback(() => {
+    //     if (debouncedRef.current) {
+    //         clearTimeout(debouncedRef.current);
+    //     }
+    //     debouncedRef.current = setTimeout(scrollToBottom, 0);
+    // }, [scrollToBottom]);
 
     // Effects
 
     useLayoutEffect(() => {
-        if (listRef.current) {
-            listRef.current.scrollTop = listRef.current.scrollHeight - listRef.current.clientHeight;
-        }
+        scrollToBottom();
+    }, [children, scrollToBottom]);
+
+    useLayoutEffect(() => {
+        return () => {
+            if (debouncedRef.current) {
+                clearTimeout(debouncedRef.current);
+            }
+        };
     }, []);
 
     // Render

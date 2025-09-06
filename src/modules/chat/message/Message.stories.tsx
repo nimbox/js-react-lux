@@ -308,6 +308,125 @@ export const ImageMessageStory: StoryObj<typeof ImageMessage> = {
     }
 };
 
+export const ImageMessageWithNoAttachments: StoryObj<typeof ImageMessage> = {
+    render: (args) => <ImageMessage {...args} />,
+    args: {
+        message: {
+            id: 'msg-13',
+            author: sampleAuthor,
+            direction: 'outbound' as const,
+            type: 'image',
+            body: 'Here\'s the photo',
+            caption: 'Product catalog image',
+            timestamp: new Date(),
+            status: 'read',
+            attachments: []
+        },
+        menu: <MessageMenu />,
+        extra: {
+            onClick: (message) => action('onClick')(message),
+            className: 'cursor-zoom-in'
+        }
+    }
+};
+
+export const ImageMessageWithNoThumbnailUrl: StoryObj<typeof ImageMessage> = {
+    render: (args) => <ImageMessage {...args} />,
+    args: {
+        message: {
+            id: 'msg-13',
+            author: sampleAuthor,
+            direction: 'outbound' as const,
+            type: 'image',
+            body: 'Here\'s the photo',
+            caption: 'Product catalog image',
+            timestamp: new Date(),
+            status: 'read',
+            attachments: [
+                {
+                    type: 'image',
+                    name: 'catalog.jpg',
+                    mime: 'image/jpeg',
+                    size: 2048000,
+                    filename: 'catalog.jpg',
+                    url: 'https://picsum.photos/400/300'
+                }
+            ]
+        },
+        menu: <MessageMenu />,
+        extra: {
+            onClick: (message) => action('onClick')(message),
+            className: 'cursor-zoom-in'
+        }
+    }
+};
+
+export const ImageMessageWithThumbnailUrlAndNoSize: StoryObj<typeof ImageMessage> = {
+    render: (args) => <ImageMessage {...args} />,
+    args: {
+        message: {
+            id: 'msg-13',
+            author: sampleAuthor,
+            direction: 'outbound' as const,
+            type: 'image',
+            body: 'Here\'s the photo',
+            caption: 'Product catalog image',
+            timestamp: new Date(),
+            status: 'read',
+            attachments: [
+                {
+                    type: 'image',
+                    name: 'catalog.jpg',
+                    mime: 'image/jpeg',
+                    size: 2048000,
+                    filename: 'catalog.jpg',
+                    url: 'https://picsum.photos/400/300',
+                    thumbnailUrl: 'https://picsum.photos/200/150'
+                }
+            ]
+        },
+        menu: <MessageMenu />,
+        extra: {
+            onClick: (message) => action('onClick')(message),
+            className: 'cursor-zoom-in'
+        }
+    }
+};
+
+export const ImageMessageWithThumbnailUrlAndSize: StoryObj<typeof ImageMessage> = {
+    render: (args) => <ImageMessage {...args} />,
+    args: {
+        message: {
+            id: 'msg-13',
+            author: sampleAuthor,
+            direction: 'outbound' as const,
+            type: 'image',
+            body: 'Here\'s the photo',
+            caption: 'Product catalog image',
+            timestamp: new Date(),
+            status: 'read',
+            attachments: [
+                {
+                    type: 'image',
+                    name: 'catalog.jpg',
+                    mime: 'image/jpeg',
+                    size: 2048000,
+                    filename: 'catalog.jpg',
+                    url: 'https://picsum.photos/400/300',
+                    thumbnailUrl: 'https://picsum.photos/200/150',
+                    width: 400,
+                    height: 300
+                }
+            ]
+        },
+        menu: <MessageMenu />,
+        extra: {
+            onClick: (message) => action('onClick')(message),
+            className: 'cursor-zoom-in'
+        }
+    }
+};
+
 export const ImageMessageWithReply: StoryObj<typeof ImageMessage> = {
     render: (args) => <ImageMessage {...args} />,
     args: {
