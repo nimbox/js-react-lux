@@ -7,5 +7,5 @@ on:
 
 jobs:
     call-node-release:
-      uses: nimbox/actions/.github/workflows/node-release.yaml@main
+      uses: nimbox/build-tools/.github/workflows/node-release.yaml@main
       secrets: inherit
