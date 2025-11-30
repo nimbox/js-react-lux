@@ -86,7 +86,8 @@
 }
 .lux-age-past-5-2 {
   color: var(--color-age-dark);
-  background-color: #fdae61 rect {
+  background-color: #fdae61;
+  rect {
     fill: #fdae61;
   }
 }
@@ -135,7 +136,8 @@
 }
 .lux-age-past-6-4 {
   color: var(--color-age-dark);
-  background-color: #f46d43 rect {
+  background-color: #f46d43;
+  rect {
     fill: #f46d43;
   }
 }

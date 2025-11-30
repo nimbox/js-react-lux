@@ -32,10 +32,12 @@ export default [{
         nodeResolve({ extensions }),
         commonjs(),
         typescript({ tsconfig: 'tsconfig.build.json' }),
-        copy({ targets: [
-            { src: 'src/styles/**/*.css', dest: 'dist/styles' },
-            { src: 'src/locales/*', dest: 'dist/locales' }
-        ] }),
+        copy({
+            targets: [
+                { src: 'src/styles/**/*.css', dest: 'dist/styles' },
+                { src: 'src/locales/*', dest: 'dist/locales' }
+            ]
+        }),
         filesize()
     ],
 
