@@ -6,6 +6,6 @@ on:
       - 'v*.*.*'
 
 jobs:
-    call-node-release:
+    publish-node:
       uses: nimbox/build-tools/.github/workflows/node-release.yaml@main
       secrets: inherit
