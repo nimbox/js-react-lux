@@ -8,40 +8,47 @@
       "types": "./dist/types/index.d.ts",
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js",
-      "default": "./dist/esm/index.js"
+      "default": "./dist/esm/index.js",
+      "development": "./src/index.ts"
     },
     "./styles/elegant.css": {
-      "default": "./dist/styles/elegant.css"
+      "default": "./dist/styles/elegant.css",
+      "development": "./src/styles/elegant.css"
     },
     "./icons": {
       "types": "./dist/types/icons/components/index.d.ts",
       "import": "./dist/esm/icons.js",
       "require": "./dist/cjs/icons.js",
-      "default": "./dist/esm/icons.js"
+      "default": "./dist/esm/icons.js",
+      "development": "./src/icons/index.ts"
     },
     "./figures": {
       "types": "./dist/types/figures/index.d.ts",
       "import": "./dist/esm/figures.js",
       "require": "./dist/cjs/figures.js",
-      "default": "./dist/esm/figures.js"
+      "default": "./dist/esm/figures.js",
+      "development": "./src/figures/index.ts"
     },
     "./modules/calendar": {
       "types": "./dist/types/modules/calendar/index.d.ts",
       "import": "./dist/esm/modules/calendar.js",
       "require": "./dist/cjs/modules/calendar.js",
-      "default": "./dist/esm/modules/calendar.js"
+      "default": "./dist/esm/modules/calendar.js",
+      "development": "./src/modules/calendar/index.ts"
     },
     "./modules/chat": {
       "types": "./dist/types/modules/chat/index.d.ts",
       "import": "./dist/esm/modules/chat.js",
       "require": "./dist/cjs/modules/chat.js",
-      "default": "./dist/esm/modules/chat.js"
+      "default": "./dist/esm/modules/chat.js",
+      "development": "./src/modules/chat/index.ts"
     },
     "./modules/kanban": {
       "types": "./dist/types/modules/kanban/index.d.ts",
       "import": "./dist/esm/modules/kanban.js",
       "require": "./dist/cjs/modules/kanban.js",
-      "default": "./dist/esm/modules/kanban.js"
+      "default": "./dist/esm/modules/kanban.js",
+      "development": "./src/modules/kanban/index.ts"
     }
   },
   "files": [

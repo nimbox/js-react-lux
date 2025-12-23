@@ -13,6 +13,8 @@ export * from './types/TemplateData';
 
 // Export components
 
+export { default as background } from './assets/chat-background.png';
+
 export * from './ChatContext';
 export * from './ChatProvider';
 
