@@ -64,7 +64,7 @@ export * from './hooks/useOption';
 export * from './hooks/useOptions';
 export * from './hooks/useOptionsCount';
 export * from './hooks/useOptionsKeyNavigator';
-
+export * from './hooks/useScrollToBottom';
 export * from './hooks/useViewport';
 export * from './hooks/ViewportProvider';
 
