@@ -40,6 +40,7 @@ export { default as GearIcon } from "./Gear";
 export { default as GlobeIcon } from "./Globe";
 export { default as GroupIcon } from "./Group";
 export { default as HamburgerIcon } from "./Hamburger";
+export { default as HandgunIcon } from "./Handgun";
 export { default as HeartIcon } from "./Heart";
 export { default as HomeIcon } from "./Home";
 export { default as HorizontalDotsIcon } from "./HorizontalDots";

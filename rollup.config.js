@@ -1,4 +1,5 @@
 import commonjs from '@rollup/plugin-commonjs';
+import image from '@rollup/plugin-image';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import copy from 'rollup-plugin-copy';
@@ -29,7 +30,8 @@ export default [{
     external,
 
     plugins: [
-        nodeResolve({ extensions }),
+        nodeResolve({ extensions: [...extensions, '.png'] }),
+        image(),
         commonjs(),
         typescript({ tsconfig: 'tsconfig.build.json' }),
         copy({
