@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, type Dispatch, type ReactNode, type Se
 import { useTranslation } from 'react-i18next';
 import { Input } from '../../../../components/inputs/Input';
 import { type MessageData } from '../../types/MessageData';
-import { TemplateContextBlock, type TemplateContextBlockType, type TemplateContextData } from '../../types/TemplateContextData';
+import { TEMPLATE_CONTEXT_BLOCK, type TemplateContextBlockType, type TemplateContextData } from '../../types/TemplateContextData';
 import { type TemplateData } from '../../types/TemplateData';
 import { useMessageComposer } from '../MessageComposerContext';
 import { ComposerPanel } from './ComposerPanel';
@@ -183,7 +183,7 @@ function TemplateContext(props: TemplateContextProps) {
 
     const { template, context, onContextChange, className } = props;
     const { t } = useTranslation();
-    const safeContext = context ?? { header: {}, body: {}, footer: {} };
+    const safeContext = context ?? { header: {}, body: {}, footer: {}, buttons: {} };
 
 
     // Context
@@ -193,11 +193,17 @@ function TemplateContext(props: TemplateContextProps) {
         return block?.type === 'text' ? Object.keys(block.content.context ?? {}) : [];
     }, [template]);
 
-    const isEmpty = useMemo(() => {
-        return TemplateContextBlock.every(k => getVariables(k).length === 0);
-    }, [getVariables]);
+    // The dynamic buttons (those that declare variables) and their parameter names.
+    // Static buttons have no variables — they appear only in the preview.
+    const buttonGroups = useMemo(() => {
+        return (template?.buttons ?? [])
+            .map((button) => ({ text: button.text, variables: Object.keys(('context' in button ? button.context : undefined) ?? {}) }))
+            .filter((group) => group.variables.length > 0);
+    }, [template]);
 
-    // Handlers
+    const isEmpty = useMemo(() => {
+        return TEMPLATE_CONTEXT_BLOCK.every(k => getVariables(k).length === 0) && buttonGroups.length === 0;
+    }, [getVariables, buttonGroups]);
 
     const handleContextChange = useCallback((b: TemplateContextBlockType, k: string, v: string) => {
         onContextChange({ ...safeContext, [b]: { ...safeContext[b], [k]: v } });
@@ -220,7 +226,7 @@ function TemplateContext(props: TemplateContextProps) {
                 'w-full flex-1 overflow-y-auto',
                 className)}
             >
-                {TemplateContextBlock.map(b => {
+                {TEMPLATE_CONTEXT_BLOCK.map(b => {
 
                     const variables = getVariables(b);
                     if (!variables.length) {
@@ -247,6 +253,25 @@ function TemplateContext(props: TemplateContextProps) {
                     );
 
                 })}
+
+                {buttonGroups.map((group, groupIndex) => (
+                    <div key={`button-${groupIndex}`} className="px-4 py-2">
+                        <div className="font-medium mb-1">{group.text}</div>
+                        <div className="space-y-2">
+                            {group.variables.map(v => (
+                                <div key={v} className="flex flex-col text-sm gap-1">
+                                    <label className="text-gray-600" htmlFor={`button-${v}`}>{v}</label>
+                                    <Input
+                                        id={`button-${v}`}
+                                        value={safeContext.buttons[v] ?? ''}
+                                        onChange={e => handleContextChange('buttons', v, e.target.value)}
+                                        className="text-sm"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ))}
 
                 {isEmpty &&
                     <div className="p-8 text-center">
@@ -280,7 +305,7 @@ function TemplatePreview({ template, context, transform, render: Message, backgr
 
     const preview = useMemo(() => {
         if (!template) return null;
-        return transform(template, context ?? { header: {}, body: {}, footer: {} });
+        return transform(template, context ?? { header: {}, body: {}, footer: {}, buttons: {} });
     }, [template, context, transform]);
 
     // Render
@@ -311,15 +336,21 @@ function TemplatePreview({ template, context, transform, render: Message, backgr
 
 function initialize(template: TemplateData) {
 
-    const context: TemplateContextData = { header: {}, body: {}, footer: {} };
+    const context: TemplateContextData = { header: {}, body: {}, footer: {}, buttons: {} };
     if (!template) return context;
 
-    TemplateContextBlock.forEach(b => {
+    TEMPLATE_CONTEXT_BLOCK.forEach(b => {
         const block = template[b as keyof TemplateData] as TemplateData['header'] | undefined;
         if (block?.type === 'text') {
             for (const k of Object.keys(block.content.context ?? {})) {
                 context[b][k] = '';
             }
+        }
+    });
+
+    (template.buttons ?? []).forEach(button => {
+        for (const k of Object.keys(('context' in button ? button.context : undefined) ?? {})) {
+            context.buttons[k] = '';
         }
     });
 

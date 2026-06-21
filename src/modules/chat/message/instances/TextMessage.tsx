@@ -23,6 +23,7 @@ export function TextMessage(props: MessageProviderProps) {
                     {!isSingleEmoji && <MessageProvider.Body />}
                     <MessageProvider.Footer />
                     <MessageProvider.Properties />
+                    <MessageProvider.Buttons />
                 </MessageProvider.Bubble>
             </MessageProvider.Container>
         </MessageProvider>

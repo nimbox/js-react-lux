@@ -8,6 +8,7 @@ import { MessageReactionPicker } from './MessageReactionPicker';
 import { MessageAudio } from './slots/MessageAudio';
 import { MessageAuthor } from './slots/MessageAuthor';
 import { MessageBody } from './slots/MessageBody';
+import { MessageButtons } from './slots/MessageButtons';
 import { MessageBubble } from './slots/MessageBubble';
 import { MessageContainer } from './slots/MessageContainer';
 import { MessageFloatingAttachments } from './slots/MessageFloatingAttachments';
@@ -82,6 +83,7 @@ MessageProvider.Video = MessageVideo;
 
 MessageProvider.Body = MessageBody;
 MessageProvider.Footer = MessageFooter;
+MessageProvider.Buttons = MessageButtons;
 
 MessageProvider.Properties = MessageProperties;
 
