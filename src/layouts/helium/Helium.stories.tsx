@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { NimboxIcon } from '../../icons/components';
+import { NimboxIcon } from '@nimbox/icons-react';
 import { Header, Helium, Main, Navigator, Panel } from './Helium';
 
 

@@ -3,7 +3,7 @@ import tinycolor from 'tinycolor2';
 import defaultSwatches from '../../data/flat-colors';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
-import { RefreshIcon } from '../../icons/components';
+import { RefreshIcon } from '@nimbox/icons-react';
 import { InputPopper, type InputPopperProps } from '../inputs/InputPopper';
 import { consumeEvent } from '../utilities/consumeEvent';
 import { setRefInputValue } from '../utilities/setRefInputValue';

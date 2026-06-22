@@ -2,7 +2,7 @@ import React, { Children, type Dispatch, type ReactNode, type SetStateAction, us
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../../components/Button';
 import { Input } from '../../../components/inputs/Input';
-import { CrossIcon, SendIcon } from '../../../icons/components';
+import { CrossIcon, SendIcon } from '@nimbox/icons-react';
 import { type ReplyProps } from '../reply/ReplyProvider';
 import type { MessageData } from '../types/MessageData';
 import { MessageComposerContext } from './MessageComposerContext';

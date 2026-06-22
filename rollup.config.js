@@ -11,7 +11,6 @@ const entries = {
 
     'index': 'src/index.ts',
 
-    'icons': 'src/icons/components/index.ts',
     'figures': 'src/figures/index.ts',
 
     'modules/calendar': 'src/modules/calendar/index.ts',
@@ -45,15 +44,7 @@ export default [{
 
     output: [
         {
-            dir: 'dist/cjs',
-            format: 'cjs',
-            sourcemap: true,
-            entryFileNames: '[name].js',
-            chunkFileNames: 'chunks/[hash].js',
-            exports: 'auto'
-        },
-        {
-            dir: 'dist/esm',
+            dir: 'dist',
             format: 'esm',
             sourcemap: true,
             entryFileNames: '[name].js',

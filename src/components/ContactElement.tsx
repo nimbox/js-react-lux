@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import { type FC } from 'react';
-import { MessageIcon, PhoneIcon } from '../icons/components';
+import { MessageIcon, PhoneIcon } from '@nimbox/icons-react';
 import { Anchor } from './Anchor';
 
 

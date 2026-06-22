@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { type ChangeEvent, type ChangeEventHandler, type Dispatch, type MouseEventHandler, type ReactNode, type SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Input } from '../../../../components/inputs/Input';
-import { CrossIcon, FileIcon, PlusIcon } from '../../../../icons/components';
+import { CrossIcon, FileIcon, PlusIcon } from '@nimbox/icons-react';
 import { useStableKey } from '../../hooks/useStableKey';
 import { mediaSize } from '../../utils/mediaSize';
 import { useMessageComposer } from '../MessageComposerContext';

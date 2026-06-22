@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import React, { type FC, type MouseEventHandler, useContext, useEffect, useState } from 'react';
 import { ShowTransition } from '../../components/transitions/ShowTransition';
 import { useViewport } from '../../hooks/useViewport';
-import { AngleLeftIcon, CrossIcon, HamburgerIcon } from '../../icons/components';
+import { AngleLeftIcon, CrossIcon, HamburgerIcon } from '@nimbox/icons-react';
 import { HeliumContext } from './HeliumContext';
 
 

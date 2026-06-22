@@ -1,5 +1,5 @@
 import React, { type Ref, useImperativeHandle, useRef } from 'react';
-import { CircleCrossIcon, SearchIcon } from '../../icons/components';
+import { CircleCrossIcon, SearchIcon } from '@nimbox/icons-react';
 import { setRefInputValue } from '../utilities/setRefInputValue';
 import { Input, type InputProps } from './Input';
 

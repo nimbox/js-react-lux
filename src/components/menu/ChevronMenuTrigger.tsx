@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { forwardRef } from 'react';
-import { AngleDownIcon } from '../../icons/components';
+import { AngleDownIcon } from '@nimbox/icons-react';
 
 
 export const AngleDownMenuTrigger = forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<Omit<HTMLButtonElement, 'ref'>>>((props, ref) => {

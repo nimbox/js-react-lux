@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import React, { type FC } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { PlusIcon } from '../../icons/components';
+import { PlusIcon } from '@nimbox/icons-react';
 import { type Card, type Column, uniqueCard, uniqueColumn, useKanbanStore } from '../../test/useKanbanStore';
 import { KanbanProvider } from './Kanban';
 import { useKanbanContext } from './KanbanContext';

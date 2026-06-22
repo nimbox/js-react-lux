@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Popper } from '../../../components/floating/Popper';
 import { EmojiPicker } from '../../../components/pickers/EmojiPicker';
 import { useOnOutsideClick } from '../../../hooks/useOnOutsideClick';
-import { SmileyIcon } from '../../../icons/components';
+import { SmileyIcon } from '@nimbox/icons-react';
 import { useMessage } from './MessageContext';
 
 

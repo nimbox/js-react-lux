@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { type ChangeEventHandler, forwardRef, type InputHTMLAttributes, type Ref, useContext } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
-import { AngleDownIcon } from '../../icons/components';
+import { AngleDownIcon } from '@nimbox/icons-react';
 import { ControlContext } from './ControlContext';
 import { Field, type FieldProps } from './Field';
 

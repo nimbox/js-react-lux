@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FullSquareIcon } from '../icons/components';
+import { FullSquareIcon } from '@nimbox/icons-react';
 import { Anchor } from './Anchor';
 
 

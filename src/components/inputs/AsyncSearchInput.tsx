@@ -1,5 +1,5 @@
 import React, { type Ref } from 'react';
-import { WarningIcon } from '../../icons/components';
+import { WarningIcon } from '@nimbox/icons-react';
 import { Delay } from '../Delay';
 import { Loading } from '../Loading';
 import { SearchInput, type SearchInputProps } from './SearchInput';

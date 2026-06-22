@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useOnOutsideClick } from '../hooks/useOnOutsideClick';
-import { VerticalDotsIcon } from '../icons/components';
+import { VerticalDotsIcon } from '@nimbox/icons-react';
 import { Button } from './Button';
 import { Popper } from './floating/Popper';
 

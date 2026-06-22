@@ -6,7 +6,7 @@ import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { type UseOptionChooser } from '../../hooks/useOption';
 import { type UseOptionsSupplier } from '../../hooks/useOptions';
 import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
-import { AngleDownIcon, CircleCrossIcon, WarningIcon } from '../../icons/components';
+import { AngleDownIcon, CircleCrossIcon, WarningIcon } from '@nimbox/icons-react';
 import { Delay } from '../Delay';
 import { FieldPopper, type FieldPopperProps } from '../inputs/FieldPopper';
 import { Placeholder } from '../inputs/Placeholder';

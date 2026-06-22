@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import { type FC } from 'react';
-import { CrossIcon } from '../icons/components';
+import { CrossIcon } from '@nimbox/icons-react';
 
 
 //

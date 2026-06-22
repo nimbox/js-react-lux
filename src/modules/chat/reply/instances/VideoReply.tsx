@@ -1,4 +1,4 @@
-import { VideoIcon } from '../../../../icons/components';
+import { VideoIcon } from '@nimbox/icons-react';
 import { type ReplyProps } from '../ReplyProvider';
 import { TimedReply } from './TimedReply';
 

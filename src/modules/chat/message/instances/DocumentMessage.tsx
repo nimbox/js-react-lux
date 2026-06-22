@@ -1,4 +1,4 @@
-import { FileIcon } from '../../../../icons/components';
+import { FileIcon } from '@nimbox/icons-react';
 import { mediaSize } from '../../utils/mediaSize';
 import { useMessage } from '../MessageContext';
 import { MessageProvider, type MessageProviderProps } from '../MessageProvider';

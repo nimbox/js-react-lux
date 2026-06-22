@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useRef } from 'react';
 import { action } from 'storybook/actions';
-import { CircleIcon, SquareIcon } from '../../icons/components';
+import { CircleIcon, SquareIcon } from '@nimbox/icons-react';
 import { ControlledTemplate, HookFormTemplate, UncontrolledTemplate } from '../../templates/InputTemplates';
 import { Button } from '../Button';
 import * as data from '../choose/data';

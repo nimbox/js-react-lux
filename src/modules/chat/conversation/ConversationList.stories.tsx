@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { action } from 'storybook/actions';
 import { AngleDownMenuTrigger } from '../../../components/menu/ChevronMenuTrigger';
 import { Menu } from '../../../components/menu/Menu';
-import { EditIcon } from '../../../icons/components';
+import { EditIcon } from '@nimbox/icons-react';
 import { conversations } from '../data/conversations';
 import { useConversation } from './ConversationContext';
 import { ConversationList } from './ConversationList';

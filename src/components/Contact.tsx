@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import React, { type FC } from 'react';
-import { NimboxIcon } from '../icons/components';
+import { NimboxIcon } from '@nimbox/icons-react';
 import { Button } from './Button';
 
 

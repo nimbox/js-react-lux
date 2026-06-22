@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { Button } from '../../../components/Button';
-import { CrossIcon } from '../../../icons/components';
+import { CrossIcon } from '@nimbox/icons-react';
 import type { MessageData } from '../types/MessageData';
 
 

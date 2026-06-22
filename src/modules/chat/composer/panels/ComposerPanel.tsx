@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { type ReactNode } from 'react';
 import { Button } from '../../../../components/Button';
 import { useOnEscape } from '../../../../hooks/useOnEscape';
-import { CrossIcon } from '../../../../icons/components';
+import { CrossIcon } from '@nimbox/icons-react';
 
 
 export interface ComposerPanelProps {

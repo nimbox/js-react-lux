@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { action } from 'storybook/actions';
-import { DirectoryIcon, EditIcon, ForwardIcon, GearIcon, LogoutIcon, TrashIcon } from '../../icons/components';
+import { DirectoryIcon, EditIcon, ForwardIcon, GearIcon, LogoutIcon, TrashIcon } from '@nimbox/icons-react';
 import { AngleDownMenuTrigger } from './ChevronMenuTrigger';
 import { Menu } from './Menu';
 

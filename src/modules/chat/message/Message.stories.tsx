@@ -4,7 +4,7 @@ import calendar from 'dayjs/plugin/calendar';
 import { action } from 'storybook/actions';
 import { AngleDownMenuTrigger } from '../../../components/menu/ChevronMenuTrigger';
 import { Menu } from '../../../components/menu/Menu';
-import { ForwardIcon, ReplyIcon } from '../../../icons/components';
+import { ForwardIcon, ReplyIcon } from '@nimbox/icons-react';
 import chatBackground from '../assets/chat-background.png';
 import { TextReply } from '../reply/instances/TextReply';
 import { AudioMessage } from './instances/AudioMessage';

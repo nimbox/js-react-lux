@@ -1,4 +1,4 @@
-import { FileIcon } from '../../../../icons/components';
+import { FileIcon } from '@nimbox/icons-react';
 import { mediaSize } from '../../utils/mediaSize';
 import { useReply } from '../ReplyContext';
 import { ReplyProvider, type ReplyProps } from '../ReplyProvider';

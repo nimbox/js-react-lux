@@ -6,48 +6,36 @@
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js",
-      "default": "./dist/esm/index.js",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js",
       "development": "./src/index.ts"
     },
     "./styles/elegant.css": {
       "default": "./dist/styles/elegant.css",
       "development": "./src/styles/elegant.css"
     },
-    "./icons": {
-      "types": "./dist/types/icons/components/index.d.ts",
-      "import": "./dist/esm/icons.js",
-      "require": "./dist/cjs/icons.js",
-      "default": "./dist/esm/icons.js",
-      "development": "./src/icons/index.ts"
-    },
     "./figures": {
       "types": "./dist/types/figures/index.d.ts",
-      "import": "./dist/esm/figures.js",
-      "require": "./dist/cjs/figures.js",
-      "default": "./dist/esm/figures.js",
+      "import": "./dist/figures.js",
+      "default": "./dist/figures.js",
       "development": "./src/figures/index.ts"
     },
     "./modules/calendar": {
       "types": "./dist/types/modules/calendar/index.d.ts",
-      "import": "./dist/esm/modules/calendar.js",
-      "require": "./dist/cjs/modules/calendar.js",
-      "default": "./dist/esm/modules/calendar.js",
+      "import": "./dist/modules/calendar.js",
+      "default": "./dist/modules/calendar.js",
       "development": "./src/modules/calendar/index.ts"
     },
     "./modules/chat": {
       "types": "./dist/types/modules/chat/index.d.ts",
-      "import": "./dist/esm/modules/chat.js",
-      "require": "./dist/cjs/modules/chat.js",
-      "default": "./dist/esm/modules/chat.js",
+      "import": "./dist/modules/chat.js",
+      "default": "./dist/modules/chat.js",
       "development": "./src/modules/chat/index.ts"
     },
     "./modules/kanban": {
       "types": "./dist/types/modules/kanban/index.d.ts",
-      "import": "./dist/esm/modules/kanban.js",
-      "require": "./dist/cjs/modules/kanban.js",
-      "default": "./dist/esm/modules/kanban.js",
+      "import": "./dist/modules/kanban.js",
+      "default": "./dist/modules/kanban.js",
       "development": "./src/modules/kanban/index.ts"
     }
   },
@@ -57,11 +45,10 @@
   "scripts": {
     "dev": "vite",
     "check": "tsc --noEmit",
-    "build": "rm -rf dist/* && npm run build:icons && npm run build:types && rollup -c",
+    "build": "rm -rf dist/* && npm run build:types && rollup -c",
     "build:types": "tsc -p tsconfig.types.json --emitDeclarationOnly --declaration --outDir dist/types",
-    "build:watch": "rm -rf dist/* && npm run build:icons && npm run build:types && rollup -cw",
-    "build:watch:yalc": "rm -rf dist/* && npm run build:icons && npm run build:types && rollup -cw -p ./yalc.js",
-    "build:icons": "rm -f src/icons/components/*.tsx && cp src/icons/sources/*.svg src/icons/outlines && svgr --config-file icons.svgr.config.js --icon --typescript --silent --out-dir src/icons/components src/icons/outlines",
+    "build:watch": "rm -rf dist/* && npm run build:types && rollup -cw",
+    "build:watch:yalc": "rm -rf dist/* && npm run build:types && rollup -cw -p ./yalc.js",
     "build:emoji": "node scripts/build-emoji.js",
     "lint": "eslint . --ignore-pattern src/sandbox",
     "preview": "vite preview",
@@ -76,6 +63,7 @@
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.16",
+    "@nimbox/icons-react": "^1.0.2",
     "classnames": "^2.5.1",
     "emoji-regex": "^10.6.0",
     "i18next": "^25.6.2",
@@ -103,7 +91,6 @@
     "@storybook/addon-docs": "^10.0.8",
     "@storybook/addon-links": "^10.0.8",
     "@storybook/react-vite": "^10.0.8",
-    "@svgr/cli": "^8.1.0",
     "@tailwindcss/vite": "^4.1.17",
     "@types/lodash-es": "^4.17.12",
     "@types/react": "^19.2.6",

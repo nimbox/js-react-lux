@@ -3,7 +3,7 @@ import { Tag } from './Tag';
 import { fn } from 'storybook/test';
 import { Wrapper } from './inputs/Wrapper';
 import { Input } from './inputs/Input';
-import Cross from '../icons/components/Cross';
+import { CrossIcon } from '@nimbox/icons-react';
 
 
 // Definition
@@ -227,10 +227,10 @@ export const DocumentationFlexIconBlock: Story = {
         return (
             <div>
                 <div>
-                    before <span className="inline-flex flex-row items-baseline py-0.5 max-w-full bg-red-200"><Cross className="flex-none self-center bg-red-300" width="0.75em" height="0.75em" /><span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex</span></span> after
+                    before <span className="inline-flex flex-row items-baseline py-0.5 max-w-full bg-red-200"><CrossIcon className="flex-none self-center bg-red-300" width="0.75em" height="0.75em" /><span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex</span></span> after
                 </div>
                 <div className="bg-gray-100">
-                    before <span className="inline-flex flex-row items-baseline py-0.5 max-w-full bg-red-200"><Cross className="flex-none self-center bg-red-300" width="0.75em" height="0.75em" /><span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex text text text text text text text text text text text text  text text text  text text text  text text text</span></span> after
+                    before <span className="inline-flex flex-row items-baseline py-0.5 max-w-full bg-red-200"><CrossIcon className="flex-none self-center bg-red-300" width="0.75em" height="0.75em" /><span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex text text text text text text text text text text text text  text text text  text text text  text text text</span></span> after
                 </div>
             </div>
         );
@@ -242,10 +242,10 @@ export const DocumentationFlexIconPaddingBlock: Story = {
         return (
             <div>
                 <div>
-                    before <span className="inline-flex flex-row items-baseline px-1 py-0.5 max-w-full bg-red-200 rounded-full"><Cross className="flex-none self-center bg-red-300 rounded rounded-full" width="0.75em" height="0.75em" style={{ marginRight: '0.25em' }} /><span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex</span></span> after
+                    before <span className="inline-flex flex-row items-baseline px-1 py-0.5 max-w-full bg-red-200 rounded-full"><CrossIcon className="flex-none self-center bg-red-300 rounded rounded-full" width="0.75em" height="0.75em" style={{ marginRight: '0.25em' }} /><span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex</span></span> after
                 </div>
                 <div className="bg-gray-100">
-                    before <span className="inline-flex flex-row items-baseline px-1 py-0.5 max-w-full bg-red-200 rounded-full"><Cross className="flex-none self-center bg-red-300 rounded rounded-full" width="0.75em" height="0.75em" style={{ marginRight: '0.25em' }} /><span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex text text text text text text text text text text text text  text text text  text text text  text text text</span></span> after
+                    before <span className="inline-flex flex-row items-baseline px-1 py-0.5 max-w-full bg-red-200 rounded-full"><CrossIcon className="flex-none self-center bg-red-300 rounded rounded-full" width="0.75em" height="0.75em" style={{ marginRight: '0.25em' }} /><span className="inline-block max-w-full truncate bg-red-100" style={{ height: '1em', lineHeight: '1em' }}>tex text text text text text text text text text text text text  text text text  text text text  text text text</span></span> after
                 </div>
             </div>
         );

@@ -1,4 +1,4 @@
-import { FullSquareIcon } from '../../icons/components';
+import { FullSquareIcon } from '@nimbox/icons-react';
 import { Field } from './Field';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 

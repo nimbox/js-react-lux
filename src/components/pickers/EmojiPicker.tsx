@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { useState } from 'react';
-import { MinusIcon, PlusIcon } from '../../icons/components';
+import { MinusIcon, PlusIcon } from '@nimbox/icons-react';
 import { Button } from '../Button';
 import { Tabs } from '../Tabs';
 import { commonEmojis } from './common-emojis';

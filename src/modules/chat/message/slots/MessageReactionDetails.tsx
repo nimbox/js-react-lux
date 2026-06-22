@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Loading } from '../../../../components/Loading';
-import { WarningIcon } from '../../../../icons/components';
+import { WarningIcon } from '@nimbox/icons-react';
 import type { ReactionDetailsData } from '../../types/ReactionDetailsData';
 import { MessageContext, useMessage } from '../MessageContext';
 

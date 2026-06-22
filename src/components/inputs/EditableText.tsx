@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { type FC, useEffect, useRef, useState } from 'react';
-import { WarningIcon } from '../../icons/components';
+import { WarningIcon } from '@nimbox/icons-react';
 import { Loading } from '../Loading';
 import { PlainInput } from './PlainInput';
 

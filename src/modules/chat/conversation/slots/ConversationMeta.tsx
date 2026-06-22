@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { useConversation } from '../ConversationContext';
-import { HeartIcon, ThumbTackIcon } from '../../../../icons/components';
+import { HeartIcon, ThumbTackIcon } from '@nimbox/icons-react';
 
 
 // ConversationMeta

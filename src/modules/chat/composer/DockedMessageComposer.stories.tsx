@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { action } from 'storybook/actions';
 import { Button } from '../../../components/Button';
 import { Menu } from '../../../components/menu/Menu';
-import { FileIcon, ImageIcon, MessageIcon, PlusIcon, SmileyIcon, TemplateIcon } from '../../../icons/components';
+import { FileIcon, ImageIcon, MessageIcon, PlusIcon, SmileyIcon, TemplateIcon } from '@nimbox/icons-react';
 import chatBackground from '../assets/chat-background.png';
 import { ChatProvider } from '../ChatProvider';
 import { type MessageData } from '../types/MessageData';

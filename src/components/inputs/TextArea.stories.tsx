@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useRef, useState } from 'react';
-import { CircleIcon, SquareIcon } from '../../icons/components';
+import { CircleIcon, SquareIcon } from '@nimbox/icons-react';
 import { Button } from '../Button';
 import { TextArea } from './TextArea';
 import { action } from 'storybook/actions';

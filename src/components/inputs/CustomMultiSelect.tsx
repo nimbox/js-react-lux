@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React, { createContext, type FC, type LegacyRef, useContext, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { AngleDownIcon } from '../../icons/components';
+import { AngleDownIcon } from '@nimbox/icons-react';
 import { type ComponentAlign } from '../ComponentAlign';
 
 

@@ -2,7 +2,7 @@ import React, { type Ref, useEffect, useImperativeHandle, useRef, useState } fro
 import { useOptions, type UseOptionsProps, type UseOptionsSupplier } from '../../hooks/useOptions';
 import { useOptionsCount } from '../../hooks/useOptionsCount';
 import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
-import { WarningIcon } from '../../icons/components';
+import { WarningIcon } from '@nimbox/icons-react';
 import { ChooseOptionList, type ChooseOptionListProps } from '../choose/ChooseOptionList';
 import { EXTRACTOR } from '../choose/options';
 import { Delay } from '../Delay';

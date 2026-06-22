@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { type FC, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { CrossIcon, DangerIcon, InformationIcon, SuccessIcon, WarningIcon } from '../icons/components';
+import { CrossIcon, DangerIcon, InformationIcon, SuccessIcon, WarningIcon } from '@nimbox/icons-react';
 import { ToastContext } from './ToastContext';
 
 

@@ -1,4 +1,4 @@
-import { AudioIcon } from '../../../../icons/components';
+import { AudioIcon } from '@nimbox/icons-react';
 import { type ReplyProps } from '../ReplyProvider';
 import { TimedReply } from './TimedReply';
 

@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React, { type ReactElement, type Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
-import { AngleDownIcon, AngleUpIcon, CircleIcon, ClockIcon } from '../../icons/components';
+import { AngleDownIcon, AngleUpIcon, CircleIcon, ClockIcon } from '@nimbox/icons-react';
 import { InputPopper, type InputPopperProps } from '../inputs/InputPopper';
 import { consumeEvent } from '../utilities/consumeEvent';
 import { setRefInputValue } from '../utilities/setRefInputValue';
