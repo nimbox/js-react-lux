@@ -45,8 +45,8 @@ export function transformTemplate(template: TemplateData, context: TemplateConte
         switch (button.type) {
             case 'reply':
                 return { type: 'reply', text: button.text };
-            case 'visit-website':
-                return { type: 'visit-website', text: button.text, url: substitute(button.url) };
+            case 'link':
+                return { type: 'link', text: button.text, url: substitute(button.url) };
             case 'call-channel':
                 return { type: 'call-channel', text: button.text };
             case 'call-phone-number':

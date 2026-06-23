@@ -29,12 +29,12 @@ export interface TemplateTextBlockData {
 }
 
 // A single template button — discriminated by `type` (channel-neutral). `reply`,
-// `call-channel`, `call-phone-number` are static; `visit-website` (when its URL has
+// `call-channel`, `call-phone-number` are static; `link` (when its URL has
 // a {{name}} variable) and `copy-code` are dynamic and declare their variables in
 // `context` so the panel can render inputs for them.
 export type TemplateButtonData =
     | TemplateReplyButtonData
-    | TemplateVisitWebsiteButtonData
+    | TemplateLinkButtonData
     | TemplateCallChannelButtonData
     | TemplateCallPhoneNumberButtonData
     | TemplateCopyCodeButtonData;
@@ -44,8 +44,8 @@ export interface TemplateReplyButtonData {
     text: string;
 }
 
-export interface TemplateVisitWebsiteButtonData {
-    type: 'visit-website';
+export interface TemplateLinkButtonData {
+    type: 'link';
     text: string;
     url: string;
     context?: Record<string, TemplateTextContextData>;

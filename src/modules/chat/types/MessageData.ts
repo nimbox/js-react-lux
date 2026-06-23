@@ -33,7 +33,7 @@ export interface MessageData {
 // Discriminated by `type`, channel-neutral.
 export type MessageButtonData =
     | MessageReplyButtonData
-    | MessageVisitWebsiteButtonData
+    | MessageLinkButtonData
     | MessageCallChannelButtonData
     | MessageCallPhoneNumberButtonData
     | MessageCopyCodeButtonData;
@@ -43,8 +43,8 @@ export interface MessageReplyButtonData {
     text: string;
 }
 
-export interface MessageVisitWebsiteButtonData {
-    type: 'visit-website';
+export interface MessageLinkButtonData {
+    type: 'link';
     text: string;
     url: string;
 }

@@ -30,7 +30,7 @@ export function MessageButtons() {
                     case 'call-channel':
                         return <div key={index}>{label}</div>;
 
-                    case 'visit-website':
+                    case 'link':
                         return (
                             <a key={index} href={button.url} target="_blank" rel="noreferrer" className="block hover:bg-primary-50">
                                 {label}
