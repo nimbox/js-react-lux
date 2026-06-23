@@ -1,6 +1,6 @@
 import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
 import { Avatar } from './Avatar';
-import { CalendarIcon, FullSquareIcon, FullCircleIcon } from '../../icons/components'
+import { CalendarIcon, FullSquareIcon, FullCircleIcon } from '@nimbox/icons-react'
 
 
 <Meta title="Components/Displays/Avatar" component={Avatar}/>
