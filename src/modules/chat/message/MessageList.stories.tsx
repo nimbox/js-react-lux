@@ -126,10 +126,10 @@ export const Default: Story = {
                                                         isFirst={r.meta.isFirst}
                                                         isLast={r.meta.isLast}
 
-                                                        // onAddReaction={async (emoji) => {
+                                                        // onCreateReaction={async (emoji) => {
                                                         //     action('addReaction')({ messageId: r.message.id, emoji });
                                                         // }}
-                                                        // onRemoveReaction={async (emoji) => {
+                                                        // onDeleteReaction={async (emoji) => {
                                                         //     action('removeReaction')({ messageId: r.message.id, emoji });
                                                         // }}
                                                         // getReactions={async () => {

@@ -9,7 +9,7 @@ import { useMessage } from './MessageContext';
 
 export function MessageReactionPicker() {
 
-    const { onAddReaction } = useMessage();
+    const { onCreateReaction } = useMessage();
 
     const [show, setShow] = useState(false);
     const [referenceRef, setReferenceRef] = useState<HTMLButtonElement | null>(null);
@@ -20,7 +20,7 @@ export function MessageReactionPicker() {
     // Handlers
 
     const handleSelect = (emoji: string) => {
-        onAddReaction?.(emoji);
+        onCreateReaction?.(emoji);
         setShow(false);
     };
 

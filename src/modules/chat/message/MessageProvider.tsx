@@ -30,8 +30,8 @@ export interface MessageProps {
     menu?: React.ReactElement<{ onOpenChange: (open: boolean) => void }>;
     message: MessageData;
 
-    onAddReaction?: (emoji: string) => Promise<void>;
-    onRemoveReaction?: (emoji: string) => Promise<void>;
+    onCreateReaction?: (emoji: string) => Promise<void>;
+    onDeleteReaction?: (emoji: string) => Promise<void>;
     getReactions?: () => Promise<ReactionDetailsData[]>;
 
     renderReplyTo?: (props: ReplyProps) => React.ReactNode;

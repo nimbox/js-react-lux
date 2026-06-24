@@ -34,7 +34,7 @@ const meta: Meta<typeof MessageProvider> = {
     args: {
         menu: <MessageMenu />,
         renderReplyTo: TextReply,
-        onAddReaction: async (reaction: string) => action('addReaction')(reaction),
+        onCreateReaction: async (reaction: string) => action('createReaction')(reaction),
         isFirst: true
     },
 

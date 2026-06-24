@@ -14,7 +14,7 @@ export interface MessageReactionDetailsProps {
 export function MessageReactionDetails(props: MessageReactionDetailsProps) {
 
     const { className = 'w-72 p-3' } = props;
-    const { message, onRemoveReaction } = useContext(MessageContext)!;
+    const { message, onDeleteReaction } = useContext(MessageContext)!;
     const { t } = useTranslation(['lux']);
 
     const { loading, error, details } = useReactionDetails(message.id);
@@ -22,7 +22,7 @@ export function MessageReactionDetails(props: MessageReactionDetailsProps) {
     // Handlers
 
     const handleRemoveReaction = (emoji: string) => {
-        onRemoveReaction?.(emoji);
+        onDeleteReaction?.(emoji);
     };
 
     // Render
@@ -63,7 +63,7 @@ export function MessageReactionDetails(props: MessageReactionDetailsProps) {
                                     <div>
                                         {detail.author.name}
                                     </div>
-                                    {onRemoveReaction && (
+                                    {onDeleteReaction && (
                                         <div className="text-xs text-gray-500">
                                             {t('chat.clickToRemove', { defaultValue: 'Click to remove' })}
                                         </div>

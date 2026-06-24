@@ -46,7 +46,7 @@ export function MessageReactions() {
     // Handlers
 
     // const handleRemoveReaction = (emoji: string) => {
-    //     onRemoveReaction?.(emoji);
+    //     onDeleteReaction?.(emoji);
     //     setOpen(false);
     // };
 
