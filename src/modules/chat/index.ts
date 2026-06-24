@@ -31,6 +31,9 @@ export * from './message/MessageGroup';
 export * from './message/MessageList';
 export * from './message/MessageProvider';
 export * from './message/MessageSeparator';
+export * from './types/MessageRow';
+export * from './types/MessageListRow';
+export * from './types/MessageGroupRow';
 
 export * from './reply/ReplyContext';
 export * from './reply/ReplyProvider';
