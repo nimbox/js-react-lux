@@ -61,8 +61,7 @@ export const Sticker: Story = {
                     name: 'Thumbs Up',
                     mime: 'image/png',
                     size: 34567,
-                    url: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg',
-                    thumbnailUrl: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg'
+                    url: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg'
                 }
             ]
         }
@@ -87,8 +86,7 @@ export const Image: Story = {
                     name: 'Placeholder Image',
                     mime: 'image/png',
                     size: 0,
-                    url: 'https://picsum.photos/150/150',
-                    thumbnailUrl: 'https://picsum.photos/150/150'
+                    url: 'https://picsum.photos/150/150'
                 }
             ]
         }
@@ -138,8 +136,7 @@ export const Video: Story = {
                     mime: 'video/mp4',
                     size: 2048000,
                     duration: 125,
-                    url: 'https://example.com/video.mp4',
-                    thumbnailUrl: 'https://picsum.photos/150/150'
+                    url: 'https://example.com/video.mp4'
                 }
             ]
         }

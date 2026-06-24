@@ -29,7 +29,7 @@ export function MessageImage(props: MessageImageProps) {
         );
     }
 
-    const url = attachments[0].thumbnailUrl;
+    const url = attachments[0].url;
     if (!url) {
         return (
             <LoadingImage width={maxWidth / 2} height={maxHeight / 2} />

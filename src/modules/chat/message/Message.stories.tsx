@@ -295,8 +295,7 @@ export const ImageMessageStory: StoryObj<typeof ImageMessage> = {
                     mime: 'image/jpeg',
                     size: 1024000,
                     filename: 'sunset.jpg',
-                    url: 'https://picsum.photos/400/300',
-                    thumbnailUrl: 'https://picsum.photos/200/150'
+                    url: 'https://picsum.photos/400/300'
                 }
             ]
         },
@@ -380,8 +379,7 @@ export const ImageMessageWithThumbnailUrlAndNoSize: StoryObj<typeof ImageMessage
                     mime: 'image/jpeg',
                     size: 2048000,
                     filename: 'catalog.jpg',
-                    url: 'https://picsum.photos/400/300',
-                    thumbnailUrl: 'https://picsum.photos/200/150'
+                    url: 'https://picsum.photos/400/300'
                 }
             ]
         },
@@ -413,7 +411,6 @@ export const ImageMessageWithThumbnailUrlAndSize: StoryObj<typeof ImageMessage> 
                     size: 2048000,
                     filename: 'catalog.jpg',
                     url: 'https://picsum.photos/400/300',
-                    thumbnailUrl: 'https://picsum.photos/200/150',
                     width: 400,
                     height: 300
                 }
@@ -447,8 +444,7 @@ export const ImageMessageWithReply: StoryObj<typeof ImageMessage> = {
                     mime: 'image/jpeg',
                     size: 2048000,
                     filename: 'catalog.jpg',
-                    url: 'https://picsum.photos/400/300',
-                    thumbnailUrl: 'https://picsum.photos/200/150'
+                    url: 'https://picsum.photos/400/300'
                 }
             ]
         },
@@ -507,8 +503,7 @@ export const VideoMessageStory: StoryObj<typeof VideoMessage> = {
                     mime: 'video/mp4',
                     size: 1048576,
                     filename: 'demo.mp4',
-                    url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
-                    thumbnailUrl: 'https://picsum.photos/400/225'
+                    url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4'
                 }
             ]
         },

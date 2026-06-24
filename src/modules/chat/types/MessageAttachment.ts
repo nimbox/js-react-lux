@@ -12,6 +12,5 @@ export interface MessageAttachment {
     duration?: number;
 
     url: string;
-    thumbnailUrl?: string;
 
 }
