@@ -9,15 +9,19 @@ import { MessageContext, useMessage } from '../MessageContext';
 
 export interface MessageReactionDetailsProps {
     className?: string;
+    // When set, only participants who reacted with this emoji are shown (a
+    // per-emoji pill's popover). Omitted → all reactors.
+    emoji?: string;
 }
 
 export function MessageReactionDetails(props: MessageReactionDetailsProps) {
 
-    const { className = 'w-72 p-3' } = props;
+    const { className = 'w-72 p-3', emoji } = props;
     const { message, onDeleteReaction } = useContext(MessageContext)!;
     const { t } = useTranslation(['lux']);
 
-    const { loading, error, details } = useReactionDetails(message.id);
+    const { loading, error, details: allDetails } = useReactionDetails(message.id);
+    const details = emoji != null ? allDetails?.filter(d => d.emoji === emoji) ?? null : allDetails;
 
     // Handlers
 

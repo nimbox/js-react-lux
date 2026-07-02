@@ -3,9 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../../../components/Button';
 import { Input } from '../../../components/inputs/Input';
 import { CrossIcon, SendIcon } from '@nimbox/icons-react';
-import { type ReplyProps } from '../reply/ReplyProvider';
-import type { MessageData } from '../types/MessageData';
+import type { BaseMessage } from '../types/BaseMessage';
 import { MessageComposerContext } from './MessageComposerContext';
+
+
+// Renders the replied-to message compactly in the composer's banner. The
+// consumer supplies it (typically routing through the message registry's
+// `preview` surface); the composer owns only the banner chrome.
+type RenderReplyTo = (props: { message: BaseMessage }) => ReactNode;
 
 
 export interface MessageComposerSubmitData {
@@ -19,8 +24,8 @@ export interface MessageComposerProps {
     onChange: Dispatch<SetStateAction<string>>;
     end?: ReactNode;
 
-    replyTo?: MessageData;
-    renderReplyTo?: (props: ReplyProps) => ReactNode;
+    replyTo?: BaseMessage;
+    renderReplyTo?: RenderReplyTo;
     onClearReplyTo?: () => void;
 
     onSubmit: (data: MessageComposerSubmitData) => Promise<void>;
@@ -131,8 +136,8 @@ export function MessageComposer(props: MessageComposerProps) {
 
 interface ReplyToMessageProps {
 
-    replyTo?: MessageData;
-    renderReplyTo?: (props: ReplyProps) => ReactNode;
+    replyTo?: BaseMessage;
+    renderReplyTo?: RenderReplyTo;
     onClearReplyTo?: () => void;
 
 }

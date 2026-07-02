@@ -1,26 +1,39 @@
 import { arrow, autoUpdate, flip, FloatingArrow, FloatingPortal, offset, shift, useClick, useDismiss, useFloating, useInteractions, type Placement } from '@floating-ui/react';
 import classNames from 'classnames';
-import { useMemo, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
+import type { ReactionPill } from '../../types/ReactionPill';
 import { useMessage } from '../MessageContext';
 import { MessageReactionDetails } from './MessageReactionDetails';
 
 
+// Renders one chip per emoji (never a single cluster pill — Slack/Teams/Telegram
+// all present reactions per-emoji). Each chip shows its own count, highlights when
+// the viewer reacted with it, and opens a popover of that emoji's participants.
+// Adding a reaction is a separate affordance (the reaction picker).
 export function MessageReactions() {
 
-    const { message: { direction, reactions } } = useMessage();
+    const { message: { alignment, reactions } } = useMessage();
 
-    // Sort reactions by count
+    if (!reactions || reactions.length === 0) {
+        return null;
+    }
 
-    const { sorted, total } = useMemo(() => {
-        if (!reactions) {
-            return { sorted: [], total: 0 };
-        }
-        const sorted = [...reactions].sort((a, b) => b.count - a.count)
-        const total = reactions.reduce((s, r) => s + r.count, 0)
-        return { sorted, total }
-    }, [reactions])
+    const sorted = [...reactions].sort((a, b) => b.count - a.count);
 
-    // Floating UI
+    return (
+        <div className={classNames(
+            'flex flex-row flex-wrap gap-1 -mt-1 z-10',
+            alignment === 'end' ? 'justify-end mr-3' : 'justify-start ml-3'
+        )}>
+            {sorted.map(pill => (
+                <ReactionChip key={pill.emoji} pill={pill} alignment={alignment} />
+            ))}
+        </div>
+    );
+
+}
+
+function ReactionChip({ pill, alignment }: { pill: ReactionPill; alignment: 'start' | 'end' }) {
 
     const [open, setOpen] = useState(false);
 
@@ -28,14 +41,9 @@ export function MessageReactions() {
     const { refs, floatingStyles, context } = useFloating({
         open,
         onOpenChange: setOpen,
-        placement: PLACEMENT[direction] ?? 'top',
+        placement: PLACEMENT[alignment] ?? 'top',
         strategy: 'fixed',
-        middleware: [
-            offset(8),
-            shift({ padding: 8 }),
-            flip(),
-            arrow({ element: arrowRef, padding: 8 })
-        ],
+        middleware: [offset(8), shift({ padding: 8 }), flip(), arrow({ element: arrowRef, padding: 8 })],
         whileElementsMounted: autoUpdate
     });
 
@@ -43,42 +51,24 @@ export function MessageReactions() {
     const dismiss = useDismiss(context, { outsidePress: true, outsidePressEvent: 'pointerdown', escapeKey: true });
     const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss]);
 
-    // Handlers
-
-    // const handleRemoveReaction = (emoji: string) => {
-    //     onDeleteReaction?.(emoji);
-    //     setOpen(false);
-    // };
-
-    // Render
-
-    if (sorted.length === 0) {
-        return null;
-    }
-
     return (
         <>
-
             <button
                 ref={refs.setReference}
                 {...getReferenceProps()}
                 className={classNames(
-                    'flex -mt-2 z-10 cursor-pointer',
-                    direction === 'outbound' ? 'justify-self-end mr-3' : 'justify-self-start ml-3'
+                    'flex items-center gap-0.5 bg-white rounded-full shadow-sm border px-2 h-6 text-sm cursor-pointer',
+                    pill.highlighted ? 'border-primary-400' : 'border-gray-200'
                 )}
             >
-                <span className="bg-white rounded-full shadow-md flex items-center justify-center min-w-6 h-6 text-base border border-gray-200 p-3 gap-0.5">
-                    {sorted.map(r => (
-                        <span key={r.emoji} className="mx-0.5 text-base">{r.emoji}</span>
-                    ))}
-                    {(total > 1) && <span className="ml-0.5 text-xs">{total}</span>}
-                </span>
+                <span className="text-base leading-none">{pill.emoji}</span>
+                {pill.count > 1 && <span className="text-xs text-gray-500">{pill.count}</span>}
             </button>
 
             {open && (
                 <FloatingPortal id="modal">
-                    <div ref={refs.setFloating} {...getFloatingProps({ className: 'text-base rounded border border-control-border bg-white' })} style={floatingStyles} >
-                        <MessageReactionDetails />
+                    <div ref={refs.setFloating} {...getFloatingProps({ className: 'text-base rounded border border-control-border bg-white' })} style={floatingStyles}>
+                        <MessageReactionDetails emoji={pill.emoji} />
                         <FloatingArrow
                             ref={arrowRef}
                             context={context}
@@ -88,14 +78,12 @@ export function MessageReactions() {
                     </div>
                 </FloatingPortal>
             )}
-
         </>
-
     );
 
 }
 
-const PLACEMENT: Record<'inbound' | 'outbound', Placement> = {
-    'inbound': 'top-start',
-    'outbound': 'top-end'
+const PLACEMENT: Record<'start' | 'end', Placement> = {
+    'start': 'top-start',
+    'end': 'top-end'
 } as const;

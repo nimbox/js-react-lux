@@ -1,10 +1,16 @@
+import { useChat } from '../../ChatContext';
 import { useMessage } from '../MessageContext';
 
 
+// Renders the author atop the first bubble of a group. The author is opaque; the
+// base forwards it to the consumer's `authorRenderer` primitives and owns only the
+// *arrangement* — the name and the optional secondary `handle` sit on one row — and
+// the *placement* (on `isFirst`). Preview surfaces render `name` alone, so the
+// handle's noise stays out of reply-quotes and conversation lines.
 export function MessageAuthor() {
 
-    const { message: { author } } = useMessage();
-    const { isFirst } = useMessage();
+    const { authorRenderer } = useChat();
+    const { message: { author }, isFirst } = useMessage();
 
     if (!author || !isFirst) {
         return null;
@@ -12,12 +18,8 @@ export function MessageAuthor() {
 
     return (
         <div className="flex flex-row justify-between items-center gap-2">
-            <div className="truncate font-bold" style={{ color: author.color }}>
-                {author.name}
-            </div>
-            <div className="text-sm truncate" style={{ color: author.color }}>
-                {author.remoteId}
-            </div>
+            {authorRenderer.name(author)}
+            {authorRenderer.handle?.(author)}
         </div>
     );
 

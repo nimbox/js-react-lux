@@ -1,19 +1,20 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { Button } from '../../../components/Button';
 import { CrossIcon } from '@nimbox/icons-react';
-import type { MessageData } from '../types/MessageData';
+import type { BaseMessage } from '../types/BaseMessage';
 
 
 interface MessageLightBoxProps {
-    message: MessageData;
+    message: BaseMessage;
     onClose: () => void;
 }
 
 export function MessageLightBox(props: MessageLightBoxProps) {
 
     const { message, onClose } = props;
-    const { attachments } = message || {};
-    const url = attachments?.[0]?.url;
+    // The lightbox opens on an image message; the URL comes from its content view
+    // (the kit's `ImageView`). Content is opaque to the base, so read defensively.
+    const url = (message?.content as { url?: string } | undefined)?.url;
 
     return (
         <div className="absolute inset-8 min-h-0 flex flex-col items-center justify-center bg-white rounded-lg shadow-lg">
@@ -26,7 +27,7 @@ export function MessageLightBox(props: MessageLightBoxProps) {
             </div>
 
             <div className="w-full min-h-0 px-4 pb-4 flex-1">
-                {url && <MessagePreview src={url} alt="Preview" />}
+                {url && <LightBoxImage src={url} alt="Preview" />}
             </div>
 
         </div>
@@ -39,12 +40,12 @@ export function MessageLightBox(props: MessageLightBoxProps) {
 // - Drag to pan
 // - Double click to toggle zoom
 
-interface MessagePreviewProps {
+interface LightBoxImageProps {
     src: string;
     alt?: string;
 }
 
-export function MessagePreview({ src, alt }: MessagePreviewProps) {
+export function LightBoxImage({ src, alt }: LightBoxImageProps) {
 
     const [scale, setScale] = useState(1);
     const [translate, setTranslate] = useState({ x: 0, y: 0 });

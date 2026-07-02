@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, type Dispatch, type ReactNode, type SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Input } from '../../../../components/inputs/Input';
-import { type MessageData } from '../../types/MessageData';
+import { type BaseMessage } from '../../types/BaseMessage';
 import { TEMPLATE_CONTEXT_BLOCK, type TemplateContextBlockType, type TemplateContextData } from '../../types/TemplateContextData';
 import { type TemplateData } from '../../types/TemplateData';
 import { useMessageComposer } from '../MessageComposerContext';
@@ -27,8 +27,8 @@ export interface ComposerTemplatePanelProps {
     onClose: () => void;
     onSubmit: (data: TemplatePanelSubmitData) => Promise<void>;
 
-    transform: (template: TemplateData, context: TemplateContextData) => MessageData;
-    render: ({ message }: { message: MessageData }) => ReactNode;
+    transform: (template: TemplateData, context: TemplateContextData) => BaseMessage;
+    render: ({ message }: { message: BaseMessage }) => ReactNode;
     background?: string;
 
 }
@@ -293,8 +293,8 @@ interface TemplatePreviewProps {
     template?: TemplateData;
     context?: TemplateContextData | null;
 
-    transform: (template: TemplateData, context: TemplateContextData) => MessageData;
-    render: ({ message }: { message: MessageData }) => ReactNode;
+    transform: (template: TemplateData, context: TemplateContextData) => BaseMessage;
+    render: ({ message }: { message: BaseMessage }) => ReactNode;
 
     background?: string;
     className?: string;

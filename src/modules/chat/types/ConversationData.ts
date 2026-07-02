@@ -1,5 +1,5 @@
 import { type AvatarData } from './AvatarData';
-import { type MessageData } from './MessageData';
+import { type BaseMessage } from './BaseMessage';
 
 
 export interface ConversationData {
@@ -8,7 +8,7 @@ export interface ConversationData {
     name: string;
     avatar?: AvatarData;
 
-    lastMessage?: MessageData;
+    lastMessage?: BaseMessage;
 
     pinned?: boolean;
     favorited?: boolean;

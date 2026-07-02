@@ -1,103 +1,96 @@
+import type { BaseMessage } from '../types/BaseMessage';
 import type { MessageBuildRowsOptions } from '../types/MessageBuildRowsOptions';
-import type { MessageData } from '../types/MessageData';
 import type { MessageGroupRow } from '../types/MessageGroupRow';
 import type { MessageListRow } from '../types/MessageListRow';
 
 
+// Derives the list rows from a flat message list: day separators, author groups,
+// ungrouped `single` rows (system events), and an optional unread `marker`.
+// Grouping runs on the opaque `group` key — the base never reads `author`.
 export function buildMessageRows(
-    messages: MessageData[],
+    messages: BaseMessage[],
     options: MessageBuildRowsOptions = {}
 ): MessageListRow[] {
 
-    const { formatLocalDate = defaultFormatLocalDate } = options;
+    const { formatLocalDate = defaultFormatLocalDate, markerBeforeId } = options;
     const rows: MessageListRow[] = [];
 
-    if (messages.length > 0) {
+    if (messages.length === 0) {
+        return rows;
+    }
 
-        const sorted = sortMessages(messages);
+    const sorted = sortMessages(messages);
 
-        // Current state.
+    // Current state.
 
-        let currentLocalDate: string | null = null;
-        let currentGroupRow: MessageGroupRow | null = null;
+    let currentLocalDate: string | null = null;
+    let currentGroupRow: MessageGroupRow | null = null;
+    let currentGroupKey: string | null = null;
 
-        // Go over all messages and build rows.
-
-        for (const message of sorted) {
-
-            // Add a new date separator if the date has changed.
-            // Take into account that we are using a locale aware
-            // date string to actually do this.
-
-            const date = new Date(message.timestamp);
-            const localDate = formatLocalDate(date);
-
-            if (localDate !== currentLocalDate) {
-
-                // If we have a current group row, add it to the rows.
-
-                if (currentGroupRow) {
-                    currentGroupRow.messages[currentGroupRow.messages.length - 1].meta.isLast = true;
-                    rows.push({ id: currentGroupRow.messages[0].message.id, type: 'group', group: currentGroupRow });
-                    currentGroupRow = null;
-                }
-
-                // Add the new date separator.
-
-                rows.push({ id: localDate, type: 'separator', date });
-                currentLocalDate = localDate;
-
-            }
-
-            // If we don't have a current group row,
-            // create one and with the message in it.
-
-            if (!currentGroupRow) {
-                currentGroupRow = {
-                    id: message.id,
-                    direction: message.direction,
-                    author: message.author,
-                    messages: [{ message, meta: { isFirst: true, isLast: false } }]
-                };
-                continue;
-            }
-
-            // If the current group row has a different direction or author,
-            // purge the row and create a new one with the message in it.
-
-            if (currentGroupRow.direction !== message.direction || currentGroupRow.author.id !== message.author.id) {
-                currentGroupRow.messages[currentGroupRow.messages.length - 1].meta.isLast = true;
-                rows.push({ id: currentGroupRow.messages[0].message.id, type: 'group', group: currentGroupRow });
-                currentGroupRow = {
-                    id: message.id,
-                    direction: message.direction,
-                    author: message.author,
-                    messages: [{ message, meta: { isFirst: true, isLast: false } }]
-                };
-                continue;
-            }
-
-            // Add the message to the current group row.
-
-            currentGroupRow.messages.push({ message, meta: { isFirst: false, isLast: false } });
-
-        }
-
-        // If we have a current group row, 
-        // add it to the rows.
-
+    // Flush the open group (if any) into a row.
+    const flushGroup = () => {
         if (currentGroupRow) {
             currentGroupRow.messages[currentGroupRow.messages.length - 1].meta.isLast = true;
             rows.push({ id: currentGroupRow.messages[0].message.id, type: 'group', group: currentGroupRow });
+            currentGroupRow = null;
+            currentGroupKey = null;
+        }
+    };
+
+    for (const message of sorted) {
+
+        // Day separator when the (locale-aware) date changes.
+
+        const date = new Date(message.timestamp);
+        const localDate = formatLocalDate(date);
+        if (localDate !== currentLocalDate) {
+            flushGroup();
+            rows.push({ id: localDate, type: 'separator', date });
+            currentLocalDate = localDate;
         }
 
+        // Unread marker immediately before the watermark message.
+
+        if (markerBeforeId != null && message.id === markerBeforeId) {
+            flushGroup();
+            rows.push({ id: `marker-${message.id}`, type: 'marker' });
+        }
+
+        // Ungrouped message (no `group`) → a `single` row (system events, …).
+
+        if (!message.group) {
+            flushGroup();
+            rows.push({ id: message.id, type: 'single', message });
+            continue;
+        }
+
+        // Start a group, or break it on an alignment / grouping-key change.
+
+        if (!currentGroupRow || currentGroupRow.alignment !== message.alignment || currentGroupKey !== message.group) {
+            flushGroup();
+            currentGroupRow = {
+                id: message.id,
+                alignment: message.alignment,
+                author: message.author,
+                messages: [{ message, meta: { isFirst: true, isLast: false } }]
+            };
+            currentGroupKey = message.group;
+            continue;
+        }
+
+        // Otherwise, extend the current group.
+
+        currentGroupRow.messages.push({ message, meta: { isFirst: false, isLast: false } });
+
     }
+
+    flushGroup();
 
     return rows;
 
 }
 
-function sortMessages(messages: MessageData[]) {
+function sortMessages(messages: BaseMessage[]) {
 
     const sorted = messages
         .map(c => [c.timestamp ? new Date(c.timestamp).getTime() : 0, c] as const)

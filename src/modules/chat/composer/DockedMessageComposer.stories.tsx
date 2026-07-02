@@ -53,7 +53,7 @@ const sampleReplyMessage: MessageData = {
         remoteId: 'user-1',
         name: 'Sarah Johnson'
     },
-    direction: 'inbound',
+    alignment: 'start',
     type: 'text',
     body: 'That sounds amazing! I spent most of the weekend working on that new project we discussed.'
 };

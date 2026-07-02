@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { type MessageData } from '../../types/MessageData';
+import { useMessageRenderer } from '../../message/useMessageRenderer';
+import { type BaseMessage } from '../../types/BaseMessage';
 import { useConversation } from '../ConversationContext';
 
 
@@ -30,11 +31,17 @@ export function ConversationMessage({ className }: ConversationMessageProps) {
 
 }
 
-function ConversationMessageContent({ message }: { message: MessageData }) {
+// The last-message line is a preview host — render it through the message
+// registry at the `preview` surface (§6), not a hand-built string.
+function ConversationMessageContent({ message }: { message: BaseMessage }) {
+
+    const resolveRenderer = useMessageRenderer();
+    const Preview = resolveRenderer(message, 'preview');
 
     return (
         <div className="text-sm text-gray-700 truncate">
-            {message.type}: {message.body}
+            <Preview message={message} />
         </div>
     );
+
 }

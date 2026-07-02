@@ -32,6 +32,12 @@
       "default": "./dist/modules/chat.js",
       "development": "./src/modules/chat/index.ts"
     },
+    "./modules/chat/kits/core": {
+      "types": "./dist/types/modules/chat/kits/core/index.d.ts",
+      "import": "./dist/modules/chat/kits/core.js",
+      "default": "./dist/modules/chat/kits/core.js",
+      "development": "./src/modules/chat/kits/core/index.ts"
+    },
     "./modules/kanban": {
       "types": "./dist/types/modules/kanban/index.d.ts",
       "import": "./dist/modules/kanban.js",

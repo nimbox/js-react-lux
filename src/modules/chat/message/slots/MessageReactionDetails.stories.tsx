@@ -22,7 +22,7 @@ type Story = StoryObj<typeof MessageReactionDetails>;
 const message: MessageData = {
     id: '1',
     author: authors['1'],
-    direction: 'inbound',
+    alignment: 'start',
     type: 'text',
     body: 'Hello, world!',
     timestamp: 0

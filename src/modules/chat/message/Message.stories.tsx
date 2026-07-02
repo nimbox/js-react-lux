@@ -96,7 +96,7 @@ const sampleReplyTextMessage: any = {
         initials: 'JS',
         color: '#10B981'
     },
-    direction: 'inbound' as const,
+    alignment: 'start' as const,
     type: 'text',
     body: 'Hi there! How are you doing?',
     timestamp: new Date(Date.now() - 60000), // 1 minute ago
@@ -111,7 +111,7 @@ export const OutboundTextMessage: StoryObj<typeof TextMessage> = {
         message: {
             id: 'msg-1',
             author: sampleAuthor,
-            direction: 'outbound',
+            alignment: 'end',
             type: 'text',
             body: 'Hello! This is a simple text message.',
             timestamp: new Date(),
@@ -126,7 +126,7 @@ export const OutboundTextMessageWithReply: StoryObj<typeof TextMessage> = {
         message: {
             id: 'msg-3',
             author: sampleAuthor,
-            direction: 'outbound',
+            alignment: 'end',
             type: 'text',
             body: 'Thanks for your message! I\'m doing great.',
             timestamp: new Date(),
@@ -150,7 +150,7 @@ export const InboundTextMessage: StoryObj<typeof TextMessage> = {
                 initials: 'JS',
                 color: '#10B981'
             },
-            direction: 'inbound' as const,
+            alignment: 'start' as const,
             type: 'text',
             body: 'Hi there! How are you doing?',
             timestamp: new Date(),
@@ -166,7 +166,7 @@ export const LongTextMessage: StoryObj<typeof TextMessage> = {
         message: {
             id: 'msg-5',
             author: sampleAuthor,
-            direction: 'outbound' as const,
+            alignment: 'end' as const,
             type: 'text',
             body: 'This is a much longer message that demonstrates how the text message component handles longer content. It should wrap properly and maintain good readability while preserving the overall message structure and layout.',
             timestamp: new Date(),
@@ -182,7 +182,7 @@ export const EmojiMessage: StoryObj<typeof TextMessage> = {
         message: {
             id: 'msg-6',
             author: sampleAuthor,
-            direction: 'outbound' as const,
+            alignment: 'end' as const,
             type: 'text',
             body: '😊',
             timestamp: new Date(),
@@ -198,7 +198,7 @@ export const MessageWithHeader: StoryObj<typeof TextMessage> = {
         message: {
             id: 'msg-7',
             author: sampleAuthor,
-            direction: 'outbound' as const,
+            alignment: 'end' as const,
             type: 'text',
             header: 'Important Update',
             body: 'Please review the latest changes before proceeding.',
@@ -215,7 +215,7 @@ export const MessageWithFooter: StoryObj<typeof TextMessage> = {
         message: {
             id: 'msg-8',
             author: sampleAuthor,
-            direction: 'outbound' as const,
+            alignment: 'end' as const,
             type: 'text',
             body: 'Meeting scheduled for tomorrow at 2 PM.',
             footer: 'Please confirm your attendance',
@@ -232,7 +232,7 @@ export const MessageWithHeaderAndFooter: StoryObj<typeof TextMessage> = {
         message: {
             id: 'msg-9',
             author: sampleAuthor,
-            direction: 'outbound' as const,
+            alignment: 'end' as const,
             type: 'text',
             header: 'Project Update',
             body: 'Phase 1 has been completed successfully. We can now proceed to Phase 2.',
@@ -250,7 +250,7 @@ export const PendingTextMessage: StoryObj<typeof TextMessage> = {
         message: {
             id: 'msg-10',
             author: sampleAuthor,
-            direction: 'outbound' as const,
+            alignment: 'end' as const,
             type: 'text',
             body: 'This message is pending...',
             timestamp: new Date(),
@@ -266,7 +266,7 @@ export const FailedTextMessage: StoryObj<typeof TextMessage> = {
         message: {
             id: 'msg-11',
             author: sampleAuthor,
-            direction: 'outbound' as const,
+            alignment: 'end' as const,
             type: 'text',
             body: 'This message failed to send',
             timestamp: new Date(),
@@ -282,10 +282,9 @@ export const ImageMessageStory: StoryObj<typeof ImageMessage> = {
         message: {
             id: 'msg-12',
             author: sampleAuthor,
-            direction: 'outbound' as const,
+            alignment: 'end' as const,
             type: 'image',
             body: 'Check out this image!',
-            caption: 'Beautiful sunset at the beach',
             timestamp: new Date(),
             status: 'read',
             attachments: [
@@ -313,10 +312,9 @@ export const ImageMessageWithNoAttachments: StoryObj<typeof ImageMessage> = {
         message: {
             id: 'msg-13',
             author: sampleAuthor,
-            direction: 'outbound' as const,
+            alignment: 'end' as const,
             type: 'image',
             body: 'Here\'s the photo',
-            caption: 'Product catalog image',
             timestamp: new Date(),
             status: 'read',
             attachments: []
@@ -335,10 +333,9 @@ export const ImageMessageWithNoThumbnailUrl: StoryObj<typeof ImageMessage> = {
         message: {
             id: 'msg-13',
             author: sampleAuthor,
-            direction: 'outbound' as const,
+            alignment: 'end' as const,
             type: 'image',
             body: 'Here\'s the photo',
-            caption: 'Product catalog image',
             timestamp: new Date(),
             status: 'read',
             attachments: [
@@ -366,10 +363,9 @@ export const ImageMessageWithThumbnailUrlAndNoSize: StoryObj<typeof ImageMessage
         message: {
             id: 'msg-13',
             author: sampleAuthor,
-            direction: 'outbound' as const,
+            alignment: 'end' as const,
             type: 'image',
             body: 'Here\'s the photo',
-            caption: 'Product catalog image',
             timestamp: new Date(),
             status: 'read',
             attachments: [
@@ -397,10 +393,9 @@ export const ImageMessageWithThumbnailUrlAndSize: StoryObj<typeof ImageMessage> 
         message: {
             id: 'msg-13',
             author: sampleAuthor,
-            direction: 'outbound' as const,
+            alignment: 'end' as const,
             type: 'image',
             body: 'Here\'s the photo',
-            caption: 'Product catalog image',
             timestamp: new Date(),
             status: 'read',
             attachments: [
@@ -430,10 +425,9 @@ export const ImageMessageWithReply: StoryObj<typeof ImageMessage> = {
         message: {
             id: 'msg-13',
             author: sampleAuthor,
-            direction: 'outbound' as const,
+            alignment: 'end' as const,
             type: 'image',
             body: 'Here\'s the photo you requested',
-            caption: 'Product catalog image',
             timestamp: new Date(),
             status: 'read',
             replyTo: sampleReplyTextMessage,
@@ -463,7 +457,7 @@ export const AudioMessageStory: StoryObj<typeof AudioMessage> = {
         message: {
             id: 'msg-14',
             author: sampleAuthor,
-            direction: 'outbound' as const,
+            alignment: 'end' as const,
             type: 'audio',
             body: 'Voice message',
             timestamp: new Date(),
@@ -490,10 +484,9 @@ export const VideoMessageStory: StoryObj<typeof VideoMessage> = {
         message: {
             id: 'msg-15',
             author: sampleAuthor,
-            direction: 'outbound' as const,
+            alignment: 'end' as const,
             type: 'video',
             body: 'Video message',
-            caption: 'Quick demo of the new feature',
             timestamp: new Date(),
             status: 'read',
             attachments: [

@@ -1,19 +1,16 @@
-import { useChat } from '../../ChatContext';
-import { useMessage } from '../MessageContext';
+import { type ReactNode } from 'react';
 
 
-export function MessageHeader() {
+// Push-only: an instance provides already-rendered header content as children.
+export function MessageHeader({ children }: { children?: ReactNode }) {
 
-    const { renderText } = useChat();
-    const { message: { header } } = useMessage();
-
-    if (!header || header.length === 0) {
+    if (children == null || children === '') {
         return null;
     }
 
     return (
         <div className="font-bold text-gray-500">
-            {renderText(header)}
+            {children}
         </div>
     );
 

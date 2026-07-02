@@ -15,6 +15,7 @@ const entries = {
 
     'modules/calendar': 'src/modules/calendar/index.ts',
     'modules/chat': 'src/modules/chat/index.ts',
+    'modules/chat/kits/core': 'src/modules/chat/kits/core/index.ts',
     'modules/kanban': 'src/modules/kanban/index.ts'
 
 };

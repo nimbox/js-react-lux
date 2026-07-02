@@ -1,40 +1,19 @@
 import classNames from 'classnames';
 import { useState, type ReactNode } from 'react';
-import type { ReplyProps } from '../reply/ReplyProvider';
-import type { MessageData } from '../types/MessageData';
+import type { BaseMessage } from '../types/BaseMessage';
 import type { ReactionDetailsData } from '../types/ReactionDetailsData';
 import { MessageContext } from './MessageContext';
-import { MessageReactionPicker } from './MessageReactionPicker';
-import { MessageAudio } from './slots/MessageAudio';
-import { MessageAuthor } from './slots/MessageAuthor';
-import { MessageBody } from './slots/MessageBody';
-import { MessageButtons } from './slots/MessageButtons';
-import { MessageBubble } from './slots/MessageBubble';
-import { MessageContainer } from './slots/MessageContainer';
-import { MessageFloatingAttachments } from './slots/MessageFloatingAttachments';
-import { MessageFloatingBody } from './slots/MessageFloatingBody';
-import { MessageFooter } from './slots/MessageFooter';
-import { MessageHeader } from './slots/MessageHeader';
-import { MessageImage } from './slots/MessageImage';
-import { MessageProperties } from './slots/MessageProperties';
-import { MessageReactions } from './slots/MessageReactions';
-import { MessageReply } from './slots/MessageReply';
-import { MessageVideo } from './slots/MessageVideo';
 
 
 // MessageProvider
 
-
 export interface MessageProps {
 
-    menu?: React.ReactElement<{ onOpenChange: (open: boolean) => void }>;
-    message: MessageData;
+    message: BaseMessage;
 
     onCreateReaction?: (emoji: string) => Promise<void>;
     onDeleteReaction?: (emoji: string) => Promise<void>;
     getReactions?: () => Promise<ReactionDetailsData[]>;
-
-    renderReplyTo?: (props: ReplyProps) => React.ReactNode;
 
     isFirst?: boolean;
     isLast?: boolean;
@@ -47,6 +26,16 @@ export interface MessageProviderProps extends MessageProps {
 
 }
 
+// What a message instance receives: the message with its arm-typed
+// `content`. The instance reads typed content from props and composes
+// slots; the **dispatch layer mounts `MessageProvider`** (the context
+// the slots read) around it — instances never mount it themselves
+// ("whoever dispatches, provides", §6).
+
+export interface MessageInstanceProps<TContent = unknown> {
+    message: Omit<BaseMessage, 'content'> & { content?: TContent };
+}
+
 export function MessageProvider({ className, children, ...props }: MessageProviderProps) {
 
     const [isOver, setIsOver] = useState(false);
@@ -56,7 +45,7 @@ export function MessageProvider({ className, children, ...props }: MessageProvid
             <div
                 onMouseEnter={() => setIsOver(true)}
                 onMouseLeave={() => setIsOver(false)}
-                className={classNames('max-w-[75%] group', className)}
+                className={classNames('w-full group', className)}
             >
                 {children}
             </div>
@@ -65,29 +54,7 @@ export function MessageProvider({ className, children, ...props }: MessageProvid
 
 }
 
-// Slots
-
-MessageProvider.Container = MessageContainer;
-MessageProvider.Bubble = MessageBubble;
-
-MessageProvider.FloatingBody = MessageFloatingBody;
-MessageProvider.FloatingAttachments = MessageFloatingAttachments;
-
-MessageProvider.Author = MessageAuthor;
-
-MessageProvider.Header = MessageHeader;
-
-MessageProvider.Image = MessageImage;
-MessageProvider.Audio = MessageAudio;
-MessageProvider.Video = MessageVideo;
-
-MessageProvider.Body = MessageBody;
-MessageProvider.Footer = MessageFooter;
-MessageProvider.Buttons = MessageButtons;
-
-MessageProvider.Properties = MessageProperties;
-
-MessageProvider.Reactions = MessageReactions;
-MessageProvider.Reply = MessageReply;
-
-MessageProvider.React = MessageReactionPicker;
+// The slots that an instance composes live in the `Message` (full surface) and
+// `MessagePreview` (preview surface) namespaces — NOT on this component. The
+// provider is only the context producer (the dispatch layer mounts it); the slots
+// are context consumers. Keeping them apart is the point of the split.

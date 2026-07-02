@@ -1,9 +1,9 @@
-import type { MessageData } from './MessageData';
+import type { BaseMessage } from './BaseMessage';
 
 
 export interface MessageRow {
 
-    message: MessageData;
+    message: BaseMessage;
     meta: MessageRowMeta;
 
 }

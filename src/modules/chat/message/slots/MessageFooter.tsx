@@ -1,19 +1,16 @@
-import { useChat } from '../../ChatContext';
-import { useMessage } from '../MessageContext';
+import { type ReactNode } from 'react';
 
 
-export function MessageFooter() {
+// Push-only: an instance provides already-rendered footer content as children.
+export function MessageFooter({ children }: { children?: ReactNode }) {
 
-    const { renderText } = useChat();
-    const { message: { footer } } = useMessage();
-
-    if (!footer || footer.length === 0) {
+    if (children == null || children === '') {
         return null;
     }
 
     return (
         <div className="text-sm text-gray-500">
-            {renderText(footer)}
+            {children}
         </div>
     );
 

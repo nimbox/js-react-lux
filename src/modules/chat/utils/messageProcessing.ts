@@ -1,14 +1,14 @@
-import { type MessageData } from '../types/MessageData';
+import { type BaseMessage } from '../types/BaseMessage';
 
 
 export interface DisplayMessageGroup {
 
     id: string;
 
-    author: MessageData['author'];
-    direction: 'inbound' | 'outbound';
+    author: BaseMessage['author'];
+    alignment: 'start' | 'end';
 
-    messages: MessageData[];
+    messages: BaseMessage[];
 
 }
 
@@ -23,7 +23,7 @@ export interface DisplayMessageDateGroup {
 /**
  * Sorts messages by timestamp in ascending order.
  */
-export function sortMessagesByTimestamp(messages: MessageData[]): MessageData[] {
+export function sortMessagesByTimestamp(messages: BaseMessage[]): BaseMessage[] {
     return [...messages]
         .map(m => [m.timestamp ? new Date(m.timestamp).getTime() : 0, m] as const)
         .sort(([a], [b]) => a - b)
@@ -31,9 +31,9 @@ export function sortMessagesByTimestamp(messages: MessageData[]): MessageData[] 
 }
 
 /**
- * Groups consecutive messages by author and direction.
+ * Groups consecutive messages by author and alignment.
  */
-export function groupByAuthor(messages: MessageData[]): DisplayMessageGroup[] {
+export function groupByAuthor(messages: BaseMessage[]): DisplayMessageGroup[] {
 
     const groups: DisplayMessageGroup[] = [];
     let currentGroup: DisplayMessageGroup | null = null;
@@ -41,12 +41,12 @@ export function groupByAuthor(messages: MessageData[]): DisplayMessageGroup[] {
     for (const message of messages) {
         if (
             !currentGroup ||
-            currentGroup.author?.id !== message.author?.id ||
-            currentGroup.direction !== message.direction
+            currentGroup.messages[0]?.group !== message.group ||
+            currentGroup.alignment !== message.alignment
         ) {
             currentGroup = {
                 id: message.id,
-                direction: message.direction,
+                alignment: message.alignment,
                 author: message.author,
                 messages: []
             };
@@ -65,18 +65,18 @@ export function groupByAuthor(messages: MessageData[]): DisplayMessageGroup[] {
  * Groups messages by local date (timezone-aware)
  */
 export function groupByDate(
-    messages: MessageData[],
+    messages: BaseMessage[],
     createDateKey: (date: Date) => string = (date) => date.toLocaleDateString('en-US')
 ): Array<{
     dateValue: Date;
     dateKey: string;
-    messages: MessageData[];
+    messages: BaseMessage[];
 }> {
 
     const dateGroups = new Map<string, {
         dateValue: Date;
         dateKey: string;
-        messages: MessageData[];
+        messages: BaseMessage[];
     }>();
 
     for (const message of messages) {
@@ -109,7 +109,7 @@ export function groupByDate(
 /**
  * Groups messages by author/direction.
  */
-export function groupMessagesByAuthor(messages: MessageData[]): DisplayMessageGroup[] {
+export function groupMessagesByAuthor(messages: BaseMessage[]): DisplayMessageGroup[] {
     const sortedMessages = sortMessagesByTimestamp(messages);
     return groupByAuthor(sortedMessages);
 }
@@ -118,7 +118,7 @@ export function groupMessagesByAuthor(messages: MessageData[]): DisplayMessageGr
  * Groups messages by date and author/direction.
  */
 export function groupMessagesByDateAuthor(
-    messages: MessageData[],
+    messages: BaseMessage[],
     createDateKey?: (date: Date) => string
 ): DisplayMessageDateGroup[] {
 

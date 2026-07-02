@@ -1,11 +1,9 @@
-import { type MessageAuthor } from './MessageAuthor';
-
-
 export interface MessageGroupData {
 
     id: string;
 
-    direction: 'inbound' | 'outbound';
-    author: MessageAuthor;
+    alignment: 'start' | 'end';
+    // Opaque — forwarded to `authorRenderer.avatar`, never read by the base.
+    author?: unknown;
 
 }

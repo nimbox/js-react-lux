@@ -1,19 +1,17 @@
-import { useChat } from '../../ChatContext';
-import { useMessage } from '../MessageContext';
+import { type ReactNode } from 'react';
 
 
-export function MessageBody() {
+// Push-only: an instance provides already-rendered body content as children. The
+// base owns the styled container; the kit/consumer owns the content.
+export function MessageBody({ children }: { children?: ReactNode }) {
 
-    const { renderText } = useChat();
-    const { message: { body } } = useMessage();
-
-    if (!body || body.length === 0) {
+    if (children == null || children === '') {
         return null;
     }
 
     return (
         <div className="text-gray-500">
-            {renderText(body)}
+            {children}
         </div>
     );
 
