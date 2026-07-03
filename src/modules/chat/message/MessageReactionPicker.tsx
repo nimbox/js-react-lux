@@ -4,12 +4,14 @@ import { Popper } from '../../../components/floating/Popper';
 import { EmojiPicker } from '../../../components/pickers/EmojiPicker';
 import { useOnOutsideClick } from '../../../hooks/useOnOutsideClick';
 import { SmileyIcon } from '@nimbox/icons-react';
+import { useChat } from '../ChatContext';
 import { useMessage } from './MessageContext';
 
 
 export function MessageReactionPicker() {
 
-    const { onCreateReaction } = useMessage();
+    const { message } = useMessage();
+    const { onCreateReaction } = useChat();
 
     const [show, setShow] = useState(false);
     const [referenceRef, setReferenceRef] = useState<HTMLButtonElement | null>(null);
@@ -20,7 +22,7 @@ export function MessageReactionPicker() {
     // Handlers
 
     const handleSelect = (emoji: string) => {
-        onCreateReaction?.(emoji);
+        onCreateReaction?.(message, emoji);
         setShow(false);
     };
 

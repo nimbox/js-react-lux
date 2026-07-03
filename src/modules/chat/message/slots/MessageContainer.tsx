@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import type { ReactNode } from 'react';
+import { useChat } from '../../ChatContext';
 import { useMessage } from '../MessageContext';
 import { MessageOptions } from '../MessageOptions';
 import { MessageReactionPicker } from '../MessageReactionPicker';
@@ -25,7 +26,8 @@ export interface MessageContainerProps {
 // default single clustered pill) stack below.
 export function MessageContainer({ children }: MessageContainerProps) {
 
-    const { message: { alignment }, onCreateReaction } = useMessage();
+    const { message: { alignment } } = useMessage();
+    const { onCreateReaction } = useChat();
     const isStart = alignment === 'start';
 
     return (

@@ -39,7 +39,7 @@ export interface BaseMessage {
         lastAt?: number | string | Date;
         participants?: unknown[];
     };
-    reactions?: ReactionPill[];   // author-free pills; who-reacted is lazy via getReactionParticipants
+    reactions?: ReactionPill[];   // author-free pills; who-reacted is lazy via getReactionDetails
     replyTo?: BaseMessage;
 
 }

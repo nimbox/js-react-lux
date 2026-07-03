@@ -10,7 +10,7 @@ export * from './types/MessageAuthor';
 export * from './types/MessageData';
 export * from './types/MessageGroupData';
 export * from './types/MessageOption';
-export * from './types/ReactionParticipant';
+export * from './types/ReactionDetail';
 export * from './types/ReactionPill';
 export * from './types/TemplateContextData';
 export * from './types/TemplateData';

@@ -5,6 +5,7 @@ import type { BaseMessage } from './types/BaseMessage';
 import type { BaseConversation } from './types/BaseConversation';
 import type { ConversationOption } from './types/ConversationOption';
 import type { MessageOption } from './types/MessageOption';
+import type { ReactionDetail } from './types/ReactionDetail';
 
 
 // Chat Context
@@ -70,6 +71,19 @@ export interface ChatContextProps {
     // ignore it). Not message-specific — hence unqualified.
 
     capabilities?: ReadonlySet<string>;
+
+    // Reaction affordance — the data side of the auto reaction chrome the base mounts
+    // (`MessageReactionPicker` + the reactions/details popover, §7). Content-blind and
+    // per-viewer, so they live here (one wiring for the whole chat), not per message;
+    // each receives the `BaseMessage` it acts on (the twin of `messageOptions.resolve`).
+    // All optional — the picker only appears when `onCreateReaction` is supplied, the
+    // details popover only lists reactors when `getReactionDetails` is, and removal is
+    // offered only when `onDeleteReaction` is. `getReactionDetails` is lazy (the popover
+    // fetches on open), since `reactions` on the envelope are author-free pills.
+
+    onCreateReaction?: (message: BaseMessage, emoji: string) => Promise<void>;
+    onDeleteReaction?: (message: BaseMessage, emoji: string) => Promise<void>;
+    getReactionDetails?: (message: BaseMessage) => Promise<ReactionDetail[]>;
 
 
     // ── Conversation rendering & affordances ───────────────────────────────────
