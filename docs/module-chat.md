@@ -444,10 +444,11 @@ around the resolved instance — *whoever dispatches, provides*: the row rendere
 the `Reply` slot / composer banner / conversation line for previews. Instances never mount it, so
 prop and context cannot diverge and no instance can forget it. The provider puts the message into
 `MessageContext`; decoration slots read it. It carries **the message (every universal envelope
-field, §3 — `author`/`content` opaque, only forwarded) and interaction/derived state**
-(`isFirst`/`isLast` from grouping, `isOver` from hover) — never a *readable* path to content, and
-never callbacks (those live on `ChatContext`; the hover actions are resolved from the option
-system, §7, not supplied per message).
+field, §3 — `author`/`content` opaque, only forwarded) and derived grouping state**
+(`isFirst`/`isLast`) — never a *readable* path to content, and never callbacks (those live on
+`ChatContext`; the hover actions are resolved from the option system, §7, not supplied per message).
+Hover *reveal* itself is pure CSS (Tailwind `group` / `group-hover`), so no hover state rides the
+context.
 
 This is the standard compound-component provider pattern (Radix/Reach-style), not prop-drilling, and
 it stays — for two concrete reasons. (1) Decoration slots each need several universal fields
@@ -455,9 +456,9 @@ it stays — for two concrete reasons. (1) Decoration slots each need several un
 `reactions`, `Reply` → `replyTo`); threading all of them through every kit and consumer
 instance is boilerplate. (2) **Reactions are *free* only because of context** — `Container`
 auto-mounts them by reading `reactions` from context; a pure-props model would make every instance
-re-wire reactions and risk silently dropping them (the failure mode §12 warns against). Interaction
-state (`isOver`, the computed `isFirst`/`isLast`) is genuinely provider-owned and wants context
-regardless.
+re-wire reactions and risk silently dropping them (the failure mode §12 warns against). The computed
+grouping state (`isFirst`/`isLast`) is genuinely provider-owned and wants context regardless (hover
+reveal itself is pure CSS — no state needed).
 
 > **Two channels, two owners.** Context carries what the **base** owns — the universal envelope +
 > derived state — for the slots. Props carry what the **type** owns — the arm-typed `content` view —
@@ -661,7 +662,7 @@ A preview composes author primitives too — it shows the replied-to author via
 `authorRenderer.name(author)` (and strokes its left line from `replyTo.color`, §3).
 
 Both surfaces share **one props/context contract**: the target message goes into `MessageContext`
-either way; interaction and grouping state (`isFirst`, `isOver`) is simply inert on `preview`.
+either way; the grouping state (`isFirst`/`isLast`) is simply inert on `preview`.
 There is deliberately no narrower `PreviewProps` type — one contract, two shapes.
 
 **Organizing renderers across the two axes (`type` × `surface`) is settled: the 2-D, type-first
@@ -1182,7 +1183,15 @@ retirement breaks a consumer surface (mechanical: move menu items into `messageO
   ten-minute start, wrong for a consumer fronting a restrictive channel (a Telegram broadcast would
   show a reaction picker it must reject). A multi-channel consumer must project real capabilities
   per conversation; treat "no capabilities supplied" in such a consumer as a bug, not a default.
-- **`MessageContext` carries `isOver` next to the data — memoize, don't split.** A hover toggle
-  re-renders that one message's consuming slots, which is cheap at per-message granularity. The
-  right move is memoizing the context value; splitting interaction state into a sibling context is
-  an escape hatch to take only if hover re-renders ever *measurably* matter — not before.
+- **Hover reveal is pure CSS, and all of it lives in `MessageContainer`.** `MessageProvider` renders
+  **no DOM** — it is a pure context producer (mirrors `ConversationProvider`), so there is no wrapper
+  to reason about there. `MessageContainer` declares all three nested elements and both hover scopes:
+  its **row** root (`w-full group`) is the full-row hover region that reveals the reaction picker
+  (bubble→gap→picker never flickers); an inner `group/bubble` wraps *just the bubble + its menu* and
+  reveals the option menu on bubble-only hover. The picker is a **sibling** of that inner wrapper —
+  inside the `relative` positioning anchor so it still places beside the bubble, but OUTSIDE
+  `group/bubble` so hovering the picker does not reveal the menu (`group-hover` keys off DOM ancestry,
+  not visual position — the picker looks outside the bubble but must not be *nested* in its hover
+  group). No hover state rides `MessageContext` — so there is no per-hover re-render to memoize away.
+  If a future affordance ever needs JS hover state, prefer a local `useState` in that leaf over putting
+  it back on the context (which would re-render every consuming slot on hover).
