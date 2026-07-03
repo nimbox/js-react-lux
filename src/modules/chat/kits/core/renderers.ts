@@ -1,10 +1,10 @@
 import { messageInstance, type MessageRendererRegistry } from '../../message/renderers';
-import { AudioMessage, AudioMessagePreview } from './instances/Audio';
-import { DocumentMessage, DocumentMessagePreview } from './instances/Document';
-import { ImageMessage, ImageMessagePreview } from './instances/Image';
-import { StickerMessage } from './instances/Sticker';
-import { TextMessage, TextMessagePreview } from './instances/Text';
-import { VideoMessage, VideoMessagePreview } from './instances/Video';
+import { AudioMessage, AudioMessagePreview, AudioMessageSummary } from './instances/Audio';
+import { DocumentMessage, DocumentMessagePreview, DocumentMessageSummary } from './instances/Document';
+import { ImageMessage, ImageMessagePreview, ImageMessageSummary } from './instances/Image';
+import { StickerMessage, StickerMessageSummary } from './instances/Sticker';
+import { TextMessage, TextMessagePreview, TextMessageSummary } from './instances/Text';
+import { VideoMessage, VideoMessagePreview, VideoMessageSummary } from './instances/Video';
 
 
 // The core kit's default registry. A consumer spreads this into
@@ -20,10 +20,10 @@ import { VideoMessage, VideoMessagePreview } from './instances/Video';
 // in the `full` presentation (a bubble-less floating image).
 
 export const coreMessageRenderers: MessageRendererRegistry = {
-    'text': messageInstance({ full: TextMessage, preview: TextMessagePreview }),
-    'image': messageInstance({ full: ImageMessage, preview: ImageMessagePreview }),
-    'sticker': messageInstance({ full: StickerMessage, preview: ImageMessagePreview }),
-    'audio': messageInstance({ full: AudioMessage, preview: AudioMessagePreview }),
-    'video': messageInstance({ full: VideoMessage, preview: VideoMessagePreview }),
-    'document': messageInstance({ full: DocumentMessage, preview: DocumentMessagePreview })
+    'text': messageInstance({ full: TextMessage, preview: TextMessagePreview, summary: TextMessageSummary }),
+    'image': messageInstance({ full: ImageMessage, preview: ImageMessagePreview, summary: ImageMessageSummary }),
+    'sticker': messageInstance({ full: StickerMessage, preview: ImageMessagePreview, summary: StickerMessageSummary }),
+    'audio': messageInstance({ full: AudioMessage, preview: AudioMessagePreview, summary: AudioMessageSummary }),
+    'video': messageInstance({ full: VideoMessage, preview: VideoMessagePreview, summary: VideoMessageSummary }),
+    'document': messageInstance({ full: DocumentMessage, preview: DocumentMessagePreview, summary: DocumentMessageSummary })
 };

@@ -4,11 +4,7 @@ import type { ConversationProviderProps } from './ConversationProvider';
 
 // ConversationContext
 
-export interface ConversationContextProps extends Omit<ConversationProviderProps, 'className' | 'children'> {
-
-    isOver: boolean;
-
-}
+export type ConversationContextProps = Omit<ConversationProviderProps, 'children'>;
 
 export const ConversationContext = createContext<ConversationContextProps | null>(null);
 

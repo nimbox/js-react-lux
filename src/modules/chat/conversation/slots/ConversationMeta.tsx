@@ -1,9 +1,18 @@
 import classNames from 'classnames';
+import { useChat } from '../../ChatContext';
 import { useConversation } from '../ConversationContext';
-import { HeartIcon, ThumbTackIcon } from '@nimbox/icons-react';
 
 
-// ConversationMeta
+// ConversationMeta — the row's trailing column: opaque consumer
+// indicators and the first-class unread badge. (The option menu is NOT
+// here — it is an absolute hover overlay owned by `ConversationContainer`,
+// so it reserves no space in this column.)
+//
+//   indicators — painted by the consumer from the opaque `meta`
+//                (`renderConversationMeta`); lux stays blind to
+//                pinned/starred/…
+//   unread     — first-class: lux owns the badge opinion, like a
+//                reaction pill (docs §1).
 
 export interface ConversationMetaProps {
     className?: string;
@@ -11,32 +20,21 @@ export interface ConversationMetaProps {
 
 export function ConversationMeta({ className }: ConversationMetaProps) {
 
-    const { conversation, menu, isOver } = useConversation();
+    const { renderConversationMeta } = useChat();
+    const { conversation } = useConversation();
 
     return (
         <div className={classNames('flex flex-row items-center gap-2', className)}>
 
-            {conversation.favorited &&
-                <span className="text-md">
-                    <HeartIcon />
-                </span>
-            }
-
-            {conversation.pinned &&
-                <span className="text-md">
-                    <ThumbTackIcon />
-                </span>
-            }
+            {renderConversationMeta?.(conversation)}
 
             {conversation.unread != null && conversation.unread > 0 &&
-                <span className=" px-2 text-xs text-white bg-red-600 rounded-full">
+                <span className="px-2 text-xs text-white bg-red-600 rounded-full">
                     {conversation.unread}
                 </span>
             }
 
-            {isOver && menu}
-
-        </div >
+        </div>
     );
 
 }

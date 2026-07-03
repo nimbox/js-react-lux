@@ -43,6 +43,35 @@ The module must satisfy four requirements, in the owner's words:
 > `end`), which is exactly the group-chat rendering every bubble client already uses. §4 maps where
 > each channel semantic goes.
 
+> **Scope: the item, not the collection.** The seam is **not** "messages are lux's, conversations
+> are the consumer's" — it is **item rendering vs collection orchestration**. Lux is opinionated
+> about how *one thing* looks (a message bubble **and** a conversation row) — that is what "design
+> system, not headless" means. Lux is *not* the owner of a collection's **orchestration** when that
+> orchestration is trivial and product-shaped. So the line falls in two different places:
+>
+> - **The message thread — lux owns rendering *and* orchestration.** The orchestration mechanics are
+>   universal and *hard* (grouping, alignment, sticky-bottom scroll, the reaction picker), so base
+>   owns them.
+> - **The conversation list — lux owns *row rendering*, the consumer owns orchestration.** Lux has a
+>   position on how a **conversation row** looks: an *opinionated, replaceable* default — a
+>   `Conversation.*` compound-component (slots) plus one default summary instance, composed from the
+>   atoms and the `preview` cell (§6). But lux owns **no list**: ordering, selection, unread /
+>   pinned / folders / filters, the list container, and the data are **product identity and viewer
+>   state → consumer**. A row is **one shape, not polymorphic by type**, so this needs **no registry,
+>   no `buildRenderers`, no surface dimension** — just slots + a default arrangement. Run the §5
+>   litmus over the *list* and nothing survives to base (ordering = business logic, selection =
+>   trivial state, unread = viewer-relative like a pill's `highlighted`, list scroll = plain
+>   top-down); run it over the *row's look* and it lands exactly where a bubble does — opinionated
+>   presentation composed from atoms.
+>
+> Concretely, lux ships: the **cells** (`ChatAvatar`, the `preview` message surface) **and** an
+> optional default **row** (`Conversation` slots + one instance) that composes them. Lux never reads
+> viewer state (`unread`/`pinned`/`selected`) inside a component — the consumer feeds those as props
+> / decoration slots, the same rule that keeps the base off message content. (The **composer** is
+> likewise out of scope for now.) This mirrors the message tiers precisely: base mechanics → a
+> replaceable *default look* (the kit / the row) → consumer orchestration. See §12 for the legacy
+> `conversation/*` code that overreaches into orchestration and must be trimmed to this line.
+
 ## 2. The three layers (+ atoms)
 
 ### BASE — `@nimbox/js-react-lux/modules/chat`
@@ -274,7 +303,7 @@ what a design system owns. The cross-cutting decorations sit in **different tier
 
 | Field | Data shape | Rendering machinery | Where it mounts | Who renders the content |
 |---|---|---|---|---|
-| `reactions` | BASE — author-free pills `{emoji, count, highlighted}` (consumer projects `highlighted: reactedByViewer`); participants lazy via `getReactionParticipants` → `ReactionParticipant<T['author']>` (§6) | BASE — **per-emoji pills**; *adding* one is the base `react` option (§7) | **Container-tier, auto** (pills outside the bubble, by `MessageContainer`, every type, free; details popover on demand) | participant **author** via `authorRenderer` (§6) |
+| `reactions` | BASE — author-free pills `{emoji, count, highlighted}` (consumer projects `highlighted: reactedByViewer`); participants lazy via `getReactionParticipants` → `ReactionParticipant` (§6) | BASE — default **one clustered pill** (per-emoji chips available as `ReactionsExpanded`); *adding* one is the base `react` option (§7) | **Container-tier, auto** (outside the bubble, by `MessageContainer`, every type, free; details popover on demand) | participant **author** via `authorRenderer` (§6) |
 | `status` | BASE — opaque `string`, delivery only, *rendered not interpreted* | just the `renderStatus` render-prop | **Properties-tier, instance-placed** (a tick inside the bubble; a floating instance moves it into a compact footer pill — or omits it) | n/a — renders no content |
 | `editedAt` | BASE — timestamp | `Properties` appends "(edited)" | **Properties-tier, instance-placed** | n/a — renders no content |
 | `deletedAt` | BASE — timestamp | **dispatch short-circuit** → `TombstoneMessage` | replaces the instance entirely | n/a — suppresses content |
@@ -311,7 +340,7 @@ The map, against the channels we target:
 | Threads (Slack / Teams / Discord) | decoration `thread` (summary) + `onOpenThread`; the thread view is consumer navigation over a **second** message list; replies are never interleaved into the main rows |
 | System events ("X joined", call started) | **`single` row kind** — authorless, centered, ungrouped; still dispatched through the type registry (`type: 'system-…'`) |
 | Unread "NEW" line (Slack), announcement breaks | **marker row** — `buildMessageRows` breaks the group at a consumer-given watermark and emits the marker (the visual already exists as `MessageSeparator.Pill`) |
-| Multi-emoji reactions + identities (Slack / Teams / Telegram) | already covered: per-emoji `ReactionPill`s + lazy `ReactionParticipant`s; rendering is **per-emoji chips** (own count, own `highlighted`, own hover identities) — never one cluster pill |
+| Multi-emoji reactions + identities (Slack / Teams / Telegram) | already covered: per-emoji `ReactionPill`s + lazy `ReactionParticipant`s. Default rendering = **one clustered pill** (all emojis + total; popover lists each reactor + their emoji); the **per-emoji chips** form is available as `Message.ReactionsExpanded` |
 | Read receipts (WhatsApp ticks; Teams "Seen"; Slack none) | `status` presence/absence per message — already capability-shaped |
 | Albums / media groups (Telegram), multi-file posts (Slack) | **kit content type** (`gallery: { items: (ImageView \| VideoView)[] }` + a grid atom); the adapter merges the run into one message; the merged album shares one reaction/reply target — accepted, it matches the channels' own behavior |
 | Block Kit / Adaptive Cards / inline keyboards | **consumer instances** composing push slots; the flat `Actions` row is the base primitive, cards are compositions — the base never grows a card DSL |
@@ -469,15 +498,25 @@ vs receives children (push)**.
   instance adds "(edited)" from `editedAt`, view counts, importance badges without forking the
   slot). Bubble-tier: **instance-placed** — the instance decides whether and where to mount them (a
   floating sticker mounts `Properties` inside a compact footer pill).
-- `Reactions` — Container-tier, auto (see above; **do not** convert to an opt-in slot). Renders
-  **per-emoji pills** — each `ReactionPill` is its own chip with its own count, `highlighted`, and
-  hover identities — never a single cluster pill (Slack/Teams/Telegram all present per-emoji).
-  Tapping your own `highlighted` pill removes that reaction (`onDeleteReaction`); *adding* one is
-  not this slot's job — it's the base `react` option (§7).
 - `Reply` — renders `replyTo` at the **`preview` surface** through the *message* registry (not a
   separate reply registry) and owns only the quote chrome — a left line stroked from the scalar
   `replyTo.color` (§3), never `replyTo.author`; the compact content comes from the replied-to type's
   own renderer.
+
+**CONTAINER-TIER CHROME — auto-mounted, NOT slots.** Reactions and the reaction picker are **not**
+in the `Message.*` slot namespace and are not composed by instances: `MessageContainer` mounts them
+automatically (reactions always; the picker when `onCreateReaction` is supplied). They live in
+`message/` as standalone components (barrel-exported, like `MessageOptions`), not in `slots/`:
+- **`MessageReactions`** — the **chooser** `MessageContainer` mounts; it renders the default form
+  (the cluster today) and is the single seam a future `ChatContext` option would use to switch forms.
+- **`MessageReactionsCluster`** (current default) — all emojis in one **clustered pill** + total,
+  highlighting only that the viewer reacted with *something* (not which); its popover
+  (`MessageReactionDetails`, unfiltered) lists each reactor + the emoji they used.
+- **`MessageReactionsExpanded`** — **one chip per emoji**, each with its own count/`highlighted`/popover
+  (filtered to that emoji).
+- **`MessageReactionPicker`** — the add-reaction affordance (also auto chrome, not a slot).
+Removal is via the popover's viewer row (`isViewer` + `onDeleteReaction`), **not** by tapping a pill
+(a tap only opens the popover). The **data** is always per-emoji `ReactionPill`s regardless of form.
 
 **DELETE the *pull* slots** — they read flat content fields and are redundant with atoms:
 - `MessageImage`, `MessageAudio`, `MessageVideo` (read `attachments[0]` — the kit feeds
@@ -572,21 +611,41 @@ decompose** (you can't build a `preview` from message-atoms), so messages stay s
 registry. The *encoding* is uniform — a named object, never a `surface` parameter — the cardinality
 differs because the concepts do.
 
-### Rendering a message across surfaces — full vs preview
+### Rendering a message across surfaces — full / preview / summary
 
 A message renders in more than one place, each a different *shape* — the same insight as author
-surfaces, applied to the whole message. The base owns a **closed, surface set**:
+surfaces, applied to the whole message. The compact places split into **two clusters, not one**,
+so the base owns a **closed set of three surfaces**:
 
 ```ts
-type MessageSurface = 'full' | 'preview';   // base-owned, closed; grows by adding a variant
+type MessageSurface = 'full' | 'preview' | 'summary';   // base-owned, closed; grows by adding a variant
 ```
 
 - **`full`** — the timeline row (reactions, options, properties, author label, reply-quote above).
-- **`preview`** — the compact form: the **reply-quote** above a bubble, the **composer's
-  "replying to…" banner**, the **conversation list's last-message line**, thread summaries' "last
-  reply", pinned lists, search hits. One shape, several hosts. (The conversation list is named
-  deliberately: last-message previews must be *renderers*, never hand-built "📷 Photo" strings —
-  the consumer's current string-building is exactly the mistake this surface retires.)
+- **`preview`** — a compact quote **block**: the **reply-quote** above a bubble and the **composer's
+  "replying to…" banner**. Can carry a thumbnail and an author line (host-added), one or two lines —
+  a little card.
+- **`summary`** — a dense one-**line** digest: the **conversation list's last-message line**, search
+  hits, pinned lists. The leanest form — label only ("📷 Photo", "🎤 Voice message", a sender-prefixed
+  snippet), no thumbnail-card. (This corrects an earlier claim that the conversation line was just a
+  *sized* `preview`: it is a genuinely different, leaner shape serving several hosts — not one renderer
+  shrunk by host chrome.)
+
+Both compact surfaces are **renderers**, never hand-built "📷 Photo" strings — the mistake this
+retires. But their **requiredness differs**, because their failure modes differ:
+
+- **`full` / `preview` are required.** Their absence *breaks* — a raw token in a bubble or a quote —
+  so completeness is compile-time and an unregistered `type` falls back to `UnknownMessage` /
+  `UnknownMessagePreview`.
+- **`summary` is optional, with no fallback — absent ⇒ nothing.** A clamped `preview` would drag a
+  thumbnail-card into a one-line list row (wrong); an empty digest line is harmless. So the summary
+  surface trades "never silent" for **"never wrong"**: a type authors `summary` only when it has a
+  genuine one-line digest, and `useMessageRenderer(message, 'summary')` returns `MessageRenderer |
+  null` — the host (`Conversation.Message`, search hit, …) renders nothing when it's null.
+
+The **cell/host split still holds**: the conversation *row* (lux's optional default row, §1/§12, or
+the consumer's own) is the host — it owns the row layout and drops the `summary` renderer into its
+last-message slot. Lux ships the row's *look* but not the *list* (no ordering/selection/unread — §1).
 
 There is **no separate reply stack.** The reply-quote slot and the composer both render their
 *target* message (`replyTo`, or the message being answered) by looking it up in the **same**
@@ -647,44 +706,53 @@ Two vocabularies share the word "action"; keep them apart:
   void` on `ChatContext` gives callback-style buttons (Telegram `callback_data`) a dispatch path;
   self-contained kinds (`link`, `tel:`) still need none.
 - **Viewer options** (`MessageOption`) — operations the viewer performs *on* a message: reply,
-  react, copy, delete, open thread. These used to be an opaque per-message `menu` element; they are
-  now **data**:
+  forward, copy, delete, open thread. These used to be an opaque per-message `menu` element; they
+  are now **data**, and share **one shape with `ConversationOption`** — the same model over a
+  different subject:
 
 ```ts
-interface MessageOption extends Pick<MenuItemProps, 'icon' | 'label' | 'disabled' | 'className'> {
-    type: string;                                   // 'reply' | 'copy' | 'delete' | … or consumer-defined
-    placement: 'quick' | 'menu';                    // hover row vs overflow menu
-    capability?: string;                            // required capability, if any
-    applies?: (message: BaseMessage) => boolean;    // message-state gate (e.g. not on a tombstone)
-    onSelect?: (message: BaseMessage) => void;      // fire-and-done options…
-    render?: ComponentType<{ message: BaseMessage }>; // …or options that open their own UI
-}   // exactly one of onSelect | render
-// ChatProvider: options?: MessageOption[] — the REQUESTED set; base default = [react].
+interface MessageMenuItem {                             // the Menu.Item VALUES lux renders
+    icon?: ReactElement; label: string; disabled?: boolean; className?: string;
+    onSelect: () => void;                               // already bound to its message
+}
+interface MessageOption {
+    type: string;                                       // 'reply' | 'copy' | 'delete' | … or consumer-defined
+    placement: 'menu';                                  // overflow menu only, for now
+    capability?: string;                                // required capability, if any
+    applies?: (message: BaseMessage) => boolean;        // message-state gate (e.g. not on a tombstone)
+    resolve: (message: BaseMessage) => MessageMenuItem; // resolves the item per message
+}
+// ChatProvider: messageOptions: MessageOption[] — the REQUESTED set; base default = [].
+// ConversationOption is identical with `conversation: BaseConversation` in place of `message`.
 ```
 
-**The menu is opinionated lux chrome.** A `placement: 'menu'` option renders as a real `Menu.Item`,
-so its display fields (`icon`, `label`, `disabled`, `className`) are *inherited from* `Menu.Item` —
-the consumer passes the same data `Menu.Item` takes and the base renders it, rather than the
-consumer re-implementing a menu. The one field that can't mirror `Menu.Item` is the click handler:
-an option is declared once at provider scope but acts on a *per-row* message, so it carries
-`onSelect(message)` (the base binds it to `Menu.Item.onClick`) instead of a zero-arg `onClick`.
+**The menu is opinionated lux chrome, and each option `resolve`s its item.** An option does not carry
+static display fields — it *returns* them from `resolve(subject)`, so the base renders a real
+`Menu.Item` (lux's chrome, not a consumer re-implementation) while the consumer decides
+label / icon / `onSelect` **per row**, including *stateful* labels (Pin ↔ Unpin, Fijar ↔ Desfijar).
+`resolve` subsumes the static case (ignore the argument), which is exactly why messages and
+conversations share the one model. `onSelect` is zero-arg — already bound to its subject inside
+`resolve`.
 
 **Rendered = requested ∩ permitted ∩ applicable.** The base resolves the consumer's option list
-against capabilities and per-message state, then owns the placement chrome (the hover quick row and
-the overflow menu that the old `menu` element occupied). Consumers add/remove/reorder by filtering
-and concatenating the exported default set — options compose; they are never a wall. This is the
-pattern that keeps per-channel affordance differences out of component code entirely.
+against `capabilities` and per-subject state (`applies`), then owns the overflow-menu chrome — an
+absolute hover overlay at the top-right corner, mounted by `MessageContainer` /
+`ConversationContainer`, so it reserves no layout space. Consumers add/remove/reorder by filtering
+and concatenating — options compose; they are never a wall. This is the pattern that keeps
+per-channel affordance differences out of component code entirely.
 
 **"Add reaction" is deliberately NOT an option — it is separate, fixed base chrome.** An earlier
-design folded the reaction chooser into the option system (`{ type: 'react', placement: 'quick' }`);
+design folded the reaction chooser into the option system (a `react` option that opened the picker);
 that was reversed by an **opinionated call**: adding a reaction is its own always-on affordance, kept
-apart from the menu/option logic. The base ships it as `MessageReactionPicker`, positioned by
+apart from the menu/option logic. (That reversal is also why the option model no longer needs a
+custom-UI escape hatch or an inline quick-row — the only thing that wanted them was `react`, so both
+were dropped and options collapsed to the single `resolve`-a-`Menu.Item` shape above.) The base ships it as `MessageReactionPicker`, positioned by
 `MessageContainer` in its own column beside the bubble (not in the option toolbar), present whenever
 `onCreateReaction` is supplied. Its picker reuses the module's `EmojiPicker`; a lighter plain-unicode
 quick strip overridable via `reactionEmojis?: string[]` is a possible future refinement. Consequently
 **the base default option set is empty (`[]`)** — every candidate option fails content-blindness or
 needs consumer behavior (`copy` must read `content`; `reply`/`delete`/`forward` need composer state or
-domain commands), so options are entirely the consumer's (via `options` or a pack). Note the split
+domain commands), so options are entirely the consumer's (via `messageOptions` or a pack). Note the split
 this makes clean: **reaction pills** are a decoration (display of reaction *data*, auto, §3 — tapping
 your own highlighted pill removes it via `onDeleteReaction`); **adding** a reaction is fixed chrome (a
 built-in affordance, gated only by `onCreateReaction`); **menu operations** are options (data, gated,
@@ -867,7 +935,8 @@ is an explicit override the consumer owns.
 | `renderText` | optional | **identity** — the text as a plain string, no markup | markdown / rich text; receives `(text, message?)` so one provider serves mixed-channel lists (§4) |
 | `renderStatus` | optional | **identity** — the status token as plain text | icon ticks |
 | `capabilities` (§7) | optional | **absent — everything permitted** | per-channel affordance gating (reactions/threads/edit…) |
-| `options` (§7) | optional | the exported base default set — honestly just `[react]` (the only content-blind operation), ∩ capabilities | add reply/copy/delete/forward… as consumer options |
+| `messageOptions` (§7) | optional | the base default set — empty (no content-blind operation survives), ∩ capabilities | add reply/copy/delete/forward… as consumer options |
+| `conversationOptions` (§7) | optional | empty | pin/mute/… as `resolve(conversation) ⇒ Menu.Item` options, ∩ the shared capabilities |
 | `reactionEmojis` (§7) | optional | a short plain-unicode emoji list for the `react` picker | your emoji vocabulary |
 | `onAction` (§7) | optional | **absent** — self-contained content actions only | callback-style content buttons (Telegram `callback_data`) |
 | `onOpenThread` (§7) | optional | **absent** — thread summaries render inert | thread navigation |
@@ -1004,10 +1073,50 @@ what makes this safe: keep both rails live until the new rail carries the traffi
 **Breaking steps:** 1–2 are mechanical breaks for the consumer (adapter fields + wiring renames —
 one coordinated pass each); 6 (base API removal) and 7 (envelope shape) are the structural breaks,
 both pre-covered because steps 3–5 migrated every read first. In phase 2 only step 11's `menu`
-retirement breaks a consumer surface (mechanical: move menu items into `options`).
+retirement breaks a consumer surface (mechanical: move menu items into `messageOptions`).
 
 ## 12. Known risks / open edges
 
+- **Conversations are trimmed to the item/collection line (§1) — DONE.** The old `conversation/*`
+  subsystem (which owned the whole list) has been split along the §1 seam, parallel to messages:
+    - **BASE `conversation/`** owns the row *mechanism* — the `Conversation` slot namespace
+      (`Container`, `Avatar`, `Name`, `Properties`, `Message` [the last-message slot, a `preview`
+      host], `Meta`), the `ConversationProvider` context **producer** (split off the slots, mirroring
+      `MessageProvider` vs `Message`), the `ConversationContext` / `useConversation` consumer hook,
+      and the neutral **`BaseConversation`** envelope (named to parallel `BaseMessage` — the base-read
+      envelope; the `…Data` suffix was the consumer type's, so it was misleading). Slots read the envelope from context exactly as
+      message slots read `BaseMessage`. The envelope keeps only what lux *paints* — `id`, `name`,
+      `avatar`, `timestamp`, `lastMessage` (→ `summary` surface), and first-class **`unread`** (lux's
+      own badge opinion, like a reaction pill) — plus one **opaque `meta`** the consumer owns
+      (pinned/starred/…). lux never reads `meta`; the parallel to `BaseMessage.content`.
+    - **KIT `kits/core/`** owns the default *look* — one **`DefaultConversation`** instance that
+      mounts the provider and arranges the slots. A row is **one shape, not polymorphic**, so there is
+      **no registry / no `buildRenderers` / no surface dimension** (unlike messages) — just the one
+      instance. This is the exact parallel of `coreMessageRenderers`: spread-and-go, replaceable by
+      composing the `Conversation` slots yourself.
+    - **CONSUMER (hermes)** owns *orchestration* — the list container (a plain `<ul>`), ordering,
+      selection, and the menu, in `chat/ConversationList.tsx`; the domain → `BaseConversation` adapter
+      stays in `utils/processConversations.ts`. Removed from base entirely: `ConversationList`,
+      `buildConversationRows`, the `ConversationRow` union, `ConversationBuildRowsOptions`, and the
+      `data/conversations.ts` fixture. Both repos green (lux `build:types` = 0, hermes-own `tsc` = 0).
+      *(Open follow-up, canexer's: the lux `Conversation*.stories.tsx` still import the removed
+      symbols — rewrite against `DefaultConversation` or delete.)*
+- **Conversation menu, indicators, and last-message rendering — DONE, parallel to messages.** The
+  per-row `menu: ReactElement` (the retired-for-messages pattern) is replaced by **`ConversationOption[]`
+  on `ChatProvider`** (`conversationOptions`), gated exactly like `MessageOption`
+  (requested ∩ permitted ∩ applicable via `useConversationOptions`) and rendered by base chrome
+  (`ConversationOptions`, one opinionated overflow `Menu`, revealed on row hover). It **diverges from
+  `MessageOption` deliberately**: a row's menu item is per-row *stateful* (pin ↔ unpin label; action
+  needs *which* row), so each option carries `resolve(conversation) ⇒ ConversationMenuItem` — it
+  returns the `Menu.Item` **values** (label / icon / bound `onSelect`), never a component, so lux still
+  renders the item while the consumer resolves label+action from the opaque `meta`. Indicators
+  (pin/star) are painted by a consumer hook **`renderConversationMeta(conversation)`** (the parallel to
+  `authorRenderer` for opaque author) inside `Conversation.Meta`; the **`unread` badge** is base-painted
+  from the first-class field. The last-message line renders through the new **`summary` surface** (§6):
+  `Conversation.Message` resolves `useMessageRenderer(message, 'summary')` and renders nothing when the
+  type authored none. hermes: `conversationOptions=[pin]` + `renderConversationMeta` on `ChatProvider`,
+  `meta:{pinned}` in the adapter, `summary` on every registered type; `ConversationMenu.tsx` deleted.
+  Both repos green.
 - **The reply subsystem is collapsed into the `preview` surface, not migrated.** Today
   `reply/instances/*` + `defaultReplyRenderers` are a *duplicate* content stack reading
   `replyTo.body`/`replyTo.attachments[0]`. The target is **one** surface-aware message registry: the

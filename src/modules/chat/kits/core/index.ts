@@ -11,3 +11,8 @@ export * from './instances/Video';
 export * from './instances/Document';
 export * from './instances/Sticker';
 export * from './renderers';
+
+// The default conversation row (one shape, no registry) — the
+// spread-and-go look for a conversation list, parallel to
+// `coreMessageRenderers`.
+export * from './DefaultConversation';

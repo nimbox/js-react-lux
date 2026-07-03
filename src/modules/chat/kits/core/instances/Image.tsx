@@ -69,3 +69,16 @@ export function ImageMessagePreview(props: MessageInstanceProps) {
     );
 
 }
+
+
+// `summary` surface — the label only (no thumbnail). Dragging the
+// thumbnail into a one-line list row is exactly what this surface
+// exists to avoid (docs §6).
+
+export function ImageMessageSummary(props: MessageInstanceProps) {
+
+    const view = props.message.content as ImageView | undefined;
+
+    return <>📷 {view?.caption ?? 'Photo'}</>;
+
+}

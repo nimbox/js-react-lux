@@ -1,39 +1,25 @@
 import { arrow, autoUpdate, flip, FloatingArrow, FloatingPortal, offset, shift, useClick, useDismiss, useFloating, useInteractions, type Placement } from '@floating-ui/react';
 import classNames from 'classnames';
 import { useRef, useState } from 'react';
-import type { ReactionPill } from '../../types/ReactionPill';
-import { useMessage } from '../MessageContext';
+import { useMessage } from './MessageContext';
 import { MessageReactionDetails } from './MessageReactionDetails';
 
 
-// Renders one chip per emoji (never a single cluster pill — Slack/Teams/Telegram
-// all present reactions per-emoji). Each chip shows its own count, highlights when
-// the viewer reacted with it, and opens a popover of that emoji's participants.
-// Adding a reaction is a separate affordance (the reaction picker).
-export function MessageReactions() {
+// Renders ALL of a message's reactions as ONE clustered pill — the
+// distinct emojis side by side plus the total count. Clicking it
+// opens a popover of every reactor and the emoji each used
+// (`MessageReactionDetails`, unfiltered — who + their reaction, and
+// the viewer's own row still offers removal). Unlike the per-emoji
+// `MessageReactionsExpanded`, the cluster does not surface *which*
+// emoji was the viewer's; it only highlights when the viewer reacted
+// with anything. This is the default form the `MessageReactions`
+// chooser renders (which `MessageContainer` mounts); exposed directly
+// as `Message.ReactionsCluster`. Adding a reaction is a separate
+// affordance (the reaction picker).
+
+export function MessageReactionsCluster() {
 
     const { message: { alignment, reactions } } = useMessage();
-
-    if (!reactions || reactions.length === 0) {
-        return null;
-    }
-
-    const sorted = [...reactions].sort((a, b) => b.count - a.count);
-
-    return (
-        <div className={classNames(
-            'flex flex-row flex-wrap gap-1 -mt-1 z-10',
-            alignment === 'end' ? 'justify-end mr-3' : 'justify-start ml-3'
-        )}>
-            {sorted.map(pill => (
-                <ReactionChip key={pill.emoji} pill={pill} alignment={alignment} />
-            ))}
-        </div>
-    );
-
-}
-
-function ReactionChip({ pill, alignment }: { pill: ReactionPill; alignment: 'start' | 'end' }) {
 
     const [open, setOpen] = useState(false);
 
@@ -51,24 +37,38 @@ function ReactionChip({ pill, alignment }: { pill: ReactionPill; alignment: 'sta
     const dismiss = useDismiss(context, { outsidePress: true, outsidePressEvent: 'pointerdown', escapeKey: true });
     const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss]);
 
+    if (!reactions || reactions.length === 0) {
+        return null;
+    }
+
+    const sorted = [...reactions].sort((a, b) => b.count - a.count);
+    const total = reactions.reduce((sum, pill) => sum + pill.count, 0);
+    const highlighted = reactions.some(pill => pill.highlighted);
+
     return (
-        <>
+        <div className={classNames(
+            'flex flex-row -mt-1 z-10',
+            alignment === 'end' ? 'justify-end mr-3' : 'justify-start ml-3'
+        )}>
+
             <button
                 ref={refs.setReference}
                 {...getReferenceProps()}
                 className={classNames(
                     'flex items-center gap-0.5 bg-white rounded-full shadow-sm border px-2 h-6 text-sm cursor-pointer',
-                    pill.highlighted ? 'border-primary-400' : 'border-gray-200'
+                    highlighted ? 'border-primary-400' : 'border-gray-200'
                 )}
             >
-                <span className="text-base leading-none">{pill.emoji}</span>
-                {pill.count > 1 && <span className="text-xs text-gray-500">{pill.count}</span>}
+                {sorted.map(pill => (
+                    <span key={pill.emoji} className="text-base leading-none">{pill.emoji}</span>
+                ))}
+                {total > 1 && <span className="text-xs text-gray-500">{total}</span>}
             </button>
 
             {open && (
                 <FloatingPortal id="modal">
                     <div ref={refs.setFloating} {...getFloatingProps({ className: 'text-base rounded border border-control-border bg-white' })} style={floatingStyles}>
-                        <MessageReactionDetails emoji={pill.emoji} />
+                        <MessageReactionDetails />
                         <FloatingArrow
                             ref={arrowRef}
                             context={context}
@@ -78,7 +78,8 @@ function ReactionChip({ pill, alignment }: { pill: ReactionPill; alignment: 'sta
                     </div>
                 </FloatingPortal>
             )}
-        </>
+
+        </div>
     );
 
 }

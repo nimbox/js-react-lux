@@ -51,3 +51,14 @@ export function VideoMessagePreview(props: MessageInstanceProps) {
     );
 
 }
+
+
+// `summary` surface — a one-line digest (caption or a "Video" label).
+
+export function VideoMessageSummary(props: MessageInstanceProps) {
+
+    const view = props.message.content as VideoView | undefined;
+
+    return <>🎬 {view?.caption ?? 'Video'}</>;
+
+}

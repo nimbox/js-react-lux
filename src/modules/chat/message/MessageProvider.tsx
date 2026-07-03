@@ -1,25 +1,30 @@
 import classNames from 'classnames';
 import { useState, type ReactNode } from 'react';
 import type { BaseMessage } from '../types/BaseMessage';
-import type { ReactionDetailsData } from '../types/ReactionDetailsData';
+import type { ReactionParticipant } from '../types/ReactionParticipant';
 import { MessageContext } from './MessageContext';
 
 
 // MessageProvider
 
-export interface MessageProps {
+// The per-message inputs the dispatch layer passes in — the message plus its
+// interaction callbacks and position flags. The provider forwards these into
+// `MessageContext` (which adds `isOver`); `MessageProviderProps` adds the
+// wrapper's `className`/`children`. NOTE: this is NOT a message *component*'s
+// props — that is `MessageInstanceProps` below.
+export interface MessageProviderInputs {
 
     message: BaseMessage;
 
     onCreateReaction?: (emoji: string) => Promise<void>;
     onDeleteReaction?: (emoji: string) => Promise<void>;
-    getReactions?: () => Promise<ReactionDetailsData[]>;
+    getReactionParticipants?: () => Promise<ReactionParticipant[]>;
 
     isFirst?: boolean;
     isLast?: boolean;
 
 }
-export interface MessageProviderProps extends MessageProps {
+export interface MessageProviderProps extends MessageProviderInputs {
 
     className?: string;
     children?: ReactNode;

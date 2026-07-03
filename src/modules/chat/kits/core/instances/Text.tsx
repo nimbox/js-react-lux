@@ -47,3 +47,16 @@ export function TextMessagePreview(props: MessageInstanceProps) {
     );
 
 }
+
+
+// `summary` surface — a dense one-line digest (conversation list,
+// search hit). Plain text, no markdown block and no chrome; the host
+// clamps and sizes it.
+
+export function TextMessageSummary(props: MessageInstanceProps) {
+
+    const view = props.message.content as TextView | undefined;
+
+    return <>{view?.text ?? ''}</>;
+
+}

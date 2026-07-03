@@ -1,54 +1,38 @@
-import React, { useState } from 'react';
-import type { ConversationData } from '../types/ConversationData';
+import React from 'react';
+import type { BaseConversation } from '../types/BaseConversation';
 import { ConversationContext } from './ConversationContext';
-import { ConversationAvatar } from './slots/ConversationAvatar';
-import { ConversationContainer } from './slots/ConversationContainer';
-import { ConversationMessage } from './slots/ConversationMessage';
-import { ConversationMeta } from './slots/ConversationMeta';
-import { ConversationName } from './slots/ConversationName';
-import { ConversationProperties } from './slots/ConversationProperties';
 
 
-// ConversationProvider
+// ConversationProvider — the context PRODUCER for a conversation row.
+// The row slots (the `Conversation` namespace) are the context
+// CONSUMERS; keeping the two apart mirrors `MessageProvider` vs
+// `Message`. Base owns this mechanism and the neutral `BaseConversation`
+// envelope; the kit's `DefaultConversation` mounts it and composes the
+// slots; the consumer owns the list, ordering, selection, and menu.
+//
+// It carries only what the slots read — the row's `conversation` and
+// its `selected` state. Hover is plain CSS (`Conversation.Container`
+// sets `group`), so there is no interaction state here.
 
 export interface ConversationProviderProps {
 
-    conversation: ConversationData;
-    menu?: React.ReactElement;
-
+    conversation: BaseConversation;
     selected?: boolean;
 
-    className?: string;
     children?: React.ReactElement | null;
 
 }
 
-export function ConversationProvider({ className, children, ...props }: Omit<ConversationProviderProps, 'isHovered'>) {
-
-    const [isOver, setIsOver] = useState(false);
+export function ConversationProvider({ children, ...props }: ConversationProviderProps) {
 
     return (
-        <ConversationContext.Provider value={{ ...props, isOver }} >
-            <div
-                onMouseEnter={() => setIsOver(true)}
-                onMouseLeave={() => setIsOver(false)}
-                className={className}
-            >
-                {children}
-            </div>
+        <ConversationContext.Provider value={props}>
+            {children}
         </ConversationContext.Provider>
     );
 
 }
 
-// Slots
-
-ConversationProvider.Avatar = ConversationAvatar;
-
-ConversationProvider.Container = ConversationContainer;
-
-ConversationProvider.Name = ConversationName;
-ConversationProvider.Properties = ConversationProperties;
-
-ConversationProvider.Message = ConversationMessage;
-ConversationProvider.Meta = ConversationMeta;
+// The slots that a row composes live in the `Conversation` namespace
+// (`./Conversation`), NOT on this component — the provider is only the
+// context producer, the slots are its consumers.

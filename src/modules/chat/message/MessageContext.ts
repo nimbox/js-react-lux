@@ -1,10 +1,10 @@
 import { createContext, useContext } from 'react';
-import type { MessageProps } from './MessageProvider';
+import type { MessageProviderInputs } from './MessageProvider';
 
 
-// MesssageContext
+// MessageContext
 
-export interface MessageContextProps extends MessageProps {
+export interface MessageContextProps extends MessageProviderInputs {
     isOver: boolean;
 }
 

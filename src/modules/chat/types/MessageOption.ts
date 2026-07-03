@@ -1,39 +1,61 @@
-import type { ComponentType } from 'react';
-import type { MenuItemProps } from '../../../components/menu/Menu';
+import type { ReactElement } from 'react';
 import type { BaseMessage } from './BaseMessage';
 
 
-// A viewer option — an operation the viewer performs *on* a message (reply, react,
-// copy, delete, …). Options are **data**: the consumer declares them; the base
-// gates them (`requested ∩ permitted ∩ applicable`) and renders them in a
-// consistent chrome (a hover quick-row + an overflow menu). This is what keeps
-// per-channel affordance differences out of component code (docs §7).
+// A viewer option on a message — an operation the viewer performs
+// *on* a message (reply, forward, copy, delete, …). Options are
+// **data**: the consumer declares them; the base gates them
+// (requested ∩ permitted ∩ applicable) and renders them in one
+// opinionated overflow `Menu`. This is what keeps per-channel
+// affordance differences out of component code (docs §7). The exact
+// parallel of `ConversationOption` — the same shape over a different
+// subject.
 //
-// The display fields (`icon`, `label`, `disabled`, `className`) are inherited from
-// `Menu.Item`: a `placement: 'menu'` option renders as a real `Menu.Item`, so the
-// menu is lux's opinionated chrome, not a consumer re-implementation. The one field
-// that can't mirror `Menu.Item` is the click handler — an option is declared once at
-// provider scope but acts on a per-row message, so it takes `onSelect(message)` (the
-// base binds it to `Menu.Item.onClick`) rather than a zero-arg `onClick`.
+// Each option `resolve`s its `Menu.Item` from the message: it returns
+// the field *values* (label / icon / bound `onSelect`), never a
+// component, so the base owns the menu chrome while the consumer owns
+// what each item says and does — including per-message-*stateful*
+// labels (e.g. Pin ↔ Unpin, Mark read ↔ Mark unread), which a static
+// field could not express.
 //
-// Distinct from a **content** action (`MessageAction`, a button that is part of
-// the message — a template button / inline keyboard).
-export interface MessageOption extends Pick<MenuItemProps, 'icon' | 'label' | 'disabled' | 'className'> {
+// Distinct from a **content** action (`MessageAction`, a button that
+// is part of the message — a template button / inline keyboard).
 
-    type: string;                                   // 'react' | 'reply' | 'copy' | 'delete' | …
+export interface MessageMenuItem {
 
-    placement: 'quick' | 'menu';                    // hover quick-row vs overflow menu
+    // `icon` is a `ReactElement` to match `Menu.Item` (the base
+    // renders it there).
+    icon?: ReactElement;
+    label: string;
+    disabled?: boolean;
 
-    // Required capability, checked against `ChatContext.capabilities` (absent
-    // capabilities set ⇒ permissive; absent `capability` ⇒ always permitted).
+    // Fire-and-done; already bound to its message (closed over in
+    // `resolve`).
+    onSelect: () => void;
+
+    className?: string;
+
+}
+
+export interface MessageOption {
+
+    type: string;                                       // 'reply' | 'forward' | 'copy' | 'delete' | …
+
+    placement: 'menu';                                  // overflow menu only, for now
+
+    // Required capability, checked against `ChatContext.capabilities`
+    // (absent set ⇒ permissive; absent `capability` ⇒ always
+    // permitted).
     capability?: string;
 
-    // Message-state gate (e.g. not on a tombstone, or only on own messages).
+    // Message-state gate — hide the option for some messages (e.g.
+    // not on a tombstone, or only on own messages).
     applies?: (message: BaseMessage) => boolean;
 
-    // Exactly one of the two: a fire-and-done handler (bound to `Menu.Item.onClick`),
-    // or a component that opens its own UI (e.g. the reaction picker's emoji strip).
-    onSelect?: (message: BaseMessage) => void;
-    render?: ComponentType<{ message: BaseMessage }>;
+    // Resolves the `Menu.Item` VALUES from the message — label, icon
+    // and the bound `onSelect` (any of which may depend on message
+    // state). The base renders the `Menu.Item`; the consumer never
+    // returns a component.
+    resolve: (message: BaseMessage) => MessageMenuItem;
 
 }

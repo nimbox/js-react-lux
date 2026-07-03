@@ -25,3 +25,13 @@ export function StickerMessage({ message }: MessageInstanceProps<ImageView>) {
     );
 
 }
+
+
+// `summary` surface — a one-line "Sticker" digest (the image summary's
+// "Photo" label would be wrong here).
+
+export function StickerMessageSummary() {
+
+    return <>Sticker</>;
+
+}

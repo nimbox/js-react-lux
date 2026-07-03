@@ -1,5 +1,5 @@
 import type { BaseMessage } from '../types/BaseMessage';
-import type { MessageBuildRowsOptions } from '../types/MessageBuildRowsOptions';
+import type { BuildMessageRowsOptions } from '../types/BuildMessageRowsOptions';
 import type { MessageGroupRow } from '../types/MessageGroupRow';
 import type { MessageListRow } from '../types/MessageListRow';
 
@@ -9,7 +9,7 @@ import type { MessageListRow } from '../types/MessageListRow';
 // Grouping runs on the opaque `group` key — the base never reads `author`.
 export function buildMessageRows(
     messages: BaseMessage[],
-    options: MessageBuildRowsOptions = {}
+    options: BuildMessageRowsOptions = {}
 ): MessageListRow[] {
 
     const { formatLocalDate = defaultFormatLocalDate, markerBeforeId } = options;
@@ -30,7 +30,7 @@ export function buildMessageRows(
     // Flush the open group (if any) into a row.
     const flushGroup = () => {
         if (currentGroupRow) {
-            currentGroupRow.messages[currentGroupRow.messages.length - 1].meta.isLast = true;
+            currentGroupRow.messages[currentGroupRow.messages.length - 1].isLast = true;
             rows.push({ id: currentGroupRow.messages[0].message.id, type: 'group', group: currentGroupRow });
             currentGroupRow = null;
             currentGroupKey = null;
@@ -72,7 +72,7 @@ export function buildMessageRows(
                 id: message.id,
                 alignment: message.alignment,
                 author: message.author,
-                messages: [{ message, meta: { isFirst: true, isLast: false } }]
+                messages: [{ message, isFirst: true, isLast: false }]
             };
             currentGroupKey = message.group;
             continue;
@@ -80,7 +80,7 @@ export function buildMessageRows(
 
         // Otherwise, extend the current group.
 
-        currentGroupRow.messages.push({ message, meta: { isFirst: false, isLast: false } });
+        currentGroupRow.messages.push({ message, isFirst: false, isLast: false });
 
     }
 

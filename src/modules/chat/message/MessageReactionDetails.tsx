@@ -1,10 +1,11 @@
 import classNames from 'classnames';
 import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Loading } from '../../../../components/Loading';
+import { Loading } from '../../../components/Loading';
 import { WarningIcon } from '@nimbox/icons-react';
-import type { ReactionDetailsData } from '../../types/ReactionDetailsData';
-import { MessageContext, useMessage } from '../MessageContext';
+import type { ReactionParticipant } from '../types/ReactionParticipant';
+import { useChat } from '../ChatContext';
+import { MessageContext, useMessage } from './MessageContext';
 
 
 export interface MessageReactionDetailsProps {
@@ -18,10 +19,11 @@ export function MessageReactionDetails(props: MessageReactionDetailsProps) {
 
     const { className = 'w-72 p-3', emoji } = props;
     const { message, onDeleteReaction } = useContext(MessageContext)!;
+    const { authorRenderer } = useChat();
     const { t } = useTranslation(['lux']);
 
-    const { loading, error, details: allDetails } = useReactionDetails(message.id);
-    const details = emoji != null ? allDetails?.filter(d => d.emoji === emoji) ?? null : allDetails;
+    const { loading, error, participants: allParticipants } = useReactionParticipants(message.id);
+    const participants = emoji != null ? allParticipants?.filter(p => p.emoji === emoji) ?? null : allParticipants;
 
     // Handlers
 
@@ -39,15 +41,7 @@ export function MessageReactionDetails(props: MessageReactionDetailsProps) {
         );
     }
 
-    if (error) {
-        return (
-            <div className={classNames(className, 'flex flex-row justify-end items-center')}>
-                <WarningIcon className="text-danger-500" />
-            </div>
-        );
-    }
-
-    if (!details || details.length === 0) {
+    if (error || !participants || participants.length === 0) {
         return (
             <div className={classNames(className, 'flex flex-row justify-end items-center')}>
                 <WarningIcon className="text-danger-500" />
@@ -58,14 +52,14 @@ export function MessageReactionDetails(props: MessageReactionDetailsProps) {
     return (
         <div className={className}>
             <div className="flex flex-col gap-2">
-                {details.map((detail, index) => (
+                {participants.map((participant, index) => (
                     <div key={index} className="flex flex-row items-center gap-2">
                         <div className="grow">
-                            {detail.self ?
+                            {participant.isViewer ?
 
-                                <button onClick={() => handleRemoveReaction(detail.emoji)} className="text-left cursor-pointer">
+                                <button onClick={() => handleRemoveReaction(participant.emoji)} className="text-left cursor-pointer">
                                     <div>
-                                        {detail.author.name}
+                                        {authorRenderer.name(participant.author)}
                                     </div>
                                     {onDeleteReaction && (
                                         <div className="text-xs text-gray-500">
@@ -75,12 +69,12 @@ export function MessageReactionDetails(props: MessageReactionDetailsProps) {
                                 </button> :
 
                                 <div>
-                                    {detail.author.name}
+                                    {authorRenderer.name(participant.author)}
                                 </div>
 
                             }
                         </div>
-                        <div className="flex-none text-2xl">{detail.emoji}</div>
+                        <div className="flex-none text-2xl">{participant.emoji}</div>
                     </div>
                 ))}
             </div>
@@ -89,49 +83,49 @@ export function MessageReactionDetails(props: MessageReactionDetailsProps) {
 
 }
 
-export function useReactionDetails(messageId: string) {
+export function useReactionParticipants(messageId: string) {
 
-    const { getReactions } = useMessage();
+    const { getReactionParticipants } = useMessage();
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [details, setDetails] = useState<ReactionDetailsData[] | null>(null);
+    const [participants, setParticipants] = useState<ReactionParticipant[] | null>(null);
 
     useEffect(() => {
 
         if (!messageId) {
             setLoading(false);
             setError('No message ID provided');
-            setDetails(null);
+            setParticipants(null);
             return;
         }
 
-        const fetchDetails = async () => {
+        const fetchParticipants = async () => {
 
             setLoading(true);
             setError(null);
 
             try {
-                if (getReactions) {
-                    const data = await getReactions();
-                    setDetails(data);
+                if (getReactionParticipants) {
+                    const data = await getReactionParticipants();
+                    setParticipants(data);
                 } else {
-                    setDetails([]);
+                    setParticipants([]);
                 }
             } catch (err: unknown) {
                 const errorMessage = err instanceof Error ? err.message : 'Unknown error';
                 setError(errorMessage);
-                setDetails(null);
+                setParticipants(null);
             } finally {
                 setLoading(false);
             }
 
         };
 
-        fetchDetails();
+        fetchParticipants();
 
-    }, [getReactions, messageId]);
+    }, [getReactionParticipants, messageId]);
 
-    return { loading, error, details };
+    return { loading, error, participants };
 
 }

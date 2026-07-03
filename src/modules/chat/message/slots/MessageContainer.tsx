@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { useMessage } from '../MessageContext';
 import { MessageOptions } from '../MessageOptions';
 import { MessageReactionPicker } from '../MessageReactionPicker';
-import { MessageReactions } from './MessageReactions';
+import { MessageReactions } from '../MessageReactions';
 
 
 export interface MessageContainerProps {
@@ -21,7 +21,8 @@ export interface MessageContainerProps {
 // (opinionated split): the **reaction chooser** (`MessageReactionPicker`) sits just
 // outside the bubble on its inner side, present whenever `onCreateReaction` is
 // supplied — it is NOT a menu option; the **option chrome** (`MessageOptions`) sits at
-// the bubble's top-right corner. Reaction pills (`MessageReactions`) stack below.
+// the bubble's top-right corner. Reactions (`MessageReactions`, the chooser — the
+// default single clustered pill) stack below.
 export function MessageContainer({ children }: MessageContainerProps) {
 
     const { message: { alignment }, onCreateReaction } = useMessage();

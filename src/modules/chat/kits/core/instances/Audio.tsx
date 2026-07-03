@@ -49,3 +49,12 @@ export function AudioMessagePreview(props: MessageInstanceProps) {
     );
 
 }
+
+
+// `summary` surface — a one-line voice-message digest.
+
+export function AudioMessageSummary() {
+
+    return <>🎤 Voice message</>;
+
+}

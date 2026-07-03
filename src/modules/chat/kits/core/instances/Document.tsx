@@ -48,3 +48,14 @@ export function DocumentMessagePreview(props: MessageInstanceProps) {
     );
 
 }
+
+
+// `summary` surface — a one-line digest (filename).
+
+export function DocumentMessageSummary(props: MessageInstanceProps) {
+
+    const view = props.message.content as DocumentView | undefined;
+
+    return <>📄 {view?.filename ?? view?.caption ?? 'Document'}</>;
+
+}

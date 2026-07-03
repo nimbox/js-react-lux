@@ -1,8 +1,9 @@
 import React, { createContext, useContext } from 'react';
 import { defaultActionRenderers, type ActionRendererRegistry } from './message/actions';
-import { defaultMessageOptions } from './message/defaultOptions';
 import type { MessageRendererRegistry } from './message/renderers';
 import type { BaseMessage } from './types/BaseMessage';
+import type { BaseConversation } from './types/BaseConversation';
+import type { ConversationOption } from './types/ConversationOption';
 import type { MessageOption } from './types/MessageOption';
 
 
@@ -10,21 +11,26 @@ import type { MessageOption } from './types/MessageOption';
 
 export interface ChatContextProps {
 
-    // Renderers
+    // ── Message rendering ──────────────────────────────────────────────────────
+    // How a message and its parts get painted. `messageRenderers` is the core; the
+    // rest paint a piece the base treats as opaque or channel-varying (author, body
+    // text, delivery status, in-message actions).
 
-    // The optional `message` lets a proxy vary markup per channel (mrkdwn vs
-    // WhatsApp formatting vs HTML) from one provider — see docs §4.
-    renderText: (text: string, message?: BaseMessage) => React.ReactNode;
+    // Message renderer registry, keyed by message `type` and dimensioned by surface
+    // (`full` / `preview` / `summary`, §6). An app maps its own types to renderers;
+    // an unregistered type falls back to `UnknownMessage`. Reply quotes, the composer
+    // banner and conversation lines all render through this same registry at their
+    // surface — there is no separate reply registry.
 
-    // Author rendering is design-system chrome the base positions but does not own
-    // the data for. The author is opaque (`unknown`) to the base; the consumer
-    // supplies the primitives — `avatar`, `name`, and the optional `handle` (a
-    // proxy-agnostic secondary identifier: a phone number, an `@user`, an email) —
-    // which the base composes per location. The first-bubble header shows `name`
-    // + `handle`; compact PREVIEW surfaces (reply-quote, conversation line) and the
-    // reaction-details row show `name` ONLY — the handle is noise there. The base
-    // ships no defaults (all render nothing), so a consumer that shows authors must
-    // provide these. See docs/module-chat.md §6.
+    messageRenderers?: MessageRendererRegistry;
+
+    // Author rendering — the base treats `author` as opaque (`unknown`) and composes
+    // these primitives per location: `avatar`, `name`, and the optional `handle` (a
+    // proxy-agnostic secondary identifier: a phone number, an `@user`, an email). The
+    // first-bubble header shows `name` + `handle`; compact surfaces (reply-quote,
+    // conversation line) and the reaction-details row show `name` ONLY. The base ships
+    // no defaults (all render nothing), so a consumer that shows authors must provide
+    // these. See docs/module-chat.md §6.
 
     authorRenderer: {
         avatar: (author: unknown) => React.ReactNode;
@@ -32,74 +38,99 @@ export interface ChatContextProps {
         handle?: (author: unknown) => React.ReactNode;
     };
 
-    // The actions (buttons) rendered under a message bubble dispatch through this
-    // registry, keyed by `action.type`. Apps override or extend it to add their
-    // own action kinds; the library ships `defaultActionRenderers`.
+    // Body text → nodes. The optional `message` lets a proxy vary markup per channel
+    // (mrkdwn vs WhatsApp formatting vs HTML) from one provider — see docs §4.
+
+    renderText: (text: string, message?: BaseMessage) => React.ReactNode;
+
+    // Opaque delivery-status token → a node (an icon tick, usually). A renderer, not
+    // a formatter: it produces a ReactNode, not a display string.
+
+    renderStatus: (status: string) => React.ReactNode;
+
+    // In-message action buttons (template buttons / inline keyboards) dispatch through
+    // this registry, keyed by `action.type`. The library ships `defaultActionRenderers`.
 
     actionRenderers: ActionRendererRegistry;
 
-    // Message renderer registry, keyed by message `type` and dimensioned by
-    // surface (`full`/`preview`). An app supplies this to map its own types to
-    // renderers; an unregistered type falls back to `UnknownMessage` (§6). Reply
-    // quotes and the composer banner render through this same registry at the
-    // `preview` surface — there is no separate reply registry.
 
-    messageRenderers?: MessageRendererRegistry;
+    // ── Message affordances ────────────────────────────────────────────────────
+    // What the viewer may DO to a message — declared as data, rendered by base chrome
+    // (`MessageOptions`, one opinionated overflow menu, §7). Each option `resolve`s
+    // its `Menu.Item` from the message.
 
-    // Viewer options — the operations the viewer performs *on* a message (react,
-    // reply, copy, …), declared as data and gated by capability. The base renders
-    // them in a consistent chrome (`MessageOptions` — hover quick-row + overflow
-    // menu); `capabilities` is the channel's permitted set, so per-channel
-    // affordance differences never reach component code. An absent `capabilities`
-    // is permissive (single-channel apps can ignore it); `options` defaults to the
-    // base set (just `react`). See docs/module-chat.md §7.
+    // The requested option set (default: empty). Rendered = requested ∩ permitted ∩
+    // applicable.
 
-    options: MessageOption[];
+    messageOptions: MessageOption[];
+
+    // The SHARED permission set — the scope's vocabulary of what the viewer may do
+    // "here". Gates BOTH `messageOptions` and `conversationOptions` (an option names a
+    // `capability`; this set permits it). Absent ⇒ permissive (single-channel apps can
+    // ignore it). Not message-specific — hence unqualified.
+
     capabilities?: ReadonlySet<string>;
 
-    // Formatters
 
-    formatDuration: (duration: number) => string;
+    // ── Conversation rendering & affordances ───────────────────────────────────
+
+    // Viewer options on a conversation row (pin, mute, …) — the twin of
+    // `messageOptions`, gated the same way against `capabilities` (§7). Rendered as one
+    // opinionated overflow menu (`ConversationOptions`); each option `resolve`s its
+    // `Menu.Item` from the row. Default: none.
+
+    conversationOptions: ConversationOption[];
+
+    // Paints the opaque conversation `meta` (pinned / starred indicators) into the
+    // `ConversationMeta` slot — the parallel to `authorRenderer` for a message's opaque
+    // author. The base never reads `meta`; absent ⇒ no indicators.
+
+    renderConversationMeta?: (conversation: BaseConversation) => React.ReactNode;
+
+
+    // ── Formatters ─────────────────────────────────────────────────────────────
+    // Leaf utilities: a scalar → a display string. Library-free defaults (Intl/Date).
 
     formatTime: (timestamp: number | string | Date | undefined | null) => string;
     formatCalendar: (timestamp: number | string | Date | undefined | null) => string;
-
-    // Opaque delivery-status token rendered to a node (an icon tick, usually).
-    // A renderer, not a formatter: it produces a ReactNode, not a display string.
-
-    renderStatus: (status: string) => React.ReactNode;
+    formatDuration: (duration: number) => string;
 
 }
 
 export const defaultProps: ChatContextProps = {
 
-    // Text rendering
-
-    renderText: (text) => text,
-
-    // Author rendering — no default avatar/name (the base owns no author shape);
-    // a consumer that shows authors overrides these.
+    // ── Message rendering ──────────────────────────────────────────────────────
+    // No default renderers (the base owns no content/author shape); a consumer that
+    // shows authors overrides `authorRenderer`. (`messageRenderers` is optional —
+    // absent here; an unmapped type falls back to `UnknownMessage`.)
 
     authorRenderer: {
         avatar: () => null,
         name: () => null,
         handle: () => null
     },
-
-    // Action rendering
-
+    renderText: (text) => text,
+    renderStatus: defaultRenderStatus,
     actionRenderers: defaultActionRenderers,
 
-    // Options — the base default set (just `react`); no `capabilities` (permissive).
+    // ── Message affordances ────────────────────────────────────────────────────
+    // Empty; the base ships no content-blind option (the consumer supplies
+    // react/reply/…). No `capabilities` ⇒ permissive.
 
-    options: defaultMessageOptions,
+    messageOptions: [],
 
-    // Formatters + status
+    // ── Conversation rendering & affordances ───────────────────────────────────
+    // Empty; the consumer supplies pin/mute/… (`renderConversationMeta` is optional
+    // — absent here).
+
+    conversationOptions: [],
+
+    // ── Formatters ─────────────────────────────────────────────────────────────
+    // Library-free (Intl/Date).
 
     formatTime: defaultFormatTime,
-    formatDuration: defaultFormatDuration,
     formatCalendar: defaultFormatCalendar,
-    renderStatus: defaultRenderStatus
+    formatDuration: defaultFormatDuration
 
 };
 

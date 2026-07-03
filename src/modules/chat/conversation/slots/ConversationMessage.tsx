@@ -31,16 +31,23 @@ export function ConversationMessage({ className }: ConversationMessageProps) {
 
 }
 
-// The last-message line is a preview host — render it through the message
-// registry at the `preview` surface (§6), not a hand-built string.
+// The last-message line is a summary host — render it through the message
+// registry at the `summary` surface (a dense one-line digest, §6), not a
+// hand-built string. `summary` has no fallback: a type that authored none
+// resolves to `null`, and the line renders nothing (better empty than a
+// mis-shaped preview dragged into the row).
 function ConversationMessageContent({ message }: { message: BaseMessage }) {
 
     const resolveRenderer = useMessageRenderer();
-    const Preview = resolveRenderer(message, 'preview');
+    const Summary = resolveRenderer(message, 'summary');
+
+    if (!Summary) {
+        return null;
+    }
 
     return (
         <div className="text-sm text-gray-700 truncate">
-            <Preview message={message} />
+            <Summary message={message} />
         </div>
     );
 

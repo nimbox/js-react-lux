@@ -1,4 +1,5 @@
-export interface MessageBuildRowsOptions {
+// Options for `buildMessageRows` (the name mirrors the function's word order).
+export interface BuildMessageRowsOptions {
 
     locale?: string;
 
