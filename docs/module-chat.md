@@ -190,7 +190,7 @@ interface BaseMessage {
     deletedAt?: number | string | Date;   // tombstone — dispatch short-circuits to TombstoneMessage
     forwardedFrom?: { author?: unknown; label?: string };   // origin attribution
     thread?: { count: number; lastAt?: number | string | Date; participants?: unknown[] };  // summary only
-    reactions?: ReactionPill[];   // author-free pills; who-reacted is lazy via getReactionParticipants (§6)
+    reactions?: ReactionPill[];   // author-free pills; who-reacted is lazy via getReactionDetails (§6)
     replyTo?: BaseMessage;
 
 }
@@ -303,7 +303,7 @@ what a design system owns. The cross-cutting decorations sit in **different tier
 
 | Field | Data shape | Rendering machinery | Where it mounts | Who renders the content |
 |---|---|---|---|---|
-| `reactions` | BASE — author-free pills `{emoji, count, highlighted}` (consumer projects `highlighted: reactedByViewer`); participants lazy via `getReactionParticipants` → `ReactionParticipant` (§6) | BASE — default **one clustered pill** (per-emoji chips available as `ReactionsExpanded`); *adding* one is the base `react` option (§7) | **Container-tier, auto** (outside the bubble, by `MessageContainer`, every type, free; details popover on demand) | participant **author** via `authorRenderer` (§6) |
+| `reactions` | BASE — author-free pills `{emoji, count, highlighted}` (consumer projects `highlighted: reactedByViewer`); details lazy via `getReactionDetails` → `ReactionDetail` (§6) | BASE — default **one clustered pill** (per-emoji chips available as `ReactionsExpanded`); *adding* one is the base `react` option (§7) | **Container-tier, auto** (outside the bubble, by `MessageContainer`, every type, free; details popover on demand) | reactor **author** via `authorRenderer` (§6) |
 | `status` | BASE — opaque `string`, delivery only, *rendered not interpreted* | just the `renderStatus` render-prop | **Properties-tier, instance-placed** (a tick inside the bubble; a floating instance moves it into a compact footer pill — or omits it) | n/a — renders no content |
 | `editedAt` | BASE — timestamp | `Properties` appends "(edited)" | **Properties-tier, instance-placed** | n/a — renders no content |
 | `deletedAt` | BASE — timestamp | **dispatch short-circuit** → `TombstoneMessage` | replaces the instance entirely | n/a — suppresses content |
@@ -340,7 +340,7 @@ The map, against the channels we target:
 | Threads (Slack / Teams / Discord) | decoration `thread` (summary) + `onOpenThread`; the thread view is consumer navigation over a **second** message list; replies are never interleaved into the main rows |
 | System events ("X joined", call started) | **`single` row kind** — authorless, centered, ungrouped; still dispatched through the type registry (`type: 'system-…'`) |
 | Unread "NEW" line (Slack), announcement breaks | **marker row** — `buildMessageRows` breaks the group at a consumer-given watermark and emits the marker (the visual already exists as `MessageSeparator.Pill`) |
-| Multi-emoji reactions + identities (Slack / Teams / Telegram) | already covered: per-emoji `ReactionPill`s + lazy `ReactionParticipant`s. Default rendering = **one clustered pill** (all emojis + total; popover lists each reactor + their emoji); the **per-emoji chips** form is available as `Message.ReactionsExpanded` |
+| Multi-emoji reactions + identities (Slack / Teams / Telegram) | already covered: per-emoji `ReactionPill`s + lazy `ReactionDetail`s. Default rendering = **one clustered pill** (all emojis + total; popover lists each reactor + their emoji); the **per-emoji chips** form is available as `Message.ReactionsExpanded` |
 | Read receipts (WhatsApp ticks; Teams "Seen"; Slack none) | `status` presence/absence per message — already capability-shaped |
 | Albums / media groups (Telegram), multi-file posts (Slack) | **kit content type** (`gallery: { items: (ImageView \| VideoView)[] }` + a grid atom); the adapter merges the run into one message; the merged album shares one reaction/reply target — accepted, it matches the channels' own behavior |
 | Block Kit / Adaptive Cards / inline keyboards | **consumer instances** composing push slots; the flat `Actions` row is the base primitive, cards are compositions — the base never grows a card DSL |
@@ -427,7 +427,7 @@ the name signals the shape:
 | `render<X>` | `(value) => ReactNode` | calls one function (no key) | `renderText`, `renderStatus` |
 | `<x>Renderer` | fixed record of render fns | reads named facets of **one** concept | `authorRenderer` `{ avatar, name }` |
 | `<x>Renderers` | open registry keyed by data | **dispatches by a runtime key** | `messageRenderers` (by `type` × surface), `actionRenderers` (by action type) |
-| `get<X>` | `(message) => Promise<data>` | fetches lazy data on demand | `getReactionParticipants` |
+| `get<X>` | `(message) => Promise<data>` | fetches lazy data on demand | `getReactionDetails` |
 | `on<X>` | `(message, …) => void` | notifies a viewer action | `onCreateReaction`, `onDeleteReaction`, `onOpenThread`, `onAction` |
 
 The plural carries meaning: **`<x>Renderers` (plural) is an *open, extensible registry* you can
@@ -515,8 +515,9 @@ automatically (reactions always; the picker when `onCreateReaction` is supplied)
 - **`MessageReactionsExpanded`** — **one chip per emoji**, each with its own count/`highlighted`/popover
   (filtered to that emoji).
 - **`MessageReactionPicker`** — the add-reaction affordance (also auto chrome, not a slot).
-Removal is via the popover's viewer row (`isViewer` + `onDeleteReaction`), **not** by tapping a pill
-(a tap only opens the popover). The **data** is always per-emoji `ReactionPill`s regardless of form.
+Removal is via the popover's `removable` row (the consumer projects it on the viewer's own reaction) +
+`onDeleteReaction`, **not** by tapping a pill (a tap only opens the popover). The **data** is always
+per-emoji `ReactionPill`s regardless of form.
 
 **DELETE the *pull* slots** — they read flat content fields and are redundant with atoms:
 - `MessageImage`, `MessageAudio`, `MessageVideo` (read `attachments[0]` — the kit feeds
@@ -571,30 +572,31 @@ layout (emoji + arrangement) × the two consumer primitives — so the base need
 knowledge. `authorRenderer` is **required** (the base ships no default avatar, symmetric with shipping
 no default content renderer).
 
-**The reaction *participants* are loaded lazily and carry the author.** The envelope's
+**The reaction *details* are loaded lazily and carry the author.** The envelope's
 `reactions: ReactionPill[]` are author-free **pills** (`{ emoji, count, highlighted }` — the base
 emphasizes a `highlighted` pill; the consumer projects `highlighted: reactedByViewer`, keeping the
 "viewer" concept out of the base type) — cheap,
-shipped with every message. The *who-reacted* list is fetched on demand, only when the popover opens,
-through the `getReactionParticipants` callback on `ChatContext`, which returns participants:
+shipped with every message. The *who-reacted* list — the expanded **detail** behind those pills — is
+fetched on demand, only when the popover opens, through the `getReactionDetails` callback on
+`ChatContext`, which returns one entry per reactor:
 
 ```ts
-interface ReactionParticipant<TAuthor = unknown> {   // TAuthor = T['author'] from ChatTypes (§3)
+interface ReactionDetail<TAuthor = unknown> {   // TAuthor = T['author'] from ChatTypes (§3)
     author: TAuthor;
     emoji: string;                       // which reaction — base-rendered in the row
     timestamp?: number | string | Date;
 }
 // ChatContext — all reaction callbacks take the message as their first argument:
-//   getReactionParticipants?: (message: BaseMessage) => Promise<ReactionParticipant<T['author']>[]>
+//   getReactionDetails?: (message: BaseMessage) => Promise<ReactionDetail<T['author']>[]>
 //   onCreateReaction? / onDeleteReaction?: (message: BaseMessage, emoji: string) => void
 ```
 
 Each entry ties an author to the **emoji** they used, so a details row is exactly
 `authorRenderer.avatar(author)` + `authorRenderer.name(author)` + the base-rendered `emoji`. The base
-sees `ReactionParticipant<unknown>` — author opaque, **rendered** (not read) via the two primitives;
-the emoji is base-owned reaction data; the consumer sees `ReactionParticipant<T['author']>`, typed
+sees `ReactionDetail<unknown>` — author opaque, **rendered** (not read) via the two primitives;
+the emoji is base-owned reaction data; the consumer sees `ReactionDetail<T['author']>`, typed
 through the provider's `T`, so the lazily-loaded list can't carry the wrong author shape. This is what retires the current
-`self`-flag / fabricated-timestamp hack: a participant now carries a real opaque author and a real
+`self`-flag / fabricated-timestamp hack: a detail now carries a real opaque author and a real
 timestamp. `ReactionPill` stays ungenericized; the author binding rides the lazy callback, not the
 envelope.
 
@@ -945,7 +947,7 @@ is an explicit override the consumer owns.
 | `formatDuration` | optional | arithmetic `m:ss` / `h:mm:ss` | — |
 | `actionRenderers` | optional | `defaultActionRenderers` — a plain `<button>` with the action's `text`, no icons | per action kind |
 | `onCreateReaction` / `onDeleteReaction` | optional | **absent** — the `react` option is inapplicable (no picker); pills still display | let the viewer react |
-| `getReactionParticipants` | optional | **absent** — pills still show; the who-reacted popover is unavailable | lazy participant details (§6) |
+| `getReactionDetails` | optional | **absent** — pills still show; the who-reacted popover is unavailable | lazy reaction details (§6) |
 
 \* Practically required: without a registered renderer every `type` falls through to the base
 `UnknownMessage` placeholder. The base ships **no** content renderers of its own; the sensible
@@ -1012,7 +1014,7 @@ what makes this safe: keep both rails live until the new rail carries the traffi
    required `authorRenderer { avatar, name }` and delete the base default `<Avatar>` fallback in
    `MessageGroup`; `formatStatus` → `renderStatus`; `reactedByViewer` → `highlighted` on the pill
    (`ReactionData` → `ReactionPill`); move the reaction callbacks to `ChatContext` with the message
-   as first argument (`onCreateReaction` / `onDeleteReaction` / `getReactionParticipants` returning
+   as first argument (`onCreateReaction` / `onDeleteReaction` / `getReactionDetails` returning
    `{ author, emoji, timestamp }`); recompose the reaction-details rows from `authorRenderer` + the
    emoji (retires the `self`-flag / fabricated-timestamp hack). One coordinated find/replace pass.
 3. **(base + kit, additive)** Add the **`preview` surface**: base preview-chrome slots (compact
@@ -1128,9 +1130,9 @@ retirement breaks a consumer surface (mechanical: move menu items into `messageO
   (Container-tier chrome, outside the bubble). Do **not** "fix" it into an opt-in slot — the
   per-instance composition model applies to Bubble-tier decorations (`Properties`, `Reply`), not to
   Container-tier ones. The envelope carries only the author-free **pills** (`ReactionPill`); the
-  who-reacted **participants** are loaded lazily via `getReactionParticipants` and carry the author
-  (`ReactionParticipant<T['author']>`, §6) — which retires the current `self`-flag /
-  fabricated-timestamp hack (participants now have a real opaque author + real timestamp). Keep the
+  who-reacted **details** are loaded lazily via `getReactionDetails` and carry the author
+  (`ReactionDetail<T['author']>`, §6) — which retires the current `self`-flag /
+  fabricated-timestamp hack (details now have a real opaque author + real timestamp). Keep the
   pill ungenericized; bind the author on the lazy callback, not the envelope.
 - **Floating sticker / single-emoji prove placement is per-instance.** A bubble-less message has
   nowhere to mount a `Properties` tick or a `Reply` quote — which is exactly why `status` and
