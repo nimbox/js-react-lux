@@ -8,9 +8,9 @@ export interface MessageActionsProps {
 }
 
 // Renders a message's actions (a template's URL buttons, quick-replies) as a
-// stacked list under the bubble. Unlike the pull-based `MessageButtons`, the
-// actions arrive as a **prop** — the kit/consumer instance passes them in — so
-// the base never reads them off the envelope. Each action dispatches to the
+// stacked list under the bubble. The actions arrive as a **prop** — the kit/consumer
+// instance passes them in — so the base never reads them off the envelope. Each
+// action dispatches to the
 // `ChatContext` action registry for its `type`; an unknown type falls back to a
 // plain label.
 export function MessageActions({ actions }: MessageActionsProps) {

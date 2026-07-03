@@ -27,9 +27,9 @@ export function MessageOptions() {
             trigger={
                 <button
                     type="button"
-                    className="p-2 bg-white/90 shadow rounded-full cursor-pointer text-gray-500 hover:text-gray-700"
+                    className="p-1 bg-white/90 shadow rounded-full cursor-pointer text-gray-500 hover:text-gray-700"
                 >
-                    <VerticalDotsIcon className="w-5 h-5" />
+                    <VerticalDotsIcon className="w-4 h-4" />
                 </button>
             }
         >

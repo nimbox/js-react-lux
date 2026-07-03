@@ -5,7 +5,7 @@ import { MessagePreview } from '../MessagePreview';
 // Rendered in place of any message that has `deletedAt` — the dispatch resolver
 // short-circuits to it before the `type` lookup (§3), whatever the original type.
 // Content-free: a "message deleted" placeholder that keeps the author/time chrome.
-// (The label is a base default; a strings map — §10 — will make it overridable.)
+// (The label is a base default; not yet overridable — see docs §11.)
 
 export function TombstoneMessage() {
 

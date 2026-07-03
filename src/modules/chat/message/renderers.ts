@@ -25,9 +25,9 @@ export type MessageSurface = 'full' | 'preview' | 'summary';
 
 export type MessageRenderer = ComponentType<MessageInstanceProps>;
 
-// A registry entry. Transitionally either a bare renderer (the `full` surface;
-// the rest absent) or a `{ full, preview, summary? }` record. `full`/`preview`
-// are the required surfaces (docs §6); `summary` is optional (absent ⇒ nothing).
+// A registry entry is either a bare renderer (the `full` surface only) or a
+// `{ full, preview, summary? }` record. `full`/`preview` are the required surfaces
+// (docs §6); `summary` is optional (absent ⇒ nothing).
 export interface MessageInstance {
     full: MessageRenderer;
     preview?: MessageRenderer;

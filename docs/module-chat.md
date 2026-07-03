@@ -69,8 +69,8 @@ The module must satisfy four requirements, in the owner's words:
 > viewer state (`unread`/`pinned`/`selected`) inside a component — the consumer feeds those as props
 > / decoration slots, the same rule that keeps the base off message content. (The **composer** is
 > likewise out of scope for now.) This mirrors the message tiers precisely: base mechanics → a
-> replaceable *default look* (the kit / the row) → consumer orchestration. See §12 for the legacy
-> `conversation/*` code that overreaches into orchestration and must be trimmed to this line.
+> replaceable *default look* (the kit / the row) → consumer orchestration. The `conversation/*` code
+> realizes this split — the base owns the row's look, the consumer owns the list (§12).
 
 ## 2. The three layers (+ atoms)
 
@@ -276,8 +276,8 @@ costs no coupling and saves every consumer from re-implementing the delivery tic
 `deletedAt` short-circuits **at the dispatch layer**: `useMessageRenderer` routes a deleted message
 to the base `TombstoneMessage` (Container + Bubble + a content-free placeholder + `Properties`)
 *before* the `type` lookup, so no instance has to cooperate. This also keeps `status` meaning
-**delivery only** — mapping deletion into `status` (as the consumer once did) destroys the delivery
-state and still renders the deleted content.
+**delivery only** — mapping deletion into `status` would destroy the delivery state and still render
+the deleted content.
 
 **`forwardedFrom` and `thread` follow the author rules.** Both carry an **opaque** author
 (`forwardedFrom.author`, `thread.participants[]`) rendered only through `authorRenderer` — the
@@ -287,10 +287,6 @@ affordance the instance mounts; opening it is consumer navigation (`onOpenThread
 message list. Replies are **never interleaved** into the main rows. (These opaque authors stay
 `unknown` even in `MessageData<T>` — they flow only into `authorRenderer`; type them later if a
 consumer ever needs to read them.)
-
-The current envelope additionally carries the legacy flat content fields
-`header, body, footer, actions, attachments`. **These leave** (see the roadmap, §11) — they are
-content, and content lives in `content`, owned by the kit/consumer.
 
 ### The generalizing rule
 
@@ -303,7 +299,7 @@ what a design system owns. The cross-cutting decorations sit in **different tier
 
 | Field | Data shape | Rendering machinery | Where it mounts | Who renders the content |
 |---|---|---|---|---|
-| `reactions` | BASE — author-free pills `{emoji, count, highlighted}` (consumer projects `highlighted: reactedByViewer`); details lazy via `getReactionDetails` → `ReactionDetail` (§6) | BASE — default **one clustered pill** (per-emoji chips available as `ReactionsExpanded`); *adding* one is the base `react` option (§7) | **Container-tier, auto** (outside the bubble, by `MessageContainer`, every type, free; details popover on demand) | reactor **author** via `authorRenderer` (§6) |
+| `reactions` | BASE — author-free pills `{emoji, count, highlighted}` (consumer projects `highlighted: reactedByViewer`); details lazy via `getReactionDetails` → `ReactionDetail` (§6) | BASE — default **one clustered pill** (per-emoji chips available as `ReactionsExpanded`); *adding* one is the base reaction picker (§7) | **Container-tier, auto** (outside the bubble, by `MessageContainer`, every type, free; details popover on demand) | reactor **author** via `authorRenderer` (§6) |
 | `status` | BASE — opaque `string`, delivery only, *rendered not interpreted* | just the `renderStatus` render-prop | **Properties-tier, instance-placed** (a tick inside the bubble; a floating instance moves it into a compact footer pill — or omits it) | n/a — renders no content |
 | `editedAt` | BASE — timestamp | `Properties` appends "(edited)" | **Properties-tier, instance-placed** | n/a — renders no content |
 | `deletedAt` | BASE — timestamp | **dispatch short-circuit** → `TombstoneMessage` | replaces the instance entirely | n/a — suppresses content |
@@ -466,23 +462,21 @@ reveal itself is pure CSS — no state needed).
 > `unknown`, deliberately unreadable, so the typed path and the chrome path cannot be confused. And
 > context nesting handles previews for free: slots inside a preview read the inner (target) message.
 
-> **Content-blindness comes from the envelope, not the mechanism.** The obvious worry is that
-> `useMessage()` is the very affordance that let base slots *pull* content fields. It was — but once
-> the flat content fields leave (§11 step 7), the base reads `content` only as `unknown`. A base slot
-> then **cannot** pull content from the context without an explicit cast, so the context stops being
-> a pull-vector on its own. That turns "delete pull, keep push" from a discipline you must remember
-> into something the types largely enforce: the leak was the flat fields on the envelope, not the
-> context call.
+> **Content-blindness comes from the envelope, not the mechanism.** `useMessage()` carries the
+> message, but the base's copy of `content` is `unknown` — a base slot **cannot** pull content from
+> the context without an explicit cast, so the context is not a pull-vector. "Delete pull, keep push"
+> is enforced by the type, not by discipline: content-blindness is a property of the envelope shape,
+> not a restriction on the mechanism.
 
 ### Slot categories
 
-What changes is *which* slots exist and *what* they are allowed to read. Two categories survive; one
-is deleted. The axis is **not** "structural vs content" — it is **reads `content`/flat fields (pull)
-vs receives children (push)**.
+Slots fall into two categories on a single axis — **receives children (push)** vs **reads *universal*
+fields**. No slot reads `content`: interpreting the payload is the instance's job (§8), so a message
+slot is always one of these two.
 
 **STRUCTURAL** — pure push wrappers, no data:
 - `Container` — aligns the row, mounts the **quick/overflow options** resolved from the option
-  system (§7) — the reaction picker arrives as the base `react` option, not as bespoke chrome —
+  system (§7), the **reaction picker** (separate always-on chrome, not an option — §7),
   and auto-mounts `Reactions` (the pills; Container-tier chrome). Chrome
   mounting is deliberately independent of Container's *geometry* (the aligned flex recipe, width
   caps — themable): bubble-paradigm geometry must never weld the chrome shut (§4, rejected
@@ -509,7 +503,7 @@ in the `Message.*` slot namespace and are not composed by instances: `MessageCon
 automatically (reactions always; the picker when `onCreateReaction` is supplied). They live in
 `message/` as standalone components (barrel-exported, like `MessageOptions`), not in `slots/`:
 - **`MessageReactions`** — the **chooser** `MessageContainer` mounts; it renders the default form
-  (the cluster today) and is the single seam a future `ChatContext` option would use to switch forms.
+  (the cluster) and is the single seam a future `ChatContext` option would use to switch forms.
 - **`MessageReactionsCluster`** (current default) — all emojis in one **clustered pill** + total,
   highlighting only that the viewer reacted with *something* (not which); its popover
   (`MessageReactionDetails`, unfiltered) lists each reactor + the emoji they used.
@@ -520,21 +514,16 @@ Removal is via the popover's `removable` row (the consumer projects it on the vi
 `onDeleteReaction`, **not** by tapping a pill (a tap only opens the popover). The **data** is always
 per-emoji `ReactionPill`s regardless of form.
 
-**DELETE the *pull* slots** — they read flat content fields and are redundant with atoms:
-- `MessageImage`, `MessageAudio`, `MessageVideo` (read `attachments[0]` — the kit feeds
-  `ChatImage`/`ChatAudio`/`ChatVideo` directly).
-- `MessageFloatingBody`, `MessageFloatingAttachments` (read `body`/`attachments`).
-- The `?? body` **pull fallback** inside `MessageBody`.
+**`Body` / `Header` / `Footer`** are **push-only layout slots** — a styled container the instance
+fills: `<Message.Body>{renderText(view.text)}</Message.Body>`. There are **no media slots**
+(`MessageImage` / `Audio` / `Video`): the kit feeds the `ChatImage` / `ChatAudio` / `ChatVideo` atoms
+directly, so a content-reading slot would be redundant.
 
-**KEEP `Body` / `Header` / `Footer` as push-only layout slots** — the styled text container is
-worth reusing; just remove the pull. The kit already uses them as push slots
-(`<MessageProvider.Body>{renderText(view.text)}</MessageProvider.Body>`).
+**`Actions`** (`MessageActions`) — the buttons under a bubble. It takes `actions` as a **prop** (the
+instance passes `content.actions` in), never pulling from the envelope; the action *visual* registry
+(`defaultActionRenderers`) lives in the base.
 
-**`MessageButtons` → `MessageActions`** (the compound `Actions` slot) — takes `actions` as a
-**prop** (the kit/consumer instance passes `content.actions` in) instead of pulling
-`message.actions`. The action *visual* registry (`defaultActionRenderers`) stays in base.
-
-> Rule of thumb: **delete pull, keep push.**
+> Rule of thumb: **slots push (children / universal fields); only instances read `content`.**
 
 ### Rendering the author — primitives the base composes
 
@@ -596,10 +585,9 @@ Each entry ties an author to the **emoji** they used, so a details row is exactl
 `authorRenderer.avatar(author)` + `authorRenderer.name(author)` + the base-rendered `emoji`. The base
 sees `ReactionDetail<unknown>` — author opaque, **rendered** (not read) via the two primitives;
 the emoji is base-owned reaction data; the consumer sees `ReactionDetail<T['author']>`, typed
-through the provider's `T`, so the lazily-loaded list can't carry the wrong author shape. This is what retires the current
-`self`-flag / fabricated-timestamp hack: a detail now carries a real opaque author and a real
-timestamp. `ReactionPill` stays ungenericized; the author binding rides the lazy callback, not the
-envelope.
+through the provider's `T`, so the lazily-loaded list can't carry the wrong author shape. A detail
+carries a real opaque author and a real timestamp — no `self`-flag, no fabricated timestamp.
+`ReactionPill` stays ungenericized; the author binding rides the lazy callback, not the envelope.
 
 This holds on one condition: the two primitives must be **size/layout-flexible** (they fill the slot
 the base gives them; the base sizes the container — a large avatar at the group edge, a small one in
@@ -630,12 +618,11 @@ type MessageSurface = 'full' | 'preview' | 'summary';   // base-owned, closed; g
   a little card.
 - **`summary`** — a dense one-**line** digest: the **conversation list's last-message line**, search
   hits, pinned lists. The leanest form — label only ("📷 Photo", "🎤 Voice message", a sender-prefixed
-  snippet), no thumbnail-card. (This corrects an earlier claim that the conversation line was just a
-  *sized* `preview`: it is a genuinely different, leaner shape serving several hosts — not one renderer
-  shrunk by host chrome.)
+  snippet), no thumbnail-card. It is a genuinely different, leaner shape than `preview` — not a
+  `preview` shrunk by host chrome — because it serves several one-line hosts.
 
-Both compact surfaces are **renderers**, never hand-built "📷 Photo" strings — the mistake this
-retires. But their **requiredness differs**, because their failure modes differ:
+Both compact surfaces are **renderers**, never hand-built "📷 Photo" strings. Their **requiredness
+differs**, because their failure modes differ:
 
 - **`full` / `preview` are required.** Their absence *breaks* — a raw token in a bubble or a quote —
   so completeness is compile-time and an unregistered `type` falls back to `UnknownMessage` /
@@ -695,7 +682,7 @@ The consumer projects channel truth into an opaque string set, per conversation.
 reads the set directly — **one derivation seam** (a base hook) combines capability × ownership
 (`alignment === 'end'` is "mine") × message state (`deletedAt`, failed send) into booleans
 (`canReact`, `canReply`, `canOpenThread`, `canEdit`, …), and every affordance consumes the booleans:
-the `react` option isn't offered without `canReact`, the thread affordance without `canOpenThread`.
+the reaction picker isn't shown without `canReact`, the thread affordance without `canOpenThread`.
 **Absent set = everything permitted** — capabilities are a restriction vocabulary, so the
 ten-minute start needs none. The base documents the capability names *it* consults; consumer
 instances are free to consult their own through the same hook.
@@ -709,9 +696,8 @@ Two vocabularies share the word "action"; keep them apart:
   void` on `ChatContext` gives callback-style buttons (Telegram `callback_data`) a dispatch path;
   self-contained kinds (`link`, `tel:`) still need none.
 - **Viewer options** (`MessageOption`) — operations the viewer performs *on* a message: reply,
-  forward, copy, delete, open thread. These used to be an opaque per-message `menu` element; they
-  are now **data**, and share **one shape with `ConversationOption`** — the same model over a
-  different subject:
+  forward, copy, delete, open thread. They are **data**, sharing **one shape with
+  `ConversationOption`** — the same model over a different subject:
 
 ```ts
 interface MessageMenuItem {                             // the Menu.Item VALUES lux renders
@@ -744,12 +730,10 @@ absolute hover overlay at the top-right corner, mounted by `MessageContainer` /
 and concatenating — options compose; they are never a wall. This is the pattern that keeps
 per-channel affordance differences out of component code entirely.
 
-**"Add reaction" is deliberately NOT an option — it is separate, fixed base chrome.** An earlier
-design folded the reaction chooser into the option system (a `react` option that opened the picker);
-that was reversed by an **opinionated call**: adding a reaction is its own always-on affordance, kept
-apart from the menu/option logic. (That reversal is also why the option model no longer needs a
-custom-UI escape hatch or an inline quick-row — the only thing that wanted them was `react`, so both
-were dropped and options collapsed to the single `resolve`-a-`Menu.Item` shape above.) The base ships it as `MessageReactionPicker`, positioned by
+**"Add reaction" is deliberately NOT an option — it is separate, always-on base chrome**, kept apart
+from the menu/option logic. Because nothing else needs them, the option model carries no custom-UI
+escape hatch and no inline quick-row: options collapse to the single `resolve`-a-`Menu.Item` shape
+above. The base ships the affordance as `MessageReactionPicker`, positioned by
 `MessageContainer` in its own column beside the bubble (not in the option toolbar), present whenever
 `onCreateReaction` is supplied. Its picker reuses the module's `EmojiPicker`; a lighter plain-unicode
 quick strip overridable via `reactionEmojis?: string[]` is a possible future refinement. Consequently
@@ -861,7 +845,7 @@ export const coreMessageRenderers = buildRenderers<CoreContentMap>({
 });
 ```
 
-Registering the wrong component under a key — `text: { full: ImageMessage, … }` — is now a compile
+Registering the wrong component under a key — `text: { full: ImageMessage, … }` — is a compile
 error.
 
 **4. The producer closes the loop.** The consumer's adapter returns `MessageData<HermesChat>` — the
@@ -940,14 +924,14 @@ is an explicit override the consumer owns.
 | `capabilities` (§7) | optional | **absent — everything permitted** | per-channel affordance gating (reactions/threads/edit…) |
 | `messageOptions` (§7) | optional | the base default set — empty (no content-blind operation survives), ∩ capabilities | add reply/copy/delete/forward… as consumer options |
 | `conversationOptions` (§7) | optional | empty | pin/mute/… as `resolve(conversation) ⇒ Menu.Item` options, ∩ the shared capabilities |
-| `reactionEmojis` (§7) | optional | a short plain-unicode emoji list for the `react` picker | your emoji vocabulary |
+| `reactionEmojis` (§7) | optional | a short plain-unicode emoji list for the reaction picker | your emoji vocabulary |
 | `onAction` (§7) | optional | **absent** — self-contained content actions only | callback-style content buttons (Telegram `callback_data`) |
 | `onOpenThread` (§7) | optional | **absent** — thread summaries render inert | thread navigation |
 | `formatTime` | optional | built-in `Intl`/`Date` (e.g. `toLocaleTimeString`) | a date library / custom format |
 | `formatCalendar` | optional | built-in `Intl`/`Date` | a date library |
 | `formatDuration` | optional | arithmetic `m:ss` / `h:mm:ss` | — |
 | `actionRenderers` | optional | `defaultActionRenderers` — a plain `<button>` with the action's `text`, no icons | per action kind |
-| `onCreateReaction` / `onDeleteReaction` | optional | **absent** — the `react` option is inapplicable (no picker); pills still display | let the viewer react |
+| `onCreateReaction` / `onDeleteReaction` | optional | **absent** — no reaction picker; pills still display | let the viewer react |
 | `getReactionDetails` | optional | **absent** — pills still show; the who-reacted popover is unavailable | lazy reaction details (§6) |
 
 \* Practically required: without a registered renderer every `type` falls through to the base
@@ -957,8 +941,8 @@ default *vocabulary* (text/image/audio/video/document/sticker) is the **core kit
 install the kit, spread it, and extend for your channel types.
 
 Not on `ChatContext`: **instance props** — instance-specific behavior (e.g. the lightbox's
-`onImageClick`) is passed where the consumer renders the instance. (The former per-message `menu`
-element is retired: hover actions now come from the option system, §7.)
+`onImageClick`) is passed where the consumer renders the instance. (Hover actions are not passed per
+message either — they come from the option system, §7.)
 
 **The library-free rule for defaults.** A default that reached for a third-party dependency — a
 markdown renderer for `renderText`, an icon set for `renderStatus`/`actionRenderers`, `date-fns` for
@@ -974,8 +958,9 @@ before us (their failure modes in parentheses):
 
 - **Scroll is a base product.** Sticky-bottom, position preservation when older history loads,
   imperative scroll, jump-to-unread — first-class, tested behaviors of `MessageList`, not examples.
-  No force-scroll-to-bottom on every render (the current code does this — it makes thread panes and
-  history reading impossible). A chat library lives or dies in its scroll mechanics (chatscope's
+  Sticky-bottom is a *condition* (the viewer is at the bottom), never an unconditional
+  scroll-to-bottom on every render — that would break thread panes and history reading. A chat
+  library lives or dies in its scroll mechanics (chatscope's
   issue tracker is the proof).
 - **Theming is semantic tokens.** `--lux-chat-*` CSS custom properties consumed by Tailwind are the
   *only* theming contract — overridable globally or per subtree, dark mode by scope class. No JS
@@ -994,204 +979,75 @@ before us (their failure modes in parentheses):
   chat. Everything sophisticated — capabilities, options, packs, custom types — is additive opt-in.
   Zero-ceremony adoption is why simpler kits keep winning users they shouldn't.
 
-## 11. Refactor roadmap
+## 11. Not yet built
 
-From the current dual-rail state to the target. **Additive first, removals last** — every removal
-is preceded by its replacement, and hermes `chat/web` stays green at each step. The dual path is
-what makes this safe: keep both rails live until the new rail carries the traffic.
+The architecture above is realized in the code. A few §10 commitments are stated but not yet fully
+wired:
 
-### Phase 1 — land the target model
+- **Theme tokens.** `--lux-chat-*` CSS custom properties (§10) are the intended theming contract, but
+  components still style with Tailwind classes directly — the tokens are not defined yet.
+- **The bubble width cap is hard-coded.** `MessageContainer` caps the bubble at `max-w-[75%]` inline
+  rather than through a theme token, so the "geometry stays themable" residue from §4 is incomplete: a
+  feed-style presentation is buildable in principle, but the cap can't be overridden yet.
+- **The tombstone label is fixed.** `TombstoneMessage` renders a built-in "message deleted" string; it
+  becomes overridable once the module ships a strings map.
 
-0. **(base, additive)** Add `UnknownMessage` (content-free structural placeholder, covering both
-   surfaces) and `MessageActions` (accepts `actions` as a prop) alongside the existing pull-based
-   `MessageButtons`. Nothing wired yet. Non-breaking.
-1. **(base + consumer, breaking-mechanical)** Introduce the **type model** (§3): `BaseMessage` (with
-   `group`, `color`, opaque `author`), `ChatTypes`, `MessageData<T>`, `MessageInstanceProps<TContent>`,
-   and `buildRenderers`; type the base machinery (`buildMessageRows`, `MessageContext`, the slots) to
-   `BaseMessage`; group by `group` instead of `author.id`. The adapter starts setting `group`/`color`
-   and returns `MessageData<HermesChat>`. The legacy flat fields remain on the envelope
-   transitionally. One coordinated pass with hermes (the adapter must add `group`).
-2. **(base + consumer, breaking-mechanical)** Rename the **context surface** (§6): `renderAvatar` →
-   required `authorRenderer { avatar, name }` and delete the base default `<Avatar>` fallback in
-   `MessageGroup`; `formatStatus` → `renderStatus`; `reactedByViewer` → `highlighted` on the pill
-   (`ReactionData` → `ReactionPill`); move the reaction callbacks to `ChatContext` with the message
-   as first argument (`onCreateReaction` / `onDeleteReaction` / `getReactionDetails` returning
-   `{ author, emoji, timestamp }`); recompose the reaction-details rows from `authorRenderer` + the
-   emoji (retires the `self`-flag / fabricated-timestamp hack). One coordinated find/replace pass.
-3. **(base + kit, additive)** Add the **`preview` surface**: base preview-chrome slots (compact
-   container, clamped body, thumbnail) + the surface dimension on the registry; give each
-   `coreMessageRenderers` entry a `preview` reading `content`. Point the `Reply` slot at
-   `messageRenderers[replyTo.type]` surface `'preview'` behind a flag. The legacy `reply/*` stack
-   stays live. Non-breaking.
-4. **(consumer, additive)** Author hermes instances for `template`, `buttons`, `list`, `link`,
-   `selection` reading their own `content` shapes (header/footer escape the envelope here, into the
-   template's content), covering both surfaces. Use the push `Body`/`Footer` slots + `MessageActions`.
-   Repoint `MESSAGE_RENDERERS` off base `TextMessage`. After this, hermes routes nothing to base
-   content instances. Green.
-5. **(consumer, additive)** Switch the reply-quote (and, when built, the composer banner) to the
-   `preview` surface; retire `REPLY_RENDERERS`. The recursive `transformMessage` already fills
-   `replyTo.content`. After this, nothing reads `replyTo` flat fields and the reply registry is
-   unused. Green.
-6. **(base, breaking for the base API — safe for hermes)** Switch the `useMessageRenderer` fallback
-   to `UnknownMessage`; delete `defaultMessageRenderers`, `message/instances/*` (incl.
-   `DefaultMessage`), **and the whole `reply/*` stack** (`ReplyProvider`, `reply/slots/*`,
-   `reply/instances/*`, `defaultReplyRenderers`). Delete the pull slots; make `MessageBody`
-   push-only; replace `MessageButtons` with `MessageActions`. Mount `MessageProvider` at the
-   **dispatch layer** (*whoever dispatches, provides* — instances stop rendering the provider).
-   hermes is unaffected (the kit is installed; consumer instances already use push slots + prop
-   actions + the preview surface).
-7. **(envelope, breaking for the consumer)** Drop `header, body, footer, actions, attachments` (and
-   `MessageAttachment`) from `BaseMessage`. Move `MessageAction` + subtypes into the action module,
-   keeping the export so `LinkAction` still resolves for the consumer. Update `transformMessage` to
-   stop writing flat fields. Everything already reads `content`. Green.
-8. **(cleanup)** Move floating sticker / single-emoji rendering into kit instances (bubble-less; the
-   split-bubble form via `Bubble`'s `connector` override — §6); drop the dead `renderReplyTo` escape
-   hatch; tighten per-kit `content` typing.
+The **composer** is out of scope for this doc, which covers the read path (see the scope note at the
+top).
 
-### Phase 2 — go multi-channel (requires phase 1)
+## 12. Invariants & open edges
 
-9. **(base, additive)** Open the **row model**: `single` row kind (authorless/system messages,
-   centered, ungrouped), the **unread-marker** injection option on `buildMessageRows`
-   (group-breaking, renders `MessageSeparator.Pill`), author-optional grouping. Fixes the live
-   crash path (`author!` → `group.author.id`).
-10. **(base, additive)** The **decorations**: `editedAt` (Properties appends "(edited)"),
-    `forwardedFrom` (origin line), `thread` summary + `onOpenThread`; `deletedAt` + the
-    `TombstoneMessage` dispatch short-circuit. The consumer stops mapping deletion into `status`.
-11. **(base, additive — mechanical break: the per-message `menu` prop is retired)** **Capabilities +
-    options** (§7): the `capabilities` set, the derivation seam, `MessageOption[]` with
-    requested ∩ permitted ∩ applicable resolution replacing the `menu` element; `onAction` for
-    callback-style content actions.
-12. **(base/kit, additive)** **Per-emoji reaction pills** (fold into step 2's `ReactionPill` work if
-    it hasn't shipped yet); gallery content type + grid atom in the kit; sticker/video-note atom
-    variants (size/format props).
-13. **(sweep, visual/mechanical)** **De-WhatsApp the base**: un-export `chat-background.png` from
-    the barrel; lift `max-w-[75%]` out of `MessageProvider` into `Bubble`/theme; size props on
-    `ChatSticker`/`ChatVideo`/`ChatImage`; move `copy-code`/`call-*` action renderers to
-    kit/consumer (base keeps `link` + a plain label); `renderText(text, message)`. (Subsumes the
-    emoji/sticker part of step 8 where not already done.)
-14. **(platform)** The §10 tenets made real: scroll rigor in `MessageList` (kill the
-    force-scroll-on-render), `--lux-chat-*` tokens, the pack merge helper, publish the frozen
-    contract.
+### Invariants — do not undo these
 
-**Breaking steps:** 1–2 are mechanical breaks for the consumer (adapter fields + wiring renames —
-one coordinated pass each); 6 (base API removal) and 7 (envelope shape) are the structural breaks,
-both pre-covered because steps 3–5 migrated every read first. In phase 2 only step 11's `menu`
-retirement breaks a consumer surface (mechanical: move menu items into `messageOptions`).
-
-## 12. Known risks / open edges
-
-- **Conversations are trimmed to the item/collection line (§1) — DONE.** The old `conversation/*`
-  subsystem (which owned the whole list) has been split along the §1 seam, parallel to messages:
-    - **BASE `conversation/`** owns the row *mechanism* — the `Conversation` slot namespace
-      (`Container`, `Avatar`, `Name`, `Properties`, `Message` [the last-message slot, a `preview`
-      host], `Meta`), the `ConversationProvider` context **producer** (split off the slots, mirroring
-      `MessageProvider` vs `Message`), the `ConversationContext` / `useConversation` consumer hook,
-      and the neutral **`BaseConversation`** envelope (named to parallel `BaseMessage` — the base-read
-      envelope; the `…Data` suffix was the consumer type's, so it was misleading). Slots read the envelope from context exactly as
-      message slots read `BaseMessage`. The envelope keeps only what lux *paints* — `id`, `name`,
-      `avatar`, `timestamp`, `lastMessage` (→ `summary` surface), and first-class **`unread`** (lux's
-      own badge opinion, like a reaction pill) — plus one **opaque `meta`** the consumer owns
-      (pinned/starred/…). lux never reads `meta`; the parallel to `BaseMessage.content`.
-    - **KIT `kits/core/`** owns the default *look* — one **`DefaultConversation`** instance that
-      mounts the provider and arranges the slots. A row is **one shape, not polymorphic**, so there is
-      **no registry / no `buildRenderers` / no surface dimension** (unlike messages) — just the one
-      instance. This is the exact parallel of `coreMessageRenderers`: spread-and-go, replaceable by
-      composing the `Conversation` slots yourself.
-    - **CONSUMER (hermes)** owns *orchestration* — the list container (a plain `<ul>`), ordering,
-      selection, and the menu, in `chat/ConversationList.tsx`; the domain → `BaseConversation` adapter
-      stays in `utils/processConversations.ts`. Removed from base entirely: `ConversationList`,
-      `buildConversationRows`, the `ConversationRow` union, `ConversationBuildRowsOptions`, and the
-      `data/conversations.ts` fixture. Both repos green (lux `build:types` = 0, hermes-own `tsc` = 0).
-      *(Open follow-up, canexer's: the lux `Conversation*.stories.tsx` still import the removed
-      symbols — rewrite against `DefaultConversation` or delete.)*
-- **Conversation menu, indicators, and last-message rendering — DONE, parallel to messages.** The
-  per-row `menu: ReactElement` (the retired-for-messages pattern) is replaced by **`ConversationOption[]`
-  on `ChatProvider`** (`conversationOptions`), gated exactly like `MessageOption`
-  (requested ∩ permitted ∩ applicable via `useConversationOptions`) and rendered by base chrome
-  (`ConversationOptions`, one opinionated overflow `Menu`, revealed on row hover). It **diverges from
-  `MessageOption` deliberately**: a row's menu item is per-row *stateful* (pin ↔ unpin label; action
-  needs *which* row), so each option carries `resolve(conversation) ⇒ ConversationMenuItem` — it
-  returns the `Menu.Item` **values** (label / icon / bound `onSelect`), never a component, so lux still
-  renders the item while the consumer resolves label+action from the opaque `meta`. Indicators
-  (pin/star) are painted by a consumer hook **`renderConversationMeta(conversation)`** (the parallel to
-  `authorRenderer` for opaque author) inside `Conversation.Meta`; the **`unread` badge** is base-painted
-  from the first-class field. The last-message line renders through the new **`summary` surface** (§6):
-  `Conversation.Message` resolves `useMessageRenderer(message, 'summary')` and renders nothing when the
-  type authored none. hermes: `conversationOptions=[pin]` + `renderConversationMeta` on `ChatProvider`,
-  `meta:{pinned}` in the adapter, `summary` on every registered type; `ConversationMenu.tsx` deleted.
-  Both repos green.
-- **The reply subsystem is collapsed into the `preview` surface, not migrated.** Today
-  `reply/instances/*` + `defaultReplyRenderers` are a *duplicate* content stack reading
-  `replyTo.body`/`replyTo.attachments[0]`. The target is **one** surface-aware message registry: the
-  reply-quote and composer banner render `replyTo` at surface `'preview'` (§6), and the whole
-  `reply/*` stack is deleted (step 6). This retires the old "highest-risk second stack" by erasing it
-  rather than porting it — but the cutover (steps 3→5→6) is the most invasive sequence in the
-  roadmap, so land it behind the flag in step 3 and verify quoted replies before deleting.
-- **Reactions are auto-injected by `Container`**, not composed by instances. That is *correct*
-  (Container-tier chrome, outside the bubble). Do **not** "fix" it into an opt-in slot — the
-  per-instance composition model applies to Bubble-tier decorations (`Properties`, `Reply`), not to
-  Container-tier ones. The envelope carries only the author-free **pills** (`ReactionPill`); the
-  who-reacted **details** are loaded lazily via `getReactionDetails` and carry the author
-  (`ReactionDetail<T['author']>`, §6) — which retires the current `self`-flag /
-  fabricated-timestamp hack (details now have a real opaque author + real timestamp). Keep the
+- **Reactions are auto-injected by `Container`, not composed by instances.** This is Container-tier
+  chrome (outside the bubble); do **not** turn it into an opt-in slot. The per-instance composition
+  model applies to Bubble-tier decorations (`Properties`, `Reply`), not Container-tier ones. The
+  envelope carries only author-free **pills** (`ReactionPill`); the who-reacted **details** load
+  lazily via `getReactionDetails` and carry the author (`ReactionDetail<T['author']>`, §6). Keep the
   pill ungenericized; bind the author on the lazy callback, not the envelope.
-- **Floating sticker / single-emoji prove placement is per-instance.** A bubble-less message has
-  nowhere to mount a `Properties` tick or a `Reply` quote — which is exactly why `status` and
-  `replyTo` cannot be auto-injected like reactions. These become kit instances that render atoms
-  with no `Bubble`.
-- **Type safety is recovered by the two-type split (§3) + §8 (*Type safety*), not by scattered
-  casts.** `BaseMessage` (author- *and content*-blind) for the base; the discriminated
-  `MessageData<T>` for the consumer/kit, where `T extends ChatTypes` bundles the content map and the
-  author as one bindings type (`T['content']`, `T['author']`) — **one** generic, not two; a content
-  map + `buildRenderers` confine the unavoidable registry erasure to one named cast; the producer
-  returns `MessageData<HermesChat>` to close the loop. `author` and `replyTo` are typed by this too.
-  Remember the **handled-vs-possible** caveat: `MessageData<T>` is the chosen handled set, not a
-  promise about the wire — keep the `UnknownMessage` fallback and never treat a `switch` over it as
-  exhaustive.
-- **`author` is opaque (`unknown`) to the base; what the base needs from it are scalar primitives.**
-  The base reads no author field. Anything author-derived splits by the **paint-vs-render** test
-  (§3): values the base *paints with* become flat scalar primitives on the envelope — `group`
-  (grouping identity, `group: author.id`) and `color` (accent for the reply line / bubble, `color:
-  author.color`); the author *shape* it would *render* stays opaque and goes through the two
-  `authorRenderer` primitives `{ avatar, name }`, which the base composes per location (the reaction
-  row is `avatar + name +` the base-owned emoji). Don't reintroduce a base `MessageAuthor` shape or a
-  base default avatar — that re-couples the base to author data (the same leak as the flat content
-  fields). Add a new author **scalar** only when the base must paint with it, and a new author
-  **surface** only when a location needs different author *content* (not just a different size).
-  Open follow-through: extend `authorRenderer` to the **composer** when that's tackled.
-- **Some action kinds may be too channel-specific for base.** `copy-code`, `call-channel`,
-  `call-phone-number` are channel-flavoured; the registry *mechanism* + a generic button atom
-  clearly belong in base, but reconsider whether those specific kinds + their renderers should be
-  kit/consumer.
-- **`renderReplyTo` is a redundant second path.** `MessageReply` honours both an explicit
-  `renderReplyTo` override and the registry; hermes uses only the registry. Drop it in cleanup to
-  avoid two ways to do one thing.
-- **`useMessage()` context is convention-enforced until the flat fields leave.** Between now and §11
-  step 7, the envelope still carries readable `body`/`header`/`attachments`, so a base slot *can*
-  still pull content from context — "delete pull, keep push" rests on discipline until step 7 makes
-  `content` `unknown` to the base and the type system takes over (see §6). Consider narrowing the
-  `MessageContext` type to drop the legacy flat fields ahead of the envelope change so the safety
-  lands earlier.
-- **`MessageList` force-scrolls to bottom on every render.** Acceptable for a live tail; fatal for
-  thread panes, history reading, and jump-to-unread. Fix under the §10 scroll tenet (step 14) —
-  sticky-bottom must be a *condition* (viewer at bottom), not an unconditional effect.
-- **Two vocabularies share the word "action" — never conflate them.** Content actions
-  (`MessageAction`, in-message buttons, `actionRenderers`, `onAction`) versus viewer options
-  (`MessageOption`, do-to-message operations, capability-gated, `onSelect`). The names are chosen
-  so a sentence can hold both: "the option to copy a message" vs "the message's reply button".
+- **`author` is opaque (`unknown`) to the base.** What the base needs from it are **scalar
+  primitives** — `group` (grouping, `group: author.id`) and `color` (accent for the reply line /
+  bubble) — split out by the paint-vs-render test (§3). The author *shape* goes through the two
+  `authorRenderer` primitives `{ avatar, name }`, composed per location (the reaction row is `avatar +
+  name +` the base-owned emoji). Do **not** reintroduce a base `MessageAuthor` shape or a base default
+  avatar — that re-couples the base to author data. Add a new author **scalar** only when the base
+  must paint with it; a new author **surface** only when a location needs different author *content*
+  (not just a different size).
+- **Placement of `status` and `replyTo` is per-instance, never auto-injected.** A bubble-less message
+  (floating sticker, single emoji) has nowhere to mount a `Properties` tick or a `Reply` quote — which
+  is exactly why they cannot be auto-injected the way reactions are.
+- **There is no separate reply stack.** Reply quotes and the composer banner render `replyTo` through
+  the *same* `messageRenderers` at the `preview` surface (§6). Do not add a second reply registry.
+- **Type safety comes from the two-type split (§3), not scattered casts.** `BaseMessage` (author- and
+  content-blind) for the base; the discriminated `MessageData<T>` for the consumer/kit, where
+  `T extends ChatTypes` bundles the content map and author as one bindings type — **one** generic, not
+  two. A content map + `buildRenderers` confine the unavoidable registry erasure to one named cast;
+  the producer returns `MessageData<HermesChat>` to close the loop. Keep the **handled-vs-possible**
+  caveat in mind: `MessageData<T>` is the chosen handled set, not a promise about the wire — keep the
+  `UnknownMessage` fallback and never treat a `switch` over it as exhaustive.
+- **Two vocabularies share the word "action" — never conflate them.** Content actions (`MessageAction`,
+  in-message buttons, `actionRenderers`, `onAction`) versus viewer options (`MessageOption`,
+  do-to-message operations, capability-gated, `onSelect`). The names are chosen so a sentence can hold
+  both: "the option to copy a message" vs "the message's reply button".
+- **Hover reveal is pure CSS, all of it in `MessageContainer`.** `MessageProvider` renders no DOM (it
+  is a pure context producer). `MessageContainer` declares both hover scopes: the **row** root
+  (`w-full group`) reveals the reaction picker (hovering bubble→gap→picker never flickers); an inner
+  `group/bubble` reveals the option menu on bubble-only hover. The picker is a **sibling** of that
+  inner wrapper — inside the `relative` positioning anchor so it still places beside the bubble, but
+  outside `group/bubble` so hovering it does not reveal the menu. No hover state rides `MessageContext`;
+  a future JS-hover affordance belongs in a local `useState` in its leaf, not on the context.
+
+### Open edges & caveats
+
 - **Capabilities default to permissive.** An absent set renders every affordance — right for the
   ten-minute start, wrong for a consumer fronting a restrictive channel (a Telegram broadcast would
-  show a reaction picker it must reject). A multi-channel consumer must project real capabilities
-  per conversation; treat "no capabilities supplied" in such a consumer as a bug, not a default.
-- **Hover reveal is pure CSS, and all of it lives in `MessageContainer`.** `MessageProvider` renders
-  **no DOM** — it is a pure context producer (mirrors `ConversationProvider`), so there is no wrapper
-  to reason about there. `MessageContainer` declares all three nested elements and both hover scopes:
-  its **row** root (`w-full group`) is the full-row hover region that reveals the reaction picker
-  (bubble→gap→picker never flickers); an inner `group/bubble` wraps *just the bubble + its menu* and
-  reveals the option menu on bubble-only hover. The picker is a **sibling** of that inner wrapper —
-  inside the `relative` positioning anchor so it still places beside the bubble, but OUTSIDE
-  `group/bubble` so hovering the picker does not reveal the menu (`group-hover` keys off DOM ancestry,
-  not visual position — the picker looks outside the bubble but must not be *nested* in its hover
-  group). No hover state rides `MessageContext` — so there is no per-hover re-render to memoize away.
-  If a future affordance ever needs JS hover state, prefer a local `useState` in that leaf over putting
-  it back on the context (which would re-render every consuming slot on hover).
+  show a reaction picker it must reject). A multi-channel consumer must project real capabilities per
+  conversation; treat "no capabilities supplied" there as a bug, not a default.
+- **Some action kinds may be too channel-specific for the base.** `copy-code`, `call-channel`,
+  `call-phone-number` are channel-flavoured. The registry *mechanism* + a generic button atom clearly
+  belong in the base, but whether those specific kinds + their renderers should move to kit/consumer is
+  open.
+- **`authorRenderer` does not yet reach the composer.** Extend it there when the composer is tackled.
+- **Dead conversation stories.** `conversation/ConversationList.stories.tsx` still imports base symbols
+  removed with the list (`ConversationList`, `buildConversationRows`, `data/conversations`). Rewrite it
+  against `DefaultConversation` or delete it.

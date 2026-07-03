@@ -13,8 +13,8 @@ export interface MessageListProps {
 //
 //  • open pinned to the bottom (newest message visible);
 //  • STAY pinned only while the user is already near the bottom — a user who has
-//    scrolled up to read history is NEVER yanked back down (the old bug: an
-//    unconditional scroll-to-bottom on every render);
+//    scrolled up to read history is NEVER yanked back down — never an
+//    unconditional scroll-to-bottom on every render;
 //  • re-pin on late layout growth that happens WITHOUT a React render — an image
 //    decoding, a font loading, media metadata arriving — via a `ResizeObserver`.
 //    This is what keeps you at the bottom when a freshly-arrived image finishes
@@ -75,8 +75,8 @@ export function MessageList({ className, children }: MessageListProps) {
 
     // Render
     //
-    // No `overflow-anchor: none` here (the old code disabled it): the browser's
-    // default scroll anchoring is what keeps a scrolled-up user's view stable when
+    // No `overflow-anchor: none` here: the browser's default scroll anchoring keeps
+    // a scrolled-up user's view stable when
     // content above them changes size. Bottom-pinning is handled explicitly above,
     // so the two do not fight — anchoring guards the scrolled-up case, the pin
     // guards the at-bottom case.
