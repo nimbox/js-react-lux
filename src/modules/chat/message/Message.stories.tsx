@@ -1,505 +1,65 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import dayjs from 'dayjs';
-import calendar from 'dayjs/plugin/calendar';
-import { action } from 'storybook/actions';
-import { AngleDownMenuTrigger } from '../../../components/menu/ChevronMenuTrigger';
-import { Menu } from '../../../components/menu/Menu';
-import { ForwardIcon, ReplyIcon } from '@nimbox/icons-react';
-import chatBackground from '../assets/chat-background.png';
-import { TextReply } from '../reply/instances/TextReply';
-import { AudioMessage } from './instances/AudioMessage';
-import { ImageMessage } from './instances/ImageMessage';
-import { TextMessage } from './instances/TextMessage';
-import { VideoMessage } from './instances/VideoMessage';
-import { MessageProvider } from './MessageProvider';
-
-dayjs.extend(calendar);
+import { sarah } from '../stories/authors';
+import { chatBackdrop } from '../stories/decorators';
+import { editedMessage, emojiOnly, longText, textInbound, textOutbound, textWithReply, withReactions } from '../stories/messages';
+import { SingleMessage } from '../stories/MessageThread';
+import { withStoryChat } from '../stories/StoryChatProvider';
+import type { BaseMessage } from '../types/BaseMessage';
 
 
-// Definition
+// A single bubble across its states, driven through the same dispatch the timeline
+// uses (`SingleMessage` = one author group, no separators). Hover a bubble for the
+// overflow option menu; hover the row for the reaction picker.
 
-const meta: Meta<typeof MessageProvider> = {
-    parameters: {
-    },
-    decorators: [
-        (Story) => (
-            <div className="relative w-full px-8 py-8 flex justify-center items-center bg-chat-message-list-bg">
-                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${chatBackground})` }} />
-                <Story />
-            </div>
-        )
-    ],
+const meta = {
+    title: 'Chat/Message/Message',
+    component: SingleMessage,
     tags: ['autodocs'],
-
-    args: {
-        menu: <MessageMenu />,
-        renderReplyTo: TextReply,
-        onCreateReaction: async (reaction: string) => action('createReaction')(reaction),
-        isFirst: true
-    },
-
-    argTypes: {
-        menu: {
-            table: {
-                disable: true
-            }
-        },
-        renderReplyTo: {
-            table: {
-                disable: true
-            }
-        }
-    }
-
-};
+    decorators: [chatBackdrop, withStoryChat],
+    parameters: { layout: 'fullscreen' }
+} satisfies Meta<typeof SingleMessage>;
 
 export default meta;
+type Story = StoryObj<typeof meta>;
 
-// Setup
+export const Inbound: Story = { args: { message: textInbound } };
 
-function MessageMenu() {
-    return (
-        <Menu trigger={<AngleDownMenuTrigger />} withPlacement="bottom-end">
-            <Menu.Item
-                icon={<ReplyIcon />}
-                label="Reply"
-                onClick={() => action('reply')()}
-            />
-            <Menu.Item
-                icon={<ForwardIcon />}
-                label="Forward"
-                onClick={() => action('forward')()}
-            />
-        </Menu>
-    );
-};
+export const Outbound: Story = { args: { message: textOutbound } };
 
-// Sample data
+// A reply-quote above the bubble: the replied-to message renders through the SAME
+// registry at the `preview` surface (no separate reply stack — §6).
+export const WithReply: Story = { args: { message: textWithReply } };
 
-const sampleAuthor = {
-    id: 'user-1',
-    type: 'user',
-    remoteId: 'remote-1',
-    name: 'John Doe',
-    initials: 'JD',
-    color: '#3B82F6',
-    avatarUrl: undefined
-};
+export const LongText: Story = { args: { message: longText } };
 
-const sampleReplyTextMessage: any = {
-    id: 'msg-2',
-    author: {
-        ...sampleAuthor,
-        id: 'user-2',
-        remoteId: 'remote-2',
-        name: 'Jane Smith',
-        initials: 'JS',
-        color: '#10B981'
-    },
-    alignment: 'start' as const,
-    type: 'text',
-    body: 'Hi there! How are you doing?',
-    timestamp: new Date(Date.now() - 60000), // 1 minute ago
-    status: 'read'
-};
+export const EmojiOnly: Story = { args: { message: emojiOnly } };
 
-// Text Message Stories
+// Reaction pills (Container-tier, auto). Click the cluster for the lazy who-reacted
+// popover; the highlighted pill marks the viewer's own reaction.
+export const WithReactions: Story = { args: { message: withReactions } };
 
-export const OutboundTextMessage: StoryObj<typeof TextMessage> = {
-    render: (args) => <TextMessage {...args} />,
-    args: {
-        message: {
-            id: 'msg-1',
-            author: sampleAuthor,
-            alignment: 'end',
-            type: 'text',
-            body: 'Hello! This is a simple text message.',
-            timestamp: new Date(),
-            status: 'read'
-        }
-    }
-};
+// `editedAt` → Properties appends "(edited)" (§3).
+export const Edited: Story = { args: { message: editedMessage } };
 
-export const OutboundTextMessageWithReply: StoryObj<typeof TextMessage> = {
-    render: (args) => <TextMessage {...args} />,
-    args: {
-        message: {
-            id: 'msg-3',
-            author: sampleAuthor,
-            alignment: 'end',
-            type: 'text',
-            body: 'Thanks for your message! I\'m doing great.',
-            timestamp: new Date(),
-            status: 'read',
-            replyTo: sampleReplyTextMessage
-        },
-        menu: <MessageMenu />
-    }
-};
-
-export const InboundTextMessage: StoryObj<typeof TextMessage> = {
-    render: (args) => <TextMessage {...args} />,
-    args: {
-        message: {
-            id: 'msg-4',
-            author: {
-                ...sampleAuthor,
-                id: 'user-2',
-                remoteId: 'remote-2',
-                name: 'Jane Smith',
-                initials: 'JS',
-                color: '#10B981'
-            },
-            alignment: 'start' as const,
-            type: 'text',
-            body: 'Hi there! How are you doing?',
-            timestamp: new Date(),
-            status: 'read'
-        },
-        menu: <MessageMenu />
-    }
-};
-
-export const LongTextMessage: StoryObj<typeof TextMessage> = {
-    render: (args) => <TextMessage {...args} />,
-    args: {
-        message: {
-            id: 'msg-5',
-            author: sampleAuthor,
-            alignment: 'end' as const,
-            type: 'text',
-            body: 'This is a much longer message that demonstrates how the text message component handles longer content. It should wrap properly and maintain good readability while preserving the overall message structure and layout.',
-            timestamp: new Date(),
-            status: 'read'
-        },
-        menu: <MessageMenu />
-    }
-};
-
-export const EmojiMessage: StoryObj<typeof TextMessage> = {
-    render: (args) => <TextMessage {...args} />,
-    args: {
-        message: {
-            id: 'msg-6',
-            author: sampleAuthor,
-            alignment: 'end' as const,
-            type: 'text',
-            body: '😊',
-            timestamp: new Date(),
-            status: 'read'
-        },
-        menu: <MessageMenu />
-    }
-};
-
-export const MessageWithHeader: StoryObj<typeof TextMessage> = {
-    render: (args) => <TextMessage {...args} />,
-    args: {
-        message: {
-            id: 'msg-7',
-            author: sampleAuthor,
-            alignment: 'end' as const,
-            type: 'text',
-            header: 'Important Update',
-            body: 'Please review the latest changes before proceeding.',
-            timestamp: new Date(),
-            status: 'read'
-        },
-        menu: <MessageMenu />
-    }
-};
-
-export const MessageWithFooter: StoryObj<typeof TextMessage> = {
-    render: (args) => <TextMessage {...args} />,
-    args: {
-        message: {
-            id: 'msg-8',
-            author: sampleAuthor,
-            alignment: 'end' as const,
-            type: 'text',
-            body: 'Meeting scheduled for tomorrow at 2 PM.',
-            footer: 'Please confirm your attendance',
-            timestamp: new Date(),
-            status: 'read'
-        },
-        menu: <MessageMenu />
-    }
-};
-
-export const MessageWithHeaderAndFooter: StoryObj<typeof TextMessage> = {
-    render: (args) => <TextMessage {...args} />,
-    args: {
-        message: {
-            id: 'msg-9',
-            author: sampleAuthor,
-            alignment: 'end' as const,
-            type: 'text',
-            header: 'Project Update',
-            body: 'Phase 1 has been completed successfully. We can now proceed to Phase 2.',
-            footer: 'Next review meeting: Friday 3 PM',
-            timestamp: new Date(),
-            status: 'read'
-        },
-        menu: <MessageMenu />
-    }
-};
-
-export const PendingTextMessage: StoryObj<typeof TextMessage> = {
-    render: (args) => <TextMessage {...args} />,
-    args: {
-        message: {
-            id: 'msg-10',
-            author: sampleAuthor,
-            alignment: 'end' as const,
-            type: 'text',
-            body: 'This message is pending...',
-            timestamp: new Date(),
-            status: 'pending'
-        },
-        menu: <MessageMenu />
-    }
-};
-
-export const FailedTextMessage: StoryObj<typeof TextMessage> = {
-    render: (args) => <TextMessage {...args} />,
-    args: {
-        message: {
-            id: 'msg-11',
-            author: sampleAuthor,
-            alignment: 'end' as const,
-            type: 'text',
-            body: 'This message failed to send',
-            timestamp: new Date(),
-            status: 'failed'
-        },
-        menu: <MessageMenu />
-    }
-};
-
-export const ImageMessageStory: StoryObj<typeof ImageMessage> = {
-    render: (args) => <ImageMessage {...args} />,
-    args: {
-        message: {
-            id: 'msg-12',
-            author: sampleAuthor,
-            alignment: 'end' as const,
-            type: 'image',
-            body: 'Check out this image!',
-            timestamp: new Date(),
-            status: 'read',
-            attachments: [
-                {
-                    type: 'image',
-                    name: 'sunset.jpg',
-                    mime: 'image/jpeg',
-                    size: 1024000,
-                    filename: 'sunset.jpg',
-                    url: 'https://picsum.photos/400/300'
-                }
-            ]
-        },
-        menu: <MessageMenu />,
-        extra: {
-            onClick: (message) => action('onClick')(message),
-            className: 'cursor-zoom-in'
-        }
-    }
-};
-
-export const ImageMessageWithNoAttachments: StoryObj<typeof ImageMessage> = {
-    render: (args) => <ImageMessage {...args} />,
-    args: {
-        message: {
-            id: 'msg-13',
-            author: sampleAuthor,
-            alignment: 'end' as const,
-            type: 'image',
-            body: 'Here\'s the photo',
-            timestamp: new Date(),
-            status: 'read',
-            attachments: []
-        },
-        menu: <MessageMenu />,
-        extra: {
-            onClick: (message) => action('onClick')(message),
-            className: 'cursor-zoom-in'
-        }
-    }
-};
-
-export const ImageMessageWithNoThumbnailUrl: StoryObj<typeof ImageMessage> = {
-    render: (args) => <ImageMessage {...args} />,
-    args: {
-        message: {
-            id: 'msg-13',
-            author: sampleAuthor,
-            alignment: 'end' as const,
-            type: 'image',
-            body: 'Here\'s the photo',
-            timestamp: new Date(),
-            status: 'read',
-            attachments: [
-                {
-                    type: 'image',
-                    name: 'catalog.jpg',
-                    mime: 'image/jpeg',
-                    size: 2048000,
-                    filename: 'catalog.jpg',
-                    url: 'https://picsum.photos/400/300'
-                }
-            ]
-        },
-        menu: <MessageMenu />,
-        extra: {
-            onClick: (message) => action('onClick')(message),
-            className: 'cursor-zoom-in'
-        }
-    }
-};
-
-export const ImageMessageWithThumbnailUrlAndNoSize: StoryObj<typeof ImageMessage> = {
-    render: (args) => <ImageMessage {...args} />,
-    args: {
-        message: {
-            id: 'msg-13',
-            author: sampleAuthor,
-            alignment: 'end' as const,
-            type: 'image',
-            body: 'Here\'s the photo',
-            timestamp: new Date(),
-            status: 'read',
-            attachments: [
-                {
-                    type: 'image',
-                    name: 'catalog.jpg',
-                    mime: 'image/jpeg',
-                    size: 2048000,
-                    filename: 'catalog.jpg',
-                    url: 'https://picsum.photos/400/300'
-                }
-            ]
-        },
-        menu: <MessageMenu />,
-        extra: {
-            onClick: (message) => action('onClick')(message),
-            className: 'cursor-zoom-in'
-        }
-    }
-};
-
-export const ImageMessageWithThumbnailUrlAndSize: StoryObj<typeof ImageMessage> = {
-    render: (args) => <ImageMessage {...args} />,
-    args: {
-        message: {
-            id: 'msg-13',
-            author: sampleAuthor,
-            alignment: 'end' as const,
-            type: 'image',
-            body: 'Here\'s the photo',
-            timestamp: new Date(),
-            status: 'read',
-            attachments: [
-                {
-                    type: 'image',
-                    name: 'catalog.jpg',
-                    mime: 'image/jpeg',
-                    size: 2048000,
-                    filename: 'catalog.jpg',
-                    url: 'https://picsum.photos/400/300',
-                    width: 400,
-                    height: 300
-                }
-            ]
-        },
-        menu: <MessageMenu />,
-        extra: {
-            onClick: (message) => action('onClick')(message),
-            className: 'cursor-zoom-in'
-        }
-    }
-};
-
-export const ImageMessageWithReply: StoryObj<typeof ImageMessage> = {
-    render: (args) => <ImageMessage {...args} />,
-    args: {
-        message: {
-            id: 'msg-13',
-            author: sampleAuthor,
-            alignment: 'end' as const,
-            type: 'image',
-            body: 'Here\'s the photo you requested',
-            timestamp: new Date(),
-            status: 'read',
-            replyTo: sampleReplyTextMessage,
-            attachments: [
-                {
-                    type: 'image',
-                    name: 'catalog.jpg',
-                    mime: 'image/jpeg',
-                    size: 2048000,
-                    filename: 'catalog.jpg',
-                    url: 'https://picsum.photos/400/300'
-                }
-            ]
-        },
-        menu: <MessageMenu />,
-        extra: {
-            onClick: (message) => action('onClick')(message),
-            className: 'cursor-zoom-in'
-        }
-    }
-};
-
-// Audio Message Stories
-export const AudioMessageStory: StoryObj<typeof AudioMessage> = {
-    render: (args) => <AudioMessage {...args} />,
-    args: {
-        message: {
-            id: 'msg-14',
-            author: sampleAuthor,
-            alignment: 'end' as const,
-            type: 'audio',
-            body: 'Voice message',
-            timestamp: new Date(),
-            status: 'read',
-            attachments: [
-                {
-                    type: 'audio',
-                    name: 'voice-message.wav',
-                    mime: 'audio/wav',
-                    size: 512000,
-                    filename: 'voice-message.wav',
-                    url: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
-                }
-            ]
-        },
-        menu: <MessageMenu />
-    }
-};
-
-// Video Message Stories
-export const VideoMessageStory: StoryObj<typeof VideoMessage> = {
-    render: (args) => <VideoMessage {...args} />,
-    args: {
-        message: {
-            id: 'msg-15',
-            author: sampleAuthor,
-            alignment: 'end' as const,
-            type: 'video',
-            body: 'Video message',
-            timestamp: new Date(),
-            status: 'read',
-            attachments: [
-                {
-                    type: 'video',
-                    name: 'demo.mp4',
-                    mime: 'video/mp4',
-                    size: 1048576,
-                    filename: 'demo.mp4',
-                    url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4'
-                }
-            ]
-        },
-        menu: <MessageMenu />
-    }
+// The delivery ticks `renderStatus` paints from the opaque `status` token (§3). Absent
+// tokens fall back to the raw string.
+export const Statuses: Story = {
+    args: { message: textOutbound },   // ignored by the custom render; satisfies the required-prop meta
+    render: () => (
+        <div className="flex flex-col gap-2">
+            {(['pending', 'sent', 'delivered', 'read', 'failed'] as const).map((status) => {
+                const message: BaseMessage = {
+                    id: `status-${status}`,
+                    author: sarah,
+                    group: sarah.id,
+                    alignment: 'end',
+                    type: 'text',
+                    content: { text: `Delivery status: ${status}` },
+                    timestamp: '2024-01-16T10:40:00Z',
+                    status
+                };
+                return <SingleMessage key={status} message={message} />;
+            })}
+        </div>
+    )
 };

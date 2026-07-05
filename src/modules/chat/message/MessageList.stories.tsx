@@ -1,151 +1,66 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import dayjs from 'dayjs';
-import calendar from 'dayjs/plugin/calendar';
-import { action } from 'storybook/actions';
-import { AngleDownMenuTrigger } from '../../../components/menu/ChevronMenuTrigger';
-import { Menu } from '../../../components/menu/Menu';
-import { ForwardIcon, ReplyIcon } from '@nimbox/icons-react';
-import chatBackground from '../assets/chat-background.png';
-import { messages } from '../data/messages';
-import { AudioReply, DefaultReply, ImageReply, TextReply, VideoReply } from '../reply/instances';
-import type { ReplyProps } from '../reply/ReplyProvider';
-import { buildMessageRows } from './buildMessageRows';
-import { AudioMessage } from './instances/AudioMessage';
-import { DefaultMessage } from './instances/DefaultMessage';
-import { ImageMessage } from './instances/ImageMessage';
-import { StickerMessage } from './instances/StickerMessage';
-import { TextMessage } from './instances/TextMessage';
-import { VideoMessage } from './instances/VideoMessage';
-import { useMessage } from './MessageContext';
-import { MessageGroup } from './MessageGroup';
-import { MessageList } from './MessageList';
-import type { MessageProps, MessageProviderProps } from './MessageProvider';
-import { MessageSeparator } from './MessageSeparator';
-
-dayjs.extend(calendar);
+import { ChatSurface } from '../stories/decorators';
+import { MessageThread } from '../stories/MessageThread';
+import { firstUnreadId, thread } from '../stories/messages';
+import { StoryChatProvider } from '../stories/StoryChatProvider';
 
 
-// Definition
+// The flagship read-path story: a full timeline driven ONLY through public props and
+// plain fixtures (no consumer/domain types). It exercises the base mechanics end to
+// end — `MessageList` sticky-bottom scroll, `buildMessageRows` day separators + author
+// grouping + tombstone, both alignments, every core media type, a reply-quote, an edit
+// stamp, reaction pills with a lazy details popover, the hover reaction picker, and the
+// overflow option menu — all wired by `StoryChatProvider` (the "consumer").
 
-const meta: Meta<typeof MessageGroup> = {
-    component: MessageGroup
-};
+const meta = {
+    title: 'Chat/Message/Thread',
+    component: MessageThread,
+    tags: ['autodocs'],
+    parameters: { layout: 'fullscreen' }
+} satisfies Meta<typeof MessageThread>;
 
 export default meta;
-type Story = StoryObj<typeof MessageGroup>;
+type Story = StoryObj<typeof meta>;
 
-// Setup
+const renderThread: Story['render'] = (args) => (
+    <StoryChatProvider>
+        <ChatSurface className="h-screen">
+            <MessageThread {...args} />
+        </ChatSurface>
+    </StoryChatProvider>
+);
 
-const rows = buildMessageRows(messages);
-
-const MessageMenu = () => {
-
-    const { message } = useMessage();
-
-    return (
-        <Menu trigger={<AngleDownMenuTrigger />} withPlacement="bottom-end">
-            <Menu.Item
-                icon={<ReplyIcon />}
-                label="Reply"
-                onClick={() => action('reply')({ message })}
-            />
-            <Menu.Item
-                icon={<ForwardIcon />}
-                label="Forward"
-                onClick={() => action('forward')({ message })}
-            />
-        </Menu>
-    );
-
+export const Thread: Story = {
+    render: renderThread,
+    args: {
+        messages: thread,
+        className: 'h-full pb-6'
+    }
 };
 
-const MESSAGES: Record<string, React.ComponentType<MessageProviderProps>> = {
-    text: TextMessage,
-    sticker: StickerMessage,
-    image: ImageMessage,
-    audio: AudioMessage,
-    video: VideoMessage,
-    document: TextMessage,
-} as const;
+// The unread "New messages" marker, injected before the first unread message. Unread
+// is viewer-relative, so the story supplies the watermark id (§4).
+export const WithUnreadMarker: Story = {
+    render: renderThread,
+    args: {
+        messages: thread,
+        markerBeforeId: firstUnreadId,
+        className: 'h-full pb-6'
+    }
+};
 
-function Message(props: MessageProps) {
-    const Renderer = MESSAGES[props.message.type] || DefaultMessage;
-    return <Renderer {...props} />;
-}
-
-const REPLIES: Record<string, React.ComponentType<ReplyProps>> = {
-    text: TextReply,
-    sticker: ImageReply,
-    image: ImageReply,
-    audio: AudioReply,
-    video: VideoReply,
-} as const;
-
-function Reply(props: ReplyProps) {
-    const Renderer = REPLIES[props.message.type] || DefaultReply;
-    return <Renderer {...props} />;
-}
-
-// Stories
-
-export const Default: Story = {
-    parameters: {
-        layout: 'fullscreen',
-        viewport: {
-            defaultViewport: 'responsive'
-        }
-    },
-    render: () => (
-        <div>
-            <div className="relative min-w-96 h-screen bg-chat-message-list-bg">
-                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${chatBackground})` }} />
-                <div className="relative w-full h-full flex flex-col z-10">
-                    <MessageList className="grow overflow-y-auto pb-24">
-                        {rows.map((row) => {
-                            switch (row.type) {
-                                case 'separator':
-                                    return (
-                                        <MessageSeparator>
-                                            <MessageSeparator.Pill>{dayjs(row.date).calendar()}</MessageSeparator.Pill>
-                                        </MessageSeparator>
-                                    );
-                                case 'group':
-                                    return (
-                                        <MessageGroup key={row.id} group={row.group}>
-                                            {row.group.messages.map(r => {
-                                                return (
-                                                    <Message
-
-                                                        key={r.message.id}
-
-                                                        menu={<MessageMenu />}
-                                                        message={r.message}
-
-                                                        renderReplyTo={Reply}
-
-                                                        isFirst={r.meta.isFirst}
-                                                        isLast={r.meta.isLast}
-
-                                                        // onCreateReaction={async (emoji) => {
-                                                        //     action('addReaction')({ messageId: r.message.id, emoji });
-                                                        // }}
-                                                        // onDeleteReaction={async (emoji) => {
-                                                        //     action('removeReaction')({ messageId: r.message.id, emoji });
-                                                        // }}
-                                                        // getReactions={async () => {
-                                                        //     await new Promise(resolve => setTimeout(resolve, 1000));
-                                                        //     return reactionDetails;
-                                                        // }}
-
-                                                    />);
-                                            })}
-                                        </MessageGroup>
-                                    );
-                            }
-                        })}
-                    </MessageList>
-                </div>
-            </div>
-        </div>
-    )
+// A read-only viewer: no reaction callbacks (the picker disappears) and an empty option
+// set (the overflow menu disappears). Capabilities/options are data, gated in one place.
+export const ReadOnly: Story = {
+    render: (args) => (
+        <StoryChatProvider onCreateReaction={undefined} onDeleteReaction={undefined} messageOptions={[]}>
+            <ChatSurface className="h-screen">
+                <MessageThread {...args} />
+            </ChatSurface>
+        </StoryChatProvider>
+    ),
+    args: {
+        messages: thread,
+        className: 'h-full pb-6'
+    }
 };
