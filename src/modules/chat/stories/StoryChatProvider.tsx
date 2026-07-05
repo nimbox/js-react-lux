@@ -1,4 +1,4 @@
-import { BellIcon, CheckIcon, ClockIcon, DoubleCheckIcon, ForwardIcon, ReplyIcon, TrashIcon, WarningIcon } from '@nimbox/icons-react';
+import { BellIcon, CheckIcon, ClockIcon, DoubleCheckIcon, ForwardIcon, ReplyIcon, ThumbTackIcon, TrashIcon, WarningIcon } from '@nimbox/icons-react';
 import type { Decorator } from '@storybook/react-vite';
 import type { ReactNode } from 'react';
 import { action } from 'storybook/actions';
@@ -115,7 +115,7 @@ function renderConversationMeta(conversation: BaseConversation): ReactNode {
     return (
         <span className="flex items-center gap-1 text-gray-400">
             {meta.muted && <BellIcon className="w-4 h-4" />}
-            {meta.pinned && <span title="Pinned">📌</span>}
+            {meta.pinned && <span title="Pinned"><ThumbTackIcon className="w-4 h-4" /></span>}
         </span>
     );
 }

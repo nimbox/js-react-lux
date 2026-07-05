@@ -1,3 +1,4 @@
+import { AudioIcon } from '@nimbox/icons-react';
 import { ChatAudio } from '../../../atoms';
 import { useChat } from '../../../ChatContext';
 import { Message } from '../../../message/Message';
@@ -44,7 +45,9 @@ export function AudioMessagePreview(props: MessageInstanceProps) {
 
     return (
         <MessagePreview.Container>
-            <MessagePreview.Body>🎤 {label}</MessagePreview.Body>
+            <MessagePreview.Body>
+                <span className="inline-flex items-center gap-1"><AudioIcon className="w-3.5 h-3.5" />{label}</span>
+            </MessagePreview.Body>
         </MessagePreview.Container>
     );
 
@@ -55,6 +58,6 @@ export function AudioMessagePreview(props: MessageInstanceProps) {
 
 export function AudioMessageSummary() {
 
-    return <>🎤 Voice message</>;
+    return <span className="inline-flex items-center gap-1"><AudioIcon className="w-3.5 h-3.5" />Voice message</span>;
 
 }

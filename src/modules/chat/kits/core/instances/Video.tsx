@@ -1,3 +1,4 @@
+import { VideoIcon } from '@nimbox/icons-react';
 import { ChatVideo } from '../../../atoms';
 import { useChat } from '../../../ChatContext';
 import { Message } from '../../../message/Message';
@@ -46,7 +47,9 @@ export function VideoMessagePreview(props: MessageInstanceProps) {
                     <img src={view.poster} alt="" className="w-full h-full object-cover" loading="lazy" />
                 </MessagePreview.Thumbnail>
             )}
-            <MessagePreview.Body>{view?.caption ?? '🎬 Video'}</MessagePreview.Body>
+            <MessagePreview.Body>
+                {view?.caption ?? <span className="inline-flex items-center gap-1"><VideoIcon className="w-3.5 h-3.5" />Video</span>}
+            </MessagePreview.Body>
         </MessagePreview.Container>
     );
 
@@ -59,6 +62,6 @@ export function VideoMessageSummary(props: MessageInstanceProps) {
 
     const view = props.message.content as VideoView | undefined;
 
-    return <>🎬 {view?.caption ?? 'Video'}</>;
+    return <span className="inline-flex items-center gap-1"><VideoIcon className="w-3.5 h-3.5" />{view?.caption ?? 'Video'}</span>;
 
 }

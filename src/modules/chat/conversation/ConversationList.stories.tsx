@@ -1,18 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
+import { DefaultConversation } from '../kits/core/DefaultConversation';
 import { conversations } from '../stories/conversations';
 import { StoryChatProvider } from '../stories/StoryChatProvider';
-import { DefaultConversation } from '../kits/core/DefaultConversation';
 
-
-// lux ships NO list — ordering, selection, the container, unread source are product
-// identity and viewer state (§1, §12). This story is the CONSUMER side: it owns the
-// list state and container and drops lux's `DefaultConversation` row into it. Selection
-// is local state; clicking a row selects it.
 
 const meta = {
     title: 'Chat/Conversation/List',
-    tags: ['autodocs'],
     parameters: { layout: 'centered' }
 } satisfies Meta;
 
@@ -36,6 +30,8 @@ function ConversationListDemo() {
     );
 
 }
+
+// Stories
 
 export const Default: Story = {
     render: () => <ConversationListDemo />

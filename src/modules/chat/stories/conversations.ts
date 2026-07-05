@@ -1,6 +1,6 @@
 import type { BaseConversation } from '../types/BaseConversation';
 import { alex } from './authors';
-import { audioMessage, documentMessage, imageMessage, textInbound } from './messages';
+import { audioMessage, documentMessage, imageMessage, longText, textInbound } from './messages';
 
 
 // Conversation-row fixtures. `BaseConversation` is the neutral row envelope lux
@@ -42,6 +42,34 @@ export const conversationMuted: BaseConversation = {
     timestamp: '2024-01-15T18:02:00Z',
     lastMessage: audioMessage,
     meta: { muted: true } satisfies StoryConversationMeta
+};
+
+export const conversationPinnedAndMuted: BaseConversation = {
+    id: 'conv-priya',
+    name: 'Priya Patel',
+    avatar: { color: '#ffffff', backgroundColor: '#EC4899', initials: 'PP' },
+    timestamp: '2024-01-16T11:15:00Z',
+    lastMessage: textInbound,
+    unread: 5,
+    meta: { pinned: true, muted: true } satisfies StoryConversationMeta
+};
+
+export const conversationLongMessage: BaseConversation = {
+    id: 'conv-jordan',
+    name: 'Jordan Lee',
+    avatar: { color: '#ffffff', backgroundColor: '#0EA5E9', initials: 'JL' },
+    timestamp: '2024-01-16T10:23:00Z',
+    lastMessage: longText
+};
+
+export const conversationLongMessagePinnedMuted: BaseConversation = {
+    id: 'conv-taylor',
+    name: 'Taylor Kim',
+    avatar: { color: '#ffffff', backgroundColor: '#EF4444', initials: 'TK' },
+    timestamp: '2024-01-16T10:24:00Z',
+    lastMessage: longText,
+    unread: 2,
+    meta: { pinned: true, muted: true } satisfies StoryConversationMeta
 };
 
 export const conversationLongName: BaseConversation = {

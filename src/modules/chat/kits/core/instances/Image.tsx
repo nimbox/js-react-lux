@@ -1,3 +1,4 @@
+import { ImageIcon } from '@nimbox/icons-react';
 import { ChatImage } from '../../../atoms';
 import { useChat } from '../../../ChatContext';
 import { Message } from '../../../message/Message';
@@ -59,7 +60,9 @@ export function ImageMessagePreview(props: MessageInstanceProps) {
 
     return (
         <MessagePreview.Container>
-            <MessagePreview.Body>📷 {view?.caption ?? 'Photo'}</MessagePreview.Body>
+            <MessagePreview.Body>
+                <span className="inline-flex items-center gap-1"><ImageIcon className="w-3.5 h-3.5" />{view?.caption ?? 'Photo'}</span>
+            </MessagePreview.Body>
             {view?.url && (
                 <MessagePreview.Thumbnail>
                     <img src={view.url} alt={view.alt ?? ''} className="w-full h-full object-cover" loading="lazy" />
@@ -79,6 +82,6 @@ export function ImageMessageSummary(props: MessageInstanceProps) {
 
     const view = props.message.content as ImageView | undefined;
 
-    return <>📷 {view?.caption ?? 'Photo'}</>;
+    return <span className="inline-flex items-center gap-1"><ImageIcon className="w-3.5 h-3.5" />{view?.caption ?? 'Photo'}</span>;
 
 }

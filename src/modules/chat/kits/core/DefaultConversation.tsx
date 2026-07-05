@@ -2,15 +2,18 @@ import { Conversation } from '../../conversation/Conversation';
 import { ConversationProvider, type ConversationProviderProps } from '../../conversation/ConversationProvider';
 
 
-// The core kit's default conversation row — the spread-and-go look,
-// parallel to `coreMessageRenderers` for messages. It arranges the
-// base `Conversation.*` slots (avatar on the left; name + timestamp
-// on top; the last-message preview + meta below) inside a
-// `ConversationProvider`. A row is one shape, not polymorphic, so
-// there is no registry — just this one instance. A consumer that
-// wants a different row composes the `Conversation` slots itself,
-// exactly as it would author a message instance.
-
+/**
+ * The core kit's default conversation row — the spread-and-go look,
+ * parallel to `coreMessageRenderers` for messages.
+ *
+ * @remarks
+ * Arranges the base `Conversation.*` slots (avatar on the left; name and
+ * timestamp on top; the last-message preview and meta below) inside a
+ * `ConversationProvider`. A row is one shape, not polymorphic, so there is
+ * no registry — just this one instance. A consumer that wants a different
+ * row composes the `Conversation` slots itself, exactly as it would author
+ * a message instance.
+ */
 export function DefaultConversation(props: ConversationProviderProps) {
 
     return (

@@ -1,3 +1,4 @@
+import { FileIcon } from '@nimbox/icons-react';
 import { ChatDocument } from '../../../atoms';
 import { useChat } from '../../../ChatContext';
 import { Message } from '../../../message/Message';
@@ -46,7 +47,9 @@ export function DocumentMessagePreview(props: MessageInstanceProps) {
 
     return (
         <MessagePreview.Container>
-            <MessagePreview.Body>📄 {view?.filename ?? view?.caption ?? 'Document'}</MessagePreview.Body>
+            <MessagePreview.Body>
+                <span className="inline-flex items-center gap-1"><FileIcon className="w-3.5 h-3.5" />{view?.filename ?? view?.caption ?? 'Document'}</span>
+            </MessagePreview.Body>
         </MessagePreview.Container>
     );
 
@@ -59,6 +62,6 @@ export function DocumentMessageSummary(props: MessageInstanceProps) {
 
     const view = props.message.content as DocumentView | undefined;
 
-    return <>📄 {view?.filename ?? view?.caption ?? 'Document'}</>;
+    return <span className="inline-flex items-center gap-1"><FileIcon className="w-3.5 h-3.5" />{view?.filename ?? view?.caption ?? 'Document'}</span>;
 
 }
