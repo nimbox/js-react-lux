@@ -1,24 +1,32 @@
 import { ChatSticker } from '../../../atoms';
 import { Message } from '../../../message/Message';
 import { type MessageInstanceProps } from '../../../message/MessageProvider';
+import { useMessage } from '../../../message/MessageContext';
 import type { ImageView } from '../views';
 
 
 // Core sticker message — `full` surface only; the `preview` reuses
-// `ImageMessagePreview` (they share `ImageView`). A sticker floats
-// free of the bubble: the `ChatSticker` atom floats above (no
-// background), while the date/status keep a compact `Message.Bubble`
-// pill (bringing the alignment-coloured background and the avatar
-// connector for free).
+// `ImageMessagePreview` (they share `ImageView`). A sticker floats free
+// of the bubble: the `ChatSticker` atom floats above (no background),
+// with the author in a `Message.Pill` on top when this message is
+// first in its group, and the date/status in a `Message.Bubble` pill
+// below (bringing the alignment-coloured background and the avatar/
+// tail for free, since it's the group's one true `Bubble`).
 
 export function StickerMessage({ message }: MessageInstanceProps<ImageView>) {
 
+    const { isFirst, message: { author } } = useMessage();
     const view = message.content;
 
     return (
         <Message.Container>
+            {isFirst && author != null && (
+                <Message.Pill>
+                    <Message.Author />
+                </Message.Pill>
+            )}
             {view?.url && <ChatSticker url={view.url} size={view.size} alt={view.alt} />}
-            <Message.Bubble compact>
+            <Message.Bubble>
                 <Message.Properties />
             </Message.Bubble>
         </Message.Container>

@@ -48,9 +48,10 @@ export function MessageContainer({ children }: MessageContainerProps) {
             <div className={classNames('relative max-w-[75%] flex flex-col', isStart ? 'items-start' : 'items-end')}>
 
                 {/* Bubble hover scope — the bubble + its option menu ONLY. Carries the
-                    flex-col alignment a bubble-less sticker needs for its two stacked
-                    children. */}
-                <div className={classNames('flex flex-col group/bubble', isStart ? 'items-start' : 'items-end')}>
+                    flex-col alignment a bubble-less sticker needs for its stacked
+                    children (author pill / image / properties bubble); `gap-1` is a
+                    no-op for every other kit, which only ever passes one child. */}
+                <div className={classNames('flex flex-col gap-1 group/bubble', isStart ? 'items-start' : 'items-end')}>
 
                     {children}
 

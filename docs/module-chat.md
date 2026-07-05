@@ -488,16 +488,24 @@ slot is always one of these two.
   the group avatar (`authorRenderer.avatar(author)`) anchored to this same `relative` box, on
   the outer side. Any author *accent* it paints comes from the scalar `color` (§3), never
   `author` — the avatar is the one place `Bubble` reaches for the opaque author itself, and
-  only because it shares the tail's positioning box, not as a separate concern. See §11 for a
-  known gap: split-bubble floating instances (a sticker) have no way to redirect either to a
-  different bubble than the one carrying `isLast`.
+  only because it shares the tail's positioning box, not as a separate concern. **Exactly one
+  `Bubble` per `Container`** — it is the tail/avatar-carrying concept; an instance never mounts
+  a second one, or a stripped-down variant, to get bubble-like chrome elsewhere (see `Pill`,
+  below, and §12).
+- `Pill` — the same alignment-coloured `rounded-xl shadow` chrome as `Bubble`, minus the tail,
+  the avatar, and any `isFirst`/`isLast` awareness — a dumb, push-only box for content that
+  needs bubble-like chrome *outside* the one true `Bubble`. Exists for split-bubble floating
+  instances: a sticker mounts `<Pill><Author /></Pill>` above the floating image when it's
+  first in its group, while its `Bubble` (holding `Properties`) is untouched and keeps carrying
+  the tail/avatar on `isLast` as usual.
 
 **DECORATION** — read *universal* fields only:
 - `Author` — forwards the opaque `author` to `authorRenderer.name(author)` on `isFirst` (it never
   reads author fields); `Properties` (timestamp + delivery status, **plus appended children** — an
   instance adds "(edited)" from `editedAt`, view counts, importance badges without forking the
   slot). Bubble-tier: **instance-placed** — the instance decides whether and where to mount them (a
-  floating sticker mounts `Properties` inside a compact footer pill).
+  floating sticker mounts `Properties` inside a compact footer `Bubble`, and — on `isFirst` — mounts
+  `Author` inside a `Pill` instead, since there's no bubble above the image to hold it).
 - `Reply` — renders `replyTo` at the **`preview` surface** through the *message* registry (not a
   separate reply registry) and owns only the quote chrome — a left line stroked from the scalar
   `replyTo.color` (§3), never `replyTo.author`; the compact content comes from the replied-to type's
@@ -998,12 +1006,6 @@ wired:
   feed-style presentation is buildable in principle, but the cap can't be overridden yet.
 - **The tombstone label is fixed.** `TombstoneMessage` renders a built-in "message deleted" string; it
   becomes overridable once the module ships a strings map.
-- **`Bubble` has no per-instance tail override.** The tail currently hardcodes to `isLast`, with
-  no `connector`-style prop to redirect it. This is latent for **split-bubble** floating
-  instances — a sticker renders `[ChatSticker (bare), a compact `Properties` pill]`, and the
-  natural design would be a proper **header pill** that always carries the tail regardless of
-  which bubble in the split ends up `isLast`. `StickerMessage` has no header pill today, so
-  this gap doesn't yet manifest a visible bug — it's a follow-up, not a regression.
 
 The **composer** is out of scope for this doc, which covers the read path (see the scope note at the
 top).
@@ -1025,6 +1027,13 @@ top).
   features in different components (that was tried — `MessageContainer` mounting the avatar
   against its own anchor — and works, but invites the tail and the avatar to drift apart).
   Do not split them back into separate components.
+- **Exactly one `Bubble` per `Container`.** `Bubble` *is* the tail/avatar-carrying concept; it is
+  not "the rounded chrome box," it is "the group's tail-and-avatar-bearing bubble." A
+  floating/split instance that needs bubble-*like* chrome elsewhere (a sticker's author header,
+  above the bare image) uses `Pill` — the same `rounded-xl shadow` box, deliberately with no
+  tail/avatar/`isFirst`/`isLast` logic of its own. Do not add a second `Bubble`, and do not add a
+  prop to `Bubble` that strips its tail/avatar to repurpose it as plain chrome — that conflates
+  two concepts (§11).
 - **`author` is opaque (`unknown`) to the base.** What the base needs from it are **scalar
   primitives** — `group` (grouping, `group: author.id`) and `color` (accent for the reply line /
   bubble) — split out by the paint-vs-render test (§3). The author *shape* goes through the two

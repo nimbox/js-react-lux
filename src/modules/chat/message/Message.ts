@@ -5,17 +5,14 @@ import { MessageBubble } from './slots/MessageBubble';
 import { MessageContainer } from './slots/MessageContainer';
 import { MessageFooter } from './slots/MessageFooter';
 import { MessageHeader } from './slots/MessageHeader';
+import { MessagePill } from './slots/MessagePill';
 import { MessageProperties } from './slots/MessageProperties';
 import { MessageReply } from './slots/MessageReply';
 
 
-// Slots for the full message surface, grouped as a namespace so
-// callsites read `Message.Bubble`. Instances compose these inside the
-// context supplied by `MessageProvider`. See `MessagePreview` for the
-// parallel compact surface.
-
 export const Message = {
     Container: MessageContainer,
+    Pill: MessagePill,
     Bubble: MessageBubble,
     Author: MessageAuthor,
     Header: MessageHeader,
@@ -24,9 +21,4 @@ export const Message = {
     Actions: MessageActions,
     Properties: MessageProperties,
     Reply: MessageReply
-    // NOTE: reactions and the reaction picker are NOT here — they are Container-tier
-    // *auto* chrome, not instance-composed slots (`MessageContainer` mounts them).
-    // Reach them via the barrel exports `MessageReactions` (the chooser) /
-    // `MessageReactionsCluster` / `MessageReactionsExpanded` / `MessageReactionPicker`,
-    // alongside `MessageOptions`.
 };
