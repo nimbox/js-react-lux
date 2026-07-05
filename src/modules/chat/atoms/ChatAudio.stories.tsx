@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { BoundingBox } from '../../../stories/utilities/BoundingBox';
 import { centered } from '../stories/decorators';
+import { VOICE_AUDIO } from '../stories/media';
 import { ChatAudio } from './ChatAudio';
 
 
-// `ChatAudio` reads `useChat()` for the `formatDuration` FORMATTER only (never message
-// data) — and the context default makes it render fine with no provider (§2). Pass a
-// `duration` to show it immediately; omit it and the atom falls back to the element's
-// own metadata on load.
+// The chat audio atom: a native `<audio controls>` for a resolved `url` — no
+// message data, no provider needed.
 
 const meta = {
     title: 'Chat/Atoms/ChatAudio',
@@ -18,17 +18,27 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const WithDuration: Story = {
+export const Default: Story = {
     args: {
-        url: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
-        size: 123456,
-        duration: 8
+        url: VOICE_AUDIO,
+        size: 123456
     }
 };
 
-export const WithoutDuration: Story = {
-    args: {
-        url: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
-        size: 123456
-    }
+// Spacing-neutral: `BoundingBox` frames each atom. Left hugs the lines (no
+// margin); right adds `m-2`, opening a gap — spacing is the parent's job.
+export const Spacing: Story = {
+    args: { url: VOICE_AUDIO, size: 123456 },   // ignored by the custom render; satisfies the required-prop meta
+    render: () => (
+        <div className="flex items-center gap-24 px-12 py-16">
+            <BoundingBox>
+                <ChatAudio url={VOICE_AUDIO} size={123456} />
+            </BoundingBox>
+            <BoundingBox>
+                <div className="m-2">
+                    <ChatAudio url={VOICE_AUDIO} size={123456} />
+                </div>
+            </BoundingBox>
+        </div>
+    )
 };

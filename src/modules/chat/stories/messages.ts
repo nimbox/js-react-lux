@@ -2,13 +2,14 @@ import type { AudioView, DocumentView, ImageView, TextView, VideoView } from '..
 import type { BaseMessage } from '../types/BaseMessage';
 import type { MessageData } from '../types/MessageData';
 import { alex, miguel, sarah, type StoryAuthor } from './authors';
+import { VOICE_AUDIO } from './media';
 
 
-// The story's ChatTypes binding — the "consumer" a story plays. `content` is the
-// core kit's view map (text/image/sticker/audio/video/document), `author` is the
-// plain `StoryAuthor`. `StoryMessage` is the discriminated union that widens to
-// `BaseMessage`, so `buildMessageRows` and every base API accept it directly. See
-// docs/module-chat.md §3 and §8.
+// The story's ChatTypes binding — the "consumer" a story plays. `content` is
+// the core kit's view map (text/image/sticker/audio/video/document), `author`
+// is the plain `StoryAuthor`. `StoryMessage` is the discriminated union that
+// widens to `BaseMessage`, so `buildMessageRows` and every base API accept it
+// directly. See docs/module-chat.md §3 and §8.
 
 export type StoryContent = {
     text: TextView;
@@ -27,17 +28,18 @@ export type StoryChat = {
 export type StoryMessage = MessageData<StoryChat>;
 
 
-// Media the fixtures point at. External URLs (they load in Storybook / Chromatic);
-// the base is content-blind — a kit hands these resolved urls to its atoms.
+// Media the fixtures point at. The image/video/sticker are external URLs (they
+// load in Storybook / Chromatic); the voice audio is an inlined `data:` URI
+// (see `./media`) so it can never rot. The base is content-blind — a kit hands
+// these resolved urls to its atoms.
 
 const MOCKUP_IMAGE = 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&h=400&q=80';
-const VOICE_AUDIO = 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav';
 const DEMO_VIDEO = 'https://www.w3schools.com/html/mov_bbb.mp4';
 const THUMBS_STICKER = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg';
 
 
-// A message the thread replies to — named so the reply can quote it (its `preview`
-// surface renders inside the reply chrome).
+// A message the thread replies to — named so the reply can quote it (its
+// `preview` surface renders inside the reply chrome).
 const mockupImage: StoryMessage = {
     id: '5',
     author: alex,
@@ -49,15 +51,16 @@ const mockupImage: StoryMessage = {
 };
 
 
-// The narrative thread — a two-day conversation between Alex (incoming, `start`) and
-// Sarah (our side, `end` = "mine"). It exercises: grouping runs, day separators, a
-// caption image, a reply-quote, an edit stamp, a tombstone, a floating sticker, and
-// media types across both alignments. `group` is derived from the author id (what a
-// real adapter does — the base groups on the opaque `group`, never on `author`).
+// The narrative thread — a two-day conversation between Alex (incoming,
+// `start`) and Sarah (our side, `end` = "mine"). It exercises: grouping runs,
+// day separators, a caption image, a reply-quote, an edit stamp, a tombstone,
+// a floating sticker, and media types across both alignments. `group` is
+// derived from the author id (what a real adapter does — the base groups on
+// the opaque `group`, never on `author`).
 
 const rawThread: StoryMessage[] = [
 
-    // ── Day 1 — Monday, January 15 ──────────────────────────────────────────────
+    // ── Day 1 — Monday, January 15 ───────────────────────────────────────────
 
     {
         id: '1', author: alex, alignment: 'start', type: 'text',
@@ -100,7 +103,7 @@ const rawThread: StoryMessage[] = [
         timestamp: '2024-01-15T09:44:00Z', status: 'read'
     },
 
-    // ── Day 2 — Tuesday, January 16 ─────────────────────────────────────────────
+    // ── Day 2 — Tuesday, January 16 ──────────────────────────────────────────
 
     {
         id: '9', author: sarah, alignment: 'end', type: 'text',
@@ -140,8 +143,9 @@ const rawThread: StoryMessage[] = [
 
 export const thread: StoryMessage[] = rawThread.map(withGroup);
 
-// The first unread message in `thread` — feed to `buildMessageRows({ markerBeforeId })`
-// to inject the "New messages" line (unread is viewer-relative — the story computes it).
+// The first unread message in `thread` — feed to
+// `buildMessageRows({ markerBeforeId })` to inject the "New messages" line
+// (unread is viewer-relative — the story computes it).
 export const firstUnreadId = '12';
 
 function withGroup(message: StoryMessage): StoryMessage {
@@ -152,10 +156,10 @@ function withGroup(message: StoryMessage): StoryMessage {
 }
 
 
-// ── Focused singles ─────────────────────────────────────────────────────────────
-// Standalone messages for the component-level stories (a single bubble, a surface
-// matrix, a reactions popover). Each carries its own id/author so it renders in
-// isolation without the thread's grouping context.
+// ── Focused singles ──────────────────────────────────────────────────────────
+// Standalone messages for the component-level stories (a single bubble, a
+// surface matrix, a reactions popover). Each carries its own id/author so it
+// renders in isolation without the thread's grouping context.
 
 export const textOutbound: StoryMessage = {
     id: 's-text-out', author: sarah, group: sarah.id, alignment: 'end', type: 'text',
@@ -241,19 +245,20 @@ export const deletedMessage: StoryMessage = {
     deletedAt: '2024-01-16T10:33:00Z'
 };
 
-// A message whose `type` has NO registered renderer — falls back to `UnknownMessage`
-// (both surfaces). Typed as `BaseMessage` (not `StoryMessage`) precisely because its
-// `type` is outside the kit's content map — the honest type for "what may arrive"
-// (docs §3, handled-vs-possible).
+// A message whose `type` has NO registered renderer — falls back to
+// `UnknownMessage` (both surfaces). Typed as `BaseMessage` (not `StoryMessage`)
+// precisely because its `type` is outside the kit's content map — the honest
+// type for "what may arrive" (docs §3, handled-vs-possible).
 export const unknownMessage: BaseMessage = {
     id: 's-unknown', author: miguel, group: miguel.id, alignment: 'start', type: 'poll',
     content: { question: 'Lunch?', options: ['Tacos', 'Sushi'] },
     timestamp: '2024-01-16T10:34:00Z'
 };
 
-// A system event — authorless and groupless, so `buildMessageRows` emits a `single`
-// row (centered, ungrouped). Its `type` is unregistered too, so it renders via the
-// fallback; a consumer would register a `system-*` instance for it.
+// A system event — authorless and groupless, so `buildMessageRows` emits a
+// `single` row (centered, ungrouped). Its `type` is unregistered too, so it
+// renders via the fallback; a consumer would register a `system-*` instance
+// for it.
 export const systemMessage: BaseMessage = {
     id: 's-system', alignment: 'start', type: 'system-join',
     content: { text: 'Miguel joined the conversation' },

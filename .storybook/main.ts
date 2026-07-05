@@ -15,6 +15,12 @@ const config: StorybookConfig = {
   framework: {
     name: "@storybook/react-vite",
     options: {},
+  },
+
+  // TS-aware docgen: correctly separates a JSDoc/TSDoc summary from its
+  // block tags (e.g. `@remarks`), instead of dumping the raw comment text.
+  typescript: {
+    reactDocgen: "react-docgen-typescript"
   }
 
 };

@@ -1,61 +1,49 @@
-import classNames from 'classnames';
-import { useEffect, useRef, useState } from 'react';
-import { useChat } from '../ChatContext';
-
-
-// ChatAudio
-//
-// The design-system audio atom for chat. Prop-driven: a kit hands it
-// a resolved `url` and, when the channel reported one, a `duration`
-// (seconds). The duration shows immediately (before the blob loads);
-// when it is absent the atom falls back to the element's own metadata
-// on load — so the browser decodes, never the proxy. The chat base
-// stays byte-blind.
-
+/** Props for {@link ChatAudio}. */
 export interface ChatAudioProps {
 
+    /**
+     * Resolved, ready-to-play audio source. The kit resolves it; the chat base
+     * never reaches into a message's attachments to find one.
+     */
     url: string;
-    size: number; // bytes — carried through with the url; not displayed yet
+
+    /** Source size in bytes, when known. Not displayed yet. */
+    size?: number;
+
+    /**
+     * Channel-reported clip length, in seconds. Reserved for future use: the
+     * native control already surfaces the duration once metadata loads, so it
+     * is not rendered here.
+     */
     duration?: number;
 
+    /** Extra CSS classes merged onto the `<audio>` element. */
     className?: string;
 
 }
 
+/**
+ * The design-system audio atom for chat — a native `<audio>` player for a
+ * resolved source.
+ *
+ * @remarks
+ * Prop-driven: a kit hands it a resolved {@link ChatAudioProps.url | url},
+ * which the native `<audio controls>` element plays and — once its metadata
+ * loads — labels with the browser's own duration readout. The chat base stays
+ * byte-blind: the browser decodes, never the proxy.
+ *
+ * Spacing-neutral by design — it claims no outer margin, so vertical rhythm is
+ * the parent's (the message bubble's) to own.
+ */
 export function ChatAudio(props: ChatAudioProps) {
 
-    const { url, duration, className } = props;
-    const { formatDuration } = useChat();
-
-    const audioRef = useRef<HTMLAudioElement>(null);
-    const [resolvedDuration, setResolvedDuration] = useState<number | undefined>(duration);
-
-    useEffect(() => {
-        setResolvedDuration(duration);
-    }, [duration, url]);
-
-    // Fall back to the element's own duration only 
-    // when the channel didn't report one.
-
-    const handleLoadedMetadata = () => {
-        if (resolvedDuration == null) {
-            const elementDuration = audioRef.current?.duration;
-            if (elementDuration != null && Number.isFinite(elementDuration)) {
-                setResolvedDuration(elementDuration);
-            }
-        }
-    };
+    const { url, className } = props;
 
     return (
-        <div className={classNames('my-2 flex items-center gap-2', className)}>
-            <audio ref={audioRef} controls className="max-w-xs" onLoadedMetadata={handleLoadedMetadata}>
-                <source src={url} />
-                Your browser does not support the audio element.
-            </audio>
-            {resolvedDuration != null && (
-                <span className="flex-none text-xs text-gray-500">{formatDuration(resolvedDuration)}</span>
-            )}
-        </div>
+        <audio controls className={className}>
+            <source src={url} />
+            Your browser does not support the audio element.
+        </audio>
     );
 
 }
