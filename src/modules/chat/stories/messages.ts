@@ -193,7 +193,7 @@ export const emojiOnly: StoryMessage = {
     timestamp: '2024-01-16T10:24:00Z', status: 'read'
 };
 
-export const withReactions: StoryMessage = {
+export const withReactionsInbound: StoryMessage = {
     id: 's-reactions', author: alex, group: alex.id, alignment: 'start', type: 'text',
     content: { text: 'Shipping this Friday 🚀' },
     timestamp: '2024-01-16T10:25:00Z',
@@ -201,6 +201,16 @@ export const withReactions: StoryMessage = {
         { emoji: '🔥', count: 4, highlighted: true },
         { emoji: '🚀', count: 2 },
         { emoji: '👏', count: 1 }
+    ]
+};
+
+export const withReactionsOutbound: StoryMessage = {
+    id: 's-reactions-out', author: sarah, group: sarah.id, alignment: 'end', type: 'text',
+    content: { text: 'Just shipped it 🎉' },
+    timestamp: '2024-01-16T10:25:15Z', status: 'read',
+    reactions: [
+        { emoji: '❤️', count: 3, highlighted: true },
+        { emoji: '👍', count: 1 }
     ]
 };
 

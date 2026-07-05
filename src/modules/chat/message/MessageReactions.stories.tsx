@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { withReactions } from '../stories/messages';
+import { withReactionsInbound } from '../stories/messages';
 import { StoryChatProvider } from '../stories/StoryChatProvider';
 import type { ReactionDetail } from '../types/ReactionDetail';
 import { MessageProvider } from './MessageProvider';
@@ -13,7 +13,7 @@ import { MessageReactionsExpanded } from './MessageReactionsExpanded';
 // The envelope carries author-free PILLS; the who-reacted DETAILS load lazily via
 // `getReactionDetails`. These stories mount the pieces directly inside a
 // `MessageProvider` (the context the timeline's dispatch layer supplies) to show each
-// in isolation. The reactions come from the `withReactions` fixture.
+// in isolation. The reactions come from the `withReactionsInbound` fixture.
 
 const meta = {
     title: 'Chat/Message/Reactions',
@@ -29,7 +29,7 @@ type Story = StoryObj<typeof meta>;
 export const Cluster: Story = {
     render: () => (
         <StoryChatProvider>
-            <MessageProvider message={withReactions}>
+            <MessageProvider message={withReactionsInbound}>
                 <MessageReactionsCluster />
             </MessageProvider>
         </StoryChatProvider>
@@ -41,7 +41,7 @@ export const Cluster: Story = {
 export const Expanded: Story = {
     render: () => (
         <StoryChatProvider>
-            <MessageProvider message={withReactions}>
+            <MessageProvider message={withReactionsInbound}>
                 <MessageReactionsExpanded />
             </MessageProvider>
         </StoryChatProvider>
@@ -54,7 +54,7 @@ export const Expanded: Story = {
 export const Picker: Story = {
     render: () => (
         <StoryChatProvider>
-            <MessageProvider message={withReactions}>
+            <MessageProvider message={withReactionsInbound}>
                 <div className="group inline-flex items-center gap-3 p-6 rounded-lg bg-gray-50">
                     <span className="text-sm text-gray-500">Hover here →</span>
                     <MessageReactionPicker />
@@ -69,7 +69,7 @@ export const Picker: Story = {
 export const DetailsLoaded: Story = {
     render: () => (
         <StoryChatProvider>
-            <MessageProvider message={withReactions}>
+            <MessageProvider message={withReactionsInbound}>
                 <DetailsCard />
             </MessageProvider>
         </StoryChatProvider>
@@ -80,7 +80,7 @@ export const DetailsLoaded: Story = {
 export const DetailsLoading: Story = {
     render: () => (
         <StoryChatProvider getReactionDetails={() => new Promise<ReactionDetail[]>(() => { })}>
-            <MessageProvider message={withReactions}>
+            <MessageProvider message={withReactionsInbound}>
                 <DetailsCard />
             </MessageProvider>
         </StoryChatProvider>
@@ -91,7 +91,7 @@ export const DetailsLoading: Story = {
 export const DetailsEmpty: Story = {
     render: () => (
         <StoryChatProvider getReactionDetails={async () => []}>
-            <MessageProvider message={withReactions}>
+            <MessageProvider message={withReactionsInbound}>
                 <DetailsCard />
             </MessageProvider>
         </StoryChatProvider>
@@ -102,7 +102,7 @@ export const DetailsEmpty: Story = {
 export const DetailsError: Story = {
     render: () => (
         <StoryChatProvider getReactionDetails={async () => { throw new Error('Failed to load reactions'); }}>
-            <MessageProvider message={withReactions}>
+            <MessageProvider message={withReactionsInbound}>
                 <DetailsCard />
             </MessageProvider>
         </StoryChatProvider>

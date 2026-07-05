@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { action } from 'storybook/actions';
-import { deletedMessage, withReactions } from '../stories/messages';
+import { deletedMessage, withReactionsInbound } from '../stories/messages';
 import { StoryChatProvider } from '../stories/StoryChatProvider';
 import type { MessageOption } from '../types/MessageOption';
 import { MessageProvider } from './MessageProvider';
@@ -33,7 +33,7 @@ function OptionsCard() {
 export const Menu: Story = {
     render: () => (
         <StoryChatProvider>
-            <MessageProvider message={withReactions}>
+            <MessageProvider message={withReactionsInbound}>
                 <OptionsCard />
             </MessageProvider>
         </StoryChatProvider>
@@ -52,7 +52,7 @@ const gatedOptions: MessageOption[] = [
 export const CapabilityGated: Story = {
     render: () => (
         <StoryChatProvider messageOptions={gatedOptions} capabilities={new Set(['send-reply'])}>
-            <MessageProvider message={withReactions}>
+            <MessageProvider message={withReactionsInbound}>
                 <OptionsCard />
             </MessageProvider>
         </StoryChatProvider>

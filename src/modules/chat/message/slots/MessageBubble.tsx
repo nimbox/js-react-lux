@@ -15,7 +15,7 @@ export function MessageBubble({ children, compact = false }: MessageBubbleProps)
     const { isFirst } = useMessage();
 
     return (
-        <div className={classNames('relative rounded-xl shadow', compact ? 'px-3 py-1' : 'p-3', {
+        <div className={classNames('relative rounded-xl shadow', compact ? 'px-3 py-1' : 'px-2 py-1', {
             'bg-chat-message-out text-gray-800 ': alignment === 'end',
             'bg-chat-message-in text-gray-800': alignment === 'start'
         })}>
