@@ -97,7 +97,7 @@ export const Avatar: FC<AvatarProps> = (props) => {
     if (!inline) {
         return (
             <span
-                className="inline-flex justify-center items-center rounded-full overflow-hidden"
+                className="flex justify-center items-center rounded-full overflow-hidden"
                 style={{ width: '1.5em', height: '1.5em', color: c, backgroundColor: bg }}
             >
                 {icon}
