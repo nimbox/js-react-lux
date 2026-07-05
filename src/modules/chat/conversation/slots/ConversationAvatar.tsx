@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { Avatar } from '../../../../components/displays/Avatar';
+import { ChatAvatar } from '../../atoms';
 import { useConversation } from '../ConversationContext';
 
 
@@ -20,20 +20,16 @@ export function ConversationAvatar({ className }: ConversationAvatarProps) {
 
     return (
         <div className={classNames('shrink-0', className)}>
-            <Avatar
+            <ChatAvatar
 
-                inline={false}
+                url={avatarData.src}
+
+                initials={avatarData.initials || conversation.name?.substring(0, 2).toUpperCase()}
 
                 color={avatarData.color}
                 backgroundColor={avatarData.backgroundColor}
 
-                src={avatarData.src}
-                srcSet={avatarData.srcSet}
-                alt={avatarData.alt}
-
-            >
-                {avatarData.initials || conversation.name?.substring(0, 2).toUpperCase()}
-            </Avatar>
+            />
         </div>
     );
 
