@@ -27,12 +27,12 @@ export function ThreadMessage({ message, isFirst, isLast }: { message: BaseMessa
 }
 
 
-// One message rendered inside its own author group (avatar column + alignment), with
-// no day separator — the focused unit the single-bubble stories drive. `isFirst`
-// controls the author header; `isLast` the bubble connector.
+// One message rendered inside its own author group (gutter + alignment), with no day
+// separator — the focused unit the single-bubble stories drive. `isFirst` controls the
+// author header; `isLast` the bubble tail and the avatar (both `MessageContainer` chrome).
 export function SingleMessage({ message, isFirst = true, isLast = true }: { message: BaseMessage; isFirst?: boolean; isLast?: boolean }) {
     return (
-        <MessageGroup group={{ id: message.id, alignment: message.alignment, author: message.author }}>
+        <MessageGroup group={{ id: message.id, alignment: message.alignment }}>
             <ThreadMessage message={message} isFirst={isFirst} isLast={isLast} />
         </MessageGroup>
     );
@@ -54,7 +54,8 @@ export interface MessageThreadProps {
 // The consumer glue that turns a flat message list into the rendered timeline: run
 // `buildMessageRows` (sort, day separators, author groups, single/marker rows), then
 // render each row kind. `MessageList` owns the sticky-bottom scroll; `MessageGroup`
-// owns the avatar column + alignment; `ThreadMessage` dispatches each bubble.
+// owns the gutter + alignment; `ThreadMessage` dispatches each bubble (the avatar itself
+// is `MessageContainer` chrome, gated on `isLast`, not something `MessageGroup` renders).
 export function MessageThread({ messages, markerBeforeId, className }: MessageThreadProps) {
 
     const { formatCalendar } = useChat();
@@ -77,7 +78,8 @@ export function MessageThread({ messages, markerBeforeId, className }: MessageTh
                             </MessageSeparator>
                         );
                     case 'single':
-                        // Ungrouped system event — centered, no avatar column.
+                        // Ungrouped system event — centered, authorless, so the Container's
+                        // avatar chrome (gated on `author != null`) never renders either.
                         return (
                             <div key={row.message.id} className="px-10 flex justify-center">
                                 <ThreadMessage message={row.message} isFirst isLast />

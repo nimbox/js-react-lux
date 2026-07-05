@@ -31,7 +31,8 @@ export interface MessageContainerProps {
 //     attached to the message — and because the picker sits OUTSIDE that group, hovering
 //     the picker does not reveal it.
 // Reactions (`MessageReactions`, the chooser — the default single clustered pill) stack
-// below.
+// below. The group avatar rides along with the tail instead of living here — both mark
+// "this is the group's last bubble," so both are `Bubble`'s job (see `MessageBubble.tsx`).
 export function MessageContainer({ children }: MessageContainerProps) {
 
     const { message: { alignment } } = useMessage();

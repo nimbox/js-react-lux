@@ -88,8 +88,10 @@ assumption about `content`'s shape**. It owns:
   `group` is its grouping primitive (§3). Rows are **`separator | group | single`** — `single`
   carries authorless/system messages, ungrouped and centered — plus an **unread-marker** row
   injected at a consumer-given watermark (§4).
-- **Layout** — `MessageGroup` (avatar *placement* + alignment via Tailwind `order`; appearance is
-  the consumer's `authorRenderer`), `MessageList` (auto-scroll container).
+- **Layout** — `MessageGroup` (the group's stack + alignment + horizontal gutter),
+  `MessageList` (auto-scroll container). The avatar is not `MessageGroup`'s to place — it
+  rides with the tail, both driven by the one `isLast` check in `Bubble` (§6), anchored
+  directly to the last message's own bubble box, never to a sibling column's height.
 - **Composition machinery** — the compound-component + context design: `MessageProvider` /
   `useMessage`, `ChatProvider` / `useChat`.
 - **The registry mechanism** — `useMessageRenderer`
@@ -481,11 +483,14 @@ slot is always one of these two.
   mounting is deliberately independent of Container's *geometry* (the aligned flex recipe, width
   caps — themable): bubble-paradigm geometry must never weld the chrome shut (§4, rejected
   feed-paradigm note).
-- `Bubble` — alignment-coloured rounded bubble + the avatar connector arrow (a `connector` prop,
-  defaulting to `isFirst`); any author accent it paints comes from the scalar `color` (§3), never
-  `author`. The explicit `connector` override exists for **split-bubble** floating instances: a
-  sticker renders an author **header pill** (which carries the tail), floating content, and a meta
-  **footer pill** (`connector={false}`) — the tail always rides the header.
+- `Bubble` — alignment-coloured rounded bubble + two things shown together on **`isLast`**,
+  because they mark the same fact ("this is the group's last bubble"): the tail arrow, and
+  the group avatar (`authorRenderer.avatar(author)`) anchored to this same `relative` box, on
+  the outer side. Any author *accent* it paints comes from the scalar `color` (§3), never
+  `author` — the avatar is the one place `Bubble` reaches for the opaque author itself, and
+  only because it shares the tail's positioning box, not as a separate concern. See §11 for a
+  known gap: split-bubble floating instances (a sticker) have no way to redirect either to a
+  different bubble than the one carrying `isLast`.
 
 **DECORATION** — read *universal* fields only:
 - `Author` — forwards the opaque `author` to `authorRenderer.name(author)` on `isFirst` (it never
@@ -501,7 +506,9 @@ slot is always one of these two.
 **CONTAINER-TIER CHROME — auto-mounted, NOT slots.** Reactions and the reaction picker are **not**
 in the `Message.*` slot namespace and are not composed by instances: `MessageContainer` mounts them
 automatically (reactions always; the picker when `onCreateReaction` is supplied). They live in
-`message/` as standalone components (barrel-exported, like `MessageOptions`), not in `slots/`:
+`message/` as standalone components (barrel-exported, like `MessageOptions`), not in `slots/`. (The
+group avatar is *not* here — it rides with the tail inside `Bubble`, above; it is Bubble-tier, not
+Container-tier, because it needs the exact same `relative` box the tail anchors to.)
 - **`MessageReactions`** — the **chooser** `MessageContainer` mounts; it renders the default form
   (the cluster) and is the single seam a future `ChatContext` option would use to switch forms.
 - **`MessageReactionsCluster`** (current default) — all emojis in one **clustered pill** + total,
@@ -548,7 +555,7 @@ authorRenderer: {
 
 | Location | Base composes |
 |---|---|
-| Group bubble icon | `authorRenderer.avatar(author)` |
+| Group bubble icon | `authorRenderer.avatar(author)`, composed by `Bubble` on `isLast`, alongside the tail — mirrors how `Author` composes `name`/`handle` on `isFirst`, opposite end of the group |
 | First-bubble header | `authorRenderer.name(author)` **+** `authorRenderer.handle?.(author)` (on `isFirst`) — the base owns the row arrangement |
 | Reaction-details row | `authorRenderer.avatar(author)` + `authorRenderer.name(author)` + the **base-owned emoji** |
 | **Preview** (reply-quote, conversation line) | `authorRenderer.name(author)` **only** — the handle is noise in a compact quote |
@@ -991,6 +998,12 @@ wired:
   feed-style presentation is buildable in principle, but the cap can't be overridden yet.
 - **The tombstone label is fixed.** `TombstoneMessage` renders a built-in "message deleted" string; it
   becomes overridable once the module ships a strings map.
+- **`Bubble` has no per-instance tail override.** The tail currently hardcodes to `isLast`, with
+  no `connector`-style prop to redirect it. This is latent for **split-bubble** floating
+  instances — a sticker renders `[ChatSticker (bare), a compact `Properties` pill]`, and the
+  natural design would be a proper **header pill** that always carries the tail regardless of
+  which bubble in the split ends up `isLast`. `StickerMessage` has no header pill today, so
+  this gap doesn't yet manifest a visible bug — it's a follow-up, not a regression.
 
 The **composer** is out of scope for this doc, which covers the read path (see the scope note at the
 top).
@@ -1005,6 +1018,13 @@ top).
   envelope carries only author-free **pills** (`ReactionPill`); the who-reacted **details** load
   lazily via `getReactionDetails` and carry the author (`ReactionDetail<T['author']>`, §6). Keep the
   pill ungenericized; bind the author on the lazy callback, not the envelope.
+- **The group avatar rides with the tail, inside `Bubble`, on the one `isLast` check — not a
+  separate concern with its own gating.** They mark the same fact ("this is the group's last
+  bubble"), so they are computed together in one place and anchored to the exact same
+  `relative` box, rather than duplicated as two independently-gated, independently-positioned
+  features in different components (that was tried — `MessageContainer` mounting the avatar
+  against its own anchor — and works, but invites the tail and the avatar to drift apart).
+  Do not split them back into separate components.
 - **`author` is opaque (`unknown`) to the base.** What the base needs from it are **scalar
   primitives** — `group` (grouping, `group: author.id`) and `color` (accent for the reply line /
   bubble) — split out by the paint-vs-render test (§3). The author *shape* goes through the two
