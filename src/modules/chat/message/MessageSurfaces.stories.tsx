@@ -7,11 +7,6 @@ import { MessageProvider } from './MessageProvider';
 import { useMessageRenderer } from './useMessageRenderer';
 
 
-// One message, three surfaces. The SAME registry entry renders a message as the
-// timeline bubble (`full`), the compact reply/banner block (`preview`), and the dense
-// one-line digest (`summary`). `full`/`preview` are required (fallback to Unknown);
-// `summary` is optional with NO fallback — absent ⇒ nothing (§6).
-
 const meta = {
     title: 'Chat/Message/Surfaces',
     tags: ['autodocs'],
@@ -65,11 +60,10 @@ const render = (message: BaseMessage): Story['render'] => () => (
     </StoryChatProvider>
 );
 
+// Stories
+
 export const Text: Story = { render: render(textOutbound) };
 export const Image: Story = { render: render(imageMessage) };
 export const Audio: Story = { render: render(audioMessage) };
 export const Document: Story = { render: render(documentMessage) };
-
-// An unregistered type: `full`/`preview` fall back to the Unknown placeholder (the raw
-// `type` token), `summary` has no fallback so it renders nothing.
 export const Unknown: Story = { render: render(unknownMessage) };
