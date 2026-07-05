@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 
 
-/** Props for {@link ChatImage}. */
+/** Props for `ChatImage`. */
 export interface ChatImageProps {
 
     /**
@@ -27,14 +27,6 @@ export interface ChatImageProps {
 /**
  * The design-system image atom for chat — a resolved image, sized to fit
  * a bubble.
- *
- * @remarks
- * Presentational and prop-driven: a kit (or the app) hands it a resolved
- * {@link ChatImageProps.url | url}; the chat base never reaches into a
- * message's attachments to find one.
- *
- * Spacing-neutral by design — it claims no outer margin, so vertical rhythm
- * is the parent's (the message bubble's) to own.
  */
 export function ChatImage(props: ChatImageProps) {
 

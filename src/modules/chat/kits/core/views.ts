@@ -35,8 +35,8 @@ export interface VideoView {
 }
 
 export interface DocumentView {
-    url: string;
-    size: number; // bytes — present whenever there is a url
+    url?: string; // absent while the upload is pending or has failed
+    size?: number; // bytes — present whenever there is a url
     filename?: string;
     caption?: string;
 }

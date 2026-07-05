@@ -2,7 +2,7 @@ import type { AudioView, DocumentView, ImageView, TextView, VideoView } from '..
 import type { BaseMessage } from '../types/BaseMessage';
 import type { MessageData } from '../types/MessageData';
 import { alex, miguel, sarah, type StoryAuthor } from './authors';
-import { VOICE_AUDIO } from './media';
+import { STICKER_IMAGE, VOICE_AUDIO } from './media';
 
 
 // The story's ChatTypes binding — the "consumer" a story plays. `content` is
@@ -28,14 +28,13 @@ export type StoryChat = {
 export type StoryMessage = MessageData<StoryChat>;
 
 
-// Media the fixtures point at. The image/video/sticker are external URLs (they
-// load in Storybook / Chromatic); the voice audio is an inlined `data:` URI
-// (see `./media`) so it can never rot. The base is content-blind — a kit hands
-// these resolved urls to its atoms.
+// Media the fixtures point at. The image/video are external URLs (they load
+// in Storybook / Chromatic); the voice audio and sticker are committed assets
+// (see `./media`) so they can never rot. The base is content-blind — a kit
+// hands these resolved urls to its atoms.
 
 const MOCKUP_IMAGE = 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&h=400&q=80';
 const DEMO_VIDEO = 'https://www.w3schools.com/html/mov_bbb.mp4';
-const THUMBS_STICKER = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg';
 
 
 // A message the thread replies to — named so the reply can quote it (its
@@ -129,7 +128,7 @@ const rawThread: StoryMessage[] = [
     },
     {
         id: '13', author: sarah, alignment: 'end', type: 'sticker',
-        content: { url: THUMBS_STICKER, size: 34567, alt: 'thumbs up' },
+        content: { url: STICKER_IMAGE, size: 40452, alt: 'leaf' },
         timestamp: '2024-01-16T10:08:30Z', status: 'read'
     },
     {
@@ -209,7 +208,7 @@ export const imageMessage = mockupImage;
 
 export const stickerMessage: StoryMessage = {
     id: 's-sticker', author: sarah, group: sarah.id, alignment: 'end', type: 'sticker',
-    content: { url: THUMBS_STICKER, size: 34567, alt: 'thumbs up' },
+    content: { url: STICKER_IMAGE, size: 40452, alt: 'leaf' },
     timestamp: '2024-01-16T10:26:00Z', status: 'read'
 };
 

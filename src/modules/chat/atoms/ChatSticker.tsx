@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 
 
-/** Props for {@link ChatSticker}. */
+/** Props for `ChatSticker`. */
 export interface ChatStickerProps {
 
     /**
@@ -25,12 +25,9 @@ export interface ChatStickerProps {
  * The design-system sticker atom for chat — a small image that floats free.
  *
  * @remarks
- * A sticker has no bubble, background, or shadow, so it is its own atom
- * rather than a styled {@link ChatImage}. Prop-driven: a kit hands it a
- * resolved {@link ChatStickerProps.url | url}.
- *
- * Spacing-neutral by design — it claims no outer margin, so vertical rhythm
- * is the parent's (the message bubble's) to own.
+ * Unlike `ChatImage`, it has no rounded corners or shadow — kits
+ * typically render it outside the message bubble entirely, rather than
+ * inside one.
  */
 export function ChatSticker(props: ChatStickerProps) {
 

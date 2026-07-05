@@ -1,10 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { BoundingBoxSpacing as BoundingBoxSpacingCheck } from '../../../stories/utilities/BoundingBoxSpacing';
 import { centered } from '../stories/decorators';
 import { ChatDocument } from './ChatDocument';
 
-
-// A download tile from a resolved `url` / `filename` / `size`. With no `url` it renders
-// a plain (non-link) tile.
 
 const meta = {
     title: 'Chat/Atoms/ChatDocument',
@@ -16,12 +14,31 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// Stories
+
 export const Downloadable: Story = {
     args: {
         url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
         filename: 'animation-spec.pdf',
         size: 1048576
     }
+};
+
+export const BoundingBoxSpacing: Story = {
+    args: {
+        url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+        filename: 'animation-spec.pdf',
+        size: 1048576
+    },
+    render: () => (
+        <BoundingBoxSpacingCheck>
+            <ChatDocument
+                url="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+                filename="animation-spec.pdf"
+                size={1048576}
+            />
+        </BoundingBoxSpacingCheck>
+    )
 };
 
 export const WithoutUrl: Story = {

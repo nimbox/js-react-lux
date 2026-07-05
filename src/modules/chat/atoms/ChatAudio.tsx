@@ -1,4 +1,7 @@
-/** Props for {@link ChatAudio}. */
+import classNames from 'classnames';
+
+
+/** Props for `ChatAudio`. */
 export interface ChatAudioProps {
 
     /**
@@ -27,20 +30,16 @@ export interface ChatAudioProps {
  * resolved source.
  *
  * @remarks
- * Prop-driven: a kit hands it a resolved {@link ChatAudioProps.url | url},
- * which the native `<audio controls>` element plays and — once its metadata
- * loads — labels with the browser's own duration readout. The chat base stays
- * byte-blind: the browser decodes, never the proxy.
- *
- * Spacing-neutral by design — it claims no outer margin, so vertical rhythm is
- * the parent's (the message bubble's) to own.
+ * The native `<audio controls>` element plays the source and — once its
+ * metadata loads — labels itself with the browser's own duration readout.
+ * The chat base stays byte-blind: the browser decodes, never the proxy.
  */
 export function ChatAudio(props: ChatAudioProps) {
 
     const { url, className } = props;
 
     return (
-        <audio controls className={className}>
+        <audio controls className={classNames(className)}>
             <source src={url} />
             Your browser does not support the audio element.
         </audio>

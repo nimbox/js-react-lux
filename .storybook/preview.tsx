@@ -5,26 +5,22 @@ import i18n from '../src/i18n';
 import '../src/index.css';
 
 
-// TSDoc's `{@link Target | label}` (and the label-less `{@link Target}`) is
-// an inline tag no docgen resolves — left alone it shows as raw braces on
-// the Docs page. Render it as plain backticked text instead.
-function resolveInlineLinks(text: string): string {
-    return text.replace(/\{@link\s+([^\s|}]+)(?:\s*\|\s*([^}]+))?\}/g, (_, target: string, label?: string) => {
-        return `\`${(label ?? target).trim()}\``;
-    });
-}
-
 // The component-level Docs description. `react-docgen-typescript` splits a
 // TSDoc comment into `description` (the summary) and `tags` (block tags like
 // `@remarks`) rather than concatenating them — so without this, only the
 // summary would reach the Docs page. Stitch them back into one block.
+//
+// Doc comments use plain backticked names (`` `Avatar` ``), not TSDoc
+// `{@link}` tags — this toolchain has no TypeDoc-style resolver for them, so
+// they'd only ever degrade to backticked text anyway, and TypeScript's own
+// extraction normalizes them inconsistently on the way here.
 function extractComponentDescription(component?: { __docgenInfo?: { description?: string; tags?: Record<string, string> } }): string {
     const info = component?.__docgenInfo;
     if (!info) {
         return '';
     }
     const parts = [info.description, info.tags?.remarks].filter((part): part is string => Boolean(part));
-    return resolveInlineLinks(parts.join('\n\n'));
+    return parts.join('\n\n');
 }
 
 

@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { mediaSize } from '../utils/mediaSize';
 
 
-/** Props for {@link ChatDocument}. */
+/** Props for `ChatDocument`. */
 export interface ChatDocumentProps {
 
     /**
@@ -13,7 +13,7 @@ export interface ChatDocumentProps {
      */
     url?: string;
 
-    /** Source size in bytes, formatted via {@link mediaSize}. */
+    /** Source size in bytes, formatted via `mediaSize`. */
     size?: number;
 
     /** Display name shown on the tile. */
@@ -29,17 +29,12 @@ export interface ChatDocumentProps {
  * resolved file.
  *
  * @remarks
- * Prop-driven: a kit hands it a resolved {@link ChatDocumentProps.url | url},
- * `filename`, and `size`; the chat base never reaches into a message's
- * attachments. Renders an `<a download>` tile when a url is given, or a plain
- * tile otherwise.
- *
- * Spacing-neutral by design — it claims no outer margin, so vertical rhythm
- * is the parent's (the message bubble's) to own.
+ * Renders an `<a download>` tile when a url is given, or a plain tile
+ * otherwise.
  */
 export function ChatDocument(props: ChatDocumentProps) {
 
-    const { url, filename, size, className } = props;
+    const { url, size, filename, className } = props;
 
     const href = url
         ? url + (url.includes('?') ? '&download=true' : '?download=true')

@@ -30,7 +30,7 @@ import { reactionDetails } from './reactions';
 export const storyAuthorRenderer: ChatContextProps['authorRenderer'] = {
     avatar: (author) => {
         const a = author as StoryAuthor;
-        return <ChatAvatar color="#ffffff" backgroundColor={a.color} src={a.avatarUrl} initials={initials(a.name)} alt={a.name} />;
+        return <ChatAvatar color="#ffffff" backgroundColor={a.color} url={a.avatarUrl} initials={initials(a.name)} />;
     },
     name: (author) => {
         const a = author as StoryAuthor;

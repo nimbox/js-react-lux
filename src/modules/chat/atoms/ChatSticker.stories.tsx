@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { BoundingBoxSpacing as BoundingBoxSpacingCheck } from '../../../stories/utilities/BoundingBoxSpacing';
 import { centered } from '../stories/decorators';
+import { STICKER_IMAGE } from '../stories/media';
 import { ChatSticker } from './ChatSticker';
 
-
-// A sticker floats free — no bubble, no background — so it is its own atom, not a
-// styled `ChatImage`.
 
 const meta = {
     title: 'Chat/Atoms/ChatSticker',
@@ -16,10 +15,29 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// Stories
+
 export const Default: Story = {
     args: {
-        url: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg',
-        size: 34567,
-        alt: 'thumbs up'
+        url: STICKER_IMAGE,
+        size: 40452,
+        alt: 'leaf'
     }
+};
+
+export const BoundingBoxSpacing: Story = {
+    args: {
+        url: STICKER_IMAGE,
+        size: 40452,
+        alt: 'leaf'
+    },
+    render: () => (
+        <BoundingBoxSpacingCheck>
+            <ChatSticker
+                url={STICKER_IMAGE}
+                size={40452}
+                alt="leaf"
+            />
+        </BoundingBoxSpacingCheck>
+    )
 };

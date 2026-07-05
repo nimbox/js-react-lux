@@ -10,7 +10,10 @@ import type { DocumentView } from '../views';
 
 
 // `full` surface — the resolved file through the base `ChatDocument`
-// atom, with an optional caption pushed into the Body slot.
+// atom, with an optional caption pushed into the Body slot. Renders
+// even when `view.url` is absent, so `ChatDocument`'s own placeholder
+// tile (a document that failed to upload, is still processing, etc.)
+// stays reachable instead of the whole message silently vanishing.
 
 export function DocumentMessage({ message }: MessageInstanceProps<DocumentView>) {
 
@@ -22,7 +25,7 @@ export function DocumentMessage({ message }: MessageInstanceProps<DocumentView>)
             <Message.Bubble>
                 <Message.Author />
                 <Message.Reply />
-                {view?.url && <ChatDocument url={view.url} filename={view.filename} size={view.size} />}
+                {view && <ChatDocument url={view.url} filename={view.filename} size={view.size} />}
                 {view?.caption && (
                     <Message.Body>{renderText(view.caption)}</Message.Body>
                 )}

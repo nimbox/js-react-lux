@@ -22,6 +22,8 @@ export function ConversationAvatar({ className }: ConversationAvatarProps) {
         <div className={classNames('shrink-0', className)}>
             <Avatar
 
+                inline={false}
+
                 color={avatarData.color}
                 backgroundColor={avatarData.backgroundColor}
 

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 
 
-/** Props for {@link ChatVideo}. */
+/** Props for `ChatVideo`. */
 export interface ChatVideoProps {
 
     /**
@@ -24,14 +24,6 @@ export interface ChatVideoProps {
 /**
  * The design-system video atom for chat — a native `<video>` player for a
  * resolved source.
- *
- * @remarks
- * Prop-driven: a kit hands it a resolved {@link ChatVideoProps.url | url}
- * and an optional {@link ChatVideoProps.poster | poster}; the chat base
- * never reaches into a message's attachments to find one.
- *
- * Spacing-neutral by design — it claims no outer margin, so vertical rhythm
- * is the parent's (the message bubble's) to own.
  */
 export function ChatVideo(props: ChatVideoProps) {
 

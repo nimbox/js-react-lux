@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { BoundingBoxSpacing as BoundingBoxSpacingCheck } from '../../../stories/utilities/BoundingBoxSpacing';
 import { centered } from '../stories/decorators';
 import { ChatVideo } from './ChatVideo';
 
@@ -13,11 +14,22 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// Stories
+
 export const Default: Story = {
     args: {
         url: 'https://www.w3schools.com/html/mov_bbb.mp4',
         size: 456789
     }
+};
+
+export const BoundingBoxSpacing: Story = {
+    args: { url: 'https://www.w3schools.com/html/mov_bbb.mp4', size: 456789 },
+    render: () => (
+        <BoundingBoxSpacingCheck>
+            <ChatVideo url="https://www.w3schools.com/html/mov_bbb.mp4" size={456789} />
+        </BoundingBoxSpacingCheck>
+    )
 };
 
 export const WithPoster: Story = {

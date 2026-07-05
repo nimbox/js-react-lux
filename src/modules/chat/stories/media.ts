@@ -1,3 +1,4 @@
+import stickerImage from './assets/sticker.png';
 import voiceMessage from './assets/voice-message.wav';
 
 
@@ -12,3 +13,5 @@ import voiceMessage from './assets/voice-message.wav';
 // written in its place.
 
 export const VOICE_AUDIO: string = voiceMessage;
+
+export const STICKER_IMAGE: string = stickerImage;

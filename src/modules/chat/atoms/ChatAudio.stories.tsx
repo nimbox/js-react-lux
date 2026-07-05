@@ -1,12 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { BoundingBox } from '../../../stories/utilities/BoundingBox';
+import { BoundingBoxSpacing as BoundingBoxSpacingCheck } from '../../../stories/utilities/BoundingBoxSpacing';
 import { centered } from '../stories/decorators';
 import { VOICE_AUDIO } from '../stories/media';
 import { ChatAudio } from './ChatAudio';
 
-
-// The chat audio atom: a native `<audio controls>` for a resolved `url` — no
-// message data, no provider needed.
 
 const meta = {
     title: 'Chat/Atoms/ChatAudio',
@@ -18,6 +15,8 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// Stories
+
 export const Default: Story = {
     args: {
         url: VOICE_AUDIO,
@@ -25,20 +24,11 @@ export const Default: Story = {
     }
 };
 
-// Spacing-neutral: `BoundingBox` frames each atom. Left hugs the lines (no
-// margin); right adds `m-2`, opening a gap — spacing is the parent's job.
-export const Spacing: Story = {
-    args: { url: VOICE_AUDIO, size: 123456 },   // ignored by the custom render; satisfies the required-prop meta
+export const BoundingBoxSpacing: Story = {
+    args: { url: VOICE_AUDIO, size: 123456 },
     render: () => (
-        <div className="flex items-center gap-24 px-12 py-16">
-            <BoundingBox>
-                <ChatAudio url={VOICE_AUDIO} size={123456} />
-            </BoundingBox>
-            <BoundingBox>
-                <div className="m-2">
-                    <ChatAudio url={VOICE_AUDIO} size={123456} />
-                </div>
-            </BoundingBox>
-        </div>
+        <BoundingBoxSpacingCheck>
+            <ChatAudio url={VOICE_AUDIO} size={123456} />
+        </BoundingBoxSpacingCheck>
     )
 };
