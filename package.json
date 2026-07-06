@@ -59,7 +59,7 @@
     "lint": "eslint . --ignore-pattern src/sandbox",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "build:storybook": "storybook build",
     "porcelain": "git status --porcelain -- || (echo 'Uncommitted changes detected' && exit 1)",
     "preversion": "npm ci && npm run build && npm run porcelain",
     "postversion": "git push origin main --follow-tags"
