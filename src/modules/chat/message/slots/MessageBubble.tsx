@@ -23,8 +23,12 @@ export function MessageBubble({ children }: MessageBubbleProps) {
         <MessagePill className="relative">
             {children}
             {isLast && author != null && (
+                // rem, not px: 1.5em avatar (`Avatar.tsx`) at 1.25rem font-size
+                // plus 0.25rem margin exactly fills `MessageGroup`'s
+                // `MESSAGE_GUTTER`, at any root font-size — not just the one
+                // it's tuned at.
                 <div className={classNames(
-                    'absolute bottom-0 text-[20px] leading-[24px]',
+                    'absolute bottom-0 text-[1.25rem] leading-[1.5rem]',
                     alignment === 'start' ? 'right-full mr-1' : 'left-full ml-1'
                 )}>
                     {authorRenderer.avatar(author)}

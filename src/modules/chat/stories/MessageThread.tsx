@@ -1,6 +1,6 @@
 import { useChat } from '../ChatContext';
 import { buildMessageRows } from '../message/buildMessageRows';
-import { MessageGroup } from '../message/MessageGroup';
+import { MESSAGE_GUTTER, MessageGroup } from '../message/MessageGroup';
 import { MessageList } from '../message/MessageList';
 import { MessageProvider } from '../message/MessageProvider';
 import { MessageSeparator } from '../message/MessageSeparator';
@@ -81,7 +81,7 @@ export function MessageThread({ messages, markerBeforeId, className }: MessageTh
                         // Ungrouped system event — centered, authorless, so the Container's
                         // avatar chrome (gated on `author != null`) never renders either.
                         return (
-                            <div key={row.message.id} className="px-10 flex justify-center">
+                            <div key={row.message.id} className={`${MESSAGE_GUTTER} flex justify-center`}>
                                 <ThreadMessage message={row.message} isFirst isLast />
                             </div>
                         );
