@@ -5,7 +5,7 @@ import { MessagePreview } from '../MessagePreview';
 
 // Fallback for an unregistered message `type` (`full` surface). The
 // base ships no content renderers of its own, so a `type` with no
-// registry entry lands here: it keeps the full chrome (the Container
+// registry entry lands here: it keeps the full chrome (the frame
 // brings reactions and the hover options; the Bubble, author and
 // properties render — the dispatch layer mounts the provider) but its
 // interior is deliberately content-free — it shows the raw `type`
@@ -15,14 +15,12 @@ import { MessagePreview } from '../MessagePreview';
 export function UnknownMessage({ message }: MessageInstanceProps) {
 
     return (
-        <Message.Container>
-            <Message.Bubble>
-                <Message.Author />
-                <Message.Reply />
-                <div className="text-sm italic text-gray-400">{message.type}</div>
-                <Message.Properties />
-            </Message.Bubble>
-        </Message.Container>
+        <Message.Bubble>
+            <Message.Author />
+            <Message.Reply />
+            <div className="text-sm italic text-gray-400">{message.type}</div>
+            <Message.Properties />
+        </Message.Bubble>
     );
 
 }

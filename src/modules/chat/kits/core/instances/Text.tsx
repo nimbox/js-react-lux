@@ -18,14 +18,12 @@ export function TextMessage({ message }: MessageInstanceProps<TextView>) {
     const { renderText } = useChat();
 
     return (
-        <Message.Container>
-            <Message.Bubble>
-                <Message.Author />
-                <Message.Reply />
-                <Message.Body>{renderText(message.content?.text ?? '', message)}</Message.Body>
-                <Message.Properties />
-            </Message.Bubble>
-        </Message.Container>
+        <Message.Bubble>
+            <Message.Author />
+            <Message.Reply />
+            <Message.Body>{renderText(message.content?.text ?? '', message)}</Message.Body>
+            <Message.Properties />
+        </Message.Bubble>
     );
 
 }

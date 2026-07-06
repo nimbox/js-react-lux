@@ -13,7 +13,7 @@ import { useConversationOptions } from './useConversationOptions';
 // consumer owns what each item says and does. Hidden entirely when
 // there are no applicable options. Positioning and the hover reveal
 // are owned by `ConversationContainer` (the absolute overlay), the way
-// `MessageContainer` positions `MessageOptions`.
+// `MessageFrame` positions `MessageOptions`.
 
 export function ConversationOptions() {
 

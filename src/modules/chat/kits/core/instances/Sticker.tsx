@@ -19,7 +19,7 @@ export function StickerMessage({ message }: MessageInstanceProps<ImageView>) {
     const view = message.content;
 
     return (
-        <Message.Container>
+        <>
             {isFirst && author != null && (
                 <Message.Pill>
                     <Message.Author />
@@ -29,7 +29,7 @@ export function StickerMessage({ message }: MessageInstanceProps<ImageView>) {
             <Message.Bubble>
                 <Message.Properties />
             </Message.Bubble>
-        </Message.Container>
+        </>
     );
 
 }

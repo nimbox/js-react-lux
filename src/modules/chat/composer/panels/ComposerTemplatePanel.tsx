@@ -2,10 +2,11 @@ import classNames from 'classnames';
 import { useCallback, useMemo, type Dispatch, type ReactNode, type SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Input } from '../../../../components/inputs/Input';
+import { MessageFrame } from '../../message/MessageFrame';
+import { MessageProvider } from '../../message/MessageProvider';
 import { type BaseMessage } from '../../types/BaseMessage';
 import { TEMPLATE_CONTEXT_BLOCK, type TemplateContextBlockType, type TemplateContextData } from '../../types/TemplateContextData';
 import { type TemplateData } from '../../types/TemplateData';
-import { MessageProvider } from '../../message/MessageProvider';
 import { ComposerPanel } from './ComposerPanel';
 
 
@@ -311,11 +312,10 @@ function TemplatePreview({ template, context, transform, render: Message, backgr
 
             {preview && (
                 <div className="h-full flex justify-center items-center">
-                    {/* The preview renders a full-surface instance, whose slots read
-                        `useMessage()` — so the dispatch layer must mount the provider
-                        ("whoever dispatches, provides"), exactly as the timeline does. */}
-                    <MessageProvider message={preview} isFirst isLast>
-                        <Message message={preview} />
+                    <MessageProvider message={preview} plain>
+                        <MessageFrame placement="center">
+                            <Message message={preview} />
+                        </MessageFrame>
                     </MessageProvider>
                 </div>
             )}

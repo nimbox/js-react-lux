@@ -18,17 +18,15 @@ export function VideoMessage({ message }: MessageInstanceProps<VideoView>) {
     const view = message.content;
 
     return (
-        <Message.Container>
-            <Message.Bubble>
-                <Message.Author />
-                <Message.Reply />
-                {view?.url && <ChatVideo url={view.url} size={view.size} poster={view.poster} />}
-                {view?.caption && (
-                    <Message.Body>{renderText(view.caption)}</Message.Body>
-                )}
-                <Message.Properties />
-            </Message.Bubble>
-        </Message.Container>
+        <Message.Bubble>
+            <Message.Author />
+            <Message.Reply />
+            {view?.url && <ChatVideo url={view.url} size={view.size} poster={view.poster} />}
+            {view?.caption && (
+                <Message.Body>{renderText(view.caption)}</Message.Body>
+            )}
+            <Message.Properties />
+        </Message.Bubble>
     );
 
 }

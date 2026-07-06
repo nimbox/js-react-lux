@@ -18,14 +18,12 @@ export function AudioMessage({ message }: MessageInstanceProps<AudioView>) {
     const view = message.content;
 
     return (
-        <Message.Container>
-            <Message.Bubble>
-                <Message.Author />
-                <Message.Reply />
-                {view?.url && <ChatAudio url={view.url} size={view.size} duration={view.duration} />}
-                <Message.Properties />
-            </Message.Bubble>
-        </Message.Container>
+        <Message.Bubble>
+            <Message.Author />
+            <Message.Reply />
+            {view?.url && <ChatAudio url={view.url} size={view.size} duration={view.duration} />}
+            <Message.Properties />
+        </Message.Bubble>
     );
 
 }

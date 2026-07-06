@@ -7,7 +7,7 @@ import type { MessageGroupData } from '../types/MessageGroupData';
 // in. The avatar no longer lives here: it used to be a sibling column, bottom-aligned
 // against this stack's total rendered height — fragile, since trailing per-message chrome
 // (a reactions pill) inflated that height and detached the avatar from the bubble tail. The
-// avatar is now auto-mounted Container-tier chrome (`MessageContainer`, gated on `isLast`),
+// avatar is now the last bubble's own chrome (`MessageBubble`, gated on `isLast`),
 // anchored directly to the last bubble's own box instead of a sibling's height.
 // `MESSAGE_GUTTER` reserves exactly the room the avatar pokes into: a 1.875rem
 // diameter + 0.25rem margin (`MessageBubble.tsx`) = 2.125rem, flush. All rem,

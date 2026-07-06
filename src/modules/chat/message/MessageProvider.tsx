@@ -18,6 +18,11 @@ export interface MessageProviderInputs {
     isFirst?: boolean;
     isLast?: boolean;
 
+    // `plain` marks an out-of-timeline render (the composer preview): the frame drops its
+    // interaction chrome and the bubble/author drop the group decorations (avatar, tail,
+    // name), leaving pure content. Read by `MessageFrame`, `MessageBubble`, `MessageAuthor`.
+    plain?: boolean;
+
 }
 export interface MessageProviderProps extends MessageProviderInputs {
 
@@ -37,7 +42,7 @@ export interface MessageInstanceProps<TContent = unknown> {
 
 // A PURE context producer — it renders NO DOM of its own (mirrors
 // `ConversationProvider`). The full-surface frame, layout, and BOTH hover scopes live
-// entirely in `MessageContainer`: the `w-full group` row-hover region that reveals the
+// entirely in `MessageFrame`: the `w-full group` row-hover region that reveals the
 // reaction picker, and the `group/bubble` scope that reveals the option menu. Keeping
 // no wrapper here means all the message chrome — and all the hover logic — is reasoned
 // about in one place, and the provider stays mountable around any surface (the full

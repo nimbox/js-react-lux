@@ -10,7 +10,7 @@ import { useMessageOptions } from './useMessageOptions';
 // `Menu`. Each option `resolve`s its `Menu.Item` values (label / icon / bound
 // `onSelect`) from the message — so the base owns the menu, the consumer owns what
 // each item says and does. Hidden entirely when there are no applicable options.
-// Positioning and the hover reveal are owned by `MessageContainer` (the absolute
+// Positioning and the hover reveal are owned by `MessageFrame` (the absolute
 // overlay at the bubble's top-right corner).
 
 export function MessageOptions() {

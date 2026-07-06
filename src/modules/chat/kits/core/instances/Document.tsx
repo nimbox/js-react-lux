@@ -22,17 +22,15 @@ export function DocumentMessage({ message }: MessageInstanceProps<DocumentView>)
     const view = message.content;
 
     return (
-        <Message.Container>
-            <Message.Bubble>
-                <Message.Author />
-                <Message.Reply />
-                {view && <ChatDocument url={view.url} filename={view.filename} size={view.size} />}
-                {view?.caption && (
-                    <Message.Body>{renderText(view.caption)}</Message.Body>
-                )}
-                <Message.Properties />
-            </Message.Bubble>
-        </Message.Container>
+        <Message.Bubble>
+            <Message.Author />
+            <Message.Reply />
+            {view && <ChatDocument url={view.url} filename={view.filename} size={view.size} />}
+            {view?.caption && (
+                <Message.Body>{renderText(view.caption)}</Message.Body>
+            )}
+            <Message.Properties />
+        </Message.Bubble>
     );
 
 }

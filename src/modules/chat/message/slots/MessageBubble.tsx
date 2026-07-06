@@ -9,20 +9,21 @@ export interface MessageBubbleProps {
 }
 
 // The tail and the group avatar are the same idea — "this is the group's last
-// bubble" — so both are driven by the one `isLast` check here, anchored to this
-// SAME `relative` box (the `Pill` chrome, made `relative` here). (For a
+// bubble" — so both are driven by the one `isLast` check here (and dropped in a
+// `plain` preview), anchored to this SAME `relative` box (the `Pill` chrome, made
+// `relative` here). (For a
 // split-bubble instance like a sticker, this bubble isn't the widest sibling,
 // but `items-start`/`items-end` aligns every sibling to the same outer edge,
 // so anchoring here lands identically to anchoring on the wider container.)
 export function MessageBubble({ children }: MessageBubbleProps) {
 
-    const { message: { alignment, author }, isLast } = useMessage();
+    const { message: { alignment, author }, isLast, plain } = useMessage();
     const { authorRenderer } = useChat();
 
     return (
         <MessagePill className="relative">
             {children}
-            {isLast && author != null && (
+            {!plain && isLast && author != null && (
                 // rem, not px: 1.5em avatar (`Avatar.tsx`) at 1.25rem font-size
                 // plus 0.25rem margin exactly fills `MessageGroup`'s
                 // `MESSAGE_GUTTER`, at any root font-size — not just the one
@@ -34,7 +35,7 @@ export function MessageBubble({ children }: MessageBubbleProps) {
                     {authorRenderer.avatar(author)}
                 </div>
             )}
-            {isLast && <MessageArrow position={'bottom'} />}
+            {!plain && isLast && <MessageArrow position={'bottom'} />}
         </MessagePill>
     );
 

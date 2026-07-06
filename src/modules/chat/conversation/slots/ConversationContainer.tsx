@@ -3,7 +3,7 @@ import { useConversation } from '../ConversationContext';
 import { ConversationOptions } from '../ConversationOptions';
 
 
-// ConversationContainer — the row frame. Like `MessageContainer`, it owns the
+// ConversationContainer — the row frame. Like `MessageFrame`, it owns the
 // row's content-blind affordance: the option menu is a hover OVERLAY anchored to
 // the `relative` row, top-right corner, `invisible group-hover:visible` — so it
 // reserves no layout space and appears only on hover (docs §7). Its overflow menu

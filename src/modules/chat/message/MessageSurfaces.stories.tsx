@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { audioMessage, documentMessage, imageMessage, textOutbound, unknownMessage } from '../stories/messages';
 import { StoryChatProvider } from '../stories/StoryChatProvider';
 import type { BaseMessage } from '../types/BaseMessage';
+import { MessageFrame } from './MessageFrame';
 import { MessageProvider } from './MessageProvider';
 import { useMessageRenderer } from './useMessageRenderer';
 
@@ -27,7 +28,9 @@ function SurfaceMatrix({ message }: { message: BaseMessage }) {
         <MessageProvider message={message}>
             <div className="max-w-md flex flex-col gap-8">
                 <Surface label="full — timeline bubble">
-                    <Full message={message} />
+                    <MessageFrame>
+                        <Full message={message} />
+                    </MessageFrame>
                 </Surface>
                 <Surface label="preview — reply-quote / composer banner">
                     <div className="px-2 py-1 rounded-lg bg-gray-100 border-l-4 border-gray-300">

@@ -9,7 +9,7 @@ import { MessageReactionsCluster } from './MessageReactionsCluster';
 import { MessageReactionsExpanded } from './MessageReactionsExpanded';
 
 
-// Container-tier reaction chrome — auto-mounted by `MessageContainer`, NOT slots (§6).
+// Frame chrome — auto-mounted by `MessageFrame`, NOT slots (§6).
 // The envelope carries author-free PILLS; the who-reacted DETAILS load lazily via
 // `getReactionDetails`. These stories mount the pieces directly inside a
 // `MessageProvider` (the context the timeline's dispatch layer supplies) to show each

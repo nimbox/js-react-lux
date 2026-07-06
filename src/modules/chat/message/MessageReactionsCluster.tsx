@@ -13,7 +13,7 @@ import { MessageReactionDetails } from './MessageReactionDetails';
 // `MessageReactionsExpanded`, the cluster does not surface *which*
 // emoji was the viewer's; it only highlights when the viewer reacted
 // with anything. This is the default form the `MessageReactions`
-// chooser renders (which `MessageContainer` mounts); exposed directly
+// chooser renders (which `MessageFrame` mounts); exposed directly
 // as `Message.ReactionsCluster`. Adding a reaction is a separate
 // affordance (the reaction picker).
 

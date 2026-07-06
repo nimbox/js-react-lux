@@ -1,6 +1,7 @@
 import { useChat } from '../ChatContext';
 import { buildMessageRows } from '../message/buildMessageRows';
 import { MESSAGE_GUTTER, MessageGroup } from '../message/MessageGroup';
+import { MessageFrame } from '../message/MessageFrame';
 import { MessageList } from '../message/MessageList';
 import { MessageProvider } from '../message/MessageProvider';
 import { MessageSeparator } from '../message/MessageSeparator';
@@ -20,7 +21,9 @@ export function ThreadMessage({ message, isFirst, isLast }: { message: BaseMessa
 
     return (
         <MessageProvider message={message} isFirst={isFirst} isLast={isLast}>
-            <Renderer message={message} />
+            <MessageFrame>
+                <Renderer message={message} />
+            </MessageFrame>
         </MessageProvider>
     );
 
@@ -29,7 +32,7 @@ export function ThreadMessage({ message, isFirst, isLast }: { message: BaseMessa
 
 // One message rendered inside its own author group (gutter + alignment), with no day
 // separator — the focused unit the single-bubble stories drive. `isFirst` controls the
-// author header; `isLast` the bubble tail and the avatar (both `MessageContainer` chrome).
+// author header; `isLast` the bubble tail and the avatar (both `MessageBubble` chrome).
 export function SingleMessage({ message, isFirst = true, isLast = true }: { message: BaseMessage; isFirst?: boolean; isLast?: boolean }) {
     return (
         <MessageGroup group={{ id: message.id, alignment: message.alignment }}>
@@ -55,7 +58,7 @@ export interface MessageThreadProps {
 // `buildMessageRows` (sort, day separators, author groups, single/marker rows), then
 // render each row kind. `MessageList` owns the sticky-bottom scroll; `MessageGroup`
 // owns the gutter + alignment; `ThreadMessage` dispatches each bubble (the avatar itself
-// is `MessageContainer` chrome, gated on `isLast`, not something `MessageGroup` renders).
+// is `MessageBubble` chrome, gated on `isLast`, not something `MessageGroup` renders).
 export function MessageThread({ messages, markerBeforeId, className }: MessageThreadProps) {
 
     const { formatCalendar } = useChat();
@@ -78,7 +81,7 @@ export function MessageThread({ messages, markerBeforeId, className }: MessageTh
                             </MessageSeparator>
                         );
                     case 'single':
-                        // Ungrouped system event — centered, authorless, so the Container's
+                        // Ungrouped system event — centered, authorless, so the bubble's
                         // avatar chrome (gated on `author != null`) never renders either.
                         return (
                             <div key={row.message.id} className={`${MESSAGE_GUTTER} flex justify-center`}>

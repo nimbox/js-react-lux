@@ -26,25 +26,23 @@ export function ImageMessage({ message, onImageClick }: ImageMessageProps) {
     const view = message.content;
 
     return (
-        <Message.Container>
-            <Message.Bubble>
-                <Message.Author />
-                <Message.Reply />
-                {view?.url && (
-                    <ChatImage
-                        url={view.url}
-                        size={view.size}
-                        alt={view.alt}
-                        onClick={onImageClick}
-                        className={onImageClick ? 'cursor-zoom-in' : undefined}
-                    />
-                )}
-                {view?.caption && (
-                    <Message.Body>{renderText(view.caption)}</Message.Body>
-                )}
-                <Message.Properties />
-            </Message.Bubble>
-        </Message.Container>
+        <Message.Bubble>
+            <Message.Author />
+            <Message.Reply />
+            {view?.url && (
+                <ChatImage
+                    url={view.url}
+                    size={view.size}
+                    alt={view.alt}
+                    onClick={onImageClick}
+                    className={onImageClick ? 'cursor-zoom-in' : undefined}
+                />
+            )}
+            {view?.caption && (
+                <Message.Body>{renderText(view.caption)}</Message.Body>
+            )}
+            <Message.Properties />
+        </Message.Bubble>
     );
 
 }

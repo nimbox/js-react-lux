@@ -41,6 +41,7 @@ export * from './message/actions';
 export * from './message/MessageGroup';
 export * from './message/MessageList';
 export * from './message/MessageProvider';
+export * from './message/MessageFrame';
 export { Message } from './message/Message';
 export { MessagePreview } from './message/MessagePreview';
 export * from './message/MessageSeparator';
@@ -48,7 +49,7 @@ export * from './message/renderers';
 export * from './message/useMessageRenderer';
 export * from './message/useMessageOptions';
 export * from './message/MessageOptions';
-// Container-tier auto chrome (NOT slots — mounted by MessageContainer): the
+// Frame chrome (NOT slots — mounted by `MessageFrame`, gated on `plain`): the
 // reactions renderers (chooser + the two forms) and the reaction picker.
 export * from './message/MessageReactions';
 export * from './message/MessageReactionsCluster';

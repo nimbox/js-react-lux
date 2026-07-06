@@ -10,13 +10,11 @@ import { MessagePreview } from '../MessagePreview';
 export function TombstoneMessage() {
 
     return (
-        <Message.Container>
-            <Message.Bubble>
-                <Message.Author />
-                <div className="text-sm italic text-gray-400">Message deleted</div>
-                <Message.Properties />
-            </Message.Bubble>
-        </Message.Container>
+        <Message.Bubble>
+            <Message.Author />
+            <div className="text-sm italic text-gray-400">Message deleted</div>
+            <Message.Properties />
+        </Message.Bubble>
     );
 
 }
