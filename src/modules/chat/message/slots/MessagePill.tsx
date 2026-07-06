@@ -20,7 +20,7 @@ export function MessagePill({ children, className }: MessagePillProps) {
     const { message: { alignment } } = useMessage();
 
     return (
-        <div className={classNames('rounded-xl shadow px-2 py-1', className, {
+        <div className={classNames('rounded-xl shadow px-3 py-1', className, {
             'bg-chat-message-out text-gray-800': alignment === 'end',
             'bg-chat-message-in text-gray-800': alignment === 'start'
         })}>
