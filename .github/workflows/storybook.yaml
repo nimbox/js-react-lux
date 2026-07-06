@@ -8,7 +8,6 @@ on:
 
 permissions:
   contents: read
-  packages: read
   pages: write
   id-token: write
 
@@ -26,8 +25,6 @@ jobs:
           scope: "@nimbox"
       - name: Install dependencies
         run: npm ci
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build Storybook
         run: npm run build:storybook
       - name: Setup Pages
