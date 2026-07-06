@@ -1,5 +1,6 @@
 import { VerticalDotsIcon } from '@nimbox/icons-react';
 import { Menu } from '../../../components/menu/Menu';
+import { CHAT_ICON_TRIGGER } from '../utils/iconTrigger';
 import { useConversation } from './ConversationContext';
 import { useConversationOptions } from './useConversationOptions';
 
@@ -29,7 +30,7 @@ export function ConversationOptions() {
             trigger={
                 <button
                     type="button"
-                    className="p-1 bg-white/90 shadow rounded-full cursor-pointer text-gray-500 hover:text-gray-700"
+                    className={CHAT_ICON_TRIGGER}
                 >
                     <VerticalDotsIcon className="w-4 h-4" />
                 </button>
