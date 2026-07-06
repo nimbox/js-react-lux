@@ -3,7 +3,7 @@ import React, { Children, type Dispatch, type ReactNode, type SetStateAction, us
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../../components/Button';
 import { Input } from '../../../components/inputs/Input';
-import { useMessageRenderer } from '../message/useMessageRenderer';
+import { MessageReplyQuote } from '../message/MessageReplyQuote';
 import type { BaseMessage } from '../types/BaseMessage';
 
 
@@ -121,24 +121,19 @@ function ReplyToMessage(props: ReplyToMessageProps) {
 
     const { replyTo, onClearReplyTo } = props;
 
-    // Renders the replied-to message compactly through the message registry at the
-    // `preview` surface — the same path the timeline reply-quote uses (there is no
-    // separate reply stack). The composer owns only the banner chrome.
-    const resolveRenderer = useMessageRenderer();
-
     // Render
 
     if (!replyTo) {
         return null;
     }
 
-    const Preview = resolveRenderer(replyTo, 'preview');
-
+    // The replied-to message renders through the shared `MessageReplyQuote` chrome —
+    // coloured bar + author name + the `preview` — the exact content the timeline
+    // reply-quote shows, so the banner and the timeline can't drift. The composer owns
+    // only the dismiss affordance.
     return (
         <div className="px-4 py-2 flex items-center justify-between gap-2 border-b border-gray-200">
-            <div className="flex-1">
-                <Preview message={replyTo} />
-            </div>
+            <MessageReplyQuote message={replyTo} className="flex-1 min-w-0" />
             <div className="flex-none">
                 <Button type="button" semantic="muted" rounded={true} onClick={onClearReplyTo}>
                     <CrossIcon />

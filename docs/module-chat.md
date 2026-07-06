@@ -1084,9 +1084,12 @@ base `ComposerPanel` chrome. There is no imperative submit registry.
   `call-phone-number` are channel-flavoured. The registry *mechanism* + a generic button atom clearly
   belong in the base, but whether those specific kinds + their renderers should move to kit/consumer is
   open.
-- **`authorRenderer` reaches the composer only transitively.** The composer's reply banner renders
-  through the `preview` surface, so it picks up `authorRenderer` for free; but composer-authored
-  previews (e.g. a template preview's author) still don't wire it. Extend it there when that surfaces.
+- **`authorRenderer` reaches the composer's reply banner, not its previews.** The banner and the
+  timeline reply-quote render the *same* shared `MessageReplyQuote` chrome — coloured bar + author via
+  `authorRenderer.name` + the `preview` — because the `preview` surface renders content only, so the
+  author is quote chrome, not content. (They shared the logic by copy at first, which drifted; it now
+  lives in one component.) Composer-authored previews (e.g. a template preview's author) still don't
+  wire it; extend it there when that surfaces.
 - **Dead conversation stories.** `conversation/ConversationList.stories.tsx` still imports base symbols
   removed with the list (`ConversationList`, `buildConversationRows`, `data/conversations`). Rewrite it
   against `DefaultConversation` or delete it.
