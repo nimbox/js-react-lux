@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  packages: read
   pages: write
   id-token: write
 
@@ -21,10 +22,14 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: "24"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@nimbox"
       - name: Install dependencies
         run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build Storybook
-        run: npm run build-storybook
+        run: npm run build:storybook
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
