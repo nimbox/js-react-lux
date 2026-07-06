@@ -1,11 +1,11 @@
 import classNames from 'classnames';
-import { useCallback, useEffect, useMemo, type Dispatch, type ReactNode, type SetStateAction } from 'react';
+import { useCallback, useMemo, type Dispatch, type ReactNode, type SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Input } from '../../../../components/inputs/Input';
 import { type BaseMessage } from '../../types/BaseMessage';
 import { TEMPLATE_CONTEXT_BLOCK, type TemplateContextBlockType, type TemplateContextData } from '../../types/TemplateContextData';
 import { type TemplateData } from '../../types/TemplateData';
-import { useMessageComposer } from '../MessageComposerContext';
+import { MessageProvider } from '../../message/MessageProvider';
 import { ComposerPanel } from './ComposerPanel';
 
 
@@ -25,7 +25,6 @@ export interface ComposerTemplatePanelProps {
     onContextChange: Dispatch<SetStateAction<TemplateContextData | null | undefined>>;
 
     onClose: () => void;
-    onSubmit: (data: TemplatePanelSubmitData) => Promise<void>;
 
     transform: (template: TemplateData, context: TemplateContextData) => BaseMessage;
     render: ({ message }: { message: BaseMessage }) => ReactNode;
@@ -41,11 +40,10 @@ export function ComposerTemplatePanel(props: ComposerTemplatePanelProps) {
         templates,
         name, onNameChange,
         context, onContextChange,
-        onClose, onSubmit,
+        onClose,
         transform, render, background
     } = props;
 
-    const { registerSubmit } = useMessageComposer();
     const { t } = useTranslation();
 
     // State
@@ -58,15 +56,6 @@ export function ComposerTemplatePanel(props: ComposerTemplatePanelProps) {
         if (!t) return;
         onContextChange(initialize(t));
     }, [templates, onNameChange, onContextChange]);
-
-    // Register
-
-    const handleSubmit = useCallback(async () => {
-        if (template != null && name != null && context != null) {
-            onSubmit({ name, context });
-        }
-    }, [template, name, context, onSubmit]);
-    useEffect(() => registerSubmit('template', handleSubmit), [registerSubmit, handleSubmit]);
 
     // Render
 
@@ -322,7 +311,12 @@ function TemplatePreview({ template, context, transform, render: Message, backgr
 
             {preview && (
                 <div className="h-full flex justify-center items-center">
-                    <Message message={preview} />
+                    {/* The preview renders a full-surface instance, whose slots read
+                        `useMessage()` — so the dispatch layer must mount the provider
+                        ("whoever dispatches, provides"), exactly as the timeline does. */}
+                    <MessageProvider message={preview} isFirst isLast>
+                        <Message message={preview} />
+                    </MessageProvider>
                 </div>
             )}
 

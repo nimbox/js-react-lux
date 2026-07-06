@@ -5,8 +5,10 @@ how a consumer wires the module. It is the **authoritative contract** for where 
 lives; the code is its implementation. When a change genuinely needs a different boundary, update
 this doc in the same pass so the doc and the code never drift.
 
-> **Scope.** This covers the **read path** — how a message is rendered. The **composer** is
-> deliberately out of scope here and is treated separately.
+> **Scope.** This covers the **read path** — how a message is rendered. The **composer** (write
+> path) is treated separately, but it now follows the same split: the shell is content-blind base
+> chrome (one send button, one mode-agnostic `onSubmit` the consumer dispatches), and every content
+> panel is the consumer's (or the kit's). Its detailed design is not covered here.
 
 ## 1. What this module is
 
@@ -1007,8 +1009,12 @@ wired:
 - **The tombstone label is fixed.** `TombstoneMessage` renders a built-in "message deleted" string; it
   becomes overridable once the module ships a strings map.
 
-The **composer** is out of scope for this doc, which covers the read path (see the scope note at the
-top).
+The **composer** (write path) is largely out of scope for this doc, which covers the read path (see
+the scope note at the top). It does, though, obey the same base/consumer split: the shell is
+content-blind base chrome — it owns the text input, the one send button, and its in-flight state,
+and exposes a single mode-agnostic `onSubmit` + a `canSubmit` gate; the consumer is the sole submit
+dispatcher (it alone knows which panel is open) and owns every content panel, wrapping each in the
+base `ComposerPanel` chrome. There is no imperative submit registry.
 
 ## 12. Invariants & open edges
 
@@ -1046,7 +1052,9 @@ top).
   (floating sticker, single emoji) has nowhere to mount a `Properties` tick or a `Reply` quote — which
   is exactly why they cannot be auto-injected the way reactions are.
 - **There is no separate reply stack.** Reply quotes and the composer banner render `replyTo` through
-  the *same* `messageRenderers` at the `preview` surface (§6). Do not add a second reply registry.
+  the *same* `messageRenderers` at the `preview` surface (§6). Do not add a second reply registry. The
+  composer shell resolves this itself via `useMessageRenderer` — it takes only `replyTo`, never an
+  injected reply renderer.
 - **Type safety comes from the two-type split (§3), not scattered casts.** `BaseMessage` (author- and
   content-blind) for the base; the discriminated `MessageData<T>` for the consumer/kit, where
   `T extends ChatTypes` bundles the content map and author as one bindings type — **one** generic, not
@@ -1076,7 +1084,9 @@ top).
   `call-phone-number` are channel-flavoured. The registry *mechanism* + a generic button atom clearly
   belong in the base, but whether those specific kinds + their renderers should move to kit/consumer is
   open.
-- **`authorRenderer` does not yet reach the composer.** Extend it there when the composer is tackled.
+- **`authorRenderer` reaches the composer only transitively.** The composer's reply banner renders
+  through the `preview` surface, so it picks up `authorRenderer` for free; but composer-authored
+  previews (e.g. a template preview's author) still don't wire it. Extend it there when that surfaces.
 - **Dead conversation stories.** `conversation/ConversationList.stories.tsx` still imports base symbols
   removed with the list (`ConversationList`, `buildConversationRows`, `data/conversations`). Rewrite it
   against `DefaultConversation` or delete it.

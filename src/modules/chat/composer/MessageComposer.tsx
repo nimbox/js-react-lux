@@ -1,21 +1,11 @@
-import React, { Children, type Dispatch, type ReactNode, type SetStateAction, useCallback, useRef, useState } from 'react';
+import { CrossIcon, SendIcon } from '@nimbox/icons-react';
+import React, { Children, type Dispatch, type ReactNode, type SetStateAction, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../../components/Button';
 import { Input } from '../../../components/inputs/Input';
-import { CrossIcon, SendIcon } from '@nimbox/icons-react';
+import { useMessageRenderer } from '../message/useMessageRenderer';
 import type { BaseMessage } from '../types/BaseMessage';
-import { MessageComposerContext } from './MessageComposerContext';
 
-
-// Renders the replied-to message compactly in the composer's banner. The
-// consumer supplies it (typically routing through the message registry's
-// `preview` surface); the composer owns only the banner chrome.
-type RenderReplyTo = (props: { message: BaseMessage }) => ReactNode;
-
-
-export interface MessageComposerSubmitData {
-    value: string;
-}
 
 export interface MessageComposerProps {
 
@@ -25,10 +15,10 @@ export interface MessageComposerProps {
     end?: ReactNode;
 
     replyTo?: BaseMessage;
-    renderReplyTo?: RenderReplyTo;
     onClearReplyTo?: () => void;
 
-    onSubmit: (data: MessageComposerSubmitData) => Promise<void>;
+    canSubmit?: boolean;
+    onSubmit: () => void | Promise<void>;
 
     className?: string;
     children?: ReactNode;
@@ -39,23 +29,12 @@ export function MessageComposer(props: MessageComposerProps) {
 
     // State
 
-    const { start, value, onChange, end, replyTo, renderReplyTo, onClearReplyTo, onSubmit, className, children } = props;
+    const { start, value, onChange, end, replyTo, onClearReplyTo, canSubmit, onSubmit, className, children } = props;
     const { t } = useTranslation();
 
     const expanded = Children.toArray(children).some(Boolean);
 
-    // Shared Submit Handlers
-
-    const submits = useRef(new Map<string, () => Promise<void>>());
-    const registerSubmit = useCallback((panel: string, fn: () => Promise<void>) => {
-        submits.current.set(panel, fn);
-        return () => {
-            if (submits.current.get(panel) === fn) {
-                submits.current.delete(panel);
-            }
-        };
-    }, []);
-
+    const submittable = canSubmit ?? true;
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     // Handlers
@@ -66,14 +45,12 @@ export function MessageComposer(props: MessageComposerProps) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!submittable || isSubmitting) {
+            return;
+        }
         try {
             setIsSubmitting(true);
-            if (submits.current.size > 0) {
-                const fns = Array.from(submits.current.values());
-                await Promise.allSettled(fns.map(fn => fn()));
-            } else {
-                await onSubmit({ value });
-            }
+            await onSubmit();
         } finally {
             setIsSubmitting(false);
         }
@@ -83,53 +60,50 @@ export function MessageComposer(props: MessageComposerProps) {
     // Render
 
     return (
-        <MessageComposerContext.Provider value={{ registerSubmit }}>
-            <div className={className}>
-                <form onSubmit={handleSubmit} className="h-full">
-                    <div className="h-full flex flex-col bg-white rounded-3xl overflow-hidden">
+        <div className={className}>
+            <form onSubmit={handleSubmit} className="h-full">
+                <div className="h-full flex flex-col bg-white rounded-3xl overflow-hidden">
 
-                        {expanded &&
-                            <div className="relative min-h-0 flex-1 border-b border-gray-200">
-                                {children}
-                            </div>
-                        }
+                    {expanded &&
+                        <div className="relative min-h-0 flex-1 border-b border-gray-200">
+                            {children}
+                        </div>
+                    }
 
-                        <div className="shrink-0 flex flex-col">
+                    <div className="shrink-0 flex flex-col">
 
-                            <ReplyToMessage
-                                replyTo={replyTo}
-                                onClearReplyTo={onClearReplyTo}
-                                renderReplyTo={renderReplyTo}
-                            />
+                        <ReplyToMessage
+                            replyTo={replyTo}
+                            onClearReplyTo={onClearReplyTo}
+                        />
 
-                            <div className="p-4 flex flex-row justify-end items-center gap-2">
-                                {!expanded && (
-                                    <>
-                                        {start}
-                                        <Input
-                                            variant="plain"
-                                            placeholder={t('chat.composer.placeholder', { defaultValue: 'Type a message...' })}
-                                            value={value}
-                                            onChange={handleValueChange}
-                                            className="text-lg"
-                                            fieldClassName="px-2"
-                                        />
-                                        {end}
-                                    </>
-                                )}
+                        <div className="p-4 flex flex-row justify-end items-center gap-2">
+                            {!expanded && (
+                                <>
+                                    {start}
+                                    <Input
+                                        variant="plain"
+                                        placeholder={t('chat.composer.placeholder', { defaultValue: 'Type a message...' })}
+                                        value={value}
+                                        onChange={handleValueChange}
+                                        className="text-lg"
+                                        fieldClassName="px-2"
+                                    />
+                                    {end}
+                                </>
+                            )}
 
-                                <Button type='submit' semantic="primary" rounded={true} disabled={isSubmitting} className="flex-none">
-                                    <SendIcon />
-                                </Button>
-
-                            </div>
+                            <Button type='submit' semantic="primary" rounded={true} disabled={isSubmitting || !submittable} className="flex-none">
+                                <SendIcon />
+                            </Button>
 
                         </div>
 
                     </div>
-                </form>
-            </div>
-        </MessageComposerContext.Provider>
+
+                </div>
+            </form>
+        </div>
     );
 
 }
@@ -137,7 +111,6 @@ export function MessageComposer(props: MessageComposerProps) {
 interface ReplyToMessageProps {
 
     replyTo?: BaseMessage;
-    renderReplyTo?: RenderReplyTo;
     onClearReplyTo?: () => void;
 
 }
@@ -146,21 +119,26 @@ function ReplyToMessage(props: ReplyToMessageProps) {
 
     // State
 
-    const { replyTo, renderReplyTo: RenderReplyTo, onClearReplyTo } = props;
+    const { replyTo, onClearReplyTo } = props;
+
+    // Renders the replied-to message compactly through the message registry at the
+    // `preview` surface — the same path the timeline reply-quote uses (there is no
+    // separate reply stack). The composer owns only the banner chrome.
+    const resolveRenderer = useMessageRenderer();
 
     // Render
 
-    if (!replyTo || !RenderReplyTo) {
+    if (!replyTo) {
         return null;
     }
 
+    const Preview = resolveRenderer(replyTo, 'preview');
+
     return (
         <div className="px-4 py-2 flex items-center justify-between gap-2 border-b border-gray-200">
-            {RenderReplyTo && (
-                <div className="flex-1">
-                    <RenderReplyTo message={replyTo} />
-                </div>
-            )}
+            <div className="flex-1">
+                <Preview message={replyTo} />
+            </div>
             <div className="flex-none">
                 <Button type="button" semantic="muted" rounded={true} onClick={onClearReplyTo}>
                     <CrossIcon />

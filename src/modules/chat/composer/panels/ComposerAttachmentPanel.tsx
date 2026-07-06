@@ -5,17 +5,12 @@ import { Input } from '../../../../components/inputs/Input';
 import { CrossIcon, FileIcon, PlusIcon } from '@nimbox/icons-react';
 import { useStableKey } from '../../hooks/useStableKey';
 import { mediaSize } from '../../utils/mediaSize';
-import { useMessageComposer } from '../MessageComposerContext';
 import { ComposerPanel } from './ComposerPanel';
 
 
 export interface Attachment {
     file: File;
     caption?: string;
-}
-
-export interface AttachmentPanelSubmitData {
-    attachments: Attachment[];
 }
 
 export interface ComposerAttachmentPanelProps {
@@ -28,7 +23,6 @@ export interface ComposerAttachmentPanelProps {
     autoOpen?: boolean;
 
     onClose: () => void;
-    onSubmit: (data: AttachmentPanelSubmitData) => Promise<void>;
 
 }
 
@@ -36,10 +30,9 @@ export function ComposerAttachmentPanel(props: ComposerAttachmentPanelProps) {
 
     // Props
 
-    const { type, attachments = [], onAttachmentsChange, autoOpen, onClose, onSubmit } = props;
+    const { type, attachments = [], onAttachmentsChange, autoOpen, onClose } = props;
     const { getKey } = useStableKey<File>();
 
-    const { registerSubmit } = useMessageComposer();
     const { t } = useTranslation();
 
     // State
@@ -126,17 +119,6 @@ export function ComposerAttachmentPanel(props: ComposerAttachmentPanelProps) {
         });
         e.currentTarget.value = '';
     }, [attachments, onAttachmentsChange]);
-
-    // Register
-
-    const handleSubmit = useCallback(async () => {
-        try {
-            await onSubmit({ attachments: attachments });
-        } catch {
-            console.error('Error submitting media panel');
-        }
-    }, [attachments, onSubmit]);
-    useEffect(() => registerSubmit('media', handleSubmit), [registerSubmit, handleSubmit]);
 
     // Render
 

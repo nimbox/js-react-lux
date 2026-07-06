@@ -60,7 +60,7 @@ export * from './types/MessageGroupRow';
 
 export * from './composer/DockedMessageComposer';
 export * from './composer/MessageComposer';
-export * from './composer/MessageComposerContext';
+export * from './composer/panels/ComposerPanel';
 export * from './composer/panels/ComposerAttachmentPanel';
 export * from './composer/panels/ComposerTemplatePanel';
 
