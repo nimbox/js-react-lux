@@ -5,15 +5,11 @@ export * from './types/BaseMessage';
 export * from './types/BaseConversation';
 export * from './types/ChatTypes';
 export * from './types/MessageAction';
-export * from './types/MessageAttachment';
-export * from './types/MessageAuthor';
 export * from './types/MessageData';
 export * from './types/MessageGroupData';
 export * from './types/MessageOption';
 export * from './types/ReactionDetail';
 export * from './types/ReactionPill';
-export * from './types/TemplateContextData';
-export * from './types/TemplateData';
 
 // Export components
 
@@ -62,10 +58,12 @@ export * from './types/MessageGroupRow';
 export * from './composer/DockedMessageComposer';
 export * from './composer/MessageComposer';
 export * from './composer/panels/ComposerPanel';
-export * from './composer/panels/ComposerAttachmentPanel';
-export * from './composer/panels/ComposerTemplatePanel';
 
 export * from './lightbox/MessageLightBox';
+
+// Export utils — library-free defaults a consumer may reuse or override
+
+export * from './utils/mediaSize';
 
 // Export renderers
 

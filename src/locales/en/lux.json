@@ -52,17 +52,6 @@
                 "uploadError": "Failed to upload document",
                 "retry": "Try again",
                 "noPreview": "No preview available"
-            },
-            "template": {
-                "attach": "Attach template",
-                "templates": "Templates",
-                "variables": "Variables",
-                "blocks": {
-                    "header": "Header",
-                    "body": "Body",
-                    "footer": "Footer"
-                },
-                "empty": "No substitution variables"
             }
         },
         "conversation": {

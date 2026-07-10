@@ -52,17 +52,6 @@
                 "uploadError": "Error al subir documento",
                 "retry": "Intentar de nuevo",
                 "noPreview": "No hay vista previa disponible"
-            },
-            "template": {
-                "attach": "Anexar plantilla",
-                "templates": "Plantillas",
-                "variables": "Variables",
-                "blocks": {
-                    "header": "Cabecera",
-                    "body": "Cuerpo",
-                    "footer": "Final"
-                },
-                "empty": "No hay variables de substitución"
             }
         },
         "conversation": {
