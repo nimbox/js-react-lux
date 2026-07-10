@@ -6,6 +6,7 @@ import { MessagePill } from './MessagePill';
 
 export interface MessageBubbleProps {
     children: React.ReactNode;
+    className?: string;
 }
 
 // The tail and the group avatar are the same idea — "this is the group's last
@@ -15,13 +16,13 @@ export interface MessageBubbleProps {
 // split-bubble instance like a sticker, this bubble isn't the widest sibling,
 // but `items-start`/`items-end` aligns every sibling to the same outer edge,
 // so anchoring here lands identically to anchoring on the wider container.)
-export function MessageBubble({ children }: MessageBubbleProps) {
+export function MessageBubble({ children, className }: MessageBubbleProps) {
 
     const { message: { alignment, author }, isLast, plain } = useMessage();
     const { authorRenderer } = useChat();
 
     return (
-        <MessagePill className="relative">
+        <MessagePill className={classNames('relative', className)}>
             {children}
             {!plain && isLast && author != null && (
                 // rem, not px: 1.5em avatar (`Avatar.tsx`) at 1.25rem font-size

@@ -1,5 +1,4 @@
 import React, { createContext, useContext } from 'react';
-import { defaultActionRenderers, type ActionRendererRegistry } from './message/actions';
 import type { MessageRendererRegistry } from './message/renderers';
 import type { BaseMessage } from './types/BaseMessage';
 import type { BaseConversation } from './types/BaseConversation';
@@ -15,7 +14,8 @@ export interface ChatContextProps {
     // ── Message rendering ──────────────────────────────────────────────────────
     // How a message and its parts get painted. `messageRenderers` is the core; the
     // rest paint a piece the base treats as opaque or channel-varying (author, body
-    // text, delivery status, in-message actions).
+    // text, delivery status). In-message action buttons are NOT here — they are
+    // consumer content, composed from the `ChatActionButton` atom (§6/§7).
 
     // Message renderer registry, keyed by message `type` and dimensioned by surface
     // (`full` / `preview` / `summary`, §6). An app maps its own types to renderers;
@@ -48,11 +48,6 @@ export interface ChatContextProps {
     // a formatter: it produces a ReactNode, not a display string.
 
     renderStatus: (status: string) => React.ReactNode;
-
-    // In-message action buttons (template buttons / inline keyboards) dispatch through
-    // this registry, keyed by `action.type`. The library ships `defaultActionRenderers`.
-
-    actionRenderers: ActionRendererRegistry;
 
 
     // ── Message affordances ────────────────────────────────────────────────────
@@ -125,7 +120,6 @@ export const defaultProps: ChatContextProps = {
     },
     renderText: (text) => text,
     renderStatus: defaultRenderStatus,
-    actionRenderers: defaultActionRenderers,
 
     // ── Message affordances ────────────────────────────────────────────────────
     // Empty; the base ships no content-blind option (the consumer supplies

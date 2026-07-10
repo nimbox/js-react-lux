@@ -107,8 +107,10 @@ assumption about `content`'s shape**. It owns:
   (consumer-projected channel truth) and a declarative viewer-**option** set decide which
   affordances render at all (§7).
 - **Structural and decoration slots** (see §6).
-- **The action-button visual registry** — `defaultActionRenderers` (how an action button *looks*),
-  which is a visual vocabulary like an atom, not content.
+- **The action-button atom** — `ChatActionButton` (how an action button *looks* — a labelled
+  link/button), a prop-driven visual primitive like any other atom. The base owns the look and the
+  row slot (`Actions`); it owns **no** action *type* and does **no** dispatch — in-message buttons are
+  consumer content composed from this atom (§6/§7).
 
 ### CORE KIT — `@nimbox/js-react-lux/modules/chat/kits/core`
 
@@ -426,9 +428,9 @@ the name signals the shape:
 | `format<X>` | `(scalar) => string` | formats a value to text | `formatTime`, `formatCalendar`, `formatDuration` |
 | `render<X>` | `(value) => ReactNode` | calls one function (no key) | `renderText`, `renderStatus` |
 | `<x>Renderer` | fixed record of render fns | reads named facets of **one** concept | `authorRenderer` `{ avatar, name }` |
-| `<x>Renderers` | open registry keyed by data | **dispatches by a runtime key** | `messageRenderers` (by `type` × surface), `actionRenderers` (by action type) |
+| `<x>Renderers` | open registry keyed by data | **dispatches by a runtime key** | `messageRenderers` (by `type` × surface) |
 | `get<X>` | `(message) => Promise<data>` | fetches lazy data on demand | `getReactionDetails` |
-| `on<X>` | `(message, …) => void` | notifies a viewer action | `onCreateReaction`, `onDeleteReaction`, `onOpenThread`, `onAction` |
+| `on<X>` | `(message, …) => void` | notifies a viewer action | `onCreateReaction`, `onDeleteReaction`, `onOpenThread` |
 
 The plural carries meaning: **`<x>Renderers` (plural) is an *open, extensible registry* you can
 register into (keyed by a data value like `message.type`); `<x>Renderer` (singular) is the *fixed
@@ -536,9 +538,12 @@ fills: `<Message.Body>{renderText(view.text)}</Message.Body>`. There are **no me
 (`MessageImage` / `Audio` / `Video`): the kit feeds the `ChatImage` / `ChatAudio` / `ChatVideo` atoms
 directly, so a content-reading slot would be redundant.
 
-**`Actions`** (`MessageActions`) — the buttons under a bubble. It takes `actions` as a **prop** (the
-instance passes `content.actions` in), never pulling from the envelope; the action *visual* registry
-(`defaultActionRenderers`) lives in the base.
+**`Actions`** (`MessageActions`) — the buttons under a bubble. Like `Body`/`Header`/`Footer`, it is a
+**pure push container**: the base owns only the row layout (top border + dividers), and the instance
+fills it with `ChatActionButton` atoms. There is **no** `actions` prop, **no** `MessageAction` type,
+and **no** `actionRenderers` registry in the base — an action button is just an atom (exactly like
+`ChatImage`), and interpreting an action's kind is the consumer's job. This mirrors the "no media
+slots" rule above: the base ships the atom + the slot, the consumer composes.
 
 > Rule of thumb: **slots push (children / universal fields); only instances read `content`.**
 
@@ -708,10 +713,12 @@ instances are free to consult their own through the same hook.
 
 Two vocabularies share the word "action"; keep them apart:
 
-- **Content actions** (`MessageAction`, the `Actions` slot, `actionRenderers`) — buttons that are
-  part of the *message* (template buttons, inline keyboards). New: `onAction?: (message, action) =>
-  void` on `ChatContext` gives callback-style buttons (Telegram `callback_data`) a dispatch path;
-  self-contained kinds (`link`, `tel:`) still need none.
+- **Content actions** — the buttons that are part of the *message* (template buttons, inline
+  keyboards). They are **consumer content**, not a base concern: the base ships the `ChatActionButton`
+  atom (the look) and the `Actions` push slot (the row), and the consumer composes them in its
+  instance, wiring each button's behaviour itself (a `tel:`/URL `href`, a clipboard `onClick`, a
+  `callback_data` dispatch). There is **no** base `MessageAction` type, `actionRenderers` registry, or
+  `onAction` callback — an in-message button is just content rendered through an atom.
 - **Viewer options** (`MessageOption`) — operations the viewer performs *on* a message: reply,
   forward, copy, delete, open thread. They are **data**, sharing **one shape with
   `ConversationOption`** — the same model over a different subject:
@@ -893,7 +900,6 @@ machinery:
 ```ts
 interface ChatPack {
     messageRenderers?: MessageRendererRegistry;    // merged by type key — later packs win
-    actionRenderers?: ActionRendererRegistry;
     options?: MessageOption[];                     // appended
 }
 // ChatProvider: packs={[corePack, whatsAppPack, slackPack]} — ordered, inspectable, per-instance
@@ -942,12 +948,10 @@ is an explicit override the consumer owns.
 | `messageOptions` (§7) | optional | the base default set — empty (no content-blind operation survives), ∩ capabilities | add reply/copy/delete/forward… as consumer options |
 | `conversationOptions` (§7) | optional | empty | pin/mute/… as `resolve(conversation) ⇒ Menu.Item` options, ∩ the shared capabilities |
 | `reactionEmojis` (§7) | optional | a short plain-unicode emoji list for the reaction picker | your emoji vocabulary |
-| `onAction` (§7) | optional | **absent** — self-contained content actions only | callback-style content buttons (Telegram `callback_data`) |
 | `onOpenThread` (§7) | optional | **absent** — thread summaries render inert | thread navigation |
 | `formatTime` | optional | built-in `Intl`/`Date` (e.g. `toLocaleTimeString`) | a date library / custom format |
 | `formatCalendar` | optional | built-in `Intl`/`Date` | a date library |
 | `formatDuration` | optional | arithmetic `m:ss` / `h:mm:ss` | — |
-| `actionRenderers` | optional | `defaultActionRenderers` — a plain `<button>` with the action's `text`, no icons | per action kind |
 | `onCreateReaction` / `onDeleteReaction` | optional | **absent** — no reaction picker; pills still display | let the viewer react |
 | `getReactionDetails` | optional | **absent** — pills still show; the who-reacted popover is unavailable | lazy reaction details (§6) |
 
@@ -962,7 +966,7 @@ Not on `ChatContext`: **instance props** — instance-specific behavior (e.g. th
 message either — they come from the option system, §7.)
 
 **The library-free rule for defaults.** A default that reached for a third-party dependency — a
-markdown renderer for `renderText`, an icon set for `renderStatus`/`actionRenderers`, `date-fns` for
+markdown renderer for `renderText`, an icon set for `renderStatus`, `date-fns` for
 the formatters — would drag that weight onto every consumer and undercut "portable base." So the
 shipped defaults stay pure: identity renderers, arithmetic/`Intl` formatters, and plain native
 elements. The consumer opts into anything richer by *overriding* the hook — which is exactly where a
@@ -1062,10 +1066,11 @@ base `ComposerPanel` chrome. There is no imperative submit registry.
   the producer returns `MessageData<HermesChat>` to close the loop. Keep the **handled-vs-possible**
   caveat in mind: `MessageData<T>` is the chosen handled set, not a promise about the wire — keep the
   `UnknownMessage` fallback and never treat a `switch` over it as exhaustive.
-- **Two vocabularies share the word "action" — never conflate them.** Content actions (`MessageAction`,
-  in-message buttons, `actionRenderers`, `onAction`) versus viewer options (`MessageOption`,
-  do-to-message operations, capability-gated, `onSelect`). The names are chosen so a sentence can hold
-  both: "the option to copy a message" vs "the message's reply button".
+- **Two vocabularies share the word "action" — never conflate them.** Content actions (in-message
+  buttons — **consumer content** composed from the `ChatActionButton` atom; no base `MessageAction`
+  type or `actionRenderers` registry) versus viewer options (`MessageOption`, do-to-message
+  operations, capability-gated, `onSelect`). The names are chosen so a sentence can hold both: "the
+  option to copy a message" vs "the message's reply button".
 - **Hover reveal is pure CSS, all of it in `MessageContainer`.** `MessageProvider` renders no DOM (it
   is a pure context producer). `MessageContainer` declares both hover scopes: the **row** root
   (`w-full group`) reveals the reaction picker (hovering bubble→gap→picker never flickers); an inner
@@ -1080,10 +1085,11 @@ base `ComposerPanel` chrome. There is no imperative submit registry.
   ten-minute start, wrong for a consumer fronting a restrictive channel (a Telegram broadcast would
   show a reaction picker it must reject). A multi-channel consumer must project real capabilities per
   conversation; treat "no capabilities supplied" there as a bug, not a default.
-- **Some action kinds may be too channel-specific for the base.** `copy-code`, `call-channel`,
-  `call-phone-number` are channel-flavoured. The registry *mechanism* + a generic button atom clearly
-  belong in the base, but whether those specific kinds + their renderers should move to kit/consumer is
-  open.
+- **Action kinds are the consumer's (RESOLVED).** `copy-code` / `call-channel` / `call-phone-number`
+  and the rest were channel-flavoured, so the whole `MessageAction` type + `actionRenderers` registry
+  were removed from the base entirely; the base now ships only the `ChatActionButton` atom + the
+  `Actions` push slot, and the consumer composes its own kinds in its instance. (Previously open;
+  closed by treating actions as content — the same move as media atoms.)
 - **`authorRenderer` reaches the composer's reply banner, not its previews.** The banner and the
   timeline reply-quote render the *same* shared `MessageReplyQuote` chrome — coloured bar + author via
   `authorRenderer.name` + the `preview` — because the `preview` surface renders content only, so the

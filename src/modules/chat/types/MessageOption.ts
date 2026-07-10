@@ -18,8 +18,9 @@ import type { BaseMessage } from './BaseMessage';
 // labels (e.g. Pin ↔ Unpin, Mark read ↔ Mark unread), which a static
 // field could not express.
 //
-// Distinct from a **content** action (`MessageAction`, a button that
-// is part of the message — a template button / inline keyboard).
+// Distinct from a **content** action — an in-message button (a template
+// button / inline keyboard) that is part of the message, composed by the
+// consumer from the `ChatActionButton` atom (there is no base action type).
 
 export interface MessageMenuItem {
 

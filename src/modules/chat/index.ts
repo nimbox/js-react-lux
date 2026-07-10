@@ -4,7 +4,6 @@ export * from './types/AvatarData';
 export * from './types/BaseMessage';
 export * from './types/BaseConversation';
 export * from './types/ChatTypes';
-export * from './types/MessageAction';
 export * from './types/MessageData';
 export * from './types/MessageGroupData';
 export * from './types/MessageOption';
@@ -33,7 +32,6 @@ export * from './types/ConversationOption';
 
 export * from './message/buildMessageRows';
 export * from './message/MessageContext';
-export * from './message/actions';
 export * from './message/MessageGroup';
 export * from './message/MessageList';
 export * from './message/MessageProvider';
