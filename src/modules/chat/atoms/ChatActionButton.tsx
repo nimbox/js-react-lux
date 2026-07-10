@@ -1,4 +1,3 @@
-import { LinkIcon, ReplyIcon } from '@nimbox/icons-react';
 import classNames from 'classnames';
 import { type ReactNode } from 'react';
 
@@ -19,9 +18,8 @@ export interface ChatActionButtonProps {
     onClick?: () => void;
 
     /**
-     * The leading icon. Defaults by mode — a link glyph for `href`, a reply glyph
-     * otherwise — so the atom needs no per-kind knowledge; override it for a more
-     * specific icon (a phone for a call, a copy glyph for a code, …).
+     * The leading icon. Optional — when omitted the pill is label-only; pass a glyph
+     * fitting the action (a phone for a call, a copy glyph for a code, …).
      */
     icon?: ReactNode;
 
@@ -30,29 +28,41 @@ export interface ChatActionButtonProps {
 }
 
 // The visual for a single action button under a message bubble — a bordered,
-// rounded pill with a leading icon and a centered label. Prop-driven like every
-// atom: it takes resolved primitives (a label + an `href` OR an `onClick`),
+// rounded pill with an optional leading icon and a centered label. Prop-driven like
+// every atom: it takes resolved primitives (a label + an `href` OR an `onClick`),
 // never a domain "action". The consumer maps its own action kinds onto this —
 // lux owns the look, not the semantics. With neither `href` nor `onClick` it is a
 // plain, non-interactive pill.
 export function ChatActionButton({ children, href, external, onClick, icon, className }: ChatActionButtonProps) {
 
-    const leadingIcon = icon ?? (href != null ? <LinkIcon /> : <ReplyIcon />);
-
     const inner = (
         <>
-            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 flex items-center text-base text-gray-500">
-                {leadingIcon}
+            {icon != null && (
+                <span className="flex shrink-0 items-center text-base text-gray-500">
+                    {icon}
+                </span>
+            )}
+            <span
+                className={classNames(
+                    'min-w-0 flex-1 truncate text-center text-sm font-medium text-gray-800',
+                    // Trailing padding mirroring the icon's width keeps the centered
+                    // label balanced within the pill; without an icon it centers on its own.
+                    icon != null && 'pr-3'
+                )}
+            >
+                {children}
             </span>
-            <span className="text-sm font-medium text-gray-800">{children}</span>
         </>
     );
 
     // No outer margin — the host slot owns the rhythm (see the atoms doc). Compact
-    // pill: a leading icon on the left, a centered label. No min-width of its own —
-    // the consumer's message bubble sets a min-width so every action-bearing bubble
-    // (and therefore its full-width buttons) is a consistent size.
-    const base = 'relative block rounded-lg border border-control-border bg-white px-8 py-0.5 text-center';
+    // pill: an inline flex row with an optional leading icon and a label centered in the
+    // space beside it (the label is the flex-1 child, so `text-center` centers it after
+    // the icon, not under it). The label truncates with an ellipsis when the bubble
+    // restricts the width. No min-width of its own — the consumer's message bubble sets a
+    // min-width so every action-bearing bubble (and therefore its full-width buttons) is a
+    // consistent size.
+    const base = 'flex items-center gap-2 rounded-lg border border-control-border bg-white px-2.5 py-0.5';
 
     if (href != null) {
         return (
