@@ -1,4 +1,5 @@
 import { VideoIcon } from '@nimbox/icons-react';
+import { useTranslation } from 'react-i18next';
 import { ChatVideo } from '../../../atoms';
 import { useChat } from '../../../ChatContext';
 import { Message } from '../../../message/Message';
@@ -36,6 +37,7 @@ export function VideoMessage({ message }: MessageInstanceProps<VideoView>) {
 // "Video" label.
 export function VideoMessagePreview(props: MessageInstanceProps) {
 
+    const { t } = useTranslation();
     const view = props.message.content as VideoView | undefined;
 
     return (
@@ -46,7 +48,7 @@ export function VideoMessagePreview(props: MessageInstanceProps) {
                 </MessagePreview.Thumbnail>
             )}
             <MessagePreview.Body>
-                {view?.caption ?? <span className="inline-flex items-center gap-1"><VideoIcon className="w-3.5 h-3.5" />Video</span>}
+                {view?.caption ?? <span className="inline-flex items-center gap-1"><VideoIcon className="w-3.5 h-3.5" />{t('chat.media.video', { defaultValue: 'Video' })}</span>}
             </MessagePreview.Body>
         </MessagePreview.Container>
     );
@@ -58,8 +60,9 @@ export function VideoMessagePreview(props: MessageInstanceProps) {
 
 export function VideoMessageSummary(props: MessageInstanceProps) {
 
+    const { t } = useTranslation();
     const view = props.message.content as VideoView | undefined;
 
-    return <span className="inline-flex items-center gap-1"><VideoIcon className="w-3.5 h-3.5" />{view?.caption ?? 'Video'}</span>;
+    return <span className="inline-flex items-center gap-1"><VideoIcon className="w-3.5 h-3.5" />{view?.caption ?? t('chat.media.video', { defaultValue: 'Video' })}</span>;
 
 }

@@ -1,4 +1,5 @@
 import { ImageIcon } from '@nimbox/icons-react';
+import { useTranslation } from 'react-i18next';
 import { ChatImage } from '../../../atoms';
 import { useChat } from '../../../ChatContext';
 import { Message } from '../../../message/Message';
@@ -54,12 +55,13 @@ export function ImageMessage({ message, onImageClick }: ImageMessageProps) {
 
 export function ImageMessagePreview(props: MessageInstanceProps) {
 
+    const { t } = useTranslation();
     const view = props.message.content as ImageView | undefined;
 
     return (
         <MessagePreview.Container>
             <MessagePreview.Body>
-                <span className="inline-flex items-center gap-1"><ImageIcon className="w-3.5 h-3.5" />{view?.caption ?? 'Photo'}</span>
+                <span className="inline-flex items-center gap-1"><ImageIcon className="w-3.5 h-3.5" />{view?.caption ?? t('chat.media.photo', { defaultValue: 'Photo' })}</span>
             </MessagePreview.Body>
             {view?.url && (
                 <MessagePreview.Thumbnail>
@@ -78,8 +80,9 @@ export function ImageMessagePreview(props: MessageInstanceProps) {
 
 export function ImageMessageSummary(props: MessageInstanceProps) {
 
+    const { t } = useTranslation();
     const view = props.message.content as ImageView | undefined;
 
-    return <span className="inline-flex items-center gap-1"><ImageIcon className="w-3.5 h-3.5" />{view?.caption ?? 'Photo'}</span>;
+    return <span className="inline-flex items-center gap-1"><ImageIcon className="w-3.5 h-3.5" />{view?.caption ?? t('chat.media.photo', { defaultValue: 'Photo' })}</span>;
 
 }

@@ -40,6 +40,8 @@
     "shortcuts": "Shortcuts",
     "chat": {
         "clickToRemove": "Click to remove",
+        "messageDeleted": "Message deleted",
+        "newMessages": "New messages",
         "composer": {
             "placeholder": "Type a message...",
             "image": {
@@ -58,6 +60,17 @@
             "message": {
                 "empty": "Nothing yet..."
             }
+        },
+        "lightbox": {
+            "title": "Preview",
+            "imageAlt": "Image preview"
+        },
+        "media": {
+            "photo": "Photo",
+            "video": "Video",
+            "voiceMessage": "Voice message",
+            "document": "Document",
+            "sticker": "Sticker"
         }
     }
 }

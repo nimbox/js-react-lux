@@ -1,4 +1,5 @@
 import { FileIcon } from '@nimbox/icons-react';
+import { useTranslation } from 'react-i18next';
 import { ChatDocument } from '../../../atoms';
 import { useChat } from '../../../ChatContext';
 import { Message } from '../../../message/Message';
@@ -41,12 +42,13 @@ export function DocumentMessage({ message }: MessageInstanceProps<DocumentView>)
 
 export function DocumentMessagePreview(props: MessageInstanceProps) {
 
+    const { t } = useTranslation();
     const view = props.message.content as DocumentView | undefined;
 
     return (
         <MessagePreview.Container>
             <MessagePreview.Body>
-                <span className="inline-flex items-center gap-1"><FileIcon className="w-3.5 h-3.5" />{view?.filename ?? view?.caption ?? 'Document'}</span>
+                <span className="inline-flex items-center gap-1"><FileIcon className="w-3.5 h-3.5" />{view?.filename ?? view?.caption ?? t('chat.media.document', { defaultValue: 'Document' })}</span>
             </MessagePreview.Body>
         </MessagePreview.Container>
     );
@@ -58,8 +60,9 @@ export function DocumentMessagePreview(props: MessageInstanceProps) {
 
 export function DocumentMessageSummary(props: MessageInstanceProps) {
 
+    const { t } = useTranslation();
     const view = props.message.content as DocumentView | undefined;
 
-    return <span className="inline-flex items-center gap-1"><FileIcon className="w-3.5 h-3.5" />{view?.filename ?? view?.caption ?? 'Document'}</span>;
+    return <span className="inline-flex items-center gap-1"><FileIcon className="w-3.5 h-3.5" />{view?.filename ?? view?.caption ?? t('chat.media.document', { defaultValue: 'Document' })}</span>;
 
 }

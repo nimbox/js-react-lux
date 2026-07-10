@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { ChatSticker } from '../../../atoms';
 import { Message } from '../../../message/Message';
 import { type MessageInstanceProps } from '../../../message/MessageProvider';
@@ -40,6 +41,8 @@ export function StickerMessage({ message }: MessageInstanceProps<ImageView>) {
 
 export function StickerMessageSummary() {
 
-    return <>Sticker</>;
+    const { t } = useTranslation();
+
+    return <>{t('chat.media.sticker', { defaultValue: 'Sticker' })}</>;
 
 }

@@ -1010,8 +1010,13 @@ wired:
 - **The bubble width cap is hard-coded.** `MessageContainer` caps the bubble at `max-w-[75%]` inline
   rather than through a theme token, so the "geometry stays themable" residue from §4 is incomplete: a
   feed-style presentation is buildable in principle, but the cap can't be overridden yet.
-- **The tombstone label is fixed.** `TombstoneMessage` renders a built-in "message deleted" string; it
-  becomes overridable once the module ships a strings map.
+- **Strings — RESOLVED (lux ships its own i18n).** Every user-facing label the base + core kit render
+  (tombstone, the unread-marker, lightbox chrome, and the kit's photo/video/voice/document/sticker
+  labels) goes through lux's **own** react-i18next namespace — `t('chat.…', { defaultValue })` in the
+  `lux` namespace, with English **and** Spanish shipped in `src/locales/*/lux.json`. lux is
+  opinionated: it provides its own labels and renders them out of the box (the `defaultValue`). A
+  consumer relabels or relocalizes by overriding the `lux` namespace with its own locale resources —
+  **never** by passing strings into the chat. There is no `strings` prop.
 
 The **composer** (write path) is largely out of scope for this doc, which covers the read path (see
 the scope note at the top). It does, though, obey the same base/consumer split: the shell is

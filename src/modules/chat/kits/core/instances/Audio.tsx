@@ -1,4 +1,5 @@
 import { AudioIcon } from '@nimbox/icons-react';
+import { useTranslation } from 'react-i18next';
 import { ChatAudio } from '../../../atoms';
 import { useChat } from '../../../ChatContext';
 import { Message } from '../../../message/Message';
@@ -34,12 +35,14 @@ export function AudioMessage({ message }: MessageInstanceProps<AudioView>) {
 
 export function AudioMessagePreview(props: MessageInstanceProps) {
 
+    const { t } = useTranslation();
     const { formatDuration } = useChat();
     const view = props.message.content as AudioView | undefined;
 
+    const voiceMessage = t('chat.media.voiceMessage', { defaultValue: 'Voice message' });
     const label = view?.duration != null
-        ? `Voice message · ${formatDuration(view.duration)}`
-        : 'Voice message';
+        ? `${voiceMessage} · ${formatDuration(view.duration)}`
+        : voiceMessage;
 
     return (
         <MessagePreview.Container>
@@ -56,6 +59,8 @@ export function AudioMessagePreview(props: MessageInstanceProps) {
 
 export function AudioMessageSummary() {
 
-    return <span className="inline-flex items-center gap-1"><AudioIcon className="w-3.5 h-3.5" />Voice message</span>;
+    const { t } = useTranslation();
+
+    return <span className="inline-flex items-center gap-1"><AudioIcon className="w-3.5 h-3.5" />{t('chat.media.voiceMessage', { defaultValue: 'Voice message' })}</span>;
 
 }

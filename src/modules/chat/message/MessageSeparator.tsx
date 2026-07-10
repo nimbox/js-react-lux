@@ -1,5 +1,6 @@
 import classnames from 'classnames';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 
 // MessageSeparator
@@ -45,6 +46,7 @@ export interface MessageSeparatorPillProps {
 export function MessageSeparatorPill(props: MessageSeparatorPillProps) {
 
     const { className, children } = props;
+    const { t } = useTranslation();
 
     return (
         <div className={classnames(
@@ -53,7 +55,7 @@ export function MessageSeparatorPill(props: MessageSeparatorPillProps) {
             'mx-3',
             className
         )}>
-            {children || 'New messages'}
+            {children || t('chat.newMessages', { defaultValue: 'New messages' })}
         </div>
     );
 }

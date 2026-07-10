@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../../../components/Button';
 import { CrossIcon } from '@nimbox/icons-react';
 import type { BaseMessage } from '../types/BaseMessage';
@@ -12,6 +13,7 @@ interface MessageLightBoxProps {
 export function MessageLightBox(props: MessageLightBoxProps) {
 
     const { message, onClose } = props;
+    const { t } = useTranslation();
     // The lightbox opens on an image message; the URL comes from its content view
     // (the kit's `ImageView`). Content is opaque to the base, so read defensively.
     const url = (message?.content as { url?: string } | undefined)?.url;
@@ -20,7 +22,7 @@ export function MessageLightBox(props: MessageLightBoxProps) {
         <div className="absolute inset-8 min-h-0 flex flex-col items-center justify-center bg-white rounded-lg shadow-lg">
 
             <div className="w-full flex-none p-4 flex flex-row justify-between items-center gap-4">
-                <div className="text-lg font-medium truncate">Preview</div>
+                <div className="text-lg font-medium truncate">{t('chat.lightbox.title', { defaultValue: 'Preview' })}</div>
                 <Button type='button' semantic="muted" rounded={true} onClick={onClose}>
                     <CrossIcon />
                 </Button>
@@ -47,6 +49,7 @@ interface LightBoxImageProps {
 
 export function LightBoxImage({ src, alt }: LightBoxImageProps) {
 
+    const { t } = useTranslation();
     const [scale, setScale] = useState(1);
     const [translate, setTranslate] = useState({ x: 0, y: 0 });
     const [isPanning, setIsPanning] = useState(false);
@@ -211,7 +214,7 @@ export function LightBoxImage({ src, alt }: LightBoxImageProps) {
             onPointerCancel={handlePointerUp}
             onDoubleClick={handleDoubleClick}
             role="img"
-            aria-label={alt || 'Image preview'}
+            aria-label={alt || t('chat.lightbox.imageAlt', { defaultValue: 'Image preview' })}
         >
             <div className="w-full h-full touch-none select-none">
                 <img
