@@ -57,8 +57,6 @@ export * from './composer/DockedMessageComposer';
 export * from './composer/MessageComposer';
 export * from './composer/panels/ComposerPanel';
 
-export * from './lightbox/MessageLightBox';
-
 // Export utils — library-free defaults a consumer may reuse or override
 
 export * from './utils/mediaSize';

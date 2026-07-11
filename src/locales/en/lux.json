@@ -38,6 +38,9 @@
     "minutes": "Minutes",
     "loading": "Loading...",
     "shortcuts": "Shortcuts",
+    "imageViewer": {
+        "alt": "Image"
+    },
     "chat": {
         "clickToRemove": "Click to remove",
         "messageDeleted": "Message deleted",
@@ -60,10 +63,6 @@
             "message": {
                 "empty": "Nothing yet..."
             }
-        },
-        "lightbox": {
-            "title": "Preview",
-            "imageAlt": "Image preview"
         },
         "media": {
             "photo": "Photo",

@@ -8,6 +8,7 @@ export * from './components/Card';
 export * from './components/Close';
 export * from './components/Delay';
 export * from './components/Dialog';
+export * from './components/ImageViewer';
 export * from './components/displays/Avatar';
 export * from './components/floating/Popper';
 export * from './components/floating/Popup';

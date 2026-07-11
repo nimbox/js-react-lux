@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { type ReactNode } from 'react';
+import { forwardRef, type HTMLAttributes, type ReactNode, type Ref } from 'react';
 
 
 export interface ChatActionButtonProps {
@@ -33,7 +33,14 @@ export interface ChatActionButtonProps {
 // never a domain "action". The consumer maps its own action kinds onto this —
 // lux owns the look, not the semantics. With neither `href` nor `onClick` it is a
 // plain, non-interactive pill.
-export function ChatActionButton({ children, href, external, onClick, icon, className }: ChatActionButtonProps) {
+//
+// Forwards its ref and passes extra props through to the root element, so it can
+// serve as a floating trigger (e.g. a `Menu` clones its trigger with a ref + the
+// open/keyboard handlers) — the pill then doubles as, say, a list-menu button.
+export const ChatActionButton = forwardRef<HTMLElement, ChatActionButtonProps & Omit<HTMLAttributes<HTMLElement>, keyof ChatActionButtonProps>>(function ChatActionButton(
+    { children, href, external, onClick, icon, className, ...rest },
+    ref
+) {
 
     const inner = (
         <>
@@ -67,8 +74,10 @@ export function ChatActionButton({ children, href, external, onClick, icon, clas
     if (href != null) {
         return (
             <a
+                ref={ref as Ref<HTMLAnchorElement>}
                 href={href}
                 {...(external && { target: '_blank', rel: 'noreferrer' })}
+                {...rest}
                 className={classNames(base, 'cursor-pointer hover:bg-gray-50', className)}
             >
                 {inner}
@@ -79,8 +88,10 @@ export function ChatActionButton({ children, href, external, onClick, icon, clas
     if (onClick != null) {
         return (
             <button
+                ref={ref as Ref<HTMLButtonElement>}
                 type="button"
                 onClick={onClick}
+                {...rest}
                 className={classNames(base, 'cursor-pointer hover:bg-gray-50', className)}
             >
                 {inner}
@@ -88,6 +99,6 @@ export function ChatActionButton({ children, href, external, onClick, icon, clas
         );
     }
 
-    return <div className={classNames(base, className)}>{inner}</div>;
+    return <div ref={ref as Ref<HTMLDivElement>} {...rest} className={classNames(base, className)}>{inner}</div>;
 
-}
+});

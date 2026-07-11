@@ -1011,7 +1011,7 @@ wired:
   rather than through a theme token, so the "geometry stays themable" residue from §4 is incomplete: a
   feed-style presentation is buildable in principle, but the cap can't be overridden yet.
 - **Strings — RESOLVED (lux ships its own i18n).** Every user-facing label the base + core kit render
-  (tombstone, the unread-marker, lightbox chrome, and the kit's photo/video/voice/document/sticker
+  (tombstone, the unread-marker, and the kit's photo/video/voice/document/sticker
   labels) goes through lux's **own** react-i18next namespace — `t('chat.…', { defaultValue })` in the
   `lux` namespace, with English **and** Spanish shipped in `src/locales/*/lux.json`. lux is
   opinionated: it provides its own labels and renders them out of the box (the `defaultValue`). A
