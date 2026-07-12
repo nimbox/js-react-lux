@@ -85,7 +85,7 @@ export function Menu(props: MenuProps) {
 
             {isOpen &&
                 <FloatingPortal id="modal" >
-                    <div ref={refs.setFloating} {...getFloatingProps()} style={floatingStyles} >
+                    <div ref={refs.setFloating} {...getFloatingProps()} style={floatingStyles} className="outline-none" >
                         <div className="py-1 bg-control-bg border border-control-border rounded shadow min-w-48">
 
                             <MenuContext.Provider value={{ closeMenu: () => setIsOpen(false), activeIndex, getItemProps }}>
@@ -147,8 +147,12 @@ function MenuItem(props: MenuItemProps) {
                 role="menuitem"
                 tabIndex={isActive ? 0 : -1}
                 className={cn(
-                    'w-full px-4 py-2 text-left flex items-center gap-2 rounded-lg hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition-colors',
+                    'w-full px-4 py-2 text-left flex items-center gap-2 rounded-lg focus:outline-none transition-colors',
                     {
+                        // Highlight the single floating-ui active item — it tracks
+                        // both hover (focusItemOnHover) and keyboard navigation, so
+                        // exactly one item is lit at a time.
+                        'bg-gray-100': isActive && !disabled,
                         'opacity-50 cursor-not-allowed': disabled,
                         'cursor-pointer': !disabled
                     },
