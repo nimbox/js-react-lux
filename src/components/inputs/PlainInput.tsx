@@ -9,6 +9,8 @@ import { ControlContext } from './ControlContext';
 
 export interface PlainInputProps {
 
+    ref?: Ref<HTMLInputElement>;
+
     /**
      * Show the input content as disabled.
      */
@@ -21,14 +23,13 @@ export interface PlainInputProps {
 
 }
 
-export const PlainInput = React.forwardRef((
-    props: PlainInputProps & React.InputHTMLAttributes<HTMLInputElement>,
-    inputRef: Ref<HTMLInputElement>
-) => {
+export function PlainInput(props: PlainInputProps & React.InputHTMLAttributes<HTMLInputElement>) {
 
     // Properties
 
     const {
+
+        ref,
 
         disabled,
         error,
@@ -50,7 +51,8 @@ export const PlainInput = React.forwardRef((
 
         <input
 
-            ref={inputRef}
+            ref={ref}
+
             disabled={disabled}
 
             className={cn(
@@ -67,4 +69,4 @@ export const PlainInput = React.forwardRef((
 
     );
 
-});
+}

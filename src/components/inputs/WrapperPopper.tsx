@@ -52,14 +52,13 @@ export interface WrapperPopperProps extends WrapperProps,
 
 }
 
-export const WrapperPopper = React.forwardRef((
-    props: WrapperPopperProps & React.HTMLAttributes<HTMLDivElement>,
-    wrapperRef: Ref<HTMLDivElement>
-) => {
+export function WrapperPopper(props: WrapperPopperProps & React.HTMLAttributes<HTMLDivElement>) {
 
     // Properties
 
     const {
+
+        ref,
 
         // Wrapper
 
@@ -130,7 +129,7 @@ export const WrapperPopper = React.forwardRef((
     }, [isShowControlled, propsOnChangeShow]);
 
     const [internalWrapperRef, setInternalWrapperRef] = useState<HTMLDivElement | null>(null);
-    useImperativeHandle(wrapperRef, () => internalWrapperRef!);
+    useImperativeHandle(ref, () => internalWrapperRef!);
 
     const [internalPopperRef, setInternalPopperRef] = useState<HTMLPopperElement | null>(null);
     useImperativeHandle(popperRef, () => internalPopperRef!);
@@ -252,4 +251,4 @@ export const WrapperPopper = React.forwardRef((
         </>
     );
 
-});
+}

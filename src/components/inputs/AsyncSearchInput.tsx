@@ -1,4 +1,4 @@
-import React, { type Ref } from 'react';
+import React from 'react';
 import { WarningIcon } from '@nimbox/icons-react';
 import { Delay } from '../Delay';
 import { Loading } from '../Loading';
@@ -30,14 +30,12 @@ export interface AsyncSearchInputProps extends SearchInputProps {
 /**
  * 
  */
-export const AsyncSearchInput = React.forwardRef((
-    props: AsyncSearchInputProps & React.InputHTMLAttributes<HTMLInputElement>,
-    ref: Ref<HTMLInputElement>
-) => {
+export function AsyncSearchInput(props: AsyncSearchInputProps & React.InputHTMLAttributes<HTMLInputElement>) {
 
     // Properties
 
     const {
+        ref,
         loading,
         error,
         end,
@@ -60,4 +58,4 @@ export const AsyncSearchInput = React.forwardRef((
         />
     );
 
-});
+}

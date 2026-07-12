@@ -1,4 +1,4 @@
-import { type ChangeEventHandler, forwardRef, type InputHTMLAttributes, type Ref } from 'react';
+import { type ChangeEventHandler, type InputHTMLAttributes, type Ref } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { cn } from '../utilities/cn';
 import { Field, type FieldProps } from './Field';
@@ -9,7 +9,9 @@ import { PlainTextArea } from './PlainTextArea';
 // TextArea
 //
 
-export interface TextAreaProps extends Omit<FieldProps, 'className'> {
+export interface TextAreaProps extends Omit<FieldProps, 'className' | 'ref'> {
+
+    ref?: Ref<HTMLTextAreaElement>;
 
     // Field
 
@@ -55,14 +57,13 @@ export interface TextAreaProps extends Omit<FieldProps, 'className'> {
 
 }
 
-export const TextArea = forwardRef((
-    props: TextAreaProps & InputHTMLAttributes<HTMLTextAreaElement>,
-    textAreaRef: Ref<HTMLTextAreaElement>
-) => {
+export function TextArea(props: TextAreaProps & InputHTMLAttributes<HTMLTextAreaElement>) {
 
     // Properties
 
     const {
+
+        ref,
 
         // Field
 
@@ -122,7 +123,7 @@ export const TextArea = forwardRef((
 
             <PlainTextArea
 
-                ref={textAreaRef}
+                ref={ref}
 
                 disabled={disabled}
                 error={error}
@@ -138,4 +139,4 @@ export const TextArea = forwardRef((
         </Field>
     );
 
-});
+}

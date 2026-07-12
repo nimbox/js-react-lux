@@ -1,4 +1,4 @@
-import { type FocusEvent, forwardRef, type HTMLAttributes, type ReactElement, type Ref, useImperativeHandle, useState } from 'react';
+import { type FocusEvent, type HTMLAttributes, type ReactElement, type Ref, useImperativeHandle, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { type HTMLPopperElement, Popper, type PopperProps } from '../floating/Popper';
 import { cn } from '../utilities/cn';
@@ -92,14 +92,13 @@ export interface FieldPopperProps extends FieldProps,
  * Focusable. Take a look at `Choose` to see how this is done.
  *
  */
-export const FieldPopper = forwardRef((
-    props: FieldPopperProps & HTMLAttributes<HTMLDivElement>,
-    fieldRef: Ref<HTMLDivElement>
-) => {
+export function FieldPopper(props: FieldPopperProps & HTMLAttributes<HTMLDivElement>) {
 
     // Properties
 
     const {
+
+        ref,
 
         // Field
 
@@ -137,7 +136,7 @@ export const FieldPopper = forwardRef((
     // Clone references
 
     const [internalFieldRef, setInternalFieldRef] = useState<HTMLDivElement | null>(null);
-    useImperativeHandle(fieldRef, () => internalFieldRef!);
+    useImperativeHandle(ref, () => internalFieldRef!);
 
     const [internalPopperRef, setInternalPopperRef] = useState<HTMLPopperElement | null>(null);
     useImperativeHandle(popperRef, () => internalPopperRef!);
@@ -225,7 +224,7 @@ export const FieldPopper = forwardRef((
         </>
     );
 
-});
+}
 
 
 const defaultFullBlur = () => null;

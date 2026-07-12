@@ -10,6 +10,8 @@ import { ControlContext } from './ControlContext';
 
 export interface WrapperProps {
 
+    ref?: Ref<HTMLDivElement>;
+
     /**
      * Variant to display the element.
      * @default 'outlined'
@@ -54,14 +56,13 @@ export interface WrapperProps {
  * display. Assume this elements acts as a `div` without any css classes or
  * style.
  */
-export const Wrapper = React.forwardRef((
-    props: WrapperProps & React.HTMLAttributes<HTMLDivElement>,
-    ref: Ref<HTMLDivElement>
-) => {
+export function Wrapper(props: WrapperProps & React.HTMLAttributes<HTMLDivElement>) {
 
     // properties
 
     const {
+
+        ref,
 
         variant = 'outlined',
         disabled,
@@ -217,4 +218,4 @@ export const Wrapper = React.forwardRef((
         </div>
     );
 
-});
+}

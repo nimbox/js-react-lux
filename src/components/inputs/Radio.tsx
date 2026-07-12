@@ -6,7 +6,7 @@ export interface RadioProps extends React.DetailedHTMLProps<React.InputHTMLAttri
     error?: boolean;
 }
 
-export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(({ className, children, ...props }, ref) => {
+export function Radio({ ref, className, children, ...props }: RadioProps) {
 
     return children ?
         (
@@ -28,4 +28,4 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(({ className
             />
         );
 
-});
+}

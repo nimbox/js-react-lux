@@ -1,8 +1,10 @@
-import { forwardRef, type HTMLAttributes, type ReactNode, type Ref } from 'react';
+import { type HTMLAttributes, type ReactNode, type Ref } from 'react';
 import { cn } from '../../../components/utilities/cn';
 
 
 export interface ChatActionButtonProps {
+
+    ref?: Ref<HTMLElement>;
 
     /** The button label. */
     children: ReactNode;
@@ -37,9 +39,8 @@ export interface ChatActionButtonProps {
 // Forwards its ref and passes extra props through to the root element, so it can
 // serve as a floating trigger (e.g. a `Menu` clones its trigger with a ref + the
 // open/keyboard handlers) — the pill then doubles as, say, a list-menu button.
-export const ChatActionButton = forwardRef<HTMLElement, ChatActionButtonProps & Omit<HTMLAttributes<HTMLElement>, keyof ChatActionButtonProps>>(function ChatActionButton(
-    { children, href, external, onClick, icon, className, ...rest },
-    ref
+export function ChatActionButton(
+    { ref, children, href, external, onClick, icon, className, ...rest }: ChatActionButtonProps & Omit<HTMLAttributes<HTMLElement>, keyof ChatActionButtonProps>
 ) {
 
     const inner = (
@@ -101,4 +102,4 @@ export const ChatActionButton = forwardRef<HTMLElement, ChatActionButtonProps & 
 
     return <div ref={ref as Ref<HTMLDivElement>} {...rest} className={cn(base, className)}>{inner}</div>;
 
-});
+}

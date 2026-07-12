@@ -1,4 +1,4 @@
-import React, { type ReactElement, type Ref, useImperativeHandle, useMemo, useState } from 'react';
+import React, { type ReactElement, useImperativeHandle, useMemo, useState } from 'react';
 import tinycolor from 'tinycolor2';
 import defaultSwatches from '../../data/flat-colors';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
@@ -35,14 +35,13 @@ export interface SwatchPickerProps extends Omit<InputPopperProps, 'show' | 'onSh
  * A color picker that allows the user to select a color from a list of
  * swatches.
  */
-export const SwatchPicker = React.forwardRef((
-    props: SwatchPickerProps & React.InputHTMLAttributes<HTMLInputElement>,
-    inputRef: Ref<HTMLInputElement>
-) => {
+export function SwatchPicker(props: SwatchPickerProps & React.InputHTMLAttributes<HTMLInputElement>) {
 
     // Properties
 
     const {
+
+        ref,
 
         // Field
 
@@ -70,7 +69,7 @@ export const SwatchPicker = React.forwardRef((
 
     const [internalValue, handleChangeInternalValue] = useInternalizeValue('', props.defaultValue, props.value, onChange);
     const internalInputRef = useObservableValueRef<HTMLInputElement>(null);
-    useImperativeHandle(inputRef, () => internalInputRef.current!);
+    useImperativeHandle(ref, () => internalInputRef.current!);
 
     const handleFinalize = (value: string): string | null => {
         return value;
@@ -150,7 +149,7 @@ export const SwatchPicker = React.forwardRef((
 
     );
 
-});
+}
 
 
 //

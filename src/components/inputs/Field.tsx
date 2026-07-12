@@ -10,6 +10,8 @@ export type FieldVariant = 'outlined' | 'filled' | 'inlined' | 'plain';
 
 export interface FieldProps {
 
+    ref?: React.Ref<HTMLDivElement>;
+
     // Variant
 
     /**
@@ -118,14 +120,13 @@ export interface FieldProps {
  * The `className` is placed at the base container and it can interact with the
  * layout of the field. Use only for styling font sizes and colors.
  */
-export const Field = React.forwardRef((
-    props: FieldProps & React.HTMLAttributes<HTMLDivElement>,
-    divRef: React.Ref<HTMLDivElement>
-) => {
+export function Field(props: FieldProps & React.HTMLAttributes<HTMLDivElement>) {
 
     // Properties
 
     const {
+
+        ref,
 
         // Field
 
@@ -154,7 +155,7 @@ export const Field = React.forwardRef((
 
         <div
 
-            ref={divRef}
+            ref={ref}
 
             className={cn('lux-crux lux-field', {
 
@@ -232,4 +233,4 @@ export const Field = React.forwardRef((
 
     );
 
-});
+}

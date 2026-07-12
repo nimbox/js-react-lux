@@ -1,4 +1,4 @@
-import React, { type Ref, useImperativeHandle, useRef } from 'react';
+import React, { useImperativeHandle, useRef } from 'react';
 import { CircleCrossIcon, SearchIcon } from '@nimbox/icons-react';
 import { setRefInputValue } from '../utilities/setRefInputValue';
 import { Input, type InputProps } from './Input';
@@ -26,14 +26,13 @@ export interface SearchInputProps extends InputProps {
 
 }
 
-export const SearchInput = React.forwardRef((
-    props: SearchInputProps & React.InputHTMLAttributes<HTMLInputElement>,
-    ref: Ref<HTMLInputElement>
-) => {
+export function SearchInput(props: SearchInputProps & React.InputHTMLAttributes<HTMLInputElement>) {
 
     // Properties
 
     const {
+
+        ref,
 
         loading, // eslint-disable-line @typescript-eslint/no-unused-vars
         loadingError, // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -78,4 +77,4 @@ export const SearchInput = React.forwardRef((
         />
     );
 
-});
+}

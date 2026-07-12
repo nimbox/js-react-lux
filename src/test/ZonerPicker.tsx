@@ -36,7 +36,7 @@ export interface ZonePickerProps {
 
 }
 
-export const ZonePicker = React.forwardRef<HTMLInputElement, ZonePickerProps>((props) => {
+export function ZonePicker(props: ZonePickerProps) {
 
     const { value, onChange, placeholder } = props;
 
@@ -102,4 +102,4 @@ export const ZonePicker = React.forwardRef<HTMLInputElement, ZonePickerProps>((p
         />
     );
 
-});
+}

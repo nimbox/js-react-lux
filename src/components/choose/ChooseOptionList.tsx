@@ -10,6 +10,8 @@ import { DEFAULT_ON_CHOOSE, DEFAULT_RENDER_GROUP_LABEL, DEFAULT_RENDER_OPTION, E
 
 export interface ChooseOptionListProps<O, G = O[]> {
 
+    ref?: Ref<HTMLDivElement>;
+
     /**
      * The data structure representing groups and options. Given a `Group`
      * interface and an `Option` interface, it has to be the case that `options`
@@ -98,14 +100,13 @@ export interface ChooseOptionListProps<O, G = O[]> {
  * [[ 'Yellow', 'Blue', 'Red' ], [ 'Green', 'Purple', 'Orange' ]]
  * ```
  */
-export const ChooseOptionList = React.forwardRef(<O, G = O[]>(
-    props: ChooseOptionListProps<O, G> & React.HTMLAttributes<HTMLDivElement>,
-    ref: Ref<HTMLDivElement>
-) => {
+export function ChooseOptionList<O, G = O[]>(props: ChooseOptionListProps<O, G> & React.HTMLAttributes<HTMLDivElement>) {
 
     // Properties
 
     const {
+
+        ref,
 
         options,
         loading = false,
@@ -219,5 +220,5 @@ export const ChooseOptionList = React.forwardRef(<O, G = O[]>(
         </div>
     );
 
-});
+}
 

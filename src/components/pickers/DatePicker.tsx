@@ -1,5 +1,5 @@
 import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon } from '@nimbox/icons-react';
-import { forwardRef, type InputHTMLAttributes, type ReactElement, type Ref, useImperativeHandle, useMemo, useState } from 'react';
+import { type InputHTMLAttributes, type ReactElement, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
@@ -60,14 +60,13 @@ const namedDays = [
 /**
  * DatePicker. Select a date with one click.
  */
-export const DatePicker = forwardRef((
-    props: DatePickerProps & InputHTMLAttributes<HTMLInputElement>,
-    inputRef: Ref<HTMLInputElement>
-) => {
+export function DatePicker(props: DatePickerProps & InputHTMLAttributes<HTMLInputElement>) {
 
     // Properties
 
     const {
+
+        ref,
 
         // Field
 
@@ -97,7 +96,7 @@ export const DatePicker = forwardRef((
 
     const [internalValue, handleChangeInternalValue] = useInternalizeValue('', props.defaultValue, props.value, onChange);
     const internalInputRef = useObservableValueRef<HTMLInputElement>(null);
-    useImperativeHandle(inputRef, () => internalInputRef.current!);
+    useImperativeHandle(ref, () => internalInputRef.current!);
 
     const handleChange = (date: [number, number, number] | null) => {
         const value = date != null ? formatDate(date) : '';
@@ -168,7 +167,7 @@ export const DatePicker = forwardRef((
 
     );
 
-});
+}
 
 //
 // Calendar

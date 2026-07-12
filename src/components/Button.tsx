@@ -7,6 +7,8 @@ import { cn } from './utilities/cn';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
+    ref?: React.Ref<HTMLButtonElement>;
+
     variant?: 'filled' | 'text' | 'outlined' | 'link';
     semantic?: 'primary' | 'secondary' | 'danger' | 'muted';
     rounded?: boolean;
@@ -24,11 +26,13 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
  * with `variant` and `semantic` selecting the visual treatment and optional
  * `start`/`end` ornaments framing the content.
  */
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
+export function Button(props: ButtonProps) {
 
     // Properties
 
     const {
+
+        ref,
 
         variant = 'filled',
         semantic = 'primary',
@@ -95,4 +99,4 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, r
         </button >
     );
 
-});
+}

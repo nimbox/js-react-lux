@@ -1,4 +1,4 @@
-import { forwardRef, type DetailedHTMLProps, type InputHTMLAttributes } from 'react';
+import { type DetailedHTMLProps, type InputHTMLAttributes } from 'react';
 import { cn } from '../utilities/cn';
 
 
@@ -10,7 +10,7 @@ export interface CheckBoxProps extends DetailedHTMLProps<InputHTMLAttributes<HTM
 
 }
 
-export const CheckBox = forwardRef<HTMLInputElement, CheckBoxProps>(({ className, ...props }, ref) => {
+export function CheckBox({ ref, className, ...props }: CheckBoxProps) {
 
     return (
         <input ref={ref} type="checkbox" {...props}
@@ -26,4 +26,4 @@ export const CheckBox = forwardRef<HTMLInputElement, CheckBoxProps>(({ className
         />
     );
 
-});
+}

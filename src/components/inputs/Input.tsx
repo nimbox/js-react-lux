@@ -1,4 +1,4 @@
-import { type ChangeEventHandler, forwardRef, type InputHTMLAttributes, type Ref, useImperativeHandle } from 'react';
+import { type ChangeEventHandler, type InputHTMLAttributes, type Ref, useImperativeHandle } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { cn } from '../utilities/cn';
@@ -10,7 +10,9 @@ import { PlainInput } from './PlainInput';
 // Input
 //
 
-export interface InputProps extends Omit<FieldProps, 'className'> {
+export interface InputProps extends Omit<FieldProps, 'className' | 'ref'> {
+
+    ref?: Ref<HTMLInputElement>;
 
     // Field
 
@@ -57,14 +59,13 @@ export interface InputProps extends Omit<FieldProps, 'className'> {
  * element. Beware that this `input` is wrapped in a `Field` components when setting
  * the `className`. To style the `Field` use the `fieldClassName` property.
  */
-export const Input = forwardRef((
-    props: InputProps & InputHTMLAttributes<HTMLInputElement>,
-    inputRef: Ref<HTMLInputElement>
-) => {
+export function Input(props: InputProps & InputHTMLAttributes<HTMLInputElement>) {
 
     // Properties
 
     const {
+
+        ref,
 
         // Field
 
@@ -100,7 +101,7 @@ export const Input = forwardRef((
 
     const [internalValue, handleChangeInternalValue] = useInternalizeValue('', props.defaultValue, props.value, onChange);
     const internalInputRef = useObservableValueRef<HTMLInputElement>(null);
-    useImperativeHandle(inputRef, () => internalInputRef.current!);
+    useImperativeHandle(ref, () => internalInputRef.current!);
 
     // Render
 
@@ -142,4 +143,4 @@ export const Input = forwardRef((
         </Field>
     );
 
-});
+}

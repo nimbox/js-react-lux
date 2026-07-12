@@ -1,5 +1,5 @@
 import { AngleDownIcon } from '@nimbox/icons-react';
-import { type ChangeEventHandler, forwardRef, type InputHTMLAttributes, type Ref, useContext } from 'react';
+import { type ChangeEventHandler, type InputHTMLAttributes, type Ref, useContext } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { cn } from '../utilities/cn';
 import { ControlContext } from './ControlContext';
@@ -10,7 +10,9 @@ import { Field, type FieldProps } from './Field';
 // Select
 //
 
-export interface NativeSelectProps extends Omit<FieldProps, 'className'> {
+export interface NativeSelectProps extends Omit<FieldProps, 'className' | 'ref'> {
+
+    ref?: Ref<HTMLSelectElement>;
 
     // Field
 
@@ -52,14 +54,13 @@ export interface NativeSelectProps extends Omit<FieldProps, 'className'> {
 }
 
 
-export const NativeSelect = forwardRef((
-    props: NativeSelectProps & InputHTMLAttributes<HTMLSelectElement>,
-    selectRef: Ref<HTMLSelectElement>
-) => {
+export function NativeSelect(props: NativeSelectProps & InputHTMLAttributes<HTMLSelectElement>) {
 
     // Properties
 
     const {
+
+        ref,
 
         // Field
 
@@ -126,10 +127,9 @@ export const NativeSelect = forwardRef((
 
             <select
 
-                ref={selectRef}
+                ref={ref}
                 disabled={disabled}
 
-                onClick={() => { console.log('clicked'); }}
                 onChange={handleInternalValueChange}
 
                 className={cn(
@@ -155,4 +155,4 @@ export const NativeSelect = forwardRef((
         </Field>
     );
 
-});
+}

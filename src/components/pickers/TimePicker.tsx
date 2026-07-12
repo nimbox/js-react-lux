@@ -1,5 +1,5 @@
 import { AngleDownIcon, AngleUpIcon, CircleIcon, ClockIcon } from '@nimbox/icons-react';
-import React, { type ReactElement, type Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import React, { type ReactElement, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { InputPopper, type InputPopperProps } from '../inputs/InputPopper';
@@ -38,14 +38,13 @@ const minutes = [15, 30, 45];
 /**
  * TimePicker. Select a time with one click.
  */
-export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & React.InputHTMLAttributes<HTMLInputElement>>((
-    props: TimePickerProps & React.InputHTMLAttributes<HTMLInputElement>,
-    inputRef: Ref<HTMLInputElement>
-) => {
+export function TimePicker(props: TimePickerProps & React.InputHTMLAttributes<HTMLInputElement>) {
 
     // Properties
 
     const {
+
+        ref,
 
         // Field
 
@@ -72,7 +71,7 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
 
     const [internalValue, handleChangeInternalValue] = useInternalizeValue('', props.defaultValue, props.value, onChange);
     const internalInputRef = useObservableValueRef<HTMLInputElement>(null);
-    useImperativeHandle(inputRef, () => internalInputRef.current!);
+    useImperativeHandle(ref, () => internalInputRef.current!);
 
     const handleChange = (time: [number, number] | null) => {
         const value = time != null ? formatTime(time) : '';
@@ -138,7 +137,7 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps & R
 
     );
 
-});
+}
 
 //
 // Watch

@@ -1,13 +1,13 @@
+import { WarningIcon } from '@nimbox/icons-react';
 import React, { type Ref, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useOptions, type UseOptionsProps, type UseOptionsSupplier } from '../../hooks/useOptions';
 import { useOptionsCount } from '../../hooks/useOptionsCount';
 import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
-import { WarningIcon } from '@nimbox/icons-react';
 import { ChooseOptionList, type ChooseOptionListProps } from '../choose/ChooseOptionList';
 import { EXTRACTOR } from '../choose/options';
 import { Delay } from '../Delay';
-import { Loading } from '../Loading';
 import { type PopperProps } from '../floating/Popper';
+import { Loading } from '../Loading';
 import { consumeEvent } from '../utilities/consumeEvent';
 import { setRefInputValue } from '../utilities/setRefInputValue';
 import { type InputProps } from './Input';
@@ -23,6 +23,8 @@ export interface AutocompleteProps<O, G = O[]> extends
     InputProps,
     Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'>,
     Pick<ChooseOptionListProps<O, G>, 'extractor' | 'renderEmpty' | 'renderGroupLabel' | 'renderOption'> {
+
+    ref?: Ref<HTMLInputElement>;
 
     // useSearchOptions
 
@@ -53,14 +55,13 @@ export interface AutocompleteProps<O, G = O[]> extends
 /**
  * Autocomplete.
  */
-export const Autocomplete = React.forwardRef(<O, G = O[]>(
-    props: AutocompleteProps<O, G> & React.InputHTMLAttributes<HTMLInputElement>,
-    inputRef: Ref<HTMLInputElement>
-) => {
+export function Autocomplete<O, G = O[]>(props: AutocompleteProps<O, G> & React.InputHTMLAttributes<HTMLInputElement>) {
 
     // Properties
 
     const {
+
+        ref,
 
         // Wrapper
 
@@ -108,7 +109,7 @@ export const Autocomplete = React.forwardRef(<O, G = O[]>(
     // State
 
     const internalInputRef = useRef<HTMLInputElement>(null);
-    useImperativeHandle(inputRef, () => internalInputRef.current!);
+    useImperativeHandle(ref, () => internalInputRef.current!);
 
     // Value
 
@@ -247,4 +248,4 @@ export const Autocomplete = React.forwardRef(<O, G = O[]>(
         </WrapperPopper>
     );
 
-});
+}

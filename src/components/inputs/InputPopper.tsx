@@ -1,4 +1,4 @@
-import { type ChangeEventHandler, forwardRef, type InputHTMLAttributes, type KeyboardEvent, type ReactElement, type Ref, useImperativeHandle, useRef } from 'react';
+import { type ChangeEventHandler, type InputHTMLAttributes, type KeyboardEvent, type ReactElement, type Ref, useImperativeHandle, useRef } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { type PopperProps } from '../floating/Popper';
 import { setRefInputValue } from '../utilities/setRefInputValue';
@@ -12,8 +12,10 @@ import { PlainInput } from './PlainInput';
 //
 
 export interface InputPopperProps extends
-    Omit<FieldProps, 'className'>,
+    Omit<FieldProps, 'className' | 'ref'>,
     Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'> {
+
+    ref?: Ref<HTMLInputElement>;
 
     // Field
 
@@ -82,14 +84,13 @@ export interface InputPopperProps extends
  * 
  * Additionaly this component requires a 
  */
-export const InputPopper = forwardRef((
-    props: InputPopperProps & InputHTMLAttributes<HTMLInputElement>,
-    inputRef: Ref<HTMLInputElement>
-) => {
+export function InputPopper(props: InputPopperProps & InputHTMLAttributes<HTMLInputElement>) {
 
     // Properties
 
     const {
+
+        ref,
 
         // Field
 
@@ -148,7 +149,7 @@ export const InputPopper = forwardRef((
     };
 
     const internalInputRef = useRef<HTMLInputElement>(null);
-    useImperativeHandle(inputRef, () => internalInputRef.current!);
+    useImperativeHandle(ref, () => internalInputRef.current!);
 
     // Handlers
 
@@ -241,4 +242,4 @@ export const InputPopper = forwardRef((
 
     );
 
-});
+}

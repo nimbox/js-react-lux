@@ -1,5 +1,5 @@
 import { arrow as arrowMw, autoUpdate, flip, FloatingPortal, offset, shift, size, useFloating, type Placement as FPlacement } from '@floating-ui/react';
-import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
+import React, { useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 import { cn } from '../utilities/cn';
 import { ControlArrow } from './ControlArrow';
 
@@ -7,6 +7,8 @@ import { ControlArrow } from './ControlArrow';
 export type PopperPlacement = FPlacement;
 
 export interface PopperProps extends React.HTMLAttributes<HTMLDivElement> {
+
+    ref?: React.Ref<HTMLPopperElement>;
 
     reference: Element;
 
@@ -22,11 +24,13 @@ export interface HTMLPopperElement extends HTMLDivElement {
     forceUpdate: (() => void) | null;
 }
 
-export const Popper = forwardRef<HTMLPopperElement, PopperProps>((props, popperRef) => {
+export function Popper(props: PopperProps) {
 
     // Properties
 
     const {
+
+        ref,
 
         reference,
 
@@ -74,7 +78,7 @@ export const Popper = forwardRef<HTMLPopperElement, PopperProps>((props, popperR
         refs.setReference(reference);
     }, [reference, refs]);
 
-    useImperativeHandle(popperRef, () => {
+    useImperativeHandle(ref, () => {
         const el = refs.floating.current as HTMLPopperElement;
         if (el) el.forceUpdate = update ?? null;
         return el;
@@ -96,4 +100,4 @@ export const Popper = forwardRef<HTMLPopperElement, PopperProps>((props, popperR
         </FloatingPortal>
     );
 
-});
+}

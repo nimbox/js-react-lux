@@ -1,4 +1,4 @@
-import React, { Children, forwardRef, type InputHTMLAttributes, type Ref, useMemo } from 'react';
+import React, { Children, type InputHTMLAttributes, type Ref, useMemo } from 'react';
 import { Choose, type ChooseProps } from '../choose/Choose';
 import { type OptionProps } from './Option';
 
@@ -9,20 +9,21 @@ import { type OptionProps } from './Option';
 
 type SelectOption = { value: string, display: React.ReactNode };
 
-export interface SelectProps extends Omit<ChooseProps<SelectOption>, 'supplier' | 'identifier' | 'extractor'> {
+export interface SelectProps extends Omit<ChooseProps<SelectOption>, 'supplier' | 'identifier' | 'extractor' | 'ref'> {
+
+    ref?: Ref<HTMLInputElement>;
 
     children: React.ReactElement<OptionProps>[];
 
 }
 
-export const Select = forwardRef((
-    props: SelectProps & InputHTMLAttributes<HTMLInputElement>,
-    selectRef: Ref<HTMLInputElement>
-) => {
+export function Select(props: SelectProps & InputHTMLAttributes<HTMLInputElement>) {
 
     // Properties
 
     const {
+
+        ref,
 
         children,
 
@@ -52,7 +53,7 @@ export const Select = forwardRef((
 
         <Choose<SelectOption>
 
-            ref={selectRef}
+            ref={ref}
 
             supplier={options}
             identifier={(option) => option.value}
@@ -66,4 +67,4 @@ export const Select = forwardRef((
 
     );
 
-});
+}

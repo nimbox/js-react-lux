@@ -1,4 +1,4 @@
-import type { ElementType, ReactElement } from 'react';
+import type { ElementType, ReactElement, Ref } from 'react';
 import React from 'react';
 import { cn } from './utilities/cn';
 
@@ -20,14 +20,17 @@ interface BaseAnchorProps {
 export type AnchorProps<C extends ElementType = ElementType> = BaseAnchorProps &
     React.AnchorHTMLAttributes<HTMLAnchorElement> &
     React.ComponentPropsWithoutRef<C> & {
+        ref?: Ref<HTMLAnchorElement>;
         component?: C;
     };
 
-export const Anchor = React.forwardRef<HTMLAnchorElement, AnchorProps>((props, ref) => {
+export function Anchor(props: AnchorProps) {
 
     // Properties
 
     const {
+
+        ref,
 
         component: Component = 'a',
 
@@ -94,4 +97,4 @@ export const Anchor = React.forwardRef<HTMLAnchorElement, AnchorProps>((props, r
         </Component>
     );
 
-});
+}

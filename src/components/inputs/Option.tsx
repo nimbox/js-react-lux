@@ -1,8 +1,10 @@
-import React, { forwardRef, type InputHTMLAttributes, type Ref } from 'react';
+import React, { type InputHTMLAttributes, type Ref } from 'react';
 
 export interface OptionProps {
 
-    /** 
+    ref?: Ref<HTMLOptionElement>;
+
+    /**
      * Option value to be used in the parent select.
      */
     value?: string;
@@ -14,15 +16,12 @@ export interface OptionProps {
 
 }
 
-export const Option = forwardRef((
-    props: OptionProps & InputHTMLAttributes<HTMLOptionElement>,
-    optionRef: Ref<HTMLOptionElement>
-) => {
+export function Option(props: OptionProps & InputHTMLAttributes<HTMLOptionElement>) {
 
-    const { children, ...optionProps } = props;
+    const { ref, children, ...optionProps } = props;
 
     return (
-        <option ref={optionRef} {...optionProps}>{children}</option>
+        <option ref={ref} {...optionProps}>{children}</option>
     );
 
-});
+}

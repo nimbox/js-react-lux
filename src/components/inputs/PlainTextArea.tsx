@@ -9,6 +9,8 @@ import { ControlContext } from './ControlContext';
 
 export interface PlainTextAreaProps {
 
+    ref?: Ref<HTMLTextAreaElement>;
+
     /**
      * Show the input content as disabled.
      */
@@ -21,14 +23,13 @@ export interface PlainTextAreaProps {
 
 }
 
-export const PlainTextArea = React.forwardRef((
-    props: PlainTextAreaProps & React.InputHTMLAttributes<HTMLTextAreaElement>,
-    inputRef: Ref<HTMLTextAreaElement>
-) => {
+export function PlainTextArea(props: PlainTextAreaProps & React.InputHTMLAttributes<HTMLTextAreaElement>) {
 
     // Properties
 
     const {
+
+        ref,
 
         disabled,
         error,
@@ -50,7 +51,7 @@ export const PlainTextArea = React.forwardRef((
 
         <textarea
 
-            ref={inputRef}
+            ref={ref}
 
             disabled={disabled}
  
@@ -69,4 +70,4 @@ export const PlainTextArea = React.forwardRef((
 
     );
 
-});
+}

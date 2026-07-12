@@ -14,6 +14,8 @@ import { EXTRACTOR } from './options';
 export interface ChooseOptionProps<O, G = O[]> extends
     Pick<ChooseOptionListProps<O, G>, 'extractor' | 'onChoose' | 'renderEmpty' | 'renderGroupLabel' | 'renderOption'> {
 
+    ref?: Ref<HTMLDivElement>;
+
     /**
      * Add a search input. An exception is thrown at development time if this
      * option is set to true and the supplier is not a function.
@@ -39,14 +41,13 @@ export interface ChooseOptionProps<O, G = O[]> extends
 
 }
 
-export const ChooseOption = React.forwardRef(<O, G = O[]>(
-    props: ChooseOptionProps<O, G> & React.HTMLAttributes<HTMLDivElement>,
-    ref: Ref<HTMLDivElement>
-) => {
+export function ChooseOption<O, G = O[]>(props: ChooseOptionProps<O, G> & React.HTMLAttributes<HTMLDivElement>) {
 
     // Properties
 
     const {
+
+        ref,
 
         withSearch = false,
 
@@ -128,4 +129,4 @@ export const ChooseOption = React.forwardRef(<O, G = O[]>(
         </div>
     );
 
-});
+}

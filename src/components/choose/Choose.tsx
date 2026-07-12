@@ -1,6 +1,6 @@
 import { AngleDownIcon, CircleCrossIcon, WarningIcon } from '@nimbox/icons-react';
 import { isFunction } from 'lodash-es';
-import React, { forwardRef, type KeyboardEvent, type Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { type KeyboardEvent, type Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { type UseOptionChooser } from '../../hooks/useOption';
@@ -23,8 +23,10 @@ import { DEFAULT_RENDER_OPTION, EXTRACTOR } from './options';
 //
 
 export interface ChooseProps<O = string, G = O[]> extends
-    Omit<FieldPopperProps, 'show' | 'onShowChange' | 'renderPopper'>,
+    Omit<FieldPopperProps, 'show' | 'onShowChange' | 'renderPopper' | 'ref'>,
     Pick<ChooseOptionListProps<O, G>, 'extractor' | 'renderEmpty' | 'renderGroupLabel' | 'renderOption'> {
+
+    ref?: Ref<HTMLInputElement>;
 
     // Field
 
@@ -119,14 +121,13 @@ export interface ChooseProps<O = string, G = O[]> extends
  * blur occurs, and (2) when the field is blurred and the popper.
  *
  */
-export const Choose = forwardRef(<O, G = O[]>(
-    props: ChooseProps<O, G> & React.InputHTMLAttributes<HTMLInputElement>,
-    inputRef: Ref<HTMLInputElement>
-) => {
+export function Choose<O, G = O[]>(props: ChooseProps<O, G> & React.InputHTMLAttributes<HTMLInputElement>) {
 
     // Properties
 
     const {
+
+        ref,
 
         // Field
 
@@ -209,7 +210,7 @@ export const Choose = forwardRef(<O, G = O[]>(
     const [internalValue, handleChangeInternalValue] = useInternalizeValue('', props.defaultValue, props.value, onChange);
 
     const internalInputRef = useObservableValueRef<HTMLInputElement>(null);
-    useImperativeHandle(inputRef, () => internalInputRef.current!);
+    useImperativeHandle(ref, () => internalInputRef.current!);
 
     const chosenValue = internalValue;
     const [chosenOption, setChosenOption] = useState<O | undefined>(undefined);
@@ -547,5 +548,5 @@ export const Choose = forwardRef(<O, G = O[]>(
         </FieldPopper>
     );
 
-});
+}
 
