@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import { Avatar } from '../../../components/displays/Avatar';
+import { cn } from '../../../components/utilities/cn';
 
 
 /** Props for `ChatAvatar`. */
@@ -49,7 +49,7 @@ export function ChatAvatar(props: ChatAvatarProps) {
     const { url, initials, color = 'red', backgroundColor, onClick, className } = props;
 
     return (
-        <span onClick={onClick} className={classNames(onClick && 'cursor-pointer', className)}>
+        <span onClick={onClick} className={cn(onClick && 'cursor-pointer', className)}>
             <Avatar inline={false} src={url} alt="avatar" color={color} backgroundColor={backgroundColor}>
                 {initials}
             </Avatar>

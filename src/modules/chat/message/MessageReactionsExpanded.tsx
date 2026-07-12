@@ -1,6 +1,6 @@
 import { arrow, autoUpdate, flip, FloatingArrow, FloatingPortal, offset, shift, useClick, useDismiss, useFloating, useInteractions, type Placement } from '@floating-ui/react';
-import classNames from 'classnames';
 import { useRef, useState } from 'react';
+import { cn } from '../../../components/utilities/cn';
 import type { ReactionPill } from '../types/ReactionPill';
 import { useMessage } from './MessageContext';
 import { MessageReactionDetails } from './MessageReactionDetails';
@@ -24,7 +24,7 @@ export function MessageReactionsExpanded() {
     const sorted = [...reactions].sort((a, b) => b.count - a.count);
 
     return (
-        <div className={classNames(
+        <div className={cn(
             'flex flex-row flex-wrap gap-1 -mt-1 z-10',
             alignment === 'end' ? 'justify-end mr-3' : 'justify-start ml-3'
         )}>
@@ -59,7 +59,7 @@ function ReactionChip({ pill, alignment }: { pill: ReactionPill; alignment: 'sta
             <button
                 ref={refs.setReference}
                 {...getReferenceProps()}
-                className={classNames(
+                className={cn(
                     'flex items-center gap-0.5 bg-white rounded-full shadow-sm border px-2 h-6 text-sm cursor-pointer',
                     pill.highlighted ? 'border-primary-400' : 'border-gray-200'
                 )}

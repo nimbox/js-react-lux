@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import React, { type ReactElement, useRef, useState } from 'react';
+import { cn } from '../utilities/cn';
 import { Field, type FieldProps } from './Field';
 
 
@@ -64,7 +64,7 @@ export const InputField = (props: InputFieldProps): ReactElement => {
             disabled={disabled}
             error={error}
 
-            className={classNames('', fieldClassName)}
+            className={cn('', fieldClassName)}
 
         >
             <input
@@ -77,7 +77,7 @@ export const InputField = (props: InputFieldProps): ReactElement => {
 
                 disabled={disabled}
 
-                className={classNames('lux-control-font outline-none focus:outline-none bg-transparent', className)}
+                className={cn('lux-control-font outline-none focus:outline-none bg-transparent', className)}
 
                 onFocus={() => setHasFocus(true)}
                 onInput={(e) => console.log('e', e)}

@@ -1,8 +1,8 @@
-import classNames from 'classnames';
+import { AngleDownIcon } from '@nimbox/icons-react';
 import React, { createContext, type FC, type LegacyRef, useContext, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
-import { AngleDownIcon } from '@nimbox/icons-react';
 import { type ComponentAlign } from '../ComponentAlign';
+import { cn } from '../utilities/cn';
 
 
 export interface CustomSelectProps {
@@ -44,8 +44,8 @@ export const CustomSelect: CustomSelectComponent = (({ value, label, onChange, a
 
     return (
         <Context.Provider value={{ value, onChange }}>
-            <div className={classNames('relative inline-block w-full', className)}>
-                <div ref={setTarget as LegacyRef<HTMLDivElement> | undefined} tabIndex={0} className={classNames(
+            <div className={cn('relative inline-block w-full', className)}>
+                <div ref={setTarget as LegacyRef<HTMLDivElement> | undefined} tabIndex={0} className={cn(
                     'relative border border-control-border rounded',
                     'focus:border-primary-500 focus:ring-2 focus:ring-primary-500/50',
                     'focus:outline-none',
@@ -53,13 +53,13 @@ export const CustomSelect: CustomSelectComponent = (({ value, label, onChange, a
                 )} onClick={(() => setIsVisible(!isVisible))}>
                     {label(value) || <span>&nbsp;</span>}
                     <div className="absolute top-1/2 right-1">
-                        < AngleDownIcon className={classNames(
+                        < AngleDownIcon className={cn(
                             'stroke-current stroke-2'
                         )} />
                     </div>
                 </div>
                 {isVisible && React.Children.count(children) !== 0 &&
-                    <div ref={setPopper as LegacyRef<HTMLDivElement> | undefined} className={classNames(
+                    <div ref={setPopper as LegacyRef<HTMLDivElement> | undefined} className={cn(
                         'absolute bg-white border border-control-border rounded',
                         {
                             'left-0': align === 'start',
@@ -84,7 +84,7 @@ CustomSelect.Option = (({ value, className, children }) => {
     const onClick = () => context.onChange(value);
 
     return (
-        <div onClick={onClick} className={classNames(
+        <div onClick={onClick} className={cn(
             'block',
             {
                 'text-white bg-primary-500': context.value === value

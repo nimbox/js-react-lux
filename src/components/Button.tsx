@@ -1,6 +1,6 @@
-import classNames from 'classnames';
 import type { ReactElement } from 'react';
 import React from 'react';
+import { cn } from './utilities/cn';
 
 
 // Button
@@ -52,7 +52,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, r
 
             ref={ref}
 
-            className={classNames('lux-crux lux-button', {
+            className={cn('lux-crux lux-button', {
 
                 'lux-crux-empty': children == null,
 

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import classNames from 'classnames';
 import { type ReactNode } from 'react';
+import { cn } from '../utilities/cn';
 import { CheckButton } from './CheckButton';
 
 
@@ -23,7 +23,7 @@ type Story = StoryObj<typeof CheckButton>;
 
 // Templates
 
-const Label = (props: { className?: string, children?: ReactNode }) => <span className={classNames('border-t border-b', props.className)}>{props.children}</span>;
+const Label = (props: { className?: string, children?: ReactNode }) => <span className={cn('border-t border-b', props.className)}>{props.children}</span>;
 
 const CheckButtonTemplate: Story = {
     render: (args) => {

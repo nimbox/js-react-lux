@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import { forwardRef, type DetailedHTMLProps, type InputHTMLAttributes } from 'react';
+import { cn } from '../utilities/cn';
 
 
 export interface CheckBoxProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
@@ -14,7 +14,7 @@ export const CheckBox = forwardRef<HTMLInputElement, CheckBoxProps>(({ className
 
     return (
         <input ref={ref} type="checkbox" {...props}
-            className={classNames(
+            className={cn(
                 'text-primary-500',
                 'border border-control-border checked:border-control-border',
                 'focus:border-primary-500',

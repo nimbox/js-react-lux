@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import { cn } from '../../../components/utilities/cn';
 
 
 // MessageList
@@ -84,7 +84,7 @@ export function MessageList({ className, children }: MessageListProps) {
         <div
             ref={scrollRef}
             onScroll={handleScroll}
-            className={classNames('w-full h-full overflow-y-auto', className)}
+            className={cn('w-full h-full overflow-y-auto', className)}
         >
             <div ref={contentRef} className="w-full min-h-full py-2 flex flex-col justify-end gap-y-2">
                 {children}

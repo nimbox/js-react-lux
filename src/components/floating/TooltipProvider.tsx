@@ -1,6 +1,6 @@
 import { FloatingArrow, FloatingPortal, type Placement, arrow, autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/react';
-import classNames from 'classnames';
 import React, { useEffect, useRef, useState } from 'react';
+import { cn } from '../utilities/cn';
 
 
 interface TooltipProviderProps {
@@ -115,7 +115,7 @@ function Tooltip(props: TooltipProps) {
             <div
                 ref={refs.setFloating}
                 style={floatingStyles}
-                className={classNames('tooltip-element',
+                className={cn('tooltip-element',
                     className,
 
                 )}

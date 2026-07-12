@@ -1,6 +1,6 @@
-import classNames from 'classnames';
-import { type FC } from 'react';
 import { CrossIcon } from '@nimbox/icons-react';
+import { type FC } from 'react';
+import { cn } from './utilities/cn';
 
 
 //
@@ -10,6 +10,6 @@ import { CrossIcon } from '@nimbox/icons-react';
 export const Close: FC<{ onClick: () => void, className?: string }> = ({ onClick, className }) => (
     <CrossIcon
         onClick={onClick}
-        className={classNames('cursor-pointer', className)}
+        className={cn('cursor-pointer', className)}
     />
 );

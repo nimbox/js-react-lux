@@ -1,7 +1,7 @@
-import classNames from 'classnames';
 import { type FocusEvent, forwardRef, type HTMLAttributes, type ReactElement, type Ref, useImperativeHandle, useState } from 'react';
 import { useOnOutsideClick } from '../../hooks/useOnOutsideClick';
 import { type HTMLPopperElement, Popper, type PopperProps } from '../floating/Popper';
+import { cn } from '../utilities/cn';
 import { Field, type FieldProps } from './Field';
 
 
@@ -211,7 +211,7 @@ export const FieldPopper = forwardRef((
 
                     onBlur={handlePopperBlur}
 
-                    className={classNames('bg-control-bg border border-control-border rounded drop-shadow', popperClassName)}
+                    className={cn('bg-control-bg border border-control-border rounded drop-shadow', popperClassName)}
 
                 >
 

@@ -1,7 +1,7 @@
-import classNames from 'classnames';
+import { AngleDownIcon } from '@nimbox/icons-react';
 import { type ChangeEventHandler, forwardRef, type InputHTMLAttributes, type Ref, useContext } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
-import { AngleDownIcon } from '@nimbox/icons-react';
+import { cn } from '../utilities/cn';
 import { ControlContext } from './ControlContext';
 import { Field, type FieldProps } from './Field';
 
@@ -120,7 +120,7 @@ export const NativeSelect = forwardRef((
             withFullWidth={withFullWidth}
             withFullHeight={withFullHeight}
 
-            className={classNames('focus:outline-none', fieldClassName)}
+            className={cn('focus:outline-none', fieldClassName)}
 
         >
 
@@ -132,7 +132,7 @@ export const NativeSelect = forwardRef((
                 onClick={() => { console.log('clicked'); }}
                 onChange={handleInternalValueChange}
 
-                className={classNames(
+                className={cn(
                     'block',
                     '-mr-[1.5em] pr-[1.5em]',
                     'bg-transparent',

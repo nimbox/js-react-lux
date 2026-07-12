@@ -1,7 +1,7 @@
 import { arrow, autoUpdate, flip, FloatingList, FloatingPortal, offset, shift, useClick, useDismiss, useFloating, useInteractions, useListItem, useListNavigation, useRole, type Placement } from '@floating-ui/react';
-import classNames from 'classnames';
 import React, { useRef, useState, type ReactElement, type ReactNode } from 'react';
 import { ControlArrow } from '../floating/ControlArrow';
+import { cn } from '../utilities/cn';
 import { MenuContext, useMenu } from './MenuContext';
 
 
@@ -146,7 +146,7 @@ function MenuItem(props: MenuItemProps) {
                 ref={ref}
                 role="menuitem"
                 tabIndex={isActive ? 0 : -1}
-                className={classNames(
+                className={cn(
                     'w-full px-4 py-2 text-left flex items-center gap-2 rounded-lg hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition-colors',
                     {
                         'opacity-50 cursor-not-allowed': disabled,
@@ -180,7 +180,7 @@ function MenuDivider(props: MenuDividerProps) {
     const { className } = props;
 
     return (
-        <div className={classNames('border-t border-control-border my-1', className)} />
+        <div className={cn('border-t border-control-border my-1', className)} />
     );
 
 }

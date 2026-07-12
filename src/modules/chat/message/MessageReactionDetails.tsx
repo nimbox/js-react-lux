@@ -1,10 +1,10 @@
-import classNames from 'classnames';
+import { WarningIcon } from '@nimbox/icons-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Loading } from '../../../components/Loading';
-import { WarningIcon } from '@nimbox/icons-react';
-import type { ReactionDetail } from '../types/ReactionDetail';
+import { cn } from '../../../components/utilities/cn';
 import { useChat } from '../ChatContext';
+import type { ReactionDetail } from '../types/ReactionDetail';
 import { useMessage } from './MessageContext';
 
 
@@ -35,7 +35,7 @@ export function MessageReactionDetails(props: MessageReactionDetailsProps) {
 
     if (loading) {
         return (
-            <div className={classNames(className, 'flex flex-row justify-end items-center')}>
+            <div className={cn(className, 'flex flex-row justify-end items-center')}>
                 <Loading />
             </div>
         );
@@ -43,7 +43,7 @@ export function MessageReactionDetails(props: MessageReactionDetailsProps) {
 
     if (error || !details || details.length === 0) {
         return (
-            <div className={classNames(className, 'flex flex-row justify-end items-center')}>
+            <div className={cn(className, 'flex flex-row justify-end items-center')}>
                 <WarningIcon className="text-danger-500" />
             </div>
         );

@@ -1,9 +1,9 @@
-import classNames from 'classnames';
+import { AngleDownIcon, AngleUpIcon, CircleIcon, ClockIcon } from '@nimbox/icons-react';
 import React, { type ReactElement, type Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
-import { AngleDownIcon, AngleUpIcon, CircleIcon, ClockIcon } from '@nimbox/icons-react';
 import { InputPopper, type InputPopperProps } from '../inputs/InputPopper';
+import { cn } from '../utilities/cn';
 import { consumeEvent } from '../utilities/consumeEvent';
 import { setRefInputValue } from '../utilities/setRefInputValue';
 
@@ -279,11 +279,11 @@ const Watch = (props: WatchProps): ReactElement => {
                     <tbody className="cursor-pointer">
                         {hours.map(h =>
                             <tr key={h} className="group">
-                                <th className={classNames('group-hover:bg-secondary-500 peer', hourClasses(h))} onClick={() => onTimeChange([h, 0])}>{internalFormatHour(h)}</th>
+                                <th className={cn('group-hover:bg-secondary-500 peer', hourClasses(h))} onClick={() => onTimeChange([h, 0])}>{internalFormatHour(h)}</th>
                                 {minutes.map(m =>
                                     <td key={m}
                                         onClick={() => onTimeChange([h, m])}
-                                        className={classNames(
+                                        className={cn(
                                             'group-hover:text-transparent group-hover:bg-secondary-500',
                                             'peer peer-hover:!text-muted peer-hover:bg-secondary-200 peer-hover:text-[0.75em]!',
                                             'text-muted text-[0.75em]',

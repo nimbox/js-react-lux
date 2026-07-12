@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import { cn } from '../../../components/utilities/cn';
 
 
 /** Props for `ChatVideo`. */
@@ -30,7 +30,7 @@ export function ChatVideo(props: ChatVideoProps) {
     const { url, poster, className } = props;
 
     return (
-        <div className={classNames('relative min-w-16 min-h-16', className)}>
+        <div className={cn('relative min-w-16 min-h-16', className)}>
             <video controls poster={poster} className="max-w-64 max-h-64 rounded shadow">
                 <source src={url} />
                 Your browser does not support the video tag.

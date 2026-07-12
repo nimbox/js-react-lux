@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import { type ReactNode } from 'react';
+import { cn } from '../../../../components/utilities/cn';
 
 
 export interface MessageActionsProps {
@@ -21,7 +21,7 @@ export function MessageActions({ children, className }: MessageActionsProps) {
     }
 
     return (
-        <div className={classNames('mt-1 -mx-3 px-3 pt-1 flex flex-col gap-1 border-t border-control-border', className)}>
+        <div className={cn('mt-1 -mx-3 px-3 pt-1 flex flex-col gap-1 border-t border-control-border', className)}>
             {children}
         </div>
     );

@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { cn } from '../../../../components/utilities/cn';
 import { useMessageRenderer } from '../../message/useMessageRenderer';
 import { type BaseMessage } from '../../types/BaseMessage';
 import { useConversation } from '../ConversationContext';
@@ -17,7 +17,7 @@ export function ConversationMessage({ className }: ConversationMessageProps) {
     const { t } = useTranslation();
 
     return (
-        <div className={classNames('min-w-0', className)}>
+        <div className={cn('min-w-0', className)}>
             {conversation?.lastMessage
                 ? <ConversationMessageContent message={conversation.lastMessage} />
                 : (

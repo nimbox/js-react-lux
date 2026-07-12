@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import { cn } from '../../../../components/utilities/cn';
 import { useChat } from '../../ChatContext';
 import { useConversation } from '../ConversationContext';
 
@@ -24,7 +24,7 @@ export function ConversationMeta({ className }: ConversationMetaProps) {
     const { conversation } = useConversation();
 
     return (
-        <div className={classNames('flex flex-row items-center gap-2', className)}>
+        <div className={cn('flex flex-row items-center gap-2', className)}>
 
             {renderConversationMeta?.(conversation)}
 

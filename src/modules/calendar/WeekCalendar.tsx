@@ -1,6 +1,6 @@
-import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { Fragment } from 'react/jsx-runtime';
+import { cn } from '../../components/utilities/cn';
 import { useWeekCalendar, type WeekCalendarProps } from './useWeekCalendar';
 
 
@@ -17,7 +17,7 @@ export const WeekCalendar = <TData,>(props: WeekCalendarExtendedProps<TData>) =>
     // Render
 
     return (
-        <div className={classNames('h-full w-full flex flex-col', className)}>
+        <div className={cn('h-full w-full flex flex-col', className)}>
 
             <div className="flex-0 flex flex-row"> {/* Header */}
 
@@ -31,7 +31,7 @@ export const WeekCalendar = <TData,>(props: WeekCalendarExtendedProps<TData>) =>
                         return (
                             <div
                                 key={date.toISOString()}
-                                className={classNames(
+                                className={cn(
                                     'flex-1 relative p-2 text-center text-xl border-t border-r border-b border-calendar-border',
                                     {
                                         'bg-calendar-weekend': isWeekend
@@ -85,7 +85,7 @@ export const WeekCalendar = <TData,>(props: WeekCalendarExtendedProps<TData>) =>
                     {calendar.getDays().map(({ date, isWeekend, events }) => (
                         <div
                             key={date.toISOString()}
-                            className={classNames(
+                            className={cn(
                                 'flex-1 relative border-r border-b border-calendar-border',
                                 {
                                     'bg-calendar-weekend': isWeekend

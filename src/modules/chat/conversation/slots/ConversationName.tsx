@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import { cn } from '../../../../components/utilities/cn';
 import { useConversation } from '../ConversationContext';
 
 
@@ -13,7 +13,7 @@ export function ConversationName({ className }: ConversationNameProps) {
     const { conversation } = useConversation();
 
     return (
-        <div className={classNames('font-bold text-gray-900 truncate', className)}>
+        <div className={cn('font-bold text-gray-900 truncate', className)}>
             {conversation.name}
         </div>
     );

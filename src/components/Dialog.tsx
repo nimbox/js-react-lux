@@ -1,7 +1,7 @@
 import { FloatingFocusManager, useDismiss, useFloating, useInteractions, useRole } from '@floating-ui/react';
-import classNames from 'classnames';
 import React, { type FC } from 'react';
 import { Modal } from './Modal';
+import { cn } from './utilities/cn';
 
 
 //
@@ -66,7 +66,7 @@ export const Dialog: DialogComponent = ({ show, onHide, className, children }) =
 };
 
 Dialog.Header = ({ noBorder = false, className, children }) => (
-    <div className={classNames({ 'border-b border-content-border': !noBorder }, className)}>{children}</div>
+    <div className={cn({ 'border-b border-content-border': !noBorder }, className)}>{children}</div>
 );
 
 Dialog.Body = ({ className, children }) => (
@@ -74,5 +74,5 @@ Dialog.Body = ({ className, children }) => (
 );
 
 Dialog.Footer = ({ className, children }) => (
-    <div className={classNames('border-t border-content-border', className)}>{children}</div>
+    <div className={cn('border-t border-content-border', className)}>{children}</div>
 );

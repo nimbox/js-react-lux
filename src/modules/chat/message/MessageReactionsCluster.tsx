@@ -1,6 +1,6 @@
 import { arrow, autoUpdate, flip, FloatingArrow, FloatingPortal, offset, shift, useClick, useDismiss, useFloating, useInteractions, type Placement } from '@floating-ui/react';
-import classNames from 'classnames';
 import { useRef, useState } from 'react';
+import { cn } from '../../../components/utilities/cn';
 import { useMessage } from './MessageContext';
 import { MessageReactionDetails } from './MessageReactionDetails';
 
@@ -46,7 +46,7 @@ export function MessageReactionsCluster() {
     const highlighted = reactions.some(pill => pill.highlighted);
 
     return (
-        <div className={classNames(
+        <div className={cn(
             'flex flex-row -mt-1 z-10',
             alignment === 'end' ? 'justify-end mr-3' : 'justify-start ml-3'
         )}>
@@ -54,7 +54,7 @@ export function MessageReactionsCluster() {
             <button
                 ref={refs.setReference}
                 {...getReferenceProps()}
-                className={classNames(
+                className={cn(
                     'flex items-center gap-0.5 bg-white rounded-full shadow-sm border px-2 h-6 text-sm cursor-pointer',
                     highlighted ? 'border-primary-400' : 'border-gray-200'
                 )}

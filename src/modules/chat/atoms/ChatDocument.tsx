@@ -1,5 +1,5 @@
 import { FileIcon } from '@nimbox/icons-react';
-import classNames from 'classnames';
+import { cn } from '../../../components/utilities/cn';
 import { mediaSize } from '../utils/mediaSize';
 
 
@@ -40,7 +40,7 @@ export function ChatDocument(props: ChatDocumentProps) {
         ? url + (url.includes('?') ? '&download=true' : '?download=true')
         : undefined;
 
-    const tileClassName = classNames(
+    const tileClassName = cn(
         'p-2 flex flex-row gap-2 items-center bg-gray-100 rounded-md hover:bg-gray-200',
         className
     );

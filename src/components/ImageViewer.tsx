@@ -1,6 +1,6 @@
-import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { cn } from './utilities/cn';
 
 
 // A zoom-and-pan image viewer — wheel to zoom, drag to pan, double-click to
@@ -187,7 +187,7 @@ export function ImageViewer({ src, alt, className }: ImageViewerProps) {
     return (
         <div
             ref={containerRef}
-            className={classNames(
+            className={cn(
                 'w-full h-full overflow-hidden rounded-lg bg-gray-100',
                 scale > 1 && (isPanning ? 'cursor-grabbing' : 'cursor-grab'),
                 className

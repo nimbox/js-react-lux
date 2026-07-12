@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import React, { type FC, createContext, useContext } from 'react';
+import { cn } from './utilities/cn';
 
 
 //
@@ -19,7 +19,7 @@ interface TabsComponent extends FC<ContextProps & { className?: string, children
 
 export const Tabs: TabsComponent = ({ value, setValue, className, children }) => (
     <Context.Provider value={{ value, setValue }}>
-        <ul className={classNames('flex flex-row', className)}>
+        <ul className={cn('flex flex-row', className)}>
             {children}
         </ul>
     </Context.Provider>
@@ -30,7 +30,7 @@ const TabsOption: FC<{ value?: string | number | undefined, className?: string, 
     return (
         <li
             onClick={() => context.setValue(value)}
-            className={classNames('px-2 py-2 text-control-border hover:text-primary-700', {
+            className={cn('px-2 py-2 text-control-border hover:text-primary-700', {
                 'text-primary-500 border-b-2 border-primary-500': context.value === value
             }, 'cursor-pointer', className)}
         >

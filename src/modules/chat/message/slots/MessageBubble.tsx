@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import { cn } from '../../../../components/utilities/cn';
 import { useChat } from '../../ChatContext';
 import { useMessage } from '../MessageContext';
 import { MessagePill } from './MessagePill';
@@ -22,14 +22,14 @@ export function MessageBubble({ children, className }: MessageBubbleProps) {
     const { authorRenderer } = useChat();
 
     return (
-        <MessagePill className={classNames('relative', className)}>
+        <MessagePill className={cn('relative', className)}>
             {children}
             {!plain && isLast && author != null && (
                 // rem, not px: 1.5em avatar (`Avatar.tsx`) at 1.25rem font-size
                 // plus 0.25rem margin exactly fills `MessageGroup`'s
                 // `MESSAGE_GUTTER`, at any root font-size — not just the one
                 // it's tuned at.
-                <div className={classNames(
+                <div className={cn(
                     'absolute bottom-0 text-[1.25rem] leading-[1.5rem]',
                     alignment === 'start' ? 'right-full mr-1' : 'left-full ml-1'
                 )}>
@@ -48,7 +48,7 @@ export function MessageArrow({ position }: { position: 'top' | 'bottom' }) {
     const { message: { alignment } } = useMessage();
 
     return (
-        <div className={classNames('absolute w-0 h-0', {
+        <div className={cn('absolute w-0 h-0', {
             'top-[14px]': position === 'top',
             'bottom-[4px]': position === 'bottom'
         }, {

@@ -1,6 +1,6 @@
-import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { Fragment } from 'react';
+import { cn } from '../../components/utilities/cn';
 import { useMonthDayCalendar, type MonthDayCalendarProps } from './useMonthDayCalendar';
 
 
@@ -18,12 +18,12 @@ export const MonthDayCalendar = <TData,>(props: MonthDayCalendarExtendedProps<TD
     const calendar = useMonthDayCalendar(rest);
 
     return (
-        <div className={classNames('h-full w-full flex flex-col', className)}>
+        <div className={cn('h-full w-full flex flex-col', className)}>
             <div className="flex-0 flex flex-row"> {/* Header */}
                 {calendar.getDayHeaders().map(({ date, isWeekend }) => (
                     <div
                         key={dayjs(date).format('ddd')}
-                        className={classNames(
+                        className={cn(
                             'flex-1 p-2 text-center first:border-l border-r border-t border-b border-calendar-border',
                             {
                                 'bg-calendar-weekend': isWeekend
@@ -41,7 +41,7 @@ export const MonthDayCalendar = <TData,>(props: MonthDayCalendarExtendedProps<TD
                         {week.map(({ date, isToday, isWeekend, events }) => (
                             <div
                                 key={date.toISOString()}
-                                className={classNames(
+                                className={cn(
                                     'flex-1 relative first:border-l border-r border-b border-calendar-border p-1',
                                     {
                                         'bg-calendar-weekend': isWeekend,

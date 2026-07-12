@@ -1,6 +1,6 @@
 import { arrow as arrowMw, autoUpdate, flip, FloatingPortal, offset, shift, size, useFloating, type Placement as FPlacement } from '@floating-ui/react';
-import classNames from 'classnames';
 import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
+import { cn } from '../utilities/cn';
 import { ControlArrow } from './ControlArrow';
 
 
@@ -87,7 +87,7 @@ export const Popper = forwardRef<HTMLPopperElement, PopperProps>((props, popperR
             <div
                 ref={refs.setFloating}
                 {...divProps}
-                className={classNames('z-50 popper-element', className)}
+                className={cn('z-50 popper-element', className)}
                 style={floatingStyles}
             >
                 {children}

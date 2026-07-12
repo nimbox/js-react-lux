@@ -1,11 +1,11 @@
-import classNames from 'classnames';
+import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon } from '@nimbox/icons-react';
 import { forwardRef, type InputHTMLAttributes, type ReactElement, type Ref, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
-import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon } from '@nimbox/icons-react';
 import { usePersistentState } from '../../persistent/usePersistentState';
 import { InputPopper, type InputPopperProps } from '../inputs/InputPopper';
+import { cn } from '../utilities/cn';
 import { consumeEvent } from '../utilities/consumeEvent';
 import { setRefInputValue } from '../utilities/setRefInputValue';
 
@@ -326,7 +326,7 @@ const Calendar = (props: CalendarProps): ReactElement => {
     return (
         <div onMouseDown={consumeEvent} className='relative'>
 
-            <div className={classNames('flex flex-row rounded overflow-hidden', className)}>
+            <div className={cn('flex flex-row rounded overflow-hidden', className)}>
 
                 <div className="w-72">
 

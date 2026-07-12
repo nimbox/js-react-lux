@@ -1,6 +1,6 @@
-import classNames from 'classnames';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { cn } from '../../../components/utilities/cn';
 
 
 // MessageSeparator
@@ -16,7 +16,7 @@ export function MessageSeparator(props: MessageSeparatorProps) {
     const { showLine = true, className, children } = props;
 
     return (
-        <div className={classNames(
+        <div className={cn(
             'flex items-center justify-center py-2 px-4',
             className
         )}>
@@ -49,7 +49,7 @@ export function MessageSeparatorPill(props: MessageSeparatorPillProps) {
     const { t } = useTranslation();
 
     return (
-        <div className={classNames(
+        <div className={cn(
             'px-3 py-1 text-xs text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 rounded-full',
             'border border-gray-200 dark:border-gray-700',
             'mx-3',

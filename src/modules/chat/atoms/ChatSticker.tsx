@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import { cn } from '../../../components/utilities/cn';
 
 
 /** Props for `ChatSticker`. */
@@ -39,7 +39,7 @@ export function ChatSticker(props: ChatStickerProps) {
             src={url}
             alt={alt}
 
-            className={classNames('w-24 h-24 object-contain select-none', className)}
+            className={cn('w-24 h-24 object-contain select-none', className)}
 
             loading="lazy"
             decoding="async"

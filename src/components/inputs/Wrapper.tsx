@@ -1,6 +1,6 @@
-import classNames from 'classnames';
 import { isString } from 'lodash-es';
 import React, { type Ref, useContext, useLayoutEffect, useRef, useState } from 'react';
+import { cn } from '../utilities/cn';
 import { ControlContext } from './ControlContext';
 
 
@@ -132,11 +132,11 @@ export const Wrapper = React.forwardRef((
             onFocus={handleFocus}
             onBlur={handleBlur}
 
-            className={classNames(
+            className={cn(
 
                 'relative',
 
-                (variant === 'outlined') && classNames(
+                (variant === 'outlined') && cn(
                     'lux-control-padding',
                     'rounded border',
                     disabled ?
@@ -152,7 +152,7 @@ export const Wrapper = React.forwardRef((
                             )
                 ),
 
-                (variant === 'filled' || variant === 'inlined') && classNames(
+                (variant === 'filled' || variant === 'inlined') && cn(
                     disabled ?
                         'border-b opacity-50' :
                         focus ?
@@ -166,7 +166,7 @@ export const Wrapper = React.forwardRef((
                             )
                 ),
 
-                (variant === 'filled') && classNames(
+                (variant === 'filled') && cn(
                     'lux-control-padding',
                     'bg-primary-100',
                     'rounded-t'
@@ -199,7 +199,7 @@ export const Wrapper = React.forwardRef((
             {start &&
                 <div
                     ref={startRef}
-                    className={classNames('absolute inset-y-0 left-0 flex flex-row justify-start items-center')}
+                    className={cn('absolute inset-y-0 left-0 flex flex-row justify-start items-center')}
                 >
                     {start}
                 </div>
@@ -208,7 +208,7 @@ export const Wrapper = React.forwardRef((
             {end &&
                 <div
                     ref={endRef}
-                    className={classNames('absolute inset-y-0 right-0 flex flex-row justify-end items-center')}
+                    className={cn('absolute inset-y-0 right-0 flex flex-row justify-end items-center')}
                 >
                     {end}
                 </div>

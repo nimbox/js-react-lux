@@ -1,6 +1,6 @@
-import classNames from 'classnames';
 import type { ElementType, ReactElement } from 'react';
 import React from 'react';
+import { cn } from './utilities/cn';
 
 
 
@@ -52,7 +52,7 @@ export const Anchor = React.forwardRef<HTMLAnchorElement, AnchorProps>((props, r
 
             ref={ref}
 
-            className={classNames('lux-crux lux-button cursor-pointer', {
+            className={cn('lux-crux lux-button cursor-pointer', {
 
                 'lux-crux-empty': children == null,
 

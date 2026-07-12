@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import { cn } from '../../../components/utilities/cn';
 import { useChat } from '../ChatContext';
 import type { BaseMessage } from '../types/BaseMessage';
 import { useMessageRenderer } from './useMessageRenderer';
@@ -20,7 +20,7 @@ export function MessageReplyQuote({ message, className }: { message: BaseMessage
 
     return (
         <div
-            className={classNames(
+            className={cn(
                 'max-h-32 px-2 py-1 flex flex-col gap-0.5 bg-gray-100 rounded-lg border-l-4 overflow-hidden',
                 className
             )}

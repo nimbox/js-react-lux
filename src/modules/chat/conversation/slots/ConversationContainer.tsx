@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import { cn } from '../../../../components/utilities/cn';
 import { useConversation } from '../ConversationContext';
 import { ConversationOptions } from '../ConversationOptions';
 
@@ -20,7 +20,7 @@ export function ConversationContainer({ children, className }: ConversationConta
 
     return (
         <div className={
-            classNames(
+            cn(
                 'relative p-3 flex flex-row items-center gap-2 rounded-lg group',
                 'hover:bg-secondary-100', {
                 'bg-primary-100': selected

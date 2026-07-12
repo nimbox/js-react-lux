@@ -1,6 +1,6 @@
-import classNames from 'classnames';
 import { type ChangeEventHandler, forwardRef, type InputHTMLAttributes, type Ref } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
+import { cn } from '../utilities/cn';
 import { Field, type FieldProps } from './Field';
 import { PlainTextArea } from './PlainTextArea';
 
@@ -129,7 +129,7 @@ export const TextArea = forwardRef((
 
                 onChange={handleChangeInternalValue}
 
-                className={classNames(className, { 'w-full': withFullWidth, 'h-full': withFullHeight })}
+                className={cn(className, { 'w-full': withFullWidth, 'h-full': withFullHeight })}
 
                 {...textAreaProps}
 

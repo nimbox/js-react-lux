@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import { forwardRef, type HTMLAttributes, type ReactNode, type Ref } from 'react';
+import { cn } from '../../../components/utilities/cn';
 
 
 export interface ChatActionButtonProps {
@@ -50,7 +50,7 @@ export const ChatActionButton = forwardRef<HTMLElement, ChatActionButtonProps & 
                 </span>
             )}
             <span
-                className={classNames(
+                className={cn(
                     'min-w-0 flex-1 truncate text-center text-sm font-medium text-gray-800',
                     // Trailing padding mirroring the icon's width keeps the centered
                     // label balanced within the pill; without an icon it centers on its own.
@@ -78,7 +78,7 @@ export const ChatActionButton = forwardRef<HTMLElement, ChatActionButtonProps & 
                 href={href}
                 {...(external && { target: '_blank', rel: 'noreferrer' })}
                 {...rest}
-                className={classNames(base, 'cursor-pointer hover:bg-gray-50', className)}
+                className={cn(base, 'cursor-pointer hover:bg-gray-50', className)}
             >
                 {inner}
             </a>
@@ -92,13 +92,13 @@ export const ChatActionButton = forwardRef<HTMLElement, ChatActionButtonProps & 
                 type="button"
                 onClick={onClick}
                 {...rest}
-                className={classNames(base, 'cursor-pointer hover:bg-gray-50', className)}
+                className={cn(base, 'cursor-pointer hover:bg-gray-50', className)}
             >
                 {inner}
             </button>
         );
     }
 
-    return <div ref={ref as Ref<HTMLDivElement>} {...rest} className={classNames(base, className)}>{inner}</div>;
+    return <div ref={ref as Ref<HTMLDivElement>} {...rest} className={cn(base, className)}>{inner}</div>;
 
 });

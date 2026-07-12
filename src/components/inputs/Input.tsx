@@ -1,7 +1,7 @@
-import classNames from 'classnames';
 import { type ChangeEventHandler, forwardRef, type InputHTMLAttributes, type Ref, useImperativeHandle } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
+import { cn } from '../utilities/cn';
 import { Field, type FieldProps } from './Field';
 import { PlainInput } from './PlainInput';
 
@@ -133,7 +133,7 @@ export const Input = forwardRef((
 
                 onChange={handleChangeInternalValue}
 
-                className={classNames(className, { 'w-full': withFullWidth, 'h-full': withFullHeight })}
+                className={cn(className, { 'w-full': withFullWidth, 'h-full': withFullHeight })}
 
                 {...inputProps}
 

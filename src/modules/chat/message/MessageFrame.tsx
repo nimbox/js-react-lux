@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import type { ReactNode } from 'react';
+import { cn } from '../../../components/utilities/cn';
 import { useChat } from '../ChatContext';
 import { useMessage } from './MessageContext';
 import { MessageOptions } from './MessageOptions';
@@ -71,18 +71,18 @@ export function MessageFrame({ children, placement }: MessageFrameProps) {
     const items = PLACEMENT_ITEMS[align];
 
     return (
-        <div className={classNames('w-full group flex flex-col', items)}>
+        <div className={cn('w-full group flex flex-col', items)}>
 
             {/* Positioning anchor — `relative`, shrink-wrapped to the content; holds the
                 picker so it can sit just outside the bubble, while keeping it out of the
                 bubble hover group. */}
-            <div className={classNames('relative max-w-[75%] flex flex-col', items)}>
+            <div className={cn('relative max-w-[75%] flex flex-col', items)}>
 
                 {/* Bubble hover scope — the content + its option menu ONLY. Carries the
                     flex-col alignment a bubble-less sticker needs for its stacked
                     children (author pill / image / properties bubble); `gap-1` is a
                     no-op for every other kit, which only ever passes one child. */}
-                <div className={classNames('flex flex-col gap-1 group/bubble', items)}>
+                <div className={cn('flex flex-col gap-1 group/bubble', items)}>
 
                     {children}
 
@@ -104,7 +104,7 @@ export function MessageFrame({ children, placement }: MessageFrameProps) {
                     places against the bubble box. The picker button self-manages its own
                     hover reveal and popover, so no gating here. */}
                 {!plain && onCreateReaction && (
-                    <div className={classNames(
+                    <div className={cn(
                         'absolute top-1/2 -translate-y-1/2 z-20',
                         align === 'start' ? 'left-full ml-2' : 'right-full mr-2'
                     )}>

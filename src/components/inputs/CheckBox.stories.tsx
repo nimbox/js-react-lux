@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { CheckBox } from './CheckBox';
-import classNames from 'classnames';
-import { CheckButton } from './CheckButton';
 import { action } from 'storybook/actions';
+import { cn } from '../utilities/cn';
+import { CheckBox } from './CheckBox';
+import { CheckButton } from './CheckButton';
 
 
 // Definition
@@ -16,7 +16,7 @@ type Story = StoryObj<typeof CheckBox>;
 
 // Templates
 
-const Label = (props) => <span className={classNames('border-t border-b', props.className)}>{props.children}</span>;
+const Label = (props) => <span className={cn('border-t border-b', props.className)}>{props.children}</span>;
 
 // Stories
 

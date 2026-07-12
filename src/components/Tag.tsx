@@ -1,6 +1,6 @@
-import classNames from 'classnames';
 import React, { type FC, type SVGProps, useMemo, useState } from 'react';
 import tinycolor from 'tinycolor2';
+import { cn } from './utilities/cn';
 
 
 //
@@ -81,7 +81,7 @@ export const Tag: FC<TagProps> = (props) => {
 
     return (
         <span
-            className={classNames('inline-flex flex-row items-baseline max-w-full rounded-full', containerClassName)}
+            className={cn('inline-flex flex-row items-baseline max-w-full rounded-full', containerClassName)}
             style={{ lineHeight: '1', paddingLeft: '0.25em', paddingTop: '0.125em', paddingRight: '0.5em', paddingBottom: '0.125em', color, backgroundColor }}
         >
 
@@ -103,7 +103,7 @@ export const Tag: FC<TagProps> = (props) => {
             />
 
             <span
-                className={classNames('block shrink min-w-0 max-w-full', className)}
+                className={cn('block shrink min-w-0 max-w-full', className)}
                 style={{ height: '1.2em', lineHeight: '1.2em' }}
                 {...spanProps}
             >

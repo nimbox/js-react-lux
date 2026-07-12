@@ -1,7 +1,7 @@
-import classNames from 'classnames';
-import { type FC, useEffect, useRef, useState } from 'react';
 import { WarningIcon } from '@nimbox/icons-react';
+import { type FC, useEffect, useRef, useState } from 'react';
 import { Loading } from '../Loading';
+import { cn } from '../utilities/cn';
 import { PlainInput } from './PlainInput';
 
 
@@ -86,7 +86,7 @@ export const EditableText: FC<EditableTextProps> = (props) => {
     return (
         <>
             {editing || loading || error ? (
-                <div className={classNames('inline-flex items-baseline gap-2',
+                <div className={cn('inline-flex items-baseline gap-2',
                     'lux-crux lux-field lux-field-focus lux-field-editable'
                     , {
                         'w-full': withFullWidth
@@ -99,7 +99,7 @@ export const EditableText: FC<EditableTextProps> = (props) => {
                         onKeyDown={handleKeyDown}
                         onBlur={handleCancel}
                         disabled={loading || error}
-                        className={classNames({ 'w-full': withFullWidth })}
+                        className={cn({ 'w-full': withFullWidth })}
                         style={{ minWidth: minInputWidth }}
                     />
 
@@ -112,7 +112,7 @@ export const EditableText: FC<EditableTextProps> = (props) => {
                 <span
                     ref={displayRef}
                     onClick={handleTextClick}
-                    className={classNames(
+                    className={cn(
                         'block cursor-text', {
                         'w-full': withFullWidth
                     })}

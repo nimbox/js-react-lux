@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import React, { type Ref, useContext } from 'react';
+import { cn } from '../utilities/cn';
 import { ControlContext } from './ControlContext';
 
 
@@ -54,7 +54,7 @@ export const PlainTextArea = React.forwardRef((
 
             disabled={disabled}
  
-            className={classNames(
+            className={cn(
                 'block w-full',
                 'bg-transparent',
                 'outline-none focus:outline-none',

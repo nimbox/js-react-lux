@@ -1,8 +1,8 @@
-import classNames from 'classnames';
+import { AngleLeftIcon, CrossIcon, HamburgerIcon } from '@nimbox/icons-react';
 import React, { type FC, type MouseEventHandler, useContext, useEffect, useState } from 'react';
 import { ShowTransition } from '../../components/transitions/ShowTransition';
+import { cn } from '../../components/utilities/cn';
 import { useViewport } from '../../hooks/useViewport';
-import { AngleLeftIcon, CrossIcon, HamburgerIcon } from '@nimbox/icons-react';
 import { HeliumContext } from './HeliumContext';
 
 
@@ -74,7 +74,7 @@ export const Header: FC<{ className?: string, children?: React.ReactNode }> = ({
     const { isCompact, showNavigator } = useContext(HeliumContext);
 
     return (
-        <header className={classNames(
+        <header className={cn(
             'fixed z-10 inset-x-0 top-0 h-16 flex-none',
             showNavigator ? 'pl-0 md:pl-56' : 'pl-0',
             'flex flex-row justify-between items-stretch',
@@ -83,7 +83,7 @@ export const Header: FC<{ className?: string, children?: React.ReactNode }> = ({
             'print:hidden'
         )}>
             <ToggleNavigator />
-            <div className={classNames('flex-1 h-full', className)}>
+            <div className={cn('flex-1 h-full', className)}>
                 {children}
             </div>
             {isCompact && <ToggleMainSide />}
@@ -112,7 +112,7 @@ export const ToggleMainSide: FC = () => {
 
     return (
         <Toggle onClick={() => setShowMainSide(!showMainSide)}>
-            <AngleLeftIcon className={classNames(
+            <AngleLeftIcon className={cn(
                 'w-8 h-8 stroke-current',
                 'transform', { 'rotate-180': showMainSide },
                 'transition-transform duration-700 ease-in-out'
@@ -140,17 +140,17 @@ export const Navigator: NavigatorComponent<{ className?: string, children?: Reac
                 <div
                     onClick={() => { setShowNavigator(false); setShowMainSide(false); }}
                     className={
-                        classNames(
+                        cn(
                             'fixed z-10 inset-0 bg-gray-800 opacity-50'
                         )}
                 />
             }
-            <div className={classNames(
+            <div className={cn(
                 'fixed z-20 inset-y-0 left-0 w-56',
                 'transform', showNavigator ? 'translate-x-0' : '-translate-x-56',
                 'transition-transform duration-700 ease-in-out'
             )}>
-                <div className={classNames('h-full flex flex-col text-navigator bg-navigator-bg', className)}>
+                <div className={cn('h-full flex flex-col text-navigator bg-navigator-bg', className)}>
                     {children}
                 </div >
             </div>
@@ -165,7 +165,7 @@ const NavigatorHeader: FC<{ className?: string, children?: React.ReactNode }> = 
 
     return (
         <div className="flex-none h-16 flex flex-row justify-between items-stretch border-b border-navigator-border">
-            <div className={classNames('w-full h-full', className)}>
+            <div className={cn('w-full h-full', className)}>
                 {children}
             </div>
             {(isCompact && showNavigator) &&
@@ -179,13 +179,13 @@ const NavigatorHeader: FC<{ className?: string, children?: React.ReactNode }> = 
 };
 
 const NavigatorContent: FC<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => (
-    <div className={classNames('grow overflow-y-scroll', className)}>
+    <div className={cn('grow overflow-y-scroll', className)}>
         {children}
     </div>
 );
 
 const NavigatorFooter: FC<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => (
-    <div className={classNames('flex-none border-t border-navigator-border', className)}>
+    <div className={cn('flex-none border-t border-navigator-border', className)}>
         {children}
     </div>
 );
@@ -207,7 +207,7 @@ export const Main: MainComponent<{ children?: React.ReactNode }> = ({ children }
 
     return (
         <main
-            className={classNames(
+            className={cn(
                 'h-full',
                 showNavigator ? 'pl-0 md:pl-56' : 'pl-0',
                 'pt-16',
@@ -224,7 +224,7 @@ export const Main: MainComponent<{ children?: React.ReactNode }> = ({ children }
 };
 
 Main.Content = ({ className, children }) => (
-    <div className={classNames('w-2/3 grow', className)}>{children}</div>
+    <div className={cn('w-2/3 grow', className)}>{children}</div>
 );
 
 const MainSide: FC<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => {
@@ -238,12 +238,12 @@ const MainSide: FC<{ className?: string, children?: React.ReactNode }> = ({ clas
                     <div
                         onClick={() => { setShowMainSide(false); }}
                         className={
-                            classNames(
+                            cn(
                                 'fixed inset-0 bg-gray-800 opacity-50'
                             )}
                     />
                 }
-                <ShowTransition show={showMainSide} className={classNames(
+                <ShowTransition show={showMainSide} className={cn(
                     'absolute left-0 top-0 right-0 h-full ml-16 mt-16',
                     'bg-content-fg', 'border-l border-content-border',
                     'transform',
@@ -259,7 +259,7 @@ const MainSide: FC<{ className?: string, children?: React.ReactNode }> = ({ clas
                 </ShowTransition>
             </>
             :
-            <div className={classNames(
+            <div className={cn(
                 'w-1/3', 'max-w-[400px]',
                 'bg-content-fg1', 'border-l border-content-border'
             )}>
@@ -280,19 +280,19 @@ interface PanelComponent<P> extends FC<P> {
 }
 
 export const Panel: PanelComponent<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => (
-    <div className={classNames('flex flex-col text-gray-100', className)}>
+    <div className={cn('flex flex-col text-gray-100', className)}>
         {children}
     </div>
 );
 
 Panel.Group = ({ className, children }) => (
-    <div className={classNames('px-3 py-2 text-xs text-gray-400 uppercase', className)}>
+    <div className={cn('px-3 py-2 text-xs text-gray-400 uppercase', className)}>
         {children}
     </div>
 );
 
 Panel.Item = ({ active, className, children }) => (
-    <div className={classNames('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className)}>
+    <div className={cn('-px-3 pl-6 py-2 cursor-pointer', { 'bg-primary-500': active }, className)}>
         {children}
     </div>
 );

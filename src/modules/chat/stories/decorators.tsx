@@ -1,6 +1,6 @@
 import type { Decorator } from '@storybook/react-vite';
-import classNames from 'classnames';
 import type { ReactNode } from 'react';
+import { cn } from '../../../components/utilities/cn';
 import chatBackground from '../assets/chat-background.png';
 
 
@@ -11,7 +11,7 @@ import chatBackground from '../assets/chat-background.png';
 
 export function ChatSurface({ className, children }: { className?: string; children: ReactNode }) {
     return (
-        <div className={classNames('relative bg-chat-message-list-bg', className)}>
+        <div className={cn('relative bg-chat-message-list-bg', className)}>
             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${chatBackground})` }} />
             <div className="relative h-full">{children}</div>
         </div>

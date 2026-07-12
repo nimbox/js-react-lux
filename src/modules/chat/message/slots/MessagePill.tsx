@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import { type ReactNode } from 'react';
+import { cn } from '../../../../components/utilities/cn';
 import { useMessage } from '../MessageContext';
 
 
@@ -20,7 +20,7 @@ export function MessagePill({ children, className }: MessagePillProps) {
     const { message: { alignment } } = useMessage();
 
     return (
-        <div className={classNames('rounded-xl shadow px-3 py-1', className, {
+        <div className={cn('rounded-xl shadow px-3 py-1', className, {
             'bg-chat-message-out text-gray-800': alignment === 'end',
             'bg-chat-message-in text-gray-800': alignment === 'start'
         })}>

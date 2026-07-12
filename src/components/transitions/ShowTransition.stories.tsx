@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import classNames from 'classnames';
+import { cn } from '../utilities/cn';
 import { ShowTransition } from './ShowTransition';
 
 
@@ -24,7 +24,7 @@ const ShowTransitionTemplate: Story = {
             <div className="relative w-96 h-96 bg-red-100 flex flex-row justify-center items-center">
                 <ShowTransition
                     show={show}
-                    className={classNames(
+                    className={cn(
                         'w-32 h-32 bg-blue-100',
                         'transform-gpu',
                         'transition-all duration-700 ease-in-out'

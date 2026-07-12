@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import React, { type CSSProperties, type FC, useContext } from 'react';
+import { cn } from '../utilities/cn';
 import { ControlContext } from './ControlContext';
 
 
@@ -59,7 +59,7 @@ Control.Label = (({ className, children }) => {
     const context = useContext(ControlContext);
 
     return (
-        <label className={classNames(
+        <label className={cn(
             'block truncate',
             'text-xs uppercase tracking-tighter',
             context.error ? 'text-danger-500' : 'text-control-border',
@@ -76,7 +76,7 @@ Control.Message = (({ className, children }) => {
     const context = useContext(ControlContext);
 
     return (
-        <div className={classNames(
+        <div className={cn(
             context.error ? 'text-danger-500' : 'text-control-border',
             className
         )}>
@@ -91,7 +91,7 @@ Control.Error = (({ className, children }) => {
     // const context = useContext(Context);
 
     return children ? (
-        <div className={classNames(
+        <div className={cn(
             'text-danger-500',
             className
         )}>

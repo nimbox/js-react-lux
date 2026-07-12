@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import React, { type FC, useContext } from 'react';
+import { cn } from '../utilities/cn';
 import { ControlContext } from './ControlContext';
 
 
@@ -60,7 +60,7 @@ export const Placeholder: FC<PlaceholderProps> = (props) => {
             {children ??
                 (placeholder ?
                     <div
-                        className={classNames(
+                        className={cn(
                             'truncate',
                             isError ?
                                 'text-danger-500' :

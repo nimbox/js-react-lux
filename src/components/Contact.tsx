@@ -1,7 +1,7 @@
-import classNames from 'classnames';
-import React, { type FC } from 'react';
 import { NimboxIcon } from '@nimbox/icons-react';
+import React, { type FC } from 'react';
 import { Button } from './Button';
+import { cn } from './utilities/cn';
 
 
 export interface ContactProps {
@@ -14,11 +14,11 @@ export const Contact: FC<ContactProps> = ({ render, className, children, ...prop
 
     return (
         <div {...props} className={className}>
-            <span className={classNames(
+            <span className={cn(
                 'flex flex-row max-w-full items-baseline py-0 truncate')} >
                 <span className={
                     'self-center flex flex-row items-center justify-center'}>
-                    <NimboxIcon className={classNames('stroke-current stroke-1')} />
+                    <NimboxIcon className={cn('stroke-current stroke-1')} />
                 </span>
                 <Button variant="link" className='truncate'>
                     {render}

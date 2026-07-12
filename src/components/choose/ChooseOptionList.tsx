@@ -1,6 +1,6 @@
-import classNames from 'classnames';
 import React, { type Ref, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useOptionsCount } from '../../hooks/useOptionsCount';
+import { cn } from '../utilities/cn';
 import { DEFAULT_ON_CHOOSE, DEFAULT_RENDER_GROUP_LABEL, DEFAULT_RENDER_OPTION, EXTRACTOR } from './options';
 
 
@@ -180,7 +180,7 @@ export const ChooseOptionList = React.forwardRef(<O, G = O[]>(
             {optionsCount === 0 ?
                 empty
                 :
-                <div className={classNames({ 'pointer-events-none': loading })}>
+                <div className={cn({ 'pointer-events-none': loading })}>
                     {options!.map((group, g) =>
                         extractor(group).length > 0 &&
                         <div key={g}>
@@ -199,7 +199,7 @@ export const ChooseOptionList = React.forwardRef(<O, G = O[]>(
                                             }
                                         }}
                                         onClick={(e) => handleClick(e, g, i)}
-                                        className={classNames(
+                                        className={cn(
                                             'lux-px-2em lux-py-0.5em',
                                             { 'bg-primary-500': !loading && selected != null && selected[0] === g && selected[1] === i },
                                             'hover:bg-secondary-500',

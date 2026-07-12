@@ -1,8 +1,8 @@
-import classNames from 'classnames';
+import { CrossIcon, DangerIcon, InformationIcon, SuccessIcon, WarningIcon } from '@nimbox/icons-react';
 import React, { type FC, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { CrossIcon, DangerIcon, InformationIcon, SuccessIcon, WarningIcon } from '@nimbox/icons-react';
 import { ToastContext } from './ToastContext';
+import { cn } from './utilities/cn';
 
 
 //
@@ -127,7 +127,7 @@ export const Toast: FC<ToastProps> = ({ type, component, autoDelete = true, auto
     const IconType = Icon[type];
 
     return (
-        <div className={classNames('px-4 py-4 flex flex-row items-start space-x-4 rounded transition-transform duration-250 transform translate-x-0',
+        <div className={cn('px-4 py-4 flex flex-row items-start space-x-4 rounded transition-transform duration-250 transform translate-x-0',
             { 'translate-x-64': initial },
             { 'text-white bg-primary-500': type === 'success' },
             { 'text-white bg-info-500': type === 'info' },

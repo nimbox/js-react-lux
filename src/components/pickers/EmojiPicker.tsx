@@ -1,8 +1,8 @@
-import classNames from 'classnames';
-import { useState } from 'react';
 import { MinusIcon, PlusIcon } from '@nimbox/icons-react';
+import { useState } from 'react';
 import { Button } from '../Button';
 import { Tabs } from '../Tabs';
+import { cn } from '../utilities/cn';
 import { commonEmojis } from './common-emojis';
 import { type EmojiGroup, emojiGroups } from './emojis';
 
@@ -68,7 +68,7 @@ function CompactForm({ onSelect, onToggle: onToggleExpand, className }: {
 }) {
 
     return (
-        <div className={classNames(
+        <div className={cn(
             'px-2 py-1 flex items-center gap-1 bg-control-bg border border-control-border rounded-full shadow',
             className
         )}>
@@ -106,7 +106,7 @@ function FullForm(props: EmojiPickerProps & { onToggle: () => void }) {
     // Render
 
     return (
-        <div className={classNames(
+        <div className={cn(
             'w-96 p-0 bg-control-bg rounded shadow border border-control-border',
             className
         )}>

@@ -1,5 +1,4 @@
 import { AngleDownIcon, CircleCrossIcon, WarningIcon } from '@nimbox/icons-react';
-import classNames from 'classnames';
 import { isFunction } from 'lodash-es';
 import React, { forwardRef, type KeyboardEvent, type Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
@@ -12,6 +11,7 @@ import { FieldPopper, type FieldPopperProps } from '../inputs/FieldPopper';
 import { Placeholder } from '../inputs/Placeholder';
 import { SearchInput } from '../inputs/SearchInput';
 import { Loading } from '../Loading';
+import { cn } from '../utilities/cn';
 import { consumeEvent } from '../utilities/consumeEvent';
 import { setRefInputValue } from '../utilities/setRefInputValue';
 import { ChooseOptionList, type ChooseOptionListProps } from './ChooseOptionList';
@@ -508,7 +508,7 @@ export const Choose = forwardRef(<O, G = O[]>(
             withFullWidth={withFullWidth}
             withFullHeight={withFullHeight}
 
-            className={classNames('focus:outline-none cursor-pointer', fieldClassName)}
+            className={cn('focus:outline-none cursor-pointer', fieldClassName)}
 
             // Popper
 

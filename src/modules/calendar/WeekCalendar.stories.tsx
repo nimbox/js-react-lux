@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import classNames from 'classnames';
+import { cn } from '../../components/utilities/cn';
 import { WeekCalendar } from './WeekCalendar';
 import { type WeekCalendarEventExtractors } from './useWeekCalendar';
 
@@ -49,7 +49,7 @@ const events: WeekCalendarEventExtractors<StoryEvent> = {
     cell: ({ startsBefore, endsAfter, event, isLargest, getPosition }) => (
         <div className="p-0.5" style={getPosition()}>
             <div
-                className={classNames(
+                className={cn(
                     'w-full h-full flex flex-row items-center justify-center bg-red-400 p-1',
                     {
                         'rounded-t-md': !startsBefore,

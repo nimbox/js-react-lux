@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import { cn } from '../../../components/utilities/cn';
 
 
 /** Props for `ChatAudio`. */
@@ -39,7 +39,7 @@ export function ChatAudio(props: ChatAudioProps) {
     const { url, className } = props;
 
     return (
-        <audio controls className={classNames(className)}>
+        <audio controls className={cn(className)}>
             <source src={url} />
             Your browser does not support the audio element.
         </audio>

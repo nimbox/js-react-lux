@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import React, { type FC, useLayoutEffect, useState } from 'react';
+import { cn } from '../utilities/cn';
 
 
 export interface ShowTransitionProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -115,7 +115,7 @@ export const ShowTransition: FC<ShowTransitionProps> = (props) => {
 
     return (
         <div
-            className={classNames(className, stateClassName)}
+            className={cn(className, stateClassName)}
             onTransitionEnd={() => handleTransitionEnd(state!)}
             {...divProps}
         >

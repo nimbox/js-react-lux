@@ -1,8 +1,8 @@
-import classNames from 'classnames';
+import { CrossIcon } from '@nimbox/icons-react';
 import { type ReactNode } from 'react';
 import { Button } from '../../../../components/Button';
+import { cn } from '../../../../components/utilities/cn';
 import { useOnEscape } from '../../../../hooks/useOnEscape';
-import { CrossIcon } from '@nimbox/icons-react';
 
 
 export interface ComposerPanelProps {
@@ -72,7 +72,7 @@ function ComposerPanelBody(props: ComposerPanelBodyProps) {
     // Render
 
     return (
-        <div className={classNames('min-h-0 flex-1', className)}>
+        <div className={cn('min-h-0 flex-1', className)}>
             {children}
         </div>
     );

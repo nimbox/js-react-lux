@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import React, { type ReactElement } from 'react';
+import { cn } from '../utilities/cn';
 
 
 //
@@ -156,7 +156,7 @@ export const Field = React.forwardRef((
 
             ref={divRef}
 
-            className={classNames('lux-crux lux-field', {
+            className={cn('lux-crux lux-field', {
 
                 // Crux classes
 
@@ -196,12 +196,12 @@ export const Field = React.forwardRef((
                 </div>
             }
 
-            <div className={classNames('lux-crux-content lux-field-content', {
+            <div className={cn('lux-crux-content lux-field-content', {
                 'w-full': withFullWidth,
                 'h-full': withFullHeight
             })}>
                 {label &&
-                    <label className={classNames('lux-field-label')}>
+                    <label className={cn('lux-field-label')}>
                         {label}
                     </label>
                 }

@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import React from 'react';
+import { cn } from './utilities/cn';
 
 
 interface PostitProps {
@@ -11,7 +11,7 @@ export function Postit({ className, children }: PostitProps) {
 
     return (
         <div className="postit-container">
-            <div className={classNames('postit', className)}>
+            <div className={cn('postit', className)}>
                 {children}
             </div >
         </div>

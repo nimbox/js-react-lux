@@ -1,6 +1,6 @@
-import classNames from 'classnames';
-import { type FC } from 'react';
 import { CheckIcon as SvgCheckIcon, CrossIcon as SvgCrossIcon } from '@nimbox/icons-react';
+import { type FC } from 'react';
+import { cn } from '../utilities/cn';
 
 
 export interface CheckButtonProps {
@@ -36,7 +36,7 @@ export const CheckButton: FC<CheckButtonProps> = (props) => {
     return (
         <div tabIndex={0}
             data-tooltip={dataTooltip}
-            className={classNames(
+            className={cn(
                 'inline-block relative',
                 'border border-control-border checked:border-control-border',
                 'focus:border-primary-500',
@@ -50,7 +50,7 @@ export const CheckButton: FC<CheckButtonProps> = (props) => {
             <button tabIndex={-1}
                 onClick={onFulfill}
                 data-tooltip={dataTooltipFulfill}
-                className={classNames(
+                className={cn(
                     'absolute inset-y-0 left-0 w-1/2 box-content -m-px',
                     'hover:bg-primary-600',
                     'border border-control-border checked:border-control-border',
@@ -63,7 +63,7 @@ export const CheckButton: FC<CheckButtonProps> = (props) => {
             <button tabIndex={-1}
                 onClick={onReject}
                 data-tooltip={dataTooltipReject}
-                className={classNames(
+                className={cn(
                     'absolute inset-y-0 right-0 w-1/2',
                     'rounded'
                 )}

@@ -1,9 +1,9 @@
-import classNames from 'classnames';
+import { SmileyIcon } from '@nimbox/icons-react';
 import { useState } from 'react';
 import { Popper } from '../../../components/floating/Popper';
 import { EmojiPicker } from '../../../components/pickers/EmojiPicker';
+import { cn } from '../../../components/utilities/cn';
 import { useOnOutsideClick } from '../../../hooks/useOnOutsideClick';
-import { SmileyIcon } from '@nimbox/icons-react';
 import { useChat } from '../ChatContext';
 import { CHAT_ICON_TRIGGER } from '../utils/iconTrigger';
 import { useMessage } from './MessageContext';
@@ -35,7 +35,7 @@ export function MessageReactionPicker() {
             <button
                 ref={setReferenceRef}
                 onClick={() => setShow(!show)}
-                className={classNames(CHAT_ICON_TRIGGER, {
+                className={cn(CHAT_ICON_TRIGGER, {
                     'invisible group-hover:visible': !show,
                     'visible': show
                 })}

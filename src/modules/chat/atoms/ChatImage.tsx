@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import { cn } from '../../../components/utilities/cn';
 
 
 /** Props for `ChatImage`. */
@@ -39,7 +39,7 @@ export function ChatImage(props: ChatImageProps) {
             alt={alt}
 
             onClick={onClick}
-            className={classNames('w-auto h-auto max-h-[256px] max-w-full object-contain rounded shadow', className)}
+            className={cn('w-auto h-auto max-h-[256px] max-w-full object-contain rounded shadow', className)}
 
             loading="lazy"
             decoding="async"

@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import { cn } from '../../../../components/utilities/cn';
 import { ChatAvatar } from '../../atoms';
 import { useConversation } from '../ConversationContext';
 
@@ -19,7 +19,7 @@ export function ConversationAvatar({ className }: ConversationAvatarProps) {
     };
 
     return (
-        <div className={classNames('shrink-0', className)}>
+        <div className={cn('shrink-0', className)}>
             <ChatAvatar
 
                 url={avatarData.src}
