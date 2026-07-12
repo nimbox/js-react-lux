@@ -1,5 +1,6 @@
 import commonjs from '@rollup/plugin-commonjs';
 import image from '@rollup/plugin-image';
+import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import copy from 'rollup-plugin-copy';
@@ -10,6 +11,7 @@ import pkg from './package.json' with { type: 'json' };
 const entries = {
 
     'index': 'src/index.ts',
+    'locales/index': 'src/locales/index.ts',
 
     'figures': 'src/figures/index.ts',
 
@@ -32,12 +34,13 @@ export default [{
     plugins: [
         nodeResolve({ extensions: [...extensions, '.png'] }),
         image(),
+        json(),
         commonjs(),
         typescript({ tsconfig: 'tsconfig.build.json' }),
         copy({
             targets: [
                 { src: 'src/styles/**/*.css', dest: 'dist/styles' },
-                { src: 'src/locales/*', dest: 'dist/locales' }
+                { src: ['src/locales/*', '!src/locales/index.ts'], dest: 'dist/locales' }
             ]
         }),
         filesize()

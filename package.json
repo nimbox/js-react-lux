@@ -7,42 +7,40 @@
     ".": {
       "types": "./dist/types/index.d.ts",
       "import": "./dist/index.js",
-      "default": "./dist/index.js",
-      "development": "./src/index.ts"
+      "default": "./dist/index.js"
     },
     "./styles/elegant.css": {
-      "default": "./dist/styles/elegant.css",
-      "development": "./src/styles/elegant.css"
+      "default": "./dist/styles/elegant.css"
+    },
+    "./locales": {
+      "types": "./dist/types/locales/index.d.ts",
+      "import": "./dist/locales/index.js",
+      "default": "./dist/locales/index.js"
     },
     "./figures": {
       "types": "./dist/types/figures/index.d.ts",
       "import": "./dist/figures.js",
-      "default": "./dist/figures.js",
-      "development": "./src/figures/index.ts"
+      "default": "./dist/figures.js"
     },
     "./modules/calendar": {
       "types": "./dist/types/modules/calendar/index.d.ts",
       "import": "./dist/modules/calendar.js",
-      "default": "./dist/modules/calendar.js",
-      "development": "./src/modules/calendar/index.ts"
+      "default": "./dist/modules/calendar.js"
     },
     "./modules/chat": {
       "types": "./dist/types/modules/chat/index.d.ts",
       "import": "./dist/modules/chat.js",
-      "default": "./dist/modules/chat.js",
-      "development": "./src/modules/chat/index.ts"
+      "default": "./dist/modules/chat.js"
     },
     "./modules/chat/kits/core": {
       "types": "./dist/types/modules/chat/kits/core/index.d.ts",
       "import": "./dist/modules/chat/kits/core.js",
-      "default": "./dist/modules/chat/kits/core.js",
-      "development": "./src/modules/chat/kits/core/index.ts"
+      "default": "./dist/modules/chat/kits/core.js"
     },
     "./modules/kanban": {
       "types": "./dist/types/modules/kanban/index.d.ts",
       "import": "./dist/modules/kanban.js",
-      "default": "./dist/modules/kanban.js",
-      "development": "./src/modules/kanban/index.ts"
+      "default": "./dist/modules/kanban.js"
     }
   },
   "files": [
