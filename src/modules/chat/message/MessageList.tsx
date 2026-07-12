@@ -6,7 +6,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 
 export interface MessageListProps {
     className?: string;
-    children?: any;
+    children?: React.ReactNode;
 }
 
 // The scroll container is a base-owned product concern (docs §10). Its contract:

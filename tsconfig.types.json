@@ -8,7 +8,6 @@
     "storybook",
     "vitest.config.*",
     "vite.config.*",
-    "src/i18n.tsx",
     "src/stories",
     "src/modules/chat/stories"
   ],

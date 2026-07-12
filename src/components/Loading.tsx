@@ -1,5 +1,5 @@
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { type CSSProperties, type FC } from 'react';
 
 
@@ -11,7 +11,7 @@ export interface LoadingProps {
 
 export const Loading: FC<LoadingProps> = ({ className, colorClassName = 'text-primary-500', style }) => (
     <svg width="44" height="44" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"
-        className={classnames('inline-block', colorClassName, className)}
+        className={classNames('inline-block', colorClassName, className)}
         style={{ width: '1em', height: '1em', ...style }}
     >
         <g fill="none" fillRule="evenodd" transform="translate(1 1)" strokeWidth="2">

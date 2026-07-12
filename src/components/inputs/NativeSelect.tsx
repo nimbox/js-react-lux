@@ -137,8 +137,7 @@ export const NativeSelect = forwardRef((
                     '-mr-[1.5em] pr-[1.5em]',
                     'bg-transparent',
                     'outline-none focus:outline-none',
-                    isError ? 'placeholder-danger-500' : 'placeholder-control-placeholder',
-                    'placeholder-opacity-40',
+                    isError ? 'placeholder-danger-500/40' : 'placeholder-control-placeholder/40',
                     'appearance-none',
                     'cursor-pointer',
                     className

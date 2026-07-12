@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { forwardRef, type DetailedHTMLProps, type InputHTMLAttributes } from 'react';
 
 
@@ -12,15 +12,13 @@ export interface CheckBoxProps extends DetailedHTMLProps<InputHTMLAttributes<HTM
 
 export const CheckBox = forwardRef<HTMLInputElement, CheckBoxProps>(({ className, ...props }, ref) => {
 
-    // const context = useContext(Context);
-
     return (
         <input ref={ref} type="checkbox" {...props}
-            className={classnames(
+            className={classNames(
                 'text-primary-500',
                 'border border-control-border checked:border-control-border',
                 'focus:border-primary-500',
-                'focus:ring focus:ring-primary-500 focus:ring-opacity-50 focus:ring-offset-0',
+                'focus:ring-2 focus:ring-primary-500/50 focus:ring-offset-0',
                 'disabled:opacity-50',
                 'rounded',
                 className)}

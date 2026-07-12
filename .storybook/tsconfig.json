@@ -1,0 +1,10 @@
+// TypeScript project for the Storybook config files (preview.tsx, main.ts,
+// i18n.ts). They live outside `src`, so without their own project they belong
+// to no tsconfig and miss `vite/client` — which provides `declare module
+// '*.css'`. The local `vite-env.d.ts` restores that declaration so the
+// `import '../src/index.css'` side-effect import resolves under
+// `noUncheckedSideEffectImports`.
+{
+  "extends": "../tsconfig.app.json",
+  "include": ["**/*.ts", "**/*.tsx"]
+}

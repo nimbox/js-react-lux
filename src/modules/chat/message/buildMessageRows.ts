@@ -95,7 +95,7 @@ function sortMessages(messages: BaseMessage[]) {
     const sorted = messages
         .map(c => [c.timestamp ? new Date(c.timestamp).getTime() : 0, c] as const)
         .sort(([a], [b]) => a - b)
-        .map(([_, c]) => c);
+        .map(([, c]) => c);
 
     return sorted;
 

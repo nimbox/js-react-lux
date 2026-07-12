@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React, { type FC } from 'react';
 
 
@@ -13,11 +13,11 @@ interface CardComponent extends FC<{ className?: string, children: React.ReactNo
 }
 
 export const Card: CardComponent = ({ className, children }) => (
-    <div className={classnames('bg-content-fg border rounded', className)}>{children}</div>
+    <div className={classNames('bg-content-fg border rounded', className)}>{children}</div>
 );
 
 Card.Header = ({ noBorder, className, children }) => (
-    <div className={classnames({ 'border-b': !noBorder }, className)}>{children}</div>
+    <div className={classNames({ 'border-b': !noBorder }, className)}>{children}</div>
 );
 
 Card.Body = ({ className, children }) => (
@@ -25,5 +25,5 @@ Card.Body = ({ className, children }) => (
 );
 
 Card.Footer = ({ noBorder, className, children }) => (
-    <div className={classnames({ 'border-t': !noBorder }, className)}>{children}</div>
+    <div className={classNames({ 'border-t': !noBorder }, className)}>{children}</div>
 );

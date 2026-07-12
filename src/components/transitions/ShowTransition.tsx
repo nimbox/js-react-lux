@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React, { type FC, useLayoutEffect, useState } from 'react';
 
 
@@ -115,7 +115,7 @@ export const ShowTransition: FC<ShowTransitionProps> = (props) => {
 
     return (
         <div
-            className={classnames(className, stateClassName)}
+            className={classNames(className, stateClassName)}
             onTransitionEnd={() => handleTransitionEnd(state!)}
             {...divProps}
         >

@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { type ReactNode } from 'react';
 import type { MessageGroupData } from '../types/MessageGroupData';
 
@@ -29,7 +29,7 @@ export interface MessageGroupProps {
 export function MessageGroup({ group, className, children }: MessageGroupProps) {
 
     return (
-        <div className={classnames(MESSAGE_GUTTER, 'flex flex-col gap-1', className, {
+        <div className={classNames(MESSAGE_GUTTER, 'flex flex-col gap-1', className, {
             'items-start': group.alignment === 'start',
             'items-end': group.alignment === 'end'
         })}>

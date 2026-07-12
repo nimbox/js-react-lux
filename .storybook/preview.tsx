@@ -1,26 +1,34 @@
 import { type Preview } from '@storybook/react-vite';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { I18nextProvider } from 'react-i18next';
-import i18n from '../src/i18n';
 import '../src/index.css';
+import i18n from './i18n';
 
 
-// The component-level Docs description. `react-docgen-typescript` splits a
-// TSDoc comment into `description` (the summary) and `tags` (block tags like
-// `@remarks`) rather than concatenating them — so without this, only the
-// summary would reach the Docs page. Stitch them back into one block.
+// The component-level Docs description. `react-docgen-typescript`
+// splits a TSDoc comment into `description` (the summary) and `tags`
+// (block tags like `@remarks`) rather than concatenating them — so
+// without this, only the summary would reach the Docs page. Stitch
+// them back into one block.
 //
 // Doc comments use plain backticked names (`` `Avatar` ``), not TSDoc
-// `{@link}` tags — this toolchain has no TypeDoc-style resolver for them, so
-// they'd only ever degrade to backticked text anyway, and TypeScript's own
-// extraction normalizes them inconsistently on the way here.
+// `{@link}` tags — this toolchain has no TypeDoc-style resolver for
+// them, so they'd only ever degrade to backticked text anyway, and
+// TypeScript's own extraction normalizes them inconsistently on the
+// way here.
+
 function extractComponentDescription(component?: { __docgenInfo?: { description?: string; tags?: Record<string, string> } }): string {
+
     const info = component?.__docgenInfo;
+
     if (!info) {
         return '';
     }
+
     const parts = [info.description, info.tags?.remarks].filter((part): part is string => Boolean(part));
+
     return parts.join('\n\n');
+
 }
 
 

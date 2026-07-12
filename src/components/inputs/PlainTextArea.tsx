@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React, { type Ref, useContext } from 'react';
 import { ControlContext } from './ControlContext';
 
@@ -54,12 +54,11 @@ export const PlainTextArea = React.forwardRef((
 
             disabled={disabled}
  
-            className={classnames(
+            className={classNames(
                 'block w-full',
                 'bg-transparent',
                 'outline-none focus:outline-none',
-                isError ? 'placeholder-danger-500' : 'placeholder-control-placeholder',
-                'placeholder-opacity-40',
+                isError ? 'placeholder-danger-500/40' : 'placeholder-control-placeholder/40',
                 'resize-none',
                 className
             )}

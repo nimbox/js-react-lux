@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React, { createContext, type FC, useContext } from 'react';
 
 
@@ -32,7 +32,7 @@ export interface CheckBarComponent extends FC<CheckBarProps> {
 export const CheckBar: CheckBarComponent = ({ value, onChange, className, children }) => (
     <Context.Provider value={{ value, onChange }}>
         <div
-            className={classnames(
+            className={classNames(
                 'inline-block truncate border border-control-border rounded',
                 className
             )}
@@ -57,7 +57,7 @@ CheckBar.Option = (({ value, className, children }) => {
     return (
         <div
             onClick={onClick}
-            className={classnames(
+            className={classNames(
                 'inline-block lux-px-2em',
                 'border-control-border border-r last:border-r-0',
                 {

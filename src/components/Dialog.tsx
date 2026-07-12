@@ -1,6 +1,6 @@
-import classnames from 'classnames';
-import React, { type FC, useState } from 'react';
-import { useOnOutsideClick } from '../hooks/useOnOutsideClick';
+import { FloatingFocusManager, useDismiss, useFloating, useInteractions, useRole } from '@floating-ui/react';
+import classNames from 'classnames';
+import React, { type FC } from 'react';
 import { Modal } from './Modal';
 
 
@@ -31,27 +31,42 @@ export interface DialogComponent extends FC<DialogProps> {
 
 export const Dialog: DialogComponent = ({ show, onHide, className, children }) => {
 
-    // State
+    // Drive open/close, dismissal and accessibility through floating-ui so the
+    // dialog gets `role="dialog"`, Escape-to-close, outside-press-to-close, a
+    // focus trap and focus restoration without hand-rolling any of it.
 
-    const [ref, setRef] = useState<HTMLDivElement | null>(null);
-    useOnOutsideClick(show, onHide, ref);
+    const { refs, context } = useFloating({
+        open: show,
+        onOpenChange: (open) => { if (!open) { onHide(); } }
+    });
+
+    const dismiss = useDismiss(context, { outsidePress: true, escapeKey: true });
+    const role = useRole(context, { role: 'dialog' });
+    const { getFloatingProps } = useInteractions([dismiss, role]);
 
     // Render
 
     return (
-        <Modal show={show} >
-            <div className="w-full h-full flex flex-row justify-center items-center">
-                <div ref={setRef} className={className}>
-                    {children}
+        <Modal show={show}>
+            <FloatingFocusManager context={context} modal>
+                <div className="w-full h-full flex flex-row justify-center items-center">
+                    <div
+                        ref={refs.setFloating}
+                        aria-modal="true"
+                        className={className}
+                        {...getFloatingProps()}
+                    >
+                        {children}
+                    </div>
                 </div>
-            </div>
+            </FloatingFocusManager>
         </Modal>
     );
 
 };
 
 Dialog.Header = ({ noBorder = false, className, children }) => (
-    <div className={classnames({ 'border-b border-content-border': !noBorder }, className)}>{children}</div>
+    <div className={classNames({ 'border-b border-content-border': !noBorder }, className)}>{children}</div>
 );
 
 Dialog.Body = ({ className, children }) => (
@@ -59,5 +74,5 @@ Dialog.Body = ({ className, children }) => (
 );
 
 Dialog.Footer = ({ className, children }) => (
-    <div className={classnames('border-t border-content-border', className)}>{children}</div>
+    <div className={classNames('border-t border-content-border', className)}>{children}</div>
 );

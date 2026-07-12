@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { isString } from 'lodash-es';
 import React, { type Ref, useContext, useLayoutEffect, useRef, useState } from 'react';
 import { ControlContext } from './ControlContext';
@@ -132,19 +132,19 @@ export const Wrapper = React.forwardRef((
             onFocus={handleFocus}
             onBlur={handleBlur}
 
-            className={classnames(
+            className={classNames(
 
                 'relative',
 
-                (variant === 'outlined') && classnames(
+                (variant === 'outlined') && classNames(
                     'lux-control-padding',
                     'rounded border',
                     disabled ?
                         'opacity-50' :
                         focus ?
                             (isError ?
-                                'text-danger-500 border-danger-500 ring ring-danger-500 ring-opacity-50' :
-                                'border-primary-500 ring ring-primary-500 ring-opacity-50'
+                                'text-danger-500 border-danger-500 ring-2 ring-danger-500/50' :
+                                'border-primary-500 ring-2 ring-primary-500/50'
                             ) :
                             (isError ?
                                 'text-danger-500 border-danger-500' :
@@ -152,7 +152,7 @@ export const Wrapper = React.forwardRef((
                             )
                 ),
 
-                (variant === 'filled' || variant === 'inlined') && classnames(
+                (variant === 'filled' || variant === 'inlined') && classNames(
                     disabled ?
                         'border-b opacity-50' :
                         focus ?
@@ -166,7 +166,7 @@ export const Wrapper = React.forwardRef((
                             )
                 ),
 
-                (variant === 'filled') && classnames(
+                (variant === 'filled') && classNames(
                     'lux-control-padding',
                     'bg-primary-100',
                     'rounded-t'
@@ -199,7 +199,7 @@ export const Wrapper = React.forwardRef((
             {start &&
                 <div
                     ref={startRef}
-                    className={classnames('absolute inset-y-0 left-0 flex flex-row justify-start items-center')}
+                    className={classNames('absolute inset-y-0 left-0 flex flex-row justify-start items-center')}
                 >
                     {start}
                 </div>
@@ -208,7 +208,7 @@ export const Wrapper = React.forwardRef((
             {end &&
                 <div
                     ref={endRef}
-                    className={classnames('absolute inset-y-0 right-0 flex flex-row justify-end items-center')}
+                    className={classNames('absolute inset-y-0 right-0 flex flex-row justify-end items-center')}
                 >
                     {end}
                 </div>

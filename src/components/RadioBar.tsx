@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import type { ReactNode } from 'react';
 import React, { createContext, type FC, useContext } from 'react';
 
@@ -26,7 +26,7 @@ export interface RadioBarComponent extends FC<RadioBarProps> {
 export const RadioBar: RadioBarComponent = ({ value, onChange, className, children }) => (
     <Context.Provider value={{ value, onChange }}>
         <div
-            className={classnames(
+            className={classNames(
                 'max-w-full inline-flex flex-row border border-control-border rounded',
                 className)}
         >
@@ -43,7 +43,7 @@ RadioBar.Option = (({ value, className, children }) => {
     return (
         <div
             onClick={onClick}
-            className={classnames(
+            className={classNames(
                 'min-w-0 flex-auto lux-px-2em',
                 'border-control-border border-r last:border-r-0',
                 {

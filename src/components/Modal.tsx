@@ -16,11 +16,20 @@ export interface ModalProps {
 
 export const Modal: FC<ModalProps> = ({ show, children }) => {
 
-    return show ? createPortal(
-        <div className="fixed inset-0 bg-gray-700 bg-opacity-80 z-40">
+    if (!show) {
+        return null;
+    }
+
+    // Prefer a host-provided `#modal` mount point, but fall back to
+    // `document.body` so the modal never crashes an app that has not declared
+    // one (`createPortal(…, null)` throws).
+    const container = document.querySelector('#modal') ?? document.body;
+
+    return createPortal(
+        <div className="fixed inset-0 bg-gray-700/80 z-40">
             {React.Children.only(children)}
         </div>,
-        document.querySelector('#modal')!
-    ) : null;
+        container
+    );
 
 };

@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { type FC } from 'react';
 import { MessageIcon, PhoneIcon } from '@nimbox/icons-react';
 import { Anchor } from './Anchor';
@@ -24,7 +24,7 @@ export const ContactElement: FC<ContactElementProps> = ({ type, locus, render, c
     }
 
     return (
-        <span {...props} className={classnames('inline-flex items-center max-w-full gap-1', className)} >
+        <span {...props} className={classNames('inline-flex items-center max-w-full gap-1', className)} >
             <Icon className="flex-none"/>
             <Anchor variant="link" className="flex-1 truncate">
                 {render}

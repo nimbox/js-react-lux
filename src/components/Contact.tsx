@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React, { type FC } from 'react';
 import { NimboxIcon } from '@nimbox/icons-react';
 import { Button } from './Button';
@@ -14,11 +14,11 @@ export const Contact: FC<ContactProps> = ({ render, className, children, ...prop
 
     return (
         <div {...props} className={className}>
-            <span className={classnames(
+            <span className={classNames(
                 'flex flex-row max-w-full items-baseline py-0 truncate')} >
                 <span className={
                     'self-center flex flex-row items-center justify-center'}>
-                    <NimboxIcon className={classnames('stroke-current stroke-1')} />
+                    <NimboxIcon className={classNames('stroke-current stroke-1')} />
                 </span>
                 <Button variant="link" className='truncate'>
                     {render}

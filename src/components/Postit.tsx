@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React from 'react';
 
 
@@ -11,7 +11,7 @@ export function Postit({ className, children }: PostitProps) {
 
     return (
         <div className="postit-container">
-            <div className={classnames('postit', className)}>
+            <div className={classNames('postit', className)}>
                 {children}
             </div >
         </div>

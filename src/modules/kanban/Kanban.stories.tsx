@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React, { type FC } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -120,7 +120,7 @@ const KanbanBoard: FC<{ columns: { id: string, cards: { id: string, lines: numbe
     return (
         <div className="relative w-full h-full">
 
-            <div className={classnames(
+            <div className={classNames(
                 'w-full h-full px-10 py-10 flex flex-row items-start overflow-x-auto space-x-2',
                 (isDraggingColumn || isDraggingCard) ? (isDraggingColumn ? 'bg-blue-400' : 'bg-blue-400') : 'bg-blue-400'
             )}>
@@ -144,7 +144,7 @@ const KanbanBoard: FC<{ columns: { id: string, cards: { id: string, lines: numbe
             </div>
 
             {isDraggingCard &&
-                <div className="absolute inset-x-0 bottom-0 px-3 py-2 flex flex-row justify-between bg-white bg-opacity-30">
+                <div className="absolute inset-x-0 bottom-0 px-3 py-2 flex flex-row justify-between bg-white/30">
                     <div className="flex flex-row space-x-2">
                         <KanbanCardDropUpdate title="add" updateCard={actions.updateCard} fn={({ lines }) => ({ lines: lines + 1 })} />
                         <KanbanCardDropUpdate title="subtract" updateCard={actions.updateCard} fn={({ lines }) => ({ lines: Math.max(lines - 1, 1) })} />
@@ -154,7 +154,7 @@ const KanbanBoard: FC<{ columns: { id: string, cards: { id: string, lines: numbe
             }
 
             {isDraggingColumn &&
-                <div className="absolute inset-x-0 bottom-0 px-3 py-2 flex flex-row justify-end bg-white bg-opacity-30">
+                <div className="absolute inset-x-0 bottom-0 px-3 py-2 flex flex-row justify-end bg-white/30">
                     <KanbanColumnDropDelete title="delete" deleteColumn={actions.deleteColumn} />
                 </div>
             }
@@ -171,7 +171,7 @@ const KanbanCardDropUpdate: FC<{ title: string, updateCard: UpdateStoryCardCallb
     });
 
     return (
-        <div ref={cardDropRef} className={classnames(
+        <div ref={cardDropRef} className={classNames(
             'w-48 h-16 flex justify-center items-center',
             isOver ? 'bg-white border-green-400' : '',
             'border-dashed border-2 rounded'
@@ -189,7 +189,7 @@ const KanbanCardDropDelete: FC<{ title: string, deleteCard: DeleteStoryCardCallb
     });
 
     return (
-        <div ref={cardDropRef} className={classnames(
+        <div ref={cardDropRef} className={classNames(
             'w-48 h-16 flex justify-center items-center',
             isOver ? 'bg-white border-red-400' : '',
             'border-dashed border-2 rounded'
@@ -207,7 +207,7 @@ const KanbanColumnDropDelete: FC<{ title: string, deleteColumn: DeleteStoryColum
     });
 
     return (
-        <div ref={cardDropRef} className={classnames(
+        <div ref={cardDropRef} className={classNames(
             'w-48 h-16 flex justify-center items-center',
             isOver ? 'bg-white border-red-400' : '',
             'border-dashed border-2 rounded'
@@ -239,7 +239,7 @@ const KanbanColumns: FC<{ moveColumn: MoveColumnCallback, children?: React.React
     countRender('columns');
 
     return (
-        <div ref={columnsRef} className={classnames(
+        <div ref={columnsRef} className={classNames(
             'h-full flex flex-row items-start space-x-2',
             { '': isOver }
         )}>
@@ -256,7 +256,7 @@ const KanbanColumn: FC<{ id: string, addCard: (id: string) => void, moveCard: Mo
     countRender('column');
 
     return (
-        <div ref={columnRef} className={classnames(
+        <div ref={columnRef} className={classNames(
             'max-h-full px-3 py-2 flex flex-col space-y-2 bg-gray-200 rounded shadow',
             { 'opacity-20': isDragging }
         )}>
@@ -299,7 +299,7 @@ const KanbanCards: FC<{ columnId: string, moveCard: MoveCardCallback, children?:
     countRender('cards');
 
     return (
-        <div ref={cardsRef} className={classnames(
+        <div ref={cardsRef} className={classNames(
             'w-48 min-h-0 px-1 py-1 -mx-1 space-y-2 overflow-y-auto',
             { '': isOver }
         )} style={{ minHeight: '2rem' }}>
@@ -316,7 +316,7 @@ const KanbanCard: FC<{ id: string, lines: number }> = ({ id, lines }) => {
     countRender('card');
 
     return (
-        <div ref={cardRef} className={classnames(
+        <div ref={cardRef} className={classNames(
             'w-full px-2 py-1 bg-gray-50 rounded shadow',
             { 'opacity-20': isDragging }
         )}>

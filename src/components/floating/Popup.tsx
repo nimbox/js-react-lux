@@ -14,7 +14,7 @@ export interface PopupProps {
 
     Component: React.FunctionComponent;
 
-    children: React.ReactElement<any>;
+    children: React.ReactElement<Record<string, unknown>>;
 
 }
 

@@ -20,7 +20,9 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 /**
- * 
+ * A styled button. Renders a native `<button>` and forwards all its props,
+ * with `variant` and `semantic` selecting the visual treatment and optional
+ * `start`/`end` ornaments framing the content.
  */
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 

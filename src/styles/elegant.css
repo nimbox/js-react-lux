@@ -44,8 +44,8 @@ html {
   --color-chat-message-out: #d9fdd3;
   --color-chat-message-list-bg: #eee9e1;
 
-  --color-tooltip: pink;
-  --color-tooltip-bg: red;
+  --color-tooltip: #ffffff;
+  --color-tooltip-bg: #222222;
 
   /* Palettes */
 
@@ -85,7 +85,7 @@ html {
   --color-danger-400: #ea6a59;
   --color-danger-500: #f05022;
   --color-danger-600: #9e1212;
-  --color-danger-700: #277d91; /* (kept as in your v3) */
+  --color-danger-700: #8e1917;
   --color-danger-800: #7f201d;
   --color-danger-900: #4c0f0f;
 
