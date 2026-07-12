@@ -1,4 +1,4 @@
-import React, { type ReactElement } from 'react';
+import React from 'react';
 import { cn } from '../utilities/cn';
 
 
@@ -31,12 +31,12 @@ export interface FieldProps {
     /**
      * Ornament to place at the start of the field.
      */
-    start?: ReactElement;
+    start?: React.ReactNode;
 
     /**
      * Ornament to place at the end of the field.
      */
-    end?: ReactElement;
+    end?: React.ReactNode;
 
     // Display
 
@@ -168,7 +168,7 @@ export function Field(props: FieldProps & React.HTMLAttributes<HTMLDivElement>) 
 
                 // Field classes
 
-                'lux-field-has-label': label,
+                'lux-field-has-label': label != null && label !== '',
 
                 'lux-field-has-start': start != null,
                 'lux-field-has-end': end != null,

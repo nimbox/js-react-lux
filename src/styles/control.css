@@ -393,7 +393,7 @@
     &:focus-within.lux-field-has-start,
     &.lux-field-shrink.lux-field-has-start {
       .lux-field-start {
-        transform: "none";
+        transform: none;
       }
     }
   }
