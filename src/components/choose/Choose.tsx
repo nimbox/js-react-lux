@@ -5,7 +5,7 @@ import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { type UseOptionChooser } from '../../hooks/useOption';
 import { type UseOptionsSupplier } from '../../hooks/useOptions';
-import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
+import { type ListHandle } from '../list/List';
 import { Delay } from '../Delay';
 import { FieldPopper, type FieldPopperProps } from '../inputs/FieldPopper';
 import { Placeholder } from '../inputs/Placeholder';
@@ -354,9 +354,10 @@ export function Choose<O, G = O[]>(props: ChooseProps<O, G> & React.InputHTMLAtt
 
     }, [identifier, internalInputRef, withHideOnChoose, fieldRef]);
 
-    // Options
+    // Options — navigation is owned by the List inside ChooseOptionList; we
+    // forward the focused control's key events to this handle.
 
-    const { selected, onKeyDown: onNavigatorKeyDown } = useOptionsKeyNavigator(options, { extractor, onChoose: handleChoose });
+    const navigationRef = useRef<ListHandle>(null);
 
     // Action Handlers
 
@@ -389,13 +390,11 @@ export function Choose<O, G = O[]>(props: ChooseProps<O, G> & React.InputHTMLAtt
 
     const handleKeyDown = (e: KeyboardEvent) => {
 
-        switch (e.key) {
-            case 'ArrowUp':
-            case 'ArrowDown':
-                handleShow();
-                break;
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            handleShow();
         }
-        onNavigatorKeyDown(e);
+
+        navigationRef.current?.onKeyDown(e);
 
     };
 
@@ -444,8 +443,9 @@ export function Choose<O, G = O[]>(props: ChooseProps<O, G> & React.InputHTMLAtt
 
             <ChooseOptionList
 
+                handleRef={navigationRef}
+
                 options={options}
-                selected={selected}
 
                 extractor={extractor}
                 onChoose={handleChoose}
@@ -455,8 +455,6 @@ export function Choose<O, G = O[]>(props: ChooseProps<O, G> & React.InputHTMLAtt
                 renderOption={renderOption}
 
                 onMouseDown={consumeEvent}
-
-                className="divide-y divide-control-border"
 
             />
 

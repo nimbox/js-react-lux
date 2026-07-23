@@ -90,3 +90,37 @@ blast radius — change carefully, verify against the stories.
   (`<Field><Field.Input/></Field>`) — more churn than it's worth given current
   usage.
 - **Risk:** low.
+
+---
+
+## List component (`src/components/list/List.tsx`)
+
+### L1. Hover is JS-driven (delegated `mousemove`), not CSS `:hover`
+- **What:** the row highlight is a single active row driven by `activeId`. Hover
+  feeds that same state via a delegated `mousemove` on the container, so there is
+  no Tailwind `hover:` class — hover and keyboard share one highlight.
+- **Why it's noted:** the user isn't fully happy with a JS-driven hover vs a pure
+  CSS `:hover` (a hair of latency, less "native" feel). It's fully encapsulated in
+  `List`, so it can be revisited without touching consumers.
+- **Constraint:** a plain CSS `hover:` cannot replace it, because it would light a
+  second row independent of the keyboard-active one (the double-highlight we
+  removed from Menu). Any alternative must still converge hover + keyboard onto a
+  single active row.
+- **Risk:** low; isolated to `List.Item`/`List`.
+
+### L2. No "selected value" state for single-select choosers (only "active")
+- **What:** `List` tracks one **active** row (the navigation cursor / Enter+hover
+  target). It has no separate **selected** concept — the row that IS the chooser's
+  current value. So opening a `Select` with a value doesn't mark that value in the
+  list. This matches the pre-refactor behaviour (the old `selected` prop was the
+  cursor, now `List.active`), so nothing regressed — deferred by decision.
+- **Why it'd matter later:** showing the current choice on open is common,
+  expected UX for single-select (`Select`/`Choose`). Less so for `Autocomplete`
+  (free text); irrelevant for `Menu`.
+- **How:** additive, keeping `List` generic — `List.Item` gains `selected?:
+  boolean` (distinct indicator, e.g. `aria-selected` + a checkmark/style, separate
+  from the active highlight); `ChooseOptionList` marks the current option via a
+  small `isSelected?: (option) => boolean` predicate; `Choose` passes its
+  `chosenOption` down. Optional extra: initialize the active cursor onto the
+  selected row when opening.
+- **Risk:** low; purely additive.

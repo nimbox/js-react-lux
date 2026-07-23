@@ -1,6 +1,6 @@
-import React, { type Ref, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { type Ref, useMemo } from 'react';
 import { useOptionsCount } from '../../hooks/useOptionsCount';
-import { cn } from '../utilities/cn';
+import { List, type ListHandle } from '../list/List';
 import { DEFAULT_ON_CHOOSE, DEFAULT_RENDER_GROUP_LABEL, DEFAULT_RENDER_OPTION, EXTRACTOR } from './options';
 
 
@@ -13,35 +13,29 @@ export interface ChooseOptionListProps<O, G = O[]> {
     ref?: Ref<HTMLDivElement>;
 
     /**
-     * The data structure representing groups and options. Given a `Group`
-     * interface and an `Option` interface, it has to be the case that `options`
-     * is options is an array of `Group` and for each element in that array
-     * `getOptions(group)` provides an array of `Option`.
+     * Imperative navigation handle of the underlying `List`. Forward the focused
+     * input's key events to `handleRef.current.onKeyDown` — the list owns the
+     * single active row and its navigation (arrows, Enter, and Tab).
+     */
+    handleRef?: Ref<ListHandle>;
+
+    /**
+     * The data structure representing groups and options: an array of groups
+     * where `extractor(group)` yields that group's options.
      */
     options?: G[] | null;
 
-    /** 
-     * Display a loading indicator as part of the list. The data that
-     * needs to be shown is on its way. (Does nothing for now).
-     * @default `false`
+    /**
+     * Display a loading indicator as part of the list. (Does nothing for now.)
+     * @default false
      */
     loading?: boolean;
 
-    /** 
-     * Display an error indicator as part of the list. The data did not load
-     * correctly. (Does nothing for now).
-     * @default `false`
+    /**
+     * Display an error indicator as part of the list. (Does nothing for now.)
+     * @default false
      */
     loadingError?: boolean;
-
-    /**
-     * The index for the element that needs to be shown as selected. This is
-     * used to draw a `cursor` like visualization when navigating with the 
-     * keyboard.
-     */
-    selected?: [number, number] | null;
-
-    //
 
     /**
      * Extractor to get the options of a given group.
@@ -50,16 +44,14 @@ export interface ChooseOptionListProps<O, G = O[]> {
     extractor?: (group: G) => O[];
 
     /**
-    * Handler to call when one of the elements is clicked inside the list. The
-    * handler receives the option. 
-    */
+     * Handler to call when an option is chosen (click or keyboard). Receives the
+     * option.
+     */
     onChoose?: (option: O) => void;
 
-    //
-
     /**
-     * Render this element when there are no options. It there are no options
-     * and this function returns null, the component is rendered as null.
+     * Render this element when there are no options. If it returns null the
+     * component renders as null.
      * @default `() => null`
      */
     renderEmpty?: () => React.ReactNode;
@@ -68,7 +60,7 @@ export interface ChooseOptionListProps<O, G = O[]> {
      * Render the group label from the provided group.
      * @default `() => null`
      */
-    renderGroupLabel?: (props: { group: G }) => React.ReactNode
+    renderGroupLabel?: (props: { group: G }) => React.ReactNode;
 
     /**
      * Render the option from the provided option.
@@ -76,149 +68,70 @@ export interface ChooseOptionListProps<O, G = O[]> {
      */
     renderOption?: (props: { option: O }) => React.ReactNode;
 
-    //
-
-    /**
-     * The class name to use for the root div element.
-     * @default `blank`
-     */
     className?: string;
 
 }
 
 /**
- * Component to choose from a list of options. When an option is clicked on the
- * `onChoose` callback is called with the option. Treat this component as an
- * unstyled `div`.
- *
- * The options are be provided in groups, so in the usual case, an array with
- * the array of options is required (note the double brackets at the begining
- * and the end): 
- *
- * ```js
- * [[ 'Yellow', 'Blue', 'Red' ]]
- * [[ 'Yellow', 'Blue', 'Red' ], [ 'Green', 'Purple', 'Orange' ]]
- * ```
+ * A data-driven list of options grouped by group. It maps its `options` data
+ * onto the shared element-driven `List`: `renderGroupLabel` becomes a
+ * `List.Header`, each option a `List.Item`, and consecutive groups are split by
+ * a `List.Separator`. The single active row, keyboard + hover navigation, and
+ * scroll-into-view all come from `List`.
  */
-export function ChooseOptionList<O, G = O[]>(props: ChooseOptionListProps<O, G> & React.HTMLAttributes<HTMLDivElement>) {
-
-    // Properties
-
-    const {
-
-        ref,
-
-        options,
-        loading = false,
-        loadingError = false,
-        selected,
-
-        extractor = EXTRACTOR,
-        onChoose = DEFAULT_ON_CHOOSE,
-
-        renderEmpty,
-        renderGroupLabel = DEFAULT_RENDER_GROUP_LABEL,
-        renderOption = DEFAULT_RENDER_OPTION,
-
-        className,
-
-        ...divProps
-
-    } = props;
-
-    // Configuration
-
-    // Create option references to scroll into view when the chosen
-    // option changes.
-
-    const optionsRef = useRef<(HTMLLIElement | null)[][]>(null);
-    const [optionsRefAvailable, setOptionsRefAvailable] = useState(false);
-    useEffect(() => {
-        optionsRef.current = options != null ?
-            options.map(group => extractor(group).map(() => null)) : [];
-        setOptionsRefAvailable(true);
-    }, [options, extractor]);
-
-    useLayoutEffect(() => {
-        if (optionsRef.current != null && selected != null) {
-            const li = optionsRef.current?.[selected[0]][selected[1]];
-            if (li) {
-                li.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-            }
-        }
-    }, [optionsRefAvailable, selected]);
-
-    // Handlers
-
-    const handleClick = (_e: React.MouseEvent<HTMLLIElement>, g: number, i: number) => {
-        onChoose(extractor(options![g])[i]);
-    };
-
-    // Render empty
+export function ChooseOptionList<O, G = O[]>({
+    ref,
+    handleRef,
+    options,
+    loading = false,
+    loadingError = false,
+    extractor = EXTRACTOR,
+    onChoose = DEFAULT_ON_CHOOSE,
+    renderEmpty,
+    renderGroupLabel = DEFAULT_RENDER_GROUP_LABEL,
+    renderOption = DEFAULT_RENDER_OPTION,
+    className,
+    ...divProps
+}: ChooseOptionListProps<O, G> & React.HTMLAttributes<HTMLDivElement>) {
 
     const optionsCount = useOptionsCount(options, extractor);
-    const empty = useMemo(() =>
-        (!loading && optionsCount === 0) ? renderEmpty?.() : null,
+
+    const empty = useMemo(
+        () => (!loading && optionsCount === 0) ? renderEmpty?.() : null,
         [loading, optionsCount, renderEmpty]
     );
-
-    // Render Label
-
-    const groupLabel = useCallback((group: G) => {
-        const label = renderGroupLabel?.({ group });
-        return label ? <div className="lux-px-2em lux-py-0.5em">{label}</div> : null;
-    }, [renderGroupLabel]);
-
-    // Render
 
     if (loading || loadingError || (optionsCount === 0 && empty == null)) {
         return null;
     }
 
+    if (optionsCount === 0) {
+        return <div ref={ref} className={className} {...divProps}>{empty}</div>;
+    }
+
     return (
-        <div ref={ref} {...divProps} className={className}>
+        <List ref={ref} handleRef={handleRef} role="listbox" className={className} {...divProps}>
+            {options!.map((group, g) => {
 
-            {optionsCount === 0 ?
-                empty
-                :
-                <div className={cn({ 'pointer-events-none': loading })}>
-                    {options!.map((group, g) =>
-                        extractor(group).length > 0 &&
-                        <div key={g}>
+                const groupOptions = extractor(group);
+                if (groupOptions.length === 0) { return null; }
 
-                            {groupLabel(group)}
+                const label = renderGroupLabel({ group });
 
-                            <ul className="list-none">
-                                {extractor(group).map((option, i) =>
-                                    <li key={i}
-                                        ref={element => {
-                                            if (
-                                                optionsRef.current != null &&
-                                                g < optionsRef.current.length
-                                            ) {
-                                                optionsRef.current[g][i] = element;
-                                            }
-                                        }}
-                                        onClick={(e) => handleClick(e, g, i)}
-                                        className={cn(
-                                            'lux-px-2em lux-py-0.5em',
-                                            { 'bg-primary-500': !loading && selected != null && selected[0] === g && selected[1] === i },
-                                            'hover:bg-secondary-500',
-                                            'cursor-pointer'
-                                        )}
-                                    >
-                                        {renderOption({ option })}
-                                    </li>
-                                )}
-                            </ul>
+                return (
+                    <React.Fragment key={g}>
+                        {g > 0 && <List.Separator />}
+                        {label != null && <List.Header>{label}</List.Header>}
+                        {groupOptions.map((option, i) => (
+                            <List.Item key={i} role="option" onClick={() => onChoose(option)}>
+                                {renderOption({ option })}
+                            </List.Item>
+                        ))}
+                    </React.Fragment>
+                );
 
-                        </div>
-                    )}
-                </div>
-            }
-
-        </div>
+            })}
+        </List>
     );
 
 }
-

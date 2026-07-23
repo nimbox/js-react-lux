@@ -1,6 +1,7 @@
-import { arrow, autoUpdate, flip, FloatingList, FloatingPortal, offset, shift, useClick, useDismiss, useFloating, useInteractions, useListItem, useListNavigation, useRole, type Placement } from '@floating-ui/react';
+import { arrow, autoUpdate, flip, FloatingFocusManager, FloatingPortal, offset, shift, useClick, useDismiss, useFloating, useInteractions, useRole, type Placement } from '@floating-ui/react';
 import React, { useRef, useState, type ReactElement, type ReactNode } from 'react';
 import { ControlArrow } from '../floating/ControlArrow';
+import { List } from '../list/List';
 import { cn } from '../utilities/cn';
 import { MenuContext, useMenu } from './MenuContext';
 
@@ -30,15 +31,17 @@ export function Menu(props: MenuProps) {
     } = props;
 
     const [isOpen, setIsOpen] = useState(false);
-    const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
     const handleOpenChange = (open: boolean) => {
         setIsOpen(open);
-        if (!open) { setActiveIndex(null); }
         onOpenChange?.(open);
     };
 
     const arrowRef = useRef<SVGSVGElement>(null);
+    const listRef = useRef<HTMLDivElement>(null);
+
+    // Positioning, trigger and dismissal stay with floating-ui; the list itself
+    // (rows, single active row, keyboard + hover navigation) is owned by `List`.
     const { refs, floatingStyles, context } = useFloating({
         open: isOpen,
         onOpenChange: handleOpenChange,
@@ -52,12 +55,6 @@ export function Menu(props: MenuProps) {
         whileElementsMounted: autoUpdate
     });
 
-    // Keyboard navigation and menu semantics. `elementsRef`/`labelsRef` are
-    // populated by each `Menu.Item` through `useListItem` (via `FloatingList`).
-
-    const elementsRef = useRef<Array<HTMLButtonElement | null>>([]);
-    const labelsRef = useRef<Array<string | null>>([]);
-
     const click = useClick(context, { toggle: true, event: 'mousedown' });
     const dismiss = useDismiss(context, {
         outsidePress: true,
@@ -65,16 +62,8 @@ export function Menu(props: MenuProps) {
         escapeKey: true
     });
     const role = useRole(context, { role: 'menu' });
-    const listNavigation = useListNavigation(context, {
-        listRef: elementsRef,
-        activeIndex,
-        onNavigate: setActiveIndex,
-        loop: true
-    });
 
-    const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
-        click, dismiss, role, listNavigation
-    ]);
+    const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, role]);
 
     // Render
 
@@ -85,19 +74,26 @@ export function Menu(props: MenuProps) {
 
             {isOpen &&
                 <FloatingPortal id="modal" >
-                    <div ref={refs.setFloating} {...getFloatingProps()} style={floatingStyles} className="outline-none" >
-                        <div className="py-1 bg-control-bg border border-control-border rounded shadow min-w-48">
+                    {/* Focus moves into the list on open (so arrow keys navigate
+                        it instead of scrolling the page) and returns to the trigger
+                        on close. `modal={false}` lets Tab-to-choose move focus out. */}
+                    <FloatingFocusManager context={context} modal={false} initialFocus={listRef}>
+                        <div ref={refs.setFloating} {...getFloatingProps()} style={floatingStyles} className="outline-none" >
 
-                            <MenuContext.Provider value={{ closeMenu: () => setIsOpen(false), activeIndex, getItemProps }}>
-                                <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
+                            <List
+                                ref={listRef}
+                                tabIndex={-1}
+                                className="bg-control-bg border border-control-border rounded shadow min-w-48 outline-none"
+                            >
+                                <MenuContext.Provider value={{ closeMenu: () => setIsOpen(false) }}>
                                     {children}
-                                </FloatingList>
-                            </MenuContext.Provider>
+                                </MenuContext.Provider>
+                            </List>
 
                             {withArrow && <ControlArrow ref={arrowRef} context={context} />}
 
                         </div>
-                    </div>
+                    </FloatingFocusManager>
                 </FloatingPortal>
             }
 
@@ -106,6 +102,7 @@ export function Menu(props: MenuProps) {
     );
 
 }
+
 
 // MenuItem
 
@@ -129,9 +126,7 @@ function MenuItem(props: MenuItemProps) {
         className
     } = props;
 
-    const { closeMenu, activeIndex, getItemProps } = useMenu();
-    const { ref, index } = useListItem({ label: disabled ? null : label });
-    const isActive = activeIndex === index;
+    const { closeMenu } = useMenu();
 
     const handleClick = () => {
         if (!disabled && onClick) {
@@ -141,37 +136,26 @@ function MenuItem(props: MenuItemProps) {
     };
 
     return (
-        <div className="px-1">
-            <button
-                ref={ref}
-                role="menuitem"
-                tabIndex={isActive ? 0 : -1}
-                className={cn(
-                    'w-full px-4 py-2 text-left flex items-center gap-2 rounded-lg focus:outline-none transition-colors',
-                    {
-                        // Highlight the single floating-ui active item — it tracks
-                        // both hover (focusItemOnHover) and keyboard navigation, so
-                        // exactly one item is lit at a time.
-                        'bg-gray-100': isActive && !disabled,
-                        'opacity-50 cursor-not-allowed': disabled,
-                        'cursor-pointer': !disabled
-                    },
-                    className
-                )}
-                disabled={disabled}
-                {...getItemProps({ onClick: disabled ? undefined : handleClick })}
-            >
-                {icon && (
-                    <div className="shrink-0 w-4 h-4">
-                        {icon}
-                    </div>
-                )}
-                <span className="flex-1">{label}</span>
-            </button>
-        </div>
+        <List.Item
+            as="button"
+            type="button"
+            role="menuitem"
+            tabIndex={-1}
+            disabled={disabled}
+            onClick={handleClick}
+            className={cn('flex items-center gap-2 text-left', className)}
+        >
+            {icon && (
+                <div className="shrink-0 w-4 h-4">
+                    {icon}
+                </div>
+            )}
+            <span className="flex-1">{label}</span>
+        </List.Item>
     );
 
 }
+
 
 // MenuDivider
 
@@ -180,14 +164,9 @@ interface MenuDividerProps {
 }
 
 function MenuDivider(props: MenuDividerProps) {
-
-    const { className } = props;
-
-    return (
-        <div className={cn('border-t border-control-border my-1', className)} />
-    );
-
+    return <List.Separator className={props.className} />;
 }
+
 
 // Slots
 

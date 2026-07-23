@@ -1,18 +1,14 @@
-import { createContext, useContext, type HTMLProps } from 'react';
+import { createContext, useContext } from 'react';
 
 
 // MenuContext
 
 export interface MenuContextProps {
     closeMenu: () => void;
-    activeIndex: number | null;
-    getItemProps: (userProps?: HTMLProps<HTMLElement>) => Record<string, unknown>;
 }
 
 export const MenuContext = createContext<MenuContextProps>({
-    closeMenu: () => { },
-    activeIndex: null,
-    getItemProps: () => ({})
+    closeMenu: () => { }
 });
 
 export const useMenu = () => {

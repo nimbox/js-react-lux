@@ -2,7 +2,7 @@ import { WarningIcon } from '@nimbox/icons-react';
 import React, { type Ref, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useOptions, type UseOptionsProps, type UseOptionsSupplier } from '../../hooks/useOptions';
 import { useOptionsCount } from '../../hooks/useOptionsCount';
-import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
+import { type ListHandle } from '../list/List';
 import { ChooseOptionList, type ChooseOptionListProps } from '../choose/ChooseOptionList';
 import { EXTRACTOR } from '../choose/options';
 import { Delay } from '../Delay';
@@ -121,9 +121,11 @@ export function Autocomplete<O, G = O[]>(props: AutocompleteProps<O, G> & React.
 
     const { options, loading, error: loadingError, search } =
         useOptions(supplier, supplierProps);
-    const { selected, onKeyDown: onNavigatorKeyDown } =
-        useOptionsKeyNavigator(options, { extractor, onChoose: handleChoose });
     const count = useOptionsCount(options, extractor);
+
+    // Navigation is owned by the List inside ChooseOptionList; forward the
+    // input's key events to this handle.
+    const navigationRef = useRef<ListHandle>(null);
 
     // Show
 
@@ -150,7 +152,7 @@ export function Autocomplete<O, G = O[]>(props: AutocompleteProps<O, G> & React.
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        onNavigatorKeyDown(e);
+        navigationRef.current?.onKeyDown(e);
         onKeyDown?.(e);
     };
 
@@ -169,10 +171,11 @@ export function Autocomplete<O, G = O[]>(props: AutocompleteProps<O, G> & React.
     const popper = () => (
         <ChooseOptionList
 
+            handleRef={navigationRef}
+
             options={options}
             loading={loading}
             loadingError={!!loadingError}
-            selected={selected}
 
             extractor={extractor}
             onChoose={handleChoose}
@@ -182,8 +185,6 @@ export function Autocomplete<O, G = O[]>(props: AutocompleteProps<O, G> & React.
             renderOption={renderOption}
 
             onMouseDown={consumeEvent}
-
-            className="divide-y"
 
         />
     );

@@ -30,14 +30,14 @@ describe('Menu', () => {
         expect(screen.getAllByRole('menuitem')).toHaveLength(2);
     });
 
-    it('moves the active item with the ArrowDown key', () => {
+    it('activates a single item with the ArrowDown key', () => {
         renderMenu();
-        const trigger = screen.getByText('Open');
-        fireEvent.mouseDown(trigger);
-        const menu = screen.getByRole('menu');
-        fireEvent.keyDown(menu, { key: 'ArrowDown' });
+        fireEvent.mouseDown(screen.getByText('Open'));
         const items = screen.getAllByRole('menuitem');
-        expect(items[0]).toHaveAttribute('tabindex', '0');
+        // Keydown bubbles from the item to the List container that owns navigation.
+        fireEvent.keyDown(items[0], { key: 'ArrowDown' });
+        expect(items[0]).toHaveClass('bg-gray-100');
+        expect(items[1]).not.toHaveClass('bg-gray-100');
     });
 
 });

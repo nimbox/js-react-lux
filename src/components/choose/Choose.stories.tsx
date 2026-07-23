@@ -102,6 +102,8 @@ export const Primary: Story = {
                     renderOption={({ option }) => <span className="lux-px-2em italic">{option.name}</span>}
                     renderChosen={({ option }) => <span>{option.name}</span>}
 
+                    fieldClassName="w-52"
+
                 />
                 <Input className="w-4" />
                 <Button>Submit</Button>

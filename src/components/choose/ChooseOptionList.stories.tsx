@@ -40,7 +40,6 @@ export const Primary: Story = {
         options: data.colors,
         loading: false,
         loadingError: false,
-        selected: [1, 1],
         className: 'w-96 text-base border border-control-border rounded overflow-hidden'
     }
 };
@@ -162,46 +161,6 @@ export const ChooseOptionListWithLoadingError: Story = {
     }
 };
 
-export const ChooseOptionListWithSelected: Story = {
-    render: () => {
-        return (
-            <ChooseOptionList
-                options={[['Yellow', 'Blue', 'Red'], ['Green', 'Purple', 'Orange']]}
-                selected={[0, 0]}
-                onChoose={option => action('onChoose')(option)}
-                className="w-96 border border-control-border rounded overflow-hidden"
-            />
-        );
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: 'To show a selection of one of the options pass a non null `selected` property.'
-            }
-        }
-    }
-};
-
-export const ChooseOptionListwithSelectedAndAutoScroll: Story = {
-    render: () => {
-        return (
-            <ChooseOptionList
-                options={[['Yellow', 'Blue', 'Red'], ['Green', 'Purple', 'Orange']]}
-                selected={[1, 2]}
-                onChoose={option => action('onChoose')(option)}
-                className="w-96 border border-control-border rounded overflow-hidden max-h-16 overflow-y-scroll"
-            />
-        );
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: 'The selection will be automatically be brought into view.'
-            }
-        }
-    }
-};
-
 export const ChooseOptionListExtraSmall: Story = {
     render: () => {
         return (
@@ -288,7 +247,6 @@ export const ChooseOptionListWithRender: Story = {
                         ]
                     }
                 ]}
-                selected={[1, 2]}
                 extractor={(group) => group.options}
                 onChoose={option => action('onChoose')(option)}
                 renderGroupLabel={({ group }) =>

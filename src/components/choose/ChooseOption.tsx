@@ -1,6 +1,6 @@
-import React, { type Ref, useState } from 'react';
+import React, { type Ref, useRef, useState } from 'react';
 import { useOptions, type UseOptionsProps, type UseOptionsSupplier } from '../../hooks/useOptions';
-import { useOptionsKeyNavigator } from '../../hooks/useOptionsKeyNavigator';
+import { type ListHandle } from '../list/List';
 import { SearchInput } from '../inputs/SearchInput';
 import { consumeEvent } from '../utilities/consumeEvent';
 import { ChooseOptionList, type ChooseOptionListProps } from './ChooseOptionList';
@@ -80,7 +80,15 @@ export function ChooseOption<O, G = O[]>(props: ChooseOptionProps<O, G> & React.
     // Options
 
     const { options, loading, error, search } = useOptions(supplier, supplierProps);
-    const { selected, onKeyDown } = useOptionsKeyNavigator(options, { extractor, onChoose });
+
+    // Navigation is owned by the List inside ChooseOptionList; forward the
+    // search input's key events to this handle.
+
+    const navigationRef = useRef<ListHandle>(null);
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        navigationRef.current?.onKeyDown(e);
+    };
 
     // Handlers
 
@@ -103,15 +111,16 @@ export function ChooseOption<O, G = O[]>(props: ChooseOptionProps<O, G> & React.
                         loadingError={!!error}
                         value={searchValue}
                         onChange={handleChangeSearchValue}
-                        onKeyDown={onKeyDown}
+                        onKeyDown={handleKeyDown}
                     />
                 </div>
             }
 
             <ChooseOptionList
 
+                handleRef={navigationRef}
+
                 options={options}
-                selected={selected}
 
                 extractor={extractor}
                 onChoose={onChoose}
@@ -121,8 +130,6 @@ export function ChooseOption<O, G = O[]>(props: ChooseOptionProps<O, G> & React.
                 renderOption={renderOption}
 
                 onMouseDown={consumeEvent}
-
-                className="divide-y"
 
             />
 
