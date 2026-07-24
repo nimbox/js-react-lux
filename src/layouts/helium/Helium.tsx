@@ -52,7 +52,7 @@ export const Helium: FC<Props> = ({ children }) => {
 
     return (
         <HeliumContext.Provider value={{ isCompact, showNavigator, setShowNavigator, showMainSide, setShowMainSide }}>
-            <div className="relative min-h-screen flex flex-col">
+            <div className="relative h-full min-h-screen flex flex-col">
                 {children}
             </div>
         </HeliumContext.Provider>
@@ -197,8 +197,8 @@ Navigator.Footer = NavigatorFooter;
 // main
 
 interface MainComponent<P> extends FC<P> {
-    Content: FC<{ className?: string, children?: React.ReactNode }>,
-    Side: FC<{ className?: string, children?: React.ReactNode }>
+    Content: FC<{ scroll?: boolean, className?: string, children?: React.ReactNode }>,
+    Side: FC<{ scroll?: boolean, className?: string, children?: React.ReactNode }>
 }
 
 export const Main: MainComponent<{ children?: React.ReactNode }> = ({ children }) => {
@@ -208,10 +208,10 @@ export const Main: MainComponent<{ children?: React.ReactNode }> = ({ children }
     return (
         <main
             className={cn(
-                'h-full',
+                'h-full min-h-0',
                 showNavigator ? 'pl-0 md:pl-56' : 'pl-0',
                 'pt-16',
-                'grow flex flex-row items-stretch overflow-y-auto ',
+                'grow flex flex-row items-stretch overflow-hidden',
                 'text-content bg-content-bg',
                 'transition-spacing duration-700 ease-in-out'
             )}
@@ -223,13 +223,27 @@ export const Main: MainComponent<{ children?: React.ReactNode }> = ({ children }
 
 };
 
-Main.Content = ({ className, children }) => (
-    <div className={cn('w-2/3 grow', className)}>{children}</div>
+Main.Content = ({ scroll = true, className, children }) => (
+    <div
+        className={cn(
+            'w-2/3 grow min-w-0 min-h-0',
+            scroll ? 'overflow-y-auto' : 'flex flex-col overflow-hidden',
+            className
+        )}
+    >
+        {children}
+    </div>
 );
 
-const MainSide: FC<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => {
+const MainSide: FC<{ scroll?: boolean, className?: string, children?: React.ReactNode }> = ({ scroll = true, className, children }) => {
 
     const { isCompact, showMainSide, setShowMainSide } = useContext(HeliumContext);
+
+    const boundedClassName = cn(
+        'min-h-0',
+        scroll ? 'overflow-y-auto' : 'flex flex-col overflow-hidden',
+        className
+    );
 
     return (
         isCompact ?
@@ -252,20 +266,18 @@ const MainSide: FC<{ className?: string, children?: React.ReactNode }> = ({ clas
                     mountClassName="translate-x-full"
                     showClassName="translate-0"
                 >
-                    <div className={className}>
+                    <div className={cn('h-full', boundedClassName)}>
                         {children}
-                        <div>side</div>
                     </div>
                 </ShowTransition>
             </>
             :
             <div className={cn(
                 'w-1/3', 'max-w-[400px]',
-                'bg-content-fg1', 'border-l border-content-border'
+                'bg-content-fg1', 'border-l border-content-border',
+                boundedClassName
             )}>
-                <div className={className}>
-                    {children}
-                </div>
+                {children}
             </div>
     );
 
