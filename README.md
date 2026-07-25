@@ -57,13 +57,16 @@ import { createRequire } from 'module';
 import { dirname, join } from 'path';
 
 const require = createRequire(import.meta.url);
-const luxDist = dirname(require.resolve('@nimbox/js-react-lux'));
+
+const PACKAGES = [
+    '@nimbox/js-react-lux'
+];
 
 export default {
     content: [
         './index.html',
         './src/**/*.{js,jsx,ts,tsx}',
-        join(luxDist, '**/*.{js,jsx,ts,tsx}')
+        ...PACKAGES.map(name => join(dirname(require.resolve(name)), '**/*.{js,jsx,ts,tsx}'))
     ]
 };
 ```
