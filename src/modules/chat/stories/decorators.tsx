@@ -1,22 +1,6 @@
 import type { Decorator } from '@storybook/react-vite';
-import type { ReactNode } from 'react';
-import { cn } from '../../../components/utilities/cn';
-import chatBackground from '../assets/chat-background.png';
+import { ChatSurface } from '../surface/ChatSurface';
 
-
-// The chat surface — the themed message-list background with the subtle pattern
-// overlay, so bubbles/rows sit on the real surface instead of a bare Storybook canvas.
-// Used as a wrapper component (`ChatSurface`, for the full-height thread) and as a
-// padded decorator (`chatBackdrop`, for single-component stories).
-
-export function ChatSurface({ className, children }: { className?: string; children: ReactNode }) {
-    return (
-        <div className={cn('relative bg-chat-message-list-bg', className)}>
-            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${chatBackground})` }} />
-            <div className="relative h-full">{children}</div>
-        </div>
-    );
-}
 
 // Padded surface for a single message / reactions / options story.
 export const chatBackdrop: Decorator = (Story) => (

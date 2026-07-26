@@ -53,6 +53,8 @@ export * from './types/MessageRow';
 export * from './types/MessageListRow';
 export * from './types/MessageGroupRow';
 
+export * from './surface/ChatSurface';
+
 export * from './composer/DockedMessageComposer';
 export * from './composer/MessageComposer';
 export * from './composer/panels/ComposerPanel';
