@@ -55,6 +55,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "build": "rm -rf dist/* && npm run build:types && rollup -c",
+    "build:yalc": "rm -rf dist/* && npm run build:types && rollup -c && yalc publish",
     "build:types": "tsc -p tsconfig.types.json --emitDeclarationOnly --declaration --outDir dist/types",
     "build:watch": "rm -rf dist/* && npm run build:types && rollup -cw",
     "build:watch:yalc": "rm -rf dist/* && npm run build:types && rollup -cw -p ./yalc.js",
