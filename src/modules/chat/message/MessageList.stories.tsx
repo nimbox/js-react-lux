@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ChatSurface } from '../stories/decorators';
 import { MessageThread } from '../stories/MessageThread';
 import { firstUnreadId, thread } from '../stories/messages';
 import { StoryChatProvider } from '../stories/StoryChatProvider';
+import { ChatSurface } from '../surface/ChatSurface';
 
 
 // The flagship read-path story: a full timeline driven ONLY through public props and
