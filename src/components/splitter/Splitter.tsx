@@ -23,9 +23,13 @@ const KEYBOARD_STEP = 16;
 /** Everything a gesture needs, snapshotted when the pointer goes down. */
 interface DragSnapshot {
 
+    /** Divider being dragged: the boundary between panes `index` and `index + 1`. */
     index: number;
+
+    /** Pointer that opened the gesture, to release the capture it took. */
     pointerId: number;
 
+    /** Where the pointer went down, along the splitter's axis. Deltas are measured from here. */
     startCoordinate: number;
 
     /** Stored sizes to restore to when the gesture is cancelled. */
@@ -110,27 +114,34 @@ export function Splitter(props: SplitterProps) {
     // Properties
 
     const {
+
         ref,
+
         direction = 'horizontal',
+
         sizes,
         defaultSizes,
         onSizesChange,
         persistenceKey,
+
         disabled = false,
         dividerClassName,
+
         className,
         style,
         children,
+
         ...divProps
+
     } = props;
 
     const { t } = useTranslation();
 
     const isHorizontal = direction === 'horizontal';
 
-    // Pane options come from the children's props rather than from the
-    // DOM: the track template needs them on the very first render, before
-    // any pane element exists to read them off.
+    // Pane options come from the children's props rather than from
+    // the DOM: the track template needs them on the very first
+    // render, before any pane element exists to read them off.
 
     const panes = Children.toArray(children).filter(isValidElement);
     const paneOptions = panes.map(readPaneOptions);
@@ -147,9 +158,9 @@ export function Splitter(props: SplitterProps) {
         else if (ref != null) { (ref as React.RefObject<HTMLDivElement | null>).current = node; }
     };
 
-    // Measurement — the panes' current pixel sizes, read straight from the
-    // DOM in document order. The `:scope >` qualifier keeps a nested
-    // splitter's panes out of the result.
+    // Measurement — the panes' current pixel sizes, read straight
+    // from the DOM in document order. The `:scope >` qualifier keeps
+    // a nested splitter's panes out of the result.
 
     const measure = useCallback((): number[] | null => {
 
@@ -166,10 +177,11 @@ export function Splitter(props: SplitterProps) {
 
     }, [isHorizontal]);
 
-    // The ARIA values report a real ratio, which stored sizes cannot give
-    // once pinned panes are in play: a pane holding 120 pixels and one
-    // holding a 0.5 share are not comparable numbers. So the panes are
-    // measured, and observed, purely to keep those values honest.
+    // The ARIA values report a real ratio, which stored sizes cannot
+    // give once pinned panes are in play: a pane holding 120 pixels
+    // and one holding a 0.5 share are not comparable numbers. So the
+    // panes are measured, and observed, purely to keep those values
+    // honest.
 
     useLayoutEffect(() => {
 
@@ -196,10 +208,10 @@ export function Splitter(props: SplitterProps) {
 
     }, [measure, panes.length]);
 
-    // Drag — the snapshot lives in a ref rather than state because the
-    // handlers must read an authoritative value synchronously. State
-    // would lag a render behind, so a burst of moves in one frame would
-    // all resolve against the same stale geometry.
+    // Drag — the snapshot lives in a ref rather than state because
+    // the handlers must read an authoritative value synchronously.
+    // State would lag a render behind, so a burst of moves in one
+    // frame would all resolve against the same stale geometry.
 
     const endDrag = useCallback(() => {
         dragRef.current = null;
@@ -246,9 +258,9 @@ export function Splitter(props: SplitterProps) {
 
     };
 
-    // Escape cancels an in-flight drag. It listens on the window because
-    // the pointer, not the keyboard, owns the gesture — the divider need
-    // not be the focused element.
+    // Escape cancels an in-flight drag. It listens on the window
+    // because the pointer, not the keyboard, owns the gesture — the
+    // divider need not be the focused element.
 
     useEffect(() => {
 
@@ -273,9 +285,9 @@ export function Splitter(props: SplitterProps) {
         const leading = paneOptions[index];
         const trailing = paneOptions[index + 1];
 
-        // Expanding restores the pane to its minimum — the smallest size
-        // at which it is usable — or to half the pair when it declared no
-        // minimum.
+        // Expanding restores the pane to its minimum — the smallest
+        // size at which it is usable — or to half the pair when it
+        // declared no minimum.
 
         if (leading.collapsible) {
             const expanded = Math.min(leading.minimumSize || available / 2, available);
@@ -287,9 +299,10 @@ export function Splitter(props: SplitterProps) {
 
     };
 
-    // Keyboard — the arrows along the axis nudge the boundary, Home/End
-    // drive it to the extremes and Enter toggles a collapsible
-    // neighbour. Everything commits through the same maths as the drag.
+    // Keyboard — the arrows along the axis nudge the boundary,
+    // Home/End drive it to the extremes and Enter toggles a
+    // collapsible neighbour. Everything commits through the same
+    // maths as the drag.
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {
 
@@ -334,9 +347,9 @@ export function Splitter(props: SplitterProps) {
 
     };
 
-    // Double click restores the two panes around the divider to an even
-    // share of the space they already occupy, leaving every other pane
-    // untouched.
+    // Double click restores the two panes around the divider to an
+    // even share of the space they already occupy, leaving every
+    // other pane untouched.
 
     const handleDoubleClick = (index: number) => {
 
@@ -351,13 +364,13 @@ export function Splitter(props: SplitterProps) {
     // Render — a stored size already carries its unit, so it drops
     // straight into the track with no branch on the pane's kind.
     //
-    // `minmax(0, …)` rather than the bare size: on an `fr` track the zero
-    // floor replaces a `min-content` floor that would stop a pane with
-    // wide content from shrinking, and on a `px` track it lets the track
-    // give way when the pinned panes together ask for more than the
-    // container has, instead of overflowing it. The stored size is
-    // untouched by that squeeze, so a pane springs back as soon as the
-    // room returns.
+    // `minmax(0, …)` rather than the bare size: on an `fr` track the
+    // zero floor replaces a `min-content` floor that would stop a
+    // pane with wide content from shrinking, and on a `px` track it
+    // lets the track give way when the pinned panes together ask for
+    // more than the container has, instead of overflowing it. The
+    // stored size is untouched by that squeeze, so a pane springs
+    // back as soon as the room returns.
 
     const tracks = panes.flatMap((_, index) => {
         const track = `minmax(0, ${currentSizes[index]})`;
@@ -416,11 +429,11 @@ export interface SplitterPaneProps extends React.HTMLAttributes<HTMLDivElement> 
      * Size the pane starts on, and the unit decides how it behaves.
      * `"240px"` pins the pane: it holds those pixels as the container
      * resizes and the other panes absorb the change. `"3fr"` gives it
-     * three shares of whatever the pinned panes leave over. Omit it for
-     * a single share.
+     * three shares of whatever the pinned panes leave over. Omit it
+     * for a single share.
      *
-     * Either way this is a starting size, not a lock — dragging sets a
-     * new one in the same unit.
+     * Either way this is a starting size, not a lock — dragging sets
+     * a new one in the same unit.
      */
     defaultSize?: PaneSize;
 
@@ -436,10 +449,11 @@ export interface SplitterPaneProps extends React.HTMLAttributes<HTMLDivElement> 
 
 export function SplitterPane({ ref, defaultSize, minimumSize = 0, collapsible = false, className, children, ...divProps }: SplitterPaneProps) {
 
-    // The splitter reads these options off the props, not the DOM — it
-    // needs them on the first render, before any pane element exists.
-    // They are mirrored as data attributes anyway: they make a layout
-    // legible in devtools and give stylesheets something to hook onto.
+    // The splitter reads these options off the props, not the DOM —
+    // it needs them on the first render, before any pane element
+    // exists. They are mirrored as data attributes anyway: they make
+    // a layout legible in devtools and give stylesheets something to
+    // hook onto.
 
     return (
         <div
@@ -460,8 +474,8 @@ export function SplitterPane({ ref, defaultSize, minimumSize = 0, collapsible = 
 
 
 //
-// SplitterDivider — the boundary control. Private: a divider only makes
-// sense between two panes, so the splitter places them itself.
+// SplitterDivider — the boundary control. Private: a divider only
+// makes sense between two panes, so the splitter places them itself.
 //
 
 interface SplitterDividerProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -495,6 +509,7 @@ function SplitterDivider({ direction, disabled, isDragging, value, label, classN
             )}
             {...divProps}
         >
+
             {/* The grab area. The divider track has no width, so this
                 straddles the seam to give the pointer something to aim at.
                 Sized in pixels rather than spacing units: it is a hit
@@ -517,6 +532,7 @@ function SplitterDivider({ direction, disabled, isDragging, value, label, classN
                     className
                 )}
             />
+
         </div>
     );
 
@@ -529,17 +545,19 @@ function SplitterDivider({ direction, disabled, isDragging, value, label, classN
 
 /**
  * What a pane declares about how it may be sized. The only place a
- * `PaneSize` is taken apart — everything downstream works in the numbers
- * this yields, or passes the strings through untouched.
+ * `PaneSize` is taken apart — everything downstream works in the
+ * numbers this yields, or passes the strings through untouched.
  */
 function readPaneOptions(pane: React.ReactElement): PaneOptions {
 
     const { defaultSize, minimumSize, collapsible } = pane.props as SplitterPaneProps;
 
     // An unreadable size is treated as if the pane declared none. The
-    // `PaneSize` type turns away the common mistakes — a bare `"200"`, a
-    // number, another unit — but a template literal type is not a parser,
-    // and forms like `"-3px"` or `"200 px"` still reach here.
+    // `PaneSize` type turns away the common mistakes — a bare
+    // `"200"`, a number, another unit — but a template literal type
+    // is not a parser, and forms like `"-3px"` or `"200 px"` still
+    // reach here.
+
     const parsed = defaultSize != null ? parseSize(defaultSize) : null;
 
     return {
@@ -552,10 +570,10 @@ function readPaneOptions(pane: React.ReactElement): PaneOptions {
 }
 
 /**
- * The leading pane's share of its adjacent pair, as a whole percentage.
- * Reads measured pixels, so it stays meaningful when one of the pair is
- * pinned and the other is not. Falls back to an even split until the
- * panes have been measured.
+ * The leading pane's share of its adjacent pair, as a whole
+ * percentage. Reads measured pixels, so it stays meaningful when one
+ * of the pair is pinned and the other is not. Falls back to an even
+ * split until the panes have been measured.
  */
 function percentageOfPair(pixelSizes: number[], index: number) {
 
