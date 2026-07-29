@@ -51,7 +51,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "check": "tsc --noEmit",
+    "check": "tsc -b",
     "test": "vitest run",
     "test:watch": "vitest",
     "build": "rm -rf dist/* && npm run build:types && rollup -c",

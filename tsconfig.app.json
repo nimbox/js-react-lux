@@ -26,5 +26,8 @@
     "noUncheckedSideEffectImports": true
 
   },
-  "include": ["src"]
+  "include": ["src"],
+  // Scratch work, already ignored by eslint. Kept out of the typecheck so
+  // `npm run check` reports on shipped code only.
+  "exclude": ["src/sandbox"]
 }
