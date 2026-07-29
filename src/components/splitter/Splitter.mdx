@@ -1,0 +1,121 @@
+import { Meta, Controls, Stories, Primary } from '@storybook/addon-docs/blocks';
+import * as SplitterStories from './Splitter.stories';
+
+
+<Meta name="Documentation" of={SplitterStories} />
+
+# Splitter
+
+Use to lay out panes along a row or a column and let the reader decide how the
+space is shared between them. Every adjacent pair gets a divider that can be
+dragged, nudged with the keyboard, or double clicked to even the pair out.
+
+<Primary />
+
+## Sizes
+
+Every size carries its own unit, and the unit is the whole of the API:
+
+- **`"3fr"`** — three shares of the space left over. Shares keep their
+  proportions as the container resizes.
+- **`"240px"`** — 240 pixels, held as the container resizes. The panes measured
+  in shares absorb the difference.
+
+That is the only rule. A pane is pinned because its size is in `px`, not because
+of a separate flag, and a pane that declares no size takes a single share — which
+is what makes an undeclared row an even split.
+
+```tsx
+<Splitter direction="horizontal">
+    <Splitter.Pane defaultSize="120px"><Navigator /></Splitter.Pane>
+    <Splitter.Pane defaultSize="3fr"><Editor /></Splitter.Pane>
+    <Splitter.Pane defaultSize="240px"><Inspector /></Splitter.Pane>
+</Splitter>
+```
+
+Because the unit travels with the value, a size stays readable everywhere it
+goes — a change callback, `localStorage`, a controlled array:
+
+```js
+onSizesChange(["120px", "1fr", "240px"])
+```
+
+Pass `sizes` together with `onSizesChange` to drive the layout yourself, or
+`defaultSizes` to set a starting layout positionally. `defaultSizes` wins over
+the panes' own `defaultSize`. A `persistenceKey` stores the layout so it survives
+a reload; a stored layout that no longer describes the panes — one added,
+removed, or switched between `px` and `fr` — is discarded rather than misread.
+
+## Pinned panes
+
+Measuring a pane in pixels is what a sidebar usually wants: an icon rail is 120px
+wide because that is how wide icons and labels are, not because it is 12% of the
+screen.
+
+| container | pinned | flexible | pinned |
+| --- | --- | --- | --- |
+| 1000px | 120 | 640 | 240 |
+| 1600px | 120 | **1240** | 240 |
+
+Any number of panes can be pinned, in any arrangement. A drag only ever moves
+the two panes touching that divider; every other pane keeps the pixels it had.
+
+If the pinned panes together ask for more than the container has, they give way
+together rather than overflowing it — the flexible panes are squeezed out first,
+then the pinned ones shrink in proportion. The squeeze does not change their
+stored sizes, so they spring back as soon as the room returns. Keep at least one
+pane flexible: with every pane pinned there is nothing to absorb the leftover,
+and the layout will not fill its container.
+
+`defaultSize` is a starting width, not a lock: dragging a pinned pane sets a new
+pixel width, which then sticks the same way.
+
+## Panes
+
+Each `Splitter.Pane` declares its own limits. `minimumSize` is the smallest size
+in pixels a pane may be dragged to, and `collapsible` lets it snap shut when
+dragged well past that minimum — dragging back out, or pressing `Enter` on the
+divider, restores it.
+
+A pane fills its track and hides its overflow, so give its content a scroll
+container if it can grow past the pane.
+
+## Dividers
+
+A divider reserves no space and paints nothing at rest, so the panes touch and
+the splitter adds no chrome of its own. Both the grab area — 8px, centred on the
+seam — and the 2px bar that fades in on hover, focus and drag float over the
+boundary, so revealing the bar never moves the panes.
+
+Two things follow from that. A permanent seam belongs on the pane, as a border,
+not on the divider. And because the grab area overlaps each pane's edge by about
+4px and sits above it, anything clickable flush against a pane edge will lose to
+the divider — give it a little breathing room.
+
+`dividerClassName` styles the visible bar. A `bg-*` there becomes the resting
+color; hover, focus and drag still win over it.
+
+```tsx
+<Splitter dividerClassName="bg-content-border">
+    <Splitter.Pane>…</Splitter.Pane>
+    <Splitter.Pane>…</Splitter.Pane>
+</Splitter>
+```
+
+## Keyboard
+
+The dividers are focusable. Along the splitter's axis, the arrow keys nudge the
+boundary, `Home` and `End` drive it to its extremes, `Enter` toggles a
+collapsible neighbour, and `Escape` cancels a drag in progress.
+
+## Inputs
+
+The component accepts the following inputs (props):
+
+<Controls />
+
+## Additional variations
+
+Listed below are additional variations of the component.
+
+<Stories />

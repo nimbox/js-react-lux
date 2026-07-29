@@ -41,6 +41,9 @@
     "imageViewer": {
         "alt": "Imagen"
     },
+    "splitter": {
+        "divider": "Redimensionar paneles"
+    },
     "chat": {
         "clickToRemove": "Click para quitar",
         "messageDeleted": "Mensaje eliminado",

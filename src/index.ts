@@ -15,6 +15,7 @@ export * from './components/floating/Popup';
 export * from './components/Loading';
 export * from './components/Modal';
 export * from './components/Postit';
+export * from './components/splitter/Splitter';
 export * from './components/Tabs';
 export * from './components/Tag';
 export * from './components/Toast';
