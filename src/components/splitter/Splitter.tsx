@@ -28,7 +28,10 @@ interface DragSnapshot {
 
     startCoordinate: number;
 
-    startSizes: number[];
+    /** Stored sizes to restore to when the gesture is cancelled. */
+    startSizes: PaneSize[];
+
+    /** Measured pixel sizes the whole gesture resolves against. */
     pixelSizes: number[];
 
 }
