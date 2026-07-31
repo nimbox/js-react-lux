@@ -61,6 +61,7 @@ export * from './components/floating/TooltipProvider';
 export * from './components/CheckBar';
 export * from './components/RadioBar';
 
+export * from './hooks/useElementSize';
 export * from './hooks/useOnOutsideClick';
 export * from './hooks/useOption';
 export * from './hooks/useOptions';
