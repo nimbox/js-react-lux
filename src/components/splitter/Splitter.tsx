@@ -377,6 +377,38 @@ export function Splitter(props: SplitterProps) {
         return index === 0 ? [track] : [`${DIVIDER_SIZE}px`, track];
     });
 
+    // Which end of the splitter a boundary is sitting on, if either.
+    //
+    // The divider track has no width, so its grab area and bar straddle the
+    // seam — half of each falls on the other side. That is right in the middle
+    // of the splitter and wrong at its ends: collapse the first pane and the
+    // boundary lands on the splitter's own edge, putting the outer half of the
+    // affordance outside the box, where anything that clips content (a parent
+    // with `overflow-hidden`, or the window) cuts it off. What is left is a
+    // 1px bar and a 4px target, which reads as no divider at all.
+    //
+    // A boundary is on an end when every pane beyond it has collapsed, not
+    // merely the neighbour: three panes with the first two shut still leave the
+    // second boundary against the edge.
+
+    // Read off the sizes the tracks are built from, not the measured
+    // `paneSizes`: those are observed asynchronously and lag a programmatic
+    // resize, which would leave a divider leaning after its neighbour reopened.
+    // A pane is shut exactly when its size is zero pixels.
+
+    const edgeOf = (boundary: number): 'start' | 'end' | null => {
+
+        const isShut = (size: PaneSize) => {
+            const parsed = parseSize(size);
+            return parsed != null && parsed.unit === 'px' && parsed.value === 0;
+        };
+
+        if (currentSizes.slice(0, boundary + 1).every(isShut)) { return 'start'; }
+        if (currentSizes.slice(boundary + 1).every(isShut)) { return 'end'; }
+        return null;
+
+    };
+
     return (
         <div
             ref={setRefs}
@@ -396,6 +428,7 @@ export function Splitter(props: SplitterProps) {
                             direction={direction}
                             disabled={disabled}
                             isDragging={draggingIndex === index - 1}
+                            edge={edgeOf(index - 1)}
                             value={percentageOfPair(paneSizes, index - 1)}
                             label={t('splitter.divider', { defaultValue: 'Resize panes' })}
                             className={dividerClassName}
@@ -482,14 +515,37 @@ interface SplitterDividerProps extends React.HTMLAttributes<HTMLDivElement> {
     direction: 'horizontal' | 'vertical';
     disabled: boolean;
     isDragging: boolean;
+    /**
+     * The end of the splitter this divider has landed on, when every pane to one
+     * side of it has collapsed. Its overlays lean inwards there rather than
+     * straddling the seam, so no half of them hangs outside the splitter.
+     */
+    edge: 'start' | 'end' | null;
     /** The leading pane's share of the adjacent pair, as a percentage. */
     value: number;
     label: string;
 }
 
-function SplitterDivider({ direction, disabled, isDragging, value, label, className, ...divProps }: SplitterDividerProps) {
+function SplitterDivider({ direction, disabled, isDragging, edge, value, label, className, ...divProps }: SplitterDividerProps) {
 
     const isHorizontal = direction === 'horizontal';
+
+    // Both overlays keep their full size whichever way they lean — the grab area
+    // stays 8px and the bar 2px — so neither the target nor the line shrinks
+    // just because a neighbouring pane is shut. The classes are spelled out
+    // rather than built from the size: Tailwind reads them as literals.
+
+    const grabLean = edge === 'start'
+        ? (isHorizontal ? 'left-0 -right-[8px]' : 'top-0 -bottom-[8px]')
+        : edge === 'end'
+            ? (isHorizontal ? '-left-[8px] right-0' : '-top-[8px] bottom-0')
+            : (isHorizontal ? '-inset-x-[4px]' : '-inset-y-[4px]');
+
+    const barLean = edge === 'start'
+        ? (isHorizontal ? 'left-0 -right-[2px]' : 'top-0 -bottom-[2px]')
+        : edge === 'end'
+            ? (isHorizontal ? '-left-[2px] right-0' : '-top-[2px] bottom-0')
+            : (isHorizontal ? '-inset-x-px' : '-inset-y-px');
 
     return (
         <div
@@ -511,12 +567,14 @@ function SplitterDivider({ direction, disabled, isDragging, value, label, classN
         >
 
             {/* The grab area. The divider track has no width, so this
-                straddles the seam to give the pointer something to aim at.
+                straddles the seam to give the pointer something to aim at —
+                except on the splitter's own ends, where `grabLean` turns it
+                inwards so it is not half outside the box.
                 Sized in pixels rather than spacing units: it is a hit
                 target, so it must not ride the root font size.
                 `touch-action` is not an inherited property, so it needs its
                 own `touch-none` or a touch drag scrolls the page. */}
-            <div className={cn('absolute touch-none', isHorizontal ? 'inset-y-0 -inset-x-[4px]' : 'inset-x-0 -inset-y-[4px]')} />
+            <div className={cn('absolute touch-none', isHorizontal ? 'inset-y-0' : 'inset-x-0', grabLean)} />
 
             {/* The visible bar, transparent until the divider is touched.
                 It is absolutely positioned, so revealing it never moves the
@@ -527,7 +585,8 @@ function SplitterDivider({ direction, disabled, isDragging, value, label, classN
             <div
                 className={cn(
                     'absolute transition-colors',
-                    isHorizontal ? 'inset-y-0 -inset-x-px' : 'inset-x-0 -inset-y-px',
+                    isHorizontal ? 'inset-y-0' : 'inset-x-0',
+                    barLean,
                     !disabled && 'group-hover:bg-primary-500 group-focus-visible:bg-primary-500 group-data-[dragging]:bg-primary-500',
                     className
                 )}
