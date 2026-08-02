@@ -92,7 +92,7 @@ export const WithDifferentActions: Story = {
  * which is what makes the dot free to mean something.
  *
  * `withSolidDot` fills it in the text colour. It says nothing on its own — the
- * caller decides what a solid dot is for. `TagCondition` uses it for negation.
+ * caller decides what a solid dot is for. `TagConditionBuilder` uses it for negation.
  */
 export const DotAndCross: Story = {
     render: () => {
@@ -134,7 +134,7 @@ export const DotAndCross: Story = {
 
                 <div className="space-y-2">
                     <div className="text-xs uppercase tracking-wider text-gray-500">
-                        As `TagCondition` uses it — solid dot, struck label, cross to remove
+                        As `TagConditionBuilder` uses it — solid dot, struck label, cross to remove
                     </div>
                     <div className="flex flex-row items-center gap-4">
                         <Tag color="#7c2d12" backgroundColor="#ffedd5" onClick={fn()} onDelete={fn()}>Moroso</Tag>
