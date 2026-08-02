@@ -21,10 +21,21 @@ export interface TimePickerProps extends Omit<InputPopperProps, 'show' | 'onShow
      */
     parseTime?: (s: string) => [number, number] | null;
 
-    /** 
-     * Format time function defaults to formatting [hh, mm] into hh:mm ampm (12 hour based). 
+    /**
+     * Format time function defaults to formatting [hh, mm] into hh:mm ampm (12 hour based).
      */
     formatTime?: (time: [number, number]) => string;
+
+    /**
+     * Keep the panel open after a time has been picked.
+     *
+     * By default it closes — picking is the errand. Set this where picking
+     * several times in a row is the normal case, such as both ends of a window.
+     * Clicking outside, tabbing away and `Escape` still close it either way.
+     *
+     * @default `false`
+     */
+    withKeepOpen?: boolean;
 
 }
 
@@ -59,6 +70,8 @@ export function TimePicker(props: TimePickerProps & React.InputHTMLAttributes<HT
         parseTime = internalParseTime,
         formatTime = internalFormatTime,
 
+        withKeepOpen = false,
+
         // Rest goes to InputPopper
 
         ...inputPopperProps
@@ -77,7 +90,7 @@ export function TimePicker(props: TimePickerProps & React.InputHTMLAttributes<HT
         const value = time != null ? formatTime(time) : '';
         setRefInputValue(internalInputRef, value);
         internalInputRef.current?.select();
-        setShow(false);
+        if (!withKeepOpen) { setShow(false); }
     };
 
     const handleFinalize = (): string | null => {

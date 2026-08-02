@@ -50,6 +50,17 @@ export interface AutocompleteProps<O, G = O[]> extends
      */
     renderChosen?: ({ option }: { option: O }) => string;
 
+    /**
+     * Keep the list open after an option has been chosen.
+     *
+     * By default it closes — choosing is the errand, and the chosen option is
+     * written into the input the list would otherwise be covering. Clicking
+     * outside, tabbing away and `Escape` still close it either way.
+     *
+     * @default `false`
+     */
+    withKeepOpen?: boolean;
+
 }
 
 /**
@@ -82,6 +93,8 @@ export function Autocomplete<O, G = O[]>(props: AutocompleteProps<O, G> & React.
 
         extractor = EXTRACTOR,
         onChoose,
+
+        withKeepOpen = false,
 
         renderEmpty,
         renderGroupLabel,
@@ -162,7 +175,7 @@ export function Autocomplete<O, G = O[]>(props: AutocompleteProps<O, G> & React.
         const v = renderChosen({ option });
         setRefInputValue(internalInputRef, v);
         search();
-        setShow(false);
+        if (!withKeepOpen) { setShow(false); }
         onChoose?.(option);
     }
 

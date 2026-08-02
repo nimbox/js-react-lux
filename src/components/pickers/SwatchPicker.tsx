@@ -29,6 +29,17 @@ export interface SwatchPickerProps extends Omit<InputPopperProps, 'show' | 'onSh
      */
     palleteClassName?: string;
 
+    /**
+     * Keep the palette open after a colour has been picked.
+     *
+     * By default it closes — picking is the errand. Set this where comparing
+     * several colours in a row is the normal case. Clicking outside, tabbing
+     * away and `Escape` still close it either way.
+     *
+     * @default `false`
+     */
+    withKeepOpen?: boolean;
+
 }
 
 /**
@@ -56,6 +67,8 @@ export function SwatchPicker(props: SwatchPickerProps & React.InputHTMLAttribute
         values = defaultSwatches,
 
         palleteClassName = 'w-64 lux-p-2em grid grid-cols-5 cursor-pointer',
+
+        withKeepOpen = false,
 
         // Rest goes to InputPopper
 
@@ -89,7 +102,7 @@ export function SwatchPicker(props: SwatchPickerProps & React.InputHTMLAttribute
     const handleColorChange = (swatch: string) => {
         setRefInputValue(internalInputRef, swatch);
         internalInputRef.current?.select();
-        setShow(false);
+        if (!withKeepOpen) { setShow(false); }
     };
 
     const handleRandomColorChange = () => {

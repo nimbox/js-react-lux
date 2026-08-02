@@ -195,3 +195,30 @@ export const Adornment: Story = {
         placeholder: 'Select color'
     }
 };
+
+/**
+ * `withClear` — the cross beside the chevron that empties the chosen value.
+ *
+ * Worth a story of its own because there had not been one: `withClear` is off
+ * by default and was switched on nowhere in the codebase, so the control had
+ * never actually been pressed. It was broken. Clearing ran on `click` and
+ * stopped propagation, which keeps the click off the field but does nothing
+ * about focus — and focus lands on `mousedown`, before that click exists, and
+ * the field opens its list `onFocus`. So clearing emptied the value and
+ * reopened the list on it in the same gesture.
+ *
+ * **What to check:** press the cross. The value empties, the placeholder comes
+ * back, and the list stays shut. Then press the field itself and confirm it
+ * still opens — the fix must not cost the field its ordinary click.
+ */
+export const WithClear: Story = {
+    ...ChooseTemplate,
+    args: {
+        // Spelled out rather than inherited: a story about clearing needs
+        // something to clear, and `args` here replaces the template's rather
+        // than merging with it.
+        ...ChooseTemplate.args,
+        withClear: true,
+        placeholder: 'Choose a color'
+    }
+};

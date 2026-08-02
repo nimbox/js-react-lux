@@ -72,10 +72,19 @@ export interface ChooseProps<O = string, G = O[]> extends
     withSearch?: boolean,
 
     /**
-     * Hide the popper after the user has selected an option.
-     * @default `true`
+     * Keep the popper open after it has done what it was opened for.
+     *
+     * By default a popper hides itself once the errand is finished — an option
+     * chosen, a date picked, a tag chosen *or created*. Set this where doing it
+     * several times in a row is the normal case rather than the exception.
+     *
+     * Only that closing is suppressed. Clicking outside, tabbing away and
+     * `Escape` still close the popper, because those are the user dismissing it
+     * rather than the control finishing.
+     *
+     * @default `false`
      */
-    withHideOnChoose?: boolean;
+    withKeepOpen?: boolean;
 
     /**
      * Add a clear adornment to clear the currently selected option.
@@ -161,7 +170,7 @@ export function Choose<O, G = O[]>(props: ChooseProps<O, G> & React.InputHTMLAtt
         // Choose
 
         withSearch = false,
-        withHideOnChoose = true,
+        withKeepOpen = false,
         withClear = false,
 
         chooser,
@@ -344,15 +353,15 @@ export function Choose<O, G = O[]>(props: ChooseProps<O, G> & React.InputHTMLAtt
         // Reset the query.
         setQuery('');
 
-        // Hide de popper if necessary.
-        if (withHideOnChoose) {
+        // Hide the popper unless the caller wants to choose again.
+        if (!withKeepOpen) {
             fieldRef.current!.focus();
             setShow(false);
         }
 
         fieldRef.current?.focus();
 
-    }, [identifier, internalInputRef, withHideOnChoose, fieldRef]);
+    }, [identifier, internalInputRef, withKeepOpen, fieldRef]);
 
     // Options — navigation is owned by the List inside ChooseOptionList; we
     // forward the focused control's key events to this handle.
@@ -379,12 +388,28 @@ export function Choose<O, G = O[]>(props: ChooseProps<O, G> & React.InputHTMLAtt
 
     };
 
-    const handleClearClick = (e: React.MouseEvent) => {
+    // Clearing runs on `mousedown`, not on `click`.
+    //
+    // Stopping the click is not enough on its own. The field opens its popper
+    // from `onFocus` as well as from `onClick`, and focus lands on mousedown —
+    // before the click this handler would see is ever dispatched. So a clear
+    // written against `click` emptied the value and then immediately reopened
+    // the list on it, which is the opposite of what clearing is for.
+    //
+    // `consumeEvent` preventing the default here is what stops the field taking
+    // focus at all. `SearchInput` clears the same way, for the same reason.
 
-        e.stopPropagation(); // Prevent wrapper click.
+    const handleClearMouseDown = (e: React.MouseEvent) => {
+
+        consumeEvent(e);
         handleClearQuery();
 
     };
+
+    // The click still follows the mousedown and would reach the field's own
+    // handler, which also opens.
+
+    const handleClearClick = consumeEvent;
 
     // Handlers
 
@@ -488,7 +513,13 @@ export function Choose<O, G = O[]>(props: ChooseProps<O, G> & React.InputHTMLAtt
                     {end}
                     {loading ? <Delay><Loading /></Delay> : null}
                     {loadingError ? <WarningIcon className="text-danger-500" /> : null}
-                    {withClear && <CircleCrossIcon onClick={handleClearClick} />}
+                    {withClear &&
+                        <CircleCrossIcon
+                            onMouseDown={handleClearMouseDown}
+                            onClick={handleClearClick}
+                            className="cursor-pointer"
+                        />
+                    }
                     <AngleDownIcon />
                 </>
             }

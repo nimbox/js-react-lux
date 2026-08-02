@@ -35,6 +35,18 @@ export interface DatePickerProps extends Omit<InputPopperProps, 'show' | 'onShow
      */
     formatDate?: (date: [number, number, number]) => string;
 
+    /**
+     * Keep the calendar open after a date has been picked.
+     *
+     * By default it closes — picking is the errand, and `DatePicker` selects the
+     * input text so the date can be typed over. Set this where picking several
+     * dates in a row is the normal case, such as filling both ends of a range.
+     * Clicking outside, tabbing away and `Escape` still close it either way.
+     *
+     * @default `false`
+     */
+    withKeepOpen?: boolean;
+
     // Styling
 
     /**
@@ -82,6 +94,7 @@ export function DatePicker(props: DatePickerProps & InputHTMLAttributes<HTMLInpu
         parseDate = internalParseDate,
         formatDate = internalFormatDate,
 
+        withKeepOpen = false,
         withShortcuts = true,
 
         // Rest goes to InputPopper
@@ -102,7 +115,7 @@ export function DatePicker(props: DatePickerProps & InputHTMLAttributes<HTMLInpu
         const value = date != null ? formatDate(date) : '';
         setRefInputValue(internalInputRef, value);
         internalInputRef.current?.select();
-        setShow(false);
+        if (!withKeepOpen) { setShow(false); }
     };
 
     const handleFinalize = (): string | null => {
