@@ -30,6 +30,20 @@ export const DifferentScalesSameBase: Story = {
     }
 };
 
+/**
+ * A deletable tag against a plain one, at five type sizes.
+ *
+ * **The two are no longer the same width**, and the name of this story is kept
+ * only because renaming it would break its link. They used to match because one
+ * glyph on the left did both jobs — it was a dot until the tag became
+ * deletable, and then it was a cross. Now the dot stays and the cross is its
+ * own control at the other end, so a deletable tag is exactly one glyph wider
+ * than a plain one. That is the honest width: it has one more thing in it.
+ *
+ * What this story is still for is the part that has to hold — both glyphs are
+ * sized in `em`, so the whole chip scales with its type rather than sitting at
+ * a fixed pixel size inside larger text.
+ */
 export const WithAndWithoutSameWidth: Story = {
     render: () => {
         return (
@@ -67,6 +81,78 @@ export const WithDifferentActions: Story = {
                 <div><Tag onClick={fn()}>With onClick</Tag></div>
                 <div><Tag onDelete={fn()}>With onDelete</Tag></div>
                 <div><Tag onClick={fn()} onDelete={fn()}>Width onClick and onDelete</Tag></div>
+            </div>
+        );
+    }
+};
+
+/**
+ * The dot and the cross are two glyphs at two ends, not one glyph doing two
+ * jobs. A tag can therefore show a dot *and* offer a delete at the same time,
+ * which is what makes the dot free to mean something.
+ *
+ * `withSolidDot` fills it in the text colour. It says nothing on its own — the
+ * caller decides what a solid dot is for. `TagCondition` uses it for negation.
+ */
+export const DotAndCross: Story = {
+    render: () => {
+
+        // Light, dark, and the no-background case where `Tag` picks the text
+        // colour itself. The solid dot has to stay legible in all three, which
+        // is the whole reason it is a boolean and not a colour.
+
+        const swatches = [
+            { name: 'Default', color: undefined, backgroundColor: undefined },
+            { name: 'Light', color: '#7c2d12', backgroundColor: '#ffedd5' },
+            { name: 'Dark', color: '#ffffff', backgroundColor: '#3730a3' },
+            { name: 'Mid', color: '#1e3a5f', backgroundColor: '#bfdbfe' }
+        ];
+
+        return (
+            <div className="p-4 space-y-6">
+
+                <div className="space-y-2">
+                    <div className="text-xs uppercase tracking-wider text-gray-500">Geometry</div>
+                    <div className="flex flex-row items-center gap-4">
+                        <Tag>dot only</Tag>
+                        <Tag onDelete={fn()}>dot left, cross right</Tag>
+                        <Tag withSolidDot onDelete={fn()}>solid dot and cross</Tag>
+                    </div>
+                </div>
+
+                <div className="space-y-2">
+                    <div className="text-xs uppercase tracking-wider text-gray-500">Solid against every background</div>
+                    <div className="flex flex-row items-center gap-4">
+                        {swatches.map(swatch =>
+                            <div key={swatch.name} className="flex flex-col items-start gap-1">
+                                <Tag color={swatch.color} backgroundColor={swatch.backgroundColor}>{swatch.name}</Tag>
+                                <Tag withSolidDot color={swatch.color} backgroundColor={swatch.backgroundColor}>{swatch.name}</Tag>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                <div className="space-y-2">
+                    <div className="text-xs uppercase tracking-wider text-gray-500">
+                        As `TagCondition` uses it — solid dot, struck label, cross to remove
+                    </div>
+                    <div className="flex flex-row items-center gap-4">
+                        <Tag color="#7c2d12" backgroundColor="#ffedd5" onClick={fn()} onDelete={fn()}>Moroso</Tag>
+                        <Tag color="#7c2d12" backgroundColor="#ffedd5" withSolidDot onClick={fn()} onDelete={fn()} className="line-through">Moroso</Tag>
+                    </div>
+                </div>
+
+                <div className="space-y-2">
+                    <div className="text-xs uppercase tracking-wider text-gray-500">Both glyphs scale with the type</div>
+                    <div className="flex flex-row items-baseline gap-4">
+                        <span className="text-xs"><Tag withSolidDot onDelete={fn()}>TagXÉ</Tag></span>
+                        <span className="text-sm"><Tag withSolidDot onDelete={fn()}>TagXÉ</Tag></span>
+                        <span className="text-base"><Tag withSolidDot onDelete={fn()}>TagXÉ</Tag></span>
+                        <span className="text-lg"><Tag withSolidDot onDelete={fn()}>TagXÉ</Tag></span>
+                        <span className="text-xl"><Tag withSolidDot onDelete={fn()}>TagXÉ</Tag></span>
+                    </div>
+                </div>
+
             </div>
         );
     }
