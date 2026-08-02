@@ -1,5 +1,8 @@
 .tooltip-element {
 
+  width: max-content;
+  max-width: 20rem;
+
   padding: 0.125em 0.5em;
 
   color: #ffffff;
@@ -7,6 +10,8 @@
 
   box-shadow: 1px 1px 3px #222222;
   border-radius: 4px;
+
+  pointer-events: none;
 
   .tooltip-arrow {
 
