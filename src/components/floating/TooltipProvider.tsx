@@ -5,9 +5,6 @@ import { cn } from '../utilities/cn';
 
 interface TooltipProviderProps {
 
-    /**
-     * Chilren.
-     */
     children?: React.ReactNode;
 
 }
@@ -28,22 +25,48 @@ export function TooltipProvider(props: TooltipProviderProps) {
 
     useEffect(() => {
 
+        // The element the pointer is over, or the nearest one above it that
+        // carries a tooltip.
+        //
+        // `closest` rather than the target itself. `mouseover` and `mouseout`
+        // fire on every crossing between an element and its own children, and
+        // the target is always the deepest one — so an element that merely
+        // holds its label in a `span` used to lose its tooltip the moment the
+        // pointer reached the text, while keeping it over the gaps in between.
+        // Anything inside a tooltipped element is still inside it.
+
+        function tooltipped(target: EventTarget | null): HTMLElement | null {
+            return target instanceof Element ? target.closest<HTMLElement>('[data-tooltip]') : null;
+        }
+
         function handleOver(e: MouseEvent) {
-            const el = e.target as HTMLElement | null;
-            if (el && el.hasAttribute('data-tooltip')) {
-                setActive({
-                    target: el,
-                    text: el.getAttribute('data-tooltip') || '',
-                    placement: (el.getAttribute('data-tooltip-placement') as Placement) || 'top',
-                });
-            }
+
+            const el = tooltipped(e.target);
+            if (el == null) { return; }
+
+            setActive({
+                target: el,
+                text: el.getAttribute('data-tooltip') || '',
+                placement: (el.getAttribute('data-tooltip-placement') as Placement) || 'top',
+            });
+
         }
 
         function handleOut(e: MouseEvent) {
-            const el = e.target as HTMLElement | null;
-            if (el && el.hasAttribute('data-tooltip')) {
-                setActive(null);
-            }
+
+            const el = tooltipped(e.target);
+            if (el == null) { return; }
+
+            // Where the pointer went. Moving into a child of the same element
+            // is not leaving it, and hiding on that would undo what the
+            // matching `mouseover` is about to do — which is the flicker this
+            // pair used to produce over any tooltip with markup inside it.
+
+            const to = e.relatedTarget;
+            if (to instanceof Node && el.contains(to)) { return; }
+
+            setActive(null);
+
         }
 
         window.addEventListener('mouseover', handleOver);
