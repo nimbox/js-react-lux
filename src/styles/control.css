@@ -3,6 +3,17 @@
   --field-py: 1.5em;
   --field-label-scale: 0.75;
   --field-label-px: 0.25em;
+
+  --field-rule-offset: 2px;
+  --field-rule-width: 1px;
+
+}
+
+
+.lux-bar-rule {
+  padding-bottom: calc(var(--field-rule-offset) - var(--field-rule-width));
+  border-bottom-width: var(--field-rule-width);
+  border-bottom-style: solid;
 }
 
 .lux-control-font {
@@ -295,6 +306,7 @@
   .lux-field-content {
     position: relative;
     width: 100%;
+    min-height: 1lh;
   }
 
   .lux-field-end {
@@ -312,6 +324,7 @@
   }
 
   &.lux-field-outlined {
+
     padding: calc(var(--field-py) / 2) calc(var(--field-px) / 2);
 
     .lux-field-border {
@@ -350,9 +363,11 @@
         }
       }
     }
+
   }
 
   &.lux-field-filled {
+
     .lux-field-label {
       top: calc(var(--field-py) * -3 / 10);
     }
@@ -396,13 +411,16 @@
         transform: none;
       }
     }
+
   }
 
   &.lux-field-inlined {
+
     padding: calc(var(--field-py) * 2 / 10) 0 calc(var(--field-py) * 0 / 10) 0;
 
     .lux-field-border {
-      border-bottom-width: 1px;
+      bottom: calc(var(--field-rule-offset) * -1);
+      border-bottom-width: var(--field-rule-width);
       border-color: var(--color-control-border);
       legend {
         display: none;
@@ -418,13 +436,16 @@
         line-height: 0;
       }
     }
+
   }
 
   &.lux-field-editable {
+
     padding: 0;
 
     .lux-field-border {
-      border-bottom-width: 1px;
+      bottom: calc(var(--field-rule-offset) * -1);
+      border-bottom-width: var(--field-rule-width);
       border-color: var(--color-control-border);
     }
 
@@ -437,6 +458,7 @@
         line-height: 0;
       }
     }
+
   }
 
   &:hover {

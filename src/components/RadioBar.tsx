@@ -56,7 +56,7 @@ export function RadioBarOption({ value, className, children }: RadioBarOptionPro
         <div
             onClick={onClick}
             className={cn(
-                'min-w-0 truncate cursor-pointer border-b-2 pb-px',
+                'min-w-0 lux-bar-rule truncate cursor-pointer',
                 isChosen
                     ? 'border-content text-content'
                     : 'border-transparent text-muted hover:text-content',

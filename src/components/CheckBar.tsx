@@ -50,7 +50,7 @@ const Context = createContext<ContextProps>({
 });
 
 const optionClassName = (isChosen: boolean, className?: string) => cn(
-    'min-w-0 truncate cursor-pointer border-b-2 pb-px',
+    'min-w-0 lux-bar-rule truncate cursor-pointer',
     isChosen
         ? 'border-content text-content'
         : 'border-transparent text-muted hover:text-content',
