@@ -45,6 +45,7 @@ export * from './components/inputs/FieldPopper';
 export * from './components/inputs/Input';
 export * from './components/inputs/NativeSelect';
 export * from './components/inputs/Option';
+export * from './components/inputs/Placeholder';
 export * from './components/inputs/Radio';
 export * from './components/inputs/SearchInput';
 export * from './components/inputs/Select';
