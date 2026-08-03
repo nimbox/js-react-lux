@@ -513,7 +513,13 @@ export function Choose<O, G = O[]>(props: ChooseProps<O, G> & React.InputHTMLAtt
                     {end}
                     {loading ? <Delay><Loading /></Delay> : null}
                     {loadingError ? <WarningIcon className="text-danger-500" /> : null}
-                    {withClear &&
+                    {/* Only when there is something to clear. `withClear` says
+                        the control may be emptied, not that it is permanently
+                        offering to — an empty field showing a clear cross
+                        invites a press that does nothing, and reads as a value
+                        the field is failing to display. `shrink` just below
+                        already asks the same question of the same value. */}
+                    {withClear && internalValue.length > 0 &&
                         <CircleCrossIcon
                             onMouseDown={handleClearMouseDown}
                             onClick={handleClearClick}
