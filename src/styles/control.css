@@ -16,6 +16,26 @@
   border-bottom-style: solid;
 }
 
+/**
+ * What a prompt looks like, in one place.
+ *
+ * Any control that draws its own empty state — rather than handing a string to
+ * a native `::placeholder` — should wear this instead of picking a grey. The
+ * two are not interchangeable: `--color-muted` is a readable secondary colour
+ * for text that is really there, while a placeholder has to sit clearly below
+ * the value it stands in for, which is what the 40% buys.
+ */
+
+.lux-placeholder {
+  color: var(--color-control-placeholder);
+  opacity: 0.4;
+}
+
+.lux-placeholder-error {
+  color: var(--color-danger-500);
+  opacity: 0.4;
+}
+
 .lux-control-font {
   font-size: 1em !important;
   line-height: 1.15em !important;

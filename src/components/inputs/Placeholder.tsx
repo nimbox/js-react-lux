@@ -1,4 +1,4 @@
-import React, { type FC, useContext } from 'react';
+import { useContext, type ReactNode } from 'react';
 import { cn } from '../utilities/cn';
 import { ControlContext } from './ControlContext';
 
@@ -25,7 +25,7 @@ export interface PlaceholderProps {
     /**
      * Children.
      */
-    children?: React.ReactNode;
+    children?: ReactNode;
 
 }
 
@@ -35,7 +35,7 @@ export interface PlaceholderProps {
  * @param props - Component properties
  * @returns The component
  */
-export const Placeholder: FC<PlaceholderProps> = (props) => {
+export function Placeholder(props: PlaceholderProps) {
 
     // Properties
 
@@ -51,29 +51,27 @@ export const Placeholder: FC<PlaceholderProps> = (props) => {
     // State
 
     const context = useContext(ControlContext);
-    const isError = error || context.error;
+    const isError = error || context?.error;
 
     // Render
 
     return (
         <>
             {children ??
-                (placeholder ?
-                    <div
-                        className={cn(
-                            'truncate',
-                            isError ?
-                                'text-danger-500' :
-                                'text-control-placeholder',
-                            'opacity-40')}
-                        title={placeholder}
-                    >
-                        {placeholder}
-                    </div> :
-                    <div>&nbsp;</div>
+                ((placeholder)
+                    ? (
+                        <div
+                            title={placeholder}
+                            className={cn('truncate', isError ? 'lux-placeholder-error' : 'lux-placeholder')}
+                        >
+                            {placeholder}
+                        </div>)
+                    : (
+                        <div>&nbsp;</div>
+                    )
                 )
             }
         </>
     );
 
-};
+}
