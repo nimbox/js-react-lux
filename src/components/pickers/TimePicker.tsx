@@ -278,7 +278,7 @@ const Watch = (props: WatchProps): ReactElement => {
                 </div>
             </div>
 
-            <div ref={timesRef} className="h-64 overflow-scroll">
+            <div ref={timesRef} className="h-64 overflow-auto">
                 <table className="table-fixed text-center" style={{ width: '12em' }}>
 
                     <thead>

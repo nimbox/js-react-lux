@@ -150,7 +150,7 @@ export const Navigator: NavigatorComponent<{ className?: string, children?: Reac
                 'transform', showNavigator ? 'translate-x-0' : '-translate-x-56',
                 'transition-transform duration-700 ease-in-out'
             )}>
-                <div className={cn('h-full flex flex-col text-navigator bg-navigator-bg', className)}>
+                <div className={cn('h-full flex flex-col scheme-dark text-navigator bg-navigator-bg', className)}>
                     {children}
                 </div >
             </div>
@@ -179,7 +179,7 @@ const NavigatorHeader: FC<{ className?: string, children?: React.ReactNode }> = 
 };
 
 const NavigatorContent: FC<{ className?: string, children?: React.ReactNode }> = ({ className, children }) => (
-    <div className={cn('grow overflow-y-scroll', className)}>
+    <div className={cn('grow overflow-y-auto', className)}>
         {children}
     </div>
 );

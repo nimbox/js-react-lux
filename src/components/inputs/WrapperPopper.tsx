@@ -44,7 +44,7 @@ export interface WrapperPopperProps extends WrapperProps,
 
     /**
      * Class name to apply to the popper.
-     * @default `max-h-96 overflow-y-scroll bg-control-bg border border-control-border rounded filter drop-shadow`
+     * @default `max-h-96 overflow-y-auto bg-control-bg border border-control-border rounded filter drop-shadow`
      */
     popperClassName?: string;
 
@@ -86,7 +86,10 @@ export function WrapperPopper(props: WrapperPopperProps & React.HTMLAttributes<H
 
         renderPopper,
         onPopperBlur,
-        popperClassName = 'max-h-96 overflow-y-scroll bg-control-bg border border-control-border rounded filter drop-shadow',
+        // `auto`, so a popper holding three options does not reserve a scrollbar
+        // track it will never use. `max-h-96` is what makes a long list scroll;
+        // the overflow value only decides whether a short one pays for it.
+        popperClassName = 'max-h-96 overflow-y-auto bg-control-bg border border-control-border rounded filter drop-shadow',
 
         //
 
