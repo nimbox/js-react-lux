@@ -1,5 +1,5 @@
 import { AngleLeftIcon, AngleRightIcon, CalendarIcon, CircleIcon } from '@nimbox/icons-react';
-import { type InputHTMLAttributes, type ReactElement, useImperativeHandle, useMemo, useState } from 'react';
+import { type InputHTMLAttributes, type ReactElement, type ReactNode, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
@@ -15,6 +15,15 @@ import { setRefInputValue } from '../utilities/setRefInputValue';
 //
 
 export interface DatePickerProps extends Omit<InputPopperProps, 'show' | 'onShowChange' | 'renderPopper'> {
+
+    // Field
+
+    /**
+     * Ornament to place at the end of the field. Left out, the field
+     * carries a calendar; `null` leaves the field bare, and any other
+     * node takes the calendar's place.
+     */
+    end?: ReactNode;
 
     // DatePicker
 
@@ -132,14 +141,15 @@ export function DatePicker(props: DatePickerProps & InputHTMLAttributes<HTMLInpu
         return parseDate(internalValue);
     }, [parseDate, internalValue]);
 
-    // Adornment
+    // Ornament
 
-    const adornment = (
-        <CalendarIcon
-            onMouseDown={consumeEvent}
-            className="cursor-pointer"
-        />
-    );
+    // The calendar is what the field carries when the caller says
+    // nothing about it. Anything passed in takes its place, `null`
+    // included.
+
+    const fieldEnd = end === undefined
+        ? <CalendarIcon onMouseDown={consumeEvent} className="cursor-pointer" />
+        : end;
 
     // Calendar
 
@@ -160,7 +170,7 @@ export function DatePicker(props: DatePickerProps & InputHTMLAttributes<HTMLInpu
 
             // Field
 
-            end={<>{end}{adornment}</>}
+            end={fieldEnd}
 
             // InputPopper 
 

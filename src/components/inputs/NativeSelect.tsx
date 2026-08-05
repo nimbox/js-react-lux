@@ -75,7 +75,7 @@ export function NativeSelect(props: NativeSelectProps & InputHTMLAttributes<HTML
         disabled,
         error,
 
-        withFullWidth,
+        withoutFullWidth,
         withFullHeight,
 
         fieldClassName,
@@ -118,7 +118,7 @@ export function NativeSelect(props: NativeSelectProps & InputHTMLAttributes<HTML
             disabled={disabled}
             error={error}
 
-            withFullWidth={withFullWidth}
+            withoutFullWidth={withoutFullWidth}
             withFullHeight={withFullHeight}
 
             className={cn('focus:outline-none', fieldClassName)}

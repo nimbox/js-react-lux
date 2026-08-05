@@ -78,7 +78,7 @@ export function TextArea(props: TextAreaProps & InputHTMLAttributes<HTMLTextArea
         disabled,
         error,
 
-        withFullWidth,
+        withoutFullWidth,
         withFullHeight,
 
         fieldClassName,
@@ -115,7 +115,7 @@ export function TextArea(props: TextAreaProps & InputHTMLAttributes<HTMLTextArea
             disabled={disabled}
             error={error}
 
-            withFullWidth={withFullWidth}
+            withoutFullWidth={withoutFullWidth}
             withFullHeight={withFullHeight}
             className={fieldClassName}
 
@@ -130,7 +130,7 @@ export function TextArea(props: TextAreaProps & InputHTMLAttributes<HTMLTextArea
 
                 onChange={handleChangeInternalValue}
 
-                className={cn(className, { 'w-full': withFullWidth, 'h-full': withFullHeight })}
+                className={cn(className, { 'h-full': withFullHeight })}
 
                 {...textAreaProps}
 

@@ -1,5 +1,5 @@
 import { AngleDownIcon, AngleUpIcon, CircleIcon, ClockIcon } from '@nimbox/icons-react';
-import React, { type ReactElement, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import React, { type ReactElement, type ReactNode, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { InputPopper, type InputPopperProps } from '../inputs/InputPopper';
@@ -13,6 +13,15 @@ import { setRefInputValue } from '../utilities/setRefInputValue';
 //
 
 export interface TimePickerProps extends Omit<InputPopperProps, 'show' | 'onShowChange' | 'renderPopper'> {
+
+    // Field
+
+    /**
+     * Ornament to place at the end of the field. Left out, the field
+     * carries a clock; `null` leaves the field bare, and any other
+     * node takes the clock's place.
+     */
+    end?: ReactNode;
 
     // TimePicker
 
@@ -104,14 +113,15 @@ export function TimePicker(props: TimePickerProps & React.InputHTMLAttributes<HT
         return parseTime(internalValue);
     }, [parseTime, internalValue]);
 
-    // Adornment
+    // Ornament
 
-    const adornment = (
-        <ClockIcon
-            onMouseDown={consumeEvent}
-            className="cursor-pointer"
-        />
-    );
+    // The clock is what the field carries when the caller says
+    // nothing about it. Anything passed in takes its place, `null`
+    // included.
+
+    const fieldEnd = end === undefined
+        ? <ClockIcon onMouseDown={consumeEvent} className="cursor-pointer" />
+        : end;
 
     // Watch
 
@@ -130,7 +140,7 @@ export function TimePicker(props: TimePickerProps & React.InputHTMLAttributes<HT
 
             // Field
 
-            end={<>{end}{adornment}</>}
+            end={fieldEnd}
 
             // InputPopper 
 

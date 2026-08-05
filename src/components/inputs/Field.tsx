@@ -67,9 +67,21 @@ export interface FieldProps {
     // Styling
 
     /**
-     * Force the field to be at full width. 
+     * Force the field to be at full width.
+     *
+     * @deprecated A field is at full width already. Reach for
+     * `withoutFullWidth` when you want one to size itself to its content.
      */
     withFullWidth?: boolean;
+
+    /**
+     * Let the field size itself to its content instead of filling its
+     * container. While the field is empty it takes the width of its
+     * placeholder.
+     *
+     * @default `false`
+     */
+    withoutFullWidth?: boolean;
 
     /**
      * Force the field to be at full height.
@@ -110,9 +122,10 @@ export interface FieldProps {
  * In terms of styling there are two parameters and the className. The
  * parameters are:
  *
- * - **`withFullWidth`**: When `true` the field is at full width. It just adds a
- *   `w-full` to the base container. You must add the `w-full` to the child
- *   element to fully occupy the whole width.
+ * - **`withoutFullWidth`**: A field fills its container, so the container is
+ *   what decides how wide a field is. When `true` the field steps out of that
+ *   and takes the width of its own content, falling back to the width of its
+ *   placeholder while it is empty.
  * - **`withFullHeight`**: When `true` the field is at full height. It just adds
  *   a `h-full` to the base container. You must add the `h-full` to the child
  *   element to fully occupy the whole height.
@@ -141,10 +154,11 @@ export function Field(props: FieldProps & React.HTMLAttributes<HTMLDivElement>) 
         disabled = false,
         error = false,
 
-        withFullWidth = false,
+        withFullWidth, // eslint-disable-line @typescript-eslint/no-unused-vars
+        withoutFullWidth = false,
         withFullHeight = false,
-        className,
 
+        className,
         children,
 
         ...divProps
@@ -180,10 +194,12 @@ export function Field(props: FieldProps & React.HTMLAttributes<HTMLDivElement>) 
 
                 'lux-field-outlined': variant === 'outlined',
                 'lux-field-filled': variant === 'filled',
-                'lux-field-inlined': variant === 'inlined'
+                'lux-field-inlined': variant === 'inlined',
+
+                'lux-field-fit-content': withoutFullWidth
 
             }, {
-                'w-full': withFullWidth,
+                'w-full': !withoutFullWidth,
                 'h-full': withFullHeight
             }, className)}
 
@@ -198,7 +214,7 @@ export function Field(props: FieldProps & React.HTMLAttributes<HTMLDivElement>) 
             }
 
             <div className={cn('lux-crux-content lux-field-content', {
-                'w-full': withFullWidth,
+                'w-full': !withoutFullWidth,
                 'h-full': withFullHeight
             })}>
                 {label &&

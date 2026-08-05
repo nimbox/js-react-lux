@@ -97,6 +97,60 @@
       margin-left: 0;
     }
   }
+
+  /**
+   * A field fills its container. This is the way out of that, for the cases
+   * where the field should be as wide as what it holds.
+   *
+   * Three things have to give way. The content box stops claiming the whole
+   * line, the flex item stops growing into it, and the control itself stops
+   * filling the content box. That last one is why these rules live here
+   * rather than in the components: `PlainInput` and `PlainTextArea` carry
+   * `w-full` unconditionally, and this file is unlayered while the Tailwind
+   * utilities sit in a layer, so it wins without `!important`.
+   *
+   * An `input` has no useful intrinsic width of its own — it defaults to
+   * roughly twenty characters no matter what it holds — so `field-sizing`
+   * supplies one. Where that property is missing the control keeps the width
+   * it would have had anyway, which is what makes this safe to ship.
+   */
+
+  &.lux-field-fit-content {
+
+    width: auto;
+
+    .lux-crux-content {
+      flex: 0 1 auto;
+    }
+
+    .lux-field-content {
+      width: auto;
+    }
+
+    input,
+    select,
+    textarea {
+      width: auto;
+      min-width: 4ch;
+
+      field-sizing: content;
+    }
+
+    /**
+     * The label is positioned rather than laid out, so it never widens the
+     * field. Once the field is only as wide as its content, a label longer
+     * than that has nowhere to go and folds onto itself. Holding it on one
+     * line turns that into a plain overflow, which reads. Fields that fit
+     * their content want short labels, or a min width of their own.
+     */
+
+    .lux-field-label,
+    .lux-field-border legend {
+      white-space: nowrap;
+    }
+
+  }
+
 }
 
 /* Button Container */

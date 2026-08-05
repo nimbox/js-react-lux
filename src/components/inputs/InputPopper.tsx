@@ -105,7 +105,7 @@ export function InputPopper(props: InputPopperProps & InputHTMLAttributes<HTMLIn
         disabled,
         error,
 
-        withFullWidth,
+        withoutFullWidth,
         withFullHeight,
 
         fieldClassName,
@@ -202,7 +202,7 @@ export function InputPopper(props: InputPopperProps & InputHTMLAttributes<HTMLIn
 
             onClick={handleShow}
 
-            withFullWidth={withFullWidth}
+            withoutFullWidth={withoutFullWidth}
             withFullHeight={withFullHeight}
 
             className={fieldClassName}
@@ -228,6 +228,9 @@ export function InputPopper(props: InputPopperProps & InputHTMLAttributes<HTMLIn
                 ref={internalInputRef}
 
                 type="text"
+
+                disabled={disabled}
+                error={error}
 
                 onFocus={handleShow}
 

@@ -80,7 +80,7 @@ export function Input(props: InputProps & InputHTMLAttributes<HTMLInputElement>)
         disabled,
         error,
 
-        withFullWidth = true,
+        withoutFullWidth,
         withFullHeight,
 
         fieldClassName,
@@ -119,7 +119,7 @@ export function Input(props: InputProps & InputHTMLAttributes<HTMLInputElement>)
             disabled={disabled}
             error={error}
 
-            withFullWidth={withFullWidth}
+            withoutFullWidth={withoutFullWidth}
             withFullHeight={withFullHeight}
 
             className={fieldClassName}
@@ -134,7 +134,7 @@ export function Input(props: InputProps & InputHTMLAttributes<HTMLInputElement>)
 
                 onChange={handleChangeInternalValue}
 
-                className={cn(className, { 'w-full': withFullWidth, 'h-full': withFullHeight })}
+                className={cn(className, { 'h-full': withFullHeight })}
 
                 {...inputProps}
 

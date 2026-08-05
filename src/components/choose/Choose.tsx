@@ -153,7 +153,7 @@ export function Choose<O, G = O[]>(props: ChooseProps<O, G> & React.InputHTMLAtt
 
         onBlur,
 
-        withFullWidth,
+        withoutFullWidth,
         withFullHeight,
 
         tabIndex = 0,
@@ -455,7 +455,6 @@ export function Choose<O, G = O[]>(props: ChooseProps<O, G> & React.InputHTMLAtt
                 <div className="lux-p-2em">
                     <SearchInput
                         ref={queryRef}
-                        withFullWidth
                         loading={loading > 0}
                         loadingError={!!loadingError}
                         value={query}
@@ -541,7 +540,7 @@ export function Choose<O, G = O[]>(props: ChooseProps<O, G> & React.InputHTMLAtt
             onKeyDown={handleKeyDown}
             onClick={handleShow}
 
-            withFullWidth={withFullWidth}
+            withoutFullWidth={withoutFullWidth}
             withFullHeight={withFullHeight}
 
             className={cn('focus:outline-none cursor-pointer', fieldClassName)}
