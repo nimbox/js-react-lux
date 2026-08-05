@@ -52,12 +52,19 @@
   min-width: 0;
   max-width: 100%;
 
+  /**
+   * An adornment slot can hold more than one thing — a clear cross beside a
+   * chevron, a search icon beside whatever the caller passed. The gap only
+   * applies between them, so a slot holding a single ornament is unchanged.
+   */
+
   .lux-crux-start {
     flex: none;
     align-self: center;
 
     display: flex;
     align-items: center;
+    gap: calc(var(--field-px) / 4);
 
     height: 0;
     margin-right: calc(var(--field-px) / 4);
@@ -81,6 +88,7 @@
 
     display: flex;
     align-items: center;
+    gap: calc(var(--field-px) / 4);
 
     height: 0;
     margin-left: calc(var(--field-px) / 4);

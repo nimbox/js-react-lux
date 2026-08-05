@@ -1,6 +1,8 @@
-import { type ChangeEventHandler, type InputHTMLAttributes, type KeyboardEvent, type ReactElement, type Ref, useImperativeHandle, useRef } from 'react';
+import { CircleCrossIcon } from '@nimbox/icons-react';
+import { type ChangeEventHandler, type InputHTMLAttributes, type KeyboardEvent, type MouseEvent, type ReactElement, type Ref, useImperativeHandle, useRef } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { type PopperProps } from '../floating/Popper';
+import { consumeEvent } from '../utilities/consumeEvent';
 import { setRefInputValue } from '../utilities/setRefInputValue';
 import { type FieldProps } from './Field';
 import { FieldPopper } from './FieldPopper';
@@ -71,9 +73,21 @@ export interface InputPopperProps extends
     onChange?: ChangeEventHandler<HTMLInputElement>,
 
     /**
-     * Change event handler for final blur event. 
+     * Change event handler for final blur event.
      */
     onFinalize?: (value: string) => string | null;
+
+    /**
+     * Offer a cross that empties the field, placed before whatever `end`
+     * ornament the input carries.
+     *
+     * The cross only appears once there is something to clear. The flag says
+     * the field may be emptied, not that it permanently advertises it — a
+     * cross on an empty field invites a press that does nothing.
+     *
+     * @default `false`
+     */
+    withClear?: boolean;
 
 }
 
@@ -126,8 +140,10 @@ export function InputPopper(props: InputPopperProps & InputHTMLAttributes<HTMLIn
 
         onKeyDown,
         onChange,
-    
+
         onFinalize,
+
+        withClear = false,
 
         // Rest goes to Input
 
@@ -161,6 +177,20 @@ export function InputPopper(props: InputPopperProps & InputHTMLAttributes<HTMLIn
         handleHide();
     };
 
+    // Clearing empties the input the same way the popper picks a value, so
+    // the change reaches the caller as an ordinary input event. Consuming the
+    // mouse down keeps the focus in the field.
+
+    const handleClearMouseDown = (e: MouseEvent) => {
+        consumeEvent(e);
+        setRefInputValue(internalInputRef, '');
+    };
+
+    // The click still follows the mouse down and would reach the field's own
+    // handler, which opens the popper.
+
+    const handleClearClick = consumeEvent;
+
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         onKeyDown?.(e);
         switch (e.key) {
@@ -193,7 +223,18 @@ export function InputPopper(props: InputPopperProps & InputHTMLAttributes<HTMLIn
 
             label={label}
             start={start}
-            end={end}
+            end={
+                withClear && internalValue.length > 0
+                    ? <>
+                        <CircleCrossIcon
+                            onMouseDown={handleClearMouseDown}
+                            onClick={handleClearClick}
+                            className="cursor-pointer"
+                        />
+                        {end}
+                    </>
+                    : end
+            }
 
             shrink={shrink || props.placeholder != null || internalValue.length > 0}
             focus={show}
