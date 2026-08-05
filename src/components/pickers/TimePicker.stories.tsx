@@ -17,6 +17,7 @@ const meta: Meta<typeof TimePicker> = {
             include: [
                 'label', 'placeholder', 'variant', 'end',
                 'disabled', 'error', 'withoutFullWidth',
+                'withClear',
                 'defaultValue',
                 'withKeepOpen'
             ]
@@ -53,6 +54,14 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
     args: { defaultValue: '8:30am' }
+};
+
+/**
+ * The cross only shows once there is a time to clear, so empty the field and
+ * it goes away rather than sitting there offering a press that does nothing.
+ */
+export const WithClear: Story = {
+    args: { defaultValue: '8:30am', withClear: true }
 };
 
 export const Controlled: Story = {

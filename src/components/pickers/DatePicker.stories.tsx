@@ -17,6 +17,7 @@ const meta: Meta<typeof DatePicker> = {
             include: [
                 'label', 'placeholder', 'variant', 'end',
                 'disabled', 'error', 'withoutFullWidth',
+                'withClear',
                 'defaultValue',
                 'firstDayOfWeek', 'withShortcuts', 'withKeepOpen'
             ]
@@ -61,6 +62,14 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
     args: { defaultValue: '19-12-1967' }
+};
+
+/**
+ * The cross only shows once there is a date to clear, so empty the field and
+ * it goes away rather than sitting there offering a press that does nothing.
+ */
+export const WithClear: Story = {
+    args: { defaultValue: '19-12-1967', withClear: true }
 };
 
 export const FitContent: Story = {
