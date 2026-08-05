@@ -24,6 +24,7 @@ const InputTemplate: Story = {
                 <Input variant="filled" {...args} />
                 <Input variant="outlined" {...args} />
                 <Input variant="inlined" {...args} />
+                <Input variant="pill" {...args} />
                 <Input variant="plain" {...args} />
             </div>
         );

@@ -6,7 +6,7 @@ import { cn } from '../utilities/cn';
 // Field
 //
 
-export type FieldVariant = 'outlined' | 'filled' | 'inlined' | 'plain';
+export type FieldVariant = 'outlined' | 'filled' | 'inlined' | 'pill' | 'plain';
 
 export interface FieldProps {
 
@@ -15,7 +15,10 @@ export interface FieldProps {
     // Variant
 
     /**
-     * Variant to display the element.
+     * Variant to display the element. The `pill` variant is a compact, fully
+     * rounded chip meant to sit beside a `Tag`; it carries a value only and
+     * never shows a `label`.
+     *
      * @default outlined
      */
     variant?: FieldVariant;
@@ -25,6 +28,9 @@ export interface FieldProps {
     /**
      * Label to us as placeholder or as label for the field. The position of the
      * label depends on the `shrink` state.
+     *
+     * The `pill` variant ignores this. Reach for a `placeholder` on the control
+     * itself when a pill needs a prompt.
      */
     label?: string;
 
@@ -165,6 +171,11 @@ export function Field(props: FieldProps & React.HTMLAttributes<HTMLDivElement>) 
 
     } = props;
 
+    // A pill carries a value only, so it drops the label wherever one would
+    // otherwise be drawn.
+
+    const hasLabel = variant !== 'pill' && label != null && label !== '';
+
     return (
 
         <div
@@ -182,7 +193,7 @@ export function Field(props: FieldProps & React.HTMLAttributes<HTMLDivElement>) 
 
                 // Field classes
 
-                'lux-field-has-label': label != null && label !== '',
+                'lux-field-has-label': hasLabel,
 
                 'lux-field-has-start': start != null,
                 'lux-field-has-end': end != null,
@@ -195,6 +206,7 @@ export function Field(props: FieldProps & React.HTMLAttributes<HTMLDivElement>) 
                 'lux-field-outlined': variant === 'outlined',
                 'lux-field-filled': variant === 'filled',
                 'lux-field-inlined': variant === 'inlined',
+                'lux-field-pill': variant === 'pill',
 
                 'lux-field-fit-content': withoutFullWidth
 
@@ -217,7 +229,7 @@ export function Field(props: FieldProps & React.HTMLAttributes<HTMLDivElement>) 
                 'w-full': !withoutFullWidth,
                 'h-full': withFullHeight
             })}>
-                {label &&
+                {hasLabel &&
                     <label className={cn('lux-field-label')}>
                         {label}
                     </label>
@@ -233,7 +245,7 @@ export function Field(props: FieldProps & React.HTMLAttributes<HTMLDivElement>) 
 
             {(variant === 'outlined') &&
                 <fieldset className="lux-field-border">
-                    {label &&
+                    {hasLabel &&
                         <legend>
                             <span>{label}</span>
                         </legend>
@@ -241,7 +253,7 @@ export function Field(props: FieldProps & React.HTMLAttributes<HTMLDivElement>) 
                 </fieldset>
             }
 
-            {(variant === 'filled' || variant === 'inlined') &&
+            {(variant === 'filled' || variant === 'inlined' || variant === 'pill') &&
                 <div className="lux-field-border" />
             }
 

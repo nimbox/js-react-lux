@@ -8,6 +8,12 @@ import { ControlContext } from './ControlContext';
 // Wrapper
 //
 
+/**
+ * Variants a `Wrapper` can draw. This is a subset of `FieldVariant` — the
+ * wrapper is the older, label-less styling path and has no `pill`.
+ */
+export type WrapperVariant = 'outlined' | 'filled' | 'inlined' | 'plain';
+
 export interface WrapperProps {
 
     ref?: Ref<HTMLDivElement>;
@@ -16,7 +22,7 @@ export interface WrapperProps {
      * Variant to display the element.
      * @default 'outlined'
      */
-    variant?: 'outlined' | 'filled' | 'inlined' | 'plain';
+    variant?: WrapperVariant;
 
     /**
      * Show the wrapper content as disabled (currently opacity 50%).

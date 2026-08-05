@@ -1,4 +1,5 @@
 import { FullSquareIcon } from '@nimbox/icons-react';
+import { Tag } from '../Tag';
 import { Field } from './Field';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
@@ -19,10 +20,11 @@ type Story = StoryObj<typeof Field>;
 
 const FieldTemplate: Story = {
     render: ({ ...args }) => (
-        <div className="grid grid-cols-3 gap-x-2 justify-items-center items-baseline">
+        <div className="grid grid-cols-4 gap-x-2 justify-items-center items-baseline">
             <Field variant="outlined" {...args} />
             <Field variant="filled" {...args} />
             <Field variant="inlined" {...args} />
+            <Field variant="pill" {...args} />
         </div>
     )
 };
@@ -32,6 +34,28 @@ const FieldTemplate: Story = {
 export const Default: Story = {
     ...FieldTemplate,
     args: { label: 'XXXX', shrink: true, children: 'XXXXXXXXXXXX' }
+};
+
+/**
+ * The reason the `pill` variant sets a line height of its own. A pill and a tag
+ * have to be the same height and sit on the same baseline at any font size; a
+ * pill left on the ambient line height stands taller than the tag next to it.
+ */
+
+export const PillBesideTag: Story = {
+    render: ({ ...args }) => (
+        <div className="flex flex-col gap-4">
+            {['text-xs', 'text-base', 'text-xl'].map((size) =>
+                <div key={size} className={`flex flex-row items-baseline gap-2 ${size}`}>
+                    <Field variant="pill" withoutFullWidth {...args} />
+                    <Tag>Tag</Tag>
+                    <Field variant="pill" withoutFullWidth start={<FullSquareIcon />} {...args} />
+                    <Tag onDelete={() => undefined}>Tag</Tag>
+                </div>
+            )}
+        </div>
+    ),
+    args: { children: 'Pill' }
 };
 
 // Plain

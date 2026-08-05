@@ -52,6 +52,9 @@ blast radius — change carefully, verify against the stories.
      from the union until designed (grep shows nothing passes `variant="plain"`).
   3. Add one story per variant (outlined/filled/inlined/editable) with label +
      start/end, shrunk and not, as a regression guard.
+- **Note:** the union has since grown a fifth member, `'pill'`, which is fully
+  wired (class, border element, state blocks). It does not change this item, but
+  it does raise the cost of leaving `plain` and `editable` half-wired.
 - **Risk:** low/medium; contained.
 
 ### F4. `shrink` must be hand-synced by every consumer (the main annoyance)

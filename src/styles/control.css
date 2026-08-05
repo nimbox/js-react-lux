@@ -7,6 +7,17 @@
   --field-rule-offset: 2px;
   --field-rule-width: 1px;
 
+  /**
+   * A pill is meant to stand beside a `Tag`, so these are a tag's own metrics.
+   * They live here rather than as literals in the variant so the two shapes
+   * cannot drift apart.
+   */
+
+  --field-pill-px: 0.5em;
+  --field-pill-py: 0.15em;
+  --field-pill-gap: 0.125em;
+  --field-pill-line-height: 1.2em;
+
 }
 
 
@@ -496,6 +507,66 @@
 
   }
 
+  /**
+   * At rest a pill is a fill and nothing more. The ring is held back for the
+   * states, which is why the border sits here at full width but transparent:
+   * hover, focus, error and disabled all colour `lux-field-border` generically,
+   * so each of them brings the ring out without a rule of its own.
+   *
+   * It has to be a ring rather than the rule the filled variant draws. A pill
+   * shows no label, so it lacks the label colour every other variant leans on,
+   * and without the ring an error would have nothing to appear on.
+   */
+
+  &.lux-field-pill {
+
+    padding: var(--field-pill-py) var(--field-pill-px);
+    background-color: var(--color-control-fill);
+    border-radius: calc(infinity * 1px);
+
+    /**
+     * `min-height: 1lh` on the content follows the line height set here. At
+     * the ambient line height a pill would stand taller than the tag next to
+     * it, which is the whole thing this variant exists to avoid.
+     */
+
+    .lux-field-content,
+    input,
+    select,
+    textarea {
+      line-height: var(--field-pill-line-height);
+    }
+
+    .lux-crux-start,
+    .lux-crux-end {
+      gap: var(--field-pill-gap);
+    }
+
+    .lux-field-border {
+      border-width: 1px;
+      border-color: transparent;
+      border-radius: calc(infinity * 1px);
+    }
+
+  }
+
+  /**
+   * `lux-crux-empty` zeroes these same margins at equal specificity, and it
+   * sits earlier in the file, so tightening them has to step around it.
+   */
+
+  &.lux-field-pill:not(.lux-crux-empty) {
+
+    .lux-crux-start {
+      margin-right: var(--field-pill-gap);
+    }
+
+    .lux-crux-end {
+      margin-left: var(--field-pill-gap);
+    }
+
+  }
+
   &.lux-field-inlined {
 
     padding: calc(var(--field-py) * 2 / 10) 0 calc(var(--field-py) * 0 / 10) 0;
@@ -569,6 +640,10 @@
       }
     }
 
+    &.lux-field-pill {
+      background-color: var(--color-control-fill-hover);
+    }
+
     &.lux-field-inlined {
       .lux-field-border {
         border-bottom-width: 1px;
@@ -612,6 +687,12 @@
       }
     }
 
+    &.lux-field-pill {
+      .lux-field-border {
+        border-width: 2px;
+      }
+    }
+
     &.lux-field-inlined {
       .lux-field-border {
         border-bottom-width: 2px;
@@ -638,7 +719,8 @@
       color: var(--color-control-border-disabled);
     }
 
-    &.lux-field-filled {
+    &.lux-field-filled,
+    &.lux-field-pill {
       background-color: var(--color-control-fill-disabled);
     }
 

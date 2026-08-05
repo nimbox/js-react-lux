@@ -1,5 +1,5 @@
-import React from 'react';
 import type { FC } from 'react';
+import React from 'react';
 import tinycolor from 'tinycolor2';
 
 
@@ -49,6 +49,16 @@ export interface AvatarProps extends React.HTMLAttributes<HTMLSpanElement & HTML
      */
     inline?: boolean;
 
+    /**
+     * Style to use as size of the icon.
+     */
+    iconSize?: React.CSSProperties['width'];
+
+    /**
+     * Style to use as font size of the initials.
+     */
+    fontSize?: React.CSSProperties['fontSize'];
+
 }
 
 /**
@@ -77,6 +87,9 @@ export const Avatar: FC<AvatarProps> = (props) => {
 
         inline = true,
 
+        iconSize = '1.5em',
+        fontSize = '0.75em',
+
         children,
 
         ...rest
@@ -90,7 +103,7 @@ export const Avatar: FC<AvatarProps> = (props) => {
 
     const icon = src
         ? <img src={src} srcSet={srcSet} alt={alt} loading="lazy" decoding="async" {...rest} />
-        : <span style={{ fontSize: '0.75em', lineHeight: 0 }} {...rest}>{children}</span>;
+        : <span style={{ fontSize, lineHeight: 0 }} {...rest}>{children}</span>;
 
     // Render
 
@@ -98,7 +111,7 @@ export const Avatar: FC<AvatarProps> = (props) => {
         return (
             <span
                 className="flex justify-center items-center rounded-full overflow-hidden"
-                style={{ width: '1.5em', height: '1.5em', color: c, backgroundColor: bg }}
+                style={{ width: iconSize, height: iconSize, color: c, backgroundColor: bg }}
             >
                 {icon}
             </span>
@@ -110,7 +123,7 @@ export const Avatar: FC<AvatarProps> = (props) => {
             <span className="lux-crux-start">
                 <span
                     className="flex justify-center items-center rounded-full overflow-hidden"
-                    style={{ width: '1.5em', height: '1.5em', color: c, backgroundColor: bg }}
+                    style={{ width: iconSize, height: iconSize, color: c, backgroundColor: bg }}
                 >
                     {icon}
                 </span>

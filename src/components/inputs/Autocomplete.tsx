@@ -12,6 +12,7 @@ import { consumeEvent } from '../utilities/consumeEvent';
 import { setRefInputValue } from '../utilities/setRefInputValue';
 import { type InputProps } from './Input';
 import { PlainInput } from './PlainInput';
+import { type WrapperVariant } from './Wrapper';
 import { WrapperPopper } from './WrapperPopper';
 
 
@@ -20,11 +21,19 @@ import { WrapperPopper } from './WrapperPopper';
 //
 
 export interface AutocompleteProps<O, G = O[]> extends
-    InputProps,
+    Omit<InputProps, 'variant'>,
     Pick<PopperProps, 'withPlacement' | 'withArrow' | 'withSameWidth'>,
     Pick<ChooseOptionListProps<O, G>, 'extractor' | 'renderEmpty' | 'renderGroupLabel' | 'renderOption'> {
 
     ref?: Ref<HTMLInputElement>;
+
+    /**
+     * Variant to display the element. This renders a `WrapperPopper` rather
+     * than a `Field`, so it offers the wrapper's variants and not the field's.
+     *
+     * @default 'outlined'
+     */
+    variant?: WrapperVariant;
 
     // useSearchOptions
 

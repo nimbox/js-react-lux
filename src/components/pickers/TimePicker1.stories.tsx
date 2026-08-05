@@ -33,7 +33,7 @@ const meta: Meta<typeof TimePicker1> = {
     argTypes: {
         variant: {
             control: 'select',
-            options: ['outlined', 'filled', 'inlined', 'plain']
+            options: ['outlined', 'filled', 'inlined', 'pill', 'plain']
         },
         end: {
             control: 'radio',
