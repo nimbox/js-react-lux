@@ -28,7 +28,10 @@ const config: StorybookConfig = {
   typescript: {
     reactDocgen: "react-docgen-typescript",
     reactDocgenTypescriptOptions: {
-      tsconfigPath: "tsconfig.app.json"
+      tsconfigPath: "tsconfig.app.json",
+      shouldExtractLiteralValuesFromEnum: true,
+      shouldRemoveUndefinedFromOptional: true,
+      propFilter: (prop) => !/node_modules/.test(prop.parent?.fileName ?? '')
     }
   }
 
