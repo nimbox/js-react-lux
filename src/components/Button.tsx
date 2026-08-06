@@ -9,7 +9,12 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
     ref?: React.Ref<HTMLButtonElement>;
 
-    variant?: 'filled' | 'text' | 'outlined' | 'link';
+    /**
+     * Visual treatment.
+     *
+     * @default filled
+     */
+    variant?: 'filled' | 'text' | 'outlined' | 'link' | 'inline';
     semantic?: 'primary' | 'secondary' | 'danger' | 'muted';
     rounded?: boolean;
     centered?: boolean;
@@ -64,6 +69,7 @@ export function Button(props: ButtonProps) {
                 'lux-button-outlined': variant === 'outlined',
                 'lux-button-text': variant === 'text',
                 'lux-button-link': variant === 'link',
+                'lux-button-inline': variant === 'inline',
 
                 'lux-button-primary': semantic === 'primary',
                 'lux-button-secondary': semantic === 'secondary',

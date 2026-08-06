@@ -22,10 +22,12 @@ const ButtonTemplate: Story = {
                 <Button variant="outlined" {...args} />
                 <Button variant="text" {...args} />
                 <Button variant="link" {...args} />
+                <Button variant="inline" {...args} />
                 <Button variant="filled" {...args} disabled />
                 <Button variant="outlined" {...args} disabled />
                 <Button variant="text" {...args} disabled />
                 <Button variant="link" {...args} disabled />
+                <Button variant="inline" {...args} disabled />
             </div>
         );
     }
@@ -63,6 +65,39 @@ export const Muted: Story = {
         ...Primary.args,
         semantic: 'muted'
     }
+};
+
+/**
+ * What the `inline` variant is for. The two paragraphs are identical except
+ * that the first has a button in it; their lines have to stay evenly spaced
+ * and the two blocks have to end at the same height. A `filled` button is
+ * shown in the third paragraph as the contrast — it is what pushing the
+ * leading apart looks like.
+ */
+
+export const InlineInText: Story = {
+    render: (args) => (
+        <div className="space-y-6 max-w-lg">
+            <p>
+                Prose that runs on for long enough to wrap over several lines, with an
+                {' '}<Button variant="inline" {...args}>inline</Button>{' '} button sitting
+                in the middle of it, and then more text after so the line it lands on is
+                not the last one in the paragraph.
+            </p>
+            <p>
+                Prose that runs on for long enough to wrap over several lines, with an
+                {' '}plain word{' '} sitting in the middle of it, and then more text after
+                so the line it lands on is not the last one in the paragraph.
+            </p>
+            <p>
+                Prose that runs on for long enough to wrap over several lines, with a
+                {' '}<Button variant="filled" {...args}>filled</Button>{' '} button sitting
+                in the middle of it, and then more text after so the line it lands on is
+                not the last one in the paragraph.
+            </p>
+        </div>
+    ),
+    args: { semantic: 'primary' }
 };
 
 export const StartIcon: Story = {

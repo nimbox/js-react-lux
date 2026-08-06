@@ -8,15 +8,18 @@
   --field-rule-width: 1px;
 
   /**
-   * A pill is meant to stand beside a `Tag`, so these are a tag's own metrics.
-   * They live here rather than as literals in the variant so the two shapes
-   * cannot drift apart.
+   * A tag's own metrics. Together they come to `1.5em`, which is one line of
+   * text at the root line height — so anything wearing them stands beside a
+   * `Tag`, and sits in running prose without pushing the lines apart.
+   *
+   * They live here rather than as literals so the shapes that have to agree —
+   * the `pill` field, the `inline` button — cannot drift apart.
    */
 
-  --field-pill-px: 0.5em;
-  --field-pill-py: 0.15em;
-  --field-pill-gap: 0.125em;
-  --field-pill-line-height: 1.2em;
+  --tag-padding-x: 0.5em;
+  --tag-padding-y: 0.15em;
+  --tag-gap: 0.125em;
+  --tag-line-height: 1.2em;
 
 }
 
@@ -277,8 +280,15 @@
     }
   }
 
-  &.lux-button-text {
-    padding: calc(var(--field-py) / 2) calc(var(--field-px) / 2);
+  /**
+   * `text` and `inline` are the same button at two heights, so they share
+   * every colour — no fill until the pointer is on them — and differ only in
+   * the geometry that follows.
+   */
+
+  &.lux-button-text,
+  &.lux-button-inline {
+
     border-radius: var(--radius-md);
 
     &.lux-button-primary {
@@ -308,6 +318,36 @@
         background-color: var(--color-danger-100);
       }
     }
+
+  }
+
+  &.lux-button-text {
+    padding: calc(var(--field-py) / 2) calc(var(--field-px) / 2);
+  }
+
+  /**
+   * A button the height of the text it sits in. The tag metrics come to one
+   * line box, so dropping this into a paragraph leaves the leading alone —
+   * which is the whole point of the variant, and what separates it from
+   * `text` at a smaller font size.
+   *
+   * The horizontal padding is a tag's rather than a button's. Nothing is drawn
+   * until hover, so it reads as gap in a sentence, and a button's worth of it
+   * would hold the words too far apart.
+   *
+   * The line height has to land on the content rather than the button: the
+   * button is a flex container, so its own line height is never consulted and
+   * the flex line takes its height from what is inside it.
+   */
+
+  &.lux-button-inline {
+
+    padding: var(--tag-padding-y) var(--tag-padding-x);
+
+    .lux-crux-content {
+      line-height: var(--tag-line-height);
+    }
+
   }
 
   &.lux-button-link {
@@ -520,7 +560,7 @@
 
   &.lux-field-pill {
 
-    padding: var(--field-pill-py) var(--field-pill-px);
+    padding: var(--tag-padding-y) var(--tag-padding-x);
     background-color: var(--color-control-fill);
     border-radius: calc(infinity * 1px);
 
@@ -534,12 +574,12 @@
     input,
     select,
     textarea {
-      line-height: var(--field-pill-line-height);
+      line-height: var(--tag-line-height);
     }
 
     .lux-crux-start,
     .lux-crux-end {
-      gap: var(--field-pill-gap);
+      gap: var(--tag-gap);
     }
 
     .lux-field-border {
@@ -558,11 +598,11 @@
   &.lux-field-pill:not(.lux-crux-empty) {
 
     .lux-crux-start {
-      margin-right: var(--field-pill-gap);
+      margin-right: var(--tag-gap);
     }
 
     .lux-crux-end {
-      margin-left: var(--field-pill-gap);
+      margin-left: var(--tag-gap);
     }
 
   }
