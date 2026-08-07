@@ -145,7 +145,7 @@ export function ListItem({ ref, as = 'div', disabled = false, className, childre
                 if (!disabled) { onClick?.(event); }
             }}
             className={cn(
-                'w-full px-[1em] py-[0.5em] rounded-lg outline-none',
+                'w-full px-[1em] py-[0.5em] rounded-item outline-none',
                 {
                     'bg-gray-100': isActive && !disabled,
                     'opacity-50 cursor-not-allowed': disabled,

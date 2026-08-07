@@ -304,7 +304,7 @@ const DayDials = (props: DayDialsProps): ReactElement => {
         <div
             onMouseDown={consumeEvent}
             onMouseLeave={() => setHovered(null)}
-            className={cn('rounded overflow-hidden', className)}
+            className={cn('rounded-surface overflow-hidden', className)}
         >
 
             <div className="px-2 py-2 text-center font-bold tabular-nums border-b border-control-border">

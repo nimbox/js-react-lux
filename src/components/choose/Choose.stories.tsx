@@ -210,6 +210,11 @@ export const Adornment: Story = {
  * **What to check:** press the cross. The value empties, the placeholder comes
  * back, and the list stays shut. Then press the field itself and confirm it
  * still opens — the fix must not cost the field its ordinary click.
+ *
+ * And the other way round, which the above missed: open the list *first*, then
+ * press the cross. It must close. Not opening a shut list and closing an open
+ * one are two different things, and the mousedown handler only ever did the
+ * first — so clearing from an open list used to leave it hanging there.
  */
 export const WithClear: Story = {
     ...ChooseTemplate,
@@ -220,5 +225,51 @@ export const WithClear: Story = {
         ...ChooseTemplate.args,
         withClear: true,
         placeholder: 'Choose a color'
+    }
+};
+
+/**
+ * `withClear` on a *controlled* field whose value comes back late.
+ *
+ * The story above clears an uncontrolled field, and that always worked: the
+ * clear empties `chosenOption` itself and nothing puts it back. Controlled is
+ * where it broke, and only when the new value lags — which is the ordinary case
+ * for a field that writes through to a server, since the value returns with the
+ * answer rather than with the click.
+ *
+ * Two things went wrong in that gap. While the old value was still in force the
+ * field re-resolved it and drew the old option again; then the empty value
+ * arrived and matched nothing, and the settle step only ever *assigned* an
+ * option it found — so the old one stayed on screen for good, contradicting the
+ * value the field held. Reading `''` as "nothing chosen" is what fixes it.
+ *
+ * **What to check:** press the cross. The option may flicker back for the
+ * length of the round trip, and then the placeholder must return and stay.
+ */
+export const WithClearControlledLate: Story = {
+    render: (args) => {
+
+        const [value, setValue] = useState('800080');
+
+        // A write that answers half a second later, like a mutation would.
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const next = e.target.value;
+            action('onChange')(next);
+            setTimeout(() => setValue(next), 500);
+        };
+
+        return (
+            <div className="w-96">
+                <Template
+                    {...args}
+                    withClear
+                    placeholder="Choose a color"
+                    value={value}
+                    onChange={handleChange}
+                />
+                <div className="lux-pt-2em text-muted">value: {value === '' ? '(empty)' : value}</div>
+            </div>
+        );
+
     }
 };

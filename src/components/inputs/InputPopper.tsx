@@ -1,9 +1,9 @@
-import { CircleCrossIcon } from '@nimbox/icons-react';
-import { type ChangeEventHandler, type InputHTMLAttributes, type KeyboardEvent, type MouseEvent, type ReactElement, type Ref, useImperativeHandle, useRef } from 'react';
+import { type ChangeEventHandler, type InputHTMLAttributes, type KeyboardEvent, type ReactElement, type Ref, useImperativeHandle, useRef } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { type PopperProps } from '../floating/Popper';
-import { consumeEvent } from '../utilities/consumeEvent';
 import { setRefInputValue } from '../utilities/setRefInputValue';
+import { canClear } from './canClear';
+import { ClearOrnament } from './ClearOrnament';
 import { type FieldProps } from './Field';
 import { FieldPopper } from './FieldPopper';
 import { PlainInput } from './PlainInput';
@@ -178,18 +178,15 @@ export function InputPopper(props: InputPopperProps & InputHTMLAttributes<HTMLIn
     };
 
     // Clearing empties the input the same way the popper picks a value, so
-    // the change reaches the caller as an ordinary input event. Consuming the
-    // mouse down keeps the focus in the field.
+    // the change reaches the caller as an ordinary input event.
 
-    const handleClearMouseDown = (e: MouseEvent) => {
-        consumeEvent(e);
+    const handleClear = () => {
         setRefInputValue(internalInputRef, '');
     };
 
-    // The click still follows the mouse down and would reach the field's own
-    // handler, which opens the popper.
+    // A disabled field offers nothing, the cross included.
 
-    const handleClearClick = consumeEvent;
+    const withCross = withClear && !disabled && canClear(internalValue);
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         onKeyDown?.(e);
@@ -224,13 +221,9 @@ export function InputPopper(props: InputPopperProps & InputHTMLAttributes<HTMLIn
             label={label}
             start={start}
             end={
-                withClear && internalValue.length > 0
+                withCross
                     ? <>
-                        <CircleCrossIcon
-                            onMouseDown={handleClearMouseDown}
-                            onClick={handleClearClick}
-                            className="cursor-pointer"
-                        />
+                        <ClearOrnament value={internalValue} onClear={handleClear} />
                         {end}
                     </>
                     : end

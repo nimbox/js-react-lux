@@ -15,6 +15,20 @@
         "Noviembre",
         "Diciembre"
     ],
+    "shortMonths": [
+        "Ene",
+        "Feb",
+        "Mar",
+        "Abr",
+        "May",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dic"
+    ],
     "shortDays": [
         "Dom",
         "Lun",
@@ -24,7 +38,17 @@
         "Vie",
         "Sab"
     ],
+    "longDays": [
+        "Domingo",
+        "Lunes",
+        "Martes",
+        "Miércoles",
+        "Jueves",
+        "Viernes",
+        "Sábado"
+    ],
     "namedDays": {
+        "today": "Hoy",
         "tomorrow": "Mañana",
         "day-after-tomorrow": "Pasado mañana",
         "this-friday": "Este viernes",
@@ -34,9 +58,16 @@
         "next-month": "El mes que viene",
         "in-two-months": "En dos meses"
     },
+    "dayParts": {
+        "night": "Madrugada",
+        "morning": "Mañana",
+        "afternoon": "Tarde",
+        "evening": "Noche"
+    },
     "hour": "Hora",
     "minutes": "Minutos",
     "time": "Hora",
+    "date": "Fecha",
     "loading": "Cargando...",
     "shortcuts": "Atajos",
     "imageViewer": {

@@ -9,7 +9,7 @@
   background-color: #222222;
 
   box-shadow: 1px 1px 3px #222222;
-  border-radius: 4px;
+  border-radius: var(--radius-surface);
 
   pointer-events: none;
 

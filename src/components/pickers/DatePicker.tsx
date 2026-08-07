@@ -348,7 +348,7 @@ const Calendar = (props: CalendarProps): ReactElement => {
     return (
         <div onMouseDown={consumeEvent} className='relative'>
 
-            <div className={cn('flex flex-row rounded overflow-hidden', className)}>
+            <div className={cn('flex flex-row rounded-surface overflow-hidden', className)}>
 
                 <div className="w-72">
 

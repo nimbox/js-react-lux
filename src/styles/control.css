@@ -206,8 +206,9 @@
   }
 
   &.lux-button-filled {
+
     padding: calc(var(--field-py) / 2) calc(var(--field-px) / 2);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-control);
 
     &.lux-button-primary {
       color: white;
@@ -243,9 +244,10 @@
   }
 
   &.lux-button-outlined {
+
     padding: calc(var(--field-py) / 2 - 1px) calc(var(--field-px) / 2 - 1px);
     border-width: 1px;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-control);
 
     &.lux-button-primary {
       color: var(--color-primary-500);
@@ -289,7 +291,7 @@
   &.lux-button-text,
   &.lux-button-inline {
 
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-control);
 
     &.lux-button-primary {
       color: var(--color-primary-500);
@@ -461,13 +463,15 @@
     padding: calc(var(--field-py) / 2) calc(var(--field-px) / 2);
 
     .lux-field-border {
+
       border-width: 1px;
       border-color: var(--color-control-border);
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-control);
 
       legend {
         display: none;
       }
+
     }
 
     &:focus-within,
@@ -507,7 +511,7 @@
 
     padding: calc(var(--field-py) / 2) calc(var(--field-px) / 2);
     background-color: var(--color-control-fill);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-control);
 
     &.lux-field-has-label {
       padding: calc(var(--field-py) * 8 / 10) calc(var(--field-px) / 2) calc(var(--field-py) * 2 / 10)
@@ -525,7 +529,7 @@
     .lux-field-border {
       border-bottom-width: 1px;
       border-color: var(--color-control-border);
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-control);
     }
 
     &:focus-within,
@@ -655,6 +659,7 @@
   }
 
   &:hover {
+
     .lux-field-start {
       color: var(--color-control-border-hover);
     }
@@ -695,10 +700,12 @@
         border-bottom-width: 1px;
       }
     }
+
   }
 
   &:focus-within,
   &.lux-field-focus {
+
     .lux-field-label {
       color: var(--color-primary-500);
     }
@@ -744,9 +751,11 @@
         border-bottom-width: 2px;
       }
     }
+  
   }
 
   &.lux-field-disabled {
+
     .lux-field-label {
       color: var(--color-control-border-disabled);
     }
@@ -769,9 +778,11 @@
     }
 
     cursor: not-allowed;
+
   }
 
   &.lux-field-error {
+
     .lux-field-label {
       color: var(--color-danger-500);
     }
@@ -787,6 +798,7 @@
     .lux-field-border {
       border-color: var(--color-danger-500);
     }
+
   }
 
   /* Disables State */
@@ -795,4 +807,5 @@
     opacity: 0.3;
     cursor: not-allowed;
   }
+
 }

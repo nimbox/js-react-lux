@@ -1,0 +1,109 @@
+import { CircleIcon } from '@nimbox/icons-react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { ControlledTemplate, HookFormTemplate, UncontrolledTemplate } from '../../templates/InputTemplates';
+import { DatePicker1 } from './DatePicker1';
+
+
+// Definition
+
+const meta: Meta<typeof DatePicker1> = {
+
+    component: DatePicker1,
+    parameters: {
+        layout: 'centered',
+        // The component's props are intersected with every attribute of an
+        // html input, so name the ones worth playing with.
+        controls: {
+            include: [
+                'label', 'placeholder', 'variant', 'end',
+                'disabled', 'error', 'withoutFullWidth',
+                'withClear',
+                'defaultValue',
+                'firstDayOfWeek', 'withShortcuts', 'withKeepOpen'
+            ]
+        }
+    },
+    tags: ['autodocs'],
+
+    // A field fills its container, so give it one worth filling — otherwise
+    // there is nothing to tell full width and fit content apart.
+
+    decorators: [(Story) => <div className="w-96 border border-dashed border-content-border p-2"><Story /></div>],
+
+    argTypes: {
+        variant: {
+            control: 'select',
+            options: ['outlined', 'filled', 'inlined', 'pill', 'plain']
+        },
+        end: {
+            control: 'radio',
+            options: ['calendar', 'none', 'other'],
+            mapping: { calendar: undefined, none: null, other: <CircleIcon /> },
+            description: 'Left out the field carries a calendar, `null` leaves it bare.'
+        },
+        firstDayOfWeek: {
+            control: { type: 'range', min: 0, max: 6, step: 1 }
+        }
+    },
+
+    // `defaultValue` stays out of here: the controlled template passes
+    // `value`, and an input given both warns.
+
+    args: {
+        label: 'Date'
+    }
+
+};
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+// Stories
+
+export const Default: Story = {
+    args: { defaultValue: '19-12-1967' }
+};
+
+/**
+ * The cross only shows once there is a date to clear, so empty the field and
+ * it goes away rather than sitting there offering a press that does nothing.
+ */
+export const WithClear: Story = {
+    args: { defaultValue: '19-12-1967', withClear: true }
+};
+
+export const FitContent: Story = {
+    args: { defaultValue: '19-12-1967', withoutFullWidth: true }
+};
+
+export const FitContentEmpty: Story = {
+    args: { placeholder: 'dd-mm-yyyy', withoutFullWidth: true }
+};
+
+/**
+ * Without the shortcuts the panel is the month alone, the width `TimePicker1`
+ * keeps for its grid.
+ */
+export const WithoutShortcuts: Story = {
+    args: { defaultValue: '19-12-1967', withShortcuts: false }
+};
+
+/**
+ * A week that starts on Monday leaves the weekend as the pair of tinted
+ * columns closing the row.
+ */
+export const MondayFirst: Story = {
+    args: { defaultValue: '19-12-1967', firstDayOfWeek: 1 }
+};
+
+export const Controlled: Story = {
+    render: (args) => <ControlledTemplate component={DatePicker1} componentProps={args} initial="19-12-1967" forced="02-02-2022" />
+};
+
+export const Uncontrolled: Story = {
+    render: (args) => <UncontrolledTemplate component={DatePicker1} componentProps={args} initial="19-12-1967" forced="02-02-2022" />
+};
+
+export const HookForm: Story = {
+    render: (args) => <HookFormTemplate component={DatePicker1} componentProps={args} initial="19-12-1967" forced="02-02-2022" />
+};

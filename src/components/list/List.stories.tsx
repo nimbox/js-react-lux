@@ -29,7 +29,7 @@ export const Default: Story = {
                 <List
                     tabIndex={0}
                     role="listbox"
-                    className="bg-control-bg border border-control-border rounded shadow outline-none"
+                    className="bg-control-bg border border-control-border rounded-surface shadow outline-none"
                 >
 
                     <List.Header>Fruits</List.Header>
@@ -64,7 +64,7 @@ function SampleList() {
         <List
             tabIndex={0}
             role="listbox"
-            className="bg-control-bg border border-control-border rounded shadow outline-none"
+            className="bg-control-bg border border-control-border rounded-surface shadow outline-none"
         >
             <List.Header>Fruits</List.Header>
             <List.Item role="option">Apple</List.Item>

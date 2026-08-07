@@ -26,7 +26,7 @@ export interface FieldPopperProps extends FieldProps,
 
     /**
      * Class names to apply to the popper.
-     * @default bg-control-bg border border-control-border rounded drop-shadow
+     * @default bg-control-bg border border-control-border rounded-surface drop-shadow
      */
     popperClassName?: string;
 
@@ -210,7 +210,7 @@ export function FieldPopper(props: FieldPopperProps & HTMLAttributes<HTMLDivElem
 
                     onBlur={handlePopperBlur}
 
-                    className={cn('bg-control-bg border border-control-border rounded drop-shadow', popperClassName)}
+                    className={cn('bg-control-bg border border-control-border rounded-surface drop-shadow', popperClassName)}
 
                 >
 

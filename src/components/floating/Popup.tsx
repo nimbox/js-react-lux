@@ -68,7 +68,7 @@ export const Popup: FC<PopupProps> = (props: PopupProps) => {
                 <FloatingPortal id="modal">
                     <div
                         ref={refs.setFloating}
-                        className="z-30 popper-element text-base rounded border border-control-border bg-white"
+                        className="z-30 popper-element text-base rounded-surface border border-control-border bg-white"
                         style={floatingStyles}
                     >
                         <Component />

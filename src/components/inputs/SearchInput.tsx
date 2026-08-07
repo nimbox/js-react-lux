@@ -1,6 +1,9 @@
 import React, { useImperativeHandle, useRef } from 'react';
-import { CircleCrossIcon, SearchIcon } from '@nimbox/icons-react';
+import { SearchIcon } from '@nimbox/icons-react';
+import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { setRefInputValue } from '../utilities/setRefInputValue';
+import { canClear } from './canClear';
+import { ClearOrnament } from './ClearOrnament';
 import { Input, type InputProps } from './Input';
 
 
@@ -40,6 +43,9 @@ export function SearchInput(props: SearchInputProps & React.InputHTMLAttributes<
         start,
         end,
 
+        disabled,
+        onChange,
+
         ...inputProps
 
     } = props;
@@ -49,12 +55,22 @@ export function SearchInput(props: SearchInputProps & React.InputHTMLAttributes<
     const inputRef = useRef<HTMLInputElement>(null);
     useImperativeHandle(ref, () => inputRef.current!);
 
+    // The value is internalized only to know whether there is anything to
+    // clear. A search field always offers the cross once there is, which is why
+    // it takes no `withClear` of its own: a search that cannot be called off is
+    // not a search.
+
+    const [internalValue, handleChangeInternalValue] = useInternalizeValue('', props.defaultValue, props.value, onChange);
+
     // Handlers
 
-    const handleClearMouseDown = (e: React.MouseEvent) => {
-        e.preventDefault();
+    const handleClear = () => {
         setRefInputValue(inputRef, '');
     };
+
+    // A disabled field offers nothing, the cross included.
+
+    const withCross = !disabled && canClear(internalValue);
 
     // Render
 
@@ -62,6 +78,8 @@ export function SearchInput(props: SearchInputProps & React.InputHTMLAttributes<
         <Input
             ref={inputRef}
             {...inputProps}
+            disabled={disabled}
+            onChange={handleChangeInternalValue}
             start={
                 <>
                     <SearchIcon className="pointer-events-none" />
@@ -69,10 +87,12 @@ export function SearchInput(props: SearchInputProps & React.InputHTMLAttributes<
                 </>
             }
             end={
-                <>
-                    {end}
-                    <CircleCrossIcon onMouseDown={handleClearMouseDown} className="cursor-pointer" />
-                </>
+                withCross
+                    ? <>
+                        {end}
+                        <ClearOrnament value={internalValue} onClear={handleClear} />
+                    </>
+                    : end
             }
         />
     );

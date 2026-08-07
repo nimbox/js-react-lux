@@ -1,15 +1,16 @@
-import { AngleDownIcon, CircleCrossIcon, WarningIcon } from '@nimbox/icons-react';
+import { AngleDownIcon, WarningIcon } from '@nimbox/icons-react';
 import { isFunction } from 'lodash-es';
 import React, { type KeyboardEvent, type Ref, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useInternalizeValue } from '../../hooks/useInternalizeValue';
 import { useObservableValueRef } from '../../hooks/useObservableValueRef';
 import { type UseOptionChooser } from '../../hooks/useOption';
 import { type UseOptionsSupplier } from '../../hooks/useOptions';
-import { type ListHandle } from '../list/List';
 import { Delay } from '../Delay';
+import { ClearOrnament } from '../inputs/ClearOrnament';
 import { FieldPopper, type FieldPopperProps } from '../inputs/FieldPopper';
 import { Placeholder } from '../inputs/Placeholder';
 import { SearchInput } from '../inputs/SearchInput';
+import { type ListHandle } from '../list/List';
 import { Loading } from '../Loading';
 import { cn } from '../utilities/cn';
 import { consumeEvent } from '../utilities/consumeEvent';
@@ -303,11 +304,21 @@ export function Choose<O, G = O[]>(props: ChooseProps<O, G> & React.InputHTMLAtt
 
             // If `chosenValue` is not present, then reset the
             // `chosenOption` to `undefined`.
-            if (chosenValue == null) {
+            //
+            // Empty counts as absent, not just `null`. Clearing sets the input
+            // to `''` — `handleClearQuery` does, and so does a controlled
+            // caller whose value went away — and an empty string falls through
+            // every guard below: it matches no option, so the chooser answers
+            // `undefined`, and the settle step only *assigns* an option it
+            // found. The previous one would stay on screen, contradicting the
+            // value the field actually holds. `''` is already how the rest of
+            // this component reads "nothing chosen" — see `shrink` and the
+            // clear adornment, both testing `internalValue.length`.
+            if (chosenValue == null || chosenValue.length === 0) {
                 if (working) {
                     setChosenOption(undefined);
-                    return;
                 }
+                return;
             }
 
             // If `chosenValue` represents the current `chosenOption`,
@@ -379,6 +390,26 @@ export function Choose<O, G = O[]>(props: ChooseProps<O, G> & React.InputHTMLAtt
         // Reset the query.
         setQuery('');
 
+        // Close, on the same terms choosing closes.
+        //
+        // Clearing finishes the errand the list was opened for, so it hides
+        // unless the caller asked to keep choosing. The mousedown handler below
+        // stops the cross from *opening* the list, but it can do nothing about
+        // one that was already open when the cross was pressed.
+        //
+        // Guarded on `show`, because closing costs a focus move. The cross is
+        // pressed with focus sitting in the popper's search input, and that
+        // input is about to unmount — focus has to land back on the field or it
+        // falls to the body and the keyboard loses its place. The field opens
+        // its list `onFocus`, but `handleShow` is a no-op while `show` is still
+        // true, which is exactly the case this branch is for. With the list
+        // already shut there is nothing to close, and focusing would open it.
+
+        if (show && !withKeepOpen) {
+            fieldRef.current?.focus();
+            setShow(false);
+        }
+
     };
 
     const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -387,29 +418,6 @@ export function Choose<O, G = O[]>(props: ChooseProps<O, G> & React.InputHTMLAtt
         setQuery(value);
 
     };
-
-    // Clearing runs on `mousedown`, not on `click`.
-    //
-    // Stopping the click is not enough on its own. The field opens its popper
-    // from `onFocus` as well as from `onClick`, and focus lands on mousedown —
-    // before the click this handler would see is ever dispatched. So a clear
-    // written against `click` emptied the value and then immediately reopened
-    // the list on it, which is the opposite of what clearing is for.
-    //
-    // `consumeEvent` preventing the default here is what stops the field taking
-    // focus at all. `SearchInput` clears the same way, for the same reason.
-
-    const handleClearMouseDown = (e: React.MouseEvent) => {
-
-        consumeEvent(e);
-        handleClearQuery();
-
-    };
-
-    // The click still follows the mousedown and would reach the field's own
-    // handler, which also opens.
-
-    const handleClearClick = consumeEvent;
 
     // Handlers
 
@@ -512,19 +520,7 @@ export function Choose<O, G = O[]>(props: ChooseProps<O, G> & React.InputHTMLAtt
                     {end}
                     {loading ? <Delay><Loading /></Delay> : null}
                     {loadingError ? <WarningIcon className="text-danger-500" /> : null}
-                    {/* Only when there is something to clear. `withClear` says
-                        the control may be emptied, not that it is permanently
-                        offering to — an empty field showing a clear cross
-                        invites a press that does nothing, and reads as a value
-                        the field is failing to display. `shrink` just below
-                        already asks the same question of the same value. */}
-                    {withClear && internalValue.length > 0 &&
-                        <CircleCrossIcon
-                            onMouseDown={handleClearMouseDown}
-                            onClick={handleClearClick}
-                            className="cursor-pointer"
-                        />
-                    }
+                    {withClear && !disabled && <ClearOrnament value={internalValue} onClear={handleClearQuery} />}
                     <AngleDownIcon />
                 </>
             }

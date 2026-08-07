@@ -25,7 +25,7 @@ export const Simple: Story = {
         return (
             <div>
                 <Button onClick={() => setVisible(true)}>modal</Button>
-                <Dialog show={visible} onHide={() => setVisible(false)} className="bg-gray-100 w-96 rounded">
+                <Dialog show={visible} onHide={() => setVisible(false)} className="bg-gray-100 w-96 rounded-overlay">
 
                     <Dialog.Header className="px-3 py-2 flex flex-row justify-between items-center">
                         <h3 className="text-xl">sss</h3>

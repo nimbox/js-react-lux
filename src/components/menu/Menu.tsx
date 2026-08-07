@@ -83,7 +83,7 @@ export function Menu(props: MenuProps) {
                             <List
                                 ref={listRef}
                                 tabIndex={-1}
-                                className="bg-control-bg border border-control-border rounded shadow min-w-48 outline-none"
+                                className="bg-control-bg border border-control-border rounded-surface shadow min-w-48 outline-none"
                             >
                                 <MenuContext.Provider value={{ closeMenu: () => setIsOpen(false) }}>
                                     {children}

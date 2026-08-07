@@ -89,6 +89,48 @@ html {
   --color-danger-800: #7f201d;
   --color-danger-900: #4c0f0f;
 
+  /* ===== Corner radius ===== */
+
+  /* The scale, roughly twice what Tailwind ships so a corner reads as a curve
+     rather than a clipped edge. The root is 14px, which shrinks every rem
+     against what the same number gives elsewhere. `rounded-full` reads none of
+     these, so discs, avatars and pills keep their shape whatever happens
+     here. */
+
+  --radius: 0.5rem;
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+  --radius-4xl: 2.5rem;
+
+  /* The scale above is the palette of curves; the four names below are what
+     the library draws with. A radius reads against the size of the box it
+     closes and against how far that box floats from the page, so a field and
+     a dialog cannot share one number. */
+
+  /* Fields, selects, textareas and buttons. They stand in the same row, so
+     they answer to the same curve. */
+
+  --radius-control: var(--radius-md);
+
+  /* Poppers, menus and tooltips, which float over the page. */
+
+  --radius-surface: var(--radius-lg);
+
+  /* Dialogs and drawers, which take the screen. */
+
+  --radius-overlay: var(--radius-xl);
+
+  /* Rows and cells held inside a surface. Nested boxes only look right when
+     the inner curve is the outer one less the gap between them, which puts an
+     item a step below whatever holds it. */
+
+  --radius-item: var(--radius-sm);
+
   /* ===== Typography ===== */
   /* v3: fontSize: { '1xs': '0.625rem' } */
 

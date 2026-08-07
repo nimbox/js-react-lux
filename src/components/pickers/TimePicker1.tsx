@@ -83,13 +83,18 @@ const hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
 /**
  * TimePicker1. Select a time with one click.
  *
- * The panel is a grid: one row per hour of the day, one column per minute
- * past it. A single click picks the hour and the minute at once, the same way
- * a day cell in `DatePicker` picks a whole date — the hour itself is the top
- * of the hour. A row fills from the hour across to whatever is picked, so
- * `12:45` reads as one bar running from a large `12` out to the `45` that
- * closes it. Typing into the field stays available for everything the grid
- * does not offer.
+ * The panel is a grid: one row per hour of the day, one column per minute past
+ * it. A single click picks the hour and the minute at once, the same way a day
+ * disc in `DatePicker2` picks a whole date — the hour itself is the top of the
+ * hour. A row fills from the hour across to whatever is picked, so `12:45`
+ * reads as one pill running from a large `12` out to the `45` that closes it.
+ * Typing into the field stays available for everything the grid does not
+ * offer.
+ *
+ * It is drawn on `DatePicker2`'s terms: the reading of the time sits in a band
+ * at the top under the stretch of day it belongs to, the hours lie on an open
+ * field rather than in a ruled table, the hours outside the working day run
+ * under one pale band, and the hour the day is in keeps a dot beside it.
  */
 export function TimePicker1(props: TimePicker1Props & InputHTMLAttributes<HTMLInputElement>) {
 
@@ -267,6 +272,12 @@ const TimeGrid = (props: TimeGridProps): ReactElement => {
 
     const [hovered, setHovered] = useState<[number, number] | null>(null);
 
+    // The hour the day is actually in. It carries a dot the way today does in
+    // `DatePicker2`, which leaves it legible even when it is also the hour
+    // picked.
+
+    const nowHour = useMemo(() => new Date().getHours(), []);
+
     // The top of the hour has no column of its own: the hour itself is what
     // you click for it, which is also where every bar starts.
 
@@ -325,43 +336,79 @@ const TimeGrid = (props: TimeGridProps): ReactElement => {
     // colour otherwise, so moving the pointer previews the exact shape the
     // pick will leave behind.
 
-    const markOf = (hour: number): { minute: number; tone: string } | null => {
+    // A time typed into the field lands anywhere, not only on a column, so the
+    // pill closes on the last column it reaches: `8:50` with a step of `15`
+    // closes on `45`. A minute short of the first column leaves the hour
+    // standing on its own.
 
-        if (hovered && hour === hovered[0]) { return { minute: hovered[1], tone: 'bg-secondary-500' }; }
-        if (time && hour === time[0]) { return { minute: time[1], tone: 'bg-primary-500' }; }
+    const closingColumn = (minute: number): number | null => {
+
+        let closing: number | null = null;
+        for (const column of minutes) {
+            if (column <= minute) { closing = column; }
+        }
+
+        return closing;
+
+    };
+
+    const markOf = (hour: number): { closing: number | null; tone: string } | null => {
+
+        if (hovered && hour === hovered[0]) { return { closing: closingColumn(hovered[1]), tone: 'bg-secondary-500' }; }
+        if (time && hour === time[0]) { return { closing: closingColumn(time[1]), tone: 'bg-primary-500' }; }
 
         return null;
 
     };
 
+    // The hours outside the working day lie under one pale band, rounded only
+    // where the run of them begins and ends, so a stretch of hours reads as one
+    // shape rather than a stack of them.
+
+    const bandClasses = (hour: number): string | false => {
+
+        return isOffHour(hour) && cn(
+            'bg-calendar-weekend',
+            (hour === 0 || !isOffHour(hour - 1)) && 'rounded-t-item',
+            (hour === 23 || !isOffHour(hour + 1)) && 'rounded-b-item'
+        );
+
+    };
+
+    // The bar is a pill: it opens on the hour and closes on the minute picked,
+    // so both ends of the run are rounded and everything between them is the
+    // straight of it.
+
     const hourClasses = (hour: number): string => {
 
-        const mark = markOf(hour);
-        if (mark) { return `px-2 py-1 text-right cursor-pointer text-white ${mark.tone}`; }
+        const base = 'h-8 px-2 flex flex-row items-center justify-end gap-1 tabular-nums cursor-pointer';
 
-        return cn('px-2 py-1 text-right cursor-pointer', isOffHour(hour) ? 'text-muted' : 'text-content');
+        const mark = markOf(hour);
+        if (mark) { return cn(base, 'text-white', mark.tone, mark.closing == null ? 'rounded-full' : 'rounded-l-full'); }
+
+        return cn(base, isOffHour(hour) ? 'text-muted' : 'text-content');
 
     };
 
     const minuteClasses = (hour: number, minute: number): string => {
 
-        const base = 'py-1 text-center text-[0.75em] cursor-pointer';
+        const base = 'h-8 flex items-center justify-center text-[0.75em] cursor-pointer';
 
         // Inside the bar the numbers go transparent so the whole run reads as
         // one stretch of time labelled by the minute it ends on.
 
         const mark = markOf(hour);
-        if (mark && minute <= mark.minute) {
-            return `${base} ${mark.tone} ${minute === mark.minute ? 'text-white' : 'text-transparent'}`;
+        if (mark && mark.closing != null && minute <= mark.closing) {
+            return cn(base, mark.tone, minute === mark.closing ? 'text-white rounded-r-full' : 'text-transparent');
         }
 
-        return `${base} text-muted`;
+        return cn(base, 'text-muted');
 
     };
 
-    // Preview
+    // Reading
 
-    const preview = hovered ?? time;
+    const reading = hovered ?? time;
 
     // Render
 
@@ -369,20 +416,28 @@ const TimeGrid = (props: TimeGridProps): ReactElement => {
         <div
             onMouseDown={consumeEvent}
             onMouseLeave={() => setHovered(null)}
-            className={cn('w-52 rounded overflow-hidden', className)}
+            className={cn('w-56 rounded-surface overflow-hidden', className)}
         >
 
-            <div className="px-2 py-2 text-center font-bold tabular-nums border-b border-control-border">
-                {preview != null ? formatTime(preview) : t('time', { defaultValue: 'Time' })}
+            <div className="px-4 py-2 bg-content-bg border-b border-control-border">
+                <div className="text-[0.7em] uppercase tracking-widest text-muted">
+                    {reading != null
+                        ? t(`dayParts.${internalDayPart(reading[0])}`, { defaultValue: internalDayPart(reading[0]) })
+                        : t('time', { defaultValue: 'Time' })
+                    }
+                </div>
+                <div className={cn('text-lg font-bold leading-tight tabular-nums', reading == null && 'text-muted')}>
+                    {reading != null ? formatTime(reading) : '—'}
+                </div>
             </div>
 
             <div ref={scrollRef} className="relative h-64 overflow-auto">
-                <div ref={rowsRef}>
+                <div ref={rowsRef} className="px-2 py-2">
                     {hours.map(hour =>
                         <div
                             key={hour}
                             style={columns}
-                            className={cn('grid', isOffHour(hour) && 'bg-calendar-weekend')}
+                            className={cn('grid', bandClasses(hour))}
                         >
 
                             <div
@@ -390,7 +445,12 @@ const TimeGrid = (props: TimeGridProps): ReactElement => {
                                 onMouseEnter={() => setHovered([hour, 0])}
                                 className={hourClasses(hour)}
                             >
-                                {internalFormatHour(hour)}<span className="text-[0.75em] opacity-60">{hour < 12 ? 'am' : 'pm'}</span>
+                                {hour === nowHour &&
+                                    <span className={cn('size-1 rounded-full', markOf(hour) != null ? 'bg-white' : 'bg-info-500')} />
+                                }
+                                <span>
+                                    {internalFormatHour(hour)}<span className="text-[0.75em] opacity-60">{hour < 12 ? 'am' : 'pm'}</span>
+                                </span>
                             </div>
 
                             {minutes.map(minute =>
@@ -448,6 +508,24 @@ function internalParseTime(s: string): [number, number] | null {
     }
 
     return [hour, minute];
+
+}
+
+/**
+ * Names the stretch of the day an hour falls in. It is what the reading at the
+ * top of the panel is titled with, the way `DatePicker2` titles its own with
+ * the weekday.
+ *
+ * @param hour - The hour on a 24 hour clock
+ * @returns The key of the day part, which is also its English name
+ */
+function internalDayPart(hour: number): string {
+
+    if (hour < 6) { return 'night'; }
+    if (hour < 12) { return 'morning'; }
+    if (hour < 18) { return 'afternoon'; }
+
+    return 'evening';
 
 }
 

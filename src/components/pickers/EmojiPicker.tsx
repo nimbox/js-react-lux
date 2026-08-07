@@ -107,7 +107,7 @@ function FullForm(props: EmojiPickerProps & { onToggle: () => void }) {
 
     return (
         <div className={cn(
-            'w-96 p-0 bg-control-bg rounded shadow border border-control-border',
+            'w-96 p-0 bg-control-bg rounded-surface shadow border border-control-border',
             className
         )}>
 
