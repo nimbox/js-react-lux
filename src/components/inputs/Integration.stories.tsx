@@ -4,9 +4,7 @@ import { InputField } from './InputField';
 
 // Definition
 
-export default {
-    title: 'Component/Controls/Integration'
-};
+export default {};
 
 export const Sizes = () => {
 

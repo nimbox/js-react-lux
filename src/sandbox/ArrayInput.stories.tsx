@@ -8,7 +8,7 @@ import { Tag } from '../components/Tag';
 
 
 export default {
-    title: 'Sandbox/ArrayInput',
+    title: 'ArrayInput',
     parameters: { layout: 'centered' }
 };
 

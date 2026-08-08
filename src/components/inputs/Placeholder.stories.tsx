@@ -4,7 +4,6 @@ import { Wrapper } from './Wrapper';
 
 
 export default {
-    title: 'Component/Controls/Placeholder',
     component: Placeholder,
     parameters: {
         layout: 'centered'

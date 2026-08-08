@@ -4,7 +4,7 @@ import { Button } from '../components/Button';
 
 
 export default {
-    title: 'Sandbox/Proxy',
+    title: 'Proxy',
     parameters: { layout: 'centered' }
 };
 

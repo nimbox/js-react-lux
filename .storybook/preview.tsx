@@ -58,6 +58,24 @@ const preview: Preview = {
         },
         docs: {
             extractComponentDescription
+        },
+        options: {
+            // Sections read in the order a reader wants them, not
+            // alphabetically: what the library is, then what you build with,
+            // then the whole features, then the scratch space. Anything not
+            // named here sorts after, alphabetically.
+            storySort: {
+                order: [
+                    'README',
+                    'Standards',
+                    'Components',
+                    'Layout',
+                    'Figures',
+                    'Hooks',
+                    'Modules',
+                    'Sandbox'
+                ]
+            }
         }
     },
 

@@ -38,7 +38,6 @@ export * from './components/choose/ChooseOptionList';
 export * from './components/inputs/AsyncSearchInput';
 export * from './components/inputs/Autocomplete';
 export * from './components/inputs/CheckBox';
-export * from './components/inputs/CheckButton';
 export * from './components/inputs/Control';
 export * from './components/inputs/EditableText';
 export * from './components/inputs/FieldPopper';

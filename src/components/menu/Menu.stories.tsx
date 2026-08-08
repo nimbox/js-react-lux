@@ -8,7 +8,6 @@ import { Menu } from './Menu';
 // Definition
 
 const meta = {
-    title: 'Components/Menu',
     component: Menu,
     parameters: {
         layout: 'centered'

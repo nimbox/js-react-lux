@@ -11,7 +11,6 @@ import { TextArea } from './TextArea';
 // definition
 
 export default {
-    title: 'Component/Controls/Form',
     component: Input,
     argTypes: {
         scale: { control: { type: 'select', options: ['xs', 'sm', 'base', 'lg'] } },

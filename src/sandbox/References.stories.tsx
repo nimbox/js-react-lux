@@ -5,7 +5,7 @@ import { useObservableValueRef } from '../hooks/useObservableValueRef';
 
 
 export default {
-    title: 'Sandbox/References',
+    title: 'References',
     parameters: { layout: 'centered' }
 };
 

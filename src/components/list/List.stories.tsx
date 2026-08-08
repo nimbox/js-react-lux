@@ -4,7 +4,6 @@ import { List } from './List';
 
 
 const meta = {
-    title: 'Components/List',
     component: List,
     parameters: {
         layout: 'centered'

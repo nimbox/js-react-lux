@@ -6,7 +6,7 @@ import { createSearchMatcher } from '../components/utilities/createSearchMatcher
 
 
 export default {
-    title: 'Sandbox/HookForm',
+    title: 'HookForm',
     parameters: { layout: 'centered' }
 };
 

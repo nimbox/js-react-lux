@@ -7,7 +7,7 @@ import { Tag } from '../components/Tag';
 
 
 export default {
-    title: 'Sandbox/Ricardo',
+    title: 'Ricardo',
     parameters: { layout: 'centered' }
 };
 
