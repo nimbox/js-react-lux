@@ -1,11 +1,29 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { NimboxIcon } from '@nimbox/icons-react';
+import { ViewportProvider } from '../../hooks/ViewportProvider';
 import { Header, Helium, Main, Navigator, Panel } from './Helium';
 
 
 // Definition
 
 const meta: Meta = {
+
+    // The layout owns the whole page: it pins a fixed header to the viewport
+    // edges and sizes itself against the screen, so the default padded frame
+    // would inset everything except that header.
+    parameters: { layout: 'fullscreen' },
+
+    // `Helium` reads the viewport width to pick between its docked and
+    // compact arrangements, and falls back to a width of zero without a
+    // provider above it.
+    decorators: [
+        (Story) => (
+            <ViewportProvider>
+                <Story />
+            </ViewportProvider>
+        )
+    ]
+
 };
 
 export default meta;
@@ -42,7 +60,7 @@ const HelliumTemplate: Story = {
                             <Panel.Group>Extra</Panel.Group>
                             <Panel.Item active={false}>Laboratorio</Panel.Item>
 
-                            {[...Array(100)].map(() => <Panel.Item active={false}>Otros</Panel.Item>)}
+                            {[...Array(100)].map((_, index) => <Panel.Item key={index} active={false}>Otros</Panel.Item>)}
 
                         </Panel>
                     </Navigator.Content>
@@ -66,17 +84,19 @@ const HelliumTemplate: Story = {
 
                     <Main.Content className="px-3 py-2">
                         <div>first</div>
-                        {[...Array(100)].map(() => <div>content</div>)}
-                    </Main.Content >
+                        {[...Array(100)].map((_, index) => <div key={index}>content</div>)}
+                    </Main.Content>
 
+                    {/* Tall enough to run past the fold, so the drawer's
+                        bottom edge is visible on a compact viewport. */}
                     <Main.Side className="px-3 py-2">
                         <div>first</div>
-                        {[...Array(2)].map(() => <div>side</div>)}
+                        {[...Array(60)].map((_, index) => <div key={index}>side</div>)}
                     </Main.Side>
 
                 </Main>
 
-            </Helium >
+            </Helium>
         );
     }
 };

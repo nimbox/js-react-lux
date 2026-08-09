@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls /Users/rmarimon/Development/nimbox-canexer/ 2>/dev/null)",
+      "Read(//Users/rmarimon/Development/nimbox-canexer/**)",
+      "Bash(lsof -ti:6008)",
+      "Bash(curl -s --max-time 20 http://localhost:6008/index.json)",
+      "Bash(curl -s -o /dev/null -w \"iframe.html -> %{http_code}\\\\n\" --max-time 20 http://localhost:6008/iframe.html)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\)['entries']; print\\('\\\\n'.join\\(f\\\\\"{k}  ->  {v['title']} / {v['name']}\\\\\" for k,v in d.items\\(\\) if 'elium' in k or 'elium' in v.get\\('title',''\\)\\)\\)\")",
+      "Bash(curl -s --max-time 25 \"http://localhost:6008/src/layouts/helium/Helium.tsx\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" --max-time 25 \"http://localhost:6008/src/layouts/helium/Helium.tsx\")",
+      "Bash(echo \"=== exit: $? ===\")",
+      "Bash(echo \"=== types build exit: $? ===\")"
+    ]
+  }
+}
