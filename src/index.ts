@@ -74,6 +74,8 @@ export * from './hooks/ViewportProvider';
 export * from './components/utilities/consumeEvent';
 export * from './components/utilities/createSearchMatcher';
 
+export * from './persistent/usePersistentState';
+
 export * from './layouts/helium/Helium';
 export * from './layouts/helium/HeliumContext';
 
