@@ -1,6 +1,7 @@
 @theme {
+
   --field-px: 1.5em;
-  --field-py: 1.5em;
+  --field-py: 1em;
   --field-label-scale: 0.75;
   --field-label-px: 0.25em;
 

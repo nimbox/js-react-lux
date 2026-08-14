@@ -114,8 +114,8 @@ export function SwatchPicker(props: SwatchPickerProps & React.InputHTMLAttribute
 
     const adornment = (
         <RefreshIcon
-            onMouseDown={consumeEvent}
-            onClick={handleRandomColorChange}
+            onMouseDown={(e) => { consumeEvent(e); handleRandomColorChange(); }}
+            onClick={consumeEvent}
             className="h-[1.5em] w-[1.5em] p-[0.25em] border border-control-border rounded cursor-pointer"
             style={{ color, backgroundColor }}
         />
