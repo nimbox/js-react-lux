@@ -125,6 +125,7 @@ function FullForm(props: EmojiPickerProps & { onToggle: () => void }) {
             <Tabs
                 value={selectedCategory}
                 setValue={(value) => setSelectedCategory(value as string)}
+                withEqualWidthOptions
                 className="border-b border-control-border"
             >
                 {emojiGroups.map((group) => (

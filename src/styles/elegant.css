@@ -21,6 +21,22 @@ html {
   --color-content: #3e3f42;
   --color-muted: #9ea0a5;
 
+  /**
+   * An option offered but not taken — the unchosen half of a tab strip, a
+   * `RadioBar`, a `CheckBar`.
+   *
+   * Not `--color-muted`, which recedes on purpose: it is for text that is
+   * there to be read past, like the days either side of the month a calendar
+   * is showing. An unchosen option is somewhere the reader can still go, and
+   * at 2.6:1 on white `--color-muted` is under both the 4.5:1 that text this
+   * size wants and the 3:1 floor for large text — pale enough to read as
+   * unavailable rather than as available. This clears 4.5:1 on white and on
+   * either weight of tab pill, while staying a clear step lighter than
+   * `--color-content` so the chosen option still leads.
+   */
+
+  --color-unchosen: #656568;
+
   --color-content-bg: #fbfbfb;
   --color-content-fg: #ffffff;
   --color-content-border: #eaedf3;

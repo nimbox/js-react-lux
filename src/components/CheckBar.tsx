@@ -53,7 +53,7 @@ const optionClassName = (isChosen: boolean, className?: string) => cn(
     'min-w-0 lux-bar-rule truncate cursor-pointer',
     isChosen
         ? 'border-content text-content'
-        : 'border-transparent text-muted hover:text-content',
+        : 'border-transparent text-unchosen hover:text-content',
     className);
 
 

@@ -37,7 +37,7 @@ export const PrimaryWithTabs: Story = {
         return (
             <Card>
                 <Card.Header className="pb-0">
-                    <Tabs value={tab} setValue={setTab}>
+                    <Tabs value={tab} setValue={setTab} className="border-b border-control-border">
                         <Tabs.Option value="one">One</Tabs.Option>
                         <Tabs.Option value="two">Two</Tabs.Option>
                         <Tabs.Option value="three">Three</Tabs.Option>

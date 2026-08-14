@@ -110,12 +110,15 @@ export const ControlsInCard: Story = {
         const [checkbox, setChecbox] = useState([1]);
         const [checkSelect, setChecboxSelect] = useState([1]);
         const [radio, setRadio] = useState(1);
-        const [tab, setTab] = useState(1);
+        const [tab, setTab] = useState('one');
 
         return (
             <Card>
                 <Card.Header className="pb-0 flex flex-row space-x-4 items-center">
-                    <Tabs value={tab} setValue={setTab} className="text-xs">
+                    {/* The strip scrolls, so it is the only control here that can shrink
+                        to nothing — without `shrink-0` it yields the whole row's overflow
+                        and quietly hides an option. */}
+                    <Tabs variant="solid" value={tab} setValue={setTab} className="text-xs shrink-0">
                         <Tabs.Option value="one">One</Tabs.Option>
                         <Tabs.Option value="two">Two</Tabs.Option>
                         <Tabs.Option value="three">Three</Tabs.Option>

@@ -402,6 +402,200 @@
   }
 }
 
+/* Tabs Container */
+
+.lux-tabs {
+
+  display: flex;
+  flex-direction: row;
+
+  /**
+   * A strip with more options than room scrolls rather than squashing them,
+   * so the labels stay readable however many there are. This is why the
+   * options refuse to shrink: a flex item that gives up its width would
+   * absorb the overflow instead of letting it reach the scroll container.
+   *
+   * The max width only matters to a caller who has narrowed the strip itself;
+   * left alone it already takes its container's width and scrolls inside it.
+   */
+
+  overflow-x: auto;
+  max-width: 100%;
+
+  .lux-tabs-option {
+
+    /**
+     * Tabs are navigation, so they sit below the type scale an action gets:
+     * a button's padding is `--field-px / 2` of a full-size em, a tab's is a
+     * third of a smaller one. Between that and the shapes below, a tab and a
+     * button standing side by side read as different kinds of thing.
+     *
+     * The colours are neutral for the same reason. `--color-primary-500` is
+     * what a filled button is painted, and a tab is not an action — spending
+     * the action colour on one leaves the two competing on every screen that
+     * holds both.
+     */
+
+    font-size: var(--text-sm);
+    padding: calc(var(--field-py) / 3) calc(var(--field-px) / 3);
+
+    cursor: pointer;
+    flex: none;
+    text-align: center;
+    white-space: nowrap;
+
+    color: var(--color-unchosen);
+
+    /**
+     * The ring is drawn inside the option because the strip is a scroll
+     * container, and anything outside the option's box would be clipped by it.
+     */
+
+    &:focus {
+      outline: none;
+    }
+    &:focus-visible {
+      outline: none;
+      box-shadow: inset 0 0 0 2px var(--color-primary-200);
+    }
+
+    /**
+     * Hover draws the mark the option would take if it were chosen, washed
+     * out — so the pointer shows where the click lands rather than merely
+     * that something is under it. Each variant paints its own mark faintly;
+     * all that is shared here is the label coming up to full strength.
+     *
+     * Only unchosen options answer the pointer: clicking the chosen one does
+     * nothing, so it should not offer to.
+     */
+
+    &:not(.lux-tabs-option-selected):hover {
+      color: var(--color-content);
+    }
+
+  }
+
+  /**
+   * Labels with a bar under the chosen one — which is also how a `RadioBar`
+   * draws itself, so the two are told apart by what surrounds them. A tab
+   * strip sits on a rule that runs the width of the panel it heads; a
+   * `RadioBar` never has one. That rule belongs to whoever placed the strip,
+   * since where it should stop is a question about the surrounding layout,
+   * but this variant is only right when there is one. Where a strip cannot
+   * have it — a header shared with other controls, say — reach for `solid`.
+   */
+
+  &.lux-tabs-underlined {
+
+    .lux-tabs-option {
+      border-bottom: 2px solid transparent;
+    }
+
+    /**
+     * The bar is the mark here, so hover draws the bar rather than a fill
+     * behind the label — the cue appears where the mark will stay. It carries
+     * more of the colour than a wash would: two pixels of a pale tint read as
+     * nothing at all.
+     */
+
+    .lux-tabs-option:not(.lux-tabs-option-selected):hover {
+      border-bottom-color: color-mix(in srgb, var(--color-content) 40%, transparent);
+    }
+
+    .lux-tabs-option-selected {
+      color: var(--color-content);
+      border-bottom-color: var(--color-content);
+    }
+
+  }
+
+  /**
+   * A row of pills: the shape a selection takes elsewhere in the library — a
+   * day in the date picker, a run of minutes in the time picker — and one a
+   * button never takes unless a caller asks for it. A container behind them
+   * would undo that, since a filled shape inside a track is a button in a
+   * toolbar; the pills are set apart instead, which groups them well enough
+   * without drawing a second surface.
+   *
+   * The pill is what separates a tab from a `RadioBar` where both are on the
+   * same line: a filled shape moves you somewhere, a bare rule narrows what
+   * you are already looking at.
+   */
+
+  &.lux-tabs-solid {
+
+    gap: calc(var(--field-px) / 4);
+
+    .lux-tabs-option {
+
+      /**
+       * Pill-shaped whether or not it is selected, so the focus ring follows
+       * the same outline either way. The extra side room is what a fill needs
+       * and bare text does not.
+       */
+
+      border-radius: calc(infinity * 1px);
+      padding-left: calc(var(--field-px) / 2);
+      padding-right: calc(var(--field-px) / 2);
+
+    }
+
+    /**
+     * Every option wears the pill from the start, so the whole set of choices
+     * is visible as a set of targets rather than as a run of text with one
+     * shape in it. Two things follow from that which hover alone cannot give:
+     * on a touch screen, where there is no hover, the other options still
+     * announce themselves; and the target the pointer has to hit is drawn,
+     * rather than being invisible padding around a label.
+     *
+     * That leaves the pill carrying state through three weights of one
+     * colour — a wash at rest, a heavier wash under the pointer, the whole
+     * thing when chosen. It stays a low-count treatment: a dozen filled pills
+     * is a wall, which is what `underlined` is for.
+     */
+
+    .lux-tabs-option:not(.lux-tabs-option-selected) {
+      background-color: color-mix(in srgb, var(--color-content) 8%, transparent);
+      &:hover {
+        background-color: color-mix(in srgb, var(--color-content) 14%, transparent);
+      }
+    }
+
+    .lux-tabs-option-selected {
+      color: white;
+      background-color: var(--color-content);
+    }
+
+  }
+
+  /**
+   * The options grow into whatever room the strip has, but still refuse to
+   * shrink — so a strip with too many options to fit goes on scrolling rather
+   * than squashing them.
+   */
+
+  &.lux-tabs-full-width {
+    width: 100%;
+    .lux-tabs-option {
+      flex: 1 0 auto;
+    }
+  }
+
+  /**
+   * `1fr` tracks share whatever width the strip has, so an auto-flow grid
+   * equalises the options either way: across the container when the strip
+   * spans one, and at the widest option's own width when a caller has narrowed
+   * the strip to its content.
+   */
+
+  &.lux-tabs-equal-width-options {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+  }
+
+}
+
 /* Field Container */
 
 .lux-field {
