@@ -19,7 +19,7 @@ const section = (directory: string, titlePrefix: string) => [
  * are still worked on. They are only shown under `Sandbox`, so the sidebar
  * says what is a component and what is an attempt at one.
  */
-const drafts = 'DatePicker1|DatePicker2|TimePicker1|TimePicker2|CustomSelect|CustomMultiSelect';
+const drafts = 'DatePicker0|DatePicker1|TimePicker1|TimePicker2|CustomSelect|CustomMultiSelect';
 
 const config: StorybookConfig = {
 

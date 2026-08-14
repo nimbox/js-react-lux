@@ -65,6 +65,15 @@ export const Default: Story = {
 };
 
 /**
+ * A date decades away is what the title is for: `December` opens the twelve
+ * months, `1967` opens twelve years, and the arrows step by whichever of the
+ * three the sheet is showing.
+ */
+export const FarAway: Story = {
+    args: { placeholder: 'dd-mm-yyyy' }
+};
+
+/**
  * The cross only shows once there is a date to clear, so empty the field and
  * it goes away rather than sitting there offering a press that does nothing.
  */
@@ -78,6 +87,30 @@ export const FitContent: Story = {
 
 export const FitContentEmpty: Story = {
     args: { placeholder: 'dd-mm-yyyy', withoutFullWidth: true }
+};
+
+/**
+ * Without the shortcuts the sheet closes on the month, reading and title
+ * alone.
+ */
+export const WithoutShortcuts: Story = {
+    args: { defaultValue: '19-12-1967', withShortcuts: false }
+};
+
+/**
+ * A week that starts on Monday moves the pale weekend columns to the end of
+ * the row.
+ */
+export const MondayFirst: Story = {
+    args: { defaultValue: '19-12-1967', firstDayOfWeek: 1 }
+};
+
+/**
+ * Picking several dates in a row keeps the sheet up, and it stays on the month
+ * it just wrote.
+ */
+export const KeepOpen: Story = {
+    args: { defaultValue: '19-12-1967', withKeepOpen: true }
 };
 
 export const Controlled: Story = {

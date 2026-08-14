@@ -1,14 +1,14 @@
 import { CircleIcon } from '@nimbox/icons-react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ControlledTemplate, HookFormTemplate, UncontrolledTemplate } from '../../templates/InputTemplates';
-import { DatePicker2 } from './DatePicker2';
+import { DatePicker0 } from './DatePicker0';
 
 
 // Definition
 
-const meta: Meta<typeof DatePicker2> = {
+const meta: Meta<typeof DatePicker0> = {
 
-    component: DatePicker2,
+    component: DatePicker0,
     parameters: {
         layout: 'centered',
         // The component's props are intersected with every attribute of an
@@ -65,15 +65,6 @@ export const Default: Story = {
 };
 
 /**
- * A date decades away is what the title is for: `December` opens the twelve
- * months, `1967` opens twelve years, and the arrows step by whichever of the
- * three the sheet is showing.
- */
-export const FarAway: Story = {
-    args: { placeholder: 'dd-mm-yyyy' }
-};
-
-/**
  * The cross only shows once there is a date to clear, so empty the field and
  * it goes away rather than sitting there offering a press that does nothing.
  */
@@ -89,38 +80,14 @@ export const FitContentEmpty: Story = {
     args: { placeholder: 'dd-mm-yyyy', withoutFullWidth: true }
 };
 
-/**
- * Without the shortcuts the sheet closes on the month, reading and title
- * alone.
- */
-export const WithoutShortcuts: Story = {
-    args: { defaultValue: '19-12-1967', withShortcuts: false }
-};
-
-/**
- * A week that starts on Monday moves the pale weekend columns to the end of
- * the row.
- */
-export const MondayFirst: Story = {
-    args: { defaultValue: '19-12-1967', firstDayOfWeek: 1 }
-};
-
-/**
- * Picking several dates in a row keeps the sheet up, and it stays on the month
- * it just wrote.
- */
-export const KeepOpen: Story = {
-    args: { defaultValue: '19-12-1967', withKeepOpen: true }
-};
-
 export const Controlled: Story = {
-    render: (args) => <ControlledTemplate component={DatePicker2} componentProps={args} initial="19-12-1967" forced="02-02-2022" />
+    render: (args) => <ControlledTemplate component={DatePicker0} componentProps={args} initial="19-12-1967" forced="02-02-2022" />
 };
 
 export const Uncontrolled: Story = {
-    render: (args) => <UncontrolledTemplate component={DatePicker2} componentProps={args} initial="19-12-1967" forced="02-02-2022" />
+    render: (args) => <UncontrolledTemplate component={DatePicker0} componentProps={args} initial="19-12-1967" forced="02-02-2022" />
 };
 
 export const HookForm: Story = {
-    render: (args) => <HookFormTemplate component={DatePicker2} componentProps={args} initial="19-12-1967" forced="02-02-2022" />
+    render: (args) => <HookFormTemplate component={DatePicker0} componentProps={args} initial="19-12-1967" forced="02-02-2022" />
 };

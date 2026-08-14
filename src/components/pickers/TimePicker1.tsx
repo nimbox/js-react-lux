@@ -85,13 +85,13 @@ const hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
  *
  * The panel is a grid: one row per hour of the day, one column per minute past
  * it. A single click picks the hour and the minute at once, the same way a day
- * disc in `DatePicker2` picks a whole date — the hour itself is the top of the
+ * disc in `DatePicker` picks a whole date — the hour itself is the top of the
  * hour. A row fills from the hour across to whatever is picked, so `12:45`
  * reads as one pill running from a large `12` out to the `45` that closes it.
  * Typing into the field stays available for everything the grid does not
  * offer.
  *
- * It is drawn on `DatePicker2`'s terms: the reading of the time sits in a band
+ * It is drawn on `DatePicker`'s terms: the reading of the time sits in a band
  * at the top under the stretch of day it belongs to, the hours lie on an open
  * field rather than in a ruled table, the hours outside the working day run
  * under one pale band, and the hour the day is in keeps a dot beside it.
@@ -273,7 +273,7 @@ const TimeGrid = (props: TimeGridProps): ReactElement => {
     const [hovered, setHovered] = useState<[number, number] | null>(null);
 
     // The hour the day is actually in. It carries a dot the way today does in
-    // `DatePicker2`, which leaves it legible even when it is also the hour
+    // `DatePicker`, which leaves it legible even when it is also the hour
     // picked.
 
     const nowHour = useMemo(() => new Date().getHours(), []);
@@ -513,7 +513,7 @@ function internalParseTime(s: string): [number, number] | null {
 
 /**
  * Names the stretch of the day an hour falls in. It is what the reading at the
- * top of the panel is titled with, the way `DatePicker2` titles its own with
+ * top of the panel is titled with, the way `DatePicker` titles its own with
  * the weekday.
  *
  * @param hour - The hour on a 24 hour clock

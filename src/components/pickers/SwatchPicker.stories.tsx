@@ -1,20 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ControlledTemplate, HookFormTemplate, UncontrolledTemplate } from '../../templates/InputTemplates';
-import { DatePicker } from './DatePicker';
 import { SwatchPicker } from './SwatchPicker';
 
 
 // Definition
 
-const meta: Meta<typeof DatePicker> = {
-    component: DatePicker,
+const meta: Meta<typeof SwatchPicker> = {
+    component: SwatchPicker,
     parameters: {
         layout: 'centered'
     }
 };
 
 export default meta;
-type Story = StoryObj<typeof DatePicker>;
+type Story = StoryObj<typeof SwatchPicker>;
 
 // Stories
 
