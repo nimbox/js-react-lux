@@ -11,7 +11,6 @@ export * from './components/Dialog';
 export * from './components/ImageViewer';
 export * from './components/displays/Avatar';
 export * from './components/floating/Popper';
-export * from './components/floating/Popup';
 export * from './components/Loading';
 export * from './components/Modal';
 export * from './components/Postit';
