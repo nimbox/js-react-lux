@@ -19,11 +19,16 @@ const meta: Meta<typeof TimePicker> = {
                 'disabled', 'error', 'withoutFullWidth',
                 'withClear',
                 'defaultValue',
-                'withKeepOpen'
+                'minuteStep', 'dayStartHour', 'dayEndHour', 'withKeepOpen'
             ]
         }
     },
     tags: ['autodocs'],
+
+    // A field fills its container, so give it one worth filling — otherwise
+    // there is nothing to tell full width and fit content apart.
+
+    decorators: [(Story) => <div className="w-96 border border-dashed border-content-border p-2"><Story /></div>],
 
     argTypes: {
         variant: {
@@ -35,6 +40,16 @@ const meta: Meta<typeof TimePicker> = {
             options: ['clock', 'none', 'other'],
             mapping: { clock: undefined, none: null, other: <CircleIcon /> },
             description: 'Left out the field carries a clock, `null` leaves it bare.'
+        },
+        minuteStep: {
+            control: 'select',
+            options: [5, 10, 15, 20, 30]
+        },
+        dayStartHour: {
+            control: { type: 'range', min: 0, max: 23, step: 1 }
+        },
+        dayEndHour: {
+            control: { type: 'range', min: 1, max: 24, step: 1 }
         }
     },
 
@@ -62,6 +77,18 @@ export const Default: Story = {
  */
 export const WithClear: Story = {
     args: { defaultValue: '8:30am', withClear: true }
+};
+
+export const FitContent: Story = {
+    args: { defaultValue: '8:30am', withoutFullWidth: true }
+};
+
+export const FitContentEmpty: Story = {
+    args: { placeholder: 'hh:mm', withoutFullWidth: true }
+};
+
+export const HalfHours: Story = {
+    args: { defaultValue: '8:30am', minuteStep: 30 }
 };
 
 export const Controlled: Story = {

@@ -82,7 +82,7 @@ const namedDays = [
  * DatePicker1. Select a date with one click.
  *
  * The panel is a month of days under a reading of the date they stand for, the
- * same bar `TimePicker1` puts above its grid: whatever the pointer rests on is
+ * same bar `TimePicker` puts above its grid: whatever the pointer rests on is
  * spelled out there before the click lands, so a cell and a shortcut are
  * committed to on the same terms. Weekends carry the tint that marks the hours
  * outside the working day, days of the neighbouring months are dimmed the way

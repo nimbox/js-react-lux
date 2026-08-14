@@ -1,6 +1,6 @@
 import { CircleIcon } from '@nimbox/icons-react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ControlledTemplate, HookFormTemplate, UncontrolledTemplate } from '../../templates/InputTemplates';
+import { ControlledTemplate, HookFormTemplate, UncontrolledTemplate } from '../templates/InputTemplates';
 import { DatePicker0 } from './DatePicker0';
 
 

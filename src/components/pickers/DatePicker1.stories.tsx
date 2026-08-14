@@ -81,7 +81,7 @@ export const FitContentEmpty: Story = {
 };
 
 /**
- * Without the shortcuts the panel is the month alone, the width `TimePicker1`
+ * Without the shortcuts the panel is the month alone, the width `TimePicker`
  * keeps for its grid.
  */
 export const WithoutShortcuts: Story = {
