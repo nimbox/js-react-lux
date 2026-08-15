@@ -63,6 +63,17 @@ html {
   --color-tooltip: #ffffff;
   --color-tooltip-bg: #222222;
 
+  /* The count of what is waiting — messages unread, and whatever else
+     a list counts the same way. Red, and its own colour rather than
+     `danger`: nothing has gone wrong, so a theme that softens its
+     error red should not quietly soften this too. A pair, like the
+     tooltip above, because the obligation is between the two — a fill
+     this dark is only legible under a light foreground, and splitting
+     them across two decisions is how that stops being true. */
+
+  --color-unread: #ffffff;
+  --color-unread-bg: #9e1212;
+
   /* Palettes */
 
   --color-primary-100: #daedef;
