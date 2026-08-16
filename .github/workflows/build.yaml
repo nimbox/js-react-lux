@@ -1,0 +1,14 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  call-node-build:
+    uses: nimbox/build-tools/.github/workflows/node-build.yaml@main
+    secrets: inherit

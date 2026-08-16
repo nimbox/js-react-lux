@@ -63,10 +63,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build:storybook": "storybook build",
-    "porcelain": "test -z \"$(git status --porcelain)\" || (echo 'Uncommitted changes detected' && exit 1)",
-    "preversion": "npm ci && npm run build && npm run porcelain",
-    "postversion": "git push origin main --follow-tags"
+    "build:storybook": "storybook build"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@nimbox"

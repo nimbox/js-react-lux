@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+#
+# bump — bootstrap for the Nimbox ship command.
+#
+# Fetches the canonical bump.sh from the repo/ref pinned in version.json's
+# `tool` block and runs it against THIS repo's VERSION + version.json. The repo
+# carries only VERSION, version.json, and this launcher; the logic lives
+# centrally in nimbox/build-tools.
+#
+# Freshness + resilience: refetches on every run (so a moving ref like `main`
+# stays current), and falls back to the last cached copy when offline.
+#
+# Deps: git, jq, curl. The tool repo is public, so the fetch needs no auth.
+
+set -euo pipefail
+
+for tool in git jq curl; do
+    command -v "$tool" >/dev/null 2>&1 || { echo "error: $tool is required" >&2; exit 1; }
+done
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+[ -f version.json ] || { echo "error: no version.json at repo root ($ROOT)" >&2; exit 1; }
+
+repo="$(jq -r '.tool.repo // "nimbox/build-tools"' version.json)"
+path="$(jq -r '.tool.path // "scripts/bump.sh"' version.json)"
+ref="$(jq -r '.tool.ref // "main"' version.json)"
+
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/nimbox-bump"
+mkdir -p "$cache_dir"
+cached="$cache_dir/$(printf '%s/%s/%s' "$repo" "$ref" "$path" | tr '/' '_')"
+
+url="https://raw.githubusercontent.com/${repo}/${ref}/${path}"
+tmp="$(mktemp)"
+if curl -fsSL "$url" -o "$tmp" 2>/dev/null && [ -s "$tmp" ]; then
+    mv "$tmp" "$cached"
+else
+    rm -f "$tmp"
+    [ -f "$cached" ] || { echo "error: failed to fetch ${url} and no cached copy" >&2; exit 1; }
+    echo "warning: using cached ${repo}@${ref}:${path} (fetch failed)" >&2
+fi
+
+exec bash "$cached" "$@"

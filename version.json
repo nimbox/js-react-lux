@@ -1,0 +1,7 @@
+{
+  "tagPrefix": "v",
+  "branch": "main",
+  "targets": [
+    { "type": "npm", "directory": "." }
+  ]
+}
