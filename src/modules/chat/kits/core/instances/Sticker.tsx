@@ -41,7 +41,7 @@ export function StickerMessage({ message }: MessageInstanceProps<ImageView>) {
 
 export function StickerMessageSummary() {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation('lux');
 
     return <>{t('chat.media.sticker', { defaultValue: 'Sticker' })}</>;
 

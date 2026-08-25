@@ -103,18 +103,19 @@ language. Pick the approach that matches your scale.
 
 ##### Bundle every language (simplest)
 
-Import the `./locales` export and pass it to `init` — every language ships in
-your JS bundle. Good for a small, fixed set of languages.
+Import the raw files and pass them to `init` — every language ships in your JS
+bundle. Good for a small, fixed set of languages.
 
 ```ts
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { resources } from '@nimbox/js-react-lux/locales';   // { en: { lux }, es: { lux } }
+import luxEn from '@nimbox/js-react-lux/locales/en/lux.json';
+import luxEs from '@nimbox/js-react-lux/locales/es/lux.json';
 
 i18n.use(initReactI18next).init({
     lng: 'en',
     fallbackLng: 'en',
-    resources,
+    resources: { en: { lux: luxEn }, es: { lux: luxEs } },
     ns: ['lux'],
     defaultNS: 'lux',
     react: { useSuspense: false },
@@ -124,41 +125,28 @@ i18n.use(initReactI18next).init({
 export default i18n;
 ```
 
-Merge with your own strings by extending the object
-(e.g. `{ en: { ...resources.en, translation: myEn }, ... }`).
+Merge with your own strings by adding your namespace beside `lux`
+(e.g. `{ en: { lux: luxEn, translation: myEn }, ... }`).
 
 ##### Lazy-load per language (recommended for the primary application)
 
-At scale you don't want every language in the JS bundle. lux also ships its raw
-files at `dist/locales/{lng}/lux.json`; serve them and let `i18next-http-backend`
-fetch **only the active language's** `lux` namespace, on demand. If your app
-already loads its own strings over an HTTP backend, you only need to make lux's
-files available at the same `/locales/{{lng}}/{{ns}}.json` path — lux's `lux`
-namespace then loads exactly like your own namespaces.
+At scale you don't want every language in the JS bundle. The same raw files are
+resolvable as `@nimbox/js-react-lux/locales/{lng}/lux.json` (on disk:
+`node_modules/@nimbox/js-react-lux/dist/locales/{lng}/lux.json`); serve them
+and let `i18next-http-backend` fetch **only the active language's** `lux`
+namespace, on demand. If your app already loads its own strings over an HTTP
+backend, you only need to make lux's files available at the same
+`/locales/{{lng}}/{{ns}}.json` path — lux's `lux` namespace then loads exactly
+like your own namespaces.
 
-**1. Serve lux's locale files.** Copy them into your static `public/locales` on
-dev *and* build. Resolve lux with `require.resolve` (hoist-independent);
-`copySync` merges, so lux's `lux.json` lands beside your own namespace files
-without clobbering them:
-
-```ts
-// vite.config.ts — add copyLuxLocales() to your `plugins` array
-import { createRequire } from 'module';
-import { dirname, resolve } from 'path';
-import fsExtra from 'fs-extra';               // npm install -D fs-extra
-
-const require = createRequire(import.meta.url);
-
-function copyLuxLocales() {
-    return {
-        name: 'copy-lux-locales',
-        buildStart() {
-            const source = resolve(dirname(require.resolve('@nimbox/js-react-lux')), 'locales');
-            fsExtra.copySync(source, resolve(__dirname, 'public/locales'), { overwrite: true });
-        }
-    };
-}
-```
+**1. Serve lux's locale files.** Do not copy them into `public/` — serve them
+from where they are. A small Vite plugin that answers
+`/locales/<lng>/<ns>.json` in dev by reading the owning package's file, and
+emits the same files as assets in `build`, keeps one copy of every string and
+nothing generated in your repo. The `canexer-application-ar` app's
+`vite.locales.ts` is a self-contained example: a map of namespace → package,
+served live (from the checkout's `src/locales` when the package is aliased to
+local source) and emitted to `dist/locales/` on build.
 
 **2. Load with `i18next-http-backend`** (`npm install i18next-http-backend`),
 replacing the init from step 3:
@@ -184,12 +172,11 @@ export default i18n;
 Now only `/locales/<active-language>/lux.json` is fetched — switching language
 loads that language on demand, and no unused language ships in your bundle. To
 defer the `lux` namespace until a lux component first renders (rather than at
-init), drop `'lux'` from `ns` and let react-i18next load it on demand. Add
-`public/locales` to `.gitignore` — it's generated.
+init), drop `'lux'` from `ns` and let react-i18next load it on demand.
 
-> lux mostly reads from the **default** namespace, so keep `defaultNS: 'lux'` on
-> the i18next instance lux uses. If your app needs its own default namespace,
-> reference it explicitly instead (`useTranslation('yourNamespace')`).
+> lux components name the `lux` namespace explicitly, so your `defaultNS` can be
+> anything. The host only has to load the `lux` namespace, from the raw files at
+> `@nimbox/js-react-lux/locales/<lng>/lux.json` — imported, or served and fetched.
 
 ### Using components
 

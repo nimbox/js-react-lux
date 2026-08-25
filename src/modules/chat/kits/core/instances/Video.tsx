@@ -37,7 +37,7 @@ export function VideoMessage({ message }: MessageInstanceProps<VideoView>) {
 // "Video" label.
 export function VideoMessagePreview(props: MessageInstanceProps) {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation('lux');
     const view = props.message.content as VideoView | undefined;
 
     return (
@@ -60,7 +60,7 @@ export function VideoMessagePreview(props: MessageInstanceProps) {
 
 export function VideoMessageSummary(props: MessageInstanceProps) {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation('lux');
     const view = props.message.content as VideoView | undefined;
 
     return <span className="inline-flex items-center gap-1"><VideoIcon className="w-3.5 h-3.5" />{view?.caption ?? t('chat.media.video', { defaultValue: 'Video' })}</span>;

@@ -135,7 +135,7 @@ export function Splitter(props: SplitterProps) {
 
     } = props;
 
-    const { t } = useTranslation();
+    const { t } = useTranslation('lux');
 
     const isHorizontal = direction === 'horizontal';
 

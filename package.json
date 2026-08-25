@@ -15,11 +15,7 @@
     "./styles/elegant.css": {
       "default": "./dist/styles/elegant.css"
     },
-    "./locales": {
-      "types": "./dist/types/locales/index.d.ts",
-      "import": "./dist/locales/index.js",
-      "default": "./dist/locales/index.js"
-    },
+    "./locales/*": "./dist/locales/*",
     "./figures": {
       "types": "./dist/types/figures/index.d.ts",
       "import": "./dist/figures.js",

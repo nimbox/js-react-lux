@@ -20,7 +20,7 @@ const MAXIMUM_SCALE = 6;
 
 export function ImageViewer({ src, alt, className }: ImageViewerProps) {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation('lux');
 
     const [scale, setScale] = useState(1);
     const [translate, setTranslate] = useState({ x: 0, y: 0 });

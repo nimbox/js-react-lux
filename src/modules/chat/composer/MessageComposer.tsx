@@ -30,7 +30,7 @@ export function MessageComposer(props: MessageComposerProps) {
     // State
 
     const { start, value, onChange, end, replyTo, onClearReplyTo, canSubmit, onSubmit, className, children } = props;
-    const { t } = useTranslation();
+    const { t } = useTranslation('lux');
 
     const expanded = Children.toArray(children).some(Boolean);
 

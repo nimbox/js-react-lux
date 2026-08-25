@@ -11,7 +11,6 @@ import pkg from './package.json' with { type: 'json' };
 const entries = {
 
     'index': 'src/index.ts',
-    'locales/index': 'src/locales/index.ts',
 
     'figures': 'src/figures/index.ts',
 
@@ -40,7 +39,9 @@ export default [{
         copy({
             targets: [
                 { src: 'src/styles/**/*.css', dest: 'dist/styles' },
-                { src: ['src/locales/*', '!src/locales/index.ts'], dest: 'dist/locales' }
+                // The translations ship as raw JSON only, at
+                // `locales/<lng>/lux.json`; hosts fetch or import them.
+                { src: 'src/locales/*', dest: 'dist/locales' }
             ]
         }),
         filesize()

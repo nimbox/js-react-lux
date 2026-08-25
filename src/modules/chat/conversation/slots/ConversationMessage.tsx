@@ -14,7 +14,7 @@ export interface ConversationMessageProps {
 export function ConversationMessage({ className }: ConversationMessageProps) {
 
     const { conversation } = useConversation();
-    const { t } = useTranslation();
+    const { t } = useTranslation('lux');
 
     return (
         <div className={cn('min-w-0', className)}>

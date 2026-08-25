@@ -11,7 +11,7 @@ import { MessagePreview } from '../MessagePreview';
 
 export function TombstoneMessage() {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation('lux');
 
     return (
         <Message.Bubble>
@@ -29,7 +29,7 @@ export function TombstoneMessage() {
 
 export function TombstoneMessagePreview() {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation('lux');
 
     return (
         <MessagePreview.Container>

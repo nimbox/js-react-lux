@@ -46,7 +46,7 @@ export interface MessageSeparatorPillProps {
 export function MessageSeparatorPill(props: MessageSeparatorPillProps) {
 
     const { className, children } = props;
-    const { t } = useTranslation();
+    const { t } = useTranslation('lux');
 
     return (
         <div className={cn(

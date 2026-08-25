@@ -55,7 +55,7 @@ export function ImageMessage({ message, onImageClick }: ImageMessageProps) {
 
 export function ImageMessagePreview(props: MessageInstanceProps) {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation('lux');
     const view = props.message.content as ImageView | undefined;
 
     return (
@@ -80,7 +80,7 @@ export function ImageMessagePreview(props: MessageInstanceProps) {
 
 export function ImageMessageSummary(props: MessageInstanceProps) {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation('lux');
     const view = props.message.content as ImageView | undefined;
 
     return <span className="inline-flex items-center gap-1"><ImageIcon className="w-3.5 h-3.5" />{view?.caption ?? t('chat.media.photo', { defaultValue: 'Photo' })}</span>;

@@ -49,7 +49,6 @@ const config: StorybookConfig = {
     ...section("../src/modules", "Modules"),
     ...section("../src/sandbox", "Sandbox")
   ],
-  staticDirs: [{ from: "../src/locales", to: '/locales' }],
 
   addons: [
     "@storybook/addon-links",

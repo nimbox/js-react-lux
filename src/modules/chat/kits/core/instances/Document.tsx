@@ -42,7 +42,7 @@ export function DocumentMessage({ message }: MessageInstanceProps<DocumentView>)
 
 export function DocumentMessagePreview(props: MessageInstanceProps) {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation('lux');
     const view = props.message.content as DocumentView | undefined;
 
     return (
@@ -60,7 +60,7 @@ export function DocumentMessagePreview(props: MessageInstanceProps) {
 
 export function DocumentMessageSummary(props: MessageInstanceProps) {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation('lux');
     const view = props.message.content as DocumentView | undefined;
 
     return <span className="inline-flex items-center gap-1"><FileIcon className="w-3.5 h-3.5" />{view?.filename ?? view?.caption ?? t('chat.media.document', { defaultValue: 'Document' })}</span>;

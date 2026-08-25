@@ -35,7 +35,7 @@ export function AudioMessage({ message }: MessageInstanceProps<AudioView>) {
 
 export function AudioMessagePreview(props: MessageInstanceProps) {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation('lux');
     const { formatDuration } = useChat();
     const view = props.message.content as AudioView | undefined;
 
@@ -59,7 +59,7 @@ export function AudioMessagePreview(props: MessageInstanceProps) {
 
 export function AudioMessageSummary() {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation('lux');
 
     return <span className="inline-flex items-center gap-1"><AudioIcon className="w-3.5 h-3.5" />{t('chat.media.voiceMessage', { defaultValue: 'Voice message' })}</span>;
 
