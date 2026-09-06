@@ -1,4 +1,5 @@
 import type { StorybookConfig } from '@storybook/react-vite';
+import remarkGfm from 'remark-gfm';
 
 
 /**
@@ -40,6 +41,7 @@ const config: StorybookConfig = {
   stories: [
     "../src/*.mdx",
     "../src/stories/*.mdx",
+    "../src/stories/*.stories.@(js|jsx|mjs|ts|tsx)",
     { directory: "../src/components", files: "**/*.mdx", titlePrefix: "Components" },
     { directory: "../src/components", files: `**/!(${drafts}).stories.@(js|jsx|mjs|ts|tsx)`, titlePrefix: "Components" },
     { directory: "../src/components", files: `**/@(${drafts}).stories.@(js|jsx|mjs|ts|tsx)`, titlePrefix: "Sandbox" },
@@ -53,7 +55,18 @@ const config: StorybookConfig = {
   addons: [
     "@storybook/addon-links",
     "@chromatic-com/storybook",
-    "@storybook/addon-docs"
+    {
+      name: "@storybook/addon-docs",
+      // MDX only understands GitHub Flavored Markdown (tables, task lists,
+      // strikethrough) through this plugin.
+      options: {
+        mdxPluginOptions: {
+          mdxCompileOptions: {
+            remarkPlugins: [remarkGfm]
+          }
+        }
+      }
+    }
   ],
 
   framework: {

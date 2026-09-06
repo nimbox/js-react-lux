@@ -1,0 +1,121 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as BandsStories from './Bands.stories';
+
+<Meta of={BandsStories}/>
+
+# Bands
+
+A band is a region that runs the full width of whatever holds it, separated
+from its neighbours by a single line.
+
+The band is the default container and the card is the exception. A card says
+"these things are comparable, and there are others like them elsewhere" — a
+statistic beside five other statistics, a specimen in a comparison. Most of an
+application is not that. A list of rows is not comparable to another list of
+rows; it is the only list on the screen, and putting it in a card claims a
+relationship that does not exist and costs the width of the padding on both
+sides.
+
+There is no `Band` component yet. What follows is the pattern written out in
+tokens, and the shape a component would take.
+
+## Three tokens
+
+| Token | Job |
+| --- | --- |
+| `--color-content-bg` | The data. |
+| `--color-content-fill` | Everything that is not the data. |
+| `--color-content-border` | Every line between one band and the next. |
+
+A strip carries the fill or it carries nothing. A row declares no background at
+all and inherits whichever ground it was put on: border to border that ground is
+`content-bg`, and inside a card it is the card's own `content-fg`. The same row
+is correct in both without knowing which.
+
+Every separator is `content-border` at one pixel — the same line between two
+rows, between a row and a caption, and under the column header. A separator that
+changes weight to mean something is a second channel nobody reads.
+
+## Why the fill is not a scale
+
+The fill answers a yes or no: this is not data. Depth is an order. Asking one
+channel to carry both is what a `fill-1`, `fill-2` scale would do, and it does
+not survive the measurement.
+
+Taking white as L\* 100, the ground is 98.4 and the fill 94.3. A second step
+lighter than the fill has about two points to live in, which is invisible — it
+was the version of this we started with and could not tell apart. A second step
+darker leaves the range where a grey reads as recessed and starts reading as a
+colour of its own, at which point it competes with the fill of a selected row,
+which has more to say.
+
+Two levels are also all there ever are. Nobody groups a table three deep. So
+what has to be distinguished is exactly two captions, and indent with weight
+does that with no new token: the outer caption sits at the row's own padding in
+`font-semibold text-content`, the inner one indented in regular `text-unchosen`.
+See <Story of={BandsStories.NestedGroups}/>.
+
+Indent has the further advantage of keeping the columns aligned from the first
+row to the last, which is the reason to group inside one table rather than break
+it into separate sections.
+
+## Two filled strips in a row
+
+The column header and the first group caption are adjacent, because the first
+group starts immediately under the header. Both are filled, and they are told
+apart by type rather than by tint.
+
+Taking the fill off the header to break the run is the wrong trade. It leaves a
+header on the same ground as its own rows, and then the only thing marking it as
+a header is the smallest text on the screen.
+
+The run resolves on scroll in any case. The column header leaves and does not
+come back; the caption is what pins to the top. Rows in two groups are
+identical, so which group you are in is the thing a reader loses — and nobody
+forgets what the columns were, because a date looks like a date and an amount
+looks like an amount.
+
+## Labels
+
+Labels are `text-unchosen`, not `text-muted`. A column header is read, not read
+past. `--color-muted` is 2.6:1 on white, which is under the 4.5:1 that text this
+size wants and under the 3:1 floor for large text; it belongs to text that is
+there to be skipped, like the days either side of the month a calendar is
+showing.
+
+## Border to border
+
+The usual case: no card, no radius, no shadow anywhere on the screen. The page
+is the table, and the last row's own separator is where the list ends.
+
+<Story of={BandsStories.Bands}/>
+
+With no groups nothing about the table changes. The column header is filled here
+for the same reason it is filled above, because it is not data.
+
+<Story of={BandsStories.BandsWithoutGroups}/>
+
+## Inside a card
+
+For the case where the region genuinely is one object among several.
+
+The card contributes the border, the radius and `overflow-hidden` — that last one
+is what makes the top and bottom bands clip to the corners instead of squaring
+them off. It contributes no padding: a band that stops short of the edge is a
+row, and reads as one.
+
+It also contributes the ground. `Card` is `bg-content-fg`, so the rows here are
+white while the identical rows above are `content-bg`.
+
+<Story of={BandsStories.BandsInCard}/>
+
+## Known gaps
+
+`Card` ships `rounded` and a bare `border`. That is a smaller curve than the
+radius scale intends and a border colour inherited from the text, so these
+stories pass `rounded-surface border-content-border` on every card. The
+component should carry them.
+
+The fill is tuned against the ground rather than against white, because border
+to border is the common case: 4.1 points below `content-bg` and 5.7 below
+`content-fg`, so one value separates in both contexts.

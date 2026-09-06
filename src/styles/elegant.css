@@ -37,9 +37,10 @@ html {
 
   --color-unchosen: #656568;
 
-  --color-content-bg: #fbfbfb;
   --color-content-fg: #ffffff;
-  --color-content-border: #eaedf3;
+  --color-content-bg: #fbfbfb;
+  --color-content-fill: #ecf0f4;
+  --color-content-border: #e3e8ef;
 
   --color-control-bg: #ffffff;
   --color-control-border: #909090;
