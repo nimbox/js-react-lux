@@ -1,6 +1,6 @@
 import { ImageIcon } from '@nimbox/icons-react';
 import { useTranslation } from 'react-i18next';
-import { ChatImage } from '../../../atoms';
+import { ChatImage, ChatMediaPending } from '../../../atoms';
 import { useChat } from '../../../ChatContext';
 import { Message } from '../../../message/Message';
 import { MessagePreview } from '../../../message/MessagePreview';
@@ -14,8 +14,9 @@ import type { ImageView } from '../views';
 
 
 // `full` surface — the resolved `url` through the base `ChatImage`
-// atom. `onImageClick` is an optional behaviour the consumer wires
-// (e.g. a lightbox).
+// atom, or a `ChatMediaPending` frame while the media is pending (no
+// `url` yet). `onImageClick` is an optional behaviour the consumer
+// wires (e.g. a lightbox).
 
 export type ImageMessageProps = MessageInstanceProps<ImageView> & {
     onImageClick?: () => void;
@@ -30,14 +31,17 @@ export function ImageMessage({ message, onImageClick }: ImageMessageProps) {
         <Message.Bubble>
             <Message.Author />
             <Message.Reply />
-            {view?.url && (
-                <ChatImage
-                    url={view.url}
-                    size={view.size}
-                    alt={view.alt}
-                    onClick={onImageClick}
-                    className={onImageClick ? 'cursor-zoom-in' : undefined}
-                />
+            {view && (view.url
+                ? (
+                    <ChatImage
+                        url={view.url}
+                        size={view.size}
+                        alt={view.alt}
+                        onClick={onImageClick}
+                        className={onImageClick ? 'cursor-zoom-in' : undefined}
+                    />
+                )
+                : <ChatMediaPending />
             )}
             {view?.caption && (
                 <Message.Body>{renderText(view.caption)}</Message.Body>

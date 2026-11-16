@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { ChatSticker } from '../../../atoms';
+import { ChatMediaPending, ChatSticker } from '../../../atoms';
 import { Message } from '../../../message/Message';
 import { type MessageInstanceProps } from '../../../message/MessageProvider';
 import { useMessage } from '../../../message/MessageContext';
@@ -12,7 +12,9 @@ import type { ImageView } from '../views';
 // with the author in a `Message.Pill` on top when this message is
 // first in its group, and the date/status in a `Message.Bubble` pill
 // below (bringing the alignment-coloured background and the avatar/
-// tail for free, since it's the group's one true `Bubble`).
+// tail for free, since it's the group's one true `Bubble`). While the
+// media is pending (no `url` yet) a sticker-sized `ChatMediaPending`
+// frame stands in its place.
 
 export function StickerMessage({ message }: MessageInstanceProps<ImageView>) {
 
@@ -26,7 +28,10 @@ export function StickerMessage({ message }: MessageInstanceProps<ImageView>) {
                     <Message.Author />
                 </Message.Pill>
             )}
-            {view?.url && <ChatSticker url={view.url} size={view.size} alt={view.alt} />}
+            {view && (view.url
+                ? <ChatSticker url={view.url} size={view.size} alt={view.alt} />
+                : <ChatMediaPending className="w-24 h-24 bg-transparent" />
+            )}
             <Message.Bubble>
                 <Message.Properties />
             </Message.Bubble>

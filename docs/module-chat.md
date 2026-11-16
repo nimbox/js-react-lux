@@ -117,7 +117,10 @@ assumption about `content`'s shape**. It owns:
 Binds the base to a small, channel-**neutral** content vocabulary. It owns:
 
 - **Views** (`views.ts`) — `TextView`, `ImageView` (sticker reuses it), `AudioView`, `VideoView`,
-  `DocumentView`. The data shapes a consumer maps its domain into.
+  `DocumentView`. The data shapes a consumer maps its domain into. A media view's `url` and
+  `size` are absent while the media is pending (its bytes not yet available); the image, sticker,
+  audio and video instances then render a `ChatMediaPending` frame, sized near the media's own,
+  in its place, and `DocumentMessage` renders `ChatDocument`'s plain tile.
 - **Message instances** — read `message.content` as a view and feed atoms into base slots;
   registered in `coreMessageRenderers`. Each instance renders its type across **surfaces** (`full`
   for the timeline bubble, `preview` for the compact form — §6). The `preview` surface *renders
@@ -149,7 +152,7 @@ Owns everything app- or channel-specific:
 ### ATOMS — a cross-cutting base concern
 
 Pure, prop-driven presentational units: `ChatAvatar`, `ChatImage`, `ChatSticker`, `ChatAudio`,
-`ChatVideo`, `ChatDocument`. They:
+`ChatVideo`, `ChatDocument`, `ChatMediaPending`. They:
 
 - Take **resolved primitives** (`src`, `url`, `duration`) — never a `BaseMessage` envelope or a
   domain object.

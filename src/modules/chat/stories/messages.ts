@@ -240,6 +240,34 @@ export const documentMessage: StoryMessage = {
     timestamp: '2024-01-16T10:29:00Z'
 };
 
+// Media whose bytes are not yet available — the adapter sends no `url` (and
+// no `size`) until the media is available, and each instance shows a
+// loading frame in its place.
+
+export const imagePendingMessage: StoryMessage = {
+    id: 's-image-pending', author: alex, group: alex.id, alignment: 'start', type: 'image',
+    content: { caption: 'The photo from the site visit' },
+    timestamp: '2024-01-16T10:29:10Z'
+};
+
+export const stickerPendingMessage: StoryMessage = {
+    id: 's-sticker-pending', author: alex, group: alex.id, alignment: 'start', type: 'sticker',
+    content: {},
+    timestamp: '2024-01-16T10:29:20Z'
+};
+
+export const audioPendingMessage: StoryMessage = {
+    id: 's-audio-pending', author: alex, group: alex.id, alignment: 'start', type: 'audio',
+    content: {},
+    timestamp: '2024-01-16T10:29:30Z'
+};
+
+export const videoPendingMessage: StoryMessage = {
+    id: 's-video-pending', author: alex, group: alex.id, alignment: 'start', type: 'video',
+    content: {},
+    timestamp: '2024-01-16T10:29:40Z'
+};
+
 export const editedMessage: StoryMessage = {
     id: 's-edited', author: sarah, group: sarah.id, alignment: 'end', type: 'text',
     content: { text: 'Amazing work 🚀' },

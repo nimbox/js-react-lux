@@ -1,6 +1,6 @@
 import { AudioIcon } from '@nimbox/icons-react';
 import { useTranslation } from 'react-i18next';
-import { ChatAudio } from '../../../atoms';
+import { ChatAudio, ChatMediaPending } from '../../../atoms';
 import { useChat } from '../../../ChatContext';
 import { Message } from '../../../message/Message';
 import { MessagePreview } from '../../../message/MessagePreview';
@@ -12,7 +12,8 @@ import type { AudioView } from '../views';
 
 
 // `full` surface — the resolved `url` (and optional `duration`)
-// through the base `ChatAudio` atom.
+// through the base `ChatAudio` atom, or a `ChatMediaPending` frame the
+// height of the native player while the media is pending.
 
 export function AudioMessage({ message }: MessageInstanceProps<AudioView>) {
 
@@ -22,7 +23,10 @@ export function AudioMessage({ message }: MessageInstanceProps<AudioView>) {
         <Message.Bubble>
             <Message.Author />
             <Message.Reply />
-            {view?.url && <ChatAudio url={view.url} size={view.size} duration={view.duration} />}
+            {view && (view.url
+                ? <ChatAudio url={view.url} size={view.size} duration={view.duration} />
+                : <ChatMediaPending className="w-[300px] max-w-full h-[54px]" />
+            )}
             <Message.Properties />
         </Message.Bubble>
     );

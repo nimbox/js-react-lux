@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { chatBackdrop } from '../../stories/decorators';
-import { audioMessage, documentMessage, imageMessage, stickerMessage, textInbound, videoMessage } from '../../stories/messages';
+import { audioMessage, audioPendingMessage, documentMessage, imageMessage, imagePendingMessage, stickerMessage, stickerPendingMessage, textInbound, videoMessage, videoPendingMessage } from '../../stories/messages';
 import { MessageThread, SingleMessage } from '../../stories/MessageThread';
 import { withStoryChat } from '../../stories/StoryChatProvider';
 import type { BaseMessage } from '../../types/BaseMessage';
@@ -30,6 +30,21 @@ export const Audio: Story = { args: { message: audioMessage } };
 export const Video: Story = { args: { message: videoMessage } };
 
 export const Document: Story = { args: { message: documentMessage } };
+
+export const ImagePending: Story = { args: { message: imagePendingMessage } };
+
+export const StickerPending: Story = { args: { message: stickerPendingMessage } };
+
+export const AudioPending: Story = { args: { message: audioPendingMessage } };
+
+export const VideoPending: Story = { args: { message: videoPendingMessage } };
+
+const pendingGallery: BaseMessage[] = [imagePendingMessage, stickerPendingMessage, audioPendingMessage, videoPendingMessage];
+
+export const PendingGallery: Story = {
+    args: { message: textInbound },   // ignored by the custom render; satisfies the required-prop meta
+    render: () => <MessageThread messages={pendingGallery} className="h-[42rem]" />
+};
 
 const gallery: BaseMessage[] = [textInbound, imageMessage, audioMessage, videoMessage, documentMessage, stickerMessage];
 

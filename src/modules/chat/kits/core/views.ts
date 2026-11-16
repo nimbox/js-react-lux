@@ -15,21 +15,21 @@ export interface TextView {
 }
 
 export interface ImageView {
-    url: string;
-    size: number; // bytes — present whenever there is a url
+    url?: string; // absent while the media is pending
+    size?: number; // bytes — unknown while the media is pending
     caption?: string;
     alt?: string;
 }
 
 export interface AudioView {
-    url: string;
-    size: number; // bytes — present whenever there is a url
+    url?: string; // absent while the media is pending
+    size?: number; // bytes — unknown while the media is pending
     duration?: number;
 }
 
 export interface VideoView {
-    url: string;
-    size: number; // bytes — present whenever there is a url
+    url?: string; // absent while the media is pending
+    size?: number; // bytes — unknown while the media is pending
     caption?: string;
     poster?: string;
 }

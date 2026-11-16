@@ -1,6 +1,6 @@
 import { VideoIcon } from '@nimbox/icons-react';
 import { useTranslation } from 'react-i18next';
-import { ChatVideo } from '../../../atoms';
+import { ChatMediaPending, ChatVideo } from '../../../atoms';
 import { useChat } from '../../../ChatContext';
 import { Message } from '../../../message/Message';
 import { MessagePreview } from '../../../message/MessagePreview';
@@ -11,8 +11,9 @@ import type { VideoView } from '../views';
 // Core video message — both surfaces of the `video` instance (docs §6).
 
 
-// `full` surface — the resolved `url` through the base `ChatVideo` atom, with an
-// optional caption pushed into the Body slot.
+// `full` surface — the resolved `url` through the base `ChatVideo` atom, or a
+// `ChatMediaPending` frame while the media is pending, with an optional
+// caption pushed into the Body slot.
 export function VideoMessage({ message }: MessageInstanceProps<VideoView>) {
 
     const { renderText } = useChat();
@@ -22,7 +23,10 @@ export function VideoMessage({ message }: MessageInstanceProps<VideoView>) {
         <Message.Bubble>
             <Message.Author />
             <Message.Reply />
-            {view?.url && <ChatVideo url={view.url} size={view.size} poster={view.poster} />}
+            {view && (view.url
+                ? <ChatVideo url={view.url} size={view.size} poster={view.poster} />
+                : <ChatMediaPending className="w-64 h-36" />
+            )}
             {view?.caption && (
                 <Message.Body>{renderText(view.caption)}</Message.Body>
             )}
