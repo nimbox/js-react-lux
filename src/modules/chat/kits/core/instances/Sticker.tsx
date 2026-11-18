@@ -2,30 +2,32 @@ import { useTranslation } from 'react-i18next';
 import { ChatMediaPending, ChatSticker } from '../../../atoms';
 import { Message } from '../../../message/Message';
 import { type MessageInstanceProps } from '../../../message/MessageProvider';
-import { useMessage } from '../../../message/MessageContext';
+import { useMessageAuthorVisible } from '../../../message/useMessageAuthorVisible';
 import type { ImageView } from '../views';
 
 
 // Core sticker message — `full` surface only; the `preview` reuses
-// `ImageMessagePreview` (they share `ImageView`). A sticker floats free of the
-// bubble: the `ChatSticker` atom floats above (no background), with the author
-// in a `Message.Pill` on top when this message is first in its group, and the
-// date/status in a `Message.Bubble` pill below (bringing the alignment-coloured
-// background, the avatar and the tight corner for free, since it's the group's
-// one true `Bubble`). While the media is pending (no `url` yet) a sticker-sized
+// `ImageMessagePreview` (they share `ImageView`). A sticker floats free
+// of any bubble, between two small chips: the author and the reply quote
+// on a `Message.Pill` above it, the date/status on a `Message.Bubble`
+// below it (a bubble for the tight corner it takes on the group's last
+// message). While the media is pending (no `url` yet) a sticker-sized
 // `ChatMediaPending` frame stands in its place.
 
 export function StickerMessage({ message }: MessageInstanceProps<ImageView>) {
 
-    const { isFirst, message: { author } } = useMessage();
+    const authorVisible = useMessageAuthorVisible();
     const view = message.content;
+
+    const hasHeader = authorVisible || message.replyTo != null;
 
     return (
         <>
-            {isFirst && author != null && (
+            {hasHeader && (
                 <Message.Pill>
                     <Message.Inset>
                         <Message.Author />
+                        <Message.Reply />
                     </Message.Inset>
                 </Message.Pill>
             )}

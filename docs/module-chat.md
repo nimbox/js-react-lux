@@ -90,10 +90,11 @@ assumption about `content`'s shape**. It owns:
   `group` is its grouping primitive (§3). Rows are **`separator | group | single`** — `single`
   carries authorless/system messages, ungrouped and centered — plus an **unread-marker** row
   injected at a consumer-given watermark (§4).
-- **Layout** — `MessageGroup` (the group's stack + alignment + horizontal gutter),
-  `MessageList` (auto-scroll container). The avatar is not `MessageGroup`'s to place — it
-  rides with the bubble's tight corner, both driven by the one `isLast` check in `Bubble` (§6),
-  anchored directly to the last message's own bubble box, never to a sibling column's height.
+- **Layout** — `MessageGroup` (the group's stack), `MessageFrame` (one message's row: its side,
+  its width cap, the gutter, and the group avatar) and `MessageList` (auto-scroll container).
+  The frame places the avatar on the group's last message, at the bottom of that message's own
+  content and standing in the gutter the frame reserves — never against a group's total height,
+  which per-message chrome under the bubble (a reactions pill) would stretch.
 - **Composition machinery** — the compound-component + context design: `MessageProvider` /
   `useMessage`, `ChatProvider` / `useChat`.
 - **The registry mechanism** — `useMessageRenderer`
@@ -490,49 +491,48 @@ slot is always one of these two.
   mounting is deliberately independent of Container's *geometry* (the aligned flex recipe, width
   caps — themable): bubble-paradigm geometry must never weld the chrome shut (§4, rejected
   feed-paradigm note).
-- `Bubble` — two boxes: an outer anchor that takes the instance's `className`, and inside it
-  the alignment-coloured rounded surface, which **clips its content to its corners**, so an
-  image or a coloured rule that runs to the edges follows the bubble's shape without knowing
-  it. Two things mark the group's last bubble, shown together on **`isLast`** because they
-  mark the same fact: a **tight corner** on the speaker's side of the surface, and the group
-  avatar (`authorRenderer.avatar(author)`) anchored to the outer box, on the outer side. The
-  corner is the surface's own shape, so it carries whatever the content paints there. Any
-  author *accent* the bubble paints comes from the scalar `color` (§3), never `author` — the
-  avatar is the one place `Bubble` reaches for the opaque author itself. Because the surface
-  clips, nothing an instance places inside a `Bubble` may reach outside it. **Exactly one
-  `Bubble` per message** — it is the concept that marks the group's last bubble; an instance
-  never mounts a second one, or a stripped-down variant, to get bubble-like chrome elsewhere
-  (see `Pill`, below, and §12).
+- `Bubble` — the message's main surface: alignment-coloured, rounded, and **clipping its
+  content to its corners**, so an image or a coloured rule that runs to the edges follows the
+  bubble's shape without knowing it. On the group's last message (**`isLast`**) the corner on
+  the speaker's side is **tight**, marking the end of the group beside the avatar the frame
+  places there. The corner is the surface's own shape, so it carries whatever the content
+  paints there. `Bubble` never touches the opaque `author`. Because the surface clips, nothing
+  an instance places inside a `Bubble` may reach outside it.
 - `Pill` — the same alignment-coloured `rounded-xl shadow` surface as `Bubble`, minus the
-  clipping, the tight corner, the avatar, and any `isFirst`/`isLast` awareness — a dumb,
-  push-only box for content that needs bubble-like chrome *outside* the one true `Bubble`.
-  Exists for split-bubble floating instances: a sticker mounts `<Pill><Author /></Pill>` above
-  the floating image when it's first in its group, while its `Bubble` (holding `Properties`)
-  is untouched and keeps carrying the tight corner and the avatar on `isLast` as usual.
+  clipping, the tight corner, and any `isFirst`/`isLast` awareness — a dumb, push-only chip. A
+  floating instance uses it for what sits beside its content: a sticker mounts the author and
+  the reply quote on a `Pill` above the bare image.
 - `Inset` — the padding between a bubble's edge and its content. `Bubble` and `Pill` are
   surfaces with no padding of their own; an instance wraps what it wants inset (text, the author
   line, a caption, `Properties`) in `Inset` and leaves bare what runs to the edges, as the image
-  instance does with its picture. An `Inset` whose slots all render nothing takes no room, so
-  an instance mounts `<Inset><Author /><Reply /></Inset>` without asking whether either shows.
+  instance does with its picture. An instance mounts an `Inset` only when it has something to
+  put in it: when the inset would hold nothing but `Author` and `Reply`, it asks
+  `useMessageAuthorVisible()` (the one rule for when `Author` renders) and checks `replyTo`.
+
+An instance renders as many surfaces as its content calls for — one `Bubble` for most types,
+two chips around a bare image for a sticker, none at all for content that floats alone. The
+pieces it returns stack inside the frame, aligned to the message's side. None of them is
+special: the frame's chrome (the avatar, the options, the reactions) attaches to the message,
+not to a surface.
 
 **DECORATION** — read *universal* fields only:
 - `Author` — forwards the opaque `author` to `authorRenderer.name(author)` on `isFirst` (it never
   reads author fields); `Properties` (timestamp + delivery status, **plus appended children** — an
   instance adds "(edited)" from `editedAt`, view counts, importance badges without forking the
   slot). Bubble-tier: **instance-placed** — the instance decides whether and where to mount them (a
-  floating sticker mounts `Properties` inside a compact footer `Bubble`, and — on `isFirst` — mounts
-  `Author` inside a `Pill` instead, since there's no bubble above the image to hold it).
+  floating sticker mounts `Properties` inside a compact footer `Bubble`, and mounts `Author` and
+  `Reply` on a `Pill` above the image, since there's no bubble there to hold them).
 - `Reply` — renders `replyTo` at the **`preview` surface** through the *message* registry (not a
   separate reply registry) and owns only the quote chrome — a left line stroked from the scalar
   `replyTo.color` (§3), never `replyTo.author`; the compact content comes from the replied-to type's
   own renderer.
 
-**CONTAINER-TIER CHROME — auto-mounted, NOT slots.** Reactions and the reaction picker are **not**
-in the `Message.*` slot namespace and are not composed by instances: `MessageContainer` mounts them
-automatically (reactions always; the picker when `onCreateReaction` is supplied). They live in
-`message/` as standalone components (barrel-exported, like `MessageOptions`), not in `slots/`. (The
-group avatar is *not* here — it belongs to `Bubble`, above; it is Bubble-tier, not
-Container-tier, because it is anchored to the bubble's own box.)
+**CONTAINER-TIER CHROME — auto-mounted, NOT slots.** The group avatar, the reactions and the reaction
+picker are **not** in the `Message.*` slot namespace and are not composed by instances:
+`MessageFrame` mounts them automatically (the avatar on the group's last message, when it has an
+author; reactions always; the picker when `onCreateReaction` is supplied). The reactions and the
+picker live in `message/` as standalone components (barrel-exported, like `MessageOptions`), not
+in `slots/`; the avatar is the consumer's `authorRenderer.avatar`, placed by the frame.
 - **`MessageReactions`** — the **chooser** `MessageContainer` mounts; it renders the default form
   (the cluster) and is the single seam a future `ChatContext` option would use to switch forms.
 - **`MessageReactionsCluster`** (current default) — all emojis in one **clustered pill** + total,
@@ -582,7 +582,7 @@ authorRenderer: {
 
 | Location | Base composes |
 |---|---|
-| Group bubble icon | `authorRenderer.avatar(author)`, composed by `Bubble` on `isLast`, alongside the tight corner — mirrors how `Author` composes `name`/`handle` on `isFirst`, opposite end of the group |
+| Group avatar | `authorRenderer.avatar(author)`, placed by `MessageFrame` on `isLast`, beside the bubble's tight corner — mirrors how `Author` composes `name`/`handle` on `isFirst`, opposite end of the group |
 | First-bubble header | `authorRenderer.name(author)` **+** `authorRenderer.handle?.(author)` (on `isFirst`) — the base owns the row arrangement |
 | Reaction-details row | `authorRenderer.avatar(author)` + `authorRenderer.name(author)` + the **base-owned emoji** |
 | **Preview** (reply-quote, conversation line) | `authorRenderer.name(author)` **only** — the handle is noise in a compact quote |
@@ -1047,22 +1047,15 @@ base `ComposerPanel` chrome. There is no imperative submit registry.
   envelope carries only author-free **pills** (`ReactionPill`); the who-reacted **details** load
   lazily via `getReactionDetails` and carry the author (`ReactionDetail<T['author']>`, §6). Keep the
   pill ungenericized; bind the author on the lazy callback, not the envelope.
-- **The group avatar and the tight corner live together, inside `Bubble`, on the one `isLast`
-  check — not as separate concerns with their own gating.** They mark the same fact ("this is
-  the group's last bubble"), so they are computed in one place, the corner as the surface's
-  own shape and the avatar anchored to the bubble's box. Do not split them into separate
-  components.
+- **The group avatar belongs to the frame, not to a surface.** `MessageFrame` places it on the
+  group's last message, anchored to the bottom of that message's content, with the gutter it
+  stands in. Every message gets it whatever its instance renders, so an instance never mounts a
+  bubble only to earn an avatar. Do not move it into `Bubble`, and do not anchor it to anything
+  taller than one message's content (a group's column grows with the reactions under it).
 - **The last bubble is marked by the surface's shape, never by a separate painted element.** A
   mark drawn beside the bubble (a triangular tail) has to guess the colour of whatever the
   content paints at that edge — a highlight, an image — and cannot. The tight corner is the
   bubble itself, so it is right by construction.
-- **Exactly one `Bubble` per message.** `Bubble` *is* the concept that marks the group's last
-  bubble; it is not "the rounded chrome box." A floating/split instance that needs
-  bubble-*like* chrome elsewhere (a sticker's author header, above the bare image) uses `Pill`
-  — the same `rounded-xl shadow` box, deliberately with no clipping, corner, avatar or
-  `isFirst`/`isLast` logic of its own. Do not add a second `Bubble`, and do not add a prop to
-  `Bubble` that strips its corner and avatar to repurpose it as plain chrome — that conflates
-  two concepts (§11).
 - **`author` is opaque (`unknown`) to the base.** What the base needs from it are **scalar
   primitives** — `group` (grouping, `group: author.id`) and `color` (accent for the reply line /
   bubble) — split out by the paint-vs-render test (§3). The author *shape* goes through the two
@@ -1072,8 +1065,9 @@ base `ComposerPanel` chrome. There is no imperative submit registry.
   must paint with it; a new author **surface** only when a location needs different author *content*
   (not just a different size).
 - **Placement of `status` and `replyTo` is per-instance, never auto-injected.** A bubble-less message
-  (floating sticker, single emoji) has nowhere to mount a `Properties` tick or a `Reply` quote — which
-  is exactly why they cannot be auto-injected the way reactions are.
+  (floating sticker, single emoji) has no bubble to hold a `Properties` tick or a `Reply` quote, so
+  its instance decides where they go (the sticker puts them on chips around the image) — which is
+  exactly why they cannot be auto-injected the way reactions are.
 - **There is no separate reply stack.** Reply quotes and the composer banner render `replyTo` through
   the *same* `messageRenderers` at the `preview` surface (§6). Do not add a second reply registry. The
   composer shell resolves this itself via `useMessageRenderer` — it takes only `replyTo`, never an

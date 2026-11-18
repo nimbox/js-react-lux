@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { chatBackdrop } from '../../stories/decorators';
-import { audioMessage, audioPendingMessage, documentMessage, imageInboundNoCaption, imageLightNoCaption, imageMessage, imageOutboundNoCaption, imagePendingMessage, imageWithReply, stickerMessage, stickerPendingMessage, textInbound, videoMessage, videoPendingMessage } from '../../stories/messages';
+import { audioMessage, audioPendingMessage, documentMessage, imageInboundNoCaption, imageLightNoCaption, imageMessage, imageOutboundNoCaption, imagePendingMessage, imageWithReply, stickerMessage, stickerPendingMessage, stickerWithReply, textInbound, videoMessage, videoPendingMessage } from '../../stories/messages';
 import { MessageThread, SingleMessage } from '../../stories/MessageThread';
 import { withStoryChat } from '../../stories/StoryChatProvider';
 import type { BaseMessage } from '../../types/BaseMessage';
@@ -71,6 +71,8 @@ export const ImageLightWithoutHeader: Story = {
 };
 
 export const Sticker: Story = { args: { message: stickerMessage } };
+
+export const StickerWithReply: Story = { args: { message: stickerWithReply } };
 
 export const Audio: Story = { args: { message: audioMessage } };
 

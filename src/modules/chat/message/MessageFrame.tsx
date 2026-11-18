@@ -9,6 +9,12 @@ import { MessageReactions } from './MessageReactions';
 
 type Placement = 'start' | 'center' | 'end';
 
+// The room on each side of a timeline row that the group avatar stands in:
+// a 1.5em avatar (`Avatar.tsx`) at the 1.25rem font-size set on it below is
+// 1.875rem across, plus its 0.25rem margin = 2.125rem, flush. All rem, so it
+// holds at any root font-size.
+const GUTTER = 'px-[2.125rem]';
+
 const PLACEMENT_ITEMS: Record<Placement, string> = {
     start: 'items-start',
     center: 'items-center',
@@ -52,16 +58,19 @@ export interface MessageFrameProps {
 //     attached to the message — and because the picker sits OUTSIDE that group, hovering
 //     the picker does not reveal it.
 // Reactions (`MessageReactions`, the chooser — the default single clustered pill) stack
-// below. The group avatar belongs to `Bubble`, not here: it and the bubble's tight corner
-// both mark "this is the group's last bubble" (see `MessageBubble.tsx`).
-// `plain` (a context flag from the dispatch layer) drops all three — and, in the bubble
-// and author slot, the group decorations too. Horizontal placement is one three-valued
+// below. The frame also places the **group avatar**, on the group's last message: at the
+// bottom of the positioning anchor, on the outer side, standing in the gutter the row
+// reserves for it. The anchor is the message's content alone (the reactions sit below
+// it), so the avatar stays level with the last bubble whatever hangs under it, and every
+// message gets it whether or not its instance renders a bubble.
+// `plain` (a context flag from the dispatch layer) drops all of it, the gutter included —
+// and, in the bubble and author slot, the group decorations too. Horizontal placement is one three-valued
 // axis: `placement` (defaulting to the message's directional `alignment`) mapped once
 // through `PLACEMENT_ITEMS`. The structural frame (row / anchor / bubble scope) is unchanged.
 export function MessageFrame({ children, placement }: MessageFrameProps) {
 
-    const { message: { alignment }, plain } = useMessage();
-    const { onCreateReaction } = useChat();
+    const { message: { alignment, author }, isLast, plain } = useMessage();
+    const { authorRenderer, onCreateReaction } = useChat();
 
     // One three-valued placement: an explicit `placement` (the preview centers a lone
     // bubble) or the message's directional `alignment`. Mapped once, used at all three
@@ -71,17 +80,16 @@ export function MessageFrame({ children, placement }: MessageFrameProps) {
     const items = PLACEMENT_ITEMS[align];
 
     return (
-        <div className={cn('w-full group flex flex-col', items)}>
+        <div className={cn('w-full group flex flex-col', !plain && GUTTER, items)}>
 
             {/* Positioning anchor — `relative`, shrink-wrapped to the content; holds the
                 picker so it can sit just outside the bubble, while keeping it out of the
                 bubble hover group. */}
             <div className={cn('relative max-w-[75%] flex flex-col', items)}>
 
-                {/* Bubble hover scope — the content + its option menu ONLY. Carries the
-                    flex-col alignment a bubble-less sticker needs for its stacked
-                    children (author pill / image / properties bubble); `gap-1` is a
-                    no-op for every other kit, which only ever passes one child. */}
+                {/* Bubble hover scope — the content + its option menu ONLY. An instance
+                    may render several pieces (a sticker: author chip / image / time
+                    chip); they stack here with a gap, aligned to the message's side. */}
                 <div className={cn('flex flex-col gap-1 group/bubble', items)}>
 
                     {children}
@@ -109,6 +117,18 @@ export function MessageFrame({ children, placement }: MessageFrameProps) {
                         align === 'start' ? 'left-full ml-2' : 'right-full mr-2'
                     )}>
                         <MessageReactionPicker />
+                    </div>
+                )}
+
+                {/* Group avatar — on the group's last message, at the bottom of the
+                    content, on the outer side. The author is opaque: it is only
+                    forwarded to `authorRenderer`. Sized in rem to fill `GUTTER`. */}
+                {!plain && isLast && author != null && (
+                    <div className={cn(
+                        'absolute bottom-0 text-[1.25rem] leading-[1.5rem]',
+                        alignment === 'start' ? 'right-full mr-1' : 'left-full ml-1'
+                    )}>
+                        {authorRenderer.avatar(author)}
                     </div>
                 )}
 

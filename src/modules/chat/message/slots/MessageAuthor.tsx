@@ -1,5 +1,6 @@
 import { useChat } from '../../ChatContext';
 import { useMessage } from '../MessageContext';
+import { useMessageAuthorVisible } from '../useMessageAuthorVisible';
 
 
 // Renders the author atop the first bubble of a group. The author is opaque; the
@@ -10,9 +11,10 @@ import { useMessage } from '../MessageContext';
 export function MessageAuthor() {
 
     const { authorRenderer } = useChat();
-    const { message: { author }, isFirst, plain } = useMessage();
+    const { message: { author } } = useMessage();
+    const visible = useMessageAuthorVisible();
 
-    if (!author || !isFirst || plain) {
+    if (!visible) {
         return null;
     }
 

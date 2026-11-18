@@ -6,6 +6,7 @@ import { useChat } from '../../../ChatContext';
 import { Message } from '../../../message/Message';
 import { MessagePreview } from '../../../message/MessagePreview';
 import { type MessageInstanceProps } from '../../../message/MessageProvider';
+import { useMessageAuthorVisible } from '../../../message/useMessageAuthorVisible';
 import type { ImageView } from '../views';
 
 
@@ -27,16 +28,20 @@ export type ImageMessageProps = MessageInstanceProps<ImageView> & {
 export function ImageMessage({ message, onImageClick }: ImageMessageProps) {
 
     const { renderText } = useChat();
+    const authorVisible = useMessageAuthorVisible();
     const view = message.content;
 
+    const hasHeader = authorVisible || message.replyTo != null;
     const caption = view?.caption;
 
     return (
         <Message.Bubble>
-            <Message.Inset>
-                <Message.Author />
-                <Message.Reply />
-            </Message.Inset>
+            {hasHeader && (
+                <Message.Inset>
+                    <Message.Author />
+                    <Message.Reply />
+                </Message.Inset>
+            )}
             <div className="relative">
                 {view?.url
                     ? (

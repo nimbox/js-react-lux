@@ -10,12 +10,12 @@ export interface MessageInsetProps {
 // The padding between a bubble's edge and the content that sits inside it.
 // `Pill` and `Bubble` are surfaces only, so an instance wraps what it wants
 // inset (text, the author line, a caption, the properties) and leaves out
-// what runs to the edges (an image). An inset whose slots all render nothing
-// takes no room, so an instance never has to ask whether they will.
+// what runs to the edges (an image). An instance mounts it only when it has
+// something to put in it.
 export function MessageInset({ children, className }: MessageInsetProps) {
 
     return (
-        <div className={cn('px-3 py-1 empty:hidden', className)}>
+        <div className={cn('px-3 py-1', className)}>
             {children}
         </div>
     );

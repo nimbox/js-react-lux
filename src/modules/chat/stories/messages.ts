@@ -222,6 +222,11 @@ export const stickerMessage: StoryMessage = {
     timestamp: '2024-01-16T10:26:00Z', status: 'read'
 };
 
+// A sticker sent as a reply: the quote sits on the chip above the sticker.
+export const stickerWithReply: StoryMessage = {
+    ...stickerMessage, id: 's-sticker-reply', replyTo: textInbound
+};
+
 export const audioMessage: StoryMessage = {
     id: 's-audio', author: alex, group: alex.id, alignment: 'start', type: 'audio',
     content: { url: VOICE_AUDIO, size: 123456, duration: 8 },

@@ -41,6 +41,7 @@ export { MessagePreview } from './message/MessagePreview';
 export * from './message/MessageSeparator';
 export * from './message/renderers';
 export * from './message/useMessageRenderer';
+export * from './message/useMessageAuthorVisible';
 export * from './message/useMessageOptions';
 export * from './message/MessageOptions';
 // Frame chrome (NOT slots — mounted by `MessageFrame`, gated on `plain`): the
