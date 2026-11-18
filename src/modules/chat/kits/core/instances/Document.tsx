@@ -24,13 +24,15 @@ export function DocumentMessage({ message }: MessageInstanceProps<DocumentView>)
 
     return (
         <Message.Bubble>
-            <Message.Author />
-            <Message.Reply />
-            {view && <ChatDocument url={view.url} filename={view.filename} size={view.size} />}
-            {view?.caption && (
-                <Message.Body>{renderText(view.caption)}</Message.Body>
-            )}
-            <Message.Properties />
+            <Message.Inset>
+                <Message.Author />
+                <Message.Reply />
+                {view && <ChatDocument url={view.url} filename={view.filename} size={view.size} />}
+                {view?.caption && (
+                    <Message.Body>{renderText(view.caption)}</Message.Body>
+                )}
+                <Message.Properties />
+            </Message.Inset>
         </Message.Bubble>
     );
 

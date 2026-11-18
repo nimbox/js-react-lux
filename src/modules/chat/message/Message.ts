@@ -4,6 +4,7 @@ import { MessageBody } from './slots/MessageBody';
 import { MessageBubble } from './slots/MessageBubble';
 import { MessageFooter } from './slots/MessageFooter';
 import { MessageHeader } from './slots/MessageHeader';
+import { MessageInset } from './slots/MessageInset';
 import { MessagePill } from './slots/MessagePill';
 import { MessageProperties } from './slots/MessageProperties';
 import { MessageReply } from './slots/MessageReply';
@@ -12,6 +13,7 @@ import { MessageReply } from './slots/MessageReply';
 export const Message = {
     Pill: MessagePill,
     Bubble: MessageBubble,
+    Inset: MessageInset,
     Author: MessageAuthor,
     Header: MessageHeader,
     Body: MessageBody,

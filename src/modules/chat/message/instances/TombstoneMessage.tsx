@@ -15,9 +15,11 @@ export function TombstoneMessage() {
 
     return (
         <Message.Bubble>
-            <Message.Author />
-            <div className="text-sm italic text-gray-400">{t('chat.messageDeleted', { defaultValue: 'Message deleted' })}</div>
-            <Message.Properties />
+            <Message.Inset>
+                <Message.Author />
+                <div className="text-sm italic text-gray-400">{t('chat.messageDeleted', { defaultValue: 'Message deleted' })}</div>
+                <Message.Properties />
+            </Message.Inset>
         </Message.Bubble>
     );
 

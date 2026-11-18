@@ -505,6 +505,10 @@ slot is always one of these two.
   instances: a sticker mounts `<Pill><Author /></Pill>` above the floating image when it's
   first in its group, while its `Bubble` (holding `Properties`) is untouched and keeps carrying
   the tail/avatar on `isLast` as usual.
+- `Inset` — the padding between a bubble's edge and its content. `Bubble` and `Pill` are
+  surfaces with no padding of their own; an instance wraps what it wants inset (text, the author
+  line, a caption, `Properties`) in `Inset` and leaves bare what runs to the edges, as the image
+  instance does with its picture.
 
 **DECORATION** — read *universal* fields only:
 - `Author` — forwards the opaque `author` to `authorRenderer.name(author)` on `isFirst` (it never

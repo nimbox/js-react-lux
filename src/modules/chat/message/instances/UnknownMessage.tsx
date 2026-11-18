@@ -16,10 +16,12 @@ export function UnknownMessage({ message }: MessageInstanceProps) {
 
     return (
         <Message.Bubble>
-            <Message.Author />
-            <Message.Reply />
-            <div className="text-sm italic text-gray-400">{message.type}</div>
-            <Message.Properties />
+            <Message.Inset>
+                <Message.Author />
+                <Message.Reply />
+                <div className="text-sm italic text-gray-400">{message.type}</div>
+                <Message.Properties />
+            </Message.Inset>
         </Message.Bubble>
     );
 

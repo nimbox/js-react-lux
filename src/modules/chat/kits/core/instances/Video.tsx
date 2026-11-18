@@ -21,16 +21,18 @@ export function VideoMessage({ message }: MessageInstanceProps<VideoView>) {
 
     return (
         <Message.Bubble>
-            <Message.Author />
-            <Message.Reply />
-            {view && (view.url
-                ? <ChatVideo url={view.url} size={view.size} poster={view.poster} />
-                : <ChatMediaPending className="w-64 h-36" />
-            )}
-            {view?.caption && (
-                <Message.Body>{renderText(view.caption)}</Message.Body>
-            )}
-            <Message.Properties />
+            <Message.Inset>
+                <Message.Author />
+                <Message.Reply />
+                {view && (view.url
+                    ? <ChatVideo url={view.url} size={view.size} poster={view.poster} />
+                    : <ChatMediaPending className="w-64 h-36" />
+                )}
+                {view?.caption && (
+                    <Message.Body>{renderText(view.caption)}</Message.Body>
+                )}
+                <Message.Properties />
+            </Message.Inset>
         </Message.Bubble>
     );
 

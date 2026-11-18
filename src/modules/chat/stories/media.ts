@@ -1,3 +1,4 @@
+import lightImage from './assets/light-image.svg';
 import stickerImage from './assets/sticker.png';
 import voiceMessage from './assets/voice-message.wav';
 
@@ -15,3 +16,7 @@ import voiceMessage from './assets/voice-message.wav';
 export const VOICE_AUDIO: string = voiceMessage;
 
 export const STICKER_IMAGE: string = stickerImage;
+
+// A mostly white picture, white along its bottom edge: the worst case for
+// properties laid over an image.
+export const LIGHT_IMAGE: string = lightImage;

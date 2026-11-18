@@ -2,7 +2,7 @@ import type { AudioView, DocumentView, ImageView, TextView, VideoView } from '..
 import type { BaseMessage } from '../types/BaseMessage';
 import type { MessageData } from '../types/MessageData';
 import { alex, miguel, sarah, type StoryAuthor } from './authors';
-import { STICKER_IMAGE, VOICE_AUDIO } from './media';
+import { LIGHT_IMAGE, STICKER_IMAGE, VOICE_AUDIO } from './media';
 
 
 // The story's ChatTypes binding — the "consumer" a story plays. `content` is
@@ -238,6 +238,34 @@ export const documentMessage: StoryMessage = {
     id: 's-document', author: alex, group: alex.id, alignment: 'start', type: 'document',
     content: { url: MOCKUP_IMAGE, size: 1048576, filename: 'animation-spec.pdf' },
     timestamp: '2024-01-16T10:29:00Z'
+};
+
+// The image layout's variants: no caption (the properties lie over the
+// image), an incoming one with its author header, and a reply.
+
+export const imageOutboundNoCaption: StoryMessage = {
+    id: 's-image-out', author: sarah, group: sarah.id, alignment: 'end', type: 'image',
+    content: { url: MOCKUP_IMAGE, size: 234567, alt: 'Landing page mockup' },
+    timestamp: '2024-01-16T10:28:30Z', status: 'read'
+};
+
+export const imageInboundNoCaption: StoryMessage = {
+    id: 's-image-in', author: alex, group: alex.id, alignment: 'start', type: 'image',
+    content: { url: MOCKUP_IMAGE, size: 234567, alt: 'Landing page mockup' },
+    timestamp: '2024-01-16T10:28:40Z'
+};
+
+export const imageWithReply: StoryMessage = {
+    id: 's-image-reply', author: sarah, group: sarah.id, alignment: 'end', type: 'image',
+    content: { url: MOCKUP_IMAGE, size: 234567, caption: 'Same one, cropped for the hero section', alt: 'Landing page mockup' },
+    timestamp: '2024-01-16T10:28:50Z', status: 'delivered',
+    replyTo: mockupImage
+};
+
+export const imageLightNoCaption: StoryMessage = {
+    id: 's-image-light', author: sarah, group: sarah.id, alignment: 'end', type: 'image',
+    content: { url: LIGHT_IMAGE, size: 612, alt: 'Pale snowy hills' },
+    timestamp: '2024-01-16T10:28:45Z', status: 'read'
 };
 
 // Media whose bytes are not yet available — the adapter sends no `url` (and

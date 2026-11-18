@@ -25,7 +25,9 @@ export function StickerMessage({ message }: MessageInstanceProps<ImageView>) {
         <>
             {isFirst && author != null && (
                 <Message.Pill>
-                    <Message.Author />
+                    <Message.Inset>
+                        <Message.Author />
+                    </Message.Inset>
                 </Message.Pill>
             )}
             {view && (view.url
@@ -33,7 +35,9 @@ export function StickerMessage({ message }: MessageInstanceProps<ImageView>) {
                 : <ChatMediaPending className="w-24 h-24 bg-transparent" />
             )}
             <Message.Bubble>
-                <Message.Properties />
+                <Message.Inset>
+                    <Message.Properties />
+                </Message.Inset>
             </Message.Bubble>
         </>
     );

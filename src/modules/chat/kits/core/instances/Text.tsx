@@ -19,10 +19,12 @@ export function TextMessage({ message }: MessageInstanceProps<TextView>) {
 
     return (
         <Message.Bubble>
-            <Message.Author />
-            <Message.Reply />
-            <Message.Body>{renderText(message.content?.text ?? '', message)}</Message.Body>
-            <Message.Properties />
+            <Message.Inset>
+                <Message.Author />
+                <Message.Reply />
+                <Message.Body>{renderText(message.content?.text ?? '', message)}</Message.Body>
+                <Message.Properties />
+            </Message.Inset>
         </Message.Bubble>
     );
 

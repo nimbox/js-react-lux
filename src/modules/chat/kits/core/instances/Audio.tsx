@@ -21,13 +21,15 @@ export function AudioMessage({ message }: MessageInstanceProps<AudioView>) {
 
     return (
         <Message.Bubble>
-            <Message.Author />
-            <Message.Reply />
-            {view && (view.url
-                ? <ChatAudio url={view.url} size={view.size} duration={view.duration} />
-                : <ChatMediaPending className="w-[300px] max-w-full h-[54px]" />
-            )}
-            <Message.Properties />
+            <Message.Inset>
+                <Message.Author />
+                <Message.Reply />
+                {view && (view.url
+                    ? <ChatAudio url={view.url} size={view.size} duration={view.duration} />
+                    : <ChatMediaPending className="w-[300px] max-w-full h-[54px]" />
+                )}
+                <Message.Properties />
+            </Message.Inset>
         </Message.Bubble>
     );
 

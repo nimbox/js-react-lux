@@ -14,13 +14,15 @@ export interface MessagePillProps {
 // split instances use it directly for chrome outside the one `Bubble` a
 // `Container` carries (§12 invariant: exactly one `Bubble` per `Container`)
 // — e.g. a sticker's author header. Unlike `Bubble`, it never reads
-// `isFirst`/`isLast` and never renders a tail or the group avatar.
+// `isFirst`/`isLast` and never renders a tail or the group avatar. It is a
+// surface with no padding: content that wants an inset wraps itself in
+// `Inset`.
 export function MessagePill({ children, className }: MessagePillProps) {
 
     const { message: { alignment } } = useMessage();
 
     return (
-        <div className={cn('rounded-xl shadow px-3 py-1', className, {
+        <div className={cn('rounded-xl shadow', className, {
             'bg-chat-message-out text-gray-800': alignment === 'end',
             'bg-chat-message-in text-gray-800': alignment === 'start'
         })}>

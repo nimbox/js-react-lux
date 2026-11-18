@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { chatBackdrop } from '../../stories/decorators';
-import { audioMessage, audioPendingMessage, documentMessage, imageMessage, imagePendingMessage, stickerMessage, stickerPendingMessage, textInbound, videoMessage, videoPendingMessage } from '../../stories/messages';
+import { audioMessage, audioPendingMessage, documentMessage, imageInboundNoCaption, imageLightNoCaption, imageMessage, imageOutboundNoCaption, imagePendingMessage, imageWithReply, stickerMessage, stickerPendingMessage, textInbound, videoMessage, videoPendingMessage } from '../../stories/messages';
 import { MessageThread, SingleMessage } from '../../stories/MessageThread';
 import { withStoryChat } from '../../stories/StoryChatProvider';
 import type { BaseMessage } from '../../types/BaseMessage';
@@ -22,6 +22,53 @@ type Story = StoryObj<typeof meta>;
 export const Text: Story = { args: { message: textInbound } };
 
 export const Image: Story = { args: { message: imageMessage } };
+
+export const ImageNoCaption: Story = { args: { message: imageOutboundNoCaption } };
+
+export const ImageInboundNoCaption: Story = { args: { message: imageInboundNoCaption } };
+
+export const ImageWithReply: Story = { args: { message: imageWithReply } };
+
+const imageGallery: BaseMessage[] = [imageMessage, imageInboundNoCaption, imageOutboundNoCaption, imageWithReply, imagePendingMessage];
+
+export const ImageGallery: Story = {
+    args: { message: textInbound },   // ignored by the custom render; satisfies the required-prop meta
+    render: () => <MessageThread messages={imageGallery} className="h-[60rem]" />
+};
+
+// Images that are not first in their group, so they carry no author header:
+// the image runs to the bubble's top edge as well. Each run opens with a text
+// message (which takes the header), then an image without a caption and one
+// with a caption, on both sides.
+
+const imagesWithoutHeader: BaseMessage[] = [
+    textInbound,
+    { ...imageInboundNoCaption, id: 'headerless-in-1', timestamp: '2024-01-16T10:21:10Z' },
+    { ...imageMessage, id: 'headerless-in-2', group: imageInboundNoCaption.group, timestamp: '2024-01-16T10:21:20Z', reactions: undefined },
+    { ...imageOutboundNoCaption, id: 'headerless-out-0', type: 'text', content: { text: 'Here are both versions' }, timestamp: '2024-01-16T10:22:00Z' },
+    { ...imageOutboundNoCaption, id: 'headerless-out-1', timestamp: '2024-01-16T10:22:10Z' },
+    { ...imageWithReply, id: 'headerless-out-2', replyTo: undefined, timestamp: '2024-01-16T10:22:20Z' }
+];
+
+export const ImageWithoutHeader: Story = {
+    args: { message: textInbound },   // ignored by the custom render; satisfies the required-prop meta
+    render: () => <MessageThread messages={imagesWithoutHeader} className="h-[60rem]" />
+};
+
+// A mostly white image with no header and no caption, both sides: how the
+// gradient holds the white properties up over a light picture.
+
+const lightImageWithoutHeader: BaseMessage[] = [
+    textInbound,
+    { ...imageLightNoCaption, id: 'light-in', author: imageInboundNoCaption.author, group: imageInboundNoCaption.group, alignment: 'start', status: undefined, timestamp: '2024-01-16T10:21:10Z' },
+    { ...imageOutboundNoCaption, id: 'light-out-0', type: 'text', content: { text: 'Snow day' }, timestamp: '2024-01-16T10:22:00Z' },
+    { ...imageLightNoCaption, id: 'light-out', timestamp: '2024-01-16T10:22:10Z' }
+];
+
+export const ImageLightWithoutHeader: Story = {
+    args: { message: textInbound },   // ignored by the custom render; satisfies the required-prop meta
+    render: () => <MessageThread messages={lightImageWithoutHeader} className="h-[42rem]" />
+};
 
 export const Sticker: Story = { args: { message: stickerMessage } };
 
