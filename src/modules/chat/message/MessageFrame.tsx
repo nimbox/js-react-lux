@@ -31,6 +31,13 @@ export interface MessageFrameProps {
      */
     placement?: Placement;
 
+    /**
+     * Renders the message out of any timeline, as the composer's preview does: the
+     * frame keeps its layout and drops everything a timeline row carries — the options
+     * menu, the reaction picker, the reactions, the group avatar and its gutter.
+     */
+    plain?: boolean;
+
     /** The slots user to render the message. */
     children: ReactNode;
 
@@ -63,19 +70,19 @@ export interface MessageFrameProps {
 // reserves for it. The anchor is the message's content alone (the reactions sit below
 // it), so the avatar stays level with the last bubble whatever hangs under it, and every
 // message gets it whether or not its instance renders a bubble.
-// `plain` (a context flag from the dispatch layer) drops all of it, the gutter included —
-// and, in the bubble and author slot, the group decorations too. Horizontal placement is one three-valued
-// axis: `placement` (defaulting to the message's directional `alignment`) mapped once
-// through `PLACEMENT_ITEMS`. The structural frame (row / anchor / bubble scope) is unchanged.
-export function MessageFrame({ children, placement }: MessageFrameProps) {
+// `plain` (a prop the dispatch layer passes for an out-of-timeline render) drops all of
+// it, the gutter included, and leaves the structural frame (row / anchor / bubble scope).
+// Horizontal placement is one three-valued axis: `placement` (defaulting to the message's
+// directional `alignment`) mapped once through `PLACEMENT_ITEMS`.
+export function MessageFrame({ children, placement, plain = false }: MessageFrameProps) {
 
-    const { message: { alignment, author }, isLast, plain } = useMessage();
+    const { message: { alignment, author }, isLast } = useMessage();
     const { authorRenderer, onCreateReaction } = useChat();
 
     // One three-valued placement: an explicit `placement` (the preview centers a lone
     // bubble) or the message's directional `alignment`. Mapped once, used at all three
-    // levels below. The picker's inner-side offset keys off the same value, but a centered
-    // frame is always `plain`, so that offset never renders.
+    // levels below. The picker's inner-side offset keys off the same value; a centered
+    // frame is a `plain` one in practice, which renders no picker.
     const align = placement ?? alignment;
     const items = PLACEMENT_ITEMS[align];
 

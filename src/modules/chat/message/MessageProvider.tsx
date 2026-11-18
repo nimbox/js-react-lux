@@ -15,13 +15,11 @@ export interface MessageProviderInputs {
 
     message: BaseMessage;
 
+    // Position in the group. Both are left out for a message rendered outside a
+    // timeline (the composer preview), which then shows no author line and no
+    // tight corner.
     isFirst?: boolean;
     isLast?: boolean;
-
-    // `plain` marks an out-of-timeline render (the composer preview): the frame drops its
-    // interaction chrome and the bubble/author drop the group decorations (avatar, tight
-    // corner, name), leaving pure content. Read by `MessageFrame`, `MessageBubble`, `MessageAuthor`.
-    plain?: boolean;
 
 }
 export interface MessageProviderProps extends MessageProviderInputs {

@@ -532,7 +532,10 @@ picker are **not** in the `Message.*` slot namespace and are not composed by ins
 `MessageFrame` mounts them automatically (the avatar on the group's last message, when it has an
 author; reactions always; the picker when `onCreateReaction` is supplied). The reactions and the
 picker live in `message/` as standalone components (barrel-exported, like `MessageOptions`), not
-in `slots/`; the avatar is the consumer's `authorRenderer.avatar`, placed by the frame.
+in `slots/`; the avatar is the consumer's `authorRenderer.avatar`, placed by the frame. A frame
+mounted with `plain` — a message shown outside any timeline, such as a composer's preview —
+keeps its layout and mounts none of this chrome, nor the gutter. `plain` is a prop of the frame,
+not part of the message context: the dispatch layer that mounts the frame is the one that knows.
 - **`MessageReactions`** — the **chooser** `MessageContainer` mounts; it renders the default form
   (the cluster) and is the single seam a future `ChatContext` option would use to switch forms.
 - **`MessageReactionsCluster`** (current default) — all emojis in one **clustered pill** + total,

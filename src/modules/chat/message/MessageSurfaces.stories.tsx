@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactNode } from 'react';
-import { audioMessage, documentMessage, imageMessage, textOutbound, unknownMessage } from '../stories/messages';
+import { TextMessage } from '../kits/core/instances/Text';
+import { audioMessage, documentMessage, imageMessage, textOutbound, unknownMessage, withReactionsInbound } from '../stories/messages';
 import { StoryChatProvider } from '../stories/StoryChatProvider';
+import { ChatSurface } from '../surface/ChatSurface';
 import type { BaseMessage } from '../types/BaseMessage';
 import { MessageFrame } from './MessageFrame';
 import { MessageProvider } from './MessageProvider';
@@ -63,6 +65,28 @@ const render = (message: BaseMessage): Story['render'] => () => (
     </StoryChatProvider>
 );
 
+// A message rendered outside any timeline, as a composer's preview does: no
+// position in a group, and a `plain` frame that keeps the layout and drops the
+// options menu, the reaction picker, the reactions and the avatar. The message
+// carries an author and reactions on purpose, to show that none of it renders.
+const draft = { ...withReactionsInbound, content: { text: 'Shipping this Friday 🚀' } };
+
+function PlainFrame() {
+
+    return (
+        <ChatSurface className="h-64 p-8">
+            <div className="h-full flex justify-center items-center">
+                <MessageProvider message={draft}>
+                    <MessageFrame plain placement="center">
+                        <TextMessage message={draft} />
+                    </MessageFrame>
+                </MessageProvider>
+            </div>
+        </ChatSurface>
+    );
+
+}
+
 // Stories
 
 export const Text: Story = { render: render(textOutbound) };
@@ -70,3 +94,11 @@ export const Image: Story = { render: render(imageMessage) };
 export const Audio: Story = { render: render(audioMessage) };
 export const Document: Story = { render: render(documentMessage) };
 export const Unknown: Story = { render: render(unknownMessage) };
+
+export const Plain: Story = {
+    render: () => (
+        <StoryChatProvider>
+            <PlainFrame />
+        </StoryChatProvider>
+    )
+};
