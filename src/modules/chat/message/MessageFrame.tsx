@@ -52,8 +52,8 @@ export interface MessageFrameProps {
 //     attached to the message — and because the picker sits OUTSIDE that group, hovering
 //     the picker does not reveal it.
 // Reactions (`MessageReactions`, the chooser — the default single clustered pill) stack
-// below. The group avatar rides along with the tail instead of living here — both mark
-// "this is the group's last bubble," so both are `Bubble`'s job (see `MessageBubble.tsx`).
+// below. The group avatar belongs to `Bubble`, not here: it and the bubble's tight corner
+// both mark "this is the group's last bubble" (see `MessageBubble.tsx`).
 // `plain` (a context flag from the dispatch layer) drops all three — and, in the bubble
 // and author slot, the group decorations too. Horizontal placement is one three-valued
 // axis: `placement` (defaulting to the message's directional `alignment`) mapped once

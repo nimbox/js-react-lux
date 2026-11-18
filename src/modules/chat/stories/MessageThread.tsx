@@ -32,7 +32,7 @@ export function ThreadMessage({ message, isFirst, isLast }: { message: BaseMessa
 
 // One message rendered inside its own author group (gutter + alignment), with no day
 // separator — the focused unit the single-bubble stories drive. `isFirst` controls the
-// author header; `isLast` the bubble tail and the avatar (both `MessageBubble` chrome).
+// author header; `isLast` the bubble's tight corner and the avatar (both `MessageBubble` chrome).
 export function SingleMessage({ message, isFirst = true, isLast = true }: { message: BaseMessage; isFirst?: boolean; isLast?: boolean }) {
     return (
         <MessageGroup group={{ id: message.id, alignment: message.alignment }}>

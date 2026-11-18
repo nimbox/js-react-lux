@@ -19,8 +19,8 @@ export interface MessageProviderInputs {
     isLast?: boolean;
 
     // `plain` marks an out-of-timeline render (the composer preview): the frame drops its
-    // interaction chrome and the bubble/author drop the group decorations (avatar, tail,
-    // name), leaving pure content. Read by `MessageFrame`, `MessageBubble`, `MessageAuthor`.
+    // interaction chrome and the bubble/author drop the group decorations (avatar, tight
+    // corner, name), leaving pure content. Read by `MessageFrame`, `MessageBubble`, `MessageAuthor`.
     plain?: boolean;
 
 }

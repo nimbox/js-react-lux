@@ -9,13 +9,12 @@ export interface MessagePillProps {
 }
 
 // The alignment-coloured `rounded-xl shadow` chrome shared by every bubble-
-// like box in a message — `Bubble` itself composes this for its own box
-// (passing `relative`, since it anchors the tail/avatar), and floating/
-// split instances use it directly for chrome outside the one `Bubble` a
-// `Container` carries (§12 invariant: exactly one `Bubble` per `Container`)
-// — e.g. a sticker's author header. Unlike `Bubble`, it never reads
-// `isFirst`/`isLast` and never renders a tail or the group avatar. It is a
-// surface with no padding: content that wants an inset wraps itself in
+// like box in a message — `Bubble` composes this for its own surface, and
+// floating/split instances use it directly for chrome outside the one `Bubble`
+// a message carries (§12 invariant) — e.g. a sticker's author header. Unlike
+// `Bubble`, it never reads `isFirst`/`isLast`, never clips its content, and
+// never marks the group's last bubble (the tight corner, the group avatar). It
+// is a surface with no padding: content that wants an inset wraps itself in
 // `Inset`.
 export function MessagePill({ children, className }: MessagePillProps) {
 

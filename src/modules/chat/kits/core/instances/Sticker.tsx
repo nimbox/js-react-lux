@@ -7,14 +7,13 @@ import type { ImageView } from '../views';
 
 
 // Core sticker message — `full` surface only; the `preview` reuses
-// `ImageMessagePreview` (they share `ImageView`). A sticker floats free
-// of the bubble: the `ChatSticker` atom floats above (no background),
-// with the author in a `Message.Pill` on top when this message is
-// first in its group, and the date/status in a `Message.Bubble` pill
-// below (bringing the alignment-coloured background and the avatar/
-// tail for free, since it's the group's one true `Bubble`). While the
-// media is pending (no `url` yet) a sticker-sized `ChatMediaPending`
-// frame stands in its place.
+// `ImageMessagePreview` (they share `ImageView`). A sticker floats free of the
+// bubble: the `ChatSticker` atom floats above (no background), with the author
+// in a `Message.Pill` on top when this message is first in its group, and the
+// date/status in a `Message.Bubble` pill below (bringing the alignment-coloured
+// background, the avatar and the tight corner for free, since it's the group's
+// one true `Bubble`). While the media is pending (no `url` yet) a sticker-sized
+// `ChatMediaPending` frame stands in its place.
 
 export function StickerMessage({ message }: MessageInstanceProps<ImageView>) {
 

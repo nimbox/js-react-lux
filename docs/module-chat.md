@@ -92,8 +92,8 @@ assumption about `content`'s shape**. It owns:
   injected at a consumer-given watermark (§4).
 - **Layout** — `MessageGroup` (the group's stack + alignment + horizontal gutter),
   `MessageList` (auto-scroll container). The avatar is not `MessageGroup`'s to place — it
-  rides with the tail, both driven by the one `isLast` check in `Bubble` (§6), anchored
-  directly to the last message's own bubble box, never to a sibling column's height.
+  rides with the bubble's tight corner, both driven by the one `isLast` check in `Bubble` (§6),
+  anchored directly to the last message's own bubble box, never to a sibling column's height.
 - **Composition machinery** — the compound-component + context design: `MessageProvider` /
   `useMessage`, `ChatProvider` / `useChat`.
 - **The registry mechanism** — `useMessageRenderer`
@@ -490,25 +490,30 @@ slot is always one of these two.
   mounting is deliberately independent of Container's *geometry* (the aligned flex recipe, width
   caps — themable): bubble-paradigm geometry must never weld the chrome shut (§4, rejected
   feed-paradigm note).
-- `Bubble` — alignment-coloured rounded bubble + two things shown together on **`isLast`**,
-  because they mark the same fact ("this is the group's last bubble"): the tail arrow, and
-  the group avatar (`authorRenderer.avatar(author)`) anchored to this same `relative` box, on
-  the outer side. Any author *accent* it paints comes from the scalar `color` (§3), never
-  `author` — the avatar is the one place `Bubble` reaches for the opaque author itself, and
-  only because it shares the tail's positioning box, not as a separate concern. **Exactly one
-  `Bubble` per `Container`** — it is the tail/avatar-carrying concept; an instance never mounts
-  a second one, or a stripped-down variant, to get bubble-like chrome elsewhere (see `Pill`,
-  below, and §12).
-- `Pill` — the same alignment-coloured `rounded-xl shadow` chrome as `Bubble`, minus the tail,
-  the avatar, and any `isFirst`/`isLast` awareness — a dumb, push-only box for content that
-  needs bubble-like chrome *outside* the one true `Bubble`. Exists for split-bubble floating
-  instances: a sticker mounts `<Pill><Author /></Pill>` above the floating image when it's
-  first in its group, while its `Bubble` (holding `Properties`) is untouched and keeps carrying
-  the tail/avatar on `isLast` as usual.
+- `Bubble` — two boxes: an outer anchor that takes the instance's `className`, and inside it
+  the alignment-coloured rounded surface, which **clips its content to its corners**, so an
+  image or a coloured rule that runs to the edges follows the bubble's shape without knowing
+  it. Two things mark the group's last bubble, shown together on **`isLast`** because they
+  mark the same fact: a **tight corner** on the speaker's side of the surface, and the group
+  avatar (`authorRenderer.avatar(author)`) anchored to the outer box, on the outer side. The
+  corner is the surface's own shape, so it carries whatever the content paints there. Any
+  author *accent* the bubble paints comes from the scalar `color` (§3), never `author` — the
+  avatar is the one place `Bubble` reaches for the opaque author itself. Because the surface
+  clips, nothing an instance places inside a `Bubble` may reach outside it. **Exactly one
+  `Bubble` per message** — it is the concept that marks the group's last bubble; an instance
+  never mounts a second one, or a stripped-down variant, to get bubble-like chrome elsewhere
+  (see `Pill`, below, and §12).
+- `Pill` — the same alignment-coloured `rounded-xl shadow` surface as `Bubble`, minus the
+  clipping, the tight corner, the avatar, and any `isFirst`/`isLast` awareness — a dumb,
+  push-only box for content that needs bubble-like chrome *outside* the one true `Bubble`.
+  Exists for split-bubble floating instances: a sticker mounts `<Pill><Author /></Pill>` above
+  the floating image when it's first in its group, while its `Bubble` (holding `Properties`)
+  is untouched and keeps carrying the tight corner and the avatar on `isLast` as usual.
 - `Inset` — the padding between a bubble's edge and its content. `Bubble` and `Pill` are
   surfaces with no padding of their own; an instance wraps what it wants inset (text, the author
   line, a caption, `Properties`) in `Inset` and leaves bare what runs to the edges, as the image
-  instance does with its picture.
+  instance does with its picture. An `Inset` whose slots all render nothing takes no room, so
+  an instance mounts `<Inset><Author /><Reply /></Inset>` without asking whether either shows.
 
 **DECORATION** — read *universal* fields only:
 - `Author` — forwards the opaque `author` to `authorRenderer.name(author)` on `isFirst` (it never
@@ -526,8 +531,8 @@ slot is always one of these two.
 in the `Message.*` slot namespace and are not composed by instances: `MessageContainer` mounts them
 automatically (reactions always; the picker when `onCreateReaction` is supplied). They live in
 `message/` as standalone components (barrel-exported, like `MessageOptions`), not in `slots/`. (The
-group avatar is *not* here — it rides with the tail inside `Bubble`, above; it is Bubble-tier, not
-Container-tier, because it needs the exact same `relative` box the tail anchors to.)
+group avatar is *not* here — it belongs to `Bubble`, above; it is Bubble-tier, not
+Container-tier, because it is anchored to the bubble's own box.)
 - **`MessageReactions`** — the **chooser** `MessageContainer` mounts; it renders the default form
   (the cluster) and is the single seam a future `ChatContext` option would use to switch forms.
 - **`MessageReactionsCluster`** (current default) — all emojis in one **clustered pill** + total,
@@ -577,7 +582,7 @@ authorRenderer: {
 
 | Location | Base composes |
 |---|---|
-| Group bubble icon | `authorRenderer.avatar(author)`, composed by `Bubble` on `isLast`, alongside the tail — mirrors how `Author` composes `name`/`handle` on `isFirst`, opposite end of the group |
+| Group bubble icon | `authorRenderer.avatar(author)`, composed by `Bubble` on `isLast`, alongside the tight corner — mirrors how `Author` composes `name`/`handle` on `isFirst`, opposite end of the group |
 | First-bubble header | `authorRenderer.name(author)` **+** `authorRenderer.handle?.(author)` (on `isFirst`) — the base owns the row arrangement |
 | Reaction-details row | `authorRenderer.avatar(author)` + `authorRenderer.name(author)` + the **base-owned emoji** |
 | **Preview** (reply-quote, conversation line) | `authorRenderer.name(author)` **only** — the handle is noise in a compact quote |
@@ -1042,19 +1047,21 @@ base `ComposerPanel` chrome. There is no imperative submit registry.
   envelope carries only author-free **pills** (`ReactionPill`); the who-reacted **details** load
   lazily via `getReactionDetails` and carry the author (`ReactionDetail<T['author']>`, §6). Keep the
   pill ungenericized; bind the author on the lazy callback, not the envelope.
-- **The group avatar rides with the tail, inside `Bubble`, on the one `isLast` check — not a
-  separate concern with its own gating.** They mark the same fact ("this is the group's last
-  bubble"), so they are computed together in one place and anchored to the exact same
-  `relative` box, rather than duplicated as two independently-gated, independently-positioned
-  features in different components (that was tried — `MessageContainer` mounting the avatar
-  against its own anchor — and works, but invites the tail and the avatar to drift apart).
-  Do not split them back into separate components.
-- **Exactly one `Bubble` per `Container`.** `Bubble` *is* the tail/avatar-carrying concept; it is
-  not "the rounded chrome box," it is "the group's tail-and-avatar-bearing bubble." A
-  floating/split instance that needs bubble-*like* chrome elsewhere (a sticker's author header,
-  above the bare image) uses `Pill` — the same `rounded-xl shadow` box, deliberately with no
-  tail/avatar/`isFirst`/`isLast` logic of its own. Do not add a second `Bubble`, and do not add a
-  prop to `Bubble` that strips its tail/avatar to repurpose it as plain chrome — that conflates
+- **The group avatar and the tight corner live together, inside `Bubble`, on the one `isLast`
+  check — not as separate concerns with their own gating.** They mark the same fact ("this is
+  the group's last bubble"), so they are computed in one place, the corner as the surface's
+  own shape and the avatar anchored to the bubble's box. Do not split them into separate
+  components.
+- **The last bubble is marked by the surface's shape, never by a separate painted element.** A
+  mark drawn beside the bubble (a triangular tail) has to guess the colour of whatever the
+  content paints at that edge — a highlight, an image — and cannot. The tight corner is the
+  bubble itself, so it is right by construction.
+- **Exactly one `Bubble` per message.** `Bubble` *is* the concept that marks the group's last
+  bubble; it is not "the rounded chrome box." A floating/split instance that needs
+  bubble-*like* chrome elsewhere (a sticker's author header, above the bare image) uses `Pill`
+  — the same `rounded-xl shadow` box, deliberately with no clipping, corner, avatar or
+  `isFirst`/`isLast` logic of its own. Do not add a second `Bubble`, and do not add a prop to
+  `Bubble` that strips its corner and avatar to repurpose it as plain chrome — that conflates
   two concepts (§11).
 - **`author` is opaque (`unknown`) to the base.** What the base needs from it are **scalar
   primitives** — `group` (grouping, `group: author.id`) and `color` (accent for the reply line /
