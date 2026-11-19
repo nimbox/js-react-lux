@@ -51,8 +51,8 @@ html {
   --color-content-bg: #fbfbfb;
   /** Everything that is not data: column headers, group captions, filled strips. A yes/no, not a scale. */
   --color-content-fill: #ecf0f4;
-  /** Every 1px separator between bands, rows, captions and under the column header. */
-  --color-content-border: #e3e8ef;
+  /** Every 1px separator between bands, rows, captions and under the column header. 1.56:1 on color-content-bg. */
+  --color-content-border: #c5ccd6;
 
   /** Ground of fields, selects, text areas. */
   --color-control-bg: #ffffff;
