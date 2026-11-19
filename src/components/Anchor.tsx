@@ -7,7 +7,7 @@ import { cn } from './utilities/cn';
 interface BaseAnchorProps {
 
     variant?: 'filled' | 'text' | 'outlined' | 'link';
-    semantic?: 'primary' | 'secondary' | 'danger' | 'muted';
+    semantic?: 'primary' | 'secondary' | 'danger' | 'neutral';
     underline?: 'none' | 'hover' | 'always';
 
     start?: ReactElement;
@@ -69,7 +69,7 @@ export function Anchor(props: AnchorProps) {
 
                 'lux-button-primary': semantic === 'primary',
                 'lux-button-secondary': semantic === 'secondary',
-                'lux-button-muted': semantic === 'muted',
+                'lux-button-neutral': semantic === 'neutral',
                 'lux-button-danger': semantic === 'danger',
 
                 'hover:underline': underline === 'hover',

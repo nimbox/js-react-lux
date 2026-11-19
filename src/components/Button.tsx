@@ -15,7 +15,18 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
      * @default filled
      */
     variant?: 'filled' | 'text' | 'outlined' | 'link' | 'inline';
-    semantic?: 'primary' | 'secondary' | 'danger' | 'muted';
+    /**
+     * Colour family.
+     *
+     * - `primary` — the brand colour. Filled, it marks the one main action of a page.
+     * - `neutral` — no brand colour and no intent: ordinary and repeated actions,
+     *   such as an action on every row of a list.
+     * - `danger` — destructive actions.
+     * - `secondary` — the orange palette.
+     *
+     * @default primary
+     */
+    semantic?: 'primary' | 'secondary' | 'danger' | 'neutral';
     rounded?: boolean;
     centered?: boolean;
 
@@ -73,7 +84,7 @@ export function Button(props: ButtonProps) {
 
                 'lux-button-primary': semantic === 'primary',
                 'lux-button-secondary': semantic === 'secondary',
-                'lux-button-muted': semantic === 'muted',
+                'lux-button-neutral': semantic === 'neutral',
                 'lux-button-danger': semantic === 'danger',
 
                 'lux-button-centered': centered

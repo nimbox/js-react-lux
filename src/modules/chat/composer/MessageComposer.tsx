@@ -135,7 +135,7 @@ function ReplyToMessage(props: ReplyToMessageProps) {
         <div className="px-4 py-2 flex items-center justify-between gap-2 border-b border-gray-200">
             <MessageReplyQuote message={replyTo} className="flex-1 min-w-0" />
             <div className="flex-none">
-                <Button type="button" semantic="muted" rounded={true} onClick={onClearReplyTo}>
+                <Button type="button" semantic="neutral" rounded={true} onClick={onClearReplyTo}>
                     <CrossIcon />
                 </Button>
             </div>

@@ -155,6 +155,26 @@ html {
   --color-danger-800: #7f201d;
   --color-danger-900: #4c0f0f;
 
+  /**
+   * Neutral palette: the colour of `semantic="neutral"` — buttons and anchors
+   * with no brand colour and no intent, for ordinary and repeated actions.
+   * Built from the content greys, so a neutral control sits in the same
+   * family as the text and lines around it. It replaces Tailwind's neutral
+   * scale step for step, 50 to 950, so no step falls back to pure grey.
+   */
+  --color-neutral-50: #f9fafb;
+  --color-neutral-100: #f3f5f8;
+  --color-neutral-200: #e3e8ef;
+  --color-neutral-300: #c5ccd6;
+  --color-neutral-400: #9ea0a5;
+  /** Neutral ink and the ground of a filled neutral button. 5.8:1 with white. */
+  --color-neutral-500: #656568;
+  --color-neutral-600: #4f5054;
+  --color-neutral-700: #3e3f42;
+  --color-neutral-800: #2f3033;
+  --color-neutral-900: #252529;
+  --color-neutral-950: #18181b;
+
   /* ===== Corner radius ===== */
 
   /* The scale, roughly twice what Tailwind ships so a corner reads as a curve

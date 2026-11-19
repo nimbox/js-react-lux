@@ -194,8 +194,8 @@
     &.lux-button-secondary {
       box-shadow: 0 0 0 2px var(--color-secondary-200);
     }
-    &.lux-button-muted {
-      box-shadow: 0 0 0 2px var(--color-gray-200);
+    &.lux-button-neutral {
+      box-shadow: 0 0 0 2px var(--color-neutral-200);
     }
     &.lux-button-danger {
       box-shadow: 0 0 0 2px var(--color-danger-200);
@@ -227,11 +227,11 @@
       }
     }
 
-    &.lux-button-muted {
+    &.lux-button-neutral {
       color: white;
-      background-color: var(--color-gray-300);
+      background-color: var(--color-neutral-500);
       &:hover {
-        background-color: var(--color-gray-400);
+        background-color: var(--color-neutral-600);
       }
     }
 
@@ -266,11 +266,11 @@
       }
     }
 
-    &.lux-button-muted {
-      color: var(--color-gray-500);
-      border-color: var(--color-gray-300);
+    &.lux-button-neutral {
+      color: var(--color-neutral-500);
+      border-color: var(--color-neutral-300);
       &:hover {
-        background-color: var(--color-gray-100);
+        background-color: var(--color-neutral-100);
       }
     }
 
@@ -308,10 +308,10 @@
       }
     }
 
-    &.lux-button-muted {
-      color: var(--color-gray-300);
+    &.lux-button-neutral {
+      color: var(--color-neutral-500);
       &:hover {
-        background-color: var(--color-gray-100);
+        background-color: var(--color-neutral-100);
       }
     }
 
@@ -370,10 +370,10 @@
       }
     }
 
-    &.lux-button-muted {
-      color: var(--color-gray-300);
+    &.lux-button-neutral {
+      color: var(--color-neutral-500);
       &:hover {
-        color: var(--color-gray-400);
+        color: var(--color-neutral-700);
       }
     }
 

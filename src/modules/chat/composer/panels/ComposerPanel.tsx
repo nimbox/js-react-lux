@@ -48,7 +48,7 @@ function ComposerPanelHeader(props: ComposerPanelHeaderProps) {
     return (
         <div className="flex-none p-4 flex flex-row justify-between items-center gap-4">
             <div className="text-lg font-medium truncate">{title}</div>
-            <Button type='button' semantic="muted" rounded={true} onClick={onClose}>
+            <Button type='button' semantic="neutral" rounded={true} onClick={onClose}>
                 <CrossIcon />
             </Button>
         </div>

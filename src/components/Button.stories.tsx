@@ -59,11 +59,11 @@ export const Danger: Story = {
     }
 };
 
-export const Muted: Story = {
+export const Neutral: Story = {
     ...ButtonTemplate,
     args: {
         ...Primary.args,
-        semantic: 'muted'
+        semantic: 'neutral'
     }
 };
 

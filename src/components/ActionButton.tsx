@@ -39,7 +39,7 @@ export const ActionButton = ({ className, popperClassName, children }: ActionBut
             <Button
                 ref={setButtonRef}
                 variant="text"
-                semantic="muted"
+                semantic="neutral"
                 onClick={() => setShow(!show)}
                 className={className}
             >

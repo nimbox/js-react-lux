@@ -78,7 +78,7 @@ function CompactForm({ onSelect, onToggle: onToggleExpand, className }: {
 
             <div className="w-px h-6 bg-gray-300 mx-1" />
 
-            <Button variant="text" semantic="muted" rounded onClick={onToggleExpand}>
+            <Button variant="text" semantic="neutral" rounded onClick={onToggleExpand}>
                 <PlusIcon />
             </Button>
 
@@ -115,7 +115,7 @@ function FullForm(props: EmojiPickerProps & { onToggle: () => void }) {
 
             <div className="p-3 flex items-center justify-between">
                 <h3 className="font-bold">Emojis</h3>
-                <Button variant="text" semantic="muted" rounded onClick={onToggle}>
+                <Button variant="text" semantic="neutral" rounded onClick={onToggle}>
                     <MinusIcon />
                 </Button>
             </div>
