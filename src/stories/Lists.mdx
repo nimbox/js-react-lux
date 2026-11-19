@@ -16,9 +16,10 @@ language belong to it; Lux fixes where a value sits and which colour it takes.
 
 From top to bottom:
 
-1. **Title row.** The page title on the left. On the right, the actions of the
-   page and nothing else. A page has at most one filled `primary` action.
-   Views of the same object are `Tabs` beside or under the title.
+1. **Title row.** The page title on the left, alone. On the right, the status
+   of the object the page shows, when it has one, then the actions of the
+   page. A page has at most one filled `primary` action. Views of the same
+   object are `Tabs` beside or under the title.
 2. **Filter bar.** The status selector, a `RadioBar`, on the left. Selects that
    narrow the scope sit flush right.
 3. **Caption.** The entity and its count, "Synchronizations (8)", in
@@ -41,7 +42,30 @@ behind an action or the next run of a schedule, is `text-sm text-label`.
 `text-muted` is only for text that is there to be skipped; an error message
 or its cause is read, so it is `text-content`.
 
-Numbers and durations are right-aligned and set with `tabular-nums`.
+Numbers and durations are right-aligned and set with `tabular-nums`. A zero is
+`text-label`, so the values that are not zero stand out.
+
+A person in a cell is an `Avatar` and the name on one line.
+
+## Columns
+
+A column is as wide as its content and does not wrap. One column per table is
+flexible and takes the rest of the width: the one whose content varies most in
+length, such as a cause or a description. A table with no such column flexes
+its identifier column. The table never shares spare width out among all its
+columns.
+
+A right-aligned column is followed by twice the column gap, so its value does
+not run into the left-aligned value beside it. The header cell carries the same
+space, so the header stays over its numbers.
+
+## Rows
+
+Every row of a table has the same height. A row whose cells are one line is
+`min-h-11` (2.75rem). When any column carries a second line, every row of that
+table is `min-h-15` (3.75rem), whether or not a given row fills it. Cells align
+on the first baseline, so a one-line value sits level with the first line of
+its neighbour.
 
 ## Groups
 
@@ -60,8 +84,9 @@ a new tab and the keyboard. The row takes `bg-neutral-100` on hover.
 A chevron at the end of the row appears on hover where the pointer can hover,
 and is always visible on touch screens, which have no hover.
 
-Actions inside a row are `Button variant="outlined" semantic="neutral"`, raised
-above the stretched link so they keep their own click. The filled `primary`
+Actions inside a row are `Button variant="outlined" semantic="neutral"` at
+`text-sm`, which fits inside a one-line row, raised above the stretched link so
+they keep their own click. The filled `primary`
 belongs to the title row.
 
 <Story of={ListsStories.RecordsWithActions}/>

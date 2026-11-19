@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState, type ReactNode } from 'react';
 import { Button } from '../components/Button';
+import { Avatar } from '../components/displays/Avatar';
 import { NativeSelect } from '../components/inputs/NativeSelect';
 import { Option } from '../components/inputs/Option';
 import { RadioBar } from '../components/RadioBar';
@@ -40,10 +41,10 @@ interface Run {
 const runs: Run[] = [
     { id: 'r8', day: 'Today', time: '10:00', company: 'demo', status: 'completed', duration: '18s', origin: 'Schedule' },
     { id: 'r7', day: 'Today', time: '09:45', company: 'demo', status: 'completed', duration: '15s', origin: 'Schedule' },
-    { id: 'r6', day: 'Today', time: '09:16', company: 'demo', status: 'completed', duration: '18s', origin: 'Administrator', user: 'rmarimon' },
+    { id: 'r6', day: 'Today', time: '09:16', company: 'demo', status: 'completed', duration: '18s', origin: 'Schedule', user: 'rmarimon' },
     { id: 'r5', day: 'Today', time: '09:15', company: 'demo', status: 'failed', duration: '31s', origin: 'Schedule', cause: 'The TCP/IP connection to the host host.docker.internal, port 4433 has failed.' },
-    { id: 'r4', day: 'Yesterday', time: '22:12', company: 'demo', status: 'completed', duration: '15s', origin: 'Administrator', user: 'rmarimon' },
-    { id: 'r3', day: 'Yesterday', time: '22:08', company: 'demo', status: 'completed', duration: '19s', origin: 'Administrator', user: 'rmarimon' }
+    { id: 'r4', day: 'Yesterday', time: '22:12', company: 'demo', status: 'completed', duration: '15s', origin: 'Schedule', user: 'rmarimon' },
+    { id: 'r3', day: 'Yesterday', time: '22:08', company: 'demo', status: 'completed', duration: '19s', origin: 'Schedule', user: 'rmarimon' }
 ];
 
 const companies = [
@@ -53,7 +54,7 @@ const companies = [
 
 // Parts
 
-const columns = 'grid grid-cols-[6rem_8rem_7rem_5rem_10rem_minmax(0,1fr)_2rem] gap-4 items-baseline';
+const columns = 'grid grid-cols-[auto_auto_auto_auto_auto_minmax(0,1fr)_auto] gap-4 items-baseline';
 
 // The status tag stays outside this standard until Lux has status roles.
 
@@ -91,7 +92,7 @@ function Caption({ children }: { children: ReactNode }) {
 }
 
 function HeaderCell({ children, right }: { children?: ReactNode, right?: boolean }) {
-    return <div className={right ? 'text-right' : undefined}>{children}</div>;
+    return <div className={right ? 'text-right pr-4' : undefined}>{children}</div>;
 }
 
 function RunsHeader() {
@@ -101,7 +102,7 @@ function RunsHeader() {
             <HeaderCell>Company</HeaderCell>
             <HeaderCell>Status</HeaderCell>
             <HeaderCell right>Duration</HeaderCell>
-            <HeaderCell>Origin</HeaderCell>
+            <HeaderCell>By</HeaderCell>
             <HeaderCell>Cause</HeaderCell>
             <HeaderCell/>
         </div>
@@ -118,14 +119,13 @@ function DayCaption({ children }: { children: ReactNode }) {
 
 function RunRow({ run }: { run: Run }) {
     return (
-        <div className={`group relative ${columns} px-8 py-2 hover:bg-neutral-100`}>
+        <div className={`group relative ${columns} min-h-11 px-8 py-2 hover:bg-neutral-100`}>
             <a href={`#${run.id}`} className="font-semibold tabular-nums text-content after:absolute after:inset-0">{run.time}</a>
             <div>{run.company}</div>
             <div><StatusTag status={run.status}/></div>
-            <div className="text-right tabular-nums">{run.duration}</div>
-            <div>
-                <div>{run.origin}</div>
-                {run.user && <div className="text-sm text-label">{run.user}</div>}
+            <div className="text-right tabular-nums pr-4">{run.duration}</div>
+            <div className="whitespace-nowrap">
+                {run.user ? <><Avatar color="#ffffff" backgroundColor="#656568">RM</Avatar><span className="ml-2">{run.user}</span></> : run.origin}
             </div>
             <div className="truncate">{run.cause}</div>
             <div className="flex justify-end"><Chevron/></div>
@@ -187,7 +187,7 @@ export const LogGroupedByDay: Story = {
 // keeps its own click above the stretched link. The one filled primary is the
 // page's action, in the title row.
 
-const companyColumns = 'grid grid-cols-[minmax(0,1fr)_10rem_7rem_9rem_8rem_auto_2rem] gap-4 items-center';
+const companyColumns = 'grid grid-cols-[minmax(0,1fr)_auto_auto_auto_auto_auto_auto] gap-4 items-baseline';
 
 export const RecordsWithActions: Story = {
     render: () => (
@@ -210,7 +210,7 @@ export const RecordsWithActions: Story = {
             </div>
 
             {companies.map((c) => (
-                <div key={c.id} className={`group relative ${companyColumns} px-8 py-2 hover:bg-neutral-100`}>
+                <div key={c.id} className={`group relative ${companyColumns} min-h-15 px-8 py-2 hover:bg-neutral-100`}>
                     <div>
                         <a href={`#${c.id}`} className="font-semibold text-content after:absolute after:inset-0">{c.id}</a>
                         <div className="text-sm text-label">{c.code}</div>
@@ -226,7 +226,7 @@ export const RecordsWithActions: Story = {
                     </div>
                     <div>{c.origin}</div>
                     <div className="relative z-10">
-                        <Button variant="outlined" semantic="neutral">Synchronize</Button>
+                        <Button variant="outlined" semantic="neutral" className="text-sm">Synchronize</Button>
                     </div>
                     <div className="flex justify-end"><Chevron/></div>
                 </div>
