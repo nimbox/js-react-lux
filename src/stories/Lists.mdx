@@ -1,0 +1,67 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as ListsStories from './Lists.stories';
+
+<Meta of={ListsStories}/>
+
+# Lists
+
+A list page shows one collection of records as a table on bands. This page
+states how such a page is composed; *Bands* states how the table itself is
+drawn.
+
+The application writes the values. Dates, times, durations, numbers and
+language belong to it; Lux fixes where a value sits and which colour it takes.
+
+## The page
+
+From top to bottom:
+
+1. **Title row.** The page title on the left. On the right, the actions of the
+   page and nothing else. A page has at most one filled `primary` action.
+   Views of the same object are `Tabs` beside or under the title.
+2. **Filter bar.** The status selector, a `RadioBar`, on the left. Selects that
+   narrow the scope sit flush right.
+3. **Caption.** The entity and its count, "Synchronizations (8)", in
+   `text-label`.
+4. **The table.**
+
+Each of these is a band, full width. The page divides them with
+`divide-y divide-content-border`, as *Bands* states; none draws its own line.
+
+<Story of={ListsStories.LogGroupedByDay}/>
+
+## The table
+
+The table runs border to border, as in *Bands*. The column header is filled
+with `content-fill` and set in small uppercase `text-label`. Its rows are
+bands, divided by their container.
+
+Values are `text-content`. A second line under a value, such as the user
+behind an action or the next run of a schedule, is `text-sm text-label`.
+`text-muted` is only for text that is there to be skipped; an error message
+or its cause is read, so it is `text-content`.
+
+Numbers and durations are right-aligned and set with `tabular-nums`.
+
+## Groups
+
+A log ordered in time may group its rows by day. The day is a group caption
+as *Bands* defines it, and its text comes from the application. Inside a
+group each row carries only what the caption does not, usually the time.
+Each group is one band of the page and divides its own caption and rows.
+
+## Rows that open
+
+A row that opens a detail is a link. The link is on the row's identifier
+cell, which is `font-semibold text-content`, and it stretches over the whole
+row, so the row is the target and the browser still offers the address,
+a new tab and the keyboard. The row takes `bg-neutral-100` on hover.
+
+A chevron at the end of the row appears on hover where the pointer can hover,
+and is always visible on touch screens, which have no hover.
+
+Actions inside a row are `Button variant="outlined" semantic="neutral"`, raised
+above the stretched link so they keep their own click. The filled `primary`
+belongs to the title row.
+
+<Story of={ListsStories.RecordsWithActions}/>
