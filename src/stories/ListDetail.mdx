@@ -1,0 +1,104 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as ListDetailStories from './ListDetail.stories';
+
+<Meta of={ListDetailStories}/>
+
+# List-detail
+
+A list-detail page keeps a collection on the left and one of its records on the
+right: users, companies, the applications whose access is being granted. The
+list stays in view while the record changes, so moving from one record to the
+next is one click.
+
+The application writes the values, as in *Lists*.
+
+## The list
+
+The list pane is 300px wide, on `content-bg`, with a `content-border` line on
+its right. From top to bottom, each part a band:
+
+1. **Title row.** The name of the page and, when records can be created, a
+   quiet `Button variant="outlined" semantic="neutral"` at `text-sm`: "New".
+   The filled `primary` belongs to the detail.
+2. **Search,** full width, and under it a `RadioBar` when the collection has
+   states (enabled, disabled).
+3. **Caption** with the count, as in *Lists*.
+4. **Rows.** An identity (an `Avatar` for a person, a rounded square for a
+   thing), the name in `font-semibold`, a second line in `text-sm text-label`,
+   and at most one short fact at the right in `text-xs text-label`. Each row is
+   a link. The selected row takes `bg-primary-100` and keeps `text-content`;
+   hover is `bg-neutral-100`. The focus ring shows on `:focus-visible` only, so
+   a click leaves the selection, not a ring.
+
+While a record is being created, a provisional row ("New user", "not saved")
+sits at the top of the list as the selected one.
+
+## The detail
+
+### Container
+
+Everything in the detail is read inside one container: a column at most 54rem
+wide, centred, with `px-8`. Every band of the detail uses it for its content
+(the header, the tabs, each tab, the save bar), so their edges fall on the same
+two verticals. The lines between bands still run from edge to edge of the
+pane, as *Bands* states.
+
+Tables and summary strips are data and take the full width; a form is read in
+a column and takes the container.
+
+### Header
+
+The header names the record: its identity at 56px (a circle for a person, a
+square with radius 14px for a thing), the name as the title in `text-2xl
+font-semibold tracking-tighter`, and under it one line of context in
+`text-label` (alias, role, email; tax id, country, currency). The status of the
+record sits at the right, as in *Lists*.
+
+### Tabs
+
+A record with more than one screen of content is split into `Tabs` under the
+header, one per part of the record: profile, the companies it sees, the
+applications it opens, its password. Each tab fits on one screen. A record
+being created has no tabs: creating asks only for what is needed to exist, in
+the same layout as the profile tab.
+
+### Forms
+
+A tab of fields groups them under short headings (`text-base font-semibold`),
+with no description column and no lines between groups. Fields sit two to a row
+in the container. Each uses `Control`: the label above, the message and the
+error below, as `Control` draws them. A value
+that cannot change is plain text, not a disabled field. A set of values, such
+as secondary currencies, is a row of removable chips and one select to add.
+
+### Access
+
+Granting access is a pair of lists, the same from either side: from the
+person (the companies she sees, the applications she opens) and from the thing
+(who sees this company, who opens this application).
+
+- **Has access,** each row with its identity, its name, its role as a
+  `RadioBar` when access has degrees (Member, Admin), and "Remove" as text.
+  The heading carries, at its right, one line on what the access or the roles
+  mean.
+- **No access,** each row in `text-label` with "Give access" as
+  `Button variant="outlined" semantic="neutral"`. An empty list says so in a
+  sentence.
+
+### Saving
+
+A form saves with a sticky bar at the bottom of the detail: "Unsaved changes"
+at the left in `text-label`, then "Discard" as text and "Save" as the filled
+`primary`. The bar shows on the tabs that have fields. A tab whose only content
+is an action, such as changing a password, carries that action as its primary
+and no bar.
+
+Access saves at once: each "Give access", "Remove" or role change is applied
+when it is made, and a toast confirms it with an undo. A page of access has no
+save bar.
+
+<Story of={ListDetailStories.Detail}/>
+
+<Story of={ListDetailStories.Creating}/>
+
+<Story of={ListDetailStories.Access}/>

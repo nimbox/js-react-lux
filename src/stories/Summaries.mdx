@@ -1,0 +1,61 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as SummariesStories from './Summaries.stories';
+
+<Meta of={SummariesStories}/>
+
+# Summaries
+
+A detail page opens with a summary of the object it shows: the facts that
+describe it and, when it has them, the figures that measure it. The summary
+sits between the title row and the page's tables, and like everything on the
+page it is made of bands, as *Bands* states.
+
+The application writes the values, as in *Lists*.
+
+## The strip
+
+A summary is a strip: one band, full width, on `content-fg`, split into equal
+cells by 1px `content-border` lines. Each cell is a label over a value, padded
+`px-8 py-4` so its text lines up with the title above and the table below. The
+label is `text-sm text-label`.
+
+The cells share the width equally (`grid-cols-N`, each `minmax(0, 1fr)`). The
+strip is one object's summary, so its cells are read as one row, not as cards.
+
+## Two kinds of strip
+
+A strip that **describes** carries facts: a name, a profile, a mode, who ran
+it, when. Its values are `text-lg font-semibold`. A value that needs a
+qualifier takes a second line in `text-sm text-label`.
+
+A strip that **measures** carries figures: counts and totals. Its values are
+`text-3xl font-semibold tracking-tight` with `tabular-nums`. A figure that is
+zero is `text-label`, so the figures that are not zero stand out, as in the
+tables of *Lists*.
+
+A page with both stacks them, the describing strip above the measuring one,
+with the same number of cells, so the lines between cells run unbroken from
+one strip into the other.
+
+A fact without a value is left out of the strip.
+
+A person is an `Avatar` and the name, as in *Lists*.
+
+<Story of={SummariesStories.Describing}/>
+
+## Status
+
+The status of the object sits at the right of the title row, before the
+page's actions, as *Lists* states. The title is the title alone.
+
+<Story of={SummariesStories.DescribingAndMeasuring}/>
+
+## Failure
+
+When the object failed, a band between the title row and the strips says
+where and why: an icon, a first line in `font-semibold text-danger-600` that
+names where it failed, the message below it in `text-content`, and a link to
+the part that failed at the right. The band is on `content-fg`, like the
+strips; the status already carries the colour of the failure.
+
+<Story of={SummariesStories.Failed}/>
