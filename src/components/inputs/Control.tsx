@@ -54,6 +54,11 @@ export const Control: ControlComponent = (props) => {
 
 };
 
+/**
+ * The label of a control. It takes the colour of the control's border, so the
+ * label and the field read as one piece; when the border changes, as in error,
+ * the label changes with it.
+ */
 Control.Label = (({ className, children }) => {
 
     const context = useContext(ControlContext);

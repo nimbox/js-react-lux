@@ -18,6 +18,7 @@ What the library defines today that does not meet its own rules. Measured at 38c
 | white on `color-danger-500` | 3.6:1 | Danger accent under white text. |
 | `color-control-placeholder` on white | 2.6:1 | Placeholder text in fields. |
 | `color-control-border` on white | 3.2:1 | Passes the 3:1 control-border floor narrowly. |
+| `Control.Label` (`color-control-border`) on white | 3.2:1 | The label shares the border's colour so the two read as one piece. As a border it passes; as text at `text-xs` it is under 4.5:1. Darkening `color-control-border` to about `#767676` reaches 4.5:1 and keeps label and border the same colour. |
 
 Pairs that pass: `color-content` on `color-content-bg` 10.2:1; `color-label` on white 5.8:1 and on `color-content-fill` 5.1:1; white on `color-navigator-bg` 15.3:1; `color-muted` on `color-navigator-bg` 5.8:1; white on `color-primary-700` 4.7:1; white on `color-unread-bg` 8.2:1; white on `color-info-600` 5.6:1.
 
