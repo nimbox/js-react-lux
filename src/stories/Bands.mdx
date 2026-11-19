@@ -36,6 +36,27 @@ Every separator is `content-border` at one pixel — the same line between two
 rows, between a row and a caption, and under the column header. A separator that
 changes weight to mean something is a second channel nobody reads.
 
+## Who draws the line
+
+The container draws every separator; a band draws none. Whatever holds the
+bands carries `divide-y divide-content-border`, which puts one line under each
+band but the last. No band has a `border-t`, `border-b` or `border-y`.
+
+A band cannot know what sits next to it or whether it is last; only its
+container can. So adding, removing or reordering bands never leaves two lines
+together or a gap with none, and the same bands are correct border to border
+and inside a card.
+
+Groups nest the same way. A group is one band of the outer container, so the
+line under it comes from there, and it divides its own caption and rows with
+`divide-y divide-content-border` again.
+
+`divide-y` alone draws in `currentColor`, the text colour, because no default
+border colour is set. It is always written with `divide-content-border`.
+
+A band that is not shown is not rendered. A band hidden with CSS is still the
+last child, and the band before it keeps a line with nothing under it.
+
 ## Why the fill is not a scale
 
 The fill answers a yes or no: this is not data. Depth is an order. Asking one
@@ -86,7 +107,8 @@ showing.
 ## Border to border
 
 The usual case: no card, no radius, no shadow anywhere on the screen. The page
-is the table, and the last row's own separator is where the list ends.
+is the table, and the list ends where its last row does, with no line under
+it.
 
 <Story of={BandsStories.Bands}/>
 
@@ -107,6 +129,9 @@ row, and reads as one.
 It also contributes the ground. `Card` is `bg-content-fg`, so the rows here are
 white while the identical rows above are `content-bg`.
 
+`Card.Body` divides its bands, and the card divides the body from the footer.
+The card's own edge is the line after the last band.
+
 <Story of={BandsStories.BandsInCard}/>
 
 ## Known gaps
@@ -115,6 +140,10 @@ white while the identical rows above are `content-bg`.
 radius scale intends and a border colour inherited from the text, so these
 stories pass `rounded-surface border-content-border` on every card. The
 component should carry them.
+
+`Card.Header` and `Card.Footer` draw their own line by default, `border-b` and
+`border-t`, which is a band drawing a separator. These stories pass `noBorder`
+and let the card divide.
 
 The fill is tuned against the ground rather than against white, because border
 to border is the common case: 4.1 points below `content-bg` and 5.7 below
