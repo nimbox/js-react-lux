@@ -12,6 +12,11 @@ interface CardComponent extends FC<{ className?: string, children: React.ReactNo
     Footer: FC<{ noBorder?: boolean, className?: string, children: React.ReactNode }>
 }
 
+/**
+ * A box on `content-fg` with `Card.Header`, `Card.Body` and `Card.Footer`.
+ *
+ * The card is the exception, not the default container: use it for one object among comparable others. Bands inside a card run to its edges with no padding (see Standards/Layouts/Bands).
+ */
 export const Card: CardComponent = ({ className, children }) => (
     <div className={cn('bg-content-fg border rounded', className)}>{children}</div>
 );

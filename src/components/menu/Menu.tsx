@@ -21,6 +21,9 @@ export interface MenuProps {
 
 }
 
+/**
+ * A floating menu opened by its `trigger` element. The surface uses `radius-surface` and its items `radius-item`.
+ */
 export function Menu(props: MenuProps) {
 
     const {

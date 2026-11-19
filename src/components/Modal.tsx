@@ -14,6 +14,9 @@ export interface ModalProps {
 
 }
 
+/**
+ * A bare modal layer shown with `show`. `Dialog` is the titled, dismissable form.
+ */
 export const Modal: FC<ModalProps> = ({ show, children }) => {
 
     if (!show) {

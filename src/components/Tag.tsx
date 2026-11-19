@@ -77,6 +77,11 @@ export interface TagProps {
 
 }
 
+/**
+ * A pill label with an optional solid dot and delete control, built on the crux layout so truncated text keeps its baseline.
+ *
+ * Colours are passed raw through `color` and `backgroundColor`.
+ */
 export const Tag: FC<TagProps> = (props) => {
 
     // Properties

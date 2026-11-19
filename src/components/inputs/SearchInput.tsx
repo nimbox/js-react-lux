@@ -29,6 +29,11 @@ export interface SearchInputProps extends InputProps {
 
 }
 
+/**
+ * A text input for searching, with `loading` and `loadingError` states.
+ *
+ * Use it to narrow what is already on screen; `AsyncSearchInput` fetches as the user types.
+ */
 export function SearchInput(props: SearchInputProps & React.InputHTMLAttributes<HTMLInputElement>) {
 
     // Properties

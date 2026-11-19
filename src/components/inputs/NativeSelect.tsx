@@ -54,6 +54,9 @@ export interface NativeSelectProps extends Omit<FieldProps, 'className' | 'ref'>
 }
 
 
+/**
+ * The browser's `<select>` inside a lux `Field`: the default for a short list of plain options. Style the frame with `fieldClassName`.
+ */
 export function NativeSelect(props: NativeSelectProps & InputHTMLAttributes<HTMLSelectElement>) {
 
     // Properties

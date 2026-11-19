@@ -107,6 +107,9 @@ export const ToastContent: FC<{ title?: string, description: string }> = ({ titl
     );
 };
 
+/**
+ * A transient notification, deleted automatically after `autoDeleteTimeout` unless `autoDelete` is off. Raised through `ToastContext`.
+ */
 export const Toast: FC<ToastProps> = ({ type, component, autoDelete = true, autoDeleteTimeout = 5000, onDelete }) => {
 
     const [initial, setInitial] = useState(true);

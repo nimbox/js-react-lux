@@ -57,6 +57,9 @@ export interface TextAreaProps extends Omit<FieldProps, 'className' | 'ref'> {
 
 }
 
+/**
+ * A native `<textarea>` inside a lux `Field`. Style the frame with `fieldClassName`.
+ */
 export function TextArea(props: TextAreaProps & InputHTMLAttributes<HTMLTextAreaElement>) {
 
     // Properties

@@ -1,0 +1,36 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+
+<Meta title="Standards/Known gaps"/>
+
+# Known gaps
+
+What the library defines today that does not meet its own rules. Measured at 38ca0aa with WCAG 2 contrast.
+
+## Contrast
+
+| Pair | Ratio | Where it appears |
+| --- | --- | --- |
+| white on `color-primary-500` | 2.1:1 | Filled primary `Button`; selected item in the Helium navigator. |
+| `color-primary-500` on white | 2.1:1 | Outlined, text and link primary `Button` ink; links. |
+| white on `color-primary-600` | 3.1:1 | Filled primary `Button` on hover. |
+| white on `color-secondary-500` | 2.1:1 | Filled secondary `Button`. |
+| white on `color-danger-500` | 3.6:1 | Danger accent under white text. |
+| `color-control-placeholder` on white | 2.6:1 | Placeholder text in fields. |
+| `color-control-border` on white | 3.2:1 | Passes the 3:1 control-border floor narrowly. |
+
+Pairs that pass: `color-content` on `color-content-bg` 10.2:1; `color-unchosen` on white 5.8:1 and on `color-content-fill` 5.1:1; white on `color-navigator-bg` 15.3:1; `color-muted` on `color-navigator-bg` 5.8:1; white on `color-primary-700` 4.7:1; white on `color-unread-bg` 8.2:1; white on `color-info-600` 5.6:1.
+
+## Status colours
+
+There is no `success` or `warning` palette and no status role tokens. Status pills (completed, running, failed, stopped) are coloured by each application, outside the system.
+
+## Components the standards name but the library lacks
+
+- `Band` — the default container is written as a pattern only.
+- A table / data grid — lists of records are composed by each application.
+- Page composition — there is no page header, toolbar or filter-bar primitive; the Helium `Main.Content` area is free-form.
+
+## Component defaults
+
+`Card` ships `rounded` and a bare `border` instead of `rounded-surface border-content-border`. `Badge` takes raw colours through `semantic` and `backgroundColor` rather than role tokens.

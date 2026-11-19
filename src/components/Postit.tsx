@@ -7,6 +7,9 @@ interface PostitProps {
     children?: React.ReactNode
 }
 
+/**
+ * A sticky-note surface.
+ */
 export function Postit({ className, children }: PostitProps) {
 
     return (

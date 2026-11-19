@@ -24,6 +24,9 @@ export type AnchorProps<C extends ElementType = ElementType> = BaseAnchorProps &
         component?: C;
     };
 
+/**
+ * A styled link for navigation inside running text.
+ */
 export function Anchor(props: AnchorProps) {
 
     // Properties

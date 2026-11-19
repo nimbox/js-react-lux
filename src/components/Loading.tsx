@@ -9,6 +9,9 @@ export interface LoadingProps {
     style?: CSSProperties;
 }
 
+/**
+ * A loading indicator, coloured by `colorClassName` (`text-primary-500` by default).
+ */
 export const Loading: FC<LoadingProps> = ({ className, colorClassName = 'text-primary-500', style }) => (
     <svg width="44" height="44" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"
         className={cn('inline-block', colorClassName, className)}

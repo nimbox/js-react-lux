@@ -1,0 +1,73 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+
+<Meta title="Standards/Overview"/>
+
+# Lux
+
+The visual language of Canexer and the Nimbox applications built on `@nimbox/js-react-lux`, a React 19 + Tailwind CSS v4 component library.
+
+**Source of truth.** This system is generated from the repository `nimbox/js-react-lux` by `design-system/sync.mjs`. This page is `src/stories/Lux.mdx`; the other sections are the Storybook standards in `src/stories/`; the tokens and their notes come from `src/styles/elegant.css`; each component card comes from the component's TSDoc. A decision exists when it is committed to lux. This system is never edited on its own.
+
+Principles, from the library's own README: a good user experience, a good design, a good developer experience and good performance are not negotiable.
+
+## Density
+
+Lux applications are data-intensive, so the root font size is **14px** (`html { font-size: 14px; line-height: 21px }`), not the browser's 16px. Every size is in `rem`; `px` values in this system are for reference only. The Tailwind text scale therefore reads: `text-xs` 10.5px, `text-sm` 12.25px, `text-base` 14px, `text-lg` 15.75px, `text-xl` 17.5px, `text-2xl` 21px. The spacing unit is `--spacing` (0.25rem = 3.5px), so `p-4` is 14px.
+
+The type family is the platform's system UI face (`ui-sans-serif, system-ui, sans-serif`). Lux ships no font files.
+
+## Colour roles
+
+Colour is assigned by role, not by palette step. Reach for a role token first; use a palette step only where no role exists.
+
+| Role | Token | Use |
+| --- | --- | --- |
+| Text | `color-content` | Body text and values. 10.2:1 on the page ground. |
+| Labels, unchosen options | `color-unchosen` | Column headers, section captions, the unchosen tab or RadioBar option. 5.8:1 on white. |
+| Text to read past | `color-muted` | Only text that is there to be skipped (days outside the shown month). 2.6:1 on white — never for labels. |
+| Page ground (the data) | `color-content-bg` | Rows that run border to border. |
+| Not-data fill | `color-content-fill` | Column headers, group captions, filled strips. One step only. |
+| Separator | `color-content-border` | Every 1px line between bands, rows and captions. |
+| Card / header ground | `color-content-fg` | Inside a `Card` and the Helium header band. |
+| Navigator | `color-navigator-bg`, `color-navigator`, `color-navigator-border` | The dark Helium side bar. |
+| Controls | `color-control-*` | Field grounds, borders (resting, hover, disabled), placeholders. |
+| Tooltip | `color-tooltip`, `color-tooltip-bg` | A pair: the foreground is only legible on that ground. |
+| Unread count | `color-unread`, `color-unread-bg` | Counts of what is waiting. Separate from `danger`: nothing has gone wrong. |
+
+Palettes: `primary` (cyan, brand), `secondary` (orange), `info` (violet), `danger` (red), each 100–900. Button `semantic` maps to `primary`, `secondary`, `danger` and `muted`.
+
+## Radius roles
+
+The radius scale (`radius-xs` … `radius-4xl`) is about twice Tailwind's, so a corner reads as a curve. Components draw with four role names:
+
+- `radius-control` (0.5rem) — fields, selects, text areas, buttons. They share a row, so they share a curve.
+- `radius-surface` (0.75rem) — poppers, menus, tooltips, cards.
+- `radius-overlay` (1rem) — dialogs and drawers.
+- `radius-item` (0.375rem) — rows and cells inside a surface, one step below what holds them.
+
+`rounded-full` reads none of these, so discs, avatars and pills keep their shape.
+
+## Layout standards
+
+- **Crux** — the start/content/end structure behind `Field`, `Button`, `Avatar` and `Tag`: adornments centred, content on the baseline. See the *Crux* section.
+- **Bands** — the default container: full-width regions separated by one `color-content-border` line, with `color-content-fill` marking what is not data. The card is the exception. See the *Bands* section.
+- **Application shell** — `Helium`: a fixed 4rem header (`color-content-fg`, bottom border), a 14rem navigator that docks on wide viewports and becomes a drawer under 768px, and a main area with content and an optional side panel.
+
+## Components
+
+The library exports buttons (`Button`, `ActionButton`, `Anchor`, `Close`), selection rows (`Tabs`, `RadioBar`, `CheckBar`), fields (`Field`, `Input`, `SearchInput`, `AsyncSearchInput`, `Select`, `NativeSelect`, `Autocomplete`, `TextArea`, `CheckBox`, `Radio`, `TaskCheckBox`, `EditableText`), pickers (`DatePicker`, `TimePicker`, `SwatchPicker`), floating surfaces (`Popper`, `Menu`, `TooltipProvider`), overlays (`Dialog`, `Modal`, `Toast`), displays (`Avatar`, `Tag`, `Badge`, `Card`, `Loading`, `Postit`, `ImageViewer`), structure (`List`, `Splitter`, `Helium`), and the `chat`, `calendar` and `kanban` modules. Each component's card carries its guidelines and props.
+
+Boolean props follow one rule: a value the code derives is `isX` (`isFirst`, `isCompact`); a flag the caller sets is a bare adjective (`disabled`, `rounded`, `loading`) or a `with*` / `can*` option.
+
+## Designing with Lux
+
+- Build screens inside the Helium shell: dark navigator on the left, white header band, page on `color-content-bg`.
+- Use role tokens by their CSS names (`var(--color-content)`, `var(--radius-control)`): they are the same names the Tailwind theme compiles, so a mockup translates to utilities one to one (`text-content`, `rounded-control`).
+- Lists and tables are bands, border to border, not cards.
+- Labels are `color-unchosen`, never `color-muted`.
+- Check every text pair against 4.5:1; the *Known gaps* section lists the pairs in the current library that fail.
+
+## Not synced
+
+Components carry guidelines and props only; their previews are not live yet — the library has not been bundled for this system. No logos or icons are included (`@nimbox/icons-react` is a separate package). The `chat`, `calendar` and `kanban` modules are listed but have no cards.

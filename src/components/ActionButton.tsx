@@ -14,6 +14,11 @@ export interface ActionButtonProps {
 
 }
 
+/**
+ * A button that opens a popper of actions. Its children are a function that receives `close`, so an action can dismiss the popper when it runs.
+ *
+ * Use for a short list of actions on a row or a page.
+ */
 export const ActionButton = ({ className, popperClassName, children }: ActionButtonProps) => {
 
     const [show, setShow] = useState(false);

@@ -17,6 +17,9 @@ export interface SelectProps extends Omit<ChooseProps<SelectOption>, 'supplier' 
 
 }
 
+/**
+ * A select drawn by the library from `Option` children, for options that need custom rendering. `NativeSelect` covers plain options.
+ */
 export function Select(props: SelectProps & InputHTMLAttributes<HTMLInputElement>) {
 
     // Properties

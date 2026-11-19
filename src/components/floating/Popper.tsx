@@ -26,6 +26,9 @@ export interface HTMLPopperElement extends HTMLDivElement {
     forceUpdate: (() => void) | null;
 }
 
+/**
+ * A floating surface anchored to `reference`: the base of menus, field poppers and tooltips. Uses `radius-surface`.
+ */
 export function Popper(props: PopperProps) {
 
     // Properties

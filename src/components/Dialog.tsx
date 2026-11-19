@@ -29,6 +29,9 @@ export interface DialogComponent extends FC<DialogProps> {
 
 }
 
+/**
+ * A modal dialog shown with `show` and dismissed through `onHide`. Dialogs use `radius-overlay`.
+ */
 export const Dialog: DialogComponent = ({ show, onHide, className, children }) => {
 
     // Drive open/close, dismissal and accessibility through floating-ui so the

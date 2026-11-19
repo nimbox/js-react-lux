@@ -9,16 +9,23 @@ html {
 
   --color-transparent: transparent;
 
+  /** Pure black. Control border on hover. */
   --color-black: #000000;
+  /** Pure white. Foreground on dark fills (navigator, tooltip, unread). */
   --color-white: #ffffff;
 
   /* Named colors */
 
+  /** Text in the Helium navigator. */
   --color-navigator: var(--color-white);
+  /** Ground of the Helium navigator (dark side bar). */
   --color-navigator-bg: #252529;
+  /** Separators inside the navigator. */
   --color-navigator-border: #5f5f5f;
 
+  /** Body text. 10.2:1 on color-content-bg. */
   --color-content: #3e3f42;
+  /** Text meant to be read past (days outside the shown month). 2.6:1 on white: never for labels or anything the reader must read. */
   --color-muted: #9ea0a5;
 
   /**
@@ -35,33 +42,54 @@ html {
    * `--color-content` so the chosen option still leads.
    */
 
+  /** An option offered but not taken (unchosen tab, RadioBar, CheckBar) and column/section labels. 5.8:1 on white, 5.1:1 on color-content-fill. */
   --color-unchosen: #656568;
 
+  /** Ground of a Card and of the header band. Rows inside a card sit on this. */
   --color-content-fg: #ffffff;
+  /** Page ground: the data. Rows border to border sit on this. */
   --color-content-bg: #fbfbfb;
+  /** Everything that is not data: column headers, group captions, filled strips. A yes/no, not a scale. */
   --color-content-fill: #ecf0f4;
+  /** Every 1px separator between bands, rows, captions and under the column header. */
   --color-content-border: #e3e8ef;
 
+  /** Ground of fields, selects, text areas. */
   --color-control-bg: #ffffff;
+  /** Resting border of a control. 3.2:1 on white. */
   --color-control-border: #909090;
+  /** Filled variant of a control. */
   --color-control-fill: #f0f0f0;
+  /** Placeholder text inside a control. 2.6:1 on white. */
   --color-control-placeholder: #a0a0a0;
 
+  /** Control border on hover. */
   --color-control-border-hover: #000000;
+  /** Filled control on hover. */
   --color-control-fill-hover: #e8e8e8;
 
+  /** Border of a disabled control. */
   --color-control-border-disabled: #c0c0c0;
+  /** Ground of a disabled control. */
   --color-control-fill-disabled: #f8f8f8;
 
+  /** Weekend columns in calendars. */
   --color-calendar-weekend: #fafafa;
+  /** Calendar outer lines. */
   --color-calendar-border: #e0e0e0;
+  /** Calendar inner grid lines. */
   --color-calendar-grid: #f0f0f0;
 
+  /** Incoming chat bubble. */
   --color-chat-message-in: #ffffff;
+  /** Outgoing chat bubble. */
   --color-chat-message-out: #d9fdd3;
+  /** Ground behind a chat thread. */
   --color-chat-message-list-bg: #eee9e1;
 
+  /** Tooltip text; pairs with color-tooltip-bg. */
   --color-tooltip: #ffffff;
+  /** Tooltip ground. */
   --color-tooltip-bg: #222222;
 
   /* The count of what is waiting — messages unread, and whatever else
@@ -72,17 +100,24 @@ html {
      this dark is only legible under a light foreground, and splitting
      them across two decisions is how that stops being true. */
 
+  /** Count of what is waiting (unread); pairs with color-unread-bg. */
   --color-unread: #ffffff;
+  /** Ground of an unread count. Its own token, not danger: nothing has gone wrong. 8.2:1 with white. */
   --color-unread-bg: #9e1212;
 
   /* Palettes */
 
+  /** Hover tint behind outlined/text primary buttons. */
   --color-primary-100: #daedef;
+  /** Focus ring of primary buttons. */
   --color-primary-200: #bfe3e8;
   --color-primary-300: #9ad2db;
   --color-primary-400: #78cadd;
+  /** The brand cyan. Filled primary Button ground and outlined/text primary Button ink. Only 2.1:1 with white: fails as text and as ground under white text (see Known gaps). */
   --color-primary-500: #4ec0e0;
+  /** Primary hover. 3.1:1 with white. */
   --color-primary-600: #309eb7;
+  /** First primary step that carries white text at 4.7:1. */
   --color-primary-700: #277d91;
   --color-primary-800: #296872;
   --color-primary-900: #03374c;
@@ -91,6 +126,7 @@ html {
   --color-secondary-200: #f9d6a2;
   --color-secondary-300: #fcc17a;
   --color-secondary-400: #ffb54a;
+  /** The brand orange. 2.1:1 with white. */
   --color-secondary-500: #f9a11a;
   --color-secondary-600: #e28414;
   --color-secondary-700: #ba650f;
@@ -111,7 +147,9 @@ html {
   --color-danger-200: #dd9999;
   --color-danger-300: #e0807c;
   --color-danger-400: #ea6a59;
+  /** Danger accent. 3.6:1 with white. */
   --color-danger-500: #f05022;
+  /** Danger text and fills under white text (8.2:1). */
   --color-danger-600: #9e1212;
   --color-danger-700: #8e1917;
   --color-danger-800: #7f201d;
@@ -125,14 +163,23 @@ html {
      these, so discs, avatars and pills keep their shape whatever happens
      here. */
 
+  /** Default rounded. */
   --radius: 0.5rem;
+  /** Scale. */
   --radius-xs: 0.25rem;
+  /** Scale. */
   --radius-sm: 0.375rem;
+  /** Scale. */
   --radius-md: 0.5rem;
+  /** Scale. */
   --radius-lg: 0.75rem;
+  /** Scale. */
   --radius-xl: 1rem;
+  /** Scale. */
   --radius-2xl: 1.5rem;
+  /** Scale. */
   --radius-3xl: 2rem;
+  /** Scale. */
   --radius-4xl: 2.5rem;
 
   /* The scale above is the palette of curves; the four names below are what
@@ -143,20 +190,24 @@ html {
   /* Fields, selects, textareas and buttons. They stand in the same row, so
      they answer to the same curve. */
 
+  /** Fields, selects, text areas and buttons: they share a row, so they share a curve (= radius-md). */
   --radius-control: var(--radius-md);
 
   /* Poppers, menus and tooltips, which float over the page. */
 
+  /** Poppers, menus, tooltips, cards: things that float or stand apart (= radius-lg). */
   --radius-surface: var(--radius-lg);
 
   /* Dialogs and drawers, which take the screen. */
 
+  /** Dialogs and drawers, which take the screen (= radius-xl). */
   --radius-overlay: var(--radius-xl);
 
   /* Rows and cells held inside a surface. Nested boxes only look right when
      the inner curve is the outer one less the gap between them, which puts an
      item a step below whatever holds it. */
 
+  /** Rows and cells inside a surface: one step below what holds them (= radius-sm). */
   --radius-item: var(--radius-sm);
 
   /* ===== Typography ===== */
@@ -167,16 +218,22 @@ html {
   /* ===== Stroke widths ===== */
   /* v3: strokeWidth: { 3: '3', 4: '4' } */
 
+  /** stroke-3 utility. */
   --stroke-3: 3px;
+  /** stroke-4 utility. */
   --stroke-4: 4px;
 
   /* ===== Spacing / sizes used by min-w-* ===== */
   /* v3: minWidth: { 24:'6rem', 28:'7rem', 32:'8rem', 36:'9rem' } */
   /* In v4, min-w-24, etc. come from the spacing scale: */
 
+  /** min-w-24. */
   --spacing-24: 6rem;
+  /** min-w-28. */
   --spacing-28: 7rem;
+  /** min-w-32. */
   --spacing-32: 8rem;
+  /** min-w-36. */
   --spacing-36: 9rem;
 
 }
