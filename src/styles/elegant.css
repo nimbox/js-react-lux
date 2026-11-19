@@ -28,22 +28,8 @@ html {
   /** Text meant to be read past (days outside the shown month). 2.6:1 on white: never for labels or anything the reader must read. */
   --color-muted: #9ea0a5;
 
-  /**
-   * An option offered but not taken — the unchosen half of a tab strip, a
-   * `RadioBar`, a `CheckBar`.
-   *
-   * Not `--color-muted`, which recedes on purpose: it is for text that is
-   * there to be read past, like the days either side of the month a calendar
-   * is showing. An unchosen option is somewhere the reader can still go, and
-   * at 2.6:1 on white `--color-muted` is under both the 4.5:1 that text this
-   * size wants and the 3:1 floor for large text — pale enough to read as
-   * unavailable rather than as available. This clears 4.5:1 on white and on
-   * either weight of tab pill, while staying a clear step lighter than
-   * `--color-content` so the chosen option still leads.
-   */
-
-  /** An option offered but not taken (unchosen tab, RadioBar, CheckBar) and column/section labels. 5.8:1 on white, 5.1:1 on color-content-fill. */
-  --color-unchosen: #656568;
+  /** Secondary text that is read: column and section labels, the second line under a value, and the unchosen option in Tabs, RadioBar and CheckBar. 5.8:1 on white, 5.1:1 on color-content-fill; a step lighter than color-content, so values and the chosen option lead. */
+  --color-label: #656568;
 
   /** Ground of a Card and of the header band. Rows inside a card sit on this. */
   --color-content-fg: #ffffff;

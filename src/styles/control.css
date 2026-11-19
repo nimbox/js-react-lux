@@ -445,7 +445,7 @@
     text-align: center;
     white-space: nowrap;
 
-    color: var(--color-unchosen);
+    color: var(--color-label);
 
     /**
      * The ring is drawn inside the option because the strip is a scroll

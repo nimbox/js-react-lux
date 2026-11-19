@@ -24,7 +24,7 @@ Colour is assigned by role, not by palette step. Reach for a role token first; u
 | Role | Token | Use |
 | --- | --- | --- |
 | Text | `color-content` | Body text and values. 10.2:1 on the page ground. |
-| Labels, unchosen options | `color-unchosen` | Column headers, section captions, the unchosen tab or RadioBar option. 5.8:1 on white. |
+| Labels | `color-label` | Column headers, section captions, the second line under a value, the unchosen tab or RadioBar option. 5.8:1 on white. |
 | Text to read past | `color-muted` | Only text that is there to be skipped (days outside the shown month). 2.6:1 on white — never for labels. |
 | Page ground (the data) | `color-content-bg` | Rows that run border to border. |
 | Not-data fill | `color-content-fill` | Column headers, group captions, filled strips. One step only. |
@@ -65,7 +65,7 @@ Boolean props follow one rule: a value the code derives is `isX` (`isFirst`, `is
 - Build screens inside the Helium shell: dark navigator on the left, white header band, page on `color-content-bg`.
 - Use role tokens by their CSS names (`var(--color-content)`, `var(--radius-control)`): they are the same names the Tailwind theme compiles, so a mockup translates to utilities one to one (`text-content`, `rounded-control`).
 - Lists and tables are bands, border to border, not cards.
-- Labels are `color-unchosen`, never `color-muted`.
+- Labels are `color-label`, never `color-muted`.
 - Check every text pair against 4.5:1; the *Known gaps* section lists the pairs in the current library that fail.
 
 ## Not synced

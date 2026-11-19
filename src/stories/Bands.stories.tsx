@@ -36,7 +36,7 @@ const older = [
 
 function Caption({ children, nested }: { children: React.ReactNode, nested?: boolean }) {
     return (
-        <div className={`py-2 bg-content-fill border-y border-content-border text-xs tracking-wide uppercase ${nested ? 'pl-12 pr-8 text-unchosen' : 'px-8 font-semibold text-content'}`}>
+        <div className={`py-2 bg-content-fill border-y border-content-border text-xs tracking-wide uppercase ${nested ? 'pl-12 pr-8 text-label' : 'px-8 font-semibold text-content'}`}>
             {children}
         </div>
     );
@@ -44,7 +44,7 @@ function Caption({ children, nested }: { children: React.ReactNode, nested?: boo
 
 function Columns() {
     return (
-        <div className="grid grid-cols-[1fr_7rem_9rem] gap-4 px-8 py-2 bg-content-fill border-b border-content-border text-xs tracking-wide text-unchosen uppercase">
+        <div className="grid grid-cols-[1fr_7rem_9rem] gap-4 px-8 py-2 bg-content-fill border-b border-content-border text-xs tracking-wide text-label uppercase">
             <div>Document</div>
             <div>Date</div>
             <div className="text-right">Amount</div>
@@ -56,7 +56,7 @@ function Row({ id, date, amount }: { id: string, date: string, amount: string })
     return (
         <div className="grid grid-cols-[1fr_7rem_9rem] gap-4 px-8 py-2 border-b border-content-border">
             <div className="truncate">{id}</div>
-            <div className="text-sm text-unchosen">{date}</div>
+            <div className="text-sm text-label">{date}</div>
             <div className="text-right tabular-nums">{amount}</div>
         </div>
     );
@@ -66,7 +66,7 @@ function Header() {
     return (
         <div className="flex items-center gap-4 px-8 py-4 border-b border-content-border">
             <div className="flex-1 text-xl font-semibold tracking-tighter">Documents</div>
-            <div className="text-sm text-unchosen">All companies</div>
+            <div className="text-sm text-label">All companies</div>
         </div>
     );
 }
@@ -157,7 +157,7 @@ export const BandsInCard: Story = {
 
                 </Card.Body>
 
-                <Card.Footer className="px-8 py-2 bg-content-fill border-content-border text-sm text-unchosen">
+                <Card.Footer className="px-8 py-2 bg-content-fill border-content-border text-sm text-label">
                     5 documents
                 </Card.Footer>
 
